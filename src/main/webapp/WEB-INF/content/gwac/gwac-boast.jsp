@@ -3,12 +3,20 @@
 <%@ taglib prefix="sj" uri="/struts-jquery-tags" %>
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags" %>
 
-<strong>客户列表:</strong>
+<!--strong>耀星列表:</strong-->
 <s:url var="remoteurl" action="grid-data-provider" namespace="/"/>
-<sjg:grid id="gridtable" caption="Customers Examples" dataType="json" 
-  href="%{remoteurl}" pager="true" gridModel="gridModel"
-  rowList="5,10,15" rowNum="5" rownumbers="true"
-  resizable="true" width="700" shrinkToFit="false" >
+<!--width="700" resizable="true" shrinkToFit="true"  -->
+<sjg:grid 
+  id="gridtable" 
+  caption="耀星列表" 
+  dataType="json" 
+  href="%{remoteurl}" 
+  pager="true" 
+  gridModel="gridModel"
+  rowList="10,15,20" 
+  rowNum="15" 
+  rownumbers="true"
+  viewrecords="true">
   <sjg:gridColumn name="id" index="id" title="ID" width="30" formatter="integer" sortable="false" displayTitle="false"/>
   <sjg:gridColumn name="name" index="name" title="Name" width="290" sortable="true"/>
   <sjg:gridColumn name="country" index="country" width="100" title="Country" sortable="false"/>

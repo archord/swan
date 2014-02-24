@@ -3,19 +3,19 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
-    <class name="com.gwac.model.User" table="user" schema="public">
-        <id name="userId" type="long">
-            <column name="user_id" />
+    <class name="com.gwac.model.Gimbal" table="gimbal" schema="public">
+        <id name="gmbId" type="long">
+            <column name="gmb_id" />
             <generator class="assigned" />
         </id>
         <property name="name" type="string">
-            <column name="name" length="45" not-null="true" />
+            <column name="name" />
         </property>
-        <property name="address" type="string">
-            <column name="address" not-null="true" />
+        <property name="ra" type="big_decimal">
+            <column name="ra" precision="12" scale="8" />
         </property>
-        <property name="createdDate" type="timestamp">
-            <column name="created_date" length="29" not-null="true" />
+        <property name="dec" type="big_decimal">
+            <column name="dec" precision="12" scale="8" />
         </property>
     </class>
 </hibernate-mapping>

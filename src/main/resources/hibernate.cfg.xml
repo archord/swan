@@ -9,6 +9,14 @@
         <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/xy</property>
         <property name="hibernate.connection.username">xy</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <mapping resource="com/gwac/model/StarKnow.hbm.xml" />
+        <mapping resource="com/gwac/model/Environment.hbm.xml" />
         <mapping resource="com/gwac/model/User.hbm.xml" />
+        <mapping resource="com/gwac/model/Telescope.hbm.xml" />
+        <mapping resource="com/gwac/model/FitsFile.hbm.xml" />
+        <mapping resource="com/gwac/model/FitsFileCut.hbm.xml" />
+        <mapping resource="com/gwac/model/Ot.hbm.xml" />
+        <mapping resource="com/gwac/model/Gimbal.hbm.xml" />
+        <mapping resource="com/gwac/model/DataProcessMachine.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.gwac.model.Environment" table="environment" schema="public">
+        <id name="envId" type="long">
+            <column name="env_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="date" type="date">
+            <column name="date" length="13" />
+        </property>
+        <property name="time" type="time">
+            <column name="time" length="15" />
+        </property>
+        <property name="wather" type="string">
+            <column name="wather" length="64" />
+        </property>
+        <property name="windSpeed" type="big_decimal">
+            <column name="wind_speed" precision="4" scale="1" />
+        </property>
+        <property name="temperature" type="big_decimal">
+            <column name="temperature" precision="4" scale="1" />
+        </property>
+        <property name="humidity" type="big_decimal">
+            <column name="humidity" precision="4" scale="1" />
+        </property>
+        <property name="sinValue" type="big_decimal">
+            <column name="sin_value" precision="5" />
+        </property>
+        <property name="cloudPercent" type="big_decimal">
+            <column name="cloud_percent" precision="5" />
+        </property>
+    </class>
+</hibernate-mapping>

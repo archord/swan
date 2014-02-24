@@ -1,0 +1,23 @@
+/* 
+    Document   : gwac-style
+    Created on : Dec 24, 2013, 10:23:46 AM
+    Author     : xy
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+table.table-style{
+  text-align: left;
+  font-size: 14px;
+}
+table.table-style tr th{
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+table.table-style tr td{
+  padding: 3px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+

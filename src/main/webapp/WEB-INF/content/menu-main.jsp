@@ -3,7 +3,7 @@
 <%@ taglib prefix="sj" uri="/struts-jquery-tags"%>
 
 <sj:menu id="subMenuAjaxLink">
-  <s:url var="url1" action="#"/>
+  <s:url var="url1" action="main/main-intro"/>
   <sj:menuItem id="remotesimplelink" href="%{url1}" targets="content" title="SVOM项目简介" />
 
   <s:url var="url2" action="#"/>

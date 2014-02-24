@@ -30,6 +30,7 @@
 
 
     <link href="<s:url value="/styles/flexible-grids.css" />" rel="stylesheet" type="text/css" />
+    <link href="<s:url value="/styles/gwac-style.css" />" rel="stylesheet" type="text/css" />
     <!--[if lte IE 7]>
     <link href="<s:url value="/yaml/core/iehacks.min.css" />" rel="stylesheet" type="text/css" />
     <![endif]-->

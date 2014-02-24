@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.gwac.model.StarKnow" table="star_know" schema="public">
+        <id name="starId" type="long">
+            <column name="star_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="ffId" type="java.lang.Long">
+            <column name="ff_id" />
+        </property>
+        <property name="ra" type="big_decimal">
+            <column name="ra" precision="12" scale="8" />
+        </property>
+        <property name="dec" type="big_decimal">
+            <column name="dec" precision="12" scale="8" />
+        </property>
+        <property name="x" type="java.lang.Float">
+            <column name="x" precision="8" scale="8" />
+        </property>
+        <property name="y" type="java.lang.Float">
+            <column name="y" precision="8" scale="8" />
+        </property>
+        <property name="datetime" type="timestamp">
+            <column name="datetime" length="29" />
+        </property>
+        <property name="mag" type="java.lang.Float">
+            <column name="mag" precision="8" scale="8" />
+        </property>
+        <property name="magErr" type="java.lang.Float">
+            <column name="mag_err" precision="8" scale="8" />
+        </property>
+        <property name="ellipticity" type="java.lang.Float">
+            <column name="ellipticity" precision="8" scale="8" />
+        </property>
+        <property name="signalNoise" type="java.lang.Float">
+            <column name="signal_noise" precision="8" scale="8" />
+        </property>
+        <property name="fwhm" type="java.lang.Float">
+            <column name="fwhm" precision="8" scale="8" />
+        </property>
+        <property name="flux" type="java.lang.Float">
+            <column name="flux" precision="8" scale="8" />
+        </property>
+        <property name="fluxErr" type="java.lang.Float">
+            <column name="flux_err" precision="8" scale="8" />
+        </property>
+        <property name="cmpStarId" type="java.lang.Long">
+            <column name="cmp_star_id" />
+        </property>
+        <property name="mchStarId" type="java.lang.Long">
+            <column name="mch_star_id" />
+        </property>
+    </class>
+</hibernate-mapping>

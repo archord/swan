@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Dec 23, 2013 8:07:43 PM by Hibernate Tools 3.2.2.GA
+// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;

@@ -11,13 +11,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 /**
- * Home object for domain model class User.
- * @see com.gwac.model.User
+ * Home object for domain model class StarKnow.
+ * @see com.gwac.model.StarKnow
  * @author Hibernate Tools
  */
-public class UserHome {
+public class StarKnowHome {
 
-    private static final Log log = LogFactory.getLog(UserHome.class);
+    private static final Log log = LogFactory.getLog(StarKnowHome.class);
 
     private final SessionFactory sessionFactory = getSessionFactory();
     
@@ -31,8 +31,8 @@ public class UserHome {
         }
     }
     
-    public void persist(User transientInstance) {
-        log.debug("persisting User instance");
+    public void persist(StarKnow transientInstance) {
+        log.debug("persisting StarKnow instance");
         try {
             sessionFactory.getCurrentSession().persist(transientInstance);
             log.debug("persist successful");
@@ -43,8 +43,8 @@ public class UserHome {
         }
     }
     
-    public void attachDirty(User instance) {
-        log.debug("attaching dirty User instance");
+    public void attachDirty(StarKnow instance) {
+        log.debug("attaching dirty StarKnow instance");
         try {
             sessionFactory.getCurrentSession().saveOrUpdate(instance);
             log.debug("attach successful");
@@ -55,8 +55,8 @@ public class UserHome {
         }
     }
     
-    public void attachClean(User instance) {
-        log.debug("attaching clean User instance");
+    public void attachClean(StarKnow instance) {
+        log.debug("attaching clean StarKnow instance");
         try {
             sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
             log.debug("attach successful");
@@ -67,8 +67,8 @@ public class UserHome {
         }
     }
     
-    public void delete(User persistentInstance) {
-        log.debug("deleting User instance");
+    public void delete(StarKnow persistentInstance) {
+        log.debug("deleting StarKnow instance");
         try {
             sessionFactory.getCurrentSession().delete(persistentInstance);
             log.debug("delete successful");
@@ -79,10 +79,10 @@ public class UserHome {
         }
     }
     
-    public User merge(User detachedInstance) {
-        log.debug("merging User instance");
+    public StarKnow merge(StarKnow detachedInstance) {
+        log.debug("merging StarKnow instance");
         try {
-            User result = (User) sessionFactory.getCurrentSession()
+            StarKnow result = (StarKnow) sessionFactory.getCurrentSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -93,11 +93,11 @@ public class UserHome {
         }
     }
     
-    public User findById( long id) {
-        log.debug("getting User instance with id: " + id);
+    public StarKnow findById( long id) {
+        log.debug("getting StarKnow instance with id: " + id);
         try {
-            User instance = (User) sessionFactory.getCurrentSession()
-                    .get("com.gwac.model.User", id);
+            StarKnow instance = (StarKnow) sessionFactory.getCurrentSession()
+                    .get("com.gwac.model.StarKnow", id);
             if (instance==null) {
                 log.debug("get successful, no instance found");
             }
@@ -112,11 +112,11 @@ public class UserHome {
         }
     }
     
-    public List findByExample(User instance) {
-        log.debug("finding User instance by example");
+    public List findByExample(StarKnow instance) {
+        log.debug("finding StarKnow instance by example");
         try {
             List results = sessionFactory.getCurrentSession()
-                    .createCriteria("com.gwac.model.User")
+                    .createCriteria("com.gwac.model.StarKnow")
                     .add(Example.create(instance))
             .list();
             log.debug("find by example successful, result size: " + results.size());

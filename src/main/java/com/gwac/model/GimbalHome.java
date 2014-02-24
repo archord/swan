@@ -11,13 +11,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 /**
- * Home object for domain model class User.
- * @see com.gwac.model.User
+ * Home object for domain model class Gimbal.
+ * @see com.gwac.model.Gimbal
  * @author Hibernate Tools
  */
-public class UserHome {
+public class GimbalHome {
 
-    private static final Log log = LogFactory.getLog(UserHome.class);
+    private static final Log log = LogFactory.getLog(GimbalHome.class);
 
     private final SessionFactory sessionFactory = getSessionFactory();
     
@@ -31,8 +31,8 @@ public class UserHome {
         }
     }
     
-    public void persist(User transientInstance) {
-        log.debug("persisting User instance");
+    public void persist(Gimbal transientInstance) {
+        log.debug("persisting Gimbal instance");
         try {
             sessionFactory.getCurrentSession().persist(transientInstance);
             log.debug("persist successful");
@@ -43,8 +43,8 @@ public class UserHome {
         }
     }
     
-    public void attachDirty(User instance) {
-        log.debug("attaching dirty User instance");
+    public void attachDirty(Gimbal instance) {
+        log.debug("attaching dirty Gimbal instance");
         try {
             sessionFactory.getCurrentSession().saveOrUpdate(instance);
             log.debug("attach successful");
@@ -55,8 +55,8 @@ public class UserHome {
         }
     }
     
-    public void attachClean(User instance) {
-        log.debug("attaching clean User instance");
+    public void attachClean(Gimbal instance) {
+        log.debug("attaching clean Gimbal instance");
         try {
             sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
             log.debug("attach successful");
@@ -67,8 +67,8 @@ public class UserHome {
         }
     }
     
-    public void delete(User persistentInstance) {
-        log.debug("deleting User instance");
+    public void delete(Gimbal persistentInstance) {
+        log.debug("deleting Gimbal instance");
         try {
             sessionFactory.getCurrentSession().delete(persistentInstance);
             log.debug("delete successful");
@@ -79,10 +79,10 @@ public class UserHome {
         }
     }
     
-    public User merge(User detachedInstance) {
-        log.debug("merging User instance");
+    public Gimbal merge(Gimbal detachedInstance) {
+        log.debug("merging Gimbal instance");
         try {
-            User result = (User) sessionFactory.getCurrentSession()
+            Gimbal result = (Gimbal) sessionFactory.getCurrentSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -93,11 +93,11 @@ public class UserHome {
         }
     }
     
-    public User findById( long id) {
-        log.debug("getting User instance with id: " + id);
+    public Gimbal findById( long id) {
+        log.debug("getting Gimbal instance with id: " + id);
         try {
-            User instance = (User) sessionFactory.getCurrentSession()
-                    .get("com.gwac.model.User", id);
+            Gimbal instance = (Gimbal) sessionFactory.getCurrentSession()
+                    .get("com.gwac.model.Gimbal", id);
             if (instance==null) {
                 log.debug("get successful, no instance found");
             }
@@ -112,11 +112,11 @@ public class UserHome {
         }
     }
     
-    public List findByExample(User instance) {
-        log.debug("finding User instance by example");
+    public List findByExample(Gimbal instance) {
+        log.debug("finding Gimbal instance by example");
         try {
             List results = sessionFactory.getCurrentSession()
-                    .createCriteria("com.gwac.model.User")
+                    .createCriteria("com.gwac.model.Gimbal")
                     .add(Example.create(instance))
             .list();
             log.debug("find by example successful, result size: " + results.size());
