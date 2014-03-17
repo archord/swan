@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.FitsFile" table="fits_file" schema="public">
         <id name="ffId" type="long">
             <column name="ff_id" />
             <generator class="assigned" />
         </id>
-        <property name="dpmId" type="java.lang.Long">
+        <property name="dpmId" type="java.lang.Short">
             <column name="dpm_id" />
         </property>
         <property name="storePath" type="string">
@@ -17,11 +17,41 @@
         <property name="fileName" type="string">
             <column name="file_name" />
         </property>
-        <property name="gmbId" type="java.lang.Long">
+        <property name="gmbId" type="java.lang.Short">
             <column name="gmb_id" />
         </property>
-        <property name="tspId" type="java.lang.Long">
+        <property name="gmbRa" type="big_decimal">
+            <column name="gmb_ra" precision="12" scale="8" />
+        </property>
+        <property name="gmbDec" type="big_decimal">
+            <column name="gmb_dec" precision="12" scale="8" />
+        </property>
+        <property name="tspId" type="java.lang.Short">
             <column name="tsp_id" />
+        </property>
+        <property name="tspRa" type="big_decimal">
+            <column name="tsp_ra" precision="12" scale="8" />
+        </property>
+        <property name="tspDec" type="big_decimal">
+            <column name="tsp_dec" precision="12" scale="8" />
+        </property>
+        <property name="fieldWidth" type="java.lang.Float">
+            <column name="field_width" precision="8" scale="8" />
+        </property>
+        <property name="fieldHeight" type="java.lang.Float">
+            <column name="field_height" precision="8" scale="8" />
+        </property>
+        <property name="pixelResolution" type="java.lang.Float">
+            <column name="pixel_resolution" precision="8" scale="8" />
+        </property>
+        <property name="templateFfId" type="java.lang.Long">
+            <column name="template_ff_id" />
+        </property>
+        <property name="slfId" type="java.lang.Long">
+            <column name="slf_id" />
+        </property>
+        <property name="isTemplate" type="java.lang.Boolean">
+            <column name="is_template" />
         </property>
     </class>
 </hibernate-mapping>

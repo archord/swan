@@ -6,17 +6,23 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.password">xyag902</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/xy</property>
-        <property name="hibernate.connection.username">xy</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://192.168.56.101:5432/postgres</property>
+        <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <mapping resource="com/gwac/model/StarKnow.hbm.xml" />
-        <mapping resource="com/gwac/model/Environment.hbm.xml" />
-        <mapping resource="com/gwac/model/User.hbm.xml" />
         <mapping resource="com/gwac/model/Telescope.hbm.xml" />
-        <mapping resource="com/gwac/model/FitsFile.hbm.xml" />
+        <mapping resource="com/gwac/model/OtObserveRecord.hbm.xml" />
         <mapping resource="com/gwac/model/FitsFileCut.hbm.xml" />
-        <mapping resource="com/gwac/model/Ot.hbm.xml" />
-        <mapping resource="com/gwac/model/Gimbal.hbm.xml" />
+        <mapping resource="com/gwac/model/OtType.hbm.xml" />
+        <mapping resource="com/gwac/model/StarListFile.hbm.xml" />
         <mapping resource="com/gwac/model/DataProcessMachine.hbm.xml" />
+        <mapping resource="com/gwac/model/VariationType.hbm.xml" />
+        <mapping resource="com/gwac/model/UserInfo.hbm.xml" />
+        <mapping resource="com/gwac/model/OtBase.hbm.xml" />
+        <mapping resource="com/gwac/model/Environment.hbm.xml" />
+        <mapping resource="com/gwac/model/FitsFile.hbm.xml" />
+        <mapping resource="com/gwac/model/Grb.hbm.xml" />
+        <mapping resource="com/gwac/model/Gimbal.hbm.xml" />
+        <mapping resource="com/gwac/model/StarKnowObserveRecord.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

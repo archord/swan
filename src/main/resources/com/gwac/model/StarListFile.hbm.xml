@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.gwac.model.StarListFile" table="star_list_file" schema="public">
+        <id name="slfId" type="long">
+            <column name="slf_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="dpmId" type="java.lang.Short">
+            <column name="dpm_id" />
+        </property>
+        <property name="storePath" type="string">
+            <column name="store_path" />
+        </property>
+        <property name="fileName" type="string">
+            <column name="file_name" />
+        </property>
+    </class>
+</hibernate-mapping>

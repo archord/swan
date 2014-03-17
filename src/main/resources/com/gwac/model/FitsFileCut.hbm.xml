@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.FitsFileCut" table="fits_file_cut" schema="public">
         <id name="ffcId" type="long">
@@ -11,7 +11,7 @@
         <property name="starId" type="java.lang.Long">
             <column name="star_id" />
         </property>
-        <property name="dpmId" type="java.lang.Long">
+        <property name="dpmId" type="java.lang.Short">
             <column name="dpm_id" />
         </property>
         <property name="storePath" type="string">
@@ -19,6 +19,15 @@
         </property>
         <property name="fileName" type="string">
             <column name="file_name" />
+        </property>
+        <property name="ffId" type="java.lang.Long">
+            <column name="ff_id" />
+        </property>
+        <property name="templateFfcId" type="java.lang.Long">
+            <column name="template_ffc_id" />
+        </property>
+        <property name="isTemplateCut" type="java.lang.Boolean">
+            <column name="is_template_cut" />
         </property>
     </class>
 </hibernate-mapping>

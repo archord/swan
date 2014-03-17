@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.gwac.service.UserService;
-import com.gwac.model.User;
+import com.gwac.service.UserInfoService;
+import com.gwac.model.UserInfo;
 import com.opensymphony.xwork2.ModelDriven;
 
-public class UserAction implements ModelDriven {
+public class UserInfoAction implements ModelDriven {
 
-  User user = new User();
-  List<User> userList = new ArrayList<User>();
-  UserService userService;
+  UserInfo user = new UserInfo();
+  List<UserInfo> userList = new ArrayList<UserInfo>();
+  UserInfoService userService;
   //DI via Spring
 
-  public void setUserService(UserService userService) {
+  public void setUserService(UserInfoService userService) {
     this.userService = userService;
   }
 
@@ -23,17 +23,17 @@ public class UserAction implements ModelDriven {
     return user;
   }
 
-  public List<User> getUserList() {
+  public List<UserInfo> getUserList() {
     return userList;
   }
 
-  public void setUserList(List<User> userList) {
+  public void setUserList(List<UserInfo> userList) {
     this.userList = userList;
   }
 
   //save user
   public String addUser() throws Exception {
-    user.setCreatedDate(new Date());
+    user.setCreateDate(new Date());
     userService.addUser(user);
     userList = null;
     userList = userService.listUser();

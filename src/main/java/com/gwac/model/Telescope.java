@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
+// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
 
 
 import java.math.BigDecimal;
@@ -10,30 +10,36 @@ import java.math.BigDecimal;
 public class Telescope  implements java.io.Serializable {
 
 
-     private long tspId;
+     private short tspId;
      private String name;
      private BigDecimal ra;
      private BigDecimal dec;
+     private Short diameter;
+     private Float focalRatio;
+     private String ccdType;
 
     public Telescope() {
     }
 
 	
-    public Telescope(long tspId) {
+    public Telescope(short tspId) {
         this.tspId = tspId;
     }
-    public Telescope(long tspId, String name, BigDecimal ra, BigDecimal dec) {
+    public Telescope(short tspId, String name, BigDecimal ra, BigDecimal dec, Short diameter, Float focalRatio, String ccdType) {
        this.tspId = tspId;
        this.name = name;
        this.ra = ra;
        this.dec = dec;
+       this.diameter = diameter;
+       this.focalRatio = focalRatio;
+       this.ccdType = ccdType;
     }
    
-    public long getTspId() {
+    public short getTspId() {
         return this.tspId;
     }
     
-    public void setTspId(long tspId) {
+    public void setTspId(short tspId) {
         this.tspId = tspId;
     }
     public String getName() {
@@ -56,6 +62,27 @@ public class Telescope  implements java.io.Serializable {
     
     public void setDec(BigDecimal dec) {
         this.dec = dec;
+    }
+    public Short getDiameter() {
+        return this.diameter;
+    }
+    
+    public void setDiameter(Short diameter) {
+        this.diameter = diameter;
+    }
+    public Float getFocalRatio() {
+        return this.focalRatio;
+    }
+    
+    public void setFocalRatio(Float focalRatio) {
+        this.focalRatio = focalRatio;
+    }
+    public String getCcdType() {
+        return this.ccdType;
+    }
+    
+    public void setCcdType(String ccdType) {
+        this.ccdType = ccdType;
     }
 
 

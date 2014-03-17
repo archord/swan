@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
+// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
 
 
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ public class Environment  implements java.io.Serializable {
      private BigDecimal windSpeed;
      private BigDecimal temperature;
      private BigDecimal humidity;
-     private BigDecimal sinValue;
+     private BigDecimal seeing;
      private BigDecimal cloudPercent;
 
     public Environment() {
@@ -28,7 +28,7 @@ public class Environment  implements java.io.Serializable {
     public Environment(long envId) {
         this.envId = envId;
     }
-    public Environment(long envId, Date date, Date time, String wather, BigDecimal windSpeed, BigDecimal temperature, BigDecimal humidity, BigDecimal sinValue, BigDecimal cloudPercent) {
+    public Environment(long envId, Date date, Date time, String wather, BigDecimal windSpeed, BigDecimal temperature, BigDecimal humidity, BigDecimal seeing, BigDecimal cloudPercent) {
        this.envId = envId;
        this.date = date;
        this.time = time;
@@ -36,7 +36,7 @@ public class Environment  implements java.io.Serializable {
        this.windSpeed = windSpeed;
        this.temperature = temperature;
        this.humidity = humidity;
-       this.sinValue = sinValue;
+       this.seeing = seeing;
        this.cloudPercent = cloudPercent;
     }
    
@@ -89,12 +89,12 @@ public class Environment  implements java.io.Serializable {
     public void setHumidity(BigDecimal humidity) {
         this.humidity = humidity;
     }
-    public BigDecimal getSinValue() {
-        return this.sinValue;
+    public BigDecimal getSeeing() {
+        return this.seeing;
     }
     
-    public void setSinValue(BigDecimal sinValue) {
-        this.sinValue = sinValue;
+    public void setSeeing(BigDecimal seeing) {
+        this.seeing = seeing;
     }
     public BigDecimal getCloudPercent() {
         return this.cloudPercent;

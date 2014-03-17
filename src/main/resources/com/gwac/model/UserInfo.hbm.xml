@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.gwac.model.UserInfo" table="user_info" schema="public">
+        <id name="uiId" type="int">
+            <column name="ui_id" />
+            <generator class="increment" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" not-null="true" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="create_date" length="29"/>
+        </property>
+    </class>
+</hibernate-mapping>

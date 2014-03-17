@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
+// Generated 2014-3-2 18:54:13 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.List;
@@ -11,13 +11,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 /**
- * Home object for domain model class Ot.
- * @see com.gwac.model.Ot
+ * Home object for domain model class StarKnowObserveRecord.
+ * @see com.gwac.model.StarKnowObserveRecord
  * @author Hibernate Tools
  */
-public class OtHome {
+public class StarKnowObserveRecordHome {
 
-    private static final Log log = LogFactory.getLog(OtHome.class);
+    private static final Log log = LogFactory.getLog(StarKnowObserveRecordHome.class);
 
     private final SessionFactory sessionFactory = getSessionFactory();
     
@@ -31,8 +31,8 @@ public class OtHome {
         }
     }
     
-    public void persist(Ot transientInstance) {
-        log.debug("persisting Ot instance");
+    public void persist(StarKnowObserveRecord transientInstance) {
+        log.debug("persisting StarKnowObserveRecord instance");
         try {
             sessionFactory.getCurrentSession().persist(transientInstance);
             log.debug("persist successful");
@@ -43,8 +43,8 @@ public class OtHome {
         }
     }
     
-    public void attachDirty(Ot instance) {
-        log.debug("attaching dirty Ot instance");
+    public void attachDirty(StarKnowObserveRecord instance) {
+        log.debug("attaching dirty StarKnowObserveRecord instance");
         try {
             sessionFactory.getCurrentSession().saveOrUpdate(instance);
             log.debug("attach successful");
@@ -55,8 +55,8 @@ public class OtHome {
         }
     }
     
-    public void attachClean(Ot instance) {
-        log.debug("attaching clean Ot instance");
+    public void attachClean(StarKnowObserveRecord instance) {
+        log.debug("attaching clean StarKnowObserveRecord instance");
         try {
             sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
             log.debug("attach successful");
@@ -67,8 +67,8 @@ public class OtHome {
         }
     }
     
-    public void delete(Ot persistentInstance) {
-        log.debug("deleting Ot instance");
+    public void delete(StarKnowObserveRecord persistentInstance) {
+        log.debug("deleting StarKnowObserveRecord instance");
         try {
             sessionFactory.getCurrentSession().delete(persistentInstance);
             log.debug("delete successful");
@@ -79,10 +79,10 @@ public class OtHome {
         }
     }
     
-    public Ot merge(Ot detachedInstance) {
-        log.debug("merging Ot instance");
+    public StarKnowObserveRecord merge(StarKnowObserveRecord detachedInstance) {
+        log.debug("merging StarKnowObserveRecord instance");
         try {
-            Ot result = (Ot) sessionFactory.getCurrentSession()
+            StarKnowObserveRecord result = (StarKnowObserveRecord) sessionFactory.getCurrentSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -93,11 +93,11 @@ public class OtHome {
         }
     }
     
-    public Ot findById( long id) {
-        log.debug("getting Ot instance with id: " + id);
+    public StarKnowObserveRecord findById( long id) {
+        log.debug("getting StarKnowObserveRecord instance with id: " + id);
         try {
-            Ot instance = (Ot) sessionFactory.getCurrentSession()
-                    .get("com.gwac.model.Ot", id);
+            StarKnowObserveRecord instance = (StarKnowObserveRecord) sessionFactory.getCurrentSession()
+                    .get("com.gwac.model.StarKnowObserveRecord", id);
             if (instance==null) {
                 log.debug("get successful, no instance found");
             }
@@ -112,11 +112,11 @@ public class OtHome {
         }
     }
     
-    public List findByExample(Ot instance) {
-        log.debug("finding Ot instance by example");
+    public List findByExample(StarKnowObserveRecord instance) {
+        log.debug("finding StarKnowObserveRecord instance by example");
         try {
             List results = sessionFactory.getCurrentSession()
-                    .createCriteria("com.gwac.model.Ot")
+                    .createCriteria("com.gwac.model.StarKnowObserveRecord")
                     .add(Example.create(instance))
             .list();
             log.debug("find by example successful, result size: " + results.size());

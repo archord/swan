@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.gwac.model.OtBase" table="ot_base" schema="public">
+        <id name="otId" type="long">
+            <column name="ot_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="otName" type="string">
+            <column name="ot_name" />
+        </property>
+    </class>
+</hibernate-mapping>

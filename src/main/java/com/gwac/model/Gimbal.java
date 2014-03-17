@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
+// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
 
 
 import java.math.BigDecimal;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class Gimbal  implements java.io.Serializable {
 
 
-     private long gmbId;
+     private short gmbId;
      private String name;
      private BigDecimal ra;
      private BigDecimal dec;
@@ -19,21 +19,21 @@ public class Gimbal  implements java.io.Serializable {
     }
 
 	
-    public Gimbal(long gmbId) {
+    public Gimbal(short gmbId) {
         this.gmbId = gmbId;
     }
-    public Gimbal(long gmbId, String name, BigDecimal ra, BigDecimal dec) {
+    public Gimbal(short gmbId, String name, BigDecimal ra, BigDecimal dec) {
        this.gmbId = gmbId;
        this.name = name;
        this.ra = ra;
        this.dec = dec;
     }
    
-    public long getGmbId() {
+    public short getGmbId() {
         return this.gmbId;
     }
     
-    public void setGmbId(long gmbId) {
+    public void setGmbId(short gmbId) {
         this.gmbId = gmbId;
     }
     public String getName() {

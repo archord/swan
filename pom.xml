@@ -8,7 +8,109 @@
   <name>SVOM</name>
   <url>http://maven.apache.org</url>
   
+  <build>
+    <finalName>svom</finalName>
+  </build>
+  
   <dependencies>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-core</artifactId>
+      <version>${struts2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-convention-plugin</artifactId>
+      <version>${struts2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-json-plugin</artifactId>
+      <version>${struts2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-spring-plugin</artifactId>
+      <version>${struts2.spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    
+    <!--struts2-jquery-->
+    <dependency>
+      <groupId>com.jgeppert.struts2.jquery</groupId>
+      <artifactId>struts2-jquery-plugin</artifactId>
+      <version>${struts2.jquery.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.jgeppert.struts2.jquery</groupId>
+      <artifactId>struts2-jquery-chart-plugin</artifactId>
+      <version>${struts2.jquery.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.jgeppert.struts2.jquery</groupId>
+      <artifactId>struts2-jquery-grid-plugin</artifactId>
+      <version>${struts2.jquery.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.jgeppert.struts2.jquery</groupId>
+      <artifactId>struts2-jquery-richtext-plugin</artifactId>
+      <version>${struts2.jquery.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.jgeppert.struts2.jquery</groupId>
+      <artifactId>struts2-jquery-tree-plugin</artifactId>
+      <version>${struts2.jquery.version}</version>
+      <type>jar</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -24,87 +126,7 @@
       <groupId>postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${postgres.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-core</artifactId>
-      <version>${struts.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-convention-plugin</artifactId>
-      <version>${struts.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-json-plugin</artifactId>
-      <version>${struts.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-spring-plugin</artifactId>
-      <version>${struts.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.jgeppert.struts2.jquery</groupId>
-      <artifactId>struts2-jquery-plugin</artifactId>
-      <version>${struts.jquery.version}</version>
       <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>com.jgeppert.struts2.jquery</groupId>
-      <artifactId>struts2-jquery-chart-plugin</artifactId>
-      <version>${struts.jquery.version}</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>com.jgeppert.struts2.jquery</groupId>
-      <artifactId>struts2-jquery-grid-plugin</artifactId>
-      <version>${struts.jquery.version}</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>com.jgeppert.struts2.jquery</groupId>
-      <artifactId>struts2-jquery-richtext-plugin</artifactId>
-      <version>${struts.jquery.version}</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>com.jgeppert.struts2.jquery</groupId>
-      <artifactId>struts2-jquery-tree-plugin</artifactId>
-      <version>${struts.jquery.version}</version>
-      <type>jar</type>
-    </dependency>
-    <!--dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring</artifactId>
-      <version>${spring.version}</version>
-    </dependency-->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-orm</artifactId>
-      <version>${spring.orm.version}</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${hibernate.version}</version>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>
@@ -117,133 +139,25 @@
       <version>${commons.logging.version}</version>
     </dependency>
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>${commons.collections.version}</version>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${servlet.version}</version>
+      <!--provided 由JDK 或者容器提供-->
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib-nodep</artifactId>
-      <version>${cglib.version}</version>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>${jsp.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>antlr</groupId>
-      <artifactId>antlr</artifactId>
-      <version>${antlr.version}</version>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>${javaee.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
-
-  
-  <build>
-    <finalName>svom</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>hibernate3-maven-plugin</artifactId>
-        <version>2.2</version>
-        <executions>
-          <execution>
-            <id>hbm2cfgxml</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>hbm2cfgxml</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-              <components>
-                <component>
-                  <name>hbm2cfgxml</name>
-                  <outputDirectory>src/main/resources</outputDirectory>
-                  <implementation>jdbcconfiguration</implementation>
-                </component>
-              </components>
-              <componentProperties>
-                <packagename>com.gwac.model</packagename>
-              </componentProperties>
-            </configuration>
-          </execution>
-          <execution>
-            <id>hbm2hbmxml</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>hbm2hbmxml</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-              <components>
-                <component>
-                  <name>hbm2hbmxml</name>
-                  <outputDirectory>src/main/resources</outputDirectory>
-                </component>
-              </components>
-              <componentProperties>
-                <packagename>com.gwac.model</packagename>
-              </componentProperties>
-            </configuration>
-          </execution>
-          <execution>
-            <id>hbm2java</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>hbm2java</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-              <components>
-                <component>
-                  <name>hbm2java</name>
-                  <outputDirectory>src/main/java</outputDirectory>
-                  <implementation>configuration</implementation>
-                </component>
-              </components>
-              <componentProperties>
-                <packagename>com.gwac.model</packagename>
-                <configurationfile>src/main/resources/hibernate.cfg.xml</configurationfile>
-              </componentProperties>
-            </configuration>
-          </execution>
-          <execution>
-            <id>hbm2dao</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>hbm2dao</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-              <components>
-                <component>
-                  <name>hbm2dao</name>
-                  <outputDirectory>src/main/java</outputDirectory>
-                  <implementation>configuration</implementation>
-                </component>
-              </components>
-              <componentProperties>
-                <packagename>com.gwac.dao</packagename>
-                <configurationfile>src/main/resources/hibernate.cfg.xml</configurationfile>
-              </componentProperties>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.3-1100.JDBC.41</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      
-      <!--plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>tomcat-maven-plugin</artifactId>
-        <configuration>
-          <url>http://127.0.0.1:8080/manager</url>
-          <server>tomcat7</server>
-          <path>/mkyongWebApp</path>
-        </configuration>
-      </plugin-->
-    </plugins>
-  </build>
   
   <repositories>
     <repository>
@@ -251,56 +165,148 @@
       <url>http://download.java.net/maven/2/</url>
     </repository>
   </repositories>
+  
+  <profiles>
+    <profile>
+      <id>generate-cfg-hbm-bean-dao</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>hibernate3-maven-plugin</artifactId>
+            <version>2.2</version>
+            <executions>
+              <execution>
+                <id>hbm2cfgxml</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>hbm2cfgxml</goal>
+                </goals>
+                <inherited>false</inherited>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2cfgxml</name>
+                      <outputDirectory>src/main/resources</outputDirectory>
+                      <implementation>jdbcconfiguration</implementation>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <packagename>com.gwac.model</packagename>
+                  </componentProperties>
+                </configuration>
+              </execution>
+              <execution>
+                <id>hbm2hbmxml</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>hbm2hbmxml</goal>
+                </goals>
+                <inherited>false</inherited>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2hbmxml</name>
+                      <outputDirectory>src/main/resources</outputDirectory>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <packagename>com.gwac.model</packagename>
+                  </componentProperties>
+                </configuration>
+              </execution>
+              <execution>
+                <id>hbm2java</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>hbm2java</goal>
+                </goals>
+                <inherited>false</inherited>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2java</name>
+                      <outputDirectory>src/main/java</outputDirectory>
+                      <implementation>configuration</implementation>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <!--packagename>com.gwac.model</packagename-->
+                    <configurationfile>src/main/resources/hibernate.cfg.xml</configurationfile>
+                  </componentProperties>
+                </configuration>
+              </execution>
+              <execution>
+                <id>hbm2dao</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>hbm2dao</goal>
+                </goals>
+                <inherited>false</inherited>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2dao</name>
+                      <outputDirectory>src/main/java</outputDirectory>
+                      <implementation>configuration</implementation>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <configurationfile>src/main/resources/hibernate.cfg.xml</configurationfile>
+                    <packagename>com.gwac.dao</packagename>
+                  </componentProperties>
+                </configuration>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.version}</version>
+                <type>jar</type>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
     
   <properties>
     <netbeans.hint.deploy.server>tomcat7</netbeans.hint.deploy.server>
         
     <!-- Application settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <copyright.year>2012</copyright.year>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <servlet.port>8080</servlet.port>
+    <copyright.year>2014</copyright.year>
     <db.name>xy</db.name>
 
     <!-- Framework dependency versions  -->
-    <junit.version>3.8.1</junit.version>
-    <mysql.version>5.1.22</mysql.version>
+    <struts2.version>2.3.15.1</struts2.version> <!-- 2.3.15.1  2.3.14.3 -->
+    <struts2.spring.version>2.3.15.1</struts2.spring.version> <!--2.3.4 2.3.15.1-->
+    <struts2.jquery.version>3.6.1</struts2.jquery.version>
+    <spring.version>3.1.0.RELEASE</spring.version>
+    <hibernate.version>4.0.1.Final</hibernate.version> <!-- 4.0.1.Final 3.6.0.Final -->
+    <sl4j.version>1.7.2</sl4j.version>
+    
+    <hsqldb.version>2.2.9</hsqldb.version>
+    <mysql.version>5.1.25</mysql.version>
     <postgres.version>9.3-1100.JDBC.41</postgres.version>
-    <!-- struts2  -->
-    <struts.version>2.3.15.1</struts.version><!--2.1.8  2.3.15.1 2.3.16-->
-    <struts.convention.version>2.3.15.1</struts.convention.version>
-    <struts.json.version>2.3.15.1</struts.json.version>
-    <struts.spring.version>2.3.15.1</struts.spring.version><!--2.1.8  2.3.15.1 -->
-    <!-- struts2-jquery  -->
-    <struts.jquery.version>3.6.1</struts.jquery.version>
-    <struts.jquery.chart.version>3.6.1</struts.jquery.chart.version>
-    <struts.jquery.grid.version>3.6.1</struts.jquery.grid.version>
-    <struts.jquery.richtext.version>3.6.1</struts.jquery.richtext.version>
-    <struts.jquery.tree.version>3.6.1</struts.jquery.tree.version>
-    <!-- spring  -->
-    <spring.version>3.0.5.RELEASE</spring.version><!--2.5.6  3.0.5.RELEASE 3.1.3.RELEASE 3.2.2.RELEASE -->
-    <spring.orm.version>3.2.5.RELEASE</spring.orm.version> <!--  3.1.3.RELEASE 3.2.5.RELEASE -->
-    <spring.context.version>3.0.5.RELEASE</spring.context.version>
-    <!-- hibernate  -->
-    <hibernate.version>4.1.8.Final</hibernate.version><!-- 3.2.7.ga 4.1.8.Final  -->
-    <!--   -->
-    <dom4j.version>1.6.1</dom4j.version>
-    <!--   -->
+    <h2.version>1.3.172</h2.version>
+    
     <commons.logging.version>1.1.1</commons.logging.version>
-    <commons.collections.version>3.2.1</commons.collections.version>
-    <!--   -->
-    <cglib.version>2.2</cglib.version>
-    <antlr.version>2.7.7</antlr.version>
-    <asm.version>3.3</asm.version> 
+    <log4j.version>1.2.14</log4j.version>
+    <hamcrest.version>1.3</hamcrest.version>
+    <junit.version>4.5</junit.version>
+    <servlet.version>2.4</servlet.version>
+    <jsp.version>2.0</jsp.version>
+    <selenium.version>2.24.1</selenium.version>
+    <mockito.version>1.9.5</mockito.version>
+    <javassist.version>3.17.1-GA</javassist.version>
+    <dom4j.version>1.6.1</dom4j.version>
+    <javaee.version>6.0</javaee.version>
         
-    <!-- Database settings -->
-    <dbunit.dataTypeFactoryName>org.dbunit.ext.mysql.MySqlDataTypeFactory</dbunit.dataTypeFactoryName>
-    <dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
-    <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
-    <jdbc.groupId>mysql</jdbc.groupId>
-    <jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
-    <jdbc.version>5.1.22</jdbc.version>
-    <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-    <jdbc.url>jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
-    <jdbc.username>root</jdbc.username>
-    <jdbc.password>123</jdbc.password>
   </properties>
+  
 </project>

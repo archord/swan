@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
+// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
 
 
 
@@ -12,6 +12,7 @@ public class DataProcessMachine  implements java.io.Serializable {
      private short dpmId;
      private String name;
      private String ip;
+     private Short tspId;
 
     public DataProcessMachine() {
     }
@@ -20,10 +21,11 @@ public class DataProcessMachine  implements java.io.Serializable {
     public DataProcessMachine(short dpmId) {
         this.dpmId = dpmId;
     }
-    public DataProcessMachine(short dpmId, String name, String ip) {
+    public DataProcessMachine(short dpmId, String name, String ip, Short tspId) {
        this.dpmId = dpmId;
        this.name = name;
        this.ip = ip;
+       this.tspId = tspId;
     }
    
     public short getDpmId() {
@@ -46,6 +48,13 @@ public class DataProcessMachine  implements java.io.Serializable {
     
     public void setIp(String ip) {
         this.ip = ip;
+    }
+    public Short getTspId() {
+        return this.tspId;
+    }
+    
+    public void setTspId(Short tspId) {
+        this.tspId = tspId;
     }
 
 

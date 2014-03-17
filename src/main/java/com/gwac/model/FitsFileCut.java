@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
+// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
 
 
 
@@ -11,9 +11,12 @@ public class FitsFileCut  implements java.io.Serializable {
 
      private long ffcId;
      private Long starId;
-     private Long dpmId;
+     private Short dpmId;
      private String storePath;
      private String fileName;
+     private Long ffId;
+     private Long templateFfcId;
+     private Boolean isTemplateCut;
 
     public FitsFileCut() {
     }
@@ -22,12 +25,15 @@ public class FitsFileCut  implements java.io.Serializable {
     public FitsFileCut(long ffcId) {
         this.ffcId = ffcId;
     }
-    public FitsFileCut(long ffcId, Long starId, Long dpmId, String storePath, String fileName) {
+    public FitsFileCut(long ffcId, Long starId, Short dpmId, String storePath, String fileName, Long ffId, Long templateFfcId, Boolean isTemplateCut) {
        this.ffcId = ffcId;
        this.starId = starId;
        this.dpmId = dpmId;
        this.storePath = storePath;
        this.fileName = fileName;
+       this.ffId = ffId;
+       this.templateFfcId = templateFfcId;
+       this.isTemplateCut = isTemplateCut;
     }
    
     public long getFfcId() {
@@ -44,11 +50,11 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setStarId(Long starId) {
         this.starId = starId;
     }
-    public Long getDpmId() {
+    public Short getDpmId() {
         return this.dpmId;
     }
     
-    public void setDpmId(Long dpmId) {
+    public void setDpmId(Short dpmId) {
         this.dpmId = dpmId;
     }
     public String getStorePath() {
@@ -64,6 +70,27 @@ public class FitsFileCut  implements java.io.Serializable {
     
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+    public Long getFfId() {
+        return this.ffId;
+    }
+    
+    public void setFfId(Long ffId) {
+        this.ffId = ffId;
+    }
+    public Long getTemplateFfcId() {
+        return this.templateFfcId;
+    }
+    
+    public void setTemplateFfcId(Long templateFfcId) {
+        this.templateFfcId = templateFfcId;
+    }
+    public Boolean getIsTemplateCut() {
+        return this.isTemplateCut;
+    }
+    
+    public void setIsTemplateCut(Boolean isTemplateCut) {
+        this.isTemplateCut = isTemplateCut;
     }
 
 

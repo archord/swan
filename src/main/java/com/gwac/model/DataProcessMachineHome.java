@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA
+// Generated 2014-3-2 18:54:13 by Hibernate Tools 3.2.2.GA
 
 
 import java.util.List;

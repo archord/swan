@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated Feb 14, 2014 3:32:17 PM by Hibernate Tools 3.2.2.GA -->
+<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.Telescope" table="telescope" schema="public">
-        <id name="tspId" type="long">
+        <id name="tspId" type="short">
             <column name="tsp_id" />
             <generator class="assigned" />
         </id>
@@ -16,6 +16,15 @@
         </property>
         <property name="dec" type="big_decimal">
             <column name="dec" precision="12" scale="8" />
+        </property>
+        <property name="diameter" type="java.lang.Short">
+            <column name="diameter" />
+        </property>
+        <property name="focalRatio" type="java.lang.Float">
+            <column name="focal_ratio" precision="8" scale="8" />
+        </property>
+        <property name="ccdType" type="string">
+            <column name="ccd_type" />
         </property>
     </class>
 </hibernate-mapping>
