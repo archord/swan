@@ -23,4 +23,7 @@
 
   <s:url var="url7" action="gwac/gwac-sequence"/>
   <sj:menuItem id="gwacsequencelink" href="%{url7}" targets="content" title="光变序列" />
+
+  <s:url var="url8" action="manage/fileUpload"/>
+  <sj:menuItem id="gwacsuploadfilelink" href="%{url8}" targets="content" title="上传文件" />
 </sj:menu>

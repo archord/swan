@@ -1,5 +1,4 @@
 <%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
-
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="sj" uri="/struts-jquery-tags" %>
 
@@ -10,7 +9,7 @@
     <legend>新用户注册，<span style="color: red">*</span>为必填</legend>
     <div class="ym-fbox-text">
       <label for="echo"><span style="color: red">*</span>登陆名: <span id="loginnameError" style="color: red"></span></label>
-      <s:textfield id="abc" name="abc" />
+      <s:textfield id="loginname" name="loginname" />
     </div>
     <div class="ym-fbox-text">
       <label for="echo"><span style="color: red">*</span>密码： <span id="loginpasswordError" style="color: red"></span></label>
@@ -23,7 +22,7 @@
     <div class="ym-fbox-button">
       <!--  targets="result"  content -->
       <sj:submit
-        targets="result" button="true" validate="true"
+        targets="content" button="true" validate="true"
         validateFunction="customeValidation"
         onBeforeTopics="removeErrors"
         onSuccessTopics="removeErrors"

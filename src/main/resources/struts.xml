@@ -9,7 +9,9 @@
   <constant name="struts.devMode" value="false" />
   <constant name="struts.convention.action.packages" value="com.gwac.action"/>
   <constant name="struts.convention.default.parent.package" value="json-default"/>
-  <constant name="struts.custom.i18n.resources" value="messages" />
+  <constant name="struts.custom.i18n.resources" value="messages, systemconfig" />
+  <constant name="struts.multipart.maxSize" value="104857600" />
+  <constant name="struts.multipart.saveDir" value="/home/xy/gwacdata" />
     
   <!-- Settings for CKEditor Image Upload -->
   <constant name="struts.ckeditor.allowUploads" value="true" /> <!-- default is false -->
@@ -18,16 +20,52 @@
     
   <!-- include file="showcase.xml" / -->
  	
-  <!--package name="default" namespace="/" extends="struts-default">
-		
-    <action name="addCustomerAction" class="customerAction" method="addCustomer" >
-      <result name="success">customer.jsp</result>
+  <package name="default" namespace="/" extends="struts-default">
+    
+    <action name="multipleFileUploadAction" 
+                class="com.gwac.action.MultipleFileUploadAction" 
+                method="display">
+      <result name="none">manage/fileUpload.jsp</result>
     </action>
+ 
+    <action name="uploadaaAction" 
+            class="com.gwac.action.MultipleFileUploadAction" 
+            method="upload">
+      <result name="success">manage/result.jsp</result>
+    </action>
+    
+    <action name="resultActionabc" class="com.gwac.action.FileUploadAction">
+      <interceptor-ref name="exception"/>
+      <interceptor-ref name="i18n"/>
+      <interceptor-ref name="fileUpload">
+        <param name="allowedTypes">text/plain,image/jpeg,image/gif,application/x-gzip,application/zip</param>
+        <param name="maximumSize">1024000</param>
+      </interceptor-ref> 
+      <interceptor-ref name="params">
+        <param name="excludeParams">dojo\..*,^struts\..*</param>
+      </interceptor-ref>
+      <interceptor-ref name="validation">
+        <param name="excludeMethods">input,back,cancel,browse</param>
+      </interceptor-ref>
+      <interceptor-ref name="workflow">
+        <param name="excludeMethods">input,back,cancel,browse</param>
+      </interceptor-ref>
+ 
+      <result name="success">manage/result.jsp</result>
+      <result name="input">manage/fileupload.jsp</result>
+      <result name="error">manage/result.jsp</result>
+ 
+    </action>
+    
+		
+    <!--action name="addCustomerAction" class="customerAction" method="addCustomer" >
+      <result name="success">customer.jsp</result>
+    </action-->
 	
-    <action name="listCustomerAction" class="customerAction" method="listCustomer" >
+    <!--action name="listCustomerAction" class="customerAction" method="listCustomer" >
       <result name="success">customer.jsp</result>
-    </action>
+    </action-->
 		
-  </package-->
+  </package>
 	
 </struts>

@@ -33,7 +33,8 @@ body{
 }
 
 #content > p, #content > div, #content > form {
-	margin: 10px;
+	margin: 5px;
+    padding: 5px;
 }
 
 .ym-hlist, .ym-hlist ul {

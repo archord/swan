@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  
+  <bean class="com.gwac.action.MultipleFileUploadAction">
+    <property name="otORDao" ref="otORDao" />	
+  </bean>
+
+  <!--bean id="otORService" class="com.gwac.service.UserInfoServiceImpl" >
+    <property name="otORDao" ref="otORDao" />
+  </bean-->
+	
+  <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.OtObserveRecord</value>
+    </property>
+  </bean>
+ 
+</beans>

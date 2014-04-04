@@ -12,7 +12,6 @@ import org.hibernate.HibernateException;
 public abstract class BaseHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
 
   private Class<T> clazz;
-
   SessionFactory sessionFactory;
 
   public void setClazz(final Class<T> clazzToSet) {
@@ -33,11 +32,11 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
     try {
       Session curSession = getCurrentSession();
       if (curSession == null) {
-	System.out.println("curSession is null!");
-	return null;
+        System.out.println("curSession is null!");
+        return null;
       } else {
-	List<T> list = curSession.createCriteria(clazz).list();
-	return list;
+        List<T> list = curSession.createCriteria(clazz).list();
+        return list;
       }
     } catch (HibernateException ex) {
       System.out.println(ex.toString());
@@ -48,9 +47,9 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
   @SuppressWarnings("unchecked")
   public List<T> findAll(int start, int resultSize) {
     return getCurrentSession().createCriteria(clazz)
-	    .setFirstResult(start)
-	    .setMaxResults(resultSize)
-	    .list();
+            .setFirstResult(start)
+            .setMaxResults(resultSize)
+            .list();
   }
 
   @Transactional(readOnly = false)
