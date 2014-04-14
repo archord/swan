@@ -21,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
 public class StoreStarInfoImpl {
 
   private static final Log log = LogFactory.getLog(StoreStarInfoImpl.class);
-  
   //单次传输配置文件信息
   private String storePath;
   private String configFile;
@@ -35,7 +34,6 @@ public class StoreStarInfoImpl {
   private String starLDir;
   private String orgIDir;
   private String cutIDir;
-  
   private OtObserveRecordDAO otORDao;
 
   public StoreStarInfoImpl() {
@@ -45,11 +43,10 @@ public class StoreStarInfoImpl {
     this.configFile = cfile;
     this.storePath = path;
   }
-  
-  public void storeOTList(){
-    
+
+  public void storeOTList() {
   }
-  
+
   public int parseConfigFile() {
     InputStream input = null;
     int fNum = 0;
@@ -136,14 +133,15 @@ public class StoreStarInfoImpl {
         log.warn("文件" + tfile1.getAbsolutePath() + "不存在!");
       }
       //存储切图文件
-      tfile2 = new File(path + cutIDir);
       for (String tci : cutImages) {
         tfile1 = new File(path, tci);
+        tfile2 = new File(path + cutIDir + "/", tci);
         if (tfile1.exists()) {
           if (tfile2.exists()) {
             FileUtils.forceDelete(tfile2);
           }
-          FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+          //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+          FileUtils.moveFile(tfile1, tfile2);
           fileNum++;
         } else {
           log.warn("文件" + tfile1.getAbsolutePath() + "不存在!");

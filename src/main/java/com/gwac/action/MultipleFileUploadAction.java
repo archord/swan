@@ -127,7 +127,7 @@ public class MultipleFileUploadAction extends ActionSupport {
         setEcho(getEcho() + "警告：应该传输文件" + shouldFNum + "个，实际传输文件" + i
                 + "个，有效文件" + validFNum + "个。\n");
       } else {
-        setEcho(getEcho() + "文件上传成功。\n");
+        setEcho(getEcho() + "上传成功，共"+ validFNum +"个文件。\n");
       }
       //otORDao.saveOTCopy(configFileFileName);
     } else {
