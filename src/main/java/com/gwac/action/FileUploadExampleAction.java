@@ -12,7 +12,7 @@ import java.io.File;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-public class FileUploadAction extends ActionSupport {
+public class FileUploadExampleAction extends ActionSupport {
 
   private File[] uploads;
   private String[] fileUploadContentType;

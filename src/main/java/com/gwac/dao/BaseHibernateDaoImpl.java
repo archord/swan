@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import org.hibernate.HibernateException;
+import org.hibernate.criterion.Projections;
 
 @Transactional
 public abstract class BaseHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
@@ -18,6 +19,10 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
     clazz = clazzToSet;
   }
 
+  public Number count() {
+    return (Number) getCurrentSession().createCriteria(clazz).setProjection(Projections.rowCount()).uniqueResult();
+  }
+
   @SuppressWarnings("unchecked")
   public T getById(final Long id) {
     if (id != null) {
@@ -27,7 +32,7 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
     }
   }
 
-  //@SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
   public List<T> findAll() {
     try {
       Session curSession = getCurrentSession();
@@ -46,7 +51,8 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
 
   @SuppressWarnings("unchecked")
   public List<T> findAll(int start, int resultSize) {
-    return getCurrentSession().createCriteria(clazz)
+    Session curSession = getCurrentSession();
+    return curSession.createCriteria(clazz)
             .setFirstResult(start)
             .setMaxResults(resultSize)
             .list();
@@ -60,6 +66,16 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
   @Transactional(readOnly = false)
   public void update(final T entity) {
     getCurrentSession().merge(entity);
+  }
+
+  @Transactional(readOnly = false)
+  public void delete(final T entity) {
+    getCurrentSession().delete(entity);
+  }
+
+  @Transactional(readOnly = false)
+  public void deleteById(final Long entityId) {
+    this.delete(this.getById(entityId));
   }
 
   public final Session getCurrentSession() {

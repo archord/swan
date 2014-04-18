@@ -4,9 +4,9 @@
 <!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.DataProcessMachine" table="data_process_machine" schema="public">
-        <id name="dpmId" type="short">
+        <id name="dpmId" type="int">
             <column name="dpm_id" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <property name="name" type="string">
             <column name="name" />
@@ -14,7 +14,7 @@
         <property name="ip" type="string">
             <column name="ip" length="15" />
         </property>
-        <property name="tspId" type="java.lang.Short">
+        <property name="tspId" type="int">
             <column name="tsp_id" />
         </property>
     </class>
