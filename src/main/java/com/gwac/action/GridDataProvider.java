@@ -27,9 +27,10 @@ import org.apache.struts2.convention.annotation.Result;
 import com.gwac.model.DataProcessMachine;
 import com.gwac.service.DataProcessMachineService;
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class GridDataProvider extends ActionSupport {
+public class GridDataProvider extends ActionSupport implements SessionAware {
 
   private static final long serialVersionUID = 5078264279068543593L;
   private static final Log log = LogFactory.getLog(GridDataProvider.class);
@@ -57,7 +58,8 @@ public class GridDataProvider extends ActionSupport {
   private Integer total = 0;
   // All Records
   private Integer records = 0;
-//  private boolean loadonce = false;
+  private boolean loadonce = false;
+  private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
   private DataProcessMachineService dpmService = null;
 
@@ -103,15 +105,18 @@ public class GridDataProvider extends ActionSupport {
 //    gridModel = new ArrayList<DataProcessMachine>();
 //    gridModel.add(dpm);
     System.out.println("size " + gridModel.size());
+    for(DataProcessMachine dpm: gridModel){
+      System.out.println("name="+dpm.getName());
+    }
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
 
     return SUCCESS;
   }
 
-  public String getJSON() {
-    return execute();
-  }
+//  public String getJSON() {
+//    return execute();
+//  }
 
   /**
    * @return how many rows we want to have into the grid
@@ -240,14 +245,18 @@ public class GridDataProvider extends ActionSupport {
   /**
    * @return the dpmService
    */
-  public DataProcessMachineService getDpmService() {
-    return dpmService;
-  }
+//  public DataProcessMachineService getDpmService() {
+//    return dpmService;
+//  }
 
   /**
    * @param dpmService the dpmService to set
    */
   public void setDpmService(DataProcessMachineService dpmService) {
     this.dpmService = dpmService;
+  }
+
+  public void setSession(Map<String, Object> session) {
+    this.session = session;
   }
 }
