@@ -26,7 +26,10 @@
 
   <s:url var="url8" action="manage/pfile-upload"/>
   <sj:menuItem id="gwacuploadfilelink" href="%{url8}" targets="content" title="上传文件" />
+  
+  <s:url var="url9" action="manage/ptelescope"/>
+  <sj:menuItem id="ptelescopelink" href="%{url9}" targets="content" title="望远镜信息" />
 
-  <s:url var="url9" action="manage/pdata-process-machine"/>
-  <sj:menuItem id="gwacdataprocessmachinelink" href="%{url9}" targets="content" title="管理数据处理机信息" />
+  <s:url var="url20" action="manage/pdata-process-machine"/>
+  <sj:menuItem id="gwacdataprocessmachinelink" href="%{url20}" targets="content" title="管理数据处理机信息" />
 </sj:menu>

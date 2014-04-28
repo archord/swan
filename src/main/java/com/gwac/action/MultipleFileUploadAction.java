@@ -62,22 +62,28 @@ public class MultipleFileUploadAction extends ActionSupport {
     String result = SUCCESS;
     echo = "";
 
+    //必须设置传输机器名称
+    if (null == dpmName) {
+      setEcho(getEcho() + "Must set machine name(dpmName).\n");
+      flag = false;
+    }
+    
     //必须传输参数配置文件
     //Must transform parameter config file
     if (null == configFile) {
-      setEcho(getEcho() + "必须传输参数配置文件(configFile)。\n");
+      setEcho(getEcho() + "Must upload config file(configFile).\n");
       flag = false;
     }
 
     //必须传输数据文件
     //Must transform data file
     if (fileUpload.isEmpty()) {
-      setEcho(getEcho() + "必须传输数据文件(fileUpload)。\n");
+      setEcho(getEcho() + "Must upload data file(fileUpload).\n");
       flag = false;
     }
 
     if (fileUpload.size() != fileUploadFileName.size()) {
-      setEcho(getEcho() + "上传数据错误，请重试或联系管理员。\n");
+      setEcho(getEcho() + "Upload data error，please retry or contact manager!\n");
       flag = false;
     }
 
@@ -86,9 +92,9 @@ public class MultipleFileUploadAction extends ActionSupport {
     if (flag) {
       if (this.getCurrentDirectory() == null || this.getCurrentDirectory().isEmpty()) {
         this.setCurrentDirectory(CommonFunction.getCurDateString());
-        setEcho(getEcho() + "没有设置存储文件夹名currentDirectory）, 使用当前日期");
+        setEcho(getEcho() + "Does not set store directory name(currentDirectory), use current date ");
         setEcho(getEcho() + this.getCurrentDirectory());
-        setEcho(getEcho() + "作为存储文件夹名。\n");
+        setEcho(getEcho() + " as store directory name.\n");
       }
 
       String destPath = getText("gwac.data.root.directory");
@@ -124,10 +130,10 @@ public class MultipleFileUploadAction extends ActionSupport {
       int shouldFNum = ssii.parseConfigFile();
       int validFNum = ssii.checkAndMoveDataFile(destPath);
       if (validFNum != i || validFNum != shouldFNum) {
-        setEcho(getEcho() + "警告：应该传输文件" + shouldFNum + "个，实际传输文件" + i
-                + "个，有效文件" + validFNum + "个。\n");
+        setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
+                + " files, " + validFNum + " valid files.\n");
       } else {
-        setEcho(getEcho() + "上传成功，共"+ validFNum +"个文件。\n");
+        setEcho(getEcho() + "Upload success，total upload "+ validFNum +" files.\n");
       }
       //otORDao.saveOTCopy(configFileFileName);
     } else {
@@ -241,5 +247,19 @@ public class MultipleFileUploadAction extends ActionSupport {
    */
   public void setOtORDao(OtObserveRecordDAO otORDao) {
     this.otORDao = otORDao;
+  }
+
+  /**
+   * @return the dpmName
+   */
+  public String getDpmName() {
+    return dpmName;
+  }
+
+  /**
+   * @param dpmName the dpmName to set
+   */
+  public void setDpmName(String dpmName) {
+    this.dpmName = dpmName;
   }
 }

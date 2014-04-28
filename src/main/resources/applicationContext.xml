@@ -11,6 +11,7 @@
   <import resource="com/gwac/bean/UserInfoBean.xml"/>
 <!--  <import resource="com/gwac/bean/OtObserveRecordBean.xml"/>-->
   <import resource="com/gwac/bean/DataProcessMachineBean.xml"/>
+  <import resource="com/gwac/bean/Telescope.xml"/>
   
  
 </beans>

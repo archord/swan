@@ -13,10 +13,10 @@
   </bean>-->
   
   <bean id="dpmService" class="com.gwac.service.DataProcessMachineServiceImpl">
-    <property name="dpmDao" ref="agfgjhhewr" />	
+    <property name="dpmDao" ref="dpmDao" />	
   </bean>
 	
-  <bean id="agfgjhhewr" class="com.gwac.dao.DataProcessMachineDAOImpl" >
+  <bean id="dpmDao" class="com.gwac.dao.DataProcessMachineDAOImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">
       <value>com.gwac.model.DataProcessMachine</value>

@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 
 @Transactional
@@ -37,11 +39,11 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
     try {
       Session curSession = getCurrentSession();
       if (curSession == null) {
-        System.out.println("curSession is null!");
-        return null;
+	System.out.println("curSession is null!");
+	return null;
       } else {
-        List<T> list = curSession.createCriteria(clazz).list();
-        return list;
+	List<T> list = curSession.createCriteria(clazz).list();
+	return list;
       }
     } catch (HibernateException ex) {
       System.out.println(ex.toString());
@@ -49,13 +51,20 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
     return null;
   }
 
+//Query q = session.createQuery("from FooBar as f");   
+//q.setFirstResult(500);   
+//q.setMaxResults(100);   
   @SuppressWarnings("unchecked")
-  public List<T> findAll(int start, int resultSize) {
-    Session curSession = getCurrentSession();
-    return curSession.createCriteria(clazz)
-            .setFirstResult(start)
-            .setMaxResults(resultSize)
-            .list();
+  public List<T> findRecord(int start, int resultSize, String[] orders) {
+    Criteria crt = getCurrentSession().createCriteria(clazz);
+    crt.setFirstResult(start);
+    crt.setMaxResults(resultSize);
+    if (orders != null) {
+      for (String ord : orders) {
+	crt.addOrder(Order.asc(ord));
+      }
+    }
+    return crt.list();
   }
 
   @Transactional(readOnly = false)

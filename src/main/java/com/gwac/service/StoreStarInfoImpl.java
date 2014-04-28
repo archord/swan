@@ -106,7 +106,7 @@ public class StoreStarInfoImpl {
         FileUtils.moveFile(tfile1, tfile2);
         fileNum++;
       } else {
-        log.warn("文件" + tfile1.getAbsolutePath() + "不存在!");
+        log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
       }
       //存储星表
       tfile1 = new File(path, starList);
@@ -118,7 +118,7 @@ public class StoreStarInfoImpl {
         FileUtils.moveFile(tfile1, tfile2);
         fileNum++;
       } else {
-        log.warn("文件" + tfile1.getAbsolutePath() + "不存在!");
+        log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
       }
       //存储原始图像
       tfile1 = new File(path, origImage);
@@ -130,7 +130,7 @@ public class StoreStarInfoImpl {
         FileUtils.moveFile(tfile1, tfile2);
         fileNum++;
       } else {
-        log.warn("文件" + tfile1.getAbsolutePath() + "不存在!");
+        log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
       }
       //存储切图文件
       for (String tci : cutImages) {
@@ -144,7 +144,7 @@ public class StoreStarInfoImpl {
           FileUtils.moveFile(tfile1, tfile2);
           fileNum++;
         } else {
-          log.warn("文件" + tfile1.getAbsolutePath() + "不存在!");
+          log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
         }
       }
     } catch (IOException ex) {
