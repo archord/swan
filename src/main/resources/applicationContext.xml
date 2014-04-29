@@ -8,9 +8,9 @@
   <!---->
   <import resource="DataSource.xml"/>
   <import resource="HibernateSessionFactory.xml"/>
-  <import resource="com/gwac/bean/UserInfoBean.xml"/>
-<!--  <import resource="com/gwac/bean/OtObserveRecordBean.xml"/>-->
   <import resource="com/gwac/bean/DataProcessMachineBean.xml"/>
+  <import resource="com/gwac/bean/UserInfoBean.xml"/>
+  <import resource="com/gwac/bean/OtObserveRecordBean.xml"/>
   
  
 </beans>

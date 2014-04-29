@@ -14,10 +14,10 @@
         <property name="ffId" type="java.lang.Long">
             <column name="ff_id" />
         </property>
-        <property name="ra" type="big_decimal">
+        <property name="ra" type="java.lang.Float">
             <column name="ra" precision="12" scale="8" />
         </property>
-        <property name="dec" type="big_decimal">
+        <property name="dec" type="java.lang.Float">
             <column name="dec" precision="12" scale="8" />
         </property>
         <property name="x" type="java.lang.Float">

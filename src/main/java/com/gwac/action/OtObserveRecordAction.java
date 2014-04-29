@@ -25,19 +25,20 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
 
-import com.gwac.model.UserInfo;
+import com.gwac.model.OtObserveRecord;
 import com.gwac.dao.CustomerDAO;
-import com.gwac.service.UserInfoService;
+import com.gwac.service.OtObserveRecordService;
+import com.gwac.service.OtObserveRecordService;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Result(name = "success", type = "json")
-public class UserList extends ActionSupport implements SessionAware {
+public class OtObserveRecordAction extends ActionSupport implements SessionAware {
 
   private static final long serialVersionUID = 5078264277068533593L;
-  private static final Log log = LogFactory.getLog(UserList.class);
+  private static final Log log = LogFactory.getLog(OtObserveRecordAction.class);
 
   // Your result List
-  private List<UserInfo> gridModel;
+  private List<OtObserveRecord> gridModel;
 
     // get how many rows we want to have into the grid - rowNum attribute in the
   // grid
@@ -73,15 +74,21 @@ public class UserList extends ActionSupport implements SessionAware {
 
   private boolean loadonce = false;
   private Map<String, Object> session;
-  private List<UserInfo> myCustomers;
-  private UserInfoService userService;
+  private List<OtObserveRecord> myCustomers;
+  private OtObserveRecordService otorService;
 
   @SuppressWarnings("unchecked")
   public String execute() {
-    gridModel = userService.listUser();
-    for(UserInfo ot:gridModel){
-      System.out.println(ot.getName());
+    System.out.println("**********************************************");
+    System.out.println("call me "+ new Date().toString());
+    System.out.println("**********************************************");
+    gridModel = otorService.getOtOR();
+    for(OtObserveRecord ot:gridModel){
+      System.out.println(ot.toString());
     }
+    System.out.println("**********************************************");
+    System.out.println("call me "+ new Date().toString());
+    System.out.println("**********************************************");
     return SUCCESS;
   }
 
@@ -158,14 +165,14 @@ public class UserList extends ActionSupport implements SessionAware {
   /**
    * @return an collection that contains the actual data
    */
-  public List<UserInfo> getGridModel() {
+  public List<OtObserveRecord> getGridModel() {
     return gridModel;
   }
 
   /**
    * @param gridModel an collection that contains the actual data
    */
-  public void setGridModel(List<UserInfo> gridModel) {
+  public void setGridModel(List<OtObserveRecord> gridModel) {
     this.gridModel = gridModel;
   }
 
@@ -222,17 +229,17 @@ public class UserList extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @return the userService
+   * @return the otorService
    */
-//  public UserInfoService getUserService() {
-//    return userService;
+//  public OtObserveRecordService getOtorService() {
+//    return otorService;
 //  }
 
   /**
-   * @param userService the userService to set
+   * @param otorService the otorService to set
    */
-  public void setUserService(UserInfoService userService) {
-    this.userService = userService;
+  public void setOtorService(OtObserveRecordService otorService) {
+    this.otorService = otorService;
   }
 
 }

@@ -14,8 +14,8 @@ public class OtObserveRecord  implements java.io.Serializable {
      private long oorId;
      private Long otId;
      private Long ffId;
-     private BigDecimal ra;
-     private BigDecimal dec;
+     private float ra;
+     private float dec;
      private Float x;
      private Float y;
      private Date datetime;
@@ -38,7 +38,7 @@ public class OtObserveRecord  implements java.io.Serializable {
     public OtObserveRecord(long oorId) {
         this.oorId = oorId;
     }
-    public OtObserveRecord(long oorId, Long otId, Long ffId, BigDecimal ra, BigDecimal dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId, Long ffcId, Short otTypeId) {
+    public OtObserveRecord(long oorId, Long otId, Long ffId, float ra, float dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId, Long ffcId, Short otTypeId) {
        this.oorId = oorId;
        this.otId = otId;
        this.ffId = ffId;
@@ -81,18 +81,18 @@ public class OtObserveRecord  implements java.io.Serializable {
     public void setFfId(Long ffId) {
         this.ffId = ffId;
     }
-    public BigDecimal getRa() {
+    public float getRa() {
         return this.ra;
     }
     
-    public void setRa(BigDecimal ra) {
+    public void setRa(float ra) {
         this.ra = ra;
     }
-    public BigDecimal getDec() {
+    public float getDec() {
         return this.dec;
     }
     
-    public void setDec(BigDecimal dec) {
+    public void setDec(float dec) {
         this.dec = dec;
     }
     public Float getX() {
@@ -193,8 +193,11 @@ public class OtObserveRecord  implements java.io.Serializable {
     public void setOtTypeId(Short otTypeId) {
         this.otTypeId = otTypeId;
     }
-
-
+    
+     @Override
+    public String toString(){
+      return "ot_id="+otId+"ra="+ra+"dec="+dec;
+    }
 
 
 }

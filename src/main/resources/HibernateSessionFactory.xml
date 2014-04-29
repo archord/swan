@@ -24,8 +24,9 @@
     </property>
     <property name="mappingResources">
       <list>
-        <value>com/gwac/model/UserInfo.hbm.xml</value>
         <value>com/gwac/model/DataProcessMachine.hbm.xml</value>
+        <value>com/gwac/model/UserInfo.hbm.xml</value>
+        <value>com/gwac/model/OtObserveRecord.hbm.xml</value>
       </list>
     </property>	
   </bean>
