@@ -26,7 +26,8 @@ public class DataProcessMachineServiceImpl implements DataProcessMachineService 
   @Override
   @Transactional
   public List<DataProcessMachine> findAll(int start, int resultSize) {
-    return dpmDao.findAll();
+    String order[] = {"name"};
+    return dpmDao.findRecord(start, resultSize, order);
   }
 
   /**

@@ -1,21 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package com.gwac.action;
 
 import com.gwac.dao.DataProcessMachineDAO;
@@ -29,7 +11,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 import com.gwac.model.DataProcessMachine;
 import com.opensymphony.xwork2.ActionSupport;
@@ -38,7 +19,7 @@ import com.opensymphony.xwork2.ActionSupport;
   @Action(value = "/edit-dpm-entry", results = {
     @Result(location = "simpleecho.jsp", name = "success"),
     @Result(location = "simpleecho.jsp", name = "input")})})
-public class EditDPMEntry extends ActionSupport implements SessionAware {
+public class EditDPMEntry extends ActionSupport {
 
   private static final long serialVersionUID = -3454448309088641394L;
   private static final Log log = LogFactory.getLog(EditDPMEntry.class);
@@ -46,20 +27,21 @@ public class EditDPMEntry extends ActionSupport implements SessionAware {
   private String id;
   private String name;
   private String ip;
-  private String telscope;
+  private int tspId;
   private List<DataProcessMachine> mchList;
   private DataProcessMachineDAO dpmDao;
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
-    log.debug("id :" + getId());
-    log.debug("name :" + name);
-    log.debug("ip :" + getIp());
-    log.debug("telscope :" + getTelscope());
+    log.info("id :" + getId());
+    log.info("name :" + name);
+    log.info("ip :" + getIp());
+    log.info("telscope :" + getTspId());
 
     DataProcessMachine dpm = new DataProcessMachine();
     dpm.setName(name);
     dpm.setIp(ip);
+    dpm.setTspId(getTspId());
 
     if (oper.equalsIgnoreCase("add")) {
       log.debug("Add DataProcessMachine");
@@ -107,20 +89,6 @@ public class EditDPMEntry extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @return the telscope
-   */
-  public String getTelscope() {
-    return telscope;
-  }
-
-  /**
-   * @param telscope the telscope to set
-   */
-  public void setTelscope(String telscope) {
-    this.telscope = telscope;
-  }
-
-  /**
    * @return the mchList
    */
   public List<DataProcessMachine> getMchList() {
@@ -137,9 +105,9 @@ public class EditDPMEntry extends ActionSupport implements SessionAware {
   /**
    * @return the dpmDao
    */
-  public DataProcessMachineDAO getDpmDao() {
-    return dpmDao;
-  }
+//  public DataProcessMachineDAO getDpmDao() {
+//    return dpmDao;
+//  }
 
   /**
    * @param dpmDao the dpmDao to set
@@ -162,7 +130,18 @@ public class EditDPMEntry extends ActionSupport implements SessionAware {
     this.id = id;
   }
 
-  public void setSession(Map<String, Object> map) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  /**
+   * @return the tspId
+   */
+  public int getTspId() {
+    return tspId;
   }
+
+  /**
+   * @param tspId the tspId to set
+   */
+  public void setTspId(int tspId) {
+    this.tspId = tspId;
+  }
+
 }

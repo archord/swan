@@ -12,8 +12,8 @@ public class Telescope  implements java.io.Serializable {
 
      private short tspId;
      private String name;
-     private BigDecimal ra;
-     private BigDecimal dec;
+     private Float ra;
+     private Float dec;
      private Short diameter;
      private Float focalRatio;
      private String ccdType;
@@ -25,7 +25,7 @@ public class Telescope  implements java.io.Serializable {
     public Telescope(short tspId) {
         this.tspId = tspId;
     }
-    public Telescope(short tspId, String name, BigDecimal ra, BigDecimal dec, Short diameter, Float focalRatio, String ccdType) {
+    public Telescope(short tspId, String name, Float ra, Float dec, Short diameter, Float focalRatio, String ccdType) {
        this.tspId = tspId;
        this.name = name;
        this.ra = ra;
@@ -49,20 +49,6 @@ public class Telescope  implements java.io.Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    public BigDecimal getRa() {
-        return this.ra;
-    }
-    
-    public void setRa(BigDecimal ra) {
-        this.ra = ra;
-    }
-    public BigDecimal getDec() {
-        return this.dec;
-    }
-    
-    public void setDec(BigDecimal dec) {
-        this.dec = dec;
-    }
     public Short getDiameter() {
         return this.diameter;
     }
@@ -84,6 +70,34 @@ public class Telescope  implements java.io.Serializable {
     public void setCcdType(String ccdType) {
         this.ccdType = ccdType;
     }
+
+  /**
+   * @return the ra
+   */
+  public Float getRa() {
+    return ra;
+  }
+
+  /**
+   * @param ra the ra to set
+   */
+  public void setRa(Float ra) {
+    this.ra = ra;
+  }
+
+  /**
+   * @return the dec
+   */
+  public Float getDec() {
+    return dec;
+  }
+
+  /**
+   * @param dec the dec to set
+   */
+  public void setDec(Float dec) {
+    this.dec = dec;
+  }
 
 
 

@@ -4,7 +4,8 @@
  */
 package com.gwac.dao;
 
-import com.gwac.model.DataProcessMachine;
+
+import com.gwac.model.Telescope;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -12,7 +13,7 @@ import org.hibernate.Session;
  *
  * @author xy
  */
-public class DataProcessMachineDAOImpl extends BaseHibernateDaoImpl<DataProcessMachine> implements DataProcessMachineDAO {
+public class TelescopeDAOImpl extends BaseHibernateDaoImpl<Telescope> implements TelescopeDAO {
 
 //  public Number count() {
 //    String sql = "select count(*) from data_process_machine;";

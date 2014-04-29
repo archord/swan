@@ -19,7 +19,9 @@
     <b>currentDirectory:&nbsp;存储文件夹名，</b> 
     为参数，后面的值没有“@”。传输的所有文件都存放在这个文件夹中，可不填写，默认以当前日期命名。<br/>
     <b>configFile:&nbsp;参数配置文件，</b> 
-    为文件，后面的值有“@”，以“.properties”结尾。后面传输的文件必须在这里说明，其中包含OT列表文件名(OTList)，
+    <a href="/svom/files/data-upload-config.properties" target="_blank" style="color:red" title="点击下载">
+      示例文件</a>，为文件，后面的值有“@”，以“.properties”结尾。后面传输的文件必须在这里说明，
+      其中包含OT列表文件名(OTList)，
     切图文件文件名列表(cutImage)，星表文件文件名(starList)，原始图像文件名(origImage)。<br/>
     <b>fileUpload:&nbsp;文件n，</b> 
     后面的值有“@”。待上传的所有文件都以该参赛进行传递。单次传送总文件大小不超过1ooMB。<br/>
