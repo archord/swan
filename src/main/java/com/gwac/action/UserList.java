@@ -78,10 +78,46 @@ public class UserList extends ActionSupport implements SessionAware {
 
   @SuppressWarnings("unchecked")
   public String execute() {
-    gridModel = userService.listUser();
-    for(UserInfo ot:gridModel){
-      System.out.println(ot.getName());
+    log.debug("Page " + getPage() + " Rows " + getRows()
+            + " Sorting Order " + getSord() + " Index Row :" + getSidx());
+    log.debug("Search :" + searchField + " " + searchOper + " "
+            + searchString);
+
+    // Count all record (select count(*) from your_custumers)
+    int tn = userService.count();
+    log.debug("number="+tn);
+
+    if (totalrows != null) {
+      records = totalrows;
     }
+    
+//    if(rows==-1){
+//      rows = records;
+//    }
+
+    // Calucalate until rows ware selected
+    int to = (rows * page);
+
+    // Calculate the first row to read
+    int from = to - rows;
+
+    // Set to = max rows
+    if (to > records) {
+      to = records;
+    }
+
+//    setGridModel(dpmDao.findAll(page, rows));
+    gridModel = userService.listUser(from, rows);
+//    gridModel = tspDao.findAll();
+    log.debug("from="+from);
+    log.debug("to="+to);
+    log.debug("size=" + gridModel.size());
+//    for(Telescope dpm: gridModel){
+//      System.out.println("name="+dpm.getName());
+//    }
+    
+    // Calculate total Pages
+    total = (int) Math.ceil((double) records / (double) rows);
     return SUCCESS;
   }
 

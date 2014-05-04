@@ -1,8 +1,7 @@
 package com.gwac.model;
-// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
+// Generated May 4, 2014 10:28:46 AM by Hibernate Tools 3.2.2.GA
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -15,11 +14,11 @@ public class Environment  implements java.io.Serializable {
      private Date date;
      private Date time;
      private String wather;
-     private BigDecimal windSpeed;
-     private BigDecimal temperature;
-     private BigDecimal humidity;
-     private BigDecimal seeing;
-     private BigDecimal cloudPercent;
+     private Float windSpeed;
+     private Float temperature;
+     private Float humidity;
+     private Float seeing;
+     private Float cloudPercent;
 
     public Environment() {
     }
@@ -28,7 +27,7 @@ public class Environment  implements java.io.Serializable {
     public Environment(long envId) {
         this.envId = envId;
     }
-    public Environment(long envId, Date date, Date time, String wather, BigDecimal windSpeed, BigDecimal temperature, BigDecimal humidity, BigDecimal seeing, BigDecimal cloudPercent) {
+    public Environment(long envId, Date date, Date time, String wather, Float windSpeed, Float temperature, Float humidity, Float seeing, Float cloudPercent) {
        this.envId = envId;
        this.date = date;
        this.time = time;
@@ -68,39 +67,39 @@ public class Environment  implements java.io.Serializable {
     public void setWather(String wather) {
         this.wather = wather;
     }
-    public BigDecimal getWindSpeed() {
+    public Float getWindSpeed() {
         return this.windSpeed;
     }
     
-    public void setWindSpeed(BigDecimal windSpeed) {
+    public void setWindSpeed(Float windSpeed) {
         this.windSpeed = windSpeed;
     }
-    public BigDecimal getTemperature() {
+    public Float getTemperature() {
         return this.temperature;
     }
     
-    public void setTemperature(BigDecimal temperature) {
+    public void setTemperature(Float temperature) {
         this.temperature = temperature;
     }
-    public BigDecimal getHumidity() {
+    public Float getHumidity() {
         return this.humidity;
     }
     
-    public void setHumidity(BigDecimal humidity) {
+    public void setHumidity(Float humidity) {
         this.humidity = humidity;
     }
-    public BigDecimal getSeeing() {
+    public Float getSeeing() {
         return this.seeing;
     }
     
-    public void setSeeing(BigDecimal seeing) {
+    public void setSeeing(Float seeing) {
         this.seeing = seeing;
     }
-    public BigDecimal getCloudPercent() {
+    public Float getCloudPercent() {
         return this.cloudPercent;
     }
     
-    public void setCloudPercent(BigDecimal cloudPercent) {
+    public void setCloudPercent(Float cloudPercent) {
         this.cloudPercent = cloudPercent;
     }
 

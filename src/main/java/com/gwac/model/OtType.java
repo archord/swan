@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
+// Generated May 4, 2014 10:28:46 AM by Hibernate Tools 3.2.2.GA
 
 
 

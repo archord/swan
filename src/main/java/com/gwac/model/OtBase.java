@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
+// Generated May 4, 2014 10:28:46 AM by Hibernate Tools 3.2.2.GA
 
 
 
@@ -10,7 +10,9 @@ public class OtBase  implements java.io.Serializable {
 
 
      private long otId;
-     private String otName;
+     private String name;
+     private Float ra;
+     private Float dec;
 
     public OtBase() {
     }
@@ -19,9 +21,11 @@ public class OtBase  implements java.io.Serializable {
     public OtBase(long otId) {
         this.otId = otId;
     }
-    public OtBase(long otId, String otName) {
+    public OtBase(long otId, String name, Float ra, Float dec) {
        this.otId = otId;
-       this.otName = otName;
+       this.name = name;
+       this.ra = ra;
+       this.dec = dec;
     }
    
     public long getOtId() {
@@ -31,12 +35,26 @@ public class OtBase  implements java.io.Serializable {
     public void setOtId(long otId) {
         this.otId = otId;
     }
-    public String getOtName() {
-        return this.otName;
+    public String getName() {
+        return this.name;
     }
     
-    public void setOtName(String otName) {
-        this.otName = otName;
+    public void setName(String name) {
+        this.name = name;
+    }
+    public Float getRa() {
+        return this.ra;
+    }
+    
+    public void setRa(Float ra) {
+        this.ra = ra;
+    }
+    public Float getDec() {
+        return this.dec;
+    }
+    
+    public void setDec(Float dec) {
+        this.dec = dec;
     }
 
 

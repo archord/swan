@@ -36,13 +36,13 @@ public class UserInfoAction implements ModelDriven {
     user.setCreateDate(new Date());
     userService.addUser(user);
     userList = null;
-    userList = userService.listUser();
+//    userList = userService.listUser();
     return "success";
   }
 
   //list all users
   public String listUser() throws Exception {
-    userList = userService.listUser();
+//    userList = userService.listUser();
     return "success";
   }
 }

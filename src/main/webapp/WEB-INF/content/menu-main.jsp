@@ -21,6 +21,6 @@
   <s:url var="url6" action="#"/>
   <sj:menuItem id="remotehighlightlink" href="%{url6}" targets="content" title="联系我们" />
 
-  <s:url var="url7" action="user/userlist"/>
+  <s:url var="url7" action="user/puserlist"/>
   <sj:menuItem id="userList" href="%{url7}" targets="content" title="用户列表" />
 </sj:menu>

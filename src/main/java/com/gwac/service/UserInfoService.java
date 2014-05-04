@@ -7,7 +7,8 @@ import com.gwac.model.UserInfo;
 
 public interface UserInfoService {
 
+  int count();
   ServiceResult addUser(UserInfo customer);
-  List<UserInfo> listUser();
+  List<UserInfo> listUser(int start, int resultSize);
 
 }

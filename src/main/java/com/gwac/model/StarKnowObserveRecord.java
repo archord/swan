@@ -1,8 +1,7 @@
 package com.gwac.model;
-// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
+// Generated May 4, 2014 10:28:46 AM by Hibernate Tools 3.2.2.GA
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -14,8 +13,8 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
      private long skorId;
      private Long starId;
      private Long ffId;
-     private BigDecimal ra;
-     private BigDecimal dec;
+     private Float ra;
+     private Float dec;
      private Float x;
      private Float y;
      private Date datetime;
@@ -36,7 +35,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public StarKnowObserveRecord(long skorId) {
         this.skorId = skorId;
     }
-    public StarKnowObserveRecord(long skorId, Long starId, Long ffId, BigDecimal ra, BigDecimal dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId) {
+    public StarKnowObserveRecord(long skorId, Long starId, Long ffId, Float ra, Float dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId) {
        this.skorId = skorId;
        this.starId = starId;
        this.ffId = ffId;
@@ -77,18 +76,18 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setFfId(Long ffId) {
         this.ffId = ffId;
     }
-    public BigDecimal getRa() {
+    public Float getRa() {
         return this.ra;
     }
     
-    public void setRa(BigDecimal ra) {
+    public void setRa(Float ra) {
         this.ra = ra;
     }
-    public BigDecimal getDec() {
+    public Float getDec() {
         return this.dec;
     }
     
-    public void setDec(BigDecimal dec) {
+    public void setDec(Float dec) {
         this.dec = dec;
     }
     public Float getX() {

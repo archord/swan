@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated May 4, 2014 10:28:47 AM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.Gimbal" table="gimbal" schema="public">
         <id name="gmbId" type="short">
@@ -11,11 +11,11 @@
         <property name="name" type="string">
             <column name="name" />
         </property>
-        <property name="ra" type="big_decimal">
-            <column name="ra" precision="12" scale="8" />
+        <property name="ra" type="java.lang.Float">
+            <column name="ra" precision="8" scale="8" />
         </property>
-        <property name="dec" type="big_decimal">
-            <column name="dec" precision="12" scale="8" />
+        <property name="dec" type="java.lang.Float">
+            <column name="dec" precision="8" scale="8" />
         </property>
     </class>
 </hibernate-mapping>

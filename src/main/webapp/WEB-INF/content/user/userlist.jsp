@@ -12,7 +12,7 @@
 shrinkToFit="true" 自动调节到表格的宽度 -->
 <sjg:grid 
   id="gridedittable"
-  caption="数据处理机信息管理"
+  caption="用户信息管理"
   dataType="json"
   href="%{remoteurl}"
   pager="true"
@@ -38,11 +38,11 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   >
   <sjg:gridColumn name="uiId"	      index="id"	  title="ID" width="30" formatter="integer" 
 		  sortable="false" displayTitle="false"/>
-  <sjg:gridColumn name="name"	      index="name"	  title="Name"  editable="true" edittype="text"
+  <sjg:gridColumn name="name"	      index="name"	  title="姓名"  editable="true" edittype="text"
 		  sortable="true"/>
-  <sjg:gridColumn name="password"   index="password"	  title="Country"  editable="true" edittype="text"
+  <sjg:gridColumn name="password"   index="password"	  title="密码"  editable="true" edittype="text"
 		  sortable="false"/>
-  <sjg:gridColumn name="address"    index="address"	  title="City"  editable="true" edittype="text"
+  <sjg:gridColumn name="address"    index="address"	  title="地址"  editable="true" edittype="text"
 		  sortable="false"/>
   <sjg:gridColumn name="createDate" index="createDate" title="Credit Limit" formatter="date"  editable="true" edittype="text"
 		  formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 

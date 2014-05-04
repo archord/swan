@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
+// Generated May 4, 2014 10:28:46 AM by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -12,18 +12,23 @@ public class UserInfo  implements java.io.Serializable {
 
      private int uiId;
      private String name;
-     private String password;
      private String address;
      private Date createDate;
+     private String password;
 
     public UserInfo() {
     }
 
-    public UserInfo(int uiId, String name, String address, Date createDate) {
+	
+    public UserInfo(int uiId) {
+        this.uiId = uiId;
+    }
+    public UserInfo(int uiId, String name, String address, Date createDate, String password) {
        this.uiId = uiId;
        this.name = name;
        this.address = address;
        this.createDate = createDate;
+       this.password = password;
     }
    
     public int getUiId() {
@@ -54,20 +59,13 @@ public class UserInfo  implements java.io.Serializable {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
-
-  /**
-   * @return the password
-   */
-  public String getPassword() {
-    return password;
-  }
-
-  /**
-   * @param password the password to set
-   */
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public String getPassword() {
+        return this.password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 
 

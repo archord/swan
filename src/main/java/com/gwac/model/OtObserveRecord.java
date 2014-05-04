@@ -1,8 +1,7 @@
 package com.gwac.model;
-// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
+// Generated May 4, 2014 10:28:46 AM by Hibernate Tools 3.2.2.GA
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -14,8 +13,8 @@ public class OtObserveRecord  implements java.io.Serializable {
      private long oorId;
      private Long otId;
      private Long ffId;
-     private float ra;
-     private float dec;
+     private Float ra;
+     private Float dec;
      private Float x;
      private Float y;
      private Date datetime;
@@ -38,7 +37,7 @@ public class OtObserveRecord  implements java.io.Serializable {
     public OtObserveRecord(long oorId) {
         this.oorId = oorId;
     }
-    public OtObserveRecord(long oorId, Long otId, Long ffId, float ra, float dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId, Long ffcId, Short otTypeId) {
+    public OtObserveRecord(long oorId, Long otId, Long ffId, Float ra, Float dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId, Long ffcId, Short otTypeId) {
        this.oorId = oorId;
        this.otId = otId;
        this.ffId = ffId;
@@ -81,18 +80,18 @@ public class OtObserveRecord  implements java.io.Serializable {
     public void setFfId(Long ffId) {
         this.ffId = ffId;
     }
-    public float getRa() {
+    public Float getRa() {
         return this.ra;
     }
     
-    public void setRa(float ra) {
+    public void setRa(Float ra) {
         this.ra = ra;
     }
-    public float getDec() {
+    public Float getDec() {
         return this.dec;
     }
     
-    public void setDec(float dec) {
+    public void setDec(Float dec) {
         this.dec = dec;
     }
     public Float getX() {
@@ -193,11 +192,8 @@ public class OtObserveRecord  implements java.io.Serializable {
     public void setOtTypeId(Short otTypeId) {
         this.otTypeId = otTypeId;
     }
-    
-     @Override
-    public String toString(){
-      return "ot_id="+otId+"ra="+ra+"dec="+dec;
-    }
+
+
 
 
 }

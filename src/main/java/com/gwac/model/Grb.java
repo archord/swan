@@ -1,8 +1,7 @@
 package com.gwac.model;
-// Generated 2014-3-2 17:07:19 by Hibernate Tools 3.2.2.GA
+// Generated May 4, 2014 10:28:46 AM by Hibernate Tools 3.2.2.GA
 
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -16,8 +15,8 @@ public class Grb  implements java.io.Serializable {
      private Date triggerTime;
      private String triggerType;
      private String triggerName;
-     private BigDecimal triggerRa;
-     private BigDecimal triggerDec;
+     private Float triggerRa;
+     private Float triggerDec;
 
     public Grb() {
     }
@@ -26,7 +25,7 @@ public class Grb  implements java.io.Serializable {
     public Grb(long grbId) {
         this.grbId = grbId;
     }
-    public Grb(long grbId, String grbName, Date triggerTime, String triggerType, String triggerName, BigDecimal triggerRa, BigDecimal triggerDec) {
+    public Grb(long grbId, String grbName, Date triggerTime, String triggerType, String triggerName, Float triggerRa, Float triggerDec) {
        this.grbId = grbId;
        this.grbName = grbName;
        this.triggerTime = triggerTime;
@@ -71,18 +70,18 @@ public class Grb  implements java.io.Serializable {
     public void setTriggerName(String triggerName) {
         this.triggerName = triggerName;
     }
-    public BigDecimal getTriggerRa() {
+    public Float getTriggerRa() {
         return this.triggerRa;
     }
     
-    public void setTriggerRa(BigDecimal triggerRa) {
+    public void setTriggerRa(Float triggerRa) {
         this.triggerRa = triggerRa;
     }
-    public BigDecimal getTriggerDec() {
+    public Float getTriggerDec() {
         return this.triggerDec;
     }
     
-    public void setTriggerDec(BigDecimal triggerDec) {
+    public void setTriggerDec(Float triggerDec) {
         this.triggerDec = triggerDec;
     }
 

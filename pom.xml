@@ -241,7 +241,7 @@
                   </componentProperties>
                 </configuration>
               </execution>
-              <execution>
+              <!--execution>
                 <id>hbm2dao</id>
                 <phase>generate-sources</phase>
                 <goals>
@@ -261,7 +261,7 @@
                     <packagename>com.gwac.dao</packagename>
                   </componentProperties>
                 </configuration>
-              </execution>
+              </execution-->
             </executions>
             <dependencies>
               <dependency>

@@ -31,8 +31,13 @@ public class UserInfoServiceImpl implements UserInfoService {
   }
 
   //call DAO to return users
-  public List<UserInfo> listUser() {
-    return userDAO.findAll();
+  public List<UserInfo> listUser(int start, int resultSize) {
+    String order[] = {"name"};
+    return userDAO.findRecord(start, resultSize, order);
+  }
+
+  public int count() {
+    return userDAO.count().intValue();
   }
 
 }

@@ -15,7 +15,7 @@ import org.apache.struts2.convention.annotation.Result;
 import com.gwac.model.DataProcessMachine;
 import com.opensymphony.xwork2.ActionSupport;
 
-@Actions({
+@Actions({ 
   @Action(value = "/edit-dpm-entry", results = {
     @Result(location = "simpleecho.jsp", name = "success"),
     @Result(location = "simpleecho.jsp", name = "input")})})
@@ -27,7 +27,7 @@ public class EditDPMEntry extends ActionSupport {
   private String id;
   private String name;
   private String ip;
-  private int tspId;
+  private short tspId;
   private List<DataProcessMachine> mchList;
   private DataProcessMachineDAO dpmDao;
 
@@ -133,14 +133,14 @@ public class EditDPMEntry extends ActionSupport {
   /**
    * @return the tspId
    */
-  public int getTspId() {
+  public short getTspId() {
     return tspId;
   }
 
   /**
    * @param tspId the tspId to set
    */
-  public void setTspId(int tspId) {
+  public void setTspId(short tspId) {
     this.tspId = tspId;
   }
 

@@ -22,11 +22,11 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   viewrecords="true">
   <sjg:gridColumn name="uiId"	      index="id"	  title="ID" width="30" formatter="integer" 
 		  sortable="false" displayTitle="false"/>
-  <sjg:gridColumn name="name"	      index="name"	  title="Name" 
+  <sjg:gridColumn name="name"	      index="name"	  title="姓名" 
 		  sortable="true"/>
-  <sjg:gridColumn name="password"   index="password"	  title="Country" 
+  <sjg:gridColumn name="password"   index="password"	  title="密码" 
 		  sortable="false"/>
-  <sjg:gridColumn name="address"    index="address"	  title="City" 
+  <sjg:gridColumn name="address"    index="address"	  title="地址" 
 		  sortable="false"/>
   <sjg:gridColumn name="createDate" index="createDate" title="Credit Limit" formatter="date" 
 		  formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 2014-3-2 17:07:23 by Hibernate Tools 3.2.2.GA -->
+<!-- Generated May 4, 2014 10:28:47 AM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.Environment" table="environment" schema="public">
         <id name="envId" type="long">
@@ -17,20 +17,20 @@
         <property name="wather" type="string">
             <column name="wather" length="64" />
         </property>
-        <property name="windSpeed" type="big_decimal">
-            <column name="wind_speed" precision="4" scale="1" />
+        <property name="windSpeed" type="java.lang.Float">
+            <column name="wind_speed" precision="8" scale="8" />
         </property>
-        <property name="temperature" type="big_decimal">
-            <column name="temperature" precision="4" scale="1" />
+        <property name="temperature" type="java.lang.Float">
+            <column name="temperature" precision="8" scale="8" />
         </property>
-        <property name="humidity" type="big_decimal">
-            <column name="humidity" precision="4" scale="1" />
+        <property name="humidity" type="java.lang.Float">
+            <column name="humidity" precision="8" scale="8" />
         </property>
-        <property name="seeing" type="big_decimal">
-            <column name="seeing" precision="5" />
+        <property name="seeing" type="java.lang.Float">
+            <column name="seeing" precision="8" scale="8" />
         </property>
-        <property name="cloudPercent" type="big_decimal">
-            <column name="cloud_percent" precision="5" />
+        <property name="cloudPercent" type="java.lang.Float">
+            <column name="cloud_percent" precision="8" scale="8" />
         </property>
     </class>
 </hibernate-mapping>
