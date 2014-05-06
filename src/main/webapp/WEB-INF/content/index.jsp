@@ -105,7 +105,7 @@
               </sj:div>
             </aside>
             <article class="ym-g75 ym-gr content">
-              <s:url var="remotelinkurl" action="gwac/gwac-system" namespace="/" />
+              <s:url var="remotelinkurl" action="gwac/pgwac-system" namespace="/" />
               <sj:div id="content" href="%{remotelinkurl}" cssClass="ym-wbox">
               </sj:div>
             </article>

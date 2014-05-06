@@ -1,10 +1,9 @@
 package com.gwac.service;
 
-import java.util.List;
-
 import com.gwac.dao.UserInfoDAO;
 import com.gwac.enums.ServiceResult;
 import com.gwac.model.UserInfo;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +32,8 @@ public class UserInfoServiceImpl implements UserInfoService {
   //call DAO to return users
   public List<UserInfo> listUser(int start, int resultSize) {
     String order[] = {"name"};
-    return userDAO.findRecord(start, resultSize, order);
+    int[] sorts = {1};
+    return userDAO.findRecord(start, resultSize, order, sorts);
   }
 
   public int count() {

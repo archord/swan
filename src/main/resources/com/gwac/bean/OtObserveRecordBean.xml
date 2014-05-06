@@ -6,6 +6,7 @@
   
   <bean class="com.gwac.action.MultipleFileUploadAction">
     <property name="otORDao" ref="otORDao" />	
+    <property name="ssiService" ref="ssiService" />	
   </bean>
   
   <bean class="com.gwac.action.OtObserveRecordAction">
@@ -15,6 +16,12 @@
   <bean id="otORService" class="com.gwac.service.OtObserveRecordServiceImpl" >
     <property name="otorDao" ref="otORDao" />
   </bean>
+
+  <bean id="ssiService" class="com.gwac.service.StoreStarInfoServiceImpl" >
+    <property name="otORDao" ref="otORDao" />
+    <property name="ufrDao" ref="ufrDao" />
+    <property name="ufuDao" ref="ufuDao" />
+  </bean>
 	
   <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
@@ -22,5 +29,5 @@
       <value>com.gwac.model.OtObserveRecord</value>
     </property>
   </bean>
- 
+	
 </beans>

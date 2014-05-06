@@ -9,12 +9,15 @@
         <property name="hibernate.connection.url">jdbc:postgresql://10.36.1.154:5432/xy</property>
         <property name="hibernate.connection.username">xy</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <mapping resource="com/gwac/model/OtObserveRecordTmp.hbm.xml" />
         <mapping resource="com/gwac/model/StarKnow.hbm.xml" />
+        <mapping resource="com/gwac/model/UploadFileRecord.hbm.xml" />
         <mapping resource="com/gwac/model/Telescope.hbm.xml" />
         <mapping resource="com/gwac/model/OtObserveRecord.hbm.xml" />
         <mapping resource="com/gwac/model/FitsFileCut.hbm.xml" />
         <mapping resource="com/gwac/model/OtType.hbm.xml" />
         <mapping resource="com/gwac/model/StarListFile.hbm.xml" />
+        <mapping resource="com/gwac/model/UploadFileUnstore.hbm.xml" />
         <mapping resource="com/gwac/model/DataProcessMachine.hbm.xml" />
         <mapping resource="com/gwac/model/VariationType.hbm.xml" />
         <mapping resource="com/gwac/model/UserInfo.hbm.xml" />

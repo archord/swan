@@ -31,7 +31,8 @@ public class TelescopeServiceImpl implements TelescopeService {
   @Transactional
   public List<Telescope> findAll(int start, int resultSize) {
     String order[] = {"name"};
-    return getTspDao().findRecord(start, resultSize, order);
+    int[] sorts = {1};
+    return getTspDao().findRecord(start, resultSize, order, sorts);
   }
 
   /**

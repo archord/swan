@@ -8,6 +8,6 @@ package com.gwac.service;
  *
  * @author xy
  */
-public interface StoreStarInfo {
+public interface StoreStarInfoService {
   
 }

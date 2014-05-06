@@ -12,9 +12,9 @@ public interface BaseHibernateDao<T> {
 
     public List<T> findAll();
 
-    public List<T> findRecord(int start, int resultSize, String[] order);
+    public List<T> findRecord(int start, int resultSize, String[] orderNames, int[] sort);
 
-    public void save(final T entity) throws Exception;
+    public void save(final T entity);
 
     public void update(final T entity);
 

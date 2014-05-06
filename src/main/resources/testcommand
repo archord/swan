@@ -1,1 +1,9 @@
-curl  http://localhost:8080/svom/uploadAction.action -F configFile=@data-upload-config.properties -F fileUpload=@m01_20140403_ot.cat -F fileUpload=@m01_20140403_star.cat -F fileUpload=@m01_20140403_image.fits -F fileUpload=@m01_20140403_cutimage1.fits -F fileUpload=@m01_20140403_cutimage2.fits -F fileUpload=@m01_20140403_cutimage3.fits
+curl  http://10.36.1.154:8080/svom/uploadAction.action \
+-F dpmName=m01 \
+-F currentDirectory=20140505 \
+-F configFile=@data-upload-config.properties \
+-F fileUpload=@res_M1AB_M1_02_140328_1_160060_0209_matchchb.log \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.png \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.png 

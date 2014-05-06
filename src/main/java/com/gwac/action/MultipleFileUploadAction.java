@@ -9,7 +9,7 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.service.StoreStarInfoImpl;
+import com.gwac.service.StoreStarInfoServiceImpl;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -42,6 +42,7 @@ public class MultipleFileUploadAction extends ActionSupport {
   private static final Log log = LogFactory.getLog(UserRegister.class);
   
   private OtObserveRecordDAO otORDao;
+  private StoreStarInfoServiceImpl ssiService;
   
   private String dpmName;
   private String currentDirectory;
@@ -67,6 +68,12 @@ public class MultipleFileUploadAction extends ActionSupport {
       setEcho(getEcho() + "Must set machine name(dpmName).\n");
       flag = false;
     }
+
+    //必须设置传输机器名称
+    if (null == currentDirectory) {
+      setEcho(getEcho() + "Must set current date(currentDirectory).\n");
+      flag = false;
+    }
     
     //必须传输参数配置文件
     //Must transform parameter config file
@@ -90,18 +97,19 @@ public class MultipleFileUploadAction extends ActionSupport {
     //没有设置存储文件夹名, 使用当前日期，作为存储文件夹名。
     //Do not set data store directory name, use current date, as data store directory name
     if (flag) {
-      if (this.getCurrentDirectory() == null || this.getCurrentDirectory().isEmpty()) {
-        this.setCurrentDirectory(CommonFunction.getCurDateString());
-        setEcho(getEcho() + "Does not set store directory name(currentDirectory), use current date ");
-        setEcho(getEcho() + this.getCurrentDirectory());
-        setEcho(getEcho() + " as store directory name.\n");
-      }
+      //由于跨天问题，这里不再自行判断currentDirectory是否为空，前面已将currentDirectory设置为必选项
+//      if (this.getCurrentDirectory() == null || this.getCurrentDirectory().isEmpty()) {
+//        this.setCurrentDirectory(CommonFunction.getCurDateString());
+//        setEcho(getEcho() + "Does not set store directory name(currentDirectory), use current date ");
+//        setEcho(getEcho() + this.getCurrentDirectory());
+//        setEcho(getEcho() + " as store directory name.\n");
+//      }
 
       String destPath = getText("gwac.data.root.directory");
       if (destPath.charAt(destPath.length() - 1) != '/') {
-        destPath += "/" + getCurrentDirectory() + "/";
+        destPath += "/" + getCurrentDirectory() + "/" + getDpmName() + "/";
       } else {
-        destPath += getCurrentDirectory() + "/";
+        destPath += getCurrentDirectory() + "/" + getDpmName() + "/";
       }
 
       //接收参数配置文件
@@ -115,20 +123,23 @@ public class MultipleFileUploadAction extends ActionSupport {
       int i = 0;
       for (File file : fileUpload) {
         File destFile = new File(destPath, fileUploadFileName.get(i++));
+        //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
         if (destFile.exists()) {
           FileUtils.forceDelete(destFile);
         }
         FileUtils.moveFile(file, destFile);
       }
 
-      StoreStarInfoImpl ssii = new StoreStarInfoImpl(destPath, configFileFileName);
-      ssii.setOtLDir(getText("gwac.data.otlist.directory"));
-      ssii.setStarLDir(getText("gwac.data.starlist.directory"));
-      ssii.setOrgIDir(getText("gwac.data.origimage.directory"));
-      ssii.setCutIDir(getText("gwac.data.cutimages.directory"));
+//      StoreStarInfoServiceImpl ssiService = new StoreStarInfoServiceImpl(destPath, configFileFileName);
+      ssiService.setStorePath(destPath);
+      ssiService.setConfigFile(configFileFileName);
+      ssiService.setOtLDir(getText("gwac.data.otlist.directory"));
+      ssiService.setStarLDir(getText("gwac.data.starlist.directory"));
+      ssiService.setOrgIDir(getText("gwac.data.origimage.directory"));
+      ssiService.setCutIDir(getText("gwac.data.cutimages.directory"));
       
-      int shouldFNum = ssii.parseConfigFile();
-      int validFNum = ssii.checkAndMoveDataFile(destPath);
+      int shouldFNum = ssiService.parseConfigFile();
+      int validFNum = ssiService.checkAndMoveDataFile(destPath);
       if (validFNum != i || validFNum != shouldFNum) {
         setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
                 + " files, " + validFNum + " valid files.\n");
@@ -261,5 +272,12 @@ public class MultipleFileUploadAction extends ActionSupport {
    */
   public void setDpmName(String dpmName) {
     this.dpmName = dpmName;
+  }
+
+  /**
+   * @param ssiService the ssiService to set
+   */
+  public void setSsiService(StoreStarInfoServiceImpl ssiService) {
+    this.ssiService = ssiService;
   }
 }

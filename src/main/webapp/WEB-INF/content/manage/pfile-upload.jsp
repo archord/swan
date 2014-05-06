@@ -11,13 +11,15 @@
 
 <div class="ui-widget-content ui-corner-all " style="margin:0px;width:100%;">
   <p style="margin:0px; padding: 5px; "><b>curl后台上传文件示例：</b><br/>
-    curl url -F currentDirectory=dirName 
+    curl uploadUrl -F dpmName=machineName -F currentDirectory=dirName 
     -F configFile=@configFileName <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     -F fileUpload=@filename1 
     -F fileUpload=@filenameN <br/>
     <b>参数说明：</b><br/>
     <b>currentDirectory:&nbsp;存储文件夹名，</b> 
-    为参数，后面的值没有“@”。传输的所有文件都存放在这个文件夹中，可不填写，默认以当前日期命名。<br/>
+    为参数，后面的值没有“@”。每天观测传输的所有文件都存放在这个文件夹中，必须填写，建议使用当前日期命名。<br/>
+    <b>dpmName:&nbsp;数据处理机名称，</b> 
+    为参数，后面的值没有“@”。存储文件夹名的子目录，存储每个机器所传输的文件，必须填写。<br/>
     <b>configFile:&nbsp;参数配置文件，</b> 
     <a href="/svom/files/data-upload-config.properties" target="_blank" style="color:red" title="点击下载">
       示例文件</a>，为文件，后面的值有“@”，以“.properties”结尾。后面传输的文件必须在这里说明，
