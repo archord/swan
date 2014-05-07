@@ -18,20 +18,21 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   gridModel="gridModel"
   rowList="10,15,20" 
   rowNum="15" 
-  rownumbers="false"
+  rownumbers="true"
   width="650"
   viewrecords="true">
-  <sjg:gridColumn name="ufrId"	  index="id"	  title="ID" width="30" formatter="integer" 
-		  sortable="false" displayTitle="false"/>
-  <sjg:gridColumn name="storePath"  index=""	  title="存储路径" 
-		  sortable="true"/>
-  <sjg:gridColumn name="fileName"   index="fileName"	  title="文件名" 
-		  sortable="false"/>
-  <sjg:gridColumn name="fileType"    index="fileType"	  title="文件类型" width="50" 
-		  sortable="false"/>
-  <sjg:gridColumn name="uploadSuccess"    index="uploadSuccess"	  title="是否上传成功" width="80" 
-		  sortable="false"/>
-  <sjg:gridColumn name="uploadDate" index="uploadDate" title="上传时间" formatter="date" width="150"  
-		  formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
+  <sjg:gridColumn name="fileName"   index="fileName"	  title="文件名" width="410"  
 		  sortable="false" align="left"/>
+  <sjg:gridColumn name="uploadSuccess"    index="uploadSuccess"	  title="是否上传成功" width="80" 
+		  sortable="false" align="center"/>
+  <sjg:gridColumn name="uploadDate" index="uploadDate" title="上传时间" formatter="date" width="160"  
+		  formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
+		  sortable="false" align="center"/>
 </sjg:grid>
+
+  <!--sjg:gridColumn name="fileType"    index="fileType"	  title="类型" width="30" 
+		  sortable="false" align="center"/-->
+  <!--sjg:gridColumn name="ufrId"	  index="id"	  title="ID" width="30" formatter="integer" 
+		  sortable="false" displayTitle="false"/-->
+  <!--sjg:gridColumn name="storePath"  index=""	  title="存储路径" 
+		  sortable="true"/-->

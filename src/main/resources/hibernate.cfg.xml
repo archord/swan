@@ -22,6 +22,7 @@
         <mapping resource="com/gwac/model/VariationType.hbm.xml" />
         <mapping resource="com/gwac/model/UserInfo.hbm.xml" />
         <mapping resource="com/gwac/model/OtBase.hbm.xml" />
+        <mapping resource="com/gwac/model/OtNumber.hbm.xml" />
         <mapping resource="com/gwac/model/Environment.hbm.xml" />
         <mapping resource="com/gwac/model/FitsFile.hbm.xml" />
         <mapping resource="com/gwac/model/Grb.hbm.xml" />

@@ -4,10 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
-  <bean class="com.gwac.action.MultipleFileUploadAction">
-    <property name="otORDao" ref="otORDao" />	
-    <property name="ssiService" ref="ssiService" />	
-  </bean>
   
   <bean class="com.gwac.action.OtObserveRecordAction">
     <property name="otorService" ref="otORService" />	
@@ -15,18 +11,48 @@
 
   <bean id="otORService" class="com.gwac.service.OtObserveRecordServiceImpl" >
     <property name="otorDao" ref="otORDao" />
-  </bean>
-
-  <bean id="ssiService" class="com.gwac.service.StoreStarInfoServiceImpl" >
-    <property name="otORDao" ref="otORDao" />
-    <property name="ufrDao" ref="ufrDao" />
     <property name="ufuDao" ref="ufuDao" />
+    <property name="otcDao" ref="otcDao" />
+    <property name="otnDao" ref="otnDao" />
+    <property name="otbDao" ref="otbDao" />
+    <property name="ffDao" ref="ffDao" />
+    <property name="ffcDao" ref="ffcDao" />
   </bean>
 	
   <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">
       <value>com.gwac.model.OtObserveRecord</value>
+    </property>
+  </bean>
+	
+  <bean id="ffDao" class="com.gwac.dao.FitsFileDAOImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FitsFile</value>
+    </property>
+  </bean>
+	
+  <bean id="ffcDao" class="com.gwac.dao.FitsFileCutDAOImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FitsFileCut</value>
+    </property>
+  </bean>
+	
+  <bean id="otcDao" class="com.gwac.dao.OTCatalogDaoImpl" />
+	
+  <bean id="otbDao" class="com.gwac.dao.OtBaseDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.OtBase</value>
+    </property>
+  </bean>
+	
+  <bean id="otnDao" class="com.gwac.dao.OtNumberDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.OtNumber</value>
     </property>
   </bean>
 	

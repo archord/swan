@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated May 5, 2014 8:56:32 PM by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.gwac.model.OtNumber" table="ot_number" schema="public">
+        <id name="otnId" type="long">
+            <column name="otn_id" />
+            <generator class="increment" />
+        </id>
+        <property name="date" type="string">
+            <column name="date"/>
+        </property>
+        <property name="number" type="int">
+            <column name="number" />
+        </property>
+    </class>
+</hibernate-mapping>

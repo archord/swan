@@ -4,14 +4,14 @@
  */
 package com.gwac.dao;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordTmp;
 
 
 /**
  *
  * @author xy
  */
-public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord>{
+public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecordTmp>{
   
   public void saveOTCopy(final String fname, final String sql);
 }

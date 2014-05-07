@@ -4,7 +4,6 @@
  */
 package com.gwac.service;
 
-import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.UploadFileRecord;
@@ -23,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class StoreStarInfoServiceImpl implements StoreStarInfoService {
+public class UploadFileServiceImpl implements UploadFileService {
 
-  private static final Log log = LogFactory.getLog(StoreStarInfoServiceImpl.class);
+  private static final Log log = LogFactory.getLog(UploadFileServiceImpl.class);
   //单次传输配置文件信息
   private String storePath;
   private String configFile;
@@ -38,14 +37,13 @@ public class StoreStarInfoServiceImpl implements StoreStarInfoService {
   private String starLDir;
   private String orgIDir;
   private String cutIDir;
-  private OtObserveRecordDAO otORDao;
   private UploadFileRecordDao ufrDao;
   private UploadFileUnstoreDao ufuDao;
 
-  public StoreStarInfoServiceImpl() {
+  public UploadFileServiceImpl() {
   }
 
-  public StoreStarInfoServiceImpl(String path, String cfile) {
+  public UploadFileServiceImpl(String path, String cfile) {
     this.configFile = cfile;
     this.storePath = path;
   }
@@ -119,6 +117,12 @@ public class StoreStarInfoServiceImpl implements StoreStarInfoService {
             obj.setFileName(tStr);
             obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
+            
+            UploadFileRecord obj2 = new UploadFileRecord();
+            obj2.setStorePath(path + starLDir);
+            obj2.setFileName(tStr);
+            obj2.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
+            obj2.setUploadDate(new Date());
 
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
             if (tfile1.exists()) {
@@ -128,12 +132,15 @@ public class StoreStarInfoServiceImpl implements StoreStarInfoService {
               //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
               FileUtils.moveFile(tfile1, tfile2);
               obj.setUploadSuccess(Boolean.TRUE);
+              obj2.setUploadSuccess(Boolean.TRUE);
               fileNum++;
             } else {
               obj.setUploadSuccess(Boolean.FALSE);
+              obj2.setUploadSuccess(Boolean.FALSE);
               log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
             }
             ufuDao.save(obj);
+            ufrDao.save(obj2);
           }
         }
       }
@@ -150,6 +157,12 @@ public class StoreStarInfoServiceImpl implements StoreStarInfoService {
             obj.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
             
+            UploadFileRecord obj2 = new UploadFileRecord();
+            obj2.setStorePath(path + starLDir);
+            obj2.setFileName(tStr);
+            obj2.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
+            obj2.setUploadDate(new Date());
+            
             if (tfile1.exists()) {
               if (tfile2.exists()) {
                 FileUtils.forceDelete(tfile2);
@@ -157,12 +170,15 @@ public class StoreStarInfoServiceImpl implements StoreStarInfoService {
               //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
               FileUtils.moveFile(tfile1, tfile2);
               obj.setUploadSuccess(Boolean.TRUE);
+              obj2.setUploadSuccess(Boolean.TRUE);
               fileNum++;
             } else {
               obj.setUploadSuccess(Boolean.FALSE);
+              obj2.setUploadSuccess(Boolean.FALSE);
               log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
             }
             ufuDao.save(obj);
+            ufrDao.save(obj2);
           }
         }
       }
@@ -257,13 +273,6 @@ public class StoreStarInfoServiceImpl implements StoreStarInfoService {
    */
   public void setCutIDir(String cutIDir) {
     this.cutIDir = cutIDir;
-  }
-
-  /**
-   * @param otORDao the otORDao to set
-   */
-  public void setOtORDao(OtObserveRecordDAO otORDao) {
-    this.otORDao = otORDao;
   }
 
   /**

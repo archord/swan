@@ -4,7 +4,7 @@
  */
 package com.gwac.service;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordTmp;
 import java.util.List;
 
 /**
@@ -12,5 +12,6 @@ import java.util.List;
  * @author xy
  */
 public interface OtObserveRecordService {
-  public List<OtObserveRecord> getOtOR();
+  public List<OtObserveRecordTmp> getOtOR();
+  public void storeOTCatalog();
 }

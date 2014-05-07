@@ -18,18 +18,14 @@
  */
 package com.gwac.action;
 
+import com.gwac.model.OtObserveRecordTmp;
+import com.gwac.service.OtObserveRecordService;
+import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
-
-import com.gwac.model.OtObserveRecord;
-import com.gwac.dao.CustomerDAO;
-import com.gwac.service.OtObserveRecordService;
-import com.gwac.service.OtObserveRecordService;
-import com.opensymphony.xwork2.ActionSupport;
 
 @Result(name = "success", type = "json")
 public class OtObserveRecordAction extends ActionSupport implements SessionAware {
@@ -38,7 +34,7 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   private static final Log log = LogFactory.getLog(OtObserveRecordAction.class);
 
   // Your result List
-  private List<OtObserveRecord> gridModel;
+  private List<OtObserveRecordTmp> gridModel;
 
     // get how many rows we want to have into the grid - rowNum attribute in the
   // grid
@@ -74,7 +70,7 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
 
   private boolean loadonce = false;
   private Map<String, Object> session;
-  private List<OtObserveRecord> myCustomers;
+  private List<OtObserveRecordTmp> myCustomers;
   private OtObserveRecordService otorService;
 
   @SuppressWarnings("unchecked")
@@ -83,7 +79,7 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
     System.out.println("call me "+ new Date().toString());
     System.out.println("**********************************************");
     gridModel = otorService.getOtOR();
-    for(OtObserveRecord ot:gridModel){
+    for(OtObserveRecordTmp ot:gridModel){
       System.out.println(ot.toString());
     }
     System.out.println("**********************************************");
@@ -165,14 +161,14 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   /**
    * @return an collection that contains the actual data
    */
-  public List<OtObserveRecord> getGridModel() {
+  public List<OtObserveRecordTmp> getGridModel() {
     return gridModel;
   }
 
   /**
    * @param gridModel an collection that contains the actual data
    */
-  public void setGridModel(List<OtObserveRecord> gridModel) {
+  public void setGridModel(List<OtObserveRecordTmp> gridModel) {
     this.gridModel = gridModel;
   }
 
@@ -231,7 +227,7 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   /**
    * @return the otorService
    */
-//  public OtObserveRecordService getOtorService() {
+//  public OtObserveRecordTmpService getOtorService() {
 //    return otorService;
 //  }
 

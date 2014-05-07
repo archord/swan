@@ -8,18 +8,15 @@ package com.gwac.action;
  *
  * @author xy
  */
-import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.service.StoreStarInfoServiceImpl;
-import com.gwac.util.CommonFunction;
+import com.gwac.service.UploadFileServiceImpl;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.opensymphony.xwork2.ActionSupport;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,8 +38,7 @@ public class MultipleFileUploadAction extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(UserRegister.class);
   
-  private OtObserveRecordDAO otORDao;
-  private StoreStarInfoServiceImpl ssiService;
+  private UploadFileServiceImpl ufService;
   
   private String dpmName;
   private String currentDirectory;
@@ -130,16 +126,16 @@ public class MultipleFileUploadAction extends ActionSupport {
         FileUtils.moveFile(file, destFile);
       }
 
-//      StoreStarInfoServiceImpl ssiService = new StoreStarInfoServiceImpl(destPath, configFileFileName);
-      ssiService.setStorePath(destPath);
-      ssiService.setConfigFile(configFileFileName);
-      ssiService.setOtLDir(getText("gwac.data.otlist.directory"));
-      ssiService.setStarLDir(getText("gwac.data.starlist.directory"));
-      ssiService.setOrgIDir(getText("gwac.data.origimage.directory"));
-      ssiService.setCutIDir(getText("gwac.data.cutimages.directory"));
+//      UploadFileServiceImpl ufService = new UploadFileServiceImpl(destPath, configFileFileName);
+      ufService.setStorePath(destPath);
+      ufService.setConfigFile(configFileFileName);
+      ufService.setOtLDir(getText("gwac.data.otlist.directory"));
+      ufService.setStarLDir(getText("gwac.data.starlist.directory"));
+      ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
+      ufService.setCutIDir(getText("gwac.data.cutimages.directory"));
       
-      int shouldFNum = ssiService.parseConfigFile();
-      int validFNum = ssiService.checkAndMoveDataFile(destPath);
+      int shouldFNum = ufService.parseConfigFile();
+      int validFNum = ufService.checkAndMoveDataFile(destPath);
       if (validFNum != i || validFNum != shouldFNum) {
         setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
                 + " files, " + validFNum + " valid files.\n");
@@ -247,20 +243,6 @@ public class MultipleFileUploadAction extends ActionSupport {
   }
 
   /**
-   * @return the otORDao
-   */
-  public OtObserveRecordDAO getOtORDao() {
-    return otORDao;
-  }
-
-  /**
-   * @param otORDao the otORDao to set
-   */
-  public void setOtORDao(OtObserveRecordDAO otORDao) {
-    this.otORDao = otORDao;
-  }
-
-  /**
    * @return the dpmName
    */
   public String getDpmName() {
@@ -275,9 +257,9 @@ public class MultipleFileUploadAction extends ActionSupport {
   }
 
   /**
-   * @param ssiService the ssiService to set
+   * @param ufService the ufService to set
    */
-  public void setSsiService(StoreStarInfoServiceImpl ssiService) {
-    this.ssiService = ssiService;
+  public void setUfService(UploadFileServiceImpl ufService) {
+    this.ufService = ufService;
   }
 }

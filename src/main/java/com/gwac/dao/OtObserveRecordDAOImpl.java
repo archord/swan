@@ -4,7 +4,7 @@
  */
 package com.gwac.dao;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordTmp;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import org.postgresql.copy.CopyManager;
  *
  * @author xy
  */
-public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
+public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecordTmp> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
