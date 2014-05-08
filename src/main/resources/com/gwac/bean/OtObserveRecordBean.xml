@@ -22,7 +22,7 @@
   <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">
-      <value>com.gwac.model.OtObserveRecord</value>
+      <value>com.gwac.model.OtObserveRecordTmp</value>
     </property>
   </bean>
 	

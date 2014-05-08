@@ -20,5 +20,14 @@
         <property name="foundTimeUtc" type="timestamp">
             <column name="found_time_utc" length="29" />
         </property>
+        <property name="identify" type="string">
+            <column name="identify" length="12" />
+        </property>
+        <property name="xtemp" type="java.lang.Float">
+            <column name="xtemp" precision="8" scale="8" />
+        </property>
+        <property name="ytemp" type="java.lang.Float">
+            <column name="ytemp" precision="8" scale="8" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -27,6 +27,7 @@
         <value>com/gwac/model/DataProcessMachine.hbm.xml</value>
         <value>com/gwac/model/UserInfo.hbm.xml</value>
         <value>com/gwac/model/OtObserveRecord.hbm.xml</value>
+        <value>com/gwac/model/OtObserveRecordTmp.hbm.xml</value>
         <value>com/gwac/model/Telescope.hbm.xml</value>
         <value>com/gwac/model/UploadFileRecord.hbm.xml</value>
         <value>com/gwac/model/UploadFileUnstore.hbm.xml</value>

@@ -15,6 +15,9 @@ public class OtBase  implements java.io.Serializable {
      private Float ra;
      private Float dec;
      private Date foundTimeUtc;
+     private String identify;
+     private float xtemp;
+     private float ytemp;
 
     public OtBase() {
     }
@@ -66,6 +69,48 @@ public class OtBase  implements java.io.Serializable {
     public void setFoundTimeUtc(Date foundTimeUtc) {
         this.foundTimeUtc = foundTimeUtc;
     }
+
+  /**
+   * @return the identify
+   */
+  public String getIdentify() {
+    return identify;
+  }
+
+  /**
+   * @param identify the identify to set
+   */
+  public void setIdentify(String identify) {
+    this.identify = identify;
+  }
+
+  /**
+   * @return the xtemp
+   */
+  public float getXtemp() {
+    return xtemp;
+  }
+
+  /**
+   * @param xtemp the xtemp to set
+   */
+  public void setXtemp(float xtemp) {
+    this.xtemp = xtemp;
+  }
+
+  /**
+   * @return the ytemp
+   */
+  public float getYtemp() {
+    return ytemp;
+  }
+
+  /**
+   * @param ytemp the ytemp to set
+   */
+  public void setYtemp(float ytemp) {
+    this.ytemp = ytemp;
+  }
 
 
 

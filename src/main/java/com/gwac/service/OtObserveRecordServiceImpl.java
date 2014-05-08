@@ -11,7 +11,10 @@ import com.gwac.dao.OtBaseDao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.FitsFile;
+import com.gwac.model.FitsFileCut;
 import com.gwac.model.OTCatalog;
+import com.gwac.model.OtBase;
 import com.gwac.model.OtObserveRecordTmp;
 import com.gwac.model.UploadFileUnstore;
 import java.util.List;
@@ -39,16 +42,73 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     List<UploadFileUnstore> ufus = ufuDao.findAll();
     if (ufus != null) {
       for (UploadFileUnstore ufu : ufus) {
-        List<OTCatalog> otcs = otcDao.getOTCatalog(ufu.getStorePath()+"/"+ufu.getFileName());
-        System.out.println("******************************************size="+otcs.size());
+
+        List<OTCatalog> otcs = otcDao.getOTCatalog(ufu.getStorePath() + "/" + ufu.getFileName());
         for (OTCatalog otc : otcs) {
+
+          String orgImg = otc.getImageName();
+          String otListPath = ufu.getStorePath();
           String fileDate = otc.getFileDate();
-          System.out.println("******************************************fileDate="+fileDate);
-          int otNumber = otnDao.getNumberByDate(fileDate);
-          System.out.println("******************************************otNumber="+otNumber);
-          String otName = String.format("%s_%05d", fileDate, otNumber);
-          System.out.println("******************************************otName="+otName);
+
+          int xtemp = Math.round(otc.getXTemp());
+          int ytemp = Math.round(otc.getYTemp());
+          String cutImg = String.format("%s_OT_X%4dY%4d.fit",
+                  orgImg.substring(0, orgImg.indexOf('.')), xtemp, ytemp);
+
+          FitsFile ff = new FitsFile();
+          ff.setFileName(orgImg);
+          ffDao.save(ff);
+
+          FitsFileCut ffc = new FitsFileCut();
+          ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
+          ffc.setFileName(cutImg);
+          ffcDao.save(ffc);
+
+          OtBase ob = new OtBase();
+          ob.setRa(otc.getRaD());
+          ob.setDec(otc.getDecD());
+          ob.setFoundTimeUtc(otc.getDateUt());
+          ob.setIdentify(orgImg.substring(0, 21));
+          ob.setXtemp(otc.getXTemp());
+          ob.setYtemp(otc.getYTemp());
+
+          /**
+           * 判断该OT是否存在，如果不存在则为该OT取名，并插入数据库 如果存在则取出该OT的ID
+           */
+          if (!otbDao.exist(ob)) {
+
+
+            int otNumber = otnDao.getNumberByDate(fileDate);
+            String otName = String.format("%s_%05d", fileDate, otNumber);
+            ob.setName(otName);
+            otbDao.save(ob);
+
+          }
+
+          OtObserveRecordTmp oort = new OtObserveRecordTmp();
+          oort.setOtId(ob.getOtId());
+          oort.setFfId(ff.getFfId());
+          oort.setFfcId(ffc.getFfcId());
+          oort.setRaD(otc.getRaD());
+          oort.setDecD(otc.getDecD());
+          oort.setX(otc.getX());
+          oort.setY(otc.getY());
+          oort.setXTemp(otc.getXTemp());
+          oort.setYTemp(otc.getYTemp());
+          oort.setDateUt(otc.getDateUt());
+          oort.setFlux(otc.getFlux());
+          oort.setFlag(otc.getFlag());
+          oort.setFlagChb(otc.getFlagChb());
+          oort.setBackground(otc.getBackground());
+          oort.setThreshold(otc.getThreshold());
+          oort.setMagAper(otc.getMagAper());
+          oort.setMagerrAper(otc.getMagerrAper());
+          oort.setEllipticity(otc.getEllipticity());
+          oort.setClassStar(otc.getClassStar());
+          oort.setOtFlag(otc.getOtFlag());
+          otorDao.save(oort);
         }
+        ufuDao.delete(ufu);
       }
     }
   }

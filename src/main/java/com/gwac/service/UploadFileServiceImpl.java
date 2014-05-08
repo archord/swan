@@ -119,7 +119,7 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj.setUploadDate(new Date());
             
             UploadFileRecord obj2 = new UploadFileRecord();
-            obj2.setStorePath(path + starLDir);
+            obj2.setStorePath(path + otLDir);
             obj2.setFileName(tStr);
             obj2.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj2.setUploadDate(new Date());
