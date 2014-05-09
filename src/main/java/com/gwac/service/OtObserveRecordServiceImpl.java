@@ -76,13 +76,10 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
            * 判断该OT是否存在，如果不存在则为该OT取名，并插入数据库 如果存在则取出该OT的ID
            */
           if (!otbDao.exist(ob)) {
-
-
             int otNumber = otnDao.getNumberByDate(fileDate);
             String otName = String.format("%s_%05d", fileDate, otNumber);
             ob.setName(otName);
             otbDao.save(ob);
-
           }
 
           OtObserveRecordTmp oort = new OtObserveRecordTmp();

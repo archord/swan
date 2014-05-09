@@ -6,7 +6,7 @@
   
   
   <bean class="com.gwac.action.OtObserveRecordAction">
-    <property name="otorService" ref="otORService" />	
+    <property name="otorDao" ref="otORDao" />
   </bean>
 
   <bean id="otORService" class="com.gwac.service.OtObserveRecordServiceImpl" >
@@ -41,13 +41,6 @@
   </bean>
 	
   <bean id="otcDao" class="com.gwac.dao.OTCatalogDaoImpl" />
-	
-  <bean id="otbDao" class="com.gwac.dao.OtBaseDaoImpl" >
-    <property name="sessionFactory" ref="sessionFactory" />
-    <property name="clazz">
-      <value>com.gwac.model.OtBase</value>
-    </property>
-  </bean>
 	
   <bean id="otnDao" class="com.gwac.dao.OtNumberDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />

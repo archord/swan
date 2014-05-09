@@ -15,7 +15,6 @@ public class DataStoreTimerTask {
   private OtObserveRecordService otORService;
   
   public void testRun(){
-    System.out.println("Spring 3 + Quartz 1.8.6 TimerTask running!");
     otORService.storeOTCatalog();
   }
 

@@ -14,6 +14,7 @@
   <import resource="com/gwac/bean/UploadFile.xml"/>
   <import resource="com/gwac/bean/OtObserveRecordBean.xml"/>
   <import resource="com/gwac/bean/DataStoreTimerTaskBean.xml"/>
+  <import resource="com/gwac/bean/OtBaseBean.xml"/>
   
  
 </beans>
