@@ -53,12 +53,14 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="dec"    index="dec"	  title="DEC" width="80" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="模板X" width="100" 
+  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="模板X" width="80" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="模板Y" width="100" 
+  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="模板Y" width="80" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="foundTimeUtc" index="foundTimeUtc" title="发现时间(UTC)" formatter="date" width="150"  
-                  formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
+  <sjg:gridColumn name="identify"    index="identify"	  title="标识字符串" width="190" 
                   sortable="false" align="center"/>
 </sjg:grid>
 
+  <!--sjg:gridColumn name="foundTimeUtc" index="foundTimeUtc" title="发现时间(UTC)" formatter="date" width="150"  
+                  formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
+                  sortable="false" align="center"/-->

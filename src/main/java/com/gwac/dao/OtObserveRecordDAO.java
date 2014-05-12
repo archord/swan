@@ -4,7 +4,9 @@
  */
 package com.gwac.dao;
 
+import com.gwac.model.OtObserveRecordShow;
 import com.gwac.model.OtObserveRecordTmp;
+import java.util.List;
 
 
 /**
@@ -12,6 +14,5 @@ import com.gwac.model.OtObserveRecordTmp;
  * @author xy
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecordTmp>{
-  
-  public void saveOTCopy(final String fname, final String sql);
+  List<OtObserveRecordShow> getRecordByOtId(long otId);
 }

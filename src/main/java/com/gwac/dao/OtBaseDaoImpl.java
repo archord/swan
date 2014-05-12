@@ -21,7 +21,6 @@ public class OtBaseDaoImpl extends BaseHibernateDaoImpl<OtBase> implements OtBas
 
   @Override
   public Boolean exist(OtBase obj) {
-    System.out.println("******************************************start");
     Boolean flag = false;
     Session session = getCurrentSession();
     String sql = "select ot_id from ot_base where identify='"
@@ -34,7 +33,6 @@ public class OtBaseDaoImpl extends BaseHibernateDaoImpl<OtBase> implements OtBas
       obj.setOtId(otId.longValue());
       flag = true;
     }
-    System.out.println("******************************************end");
     return flag;
   }
 }

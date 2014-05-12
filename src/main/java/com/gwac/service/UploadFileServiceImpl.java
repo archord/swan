@@ -27,6 +27,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private static final Log log = LogFactory.getLog(UploadFileServiceImpl.class);
   //单次传输配置文件信息
   private String storePath;
+  private String configPath;
   private String configFile;
   private String[] otList;
   private String[] starList;
@@ -37,15 +38,16 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String starLDir;
   private String orgIDir;
   private String cutIDir;
+  private String cfgDir;
   private UploadFileRecordDao ufrDao;
   private UploadFileUnstoreDao ufuDao;
 
   public UploadFileServiceImpl() {
   }
 
-  public UploadFileServiceImpl(String path, String cfile) {
+  public UploadFileServiceImpl(String configPath, String cfile) {
     this.configFile = cfile;
-    this.storePath = path;
+    this.configPath = configPath;
   }
 
   public void storeOTList() {
@@ -55,7 +57,7 @@ public class UploadFileServiceImpl implements UploadFileService {
     InputStream input = null;
     int fNum = 0;
     try {
-      input = new FileInputStream(storePath + configFile);
+      input = new FileInputStream(getConfigPath() + configFile);
       Properties cfile = new Properties();
       cfile.load(input);
 
@@ -301,5 +303,33 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setUfuDao(UploadFileUnstoreDao ufuDao) {
     this.ufuDao = ufuDao;
+  }
+
+  /**
+   * @return the cfgDir
+   */
+  public String getCfgDir() {
+    return cfgDir;
+  }
+
+  /**
+   * @param cfgDir the cfgDir to set
+   */
+  public void setCfgDir(String cfgDir) {
+    this.cfgDir = cfgDir;
+  }
+
+  /**
+   * @return the configPath
+   */
+  public String getConfigPath() {
+    return configPath;
+  }
+
+  /**
+   * @param configPath the configPath to set
+   */
+  public void setConfigPath(String configPath) {
+    this.configPath = configPath;
   }
 }

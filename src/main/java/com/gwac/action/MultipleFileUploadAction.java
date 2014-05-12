@@ -109,7 +109,8 @@ public class MultipleFileUploadAction extends ActionSupport {
       }
 
       //接收参数配置文件
-      File confFile = new File(destPath, configFileFileName);
+      String confPath = destPath + "/" + getText("gwac.data.cfgfile.directory") + "/";
+      File confFile = new File(confPath, configFileFileName);
       if (confFile.exists()) {
         FileUtils.forceDelete(confFile);
       }
@@ -127,12 +128,13 @@ public class MultipleFileUploadAction extends ActionSupport {
       }
 
 //      UploadFileServiceImpl ufService = new UploadFileServiceImpl(destPath, configFileFileName);
-      ufService.setStorePath(destPath);
+      ufService.setConfigPath(confPath);
       ufService.setConfigFile(configFileFileName);
       ufService.setOtLDir(getText("gwac.data.otlist.directory"));
       ufService.setStarLDir(getText("gwac.data.starlist.directory"));
       ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
       ufService.setCutIDir(getText("gwac.data.cutimages.directory"));
+      ufService.setCfgDir(getText("gwac.data.cfgfile.directory"));
       
       int shouldFNum = ufService.parseConfigFile();
       int validFNum = ufService.checkAndMoveDataFile(destPath);
