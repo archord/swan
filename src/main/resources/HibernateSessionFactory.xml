@@ -35,6 +35,7 @@
         <value>com/gwac/model/FitsFileCut.hbm.xml</value>
         <value>com/gwac/model/OtBase.hbm.xml</value>
         <value>com/gwac/model/OtNumber.hbm.xml</value>
+        <value>com/gwac/model/ConfigFile.hbm.xml</value>
       </list>
     </property>	
   </bean>

@@ -111,6 +111,7 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (otList != null) {
         for (String tStr : otList) {
           if (!tStr.isEmpty()) {
+	    tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(path + otLDir + "/", tStr);
             
@@ -150,6 +151,7 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (starList != null) {
         for (String tStr : starList) {
           if (!tStr.isEmpty()) {
+	    tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(path + starLDir + "/", tStr);
             
@@ -188,6 +190,7 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (origImage != null) {
         for (String tStr : origImage) {
           if (!tStr.isEmpty()) {
+	    tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(path + orgIDir + "/", tStr);
             
@@ -217,6 +220,7 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (cutImages != null) {
         for (String tStr : cutImages) {
           if (!tStr.isEmpty()) {
+	    tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(path + cutIDir + "/", tStr);
             

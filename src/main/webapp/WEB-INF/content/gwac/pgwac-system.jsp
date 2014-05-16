@@ -3,6 +3,7 @@
 <%@ taglib prefix="sj" uri="/struts-jquery-tags" %>
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags" %>
 
+<strong><a href="/svom/newhtmlrealTimeOtDistribution.html" target="_blank">OT实时分布概览</a></strong><br/><br/>
 <strong>望远镜信息:</strong>
 <div id="tlp-info" class="result ui-widget-content ui-corner-all">
   <table style="padding: 3px;"  class="table-style">

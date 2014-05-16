@@ -30,7 +30,6 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     try {
-
       br = new BufferedReader(new FileReader(path));
       while ((line = br.readLine()) != null) {
         if(line.charAt(0)=='#'){

@@ -18,6 +18,7 @@ public class OtBase  implements java.io.Serializable {
      private String identify;
      private float xtemp;
      private float ytemp;
+     private int number;
 
     public OtBase() {
     }
@@ -110,6 +111,20 @@ public class OtBase  implements java.io.Serializable {
    */
   public void setYtemp(float ytemp) {
     this.ytemp = ytemp;
+  }
+
+  /**
+   * @return the number
+   */
+  public int getNumber() {
+    return number;
+  }
+
+  /**
+   * @param number the number to set
+   */
+  public void setNumber(int number) {
+    this.number = number;
   }
 
 

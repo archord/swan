@@ -74,8 +74,8 @@ public class GetOtBaseList extends ActionSupport implements SessionAware {
       to = records;
     }
 
-    String[] orderNames = {"foundTimeUtc"};
-    int[] sorts = {2};
+    String[] orderNames = {"foundTimeUtc","name"};
+    int[] sorts = {2, 2};
     gridModel = obDao.findRecord(from, rows, orderNames, sorts);
     log.debug("from="+from);
     log.debug("to="+to);

@@ -21,3 +21,10 @@ table.table-style tr td{
   padding-right: 20px;
 }
 
+#getOtBaseListForm table td{
+  font-size: 12px;
+  padding: 3px;
+}
+#getOtBaseListForm table td input{
+  height: 22px;
+}

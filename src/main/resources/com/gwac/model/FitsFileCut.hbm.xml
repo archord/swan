@@ -29,5 +29,11 @@
         <property name="isTemplateCut" type="java.lang.Boolean">
             <column name="is_template_cut" />
         </property>
+        <property name="otId" type="java.lang.Long">
+            <column name="ot_id" />
+        </property>
+        <property name="number" type="int">
+            <column name="number" />
+        </property>
     </class>
 </hibernate-mapping>

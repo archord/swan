@@ -18,6 +18,18 @@ import org.hibernate.Session;
 public class OtBaseDaoImpl extends BaseHibernateDaoImpl<OtBase> implements OtBaseDao {
 
   private static final Log log = LogFactory.getLog(OtBaseDaoImpl.class);
+  
+  @Override
+  public OtBase getOtBaseByName(String otName) {
+    Session session = getCurrentSession();
+    String sql = "select * from ot_base where name='" + otName + "';";
+    Query q = session.createSQLQuery(sql).addEntity(OtBase.class);
+    if (!q.list().isEmpty()) {
+      return (OtBase) q.list().get(0);
+    }else{
+      return null;
+    }
+  }
 
   @Override
   public Boolean exist(OtBase obj) {
@@ -25,8 +37,8 @@ public class OtBaseDaoImpl extends BaseHibernateDaoImpl<OtBase> implements OtBas
     Session session = getCurrentSession();
     String sql = "select ot_id from ot_base where identify='"
             + obj.getIdentify()
-            + "' and abs(xtemp-" + obj.getXtemp() + ")<1 "
-            + " and abs(ytemp-" + obj.getYtemp() + ")<1 ";
+            + "' and abs(xtemp-" + obj.getXtemp() + ")<2 "
+            + " and abs(ytemp-" + obj.getYtemp() + ")<2 ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
       BigInteger otId = (BigInteger) q.list().get(0);

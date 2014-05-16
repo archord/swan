@@ -10,6 +10,9 @@ import com.gwac.model.OtBase;
  *
  * @author xy
  */
-public interface OtBaseDao extends BaseHibernateDao<OtBase>{
-    public Boolean exist(OtBase obj);
+public interface OtBaseDao extends BaseHibernateDao<OtBase> {
+
+  public Boolean exist(OtBase obj);
+
+  public OtBase getOtBaseByName(String otName);
 }

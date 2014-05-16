@@ -6,6 +6,7 @@
   
   <bean class="com.gwac.action.MultipleFileUploadAction">
     <property name="ufService" ref="ufService" />	
+    <property name="cfDao" ref="cfDao" />	
   </bean>
   
   <bean class="com.gwac.action.GetUploadFileUnstoreList">

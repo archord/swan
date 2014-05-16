@@ -29,5 +29,8 @@
         <property name="ytemp" type="java.lang.Float">
             <column name="ytemp" precision="8" scale="8" />
         </property>
+        <property name="number" type="int">
+            <column name="number" />
+        </property>
     </class>
 </hibernate-mapping>

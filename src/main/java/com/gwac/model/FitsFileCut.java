@@ -17,6 +17,8 @@ public class FitsFileCut  implements java.io.Serializable {
      private Long ffId;
      private Long templateFfcId;
      private Boolean isTemplateCut;
+     private long otId;
+     private int number;
 
     public FitsFileCut() {
     }
@@ -92,6 +94,34 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setIsTemplateCut(Boolean isTemplateCut) {
         this.isTemplateCut = isTemplateCut;
     }
+
+  /**
+   * @return the otId
+   */
+  public long getOtId() {
+    return otId;
+  }
+
+  /**
+   * @param otId the otId to set
+   */
+  public void setOtId(long otId) {
+    this.otId = otId;
+  }
+
+  /**
+   * @return the number
+   */
+  public int getNumber() {
+    return number;
+  }
+
+  /**
+   * @param number the number to set
+   */
+  public void setNumber(int number) {
+    this.number = number;
+  }
 
 
 

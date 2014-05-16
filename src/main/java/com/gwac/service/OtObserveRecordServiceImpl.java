@@ -43,69 +43,89 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     if (ufus != null) {
       for (UploadFileUnstore ufu : ufus) {
 
-        List<OTCatalog> otcs = otcDao.getOTCatalog(ufu.getStorePath() + "/" + ufu.getFileName());
-        for (OTCatalog otc : otcs) {
+	List<OTCatalog> otcs = otcDao.getOTCatalog(ufu.getStorePath() + "/" + ufu.getFileName());
+	for (OTCatalog otc : otcs) {
 
-          String orgImg = otc.getImageName();
-          String otListPath = ufu.getStorePath();
-          String fileDate = otc.getFileDate();
+	  String orgImg = otc.getImageName();
+	  String otListPath = ufu.getStorePath();
+	  String fileDate = otc.getFileDate();
+	  int number = Integer.parseInt(orgImg.substring(22, 26));
 
-          int xtemp = Math.round(otc.getXTemp());
-          int ytemp = Math.round(otc.getYTemp());
-          String cutImg = String.format("%s_OT_X%4dY%4d.fit",
-                  orgImg.substring(0, orgImg.indexOf('.')), xtemp, ytemp);
+	  FitsFile ff = new FitsFile();
+	  ff.setFileName(orgImg);
+	  ffDao.save(ff);
 
-          FitsFile ff = new FitsFile();
-          ff.setFileName(orgImg);
-          ffDao.save(ff);
+	  OtObserveRecordTmp oort = new OtObserveRecordTmp();
+	  oort.setRaD(otc.getRaD());
+	  oort.setDecD(otc.getDecD());
+	  oort.setX(otc.getX());
+	  oort.setY(otc.getY());
+	  oort.setXTemp(otc.getXTemp());
+	  oort.setYTemp(otc.getYTemp());
+	  oort.setDateUt(otc.getDateUt());
+	  oort.setFlux(otc.getFlux());
+	  oort.setFlag(otc.getFlag());
+	  oort.setFlagChb(otc.getFlagChb());
+	  oort.setBackground(otc.getBackground());
+	  oort.setThreshold(otc.getThreshold());
+	  oort.setMagAper(otc.getMagAper());
+	  oort.setMagerrAper(otc.getMagerrAper());
+	  oort.setEllipticity(otc.getEllipticity());
+	  oort.setClassStar(otc.getClassStar());
+	  oort.setOtFlag(otc.getOtFlag());
 
-          FitsFileCut ffc = new FitsFileCut();
-          ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
-          ffc.setFileName(cutImg);
-          ffcDao.save(ffc);
+	  oort.setFfId(ff.getFfId());
 
-          OtBase ob = new OtBase();
-          ob.setRa(otc.getRaD());
-          ob.setDec(otc.getDecD());
-          ob.setFoundTimeUtc(otc.getDateUt());
-          ob.setIdentify(orgImg.substring(0, 21));
-          ob.setXtemp(otc.getXTemp());
-          ob.setYtemp(otc.getYTemp());
+	  if (!otorDao.exist(oort)) {
 
-          /**
-           * 判断该OT是否存在，如果不存在则为该OT取名，并插入数据库 如果存在则取出该OT的ID
-           */
-          if (!otbDao.exist(ob)) {
-            int otNumber = otnDao.getNumberByDate(fileDate);
-            String otName = String.format("%s_%05d", fileDate, otNumber);
-            ob.setName(otName);
-            otbDao.save(ob);
-          }
+	    OtBase ob = new OtBase();
+	    ob.setRa(otc.getRaD());
+	    ob.setDec(otc.getDecD());
+	    ob.setFoundTimeUtc(otc.getDateUt());
+	    ob.setIdentify(orgImg.substring(0, 21));
+	    ob.setXtemp(otc.getXTemp());
+	    ob.setYtemp(otc.getYTemp());
+	    ob.setNumber(number);
 
-          OtObserveRecordTmp oort = new OtObserveRecordTmp();
-          oort.setOtId(ob.getOtId());
-          oort.setFfId(ff.getFfId());
-          oort.setFfcId(ffc.getFfcId());
-          oort.setRaD(otc.getRaD());
-          oort.setDecD(otc.getDecD());
-          oort.setX(otc.getX());
-          oort.setY(otc.getY());
-          oort.setXTemp(otc.getXTemp());
-          oort.setYTemp(otc.getYTemp());
-          oort.setDateUt(otc.getDateUt());
-          oort.setFlux(otc.getFlux());
-          oort.setFlag(otc.getFlag());
-          oort.setFlagChb(otc.getFlagChb());
-          oort.setBackground(otc.getBackground());
-          oort.setThreshold(otc.getThreshold());
-          oort.setMagAper(otc.getMagAper());
-          oort.setMagerrAper(otc.getMagerrAper());
-          oort.setEllipticity(otc.getEllipticity());
-          oort.setClassStar(otc.getClassStar());
-          oort.setOtFlag(otc.getOtFlag());
-          otorDao.save(oort);
-        }
-        ufuDao.delete(ufu);
+	    /**
+	     * 判断该OT是否存在，如果不存在则为该OT取名，并插入数据库，如果存在则取出该OT的ID
+	     * 为了保证OT切图命名的唯一性，约定该OT所有切图的后缀（X和Y）都以OT首次出现帧中OT
+	     * 所对应的X、Y坐标为准（解决四舍五入问题）。
+	     */
+	    if (otbDao.exist(ob)) {
+	      OtBase tOb = otbDao.getById(ob.getOtId());
+	      if(tOb.getNumber()>ob.getNumber()){
+		ob.setName(tOb.getName());
+		otbDao.update(ob);
+	      }else{
+		ob.setXtemp(tOb.getXtemp());
+		ob.setYtemp(tOb.getYtemp());
+	      }
+	    }else{
+	      int otNumber = otnDao.getNumberByDate(fileDate);
+	      String otName = String.format("%s_%05d", fileDate, otNumber);
+	      ob.setName(otName);
+	      otbDao.save(ob);
+	    }
+	    oort.setOtId(ob.getOtId());
+
+	    int xtemp = Math.round(ob.getXtemp());
+	    int ytemp = Math.round(ob.getYtemp());
+	    String cutImg = String.format("%s_OT_X%04dY%04d.fit",
+		    orgImg.substring(0, orgImg.indexOf('.')), xtemp, ytemp);
+	    FitsFileCut ffc = new FitsFileCut();
+	    ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
+	    ffc.setFileName(cutImg);
+	    ffc.setOtId(ob.getOtId());
+	    ffc.setNumber(number);
+	    ffc.setFfId(ff.getFfId());
+	    ffcDao.save(ffc);
+	    oort.setFfcId(ffc.getFfcId());
+
+	    otorDao.save(oort);
+	  }
+	}
+	ufuDao.delete(ufu);
       }
     }
   }

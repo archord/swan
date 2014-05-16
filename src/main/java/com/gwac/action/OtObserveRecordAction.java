@@ -19,6 +19,7 @@
 package com.gwac.action;
 
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.model.OtObserveRecordShow;
 import com.gwac.model.OtObserveRecordTmp;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
@@ -34,9 +35,9 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   private static final Log log = LogFactory.getLog(OtObserveRecordAction.class);
 
   // Your result List
-  private List<OtObserveRecordTmp> gridModel;
+  private List<OtObserveRecordShow> gridModel;
 
-    // get how many rows we want to have into the grid - rowNum attribute in the
+  // get how many rows we want to have into the grid - rowNum attribute in the
   // grid
   private Integer rows = 0;
 
@@ -58,7 +59,7 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   // Limit the result when using local data, value form attribute rowTotal
   private Integer totalrows;
 
-    // he Search Operation
+  // he Search Operation
   // ['eq','ne','lt','le','gt','ge','bw','bn','in','ni','ew','en','cn','nc']
   private String searchOper;
 
@@ -72,12 +73,19 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   private Map<String, Object> session;
   private OtObserveRecordDAO otorDao;
 
+  private String otName;
+
   @SuppressWarnings("unchecked")
   public String execute() {
 
+    String[] orderNames = {"dateUt"};
+    int[] sorts = {2};
+    //gridModel = otorDao.findRecord(from, rows, orderNames, sorts);
+    setGridModel(otorDao.getRecordByOtName(otName));
+    
     // Count all record (select count(*) from )
-    Number tn = otorDao.count();
-    log.debug("number="+tn);
+    Number tn = gridModel.size();
+    log.debug("number=" + tn);
     if (tn != null) {
       records = tn.intValue();
     } else {
@@ -99,13 +107,6 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
       to = records;
     }
 
-    String[] orderNames = {"foundTimeUtc"};
-    int[] sorts = {2};
-    gridModel = otorDao.findRecord(from, rows, orderNames, sorts);
-    log.debug("from="+from);
-    log.debug("to="+to);
-    log.debug("size=" + gridModel.size());
-    
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
 
@@ -115,7 +116,6 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
 //  public String getJSON() {
 //    return execute();
 //  }
-
   /**
    * @return how many rows we want to have into the grid
    */
@@ -183,20 +183,6 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   }
 
   /**
-   * @return an collection that contains the actual data
-   */
-  public List<OtObserveRecordTmp> getGridModel() {
-    return gridModel;
-  }
-
-  /**
-   * @param gridModel an collection that contains the actual data
-   */
-  public void setGridModel(List<OtObserveRecordTmp> gridModel) {
-    this.gridModel = gridModel;
-  }
-
-  /**
    * @return sorting order
    */
   public String getSord() {
@@ -255,5 +241,32 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
     this.otorDao = otorDao;
   }
 
+  /**
+   * @return the otName
+   */
+  public String getOtName() {
+    return otName;
+  }
+
+  /**
+   * @param otName the otName to set
+   */
+  public void setOtName(String otName) {
+    this.otName = otName;
+  }
+
+  /**
+   * @return the gridModel
+   */
+  public List<OtObserveRecordShow> getGridModel() {
+    return gridModel;
+  }
+
+  /**
+   * @param gridModel the gridModel to set
+   */
+  public void setGridModel(List<OtObserveRecordShow> gridModel) {
+    this.gridModel = gridModel;
+  }
 
 }

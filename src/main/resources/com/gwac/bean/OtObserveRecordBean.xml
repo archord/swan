@@ -33,13 +33,6 @@
     </property>
   </bean>
 	
-  <bean id="ffcDao" class="com.gwac.dao.FitsFileCutDAOImpl" >
-    <property name="sessionFactory" ref="sessionFactory" />
-    <property name="clazz">
-      <value>com.gwac.model.FitsFileCut</value>
-    </property>
-  </bean>
-	
   <bean id="otcDao" class="com.gwac.dao.OTCatalogDaoImpl" />
 	
   <bean id="otnDao" class="com.gwac.dao.OtNumberDaoImpl" >

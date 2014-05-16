@@ -8,6 +8,8 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.ConfigFileDao;
+import com.gwac.model.ConfigFile;
 import com.gwac.service.UploadFileServiceImpl;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -36,10 +38,11 @@ import org.apache.struts2.convention.annotation.Result;
 //加了这句化，文件传不上来
 public class MultipleFileUploadAction extends ActionSupport {
 
-  private static final Log log = LogFactory.getLog(UserRegister.class);
-  
+  private static final Log log = LogFactory.getLog(MultipleFileUploadAction.class);
+
   private UploadFileServiceImpl ufService;
-  
+  private ConfigFileDao cfDao;
+
   private String dpmName;
   private String currentDirectory;
   private File configFile;
@@ -70,7 +73,7 @@ public class MultipleFileUploadAction extends ActionSupport {
       setEcho(getEcho() + "Must set current date(currentDirectory).\n");
       flag = false;
     }
-    
+
     //必须传输参数配置文件
     //Must transform parameter config file
     if (null == configFile) {
@@ -103,28 +106,36 @@ public class MultipleFileUploadAction extends ActionSupport {
 
       String destPath = getText("gwac.data.root.directory");
       if (destPath.charAt(destPath.length() - 1) != '/') {
-        destPath += "/" + getCurrentDirectory() + "/" + getDpmName() + "/";
+	destPath += "/" + getCurrentDirectory() + "/" + getDpmName() + "/";
       } else {
-        destPath += getCurrentDirectory() + "/" + getDpmName() + "/";
+	destPath += getCurrentDirectory() + "/" + getDpmName() + "/";
       }
 
       //接收参数配置文件
-      String confPath = destPath + "/" + getText("gwac.data.cfgfile.directory") + "/";
+      String confPath = destPath + getText("gwac.data.cfgfile.directory") + "/";
       File confFile = new File(confPath, configFileFileName);
       if (confFile.exists()) {
-        FileUtils.forceDelete(confFile);
+	FileUtils.forceDelete(confFile);
       }
       FileUtils.moveFile(configFile, confFile);
+      ConfigFile cf = new ConfigFile();
+      cf.setFileName(configFileFileName);
+      cf.setStorePath(confPath);
+      cf.setIsSync(false);
+      cf.setIsStore(false);
+      if (!cfDao.exist(cf)) {
+	cfDao.save(cf);
+      }
 
       //接受数据文件
       int i = 0;
       for (File file : fileUpload) {
-        File destFile = new File(destPath, fileUploadFileName.get(i++));
-        //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-        if (destFile.exists()) {
-          FileUtils.forceDelete(destFile);
-        }
-        FileUtils.moveFile(file, destFile);
+	File destFile = new File(destPath, fileUploadFileName.get(i++));
+	//如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+	if (destFile.exists()) {
+	  FileUtils.forceDelete(destFile);
+	}
+	FileUtils.moveFile(file, destFile);
       }
 
 //      UploadFileServiceImpl ufService = new UploadFileServiceImpl(destPath, configFileFileName);
@@ -135,14 +146,14 @@ public class MultipleFileUploadAction extends ActionSupport {
       ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
       ufService.setCutIDir(getText("gwac.data.cutimages.directory"));
       ufService.setCfgDir(getText("gwac.data.cfgfile.directory"));
-      
+
       int shouldFNum = ufService.parseConfigFile();
       int validFNum = ufService.checkAndMoveDataFile(destPath);
       if (validFNum != i || validFNum != shouldFNum) {
-        setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
-                + " files, " + validFNum + " valid files.\n");
+	setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
+		+ " files, " + validFNum + " valid files.\n");
       } else {
-        setEcho(getEcho() + "Upload success，total upload "+ validFNum +" files.\n");
+	setEcho(getEcho() + "Upload success，total upload " + validFNum + " files.\n");
       }
       //otORDao.saveOTCopy(configFileFileName);
     } else {
@@ -263,5 +274,12 @@ public class MultipleFileUploadAction extends ActionSupport {
    */
   public void setUfService(UploadFileServiceImpl ufService) {
     this.ufService = ufService;
+  }
+
+  /**
+   * @param cfDao the cfDao to set
+   */
+  public void setCfDao(ConfigFileDao cfDao) {
+    this.cfDao = cfDao;
   }
 }

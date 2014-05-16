@@ -23,14 +23,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 
-/*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
-/* curl command example: */
-/* curl -F currentDirectory=dirName */
-/* -F configFile=@configFileName */
-/* -F fileUpload=@simulationUI2.tar.gz */
-/* -F fileUpload=@simulationUI.tar.gz http://localhost:8080/svom/resultAction.action*/
 /**
- * @author xy
+ * OT名称请求服务，传递OT对应的标示字符串、模板X、模板Y三个字段，查询OT的名称，
+ * 如果OT存在，则返回OT名；
+ * 如果不存在，则新建OT，并取名，返回新OT名称。
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来

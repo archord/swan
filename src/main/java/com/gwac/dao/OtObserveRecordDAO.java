@@ -8,11 +8,15 @@ import com.gwac.model.OtObserveRecordShow;
 import com.gwac.model.OtObserveRecordTmp;
 import java.util.List;
 
-
 /**
  *
  * @author xy
  */
-public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecordTmp>{
-  List<OtObserveRecordShow> getRecordByOtId(long otId);
+public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecordTmp> {
+
+  public List<OtObserveRecordShow> getRecordByOtId(long otId);
+
+  public List<OtObserveRecordShow> getRecordByOtName(String otName);
+
+  public Boolean exist(OtObserveRecordTmp obj);
 }

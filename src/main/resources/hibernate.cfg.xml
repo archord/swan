@@ -28,5 +28,6 @@
         <mapping resource="com/gwac/model/Grb.hbm.xml" />
         <mapping resource="com/gwac/model/Gimbal.hbm.xml" />
         <mapping resource="com/gwac/model/StarKnowObserveRecord.hbm.xml" />
+        <mapping resource="com/gwac/model/ConfigFile.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

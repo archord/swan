@@ -12,8 +12,8 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
-    <meta http-equiv="keywords" content="struts2, jquery, jquery-ui, plugin, showcase, jqgrid" />
-    <meta http-equiv="description" content="A Showcase for the Struts2 jQuery Plugin" />
+    <meta http-equiv="keywords" content=",国家天文台，svom, gwac，望远镜阵列" />
+    <meta http-equiv="description" content="GWAC数据展示页面" />
 
     <title>SVOM空间天文卫星 - <s:text name="showcase.version"/></title>
 
