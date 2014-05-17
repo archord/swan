@@ -41,18 +41,26 @@ public class GetOtBaseList extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
   private OtBaseDao obDao = null;
+  private Boolean isQuery;
+  private String startDate;
+  private String endDate;
+  private float xTemp;
+  private float yTemp;
+  private String telscope;
+  private float searchRadius;
 
   @SuppressWarnings("unchecked")
   public String execute() {
 
-    log.debug("Page " + getPage() + " Rows " + getRows()
-            + " Sorting Order " + getSord() + " Index Row :" + getSidx());
-    log.debug("Search :" + searchField + " " + searchOper + " "
-            + searchString);
+    System.out.println("isQuery=" + isQuery);
+    System.out.println("startDate=" + startDate);
+    System.out.println("endDate=" + endDate);
+    System.out.println("xTemp=" + xTemp);
+    System.out.println("yTemp=" + yTemp);
+    System.out.println("telscope=" + telscope);
+    System.out.println("searchRadius=" + searchRadius);
 
-    // Count all record (select count(*) from )
     Number tn = obDao.count();
-    log.debug("number="+tn);
     if (tn != null) {
       records = tn.intValue();
     } else {
@@ -74,13 +82,13 @@ public class GetOtBaseList extends ActionSupport implements SessionAware {
       to = records;
     }
 
-    String[] orderNames = {"foundTimeUtc","name"};
+    String[] orderNames = {"foundTimeUtc", "name"};
     int[] sorts = {2, 2};
     gridModel = obDao.findRecord(from, rows, orderNames, sorts);
-    log.debug("from="+from);
-    log.debug("to="+to);
+    log.debug("from=" + from);
+    log.debug("to=" + to);
     log.debug("size=" + gridModel.size());
-    
+
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
 
@@ -222,4 +230,101 @@ public class GetOtBaseList extends ActionSupport implements SessionAware {
     this.obDao = obDao;
   }
 
+  /**
+   * @return the xTemp
+   */
+  public float getXTemp() {
+    return xTemp;
+  }
+
+  /**
+   * @param xTemp the xTemp to set
+   */
+  public void setXTemp(float xTemp) {
+    this.xTemp = xTemp;
+  }
+
+  /**
+   * @return the yTemp
+   */
+  public float getYTemp() {
+    return yTemp;
+  }
+
+  /**
+   * @param yTemp the yTemp to set
+   */
+  public void setYTemp(float yTemp) {
+    this.yTemp = yTemp;
+  }
+
+  /**
+   * @return the telscope
+   */
+  public String getTelscope() {
+    return telscope;
+  }
+
+  /**
+   * @param telscope the telscope to set
+   */
+  public void setTelscope(String telscope) {
+    this.telscope = telscope;
+  }
+
+  /**
+   * @return the searchRadius
+   */
+  public float getSearchRadius() {
+    return searchRadius;
+  }
+
+  /**
+   * @param searchRadius the searchRadius to set
+   */
+  public void setSearchRadius(float searchRadius) {
+    this.searchRadius = searchRadius;
+  }
+
+  /**
+   * @return the startDate
+   */
+  public String getStartDate() {
+    return startDate;
+  }
+
+  /**
+   * @param startDate the startDate to set
+   */
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  /**
+   * @return the endDate
+   */
+  public String getEndDate() {
+    return endDate;
+  }
+
+  /**
+   * @param endDate the endDate to set
+   */
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
+  }
+
+  /**
+   * @return the isQuery
+   */
+  public Boolean getIsQuery() {
+    return isQuery;
+  }
+
+  /**
+   * @param isQuery the isQuery to set
+   */
+  public void setIsQuery(Boolean isQuery) {
+    this.isQuery = isQuery;
+  }
 }
