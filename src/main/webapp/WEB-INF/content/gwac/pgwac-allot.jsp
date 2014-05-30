@@ -29,7 +29,7 @@
 //	    'otDetailWindow',
 //	    'height=500,width=800,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,status=yes');
     openwindow("<s:property value="otDetail"/>?otName=" + otName,
-            'otDetailWindow', 800, 500, 800, 500);
+            '_blank', 800, 500, 800, 500);
     return false;
   }
   function openwindow(url, name, width, height, iWidth, iHeight)
@@ -50,24 +50,25 @@
 <s:property value="echo" escape="%{escape}"/>
 
 <div style="width:650px;text-align: left;">
-  <s:form id="getOtBaseListForm"  action="get-ot-base-list" theme="simple" cssClass="yform" namespace="/">
-    <table style="margin:auto; width:80%;">
+  <s:form id="getOtBaseListForm"  action="query-ot-base" theme="simple" cssClass="yform" namespace="/">
+    <table style="margin:auto; width:90%;">
       <tr>
-        <td>开始日期：</td>
-        <td><sj:datepicker value="yesterday" id="from" name="startDate" displayFormat="yy-mm-dd" label="开始日期" />
-          <s:hidden name="isQuery" value="true"/></td>
-        <td>结束日期：</td>
-        <td><sj:datepicker value="today" id="to" name="endDate" displayFormat="yy-mm-dd" label="结束日期" /></td>
+        <td>开始日期(UTC)：</td>
+        <!--value="yesterday" value="today" -->
+        <td><sj:datepicker id="from" name="startDate" displayFormat="yy-mm-dd" label="开始日期" /></td>
+        <td>结束日期(UTC)：</td>
+        <td><sj:datepicker  id="to" name="endDate" displayFormat="yy-mm-dd" label="结束日期" /></td>
       </tr>
       <tr>
         <td>模板X坐标：</td>
-        <td><sj:textfield name="xTemp" /></td>
+        <td><sj:textfield name="xtemp" /></td>
         <td>模板Y坐标：</td>
-        <td><sj:textfield name="yTemp" /></td>
+        <td><sj:textfield name="ytemp" /></td>
       </tr>
       <tr>
         <td>望远镜：</td>
         <td><select name="telscope" >
+            <option value="all">All</option>
             <option value="M01">M01</option>
             <option value="M02">M02</option>
             <option value="M03">M03</option>
@@ -126,7 +127,7 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="ytemp"    index="ytemp"	  title="模板Y" width="80" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="identify"    index="identify"	  title="标识字符串" width="190" 
+  <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="190" 
                   sortable="false" align="center"/>
 </sjg:grid>
 

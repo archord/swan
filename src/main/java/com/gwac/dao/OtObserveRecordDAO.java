@@ -16,7 +16,9 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecordTmp>
 
   public List<OtObserveRecordShow> getRecordByOtId(long otId);
 
-  public List<OtObserveRecordShow> getRecordByOtName(String otName);
+  public int countRecordByOtName(String otName);
+
+  public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize);
 
   public Boolean exist(OtObserveRecordTmp obj);
 }

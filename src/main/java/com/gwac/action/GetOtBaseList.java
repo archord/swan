@@ -41,53 +41,47 @@ public class GetOtBaseList extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
   private OtBaseDao obDao = null;
-  private Boolean isQuery;
   private String startDate;
   private String endDate;
-  private float xTemp;
-  private float yTemp;
+  private float xtemp;
+  private float ytemp;
   private String telscope;
   private float searchRadius;
 
   @SuppressWarnings("unchecked")
   public String execute() {
 
-    System.out.println("isQuery=" + isQuery);
-    System.out.println("startDate=" + startDate);
-    System.out.println("endDate=" + endDate);
-    System.out.println("xTemp=" + xTemp);
-    System.out.println("yTemp=" + yTemp);
-    System.out.println("telscope=" + telscope);
-    System.out.println("searchRadius=" + searchRadius);
+    // Calucalate until rows ware selected
+    int to = (rows * page);
+    // Calculate the first row to read
+    int from = to - rows;
+
+    if (startDate.isEmpty() && endDate.isEmpty() && telscope.equalsIgnoreCase("all")
+            && xtemp == 0.0 && ytemp == 0.0) {
+
+      String[] orderNames = {"foundTimeUtc", "name"};
+      int[] sorts = {2, 2};
+      gridModel = obDao.findRecord(from, rows, orderNames, sorts);
+
+    } else {
+      gridModel = obDao.queryOtBase(startDate, endDate, telscope, xtemp, ytemp, searchRadius, from, rows);
+    }
 
     Number tn = obDao.count();
     if (tn != null) {
       records = tn.intValue();
     } else {
       records = 0;
-    }
-
+    };
+    
     if (totalrows != null) {
       records = totalrows;
     }
-
-    // Calucalate until rows ware selected
-    int to = (rows * page);
-
-    // Calculate the first row to read
-    int from = to - rows;
 
     // Set to = max rows
     if (to > records) {
       to = records;
     }
-
-    String[] orderNames = {"foundTimeUtc", "name"};
-    int[] sorts = {2, 2};
-    gridModel = obDao.findRecord(from, rows, orderNames, sorts);
-    log.debug("from=" + from);
-    log.debug("to=" + to);
-    log.debug("size=" + gridModel.size());
 
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
@@ -231,31 +225,31 @@ public class GetOtBaseList extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @return the xTemp
+   * @return the startDate
    */
-  public float getXTemp() {
-    return xTemp;
+  public String getStartDate() {
+    return startDate;
   }
 
   /**
-   * @param xTemp the xTemp to set
+   * @param startDate the startDate to set
    */
-  public void setXTemp(float xTemp) {
-    this.xTemp = xTemp;
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
   }
 
   /**
-   * @return the yTemp
+   * @return the endDate
    */
-  public float getYTemp() {
-    return yTemp;
+  public String getEndDate() {
+    return endDate;
   }
 
   /**
-   * @param yTemp the yTemp to set
+   * @param endDate the endDate to set
    */
-  public void setYTemp(float yTemp) {
-    this.yTemp = yTemp;
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
   }
 
   /**
@@ -287,44 +281,30 @@ public class GetOtBaseList extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @return the startDate
+   * @return the xtemp
    */
-  public String getStartDate() {
-    return startDate;
+  public float getXtemp() {
+    return xtemp;
   }
 
   /**
-   * @param startDate the startDate to set
+   * @param xtemp the xtemp to set
    */
-  public void setStartDate(String startDate) {
-    this.startDate = startDate;
+  public void setXtemp(float xtemp) {
+    this.xtemp = xtemp;
   }
 
   /**
-   * @return the endDate
+   * @return the ytemp
    */
-  public String getEndDate() {
-    return endDate;
+  public float getYtemp() {
+    return ytemp;
   }
 
   /**
-   * @param endDate the endDate to set
+   * @param ytemp the ytemp to set
    */
-  public void setEndDate(String endDate) {
-    this.endDate = endDate;
-  }
-
-  /**
-   * @return the isQuery
-   */
-  public Boolean getIsQuery() {
-    return isQuery;
-  }
-
-  /**
-   * @param isQuery the isQuery to set
-   */
-  public void setIsQuery(Boolean isQuery) {
-    this.isQuery = isQuery;
+  public void setYtemp(float ytemp) {
+    this.ytemp = ytemp;
   }
 }

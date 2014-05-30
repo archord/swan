@@ -1,25 +1,7 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package com.gwac.action;
 
-import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.model.OtObserveRecordShow;
+import com.gwac.dao.OtBaseDao;
+import com.gwac.model.OtBase;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
 import org.apache.commons.logging.Log;
@@ -28,12 +10,12 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class OtObserveRecordAction extends ActionSupport implements SessionAware {
+public class QueryOtBase extends ActionSupport implements SessionAware {
 
-  private static final long serialVersionUID = 5078264277068533593L;
-  private static final Log log = LogFactory.getLog(OtObserveRecordAction.class);
+  private static final long serialVersionUID = 5078264279538543593L;
+  private static final Log log = LogFactory.getLog(QueryOtBase.class);
   // Your result List
-  private List<OtObserveRecordShow> gridModel;
+  private List<OtBase> gridModel;
   // get how many rows we want to have into the grid - rowNum attribute in the
   // grid
   private Integer rows = 0;
@@ -58,56 +40,56 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   private Integer records = 0;
   private boolean loadonce = false;
   private Map<String, Object> session;
-  private OtObserveRecordDAO otorDao;
-  private String otName;
+  private OtBaseDao obDao = null;
+  private String startDate;
+  private String endDate;
+  private float xTemp;
+  private float yTemp;
+  private String telscope;
+  private float searchRadius;
 
   @SuppressWarnings("unchecked")
   public String execute() {
-    log.info("Page " + getPage() + " Rows " + getRows()
-            + " Sorting Order " + getSord() + " Index Row :" + getSidx());
-    log.info("Search :" + searchField + " " + searchOper + " "
-            + searchString);
+
+    System.out.println("startDate=" + startDate);
+    System.out.println("endDate=" + endDate);
+    System.out.println("xTemp=" + xTemp);
+    System.out.println("yTemp=" + yTemp);
+    System.out.println("telscope=" + telscope);
+    System.out.println("searchRadius=" + searchRadius);
+
+    Number tn = obDao.count();
+    if (tn != null) {
+      records = tn.intValue();
+    } else {
+      records = 0;
+    }
+
+    if (totalrows != null) {
+      records = totalrows;
+    }
 
     // Calucalate until rows ware selected
     int to = (rows * page);
 
     // Calculate the first row to read
     int from = to - rows;
-    String[] orderNames = {"dateUt"};
-
-    int[] sorts = {2};
-    //gridModel = otorDao.findRecord(from, rows, orderNames, sorts);
-    setGridModel(otorDao.getRecordByOtName(otName, from, rows));
-
-    // Count all record (select count(*) from )
-    records = otorDao.countRecordByOtName(otName);
-    log.debug("records=" + records);
-    log.info("records=" + records);
-
-    if (totalrows != null) {
-      records = totalrows;
-    }
-    log.info("records=" + records);
 
     // Set to = max rows
     if (to > records) {
       to = records;
     }
 
+    String[] orderNames = {"foundTimeUtc", "name"};
+    int[] sorts = {2, 2};
+    gridModel = obDao.queryOtBase(startDate, endDate, telscope, xTemp, yTemp, searchRadius, from, rows);
+
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
-    log.info("from=" + from);
-    log.info("to=" + to);
-    log.info("size=" + gridModel.size());
-    log.info("records=" + records);
-    log.info("total=" + total);
 
     return SUCCESS;
   }
 
-//  public String getJSON() {
-//    return execute();
-//  }
   /**
    * @return how many rows we want to have into the grid
    */
@@ -175,6 +157,20 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   }
 
   /**
+   * @return an collection that contains the actual data
+   */
+  public List<OtBase> getGridModel() {
+    return gridModel;
+  }
+
+  /**
+   * @param gridModel an collection that contains the actual data
+   */
+  public void setGridModel(List<OtBase> gridModel) {
+    this.gridModel = gridModel;
+  }
+
+  /**
    * @return sorting order
    */
   public String getSord() {
@@ -214,50 +210,102 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
     this.searchOper = searchOper;
   }
 
-  public void setLoadonce(boolean loadonce) {
-    this.loadonce = loadonce;
+  public void setTotalrows(Integer totalrows) {
+    this.totalrows = totalrows;
   }
 
   public void setSession(Map<String, Object> session) {
     this.session = session;
   }
 
-  public void setTotalrows(Integer totalrows) {
-    this.totalrows = totalrows;
+  /**
+   * @param obDao the obDao to set
+   */
+  public void setObDao(OtBaseDao obDao) {
+    this.obDao = obDao;
   }
 
   /**
-   * @param otorDao the otorDao to set
+   * @return the xTemp
    */
-  public void setOtorDao(OtObserveRecordDAO otorDao) {
-    this.otorDao = otorDao;
+  public float getXTemp() {
+    return xTemp;
   }
 
   /**
-   * @return the otName
+   * @param xTemp the xTemp to set
    */
-  public String getOtName() {
-    return otName;
+  public void setXTemp(float xTemp) {
+    this.xTemp = xTemp;
   }
 
   /**
-   * @param otName the otName to set
+   * @return the yTemp
    */
-  public void setOtName(String otName) {
-    this.otName = otName;
+  public float getYTemp() {
+    return yTemp;
   }
 
   /**
-   * @return the gridModel
+   * @param yTemp the yTemp to set
    */
-  public List<OtObserveRecordShow> getGridModel() {
-    return gridModel;
+  public void setYTemp(float yTemp) {
+    this.yTemp = yTemp;
   }
 
   /**
-   * @param gridModel the gridModel to set
+   * @return the telscope
    */
-  public void setGridModel(List<OtObserveRecordShow> gridModel) {
-    this.gridModel = gridModel;
+  public String getTelscope() {
+    return telscope;
+  }
+
+  /**
+   * @param telscope the telscope to set
+   */
+  public void setTelscope(String telscope) {
+    this.telscope = telscope;
+  }
+
+  /**
+   * @return the searchRadius
+   */
+  public float getSearchRadius() {
+    return searchRadius;
+  }
+
+  /**
+   * @param searchRadius the searchRadius to set
+   */
+  public void setSearchRadius(float searchRadius) {
+    this.searchRadius = searchRadius;
+  }
+
+  /**
+   * @return the startDate
+   */
+  public String getStartDate() {
+    return startDate;
+  }
+
+  /**
+   * @param startDate the startDate to set
+   */
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  /**
+   * @return the endDate
+   */
+  public String getEndDate() {
+    return endDate;
+  }
+
+  /**
+   * @param endDate the endDate to set
+   */
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
   }
 }

@@ -34,10 +34,11 @@
   onEditInlineSuccessTopics="oneditsuccess"
   viewrecords="true"
   width="500"
+  rownumbers="true"
   shrinkToFit="true"
   >
-  <sjg:gridColumn name="dpmId" frozen="true" index="dmpid" title="ID" width="30" editable="false"
-                  sortable="false" search="false"/>
+  <sjg:gridColumn name="dpmId" frozen="true" index="dpmId" title="ID" width="30" editable="true" edittype="text"
+                  sortable="false" search="false" hidden="true"/>
   <sjg:gridColumn name="name" index="name" title="名称" width="150" editable="true" edittype="text" sortable="false"
                   search="false"/>
   <sjg:gridColumn name="ip" index="ip" title="IP地址" sortable="false" editable="true"

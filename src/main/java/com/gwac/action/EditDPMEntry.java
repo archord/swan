@@ -1,19 +1,15 @@
 package com.gwac.action;
 
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.model.DataProcessMachine;
+import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.StringTokenizer;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
-
-import com.gwac.model.DataProcessMachine;
-import com.opensymphony.xwork2.ActionSupport;
 
 @Actions({ 
   @Action(value = "/edit-dpm-entry", results = {
@@ -24,7 +20,7 @@ public class EditDPMEntry extends ActionSupport {
   private static final long serialVersionUID = -3454448309088641394L;
   private static final Log log = LogFactory.getLog(EditDPMEntry.class);
   private String oper = "";
-  private String id;
+  private String dpmId;
   private String name;
   private String ip;
   private short tspId;
@@ -33,7 +29,7 @@ public class EditDPMEntry extends ActionSupport {
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
-    log.info("id :" + getId());
+    log.info("id :" + dpmId);
     log.info("name :" + name);
     log.info("ip :" + getIp());
     log.info("telscope :" + getTspId());
@@ -48,10 +44,10 @@ public class EditDPMEntry extends ActionSupport {
       dpmDao.save(dpm);
     } else if (oper.equalsIgnoreCase("edit")) {
       log.debug("Edit DataProcessMachine");
-      dpm.setDpmId(Short.parseShort(getId()));
+      dpm.setDpmId(Short.parseShort(dpmId));
       dpmDao.update(dpm);
     } else if (oper.equalsIgnoreCase("del")) {
-      StringTokenizer ids = new StringTokenizer(getId(), ",");
+      StringTokenizer ids = new StringTokenizer(dpmId, ",");
       while (ids.hasMoreTokens()) {
         int removeId = Integer.parseInt(ids.nextToken());
         log.debug("Delete DataProcessMachine " + removeId);
@@ -117,20 +113,6 @@ public class EditDPMEntry extends ActionSupport {
   }
 
   /**
-   * @return the id
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
-   * @param id the id to set
-   */
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  /**
    * @return the tspId
    */
   public short getTspId() {
@@ -142,6 +124,20 @@ public class EditDPMEntry extends ActionSupport {
    */
   public void setTspId(short tspId) {
     this.tspId = tspId;
+  }
+
+  /**
+   * @return the dpmId
+   */
+  public String getDpmId() {
+    return dpmId;
+  }
+
+  /**
+   * @param dpmId the dpmId to set
+   */
+  public void setDpmId(String dpmId) {
+    this.dpmId = dpmId;
   }
 
 }

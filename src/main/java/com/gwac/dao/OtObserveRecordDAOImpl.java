@@ -30,7 +30,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Session session = getCurrentSession();
     String sql = "select oort_id from ot_observe_record_tmp where ff_id="
             + obj.getFfId()
-            + " and abs(x_temp-" + obj.getXTemp()+ ")<2 "
+            + " and abs(x_temp-" + obj.getXTemp() + ")<2 "
             + " and abs(y_temp-" + obj.getYTemp() + ")<2 ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
@@ -40,8 +40,23 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     }
     return flag;
   }
-  
-  public List<OtObserveRecordShow> getRecordByOtName(String otName) {
+
+  public int countRecordByOtName(String otName) {
+
+    int tNum = 0;
+    Session session = getCurrentSession();
+    String sql = "select count(*) "
+            + "from ot_observe_record_tmp oor "
+            + "where oor.ot_id=(select ob.ot_id from ot_base ob where name='" + otName + "') ";
+    Query q = session.createSQLQuery(sql);
+    if (!q.list().isEmpty()) {
+      BigInteger objId = (BigInteger) q.list().get(0);
+      tNum = objId.intValue();
+    }
+    return tNum;
+  }
+
+  public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize) {
 
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
     Session session = getCurrentSession();
@@ -50,8 +65,11 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
             + "where oor.ot_id=(select ob.ot_id from ot_base ob where name='" + otName + "') "
-	    + "order by oor.date_ut";
-    Iterator itor = session.createSQLQuery(sql).list().iterator();
+            + "order by oor.date_ut";
+    Query q = session.createSQLQuery(sql);
+    q.setFirstResult(start);
+    q.setMaxResults(resultSize);
+    Iterator itor = q.list().iterator();
     while (itor.hasNext()) {
       Object[] row = (Object[]) itor.next();
       try {
@@ -108,7 +126,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         oors.setXTemp(xTemp);
         oors.setY(y);
         oors.setYTemp(yTemp);
-	oors.setOtTypeId(otTypeId);
+        oors.setOtTypeId(otTypeId);
         oorss.add(oors);
       } catch (ClassCastException cce) {
         cce.printStackTrace();
@@ -116,7 +134,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     }
     return oorss;
   }
-  
+
   public List<OtObserveRecordShow> getRecordByOtId(long otId) {
 
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
@@ -183,7 +201,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         oors.setXTemp(xTemp);
         oors.setY(y);
         oors.setYTemp(yTemp);
-	oors.setOtTypeId(otTypeId);
+        oors.setOtTypeId(otTypeId);
         oorss.add(oors);
       } catch (ClassCastException cce) {
         cce.printStackTrace();

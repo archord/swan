@@ -65,11 +65,13 @@
           next: '#next',
           auto: {
             button: '#play',
-            progress: '#timer',
             pauseOnEvent: 'resume',
-            timeoutDuration: 1000
+            timeoutDuration: 1000,
+            progress: {bar:'#timer', interval:0}
           },
           scroll: {
+            items:1,
+            duration: 0,
             fx: 'fade',
             onBefore: function(data) {
               setNavi($(this), data.items.visible);
