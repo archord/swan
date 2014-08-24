@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated May 5, 2014 8:56:32 PM by Hibernate Tools 3.2.2.GA -->
+<!-- Generated Aug 24, 2014 3:05:02 PM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.ConfigFile" table="config_file" schema="public">
-        <id name="cfId" type="java.lang.Long">
+        <id name="cfId" type="long">
             <column name="cf_id" />
-            <generator class="increment" />
+            <generator class="assigned" />
         </id>
         <property name="storePath" type="string">
             <column name="store_path" />
         </property>
         <property name="fileName" type="string">
-            <column name="file_name" length="15" />
+            <column name="file_name" />
         </property>
         <property name="isSync" type="java.lang.Boolean">
             <column name="is_sync" />

@@ -4,9 +4,9 @@
  */
 package com.gwac.service;
 
-import com.gwac.dao.OtBaseDao;
+import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
-import com.gwac.model.OtBase;
+import com.gwac.model.OtLevel2;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,15 +21,15 @@ import java.util.List;
  */
 public class OtNameRequestServiceImpl implements OtNameRequestService {
 
-  private OtBaseDao obDao;
+  private OtLevel2Dao obDao;
   private OtNumberDao otnDao;
 
-  public List<OtBase> parseParaFile(File paraFile) {
+  public List<OtLevel2> parseParaFile(File paraFile) {
 
     BufferedReader br = null;
     String line = "";
     String splitBy = " ";
-    List<OtBase> objs = new ArrayList<OtBase>();
+    List<OtLevel2> objs = new ArrayList<OtLevel2>();
 
     try {
 
@@ -41,7 +41,7 @@ public class OtNameRequestServiceImpl implements OtNameRequestService {
         // split on comma(',')  
         String[] strs = line.split(splitBy);
         // create car object to store values  
-        OtBase obj = new OtBase();
+        OtLevel2 obj = new OtLevel2();
 
         // add values from csv to car object  
         obj.setXtemp(Float.parseFloat(strs[0]));
@@ -67,10 +67,10 @@ public class OtNameRequestServiceImpl implements OtNameRequestService {
     return objs;
   }
 
-  public List<OtBase> getOtNames(File paraFile) {
+  public List<OtLevel2> getOtNames(File paraFile) {
 
-    List<OtBase> obs = parseParaFile(paraFile);
-    for (OtBase ob : obs) {
+    List<OtLevel2> obs = parseParaFile(paraFile);
+    for (OtLevel2 ob : obs) {
       //向数据库添加OT名字，需要在此时添加OT的所有相关属性信息，即相当于要先把OT观测列表先传输一遍
       //另一方面，GWAC为实时数据处理，如果处理流程依赖服务器，在服务器出问题时，GWAC流程就中断了。。
       if (!obDao.exist(ob)) {
@@ -86,14 +86,14 @@ public class OtNameRequestServiceImpl implements OtNameRequestService {
   /**
    * @return the obDao
    */
-  public OtBaseDao getObDao() {
+  public OtLevel2Dao getObDao() {
     return obDao;
   }
 
   /**
    * @param obDao the obDao to set
    */
-  public void setObDao(OtBaseDao obDao) {
+  public void setObDao(OtLevel2Dao obDao) {
     this.obDao = obDao;
   }
 }

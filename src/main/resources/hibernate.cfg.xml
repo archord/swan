@@ -12,22 +12,24 @@
         <mapping resource="com/gwac/model/OtObserveRecordTmp.hbm.xml" />
         <mapping resource="com/gwac/model/StarKnow.hbm.xml" />
         <mapping resource="com/gwac/model/UploadFileRecord.hbm.xml" />
+        <mapping resource="com/gwac/model/ConfigFile.hbm.xml" />
         <mapping resource="com/gwac/model/Telescope.hbm.xml" />
+        <mapping resource="com/gwac/model/OtLevel2.hbm.xml" />
         <mapping resource="com/gwac/model/OtObserveRecord.hbm.xml" />
         <mapping resource="com/gwac/model/FitsFileCut.hbm.xml" />
+        <mapping resource="com/gwac/model/OtLevel3.hbm.xml" />
         <mapping resource="com/gwac/model/OtType.hbm.xml" />
         <mapping resource="com/gwac/model/StarListFile.hbm.xml" />
+        <mapping resource="com/gwac/model/OtLevel2His.hbm.xml" />
         <mapping resource="com/gwac/model/UploadFileUnstore.hbm.xml" />
         <mapping resource="com/gwac/model/DataProcessMachine.hbm.xml" />
         <mapping resource="com/gwac/model/VariationType.hbm.xml" />
         <mapping resource="com/gwac/model/UserInfo.hbm.xml" />
-        <mapping resource="com/gwac/model/OtBase.hbm.xml" />
-        <mapping resource="com/gwac/model/OtNumber.hbm.xml" />
         <mapping resource="com/gwac/model/Environment.hbm.xml" />
+        <mapping resource="com/gwac/model/OtNumber.hbm.xml" />
         <mapping resource="com/gwac/model/FitsFile.hbm.xml" />
         <mapping resource="com/gwac/model/Grb.hbm.xml" />
         <mapping resource="com/gwac/model/Gimbal.hbm.xml" />
         <mapping resource="com/gwac/model/StarKnowObserveRecord.hbm.xml" />
-        <mapping resource="com/gwac/model/ConfigFile.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

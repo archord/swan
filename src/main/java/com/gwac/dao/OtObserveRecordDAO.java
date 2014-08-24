@@ -5,14 +5,14 @@
 package com.gwac.dao;
 
 import com.gwac.model.OtObserveRecordShow;
-import com.gwac.model.OtObserveRecordTmp;
+import com.gwac.model.OtObserveRecord;
 import java.util.List;
 
 /**
  *
  * @author xy
  */
-public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecordTmp> {
+public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
 
   public List<OtObserveRecordShow> getRecordByOtId(long otId);
 
@@ -20,5 +20,5 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecordTmp>
 
   public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize);
 
-  public Boolean exist(OtObserveRecordTmp obj);
+  public Boolean exist(OtObserveRecord obj);
 }

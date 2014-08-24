@@ -5,12 +5,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.FitsFileCut;
-import com.gwac.model.OtNumber;
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -32,11 +28,11 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     Session session = getCurrentSession();
 //    String sql = "select ffc.store_path, ffc.file_name, ffc.number "
 //	    + "from fits_file_cut ffc "
-//	    + "where ffc.ot_id=(select ot_id from ot_base ob where ob.name='" + otName + "') "
+//	    + "where ffc.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "') "
 //	    + "order by ffc.number;";
     String sql = "select * "
 	    + "from fits_file_cut ffc "
-	    + "where ffc.ot_id=(select ot_id from ot_base ob where ob.name='" + otName + "') "
+	    + "where ffc.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "') "
 	    + "order by ffc.number;";
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     List rstList = q.list();

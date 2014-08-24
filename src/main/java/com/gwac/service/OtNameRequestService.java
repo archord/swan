@@ -4,7 +4,7 @@
  */
 package com.gwac.service;
 
-import com.gwac.model.OtBase;
+import com.gwac.model.OtLevel2;
 import java.io.File;
 import java.util.List;
 
@@ -14,5 +14,5 @@ import java.util.List;
  */
 public interface OtNameRequestService {
   
-  public List<OtBase> getOtNames(File paraFile);
+  public List<OtLevel2> getOtNames(File paraFile);
 }

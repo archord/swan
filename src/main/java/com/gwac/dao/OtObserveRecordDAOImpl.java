@@ -4,8 +4,8 @@
  */
 package com.gwac.dao;
 
+import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtObserveRecordShow;
-import com.gwac.model.OtObserveRecordTmp;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,15 +20,15 @@ import org.hibernate.Session;
  *
  * @author xy
  */
-public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecordTmp> implements OtObserveRecordDAO {
+public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
   @Override
-  public Boolean exist(OtObserveRecordTmp obj) {
+  public Boolean exist(OtObserveRecord obj) {
     Boolean flag = false;
     Session session = getCurrentSession();
-    String sql = "select oort_id from ot_observe_record_tmp where ff_id="
+    String sql = "select oort_id from ot_observe_record where ff_id="
             + obj.getFfId()
             + " and abs(x_temp-" + obj.getXTemp() + ")<2 "
             + " and abs(y_temp-" + obj.getYTemp() + ")<2 ";
@@ -46,8 +46,8 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     int tNum = 0;
     Session session = getCurrentSession();
     String sql = "select count(*) "
-            + "from ot_observe_record_tmp oor "
-            + "where oor.ot_id=(select ob.ot_id from ot_base ob where name='" + otName + "') ";
+            + "from ot_observe_record oor "
+            + "where oor.ot_id=(select ob.ot_id from ot_level2 ob where name='" + otName + "') ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
       BigInteger objId = (BigInteger) q.list().get(0);
@@ -61,10 +61,10 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
     Session session = getCurrentSession();
     String sql = "select oor.*, ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath "
-            + "from ot_observe_record_tmp oor "
+            + "from ot_observe_record oor "
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
-            + "where oor.ot_id=(select ob.ot_id from ot_base ob where name='" + otName + "') "
+            + "where oor.ot_id=(select ob.ot_id from ot_level2 ob where name='" + otName + "') "
             + "order by oor.date_ut";
     Query q = session.createSQLQuery(sql);
     q.setFirstResult(start);
@@ -140,7 +140,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
     Session session = getCurrentSession();
     String sql = "select oor.*, ff.file_name, ff.store_path, ffc.file_name, ffc.store_path "
-            + "from ot_observe_record_tmp oor "
+            + "from ot_observe_record oor "
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
             + "where ot_id='" + otId + "'";

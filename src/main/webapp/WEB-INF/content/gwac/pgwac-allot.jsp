@@ -50,7 +50,7 @@
 <s:property value="echo" escape="%{escape}"/>
 
 <div style="width:650px;text-align: left;">
-  <s:form id="getOtBaseListForm"  action="query-ot-base" theme="simple" cssClass="yform" namespace="/">
+  <s:form id="getOtListForm"  action="query-ot-level2" theme="simple" cssClass="yform" namespace="/">
     <table style="margin:auto; width:90%;">
       <tr>
         <td>开始日期(UTC)：</td>
@@ -99,7 +99,7 @@
 </div>
 
 <!--strong>已注册用户列表:</strong-->
-<s:url var="remoteurl" action="get-ot-base-list" namespace="/"/>
+<s:url var="remoteurl" action="get-ot-level2-list" namespace="/"/>
 <!--width="700" resizable="true" 
 shrinkToFit="true" 自动调节到表格的宽度 -->
 <!--不能添加loadonce="true"，否则上面的“搜索”提交不起作用-->
@@ -116,7 +116,7 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   width="650"
   viewrecords="true"
   reloadTopics="reloadOtGrid"
-  formIds="getOtBaseListForm">
+  formIds="getOtListForm">
   <sjg:gridColumn name="name"   index="name"	  title="OT名" width="140"  formatter="formatLink"
                   sortable="false" align="center"/>
   <sjg:gridColumn name="ra"    index="ra"	  title="RA" width="80" 
@@ -128,6 +128,8 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   <sjg:gridColumn name="ytemp"    index="ytemp"	  title="模板Y" width="80" 
                   sortable="false" align="center"/>
   <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="190" 
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="total"    index="total"	  title="记录总数" width="70" 
                   sortable="false" align="center"/>
 </sjg:grid>
 

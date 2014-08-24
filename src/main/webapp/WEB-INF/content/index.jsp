@@ -15,7 +15,7 @@
     <meta http-equiv="keywords" content=",国家天文台，svom, gwac，望远镜阵列" />
     <meta http-equiv="description" content="GWAC数据展示页面" />
 
-    <title>SVOM空间天文卫星 - <s:text name="showcase.version"/></title>
+    <title>GWAC - <s:text name="showcase.version"/></title>
 
     <s:if test="%{theme == 'showcase' || theme == null}">
       <sj:head debug="true" compressed="true" jquerytheme="showcase" customBasepath="themes" 
@@ -57,7 +57,7 @@
           <div class="ym-grid linearize-level-1">
             <div class="ym-g75 ym-gl" >
               <div style="padding-left: 9px;">
-              <h1 class="ui-state-default" style="background: none; border: none; margin: 0;">SVOM空间天文卫星</h1>
+              <h1 class="ui-state-default" style="background: none; border: none; margin: 0;">GWAC信息展示平台</h1>
               <h5 class="ui-state-default" style="background: none; border: none;"> <s:text name="showcase.version"/></h5>
               </div>
             </div>
@@ -84,7 +84,7 @@
             <li><s:url var="mainurl" action="menu-main" namespace="/" />
               <sj:a id="menumain" href="%{mainurl}" targets="menu">首页</sj:a></li>
             <li><s:url var="gwacurl" action="menu-gwac" namespace="/" />
-              <sj:a id="menugwac" href="%{gwacurl}" targets="menu">GWAC项目</sj:a></li>
+              <sj:a id="menugwac" href="%{gwacurl}" targets="menu">GWAC数据</sj:a></li>
             <li><s:url var="questionurl" action="menu-question" namespace="/" />
               <sj:a id="menuquestion" href="%{questionurl}" targets="menu">问题反馈</sj:a></li>
             <li><a href="http://svom.bao.ac.cn:3000/">项目管理</a></li>

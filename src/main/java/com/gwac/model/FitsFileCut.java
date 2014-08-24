@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated May 5, 2014 8:56:32 PM by Hibernate Tools 3.2.2.GA
+// Generated Aug 24, 2014 3:05:01 PM by Hibernate Tools 3.2.2.GA
 
 
 
@@ -17,8 +17,8 @@ public class FitsFileCut  implements java.io.Serializable {
      private Long ffId;
      private Long templateFfcId;
      private Boolean isTemplateCut;
-     private long otId;
-     private int number;
+     private Long otId;
+     private Integer number;
 
     public FitsFileCut() {
     }
@@ -27,7 +27,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public FitsFileCut(long ffcId) {
         this.ffcId = ffcId;
     }
-    public FitsFileCut(long ffcId, Long starId, Short dpmId, String storePath, String fileName, Long ffId, Long templateFfcId, Boolean isTemplateCut) {
+    public FitsFileCut(long ffcId, Long starId, Short dpmId, String storePath, String fileName, Long ffId, Long templateFfcId, Boolean isTemplateCut, Long otId, Integer number) {
        this.ffcId = ffcId;
        this.starId = starId;
        this.dpmId = dpmId;
@@ -36,6 +36,8 @@ public class FitsFileCut  implements java.io.Serializable {
        this.ffId = ffId;
        this.templateFfcId = templateFfcId;
        this.isTemplateCut = isTemplateCut;
+       this.otId = otId;
+       this.number = number;
     }
    
     public long getFfcId() {
@@ -94,34 +96,20 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setIsTemplateCut(Boolean isTemplateCut) {
         this.isTemplateCut = isTemplateCut;
     }
-
-  /**
-   * @return the otId
-   */
-  public long getOtId() {
-    return otId;
-  }
-
-  /**
-   * @param otId the otId to set
-   */
-  public void setOtId(long otId) {
-    this.otId = otId;
-  }
-
-  /**
-   * @return the number
-   */
-  public int getNumber() {
-    return number;
-  }
-
-  /**
-   * @param number the number to set
-   */
-  public void setNumber(int number) {
-    this.number = number;
-  }
+    public Long getOtId() {
+        return this.otId;
+    }
+    
+    public void setOtId(Long otId) {
+        this.otId = otId;
+    }
+    public Integer getNumber() {
+        return this.number;
+    }
+    
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 
 
 

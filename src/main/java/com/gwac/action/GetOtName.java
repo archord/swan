@@ -8,7 +8,7 @@ package com.gwac.action;
  *
  * @author xy
  */
-import com.gwac.model.OtBase;
+import com.gwac.model.OtLevel2;
 import com.gwac.service.OtNameRequestService;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -57,8 +57,8 @@ public class GetOtName extends ActionSupport {
     }
 
     if (flag) {
-      List<OtBase> objs = onrService.getOtNames(requestList);
-      for(OtBase obj:objs){
+      List<OtLevel2> objs = onrService.getOtNames(requestList);
+      for(OtLevel2 obj:objs){
         System.out.println("");
       }
 

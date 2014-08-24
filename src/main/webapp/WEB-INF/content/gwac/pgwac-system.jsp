@@ -3,7 +3,10 @@
 <%@ taglib prefix="sj" uri="/struts-jquery-tags" %>
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags" %>
 
-<strong><a href="/svom/newhtmlrealTimeOtDistribution.html" target="_blank">OT实时分布概览</a></strong><br/><br/>
+<strong>
+  <a href="<%=request.getContextPath() %>/newhtmlrealTimeOtDistribution.html" target="_blank">OT实时分布概览&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/flotexample2.jsp" target="_blank">OT实时分布概览-实时绘制&nbsp;&nbsp;&nbsp;</a>
+</strong><br/><br/>
 <strong>望远镜信息:</strong>
 <div id="tlp-info" class="result ui-widget-content ui-corner-all">
   <table style="padding: 3px;"  class="table-style">

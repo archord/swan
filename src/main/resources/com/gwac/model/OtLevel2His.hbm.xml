@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 24, 2014 3:05:02 PM by Hibernate Tools 3.2.2.GA -->
+<hibernate-mapping>
+    <class name="com.gwac.model.OtLevel2His" table="ot_level2_his" schema="public">
+        <id name="otId" type="long">
+            <column name="ot_id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="otType" class="com.gwac.model.OtType" fetch="select">
+            <column name="ot_type" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" length="12" />
+        </property>
+        <property name="ra" type="java.lang.Float">
+            <column name="ra" precision="8" scale="8" />
+        </property>
+        <property name="dec" type="java.lang.Float">
+            <column name="dec" precision="8" scale="8" />
+        </property>
+        <property name="foundTimeUtc" type="timestamp">
+            <column name="found_time_utc" length="29" />
+        </property>
+        <property name="identify" type="string">
+            <column name="identify" length="21" />
+        </property>
+        <property name="xtemp" type="java.lang.Float">
+            <column name="xtemp" precision="8" scale="8" />
+        </property>
+        <property name="ytemp" type="java.lang.Float">
+            <column name="ytemp" precision="8" scale="8" />
+        </property>
+        <property name="lastFfNumber" type="java.lang.Integer">
+            <column name="last_ff_number" />
+        </property>
+        <property name="total" type="java.lang.Integer">
+            <column name="total" />
+        </property>
+        <property name="succOccurTimes" type="java.lang.Short">
+            <column name="succ_occur_times" />
+        </property>
+        <property name="maxSuccOccurTimes" type="java.lang.Short">
+            <column name="max_succ_occur_times" />
+        </property>
+        <property name="isRecognize" type="java.lang.Boolean">
+            <column name="is_recognize" />
+        </property>
+        <property name="comments" type="string">
+            <column name="comments" length="1024" />
+        </property>
+        <property name="dpmName" type="string">
+            <column name="dpm_name" length="3" />
+        </property>
+    </class>
+</hibernate-mapping>

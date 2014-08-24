@@ -7,9 +7,9 @@ package com.gwac.service;
 
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileDAO;
-import com.gwac.dao.OtBaseDao;
+import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.FitsFileCut;
-import com.gwac.model.OtBase;
+import com.gwac.model.OtLevel2;
 import com.gwac.model.UploadFileRecord;
 
 /**
@@ -18,7 +18,7 @@ import com.gwac.model.UploadFileRecord;
  */
 public class FitsFileCutServiceImpl implements FitsFileCutService {
 
-  private OtBaseDao obDao;
+  private OtLevel2Dao obDao;
   private FitsFileDAO ffDao;
   private FitsFileCutDAO ffcDao;
 
@@ -36,10 +36,10 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       int x = Integer.parseInt(cutImg.substring(31, 35));
       int y = Integer.parseInt(cutImg.substring(36, 40));
       
-      OtBase ob = new OtBase();
+      OtLevel2 ob = new OtLevel2();
       ob.setIdentify(identifyStr);
-      ob.setXtemp(x);
-      ob.setYtemp(y);
+      ob.setXtemp((float)x);
+      ob.setYtemp((float)y);
       
       FitsFileCut ffc = new FitsFileCut();
       ffc.setFileName(cutImg);
@@ -52,14 +52,14 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   /**
    * @return the obDao
    */
-  public OtBaseDao getObDao() {
+  public OtLevel2Dao getObDao() {
     return obDao;
   }
 
   /**
    * @param obDao the obDao to set
    */
-  public void setObDao(OtBaseDao obDao) {
+  public void setObDao(OtLevel2Dao obDao) {
     this.obDao = obDao;
   }
 

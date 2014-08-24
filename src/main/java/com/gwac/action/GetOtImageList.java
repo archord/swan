@@ -1,16 +1,16 @@
 package com.gwac.action;
 
 import com.gwac.dao.FitsFileCutDAO;
-import com.gwac.dao.OtBaseDao;
+import com.gwac.dao.OtLevel2Dao;
+import com.gwac.model.FitsFileCut;
+import com.gwac.model.OtLevel2;
+import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
-import com.gwac.model.FitsFileCut;
-import com.gwac.model.OtBase;
-import com.opensymphony.xwork2.ActionSupport;
 
 @Actions({
   @Action(value = "/get-ot-image-list", results = {
@@ -23,7 +23,7 @@ public class GetOtImageList extends ActionSupport {
   private String otName;
   private List<FitsFileCut> ffcList;
   private FitsFileCutDAO ffcDao;
-  private OtBaseDao obDao;
+  private OtLevel2Dao obDao;
   private int totalImage;
   private int startImgNum;
 
@@ -32,8 +32,8 @@ public class GetOtImageList extends ActionSupport {
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
     ffcList = ffcDao.getCutImageByOtName(getOtName());
-    OtBase ob = obDao.getOtBaseByName(otName);
-    setStartImgNum(ob.getNumber());
+    OtLevel2 ob = obDao.getOtLevel2ByName(otName);
+    setStartImgNum(ob.getLastFfNumber());
     totalImage = ffcList.size();
     for (FitsFileCut ffc : ffcList) {
       ffc.setFileName(ffc.getFileName().replace("fit", "png"));
@@ -94,7 +94,7 @@ public class GetOtImageList extends ActionSupport {
   /**
    * @param obDao the obDao to set
    */
-  public void setObDao(OtBaseDao obDao) {
+  public void setObDao(OtLevel2Dao obDao) {
     this.obDao = obDao;
   }
 

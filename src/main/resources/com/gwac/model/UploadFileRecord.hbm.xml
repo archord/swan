@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated May 5, 2014 8:56:32 PM by Hibernate Tools 3.2.2.GA -->
+<!-- Generated Aug 24, 2014 3:05:02 PM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.UploadFileRecord" table="upload_file_record" schema="public">
         <id name="ufrId" type="long">
             <column name="ufr_id" />
-            <generator class="increment" />
+            <generator class="assigned" />
         </id>
         <property name="storePath" type="string">
             <column name="store_path" />
         </property>
         <property name="fileName" type="string">
-            <column name="file_name" />
+            <column name="file_name" unique="true" />
         </property>
         <property name="fileType" type="java.lang.Character">
             <column name="file_type" length="1" />

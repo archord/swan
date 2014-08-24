@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated May 5, 2014 8:56:32 PM by Hibernate Tools 3.2.2.GA
+// Generated Aug 24, 2014 3:05:01 PM by Hibernate Tools 3.2.2.GA
 
 
 import java.util.Date;
@@ -10,67 +10,61 @@ import java.util.Date;
 public class OtObserveRecordTmp  implements java.io.Serializable {
 
 
-     private long oortId;
+     private long oorId;
      private Long otId;
      private Long ffId;
-     private Long ffcId;
-     private Short otTypeId;
-     private Float raD;
-     private Float decD;
+     private Float ra;
+     private Float dec;
      private Float x;
      private Float y;
-     private Float XTemp;
-     private Float YTemp;
-     private Date dateUt;
-     private Float flux;
-     private Boolean flag;
-     private Float flagChb;
-     private Float background;
-     private Float threshold;
-     private Float magAper;
-     private Float magerrAper;
+     private Date datetime;
+     private Float mag;
+     private Float magErr;
      private Float ellipticity;
-     private Short classStar;
-     private Boolean otFlag;
+     private Float signalNoise;
+     private Float fwhm;
+     private Float flux;
+     private Float fluxErr;
+     private Long cmpStarId;
+     private Long mchStarId;
+     private Long ffcId;
+     private Short otTypeId;
 
     public OtObserveRecordTmp() {
     }
 
 	
-    public OtObserveRecordTmp(long oortId) {
-        this.oortId = oortId;
+    public OtObserveRecordTmp(long oorId) {
+        this.oorId = oorId;
     }
-    public OtObserveRecordTmp(long oortId, Long otId, Long ffId, Long ffcId, Short otTypeId, Float raD, Float decD, Float x, Float y, Float XTemp, Float YTemp, Date dateUt, Float flux, Boolean flag, Float flagChb, Float background, Float threshold, Float magAper, Float magerrAper, Float ellipticity, Short classStar, Boolean otFlag) {
-       this.oortId = oortId;
+    public OtObserveRecordTmp(long oorId, Long otId, Long ffId, Float ra, Float dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId, Long ffcId, Short otTypeId) {
+       this.oorId = oorId;
        this.otId = otId;
        this.ffId = ffId;
-       this.ffcId = ffcId;
-       this.otTypeId = otTypeId;
-       this.raD = raD;
-       this.decD = decD;
+       this.ra = ra;
+       this.dec = dec;
        this.x = x;
        this.y = y;
-       this.XTemp = XTemp;
-       this.YTemp = YTemp;
-       this.dateUt = dateUt;
-       this.flux = flux;
-       this.flag = flag;
-       this.flagChb = flagChb;
-       this.background = background;
-       this.threshold = threshold;
-       this.magAper = magAper;
-       this.magerrAper = magerrAper;
+       this.datetime = datetime;
+       this.mag = mag;
+       this.magErr = magErr;
        this.ellipticity = ellipticity;
-       this.classStar = classStar;
-       this.otFlag = otFlag;
+       this.signalNoise = signalNoise;
+       this.fwhm = fwhm;
+       this.flux = flux;
+       this.fluxErr = fluxErr;
+       this.cmpStarId = cmpStarId;
+       this.mchStarId = mchStarId;
+       this.ffcId = ffcId;
+       this.otTypeId = otTypeId;
     }
    
-    public long getOortId() {
-        return this.oortId;
+    public long getOorId() {
+        return this.oorId;
     }
     
-    public void setOortId(long oortId) {
-        this.oortId = oortId;
+    public void setOorId(long oorId) {
+        this.oorId = oorId;
     }
     public Long getOtId() {
         return this.otId;
@@ -86,33 +80,19 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     public void setFfId(Long ffId) {
         this.ffId = ffId;
     }
-    public Long getFfcId() {
-        return this.ffcId;
+    public Float getRa() {
+        return this.ra;
     }
     
-    public void setFfcId(Long ffcId) {
-        this.ffcId = ffcId;
+    public void setRa(Float ra) {
+        this.ra = ra;
     }
-    public Short getOtTypeId() {
-        return this.otTypeId;
-    }
-    
-    public void setOtTypeId(Short otTypeId) {
-        this.otTypeId = otTypeId;
-    }
-    public Float getRaD() {
-        return this.raD;
+    public Float getDec() {
+        return this.dec;
     }
     
-    public void setRaD(Float raD) {
-        this.raD = raD;
-    }
-    public Float getDecD() {
-        return this.decD;
-    }
-    
-    public void setDecD(Float decD) {
-        this.decD = decD;
+    public void setDec(Float dec) {
+        this.dec = dec;
     }
     public Float getX() {
         return this.x;
@@ -128,75 +108,26 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     public void setY(Float y) {
         this.y = y;
     }
-    public Float getXTemp() {
-        return this.XTemp;
+    public Date getDatetime() {
+        return this.datetime;
     }
     
-    public void setXTemp(Float XTemp) {
-        this.XTemp = XTemp;
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
-    public Float getYTemp() {
-        return this.YTemp;
-    }
-    
-    public void setYTemp(Float YTemp) {
-        this.YTemp = YTemp;
-    }
-    public Date getDateUt() {
-        return this.dateUt;
+    public Float getMag() {
+        return this.mag;
     }
     
-    public void setDateUt(Date dateUt) {
-        this.dateUt = dateUt;
+    public void setMag(Float mag) {
+        this.mag = mag;
     }
-    public Float getFlux() {
-        return this.flux;
-    }
-    
-    public void setFlux(Float flux) {
-        this.flux = flux;
-    }
-    public Boolean getFlag() {
-        return this.flag;
+    public Float getMagErr() {
+        return this.magErr;
     }
     
-    public void setFlag(Boolean flag) {
-        this.flag = flag;
-    }
-    public Float getFlagChb() {
-        return this.flagChb;
-    }
-    
-    public void setFlagChb(Float flagChb) {
-        this.flagChb = flagChb;
-    }
-    public Float getBackground() {
-        return this.background;
-    }
-    
-    public void setBackground(Float background) {
-        this.background = background;
-    }
-    public Float getThreshold() {
-        return this.threshold;
-    }
-    
-    public void setThreshold(Float threshold) {
-        this.threshold = threshold;
-    }
-    public Float getMagAper() {
-        return this.magAper;
-    }
-    
-    public void setMagAper(Float magAper) {
-        this.magAper = magAper;
-    }
-    public Float getMagerrAper() {
-        return this.magerrAper;
-    }
-    
-    public void setMagerrAper(Float magerrAper) {
-        this.magerrAper = magerrAper;
+    public void setMagErr(Float magErr) {
+        this.magErr = magErr;
     }
     public Float getEllipticity() {
         return this.ellipticity;
@@ -205,19 +136,61 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     public void setEllipticity(Float ellipticity) {
         this.ellipticity = ellipticity;
     }
-    public Short getClassStar() {
-        return this.classStar;
+    public Float getSignalNoise() {
+        return this.signalNoise;
     }
     
-    public void setClassStar(Short classStar) {
-        this.classStar = classStar;
+    public void setSignalNoise(Float signalNoise) {
+        this.signalNoise = signalNoise;
     }
-    public Boolean getOtFlag() {
-        return this.otFlag;
+    public Float getFwhm() {
+        return this.fwhm;
     }
     
-    public void setOtFlag(Boolean otFlag) {
-        this.otFlag = otFlag;
+    public void setFwhm(Float fwhm) {
+        this.fwhm = fwhm;
+    }
+    public Float getFlux() {
+        return this.flux;
+    }
+    
+    public void setFlux(Float flux) {
+        this.flux = flux;
+    }
+    public Float getFluxErr() {
+        return this.fluxErr;
+    }
+    
+    public void setFluxErr(Float fluxErr) {
+        this.fluxErr = fluxErr;
+    }
+    public Long getCmpStarId() {
+        return this.cmpStarId;
+    }
+    
+    public void setCmpStarId(Long cmpStarId) {
+        this.cmpStarId = cmpStarId;
+    }
+    public Long getMchStarId() {
+        return this.mchStarId;
+    }
+    
+    public void setMchStarId(Long mchStarId) {
+        this.mchStarId = mchStarId;
+    }
+    public Long getFfcId() {
+        return this.ffcId;
+    }
+    
+    public void setFfcId(Long ffcId) {
+        this.ffcId = ffcId;
+    }
+    public Short getOtTypeId() {
+        return this.otTypeId;
+    }
+    
+    public void setOtTypeId(Short otTypeId) {
+        this.otTypeId = otTypeId;
     }
 
 

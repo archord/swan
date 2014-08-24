@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated May 5, 2014 8:56:32 PM by Hibernate Tools 3.2.2.GA -->
+<!-- Generated Aug 24, 2014 3:05:02 PM by Hibernate Tools 3.2.2.GA -->
 <hibernate-mapping>
     <class name="com.gwac.model.OtType" table="ot_type" schema="public">
         <id name="otTypeId" type="short">
             <column name="ot_type_id" />
-            <generator class="increment" />
+            <generator class="assigned" />
         </id>
         <property name="otTypeName" type="string">
             <column name="ot_type_name" />
@@ -14,5 +14,26 @@
         <property name="otTableName" type="string">
             <column name="ot_table_name" length="64" />
         </property>
+        <property name="comments" type="string">
+            <column name="comments" length="1024" />
+        </property>
+        <set name="otLevel3s" inverse="true">
+            <key>
+                <column name="ot_type" />
+            </key>
+            <one-to-many class="com.gwac.model.OtLevel3" />
+        </set>
+        <set name="otLevel2s" inverse="true">
+            <key>
+                <column name="ot_type" />
+            </key>
+            <one-to-many class="com.gwac.model.OtLevel2" />
+        </set>
+        <set name="otLevel2Hises" inverse="true">
+            <key>
+                <column name="ot_type" />
+            </key>
+            <one-to-many class="com.gwac.model.OtLevel2His" />
+        </set>
     </class>
 </hibernate-mapping>
