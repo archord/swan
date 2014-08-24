@@ -67,7 +67,6 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
     } else {
       gridModel = obDao.queryOtLevel2(startDate, endDate, telscope, xtemp, ytemp, searchRadius, from, rows);
     }
-    System.out.println("gridModel number="+gridModel.size());
 
     Number tn = obDao.count();
     if (tn != null) {

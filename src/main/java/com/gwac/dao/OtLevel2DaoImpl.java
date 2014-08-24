@@ -49,6 +49,31 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return flag;
   }
 
+  public List<OtLevel2> findRecord1(int start, int resultSize, String[] orderNames, int[] sort) {
+
+    String sql = "select ol2 from OtLevel2 ol2 join fetch ol2.otType ";
+    if (orderNames != null && sort != null && orderNames.length > 0 && sort.length>0) {
+      sql += "order by ";
+      if (orderNames.length == sort.length) {
+        for (int i = 0; i < orderNames.length; i++) {
+          if (sort[i] == SORT_ASC) {
+            sql += "ol2." + orderNames[i] + " asc ";
+          } else {
+            sql += "ol2." + orderNames[i] + " desc ";
+          }
+        }
+      } else {
+        for (String ord : orderNames) {
+          sql += "ol2." + ord + " asc ";
+        }
+      }
+    }
+    Query q = getCurrentSession().createQuery(sql);
+    q.setFirstResult(start);
+    q.setMaxResults(resultSize);
+    return q.list();
+  }
+
   public List<OtLevel2> queryOtLevel2(String startDate, String endDate, String tsp, float xtemp, float ytemp, float radius, int start, int resultSize) {
 
     int parNum = 0;
@@ -67,7 +92,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     if (ytemp != 0.0) {
       parNum++;
     }
-    if(radius < 2.0){
+    if (radius < 2.0) {
       radius = 2;
     }
 
@@ -85,7 +110,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       } else if (ytemp == 0.0) {
         sql += " where abs(ytemp-" + ytemp + ")<" + radius;
       }
-    } else if (parNum >= 2){
+    } else if (parNum >= 2) {
       int tParNum = 1;
       sql += " where ";
       if (!startDate.isEmpty()) {

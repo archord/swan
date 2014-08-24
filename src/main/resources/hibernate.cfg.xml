@@ -1,35 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC
-"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.password">xyag902</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://10.36.1.154:5432/xy</property>
-        <property name="hibernate.connection.username">xy</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-        <mapping resource="com/gwac/model/OtObserveRecordTmp.hbm.xml" />
-        <mapping resource="com/gwac/model/StarKnow.hbm.xml" />
-        <mapping resource="com/gwac/model/UploadFileRecord.hbm.xml" />
-        <mapping resource="com/gwac/model/ConfigFile.hbm.xml" />
-        <mapping resource="com/gwac/model/Telescope.hbm.xml" />
-        <mapping resource="com/gwac/model/OtLevel2.hbm.xml" />
-        <mapping resource="com/gwac/model/OtObserveRecord.hbm.xml" />
-        <mapping resource="com/gwac/model/FitsFileCut.hbm.xml" />
-        <mapping resource="com/gwac/model/OtLevel3.hbm.xml" />
-        <mapping resource="com/gwac/model/OtType.hbm.xml" />
-        <mapping resource="com/gwac/model/StarListFile.hbm.xml" />
-        <mapping resource="com/gwac/model/OtLevel2His.hbm.xml" />
-        <mapping resource="com/gwac/model/UploadFileUnstore.hbm.xml" />
-        <mapping resource="com/gwac/model/DataProcessMachine.hbm.xml" />
-        <mapping resource="com/gwac/model/VariationType.hbm.xml" />
-        <mapping resource="com/gwac/model/UserInfo.hbm.xml" />
-        <mapping resource="com/gwac/model/Environment.hbm.xml" />
-        <mapping resource="com/gwac/model/OtNumber.hbm.xml" />
-        <mapping resource="com/gwac/model/FitsFile.hbm.xml" />
-        <mapping resource="com/gwac/model/Grb.hbm.xml" />
-        <mapping resource="com/gwac/model/Gimbal.hbm.xml" />
-        <mapping resource="com/gwac/model/StarKnowObserveRecord.hbm.xml" />
-    </session-factory>
+  <session-factory>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.password">xyag902</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://10.36.1.154:5432/xy</property>
+    <property name="hibernate.connection.username">xy</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <mapping class="com.gwac.model.UserInfo"/>
+    <mapping class="com.gwac.model.DataProcessMachine"/>
+    <mapping class="com.gwac.model.Environment"/>
+    <mapping class="com.gwac.model.StarKnowObserveRecord"/>
+    <mapping class="com.gwac.model.OtLevel3"/>
+    <mapping class="com.gwac.model.OtLevel2"/>
+    <mapping class="com.gwac.model.StarKnow"/>
+    <mapping class="com.gwac.model.OtObserveRecordTmp"/>
+    <mapping class="com.gwac.model.UploadFileUnstore"/>
+    <mapping class="com.gwac.model.Grb"/>
+    <mapping class="com.gwac.model.OtLevel2His"/>
+    <mapping class="com.gwac.model.OtNumber"/>
+    <mapping class="com.gwac.model.UploadFileRecord"/>
+    <mapping class="com.gwac.model.OtObserveRecord"/>
+    <mapping class="com.gwac.model.VariationType"/>
+    <mapping class="com.gwac.model.FitsFileCut"/>
+    <mapping class="com.gwac.model.OtObserveRecordShow"/>
+    <mapping class="com.gwac.model.OtType"/>
+    <mapping class="com.gwac.model.Telescope"/>
+    <mapping class="com.gwac.model.StarListFile"/>
+    <mapping class="com.gwac.model.FitsFile"/>
+    <mapping class="com.gwac.model.Gimbal"/>
+    <mapping class="com.gwac.model.OTCatalog"/>
+    <mapping class="com.gwac.model.ConfigFile"/>
+    <mapping class="com.gwac.model.Customer"/>
+    <mapping class="com.gwac.model.UserInfo"/>
+    <mapping class="com.gwac.model.DataProcessMachine"/>
+    <mapping class="com.gwac.model.Environment"/>
+    <mapping class="com.gwac.model.StarKnowObserveRecord"/>
+    <mapping class="com.gwac.model.OtLevel3"/>
+    <mapping class="com.gwac.model.OtLevel2"/>
+    <mapping class="com.gwac.model.StarKnow"/>
+    <mapping class="com.gwac.model.OtObserveRecordTmp"/>
+    <mapping class="com.gwac.model.UploadFileUnstore"/>
+    <mapping class="com.gwac.model.Grb"/>
+    <mapping class="com.gwac.model.OtLevel2His"/>
+    <mapping class="com.gwac.model.OtNumber"/>
+    <mapping class="com.gwac.model.UploadFileRecord"/>
+    <mapping class="com.gwac.model.OtObserveRecord"/>
+    <mapping class="com.gwac.model.VariationType"/>
+    <mapping class="com.gwac.model.FitsFileCut"/>
+    <mapping class="com.gwac.model.OtObserveRecordShow"/>
+    <mapping class="com.gwac.model.OtType"/>
+    <mapping class="com.gwac.model.Telescope"/>
+    <mapping class="com.gwac.model.StarListFile"/>
+    <mapping class="com.gwac.model.FitsFile"/>
+    <mapping class="com.gwac.model.Gimbal"/>
+    <mapping class="com.gwac.model.OTCatalog"/>
+    <mapping class="com.gwac.model.ConfigFile"/>
+    <mapping class="com.gwac.model.Customer"/>
+  </session-factory>
 </hibernate-configuration>

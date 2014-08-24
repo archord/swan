@@ -13,6 +13,11 @@
   <!-- Hibernate session factory -->
   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource"/>
+    <property name="packagesToScan">
+      <list>
+        <value>com.gwac.model</value>
+      </list>
+    </property>
     <!--property name="namingStrategy" ref="namingStrategy"/-->
     <property name="hibernateProperties">
       <props>
@@ -22,25 +27,6 @@
         <prop key="hibernate.show_sql">true</prop>
       </props>
     </property>
-    <property name="mappingResources">
-      <list>
-        <value>com/gwac/model/DataProcessMachine.hbm.xml</value>
-        <value>com/gwac/model/UserInfo.hbm.xml</value>
-        <value>com/gwac/model/OtObserveRecord.hbm.xml</value>
-        <value>com/gwac/model/OtObserveRecordTmp.hbm.xml</value>
-        <value>com/gwac/model/Telescope.hbm.xml</value>
-        <value>com/gwac/model/UploadFileRecord.hbm.xml</value>
-        <value>com/gwac/model/UploadFileUnstore.hbm.xml</value>
-        <value>com/gwac/model/FitsFile.hbm.xml</value>
-        <value>com/gwac/model/FitsFileCut.hbm.xml</value>
-        <value>com/gwac/model/OtLevel2.hbm.xml</value>
-        <value>com/gwac/model/OtLevel2His.hbm.xml</value>
-        <value>com/gwac/model/OtLevel3.hbm.xml</value>
-        <value>com/gwac/model/OtNumber.hbm.xml</value>
-        <value>com/gwac/model/ConfigFile.hbm.xml</value>
-        <value>com/gwac/model/OtType.hbm.xml</value>
-      </list>
-    </property>	
   </bean>
   
   <!--bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy"/-->
