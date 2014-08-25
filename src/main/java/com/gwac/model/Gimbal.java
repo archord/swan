@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 24, 2014 9:21:15 PM by Hibernate Tools 3.2.1.GA
+// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
 
 
 import javax.persistence.Column;

@@ -11,5 +11,5 @@ import com.gwac.model.DataProcessMachine;
  * @author xy
  */
 public interface DataProcessMachineDAO extends BaseHibernateDao<DataProcessMachine>{
-  
+  public DataProcessMachine getDpmByName(String name);
 }

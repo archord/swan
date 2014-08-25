@@ -11,14 +11,12 @@
     <script language="javascript" type="text/javascript" src="js/plot/jquery.flot.js"></script>
     <script language="javascript" type="text/javascript" src="js/plot/jquery.flot.selection.js"></script>
     <script language="javascript" type="text/javascript" src="js/plot/jquery.flot.navigate.js"></script>
+    <script language="javascript" type="text/javascript" src="js/plot/jquery.flot.symbol.js"></script>
     <script type="text/javascript">
 
       $(function() {
 
-        var options = {
-          lines: {
-            show: false
-          },
+        var option1 = {
           points: {
             show: true
           },
@@ -30,46 +28,78 @@
             mode: "xy"
           }
         };
+        var option2 = {
+          legend: {
+            show: false
+          },
+          xaxis: {
+            show: false
+          },
+          yaxis: {
+            show: false
+          },
+          grid: {
+            color: "#999"
+          },
+          selection: {
+            mode: "xy"
+          }
+        };
 
         var plot;
         var overview;
 
         var dataObj = [];
-        var corr = [];
+        var otl2 = [];
+        var otl2cur = [];
+        //fill: true, fillColor: 'purple',
+        var drawData = [
+          {
+            label: "ot-level2",
+            data: [],
+            color: '#71c73e',
+            points: {show: true, radius: 2}
+          },
+          {
+            label: "ot-level2-cur",
+            data: [],
+            color: 'purple',
+            points: {show: true, radius: 4}
+          }
+        ];
+        var drawDataOverView = [
+          {
+            label: "ot-level2",
+            data: [],
+            color: '#71c73e',
+            points: {show: true, fill: true, fillColor: '#71c73e', radius: 1}
+          },
+          {
+            label: "ot-level2-cur",
+            data: [],
+            color: 'purple',
+            points: {show: true, radius: 2}
+          }
+        ];
         var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action";
         function onDataReceived(result) {
           dataObj = result.gridModel;
           for (var i = 0; i < dataObj.length; i++) {
-            corr.push([dataObj[i].xtemp, dataObj[i].ytemp]);
-          }
-          plot = $.plot("#placeholder", [{data: corr, label: "sin(x)"}], options);
-          overview = $.plot("#overview", [corr], {
-            legend: {
-              show: false
-            },
-            series: {
-              lines: {
-                show: false,
-                lineWidth: 1
-              },
-              points: {
-                show: true
-              },
-              shadowSize: 0
-            },
-            xaxis: {
-              show: false
-            },
-            yaxis: {
-              show: false
-            },
-            grid: {
-              color: "#999"
-            },
-            selection: {
-              mode: "xy"
+            if (dataObj[i].lastFfNumber === 722 || dataObj[i].lastFfNumber === 592) {
+              otl2cur.push([dataObj[i].xtemp, dataObj[i].ytemp]);
+            } else {
+              otl2.push([dataObj[i].xtemp, dataObj[i].ytemp]);
             }
-          });
+          }
+
+          drawData[0].data = otl2;
+          drawData[1].data = otl2cur;
+
+          drawDataOverView[0].data = otl2;
+          drawDataOverView[1].data = otl2cur;
+
+          plot = $.plot("#placeholder", drawData, option1);
+          overview = $.plot("#overview", drawDataOverView, option2);
         }
 
         $.ajax({
@@ -124,7 +154,7 @@
 
           // do the zooming
 
-          plot = $.plot("#placeholder", [corr],
+          plot = $.plot("#placeholder", drawData,
                   $.extend(true, {}, options, {
             xaxis: {min: ranges.xaxis.from, max: ranges.xaxis.to},
             yaxis: {min: ranges.yaxis.from, max: ranges.yaxis.to}

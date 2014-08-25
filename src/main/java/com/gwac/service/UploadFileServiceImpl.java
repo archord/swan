@@ -34,6 +34,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String[] origImage;
   private String[] cutImages;
   //系统配置文件信息
+  private String rootDir;
   private String otLDir;
   private String starLDir;
   private String orgIDir;
@@ -111,18 +112,19 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (otList != null) {
         for (String tStr : otList) {
           if (!tStr.isEmpty()) {
-	    tStr = tStr.trim();
+            String tpath = path + otLDir;
+            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
-            tfile2 = new File(path + otLDir + "/", tStr);
-            
+            tfile2 = new File(tpath + "/", tStr);
+
             UploadFileUnstore obj = new UploadFileUnstore();
-            obj.setStorePath(path + otLDir);
+            obj.setStorePath(tpath.substring(rootDir.length()+1));
             obj.setFileName(tStr);
             obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
-            
+
             UploadFileRecord obj2 = new UploadFileRecord();
-            obj2.setStorePath(path + otLDir);
+            obj2.setStorePath(tpath.substring(rootDir.length()+1));
             obj2.setFileName(tStr);
             obj2.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj2.setUploadDate(new Date());
@@ -151,22 +153,23 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (starList != null) {
         for (String tStr : starList) {
           if (!tStr.isEmpty()) {
-	    tStr = tStr.trim();
+            String tpath = path + starLDir;
+            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
-            tfile2 = new File(path + starLDir + "/", tStr);
-            
+            tfile2 = new File(tpath + "/", tStr);
+
             UploadFileUnstore obj = new UploadFileUnstore();
-            obj.setStorePath(path + starLDir);
+            obj.setStorePath(tpath.substring(rootDir.length()+1));
             obj.setFileName(tStr);
             obj.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
-            
+
             UploadFileRecord obj2 = new UploadFileRecord();
-            obj2.setStorePath(path + starLDir);
+            obj2.setStorePath(tpath.substring(rootDir.length()+1));
             obj2.setFileName(tStr);
             obj2.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj2.setUploadDate(new Date());
-            
+
             if (tfile1.exists()) {
               if (tfile2.exists()) {
                 FileUtils.forceDelete(tfile2);
@@ -190,16 +193,17 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (origImage != null) {
         for (String tStr : origImage) {
           if (!tStr.isEmpty()) {
-	    tStr = tStr.trim();
+            String tpath = path + orgIDir;
+            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
-            tfile2 = new File(path + orgIDir + "/", tStr);
-            
+            tfile2 = new File(tpath + "/", tStr);
+
             UploadFileRecord obj = new UploadFileRecord();
-            obj.setStorePath(path + orgIDir);
+            obj.setStorePath(tpath.substring(rootDir.length()+1));
             obj.setFileName(tStr);
             obj.setFileType('3');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
-            
+
             if (tfile1.exists()) {
               if (tfile2.exists()) {
                 FileUtils.forceDelete(tfile2);
@@ -220,16 +224,17 @@ public class UploadFileServiceImpl implements UploadFileService {
       if (cutImages != null) {
         for (String tStr : cutImages) {
           if (!tStr.isEmpty()) {
-	    tStr = tStr.trim();
+            String tpath = path + cutIDir;
+            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
-            tfile2 = new File(path + cutIDir + "/", tStr);
-            
+            tfile2 = new File(tpath + "/", tStr);
+
             UploadFileRecord obj = new UploadFileRecord();
-            obj.setStorePath(path + cutIDir);
+            obj.setStorePath(tpath.substring(rootDir.length()+1));
             obj.setFileName(tStr);
             obj.setFileType('4');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
-            
+
             if (tfile1.exists()) {
               if (tfile2.exists()) {
                 FileUtils.forceDelete(tfile2);
@@ -335,5 +340,19 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setConfigPath(String configPath) {
     this.configPath = configPath;
+  }
+
+  /**
+   * @return the rootDir
+   */
+  public String getRootDir() {
+    return rootDir;
+  }
+
+  /**
+   * @param rootDir the rootDir to set
+   */
+  public void setRootDir(String rootDir) {
+    this.rootDir = rootDir;
   }
 }

@@ -4,22 +4,23 @@ import java.util.List;
 
 public interface BaseHibernateDao<T> {
 
-    public void setClazz(final Class<T> clazzToSet);
-    
-    public Number count();
+  public void setClazz(final Class<T> clazzToSet);
 
-    public T getById(final Long id);
+  public Number count();
 
-    public List<T> findAll();
+  public T getById(final Long id);
 
-    public List<T> findRecord(int start, int resultSize, String[] orderNames, int[] sort);
+  public List<T> findAll();
 
-    public void save(final T entity);
+  public List<T> findRecord(int start, int resultSize, String[] orderNames, int[] sort);
 
-    public void update(final T entity);
+  public void save(final T entity);
 
-    public void delete(final T entity);
+  public void save(final List<T> entList);
 
-    public void deleteById(final Long entityId);
+  public void update(final T entity);
 
+  public void delete(final T entity);
+
+  public void deleteById(final Long entityId);
 }

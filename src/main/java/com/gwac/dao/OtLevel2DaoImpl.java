@@ -164,4 +164,15 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     q.setMaxResults(resultSize);
     return q.list();
   }
+
+  public List<OtLevel2> getOtLevel2ByDpmName(String dpmName) {
+    Session session = getCurrentSession();
+    String sql = "select * from ot_level2 where dpm_name='" + dpmName + "';";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    if (!q.list().isEmpty()) {
+      return q.list();
+    } else {
+      return null;
+    }
+  }
 }

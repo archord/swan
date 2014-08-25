@@ -29,11 +29,11 @@
                defaultLoadingText="Please wait ..."/>
     </s:else>
 
-
-    <link href="<s:url value="/styles/flexible-grids.css" />" rel="stylesheet" type="text/css" />
-    <link href="<s:url value="/styles/gwac-style.css" />" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/themes/showcase/jquery-ui.css?s2j=3.6.1" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/styles/flexible-grids.css" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/styles/gwac-style.css" rel="stylesheet" type="text/css" />
     <!--[if lte IE 7]>
-    <link href="<s:url value="/yaml/core/iehacks.min.css" />" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/yaml/core/iehacks.min.css" rel="stylesheet" type="text/css" />
     <![endif]-->
 
     <!--[if lt IE 9]>
@@ -46,10 +46,10 @@
 
 
     <!-- This file includes necessary functions/topics for validation and all topic examples -->
-    <script type="text/javascript" src="<s:url value="/js/showcase.js" />"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/showcase.js" />"></script>
     <!-- Extend the Struts2 jQuery Plugin with an richtext editor -->
-    <script type="text/javascript" src="<s:url value="/js/extendplugin.js" />"></script>
-    <script src="js/jquery.carouFredSel-6.2.1-packed.js" type="text/javascript"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/extendplugin.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery.carouFredSel-6.2.1-packed.js" type="text/javascript"></script>
     <script type="text/javascript">
       $(function() {
         function setNavi($c, $i) {
@@ -203,19 +203,19 @@
         width: 53px;
         height: 53px;
         top: 10px;
-        background: url(images/imageGallery/ui/pause.png) 0 0 no-repeat transparent;
+        background: url(${pageContext.request.contextPath}/images/imageGallery/ui/pause.png) 0 0 no-repeat transparent;
         left: 50%;
         margin-left: -27px;
       }
       #play.paused {
-        background: url(images/imageGallery/ui/play.png) 0 0 no-repeat transparent;
+        background: url(${pageContext.request.contextPath}/images/imageGallery/ui/play.png) 0 0 no-repeat transparent;
       }
       #prev {
-        background: url(images/imageGallery/ui/prev.png) 0 0 no-repeat transparent;
+        background: url(${pageContext.request.contextPath}/images/imageGallery/ui/prev.png) 0 0 no-repeat transparent;
         left: 220px;
       }
       #next {
-        background: url(images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
+        background: url(${pageContext.request.contextPath}/images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
         right: 220px;
       }
 

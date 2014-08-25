@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 24, 2014 9:21:15 PM by Hibernate Tools 3.2.1.GA
+// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
 
 
 import javax.persistence.Column;
@@ -21,6 +21,7 @@ public class DataProcessMachine  implements java.io.Serializable {
      private String name;
      private String ip;
      private Short tspId;
+     private Integer curProcessNumber;
 
     public DataProcessMachine() {
     }
@@ -29,11 +30,12 @@ public class DataProcessMachine  implements java.io.Serializable {
     public DataProcessMachine(short dpmId) {
         this.dpmId = dpmId;
     }
-    public DataProcessMachine(short dpmId, String name, String ip, Short tspId) {
+    public DataProcessMachine(short dpmId, String name, String ip, Short tspId, Integer curProcessNumber) {
        this.dpmId = dpmId;
        this.name = name;
        this.ip = ip;
        this.tspId = tspId;
+       this.curProcessNumber = curProcessNumber;
     }
    
      @Id 
@@ -72,6 +74,15 @@ public class DataProcessMachine  implements java.io.Serializable {
     
     public void setTspId(Short tspId) {
         this.tspId = tspId;
+    }
+    
+    @Column(name="cur_process_number")
+    public Integer getCurProcessNumber() {
+        return this.curProcessNumber;
+    }
+    
+    public void setCurProcessNumber(Integer curProcessNumber) {
+        this.curProcessNumber = curProcessNumber;
     }
 
 

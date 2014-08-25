@@ -17,5 +17,7 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
 
   public OtLevel2 getOtLevel2ByName(String otName);
 
+  public List<OtLevel2> getOtLevel2ByDpmName(String dpmName);
+
   public List<OtLevel2> queryOtLevel2(String startDate, String endDate, String tsp, float xtemp, float ytemp, float radius, int start, int resultSize);
 }

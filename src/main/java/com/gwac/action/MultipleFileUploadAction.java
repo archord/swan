@@ -39,10 +39,8 @@ import org.apache.struts2.convention.annotation.Result;
 public class MultipleFileUploadAction extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(MultipleFileUploadAction.class);
-
   private UploadFileServiceImpl ufService;
   private ConfigFileDao cfDao;
-
   private String dpmName;
   private String currentDirectory;
   private File configFile;
@@ -104,43 +102,44 @@ public class MultipleFileUploadAction extends ActionSupport {
 //        setEcho(getEcho() + " as store directory name.\n");
 //      }
 
-      String destPath = getText("gwac.data.root.directory");
+      String rootPath = getText("gwac.data.root.directory");
+      String destPath = rootPath;
       if (destPath.charAt(destPath.length() - 1) != '/') {
-	destPath += "/" + getCurrentDirectory() + "/" + getDpmName() + "/";
+        destPath += "/" + getCurrentDirectory() + "/" + getDpmName() + "/";
       } else {
-	destPath += getCurrentDirectory() + "/" + getDpmName() + "/";
+        destPath += getCurrentDirectory() + "/" + getDpmName() + "/";
       }
 
       //接收参数配置文件
       String confPath = destPath + getText("gwac.data.cfgfile.directory") + "/";
       File confFile = new File(confPath, configFileFileName);
       if (confFile.exists()) {
-	FileUtils.forceDelete(confFile);
+        FileUtils.forceDelete(confFile);
       }
       FileUtils.moveFile(configFile, confFile);
       ConfigFile cf = new ConfigFile();
       cf.setFileName(configFileFileName);
-      cf.setStorePath(confPath);
+      cf.setStorePath(confPath.substring(rootPath.length()+1));
       cf.setIsSync(false);
       cf.setIsStore(false);
       if (!cfDao.exist(cf)) {
-	cfDao.save(cf);
+        cfDao.save(cf);
       }
 
       //接受数据文件
       int i = 0;
       for (File file : fileUpload) {
-	File destFile = new File(destPath, fileUploadFileName.get(i++));
-	//如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-	if (destFile.exists()) {
-	  FileUtils.forceDelete(destFile);
-	}
-	FileUtils.moveFile(file, destFile);
+        File destFile = new File(destPath, fileUploadFileName.get(i++));
+        //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+        if (destFile.exists()) {
+          FileUtils.forceDelete(destFile);
+        }
+        FileUtils.moveFile(file, destFile);
       }
 
-//      UploadFileServiceImpl ufService = new UploadFileServiceImpl(destPath, configFileFileName);
       ufService.setConfigPath(confPath);
       ufService.setConfigFile(configFileFileName);
+      ufService.setRootDir(rootPath);
       ufService.setOtLDir(getText("gwac.data.otlist.directory"));
       ufService.setStarLDir(getText("gwac.data.starlist.directory"));
       ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
@@ -150,10 +149,10 @@ public class MultipleFileUploadAction extends ActionSupport {
       int shouldFNum = ufService.parseConfigFile();
       int validFNum = ufService.checkAndMoveDataFile(destPath);
       if (validFNum != i || validFNum != shouldFNum) {
-	setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
-		+ " files, " + validFNum + " valid files.\n");
+        setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
+                + " files, " + validFNum + " valid files.\n");
       } else {
-	setEcho(getEcho() + "Upload success，total upload " + validFNum + " files.\n");
+        setEcho(getEcho() + "Upload success，total upload " + validFNum + " files.\n");
       }
       //otORDao.saveOTCopy(configFileFileName);
     } else {

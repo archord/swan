@@ -91,6 +91,11 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
   }
 
   @Transactional(readOnly = false)
+  public void save(final List<T> entList) {
+    getCurrentSession().saveOrUpdate(entList);
+  }
+
+  @Transactional(readOnly = false)
   public void update(final T entity) {
     getCurrentSession().merge(entity);
   }

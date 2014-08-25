@@ -17,6 +17,7 @@
     <property name="otbDao" ref="otbDao" />
     <property name="ffDao" ref="ffDao" />
     <property name="ffcDao" ref="ffcDao" />
+    <property name="dpmDao" ref="dpmDao" />	
   </bean>
 	
   <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >

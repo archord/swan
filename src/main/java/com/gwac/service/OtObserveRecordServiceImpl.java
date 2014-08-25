@@ -4,6 +4,7 @@
  */
 package com.gwac.service;
 
+import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.OTCatalogDao;
@@ -11,6 +12,7 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.DataProcessMachine;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.OTCatalog;
@@ -32,6 +34,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private FitsFileDAO ffDao;
   private FitsFileCutDAO ffcDao;
   private OtObserveRecordDAO otorDao;
+  private DataProcessMachineDAO dpmDao;
 
   public List<OtObserveRecord> getOtOR() {
     return otorDao.findAll();
@@ -49,7 +52,14 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           String orgImg = otc.getImageName();
           String otListPath = ufu.getStorePath();
           String fileDate = otc.getFileDate();
+          String dpmName = "M"+ orgImg.substring(3, 5);
           int number = Integer.parseInt(orgImg.substring(22, 26));
+          
+          DataProcessMachine dpm = getDpmDao().getDpmByName(dpmName);
+          if(dpm.getCurProcessNumber() < number){
+            dpm.setCurProcessNumber(number);
+            getDpmDao().update(dpm);
+          }
 
           FitsFile ff = new FitsFile();
           ff.setFileName(orgImg);
@@ -86,6 +96,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             ob.setXtemp(otc.getXTemp());
             ob.setYtemp(otc.getYTemp());
             ob.setLastFfNumber(number);
+            ob.setTotal(1);
+            ob.setSuccOccurTimes((short)1);
+            ob.setMaxSuccOccurTimes((short)0);
 
             /**
              * 判断该OT是否存在，如果不存在则为该OT取名，并插入数据库，如果存在则取出该OT的ID
@@ -94,13 +107,11 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
              */
             if (otbDao.exist(ob)) {
               OtLevel2 tOb = otbDao.getById(ob.getOtId());
-              if (tOb.getLastFfNumber()> ob.getLastFfNumber()) {
-                ob.setName(tOb.getName());
-                otbDao.update(ob);
-              } else {
-                ob.setXtemp(tOb.getXtemp());
-                ob.setYtemp(tOb.getYtemp());
+              if (tOb.getLastFfNumber() < ob.getLastFfNumber()) {
+                tOb.setLastFfNumber(ob.getLastFfNumber());
               }
+              tOb.setTotal(tOb.getTotal()+1);
+              otbDao.update(ob);
             } else {
               int otNumber = otnDao.getNumberByDate(fileDate);
               String otName = String.format("%s_%05d", fileDate, otNumber);
@@ -128,6 +139,10 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         ufuDao.delete(ufu);
       }
     }
+  }
+  
+  void updateOTStatus(){
+    
   }
 
   /**
@@ -226,5 +241,19 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setOtbDao(OtLevel2Dao otbDao) {
     this.otbDao = otbDao;
+  }
+
+  /**
+   * @return the dpmDao
+   */
+  public DataProcessMachineDAO getDpmDao() {
+    return dpmDao;
+  }
+
+  /**
+   * @param dpmDao the dpmDao to set
+   */
+  public void setDpmDao(DataProcessMachineDAO dpmDao) {
+    this.dpmDao = dpmDao;
   }
 }
