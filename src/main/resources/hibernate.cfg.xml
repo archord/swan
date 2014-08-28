@@ -4,7 +4,7 @@
   <session-factory>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
     <property name="hibernate.connection.password">gdb%980</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://190.168.1.10:5432/gwac</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://190.168.1.25:5432/gwac</property>
     <property name="hibernate.connection.username">gwac</property>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
     <mapping class="com.gwac.model.OtLevel3"/>
