@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -41,6 +41,7 @@ public class StarKnow  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="star_id", unique=true, nullable=false)
     public long getStarId() {
@@ -50,6 +51,7 @@ public class StarKnow  implements java.io.Serializable {
     public void setStarId(long starId) {
         this.starId = starId;
     }
+
     
     @Column(name="star_name")
     public String getStarName() {
@@ -59,6 +61,7 @@ public class StarKnow  implements java.io.Serializable {
     public void setStarName(String starName) {
         this.starName = starName;
     }
+
     
     @Column(name="ra", precision=8, scale=8)
     public Float getRa() {
@@ -68,6 +71,7 @@ public class StarKnow  implements java.io.Serializable {
     public void setRa(Float ra) {
         this.ra = ra;
     }
+
     
     @Column(name="dec", precision=8, scale=8)
     public Float getDec() {
@@ -77,6 +81,7 @@ public class StarKnow  implements java.io.Serializable {
     public void setDec(Float dec) {
         this.dec = dec;
     }
+
     
     @Column(name="mag", precision=8, scale=8)
     public Float getMag() {
@@ -86,6 +91,7 @@ public class StarKnow  implements java.io.Serializable {
     public void setMag(Float mag) {
         this.mag = mag;
     }
+
     
     @Column(name="vt_id")
     public Short getVtId() {

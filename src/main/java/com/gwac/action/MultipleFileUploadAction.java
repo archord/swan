@@ -140,7 +140,8 @@ public class MultipleFileUploadAction extends ActionSupport {
       ufService.setConfigPath(confPath);
       ufService.setConfigFile(configFileFileName);
       ufService.setRootDir(rootPath);
-      ufService.setOtLDir(getText("gwac.data.otlist.directory"));
+      ufService.setOt1LDir(getText("gwac.data.ot1list.directory"));
+      ufService.setOt2LDir(getText("gwac.data.ot2list.directory"));
       ufService.setStarLDir(getText("gwac.data.starlist.directory"));
       ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
       ufService.setCutIDir(getText("gwac.data.cutimages.directory"));

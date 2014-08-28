@@ -4,8 +4,10 @@
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags" %>
 
 <strong>
-  <a href="<%=request.getContextPath() %>/newhtmlrealTimeOtDistribution.html" target="_blank">OT实时分布概览&nbsp;&nbsp;&nbsp;</a>
-  <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay.action" target="_blank">OT实时分布概览-实时绘制&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/newhtmlrealTimeOtDistribution.html" target="_blank">OT实时分布1&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay.action" target="_blank">OT实时分布2&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank">OT实时分布3&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay-sphere2.action" target="_blank">OT实时分布4&nbsp;&nbsp;&nbsp;</a>
 </strong><br/><br/>
 <strong>望远镜信息:</strong>
 <div id="tlp-info" class="result ui-widget-content ui-corner-all">

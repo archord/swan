@@ -23,7 +23,7 @@
   <bean id="dataStoreJob" 
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
     <property name="targetObject" ref="dataStoreTask" /> 
-    <property name="targetMethod" value="testRun" /> 
+    <property name="targetMethod" value="storeOT" /> 
   </bean> 
 
   <!-- Simple Trigger, run every 15 seconds -->
@@ -31,18 +31,14 @@
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="dataStoreJob" />
     <property name="repeatInterval" value="15000" />
-    <property name="startDelay" value="1000" />
+    <property name="startDelay" value="10000" />
   </bean>
 
   <!-- Cron Trigger, run every 5 seconds -->
-  <!--
-  <bean id="cronTrigger" 
-        class="org.springframework.scheduling.quartz.CronTriggerBean">
-
+  <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="runMeJob" />
     <property name="cronExpression" value="0/5 * * * * ?" />
   </bean>
-  -->
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="jobDetails">

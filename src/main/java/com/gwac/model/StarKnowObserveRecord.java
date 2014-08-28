@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -66,6 +66,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="skor_id", unique=true, nullable=false)
     public long getSkorId() {
@@ -75,6 +76,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setSkorId(long skorId) {
         this.skorId = skorId;
     }
+
     
     @Column(name="star_id")
     public Long getStarId() {
@@ -84,6 +86,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setStarId(Long starId) {
         this.starId = starId;
     }
+
     
     @Column(name="ff_id")
     public Long getFfId() {
@@ -93,6 +96,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setFfId(Long ffId) {
         this.ffId = ffId;
     }
+
     
     @Column(name="ra", precision=8, scale=8)
     public Float getRa() {
@@ -102,6 +106,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setRa(Float ra) {
         this.ra = ra;
     }
+
     
     @Column(name="dec", precision=8, scale=8)
     public Float getDec() {
@@ -111,6 +116,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setDec(Float dec) {
         this.dec = dec;
     }
+
     
     @Column(name="x", precision=8, scale=8)
     public Float getX() {
@@ -120,6 +126,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setX(Float x) {
         this.x = x;
     }
+
     
     @Column(name="y", precision=8, scale=8)
     public Float getY() {
@@ -129,6 +136,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setY(Float y) {
         this.y = y;
     }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="datetime", length=29)
     public Date getDatetime() {
@@ -138,6 +146,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setDatetime(Date datetime) {
         this.datetime = datetime;
     }
+
     
     @Column(name="mag", precision=8, scale=8)
     public Float getMag() {
@@ -147,6 +156,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setMag(Float mag) {
         this.mag = mag;
     }
+
     
     @Column(name="mag_err", precision=8, scale=8)
     public Float getMagErr() {
@@ -156,6 +166,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setMagErr(Float magErr) {
         this.magErr = magErr;
     }
+
     
     @Column(name="ellipticity", precision=8, scale=8)
     public Float getEllipticity() {
@@ -165,6 +176,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setEllipticity(Float ellipticity) {
         this.ellipticity = ellipticity;
     }
+
     
     @Column(name="signal_noise", precision=8, scale=8)
     public Float getSignalNoise() {
@@ -174,6 +186,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setSignalNoise(Float signalNoise) {
         this.signalNoise = signalNoise;
     }
+
     
     @Column(name="fwhm", precision=8, scale=8)
     public Float getFwhm() {
@@ -183,6 +196,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setFwhm(Float fwhm) {
         this.fwhm = fwhm;
     }
+
     
     @Column(name="flux", precision=8, scale=8)
     public Float getFlux() {
@@ -192,6 +206,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setFlux(Float flux) {
         this.flux = flux;
     }
+
     
     @Column(name="flux_err", precision=8, scale=8)
     public Float getFluxErr() {
@@ -201,6 +216,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setFluxErr(Float fluxErr) {
         this.fluxErr = fluxErr;
     }
+
     
     @Column(name="cmp_star_id")
     public Long getCmpStarId() {
@@ -210,6 +226,7 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public void setCmpStarId(Long cmpStarId) {
         this.cmpStarId = cmpStarId;
     }
+
     
     @Column(name="mch_star_id")
     public Long getMchStarId() {

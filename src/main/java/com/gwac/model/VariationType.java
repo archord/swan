@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -33,6 +33,7 @@ public class VariationType  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="vt_id", unique=true, nullable=false)
     public long getVtId() {
@@ -42,6 +43,7 @@ public class VariationType  implements java.io.Serializable {
     public void setVtId(long vtId) {
         this.vtId = vtId;
     }
+
     
     @Column(name="vt_name")
     public String getVtName() {

@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -46,6 +46,7 @@ public class Grb  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="grb_id", unique=true, nullable=false)
     public long getGrbId() {
@@ -55,6 +56,7 @@ public class Grb  implements java.io.Serializable {
     public void setGrbId(long grbId) {
         this.grbId = grbId;
     }
+
     
     @Column(name="grb_name")
     public String getGrbName() {
@@ -64,6 +66,7 @@ public class Grb  implements java.io.Serializable {
     public void setGrbName(String grbName) {
         this.grbName = grbName;
     }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="trigger_time", length=29)
     public Date getTriggerTime() {
@@ -73,6 +76,7 @@ public class Grb  implements java.io.Serializable {
     public void setTriggerTime(Date triggerTime) {
         this.triggerTime = triggerTime;
     }
+
     
     @Column(name="trigger_type")
     public String getTriggerType() {
@@ -82,6 +86,7 @@ public class Grb  implements java.io.Serializable {
     public void setTriggerType(String triggerType) {
         this.triggerType = triggerType;
     }
+
     
     @Column(name="trigger_name")
     public String getTriggerName() {
@@ -91,6 +96,7 @@ public class Grb  implements java.io.Serializable {
     public void setTriggerName(String triggerName) {
         this.triggerName = triggerName;
     }
+
     
     @Column(name="trigger_ra", precision=8, scale=8)
     public Float getTriggerRa() {
@@ -100,6 +106,7 @@ public class Grb  implements java.io.Serializable {
     public void setTriggerRa(Float triggerRa) {
         this.triggerRa = triggerRa;
     }
+
     
     @Column(name="trigger_dec", precision=8, scale=8)
     public Float getTriggerDec() {

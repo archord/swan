@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -50,6 +50,7 @@ public class Environment  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="env_id", unique=true, nullable=false)
     public long getEnvId() {
@@ -59,6 +60,7 @@ public class Environment  implements java.io.Serializable {
     public void setEnvId(long envId) {
         this.envId = envId;
     }
+
     @Temporal(TemporalType.DATE)
     @Column(name="date", length=13)
     public Date getDate() {
@@ -68,6 +70,7 @@ public class Environment  implements java.io.Serializable {
     public void setDate(Date date) {
         this.date = date;
     }
+
     @Temporal(TemporalType.TIME)
     @Column(name="time", length=15)
     public Date getTime() {
@@ -77,6 +80,7 @@ public class Environment  implements java.io.Serializable {
     public void setTime(Date time) {
         this.time = time;
     }
+
     
     @Column(name="wather", length=64)
     public String getWather() {
@@ -86,6 +90,7 @@ public class Environment  implements java.io.Serializable {
     public void setWather(String wather) {
         this.wather = wather;
     }
+
     
     @Column(name="wind_speed", precision=8, scale=8)
     public Float getWindSpeed() {
@@ -95,6 +100,7 @@ public class Environment  implements java.io.Serializable {
     public void setWindSpeed(Float windSpeed) {
         this.windSpeed = windSpeed;
     }
+
     
     @Column(name="temperature", precision=8, scale=8)
     public Float getTemperature() {
@@ -104,6 +110,7 @@ public class Environment  implements java.io.Serializable {
     public void setTemperature(Float temperature) {
         this.temperature = temperature;
     }
+
     
     @Column(name="humidity", precision=8, scale=8)
     public Float getHumidity() {
@@ -113,6 +120,7 @@ public class Environment  implements java.io.Serializable {
     public void setHumidity(Float humidity) {
         this.humidity = humidity;
     }
+
     
     @Column(name="seeing", precision=8, scale=8)
     public Float getSeeing() {
@@ -122,6 +130,7 @@ public class Environment  implements java.io.Serializable {
     public void setSeeing(Float seeing) {
         this.seeing = seeing;
     }
+
     
     @Column(name="cloud_percent", precision=8, scale=8)
     public Float getCloudPercent() {

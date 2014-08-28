@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -37,6 +37,7 @@ public class OtNumber  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="otn_id", unique=true, nullable=false)
     public long getOtnId() {
@@ -46,6 +47,7 @@ public class OtNumber  implements java.io.Serializable {
     public void setOtnId(long otnId) {
         this.otnId = otnId;
     }
+
     
     @Column(name="date", length=32)
     public String getDate() {
@@ -55,6 +57,7 @@ public class OtNumber  implements java.io.Serializable {
     public void setDate(String date) {
         this.date = date;
     }
+
     
     @Column(name="number")
     public Integer getNumber() {
@@ -64,6 +67,7 @@ public class OtNumber  implements java.io.Serializable {
     public void setNumber(Integer number) {
         this.number = number;
     }
+
     
     @Column(name="ot_level", length=1)
     public Character getOtLevel() {

@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -43,6 +43,7 @@ public class Telescope  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="tsp_id", unique=true, nullable=false)
     public short getTspId() {
@@ -52,6 +53,7 @@ public class Telescope  implements java.io.Serializable {
     public void setTspId(short tspId) {
         this.tspId = tspId;
     }
+
     
     @Column(name="name")
     public String getName() {
@@ -61,6 +63,7 @@ public class Telescope  implements java.io.Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     
     @Column(name="ra", precision=8, scale=8)
     public Float getRa() {
@@ -70,6 +73,7 @@ public class Telescope  implements java.io.Serializable {
     public void setRa(Float ra) {
         this.ra = ra;
     }
+
     
     @Column(name="dec", precision=8, scale=8)
     public Float getDec() {
@@ -79,6 +83,7 @@ public class Telescope  implements java.io.Serializable {
     public void setDec(Float dec) {
         this.dec = dec;
     }
+
     
     @Column(name="diameter")
     public Short getDiameter() {
@@ -88,6 +93,7 @@ public class Telescope  implements java.io.Serializable {
     public void setDiameter(Short diameter) {
         this.diameter = diameter;
     }
+
     
     @Column(name="focal_ratio", precision=8, scale=8)
     public Float getFocalRatio() {
@@ -97,6 +103,7 @@ public class Telescope  implements java.io.Serializable {
     public void setFocalRatio(Float focalRatio) {
         this.focalRatio = focalRatio;
     }
+
     
     @Column(name="ccd_type")
     public String getCcdType() {

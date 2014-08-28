@@ -290,7 +290,6 @@
   </profiles>
     
   <properties>
-    <netbeans.hint.deploy.server>tomcat7</netbeans.hint.deploy.server>
         
     <!-- Application settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

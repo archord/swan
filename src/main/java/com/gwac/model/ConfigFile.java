@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -39,6 +39,7 @@ public class ConfigFile  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="cf_id", unique=true, nullable=false)
     public long getCfId() {
@@ -48,6 +49,7 @@ public class ConfigFile  implements java.io.Serializable {
     public void setCfId(long cfId) {
         this.cfId = cfId;
     }
+
     
     @Column(name="store_path")
     public String getStorePath() {
@@ -57,6 +59,7 @@ public class ConfigFile  implements java.io.Serializable {
     public void setStorePath(String storePath) {
         this.storePath = storePath;
     }
+
     
     @Column(name="file_name")
     public String getFileName() {
@@ -66,6 +69,7 @@ public class ConfigFile  implements java.io.Serializable {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
     
     @Column(name="is_sync")
     public Boolean getIsSync() {
@@ -75,6 +79,7 @@ public class ConfigFile  implements java.io.Serializable {
     public void setIsSync(Boolean isSync) {
         this.isSync = isSync;
     }
+
     
     @Column(name="is_store")
     public Boolean getIsStore() {

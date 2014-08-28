@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -37,6 +37,7 @@ public class OtType  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="ot_type_id", unique=true, nullable=false)
     public short getOtTypeId() {
@@ -46,6 +47,7 @@ public class OtType  implements java.io.Serializable {
     public void setOtTypeId(short otTypeId) {
         this.otTypeId = otTypeId;
     }
+
     
     @Column(name="ot_type_name")
     public String getOtTypeName() {
@@ -55,6 +57,7 @@ public class OtType  implements java.io.Serializable {
     public void setOtTypeName(String otTypeName) {
         this.otTypeName = otTypeName;
     }
+
     
     @Column(name="ot_table_name", length=64)
     public String getOtTableName() {
@@ -64,6 +67,7 @@ public class OtType  implements java.io.Serializable {
     public void setOtTableName(String otTableName) {
         this.otTableName = otTableName;
     }
+
     
     @Column(name="comments", length=1024)
     public String getComments() {

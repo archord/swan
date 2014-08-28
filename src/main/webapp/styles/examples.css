@@ -70,8 +70,8 @@ input[type=checkbox] {
 
 .demo-container {
 	box-sizing: border-box;
-	width: 95%;
-	height: 93%;
+	width: 85%;
+	height: 90%;
 	padding: 20px 15px 15px 15px;
 	margin: 15px auto 30px auto;
 	border: 1px solid #ddd;
@@ -89,8 +89,10 @@ input[type=checkbox] {
 }
 
 .demo-placeholder {
-	width: 50%;
-	height: 50%;
+  float:left; 
+  width:24%; 
+  height: 33%;
+  margin:5px;
 	font-size: 14px;
 	line-height: 1.2em;
 }

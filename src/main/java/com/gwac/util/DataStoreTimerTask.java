@@ -14,8 +14,12 @@ public class DataStoreTimerTask {
   
   private OtObserveRecordService otORService;
   
-  public void testRun(){
+  public void storeOT(){
     otORService.storeOTCatalog();
+  }
+  
+  public void moveDataToHisTable(){
+    
   }
 
   /**

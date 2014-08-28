@@ -4,7 +4,7 @@
  */
 package com.gwac.dao;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordLevel1;
 import com.gwac.model.OtObserveRecordShow;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ import org.hibernate.Session;
  *
  * @author xy
  */
-public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
+public class OtObserveRecordLevel1DAOImpl extends BaseHibernateDaoImpl<OtObserveRecordLevel1> implements OtObserveRecordLevel1DAO {
 
-  private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
+  private static final Log log = LogFactory.getLog(OtObserveRecordLevel1DAOImpl.class);
 
   @Override
-  public Boolean exist(OtObserveRecord obj) {
+  public Boolean exist(OtObserveRecordLevel1 obj) {
     Boolean flag = false;
     Session session = getCurrentSession();
     String sql = "select oort_id from ot_observe_record where ff_id="

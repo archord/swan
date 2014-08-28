@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -49,6 +49,7 @@ public class FitsFileCut  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="ffc_id", unique=true, nullable=false)
     public long getFfcId() {
@@ -58,6 +59,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setFfcId(long ffcId) {
         this.ffcId = ffcId;
     }
+
     
     @Column(name="star_id")
     public Long getStarId() {
@@ -67,6 +69,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setStarId(Long starId) {
         this.starId = starId;
     }
+
     
     @Column(name="dpm_id")
     public Short getDpmId() {
@@ -76,6 +79,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setDpmId(Short dpmId) {
         this.dpmId = dpmId;
     }
+
     
     @Column(name="store_path")
     public String getStorePath() {
@@ -85,6 +89,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setStorePath(String storePath) {
         this.storePath = storePath;
     }
+
     
     @Column(name="file_name")
     public String getFileName() {
@@ -94,6 +99,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
     
     @Column(name="ff_id")
     public Long getFfId() {
@@ -103,6 +109,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setFfId(Long ffId) {
         this.ffId = ffId;
     }
+
     
     @Column(name="template_ffc_id")
     public Long getTemplateFfcId() {
@@ -112,6 +119,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setTemplateFfcId(Long templateFfcId) {
         this.templateFfcId = templateFfcId;
     }
+
     
     @Column(name="is_template_cut")
     public Boolean getIsTemplateCut() {
@@ -121,6 +129,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setIsTemplateCut(Boolean isTemplateCut) {
         this.isTemplateCut = isTemplateCut;
     }
+
     
     @Column(name="ot_id")
     public Long getOtId() {
@@ -130,6 +139,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setOtId(Long otId) {
         this.otId = otId;
     }
+
     
     @Column(name="number")
     public Integer getNumber() {

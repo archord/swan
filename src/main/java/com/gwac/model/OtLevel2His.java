@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -64,6 +64,7 @@ public class OtLevel2His  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="ot_id", unique=true, nullable=false)
     public long getOtId() {
@@ -73,6 +74,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setOtId(long otId) {
         this.otId = otId;
     }
+
     
     @Column(name="name", length=12)
     public String getName() {
@@ -82,6 +84,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     
     @Column(name="ra", precision=8, scale=8)
     public Float getRa() {
@@ -91,6 +94,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setRa(Float ra) {
         this.ra = ra;
     }
+
     
     @Column(name="dec", precision=8, scale=8)
     public Float getDec() {
@@ -100,6 +104,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setDec(Float dec) {
         this.dec = dec;
     }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="found_time_utc", length=29)
     public Date getFoundTimeUtc() {
@@ -109,6 +114,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setFoundTimeUtc(Date foundTimeUtc) {
         this.foundTimeUtc = foundTimeUtc;
     }
+
     
     @Column(name="identify", length=21)
     public String getIdentify() {
@@ -118,6 +124,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setIdentify(String identify) {
         this.identify = identify;
     }
+
     
     @Column(name="xtemp", precision=8, scale=8)
     public Float getXtemp() {
@@ -127,6 +134,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setXtemp(Float xtemp) {
         this.xtemp = xtemp;
     }
+
     
     @Column(name="ytemp", precision=8, scale=8)
     public Float getYtemp() {
@@ -136,6 +144,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setYtemp(Float ytemp) {
         this.ytemp = ytemp;
     }
+
     
     @Column(name="last_ff_number")
     public Integer getLastFfNumber() {
@@ -145,6 +154,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setLastFfNumber(Integer lastFfNumber) {
         this.lastFfNumber = lastFfNumber;
     }
+
     
     @Column(name="total")
     public Integer getTotal() {
@@ -154,6 +164,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setTotal(Integer total) {
         this.total = total;
     }
+
     
     @Column(name="succ_occur_times")
     public Short getSuccOccurTimes() {
@@ -163,6 +174,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setSuccOccurTimes(Short succOccurTimes) {
         this.succOccurTimes = succOccurTimes;
     }
+
     
     @Column(name="max_succ_occur_times")
     public Short getMaxSuccOccurTimes() {
@@ -172,6 +184,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setMaxSuccOccurTimes(Short maxSuccOccurTimes) {
         this.maxSuccOccurTimes = maxSuccOccurTimes;
     }
+
     
     @Column(name="is_recognize")
     public Boolean getIsRecognize() {
@@ -181,6 +194,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setIsRecognize(Boolean isRecognize) {
         this.isRecognize = isRecognize;
     }
+
     
     @Column(name="ot_type")
     public Short getOtType() {
@@ -190,6 +204,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setOtType(Short otType) {
         this.otType = otType;
     }
+
     
     @Column(name="comments", length=1024)
     public String getComments() {
@@ -199,6 +214,7 @@ public class OtLevel2His  implements java.io.Serializable {
     public void setComments(String comments) {
         this.comments = comments;
     }
+
     
     @Column(name="dpm_name", length=3)
     public String getDpmName() {

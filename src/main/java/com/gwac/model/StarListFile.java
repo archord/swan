@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -37,6 +37,7 @@ public class StarListFile  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="slf_id", unique=true, nullable=false)
     public long getSlfId() {
@@ -46,6 +47,7 @@ public class StarListFile  implements java.io.Serializable {
     public void setSlfId(long slfId) {
         this.slfId = slfId;
     }
+
     
     @Column(name="dpm_id")
     public Short getDpmId() {
@@ -55,6 +57,7 @@ public class StarListFile  implements java.io.Serializable {
     public void setDpmId(Short dpmId) {
         this.dpmId = dpmId;
     }
+
     
     @Column(name="store_path")
     public String getStorePath() {
@@ -64,6 +67,7 @@ public class StarListFile  implements java.io.Serializable {
     public void setStorePath(String storePath) {
         this.storePath = storePath;
     }
+
     
     @Column(name="file_name")
     public String getFileName() {

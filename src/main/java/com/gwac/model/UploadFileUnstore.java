@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -46,6 +46,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="ufu_id", unique=true, nullable=false)
     public long getUfuId() {
@@ -55,6 +56,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
     public void setUfuId(long ufuId) {
         this.ufuId = ufuId;
     }
+
     
     @Column(name="store_path")
     public String getStorePath() {
@@ -64,6 +66,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
     public void setStorePath(String storePath) {
         this.storePath = storePath;
     }
+
     
     @Column(name="file_name", unique=true)
     public String getFileName() {
@@ -73,6 +76,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
     
     @Column(name="file_type", length=1)
     public Character getFileType() {
@@ -82,6 +86,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
     public void setFileType(Character fileType) {
         this.fileType = fileType;
     }
+
     
     @Column(name="upload_success")
     public Boolean getUploadSuccess() {
@@ -91,6 +96,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
     public void setUploadSuccess(Boolean uploadSuccess) {
         this.uploadSuccess = uploadSuccess;
     }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="upload_date", length=29)
     public Date getUploadDate() {

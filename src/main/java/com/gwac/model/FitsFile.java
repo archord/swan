@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -61,6 +61,7 @@ public class FitsFile  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="ff_id", unique=true, nullable=false)
     public long getFfId() {
@@ -70,6 +71,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setFfId(long ffId) {
         this.ffId = ffId;
     }
+
     
     @Column(name="dpm_id")
     public Short getDpmId() {
@@ -79,6 +81,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setDpmId(Short dpmId) {
         this.dpmId = dpmId;
     }
+
     
     @Column(name="store_path")
     public String getStorePath() {
@@ -88,6 +91,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setStorePath(String storePath) {
         this.storePath = storePath;
     }
+
     
     @Column(name="file_name")
     public String getFileName() {
@@ -97,6 +101,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
     
     @Column(name="gmb_id")
     public Short getGmbId() {
@@ -106,6 +111,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setGmbId(Short gmbId) {
         this.gmbId = gmbId;
     }
+
     
     @Column(name="gmb_ra", precision=8, scale=8)
     public Float getGmbRa() {
@@ -115,6 +121,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setGmbRa(Float gmbRa) {
         this.gmbRa = gmbRa;
     }
+
     
     @Column(name="gmb_dec", precision=8, scale=8)
     public Float getGmbDec() {
@@ -124,6 +131,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setGmbDec(Float gmbDec) {
         this.gmbDec = gmbDec;
     }
+
     
     @Column(name="tsp_id")
     public Short getTspId() {
@@ -133,6 +141,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setTspId(Short tspId) {
         this.tspId = tspId;
     }
+
     
     @Column(name="tsp_ra", precision=8, scale=8)
     public Float getTspRa() {
@@ -142,6 +151,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setTspRa(Float tspRa) {
         this.tspRa = tspRa;
     }
+
     
     @Column(name="tsp_dec", precision=8, scale=8)
     public Float getTspDec() {
@@ -151,6 +161,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setTspDec(Float tspDec) {
         this.tspDec = tspDec;
     }
+
     
     @Column(name="field_width", precision=8, scale=8)
     public Float getFieldWidth() {
@@ -160,6 +171,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setFieldWidth(Float fieldWidth) {
         this.fieldWidth = fieldWidth;
     }
+
     
     @Column(name="field_height", precision=8, scale=8)
     public Float getFieldHeight() {
@@ -169,6 +181,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setFieldHeight(Float fieldHeight) {
         this.fieldHeight = fieldHeight;
     }
+
     
     @Column(name="pixel_resolution", precision=8, scale=8)
     public Float getPixelResolution() {
@@ -178,6 +191,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setPixelResolution(Float pixelResolution) {
         this.pixelResolution = pixelResolution;
     }
+
     
     @Column(name="template_ff_id")
     public Long getTemplateFfId() {
@@ -187,6 +201,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setTemplateFfId(Long templateFfId) {
         this.templateFfId = templateFfId;
     }
+
     
     @Column(name="slf_id")
     public Long getSlfId() {
@@ -196,6 +211,7 @@ public class FitsFile  implements java.io.Serializable {
     public void setSlfId(Long slfId) {
         this.slfId = slfId;
     }
+
     
     @Column(name="is_template")
     public Boolean getIsTemplate() {

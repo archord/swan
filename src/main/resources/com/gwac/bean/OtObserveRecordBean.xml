@@ -11,6 +11,7 @@
 
   <bean id="otORService" class="com.gwac.service.OtObserveRecordServiceImpl" >
     <property name="otorDao" ref="otORDao" />
+    <property name="otorl1Dao" ref="otORL1Dao" />
     <property name="ufuDao" ref="ufuDao" />
     <property name="otcDao" ref="otcDao" />
     <property name="otnDao" ref="otnDao" />
@@ -24,6 +25,13 @@
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">
       <value>com.gwac.model.OtObserveRecord</value>
+    </property>
+  </bean>
+	
+  <bean id="otORL1Dao" class="com.gwac.dao.OtObserveRecordLevel1DAOImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.OtObserveRecordLevel1</value>
     </property>
   </bean>
 	

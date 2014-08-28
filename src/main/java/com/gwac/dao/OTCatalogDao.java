@@ -12,5 +12,6 @@ import java.util.List;
  * @author xy
  */
 public interface OTCatalogDao {
-  public List<OTCatalog> getOTCatalog(String path);
+  public List<OTCatalog> getOT1Catalog(String path);
+  public List<OTCatalog> getOT2Catalog(String path);
 }

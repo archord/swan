@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated Aug 25, 2014 8:19:59 AM by Hibernate Tools 3.2.1.GA
+// Generated 2014-8-27 21:38:36 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -37,6 +37,7 @@ public class SystemStatus  implements java.io.Serializable {
     }
    
      @Id 
+
     
     @Column(name="id", unique=true, nullable=false)
     public int getId() {
@@ -46,6 +47,7 @@ public class SystemStatus  implements java.io.Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
     
     @Column(name="date_str6", length=32)
     public String getDateStr6() {
@@ -55,6 +57,7 @@ public class SystemStatus  implements java.io.Serializable {
     public void setDateStr6(String dateStr6) {
         this.dateStr6 = dateStr6;
     }
+
     
     @Column(name="total_storage_size", precision=8, scale=8)
     public Float getTotalStorageSize() {
@@ -64,6 +67,7 @@ public class SystemStatus  implements java.io.Serializable {
     public void setTotalStorageSize(Float totalStorageSize) {
         this.totalStorageSize = totalStorageSize;
     }
+
     
     @Column(name="used_storage_size", precision=8, scale=8)
     public Float getUsedStorageSize() {
