@@ -11,14 +11,12 @@ import com.gwac.dao.OTCatalogDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.dao.OtObserveRecordLevel1DAO;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.OTCatalog;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
-import com.gwac.model.OtObserveRecordLevel1;
 import com.gwac.model.UploadFileUnstore;
 import java.util.List;
 
@@ -31,12 +29,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private UploadFileUnstoreDao ufuDao;
   private OTCatalogDao otcDao;
   private OtNumberDao otnDao;
-  private OtLevel2Dao otbDao;
+  private OtLevel2Dao otLv2Dao;
   private FitsFileDAO ffDao;
   private FitsFileCutDAO ffcDao;
   private OtObserveRecordDAO otorDao;
-  private OtObserveRecordLevel1DAO otorl1Dao;
   private DataProcessMachineDAO dpmDao;
+  private String rootPath;
 
   public List<OtObserveRecord> getOtOR() {
     return otorDao.findAll();
@@ -46,119 +44,109 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     List<UploadFileUnstore> ufus = ufuDao.findAll();
     if (ufus != null) {
       for (UploadFileUnstore ufu : ufus) {
-        if (ufu.getFileType() == 1) {//一级OT
-          List<OTCatalog> otcs = otcDao.getOT1Catalog(ufu.getStorePath() + "/" + ufu.getFileName());
-          for (OTCatalog otc : otcs) {
 
-            String orgImg = otc.getImageName();
-            FitsFile ff = new FitsFile();
-            ff.setFileName(orgImg);
-            ffDao.save(ff);
+        List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + ufu.getStorePath() + "/" + ufu.getFileName());
+        for (OTCatalog otc : otcs) {
 
-            OtObserveRecordLevel1 oort = new OtObserveRecordLevel1();
-            oort.setRaD(otc.getRaD());
-            oort.setDecD(otc.getDecD());
-            oort.setX(otc.getX());
-            oort.setY(otc.getY());
-            oort.setXTemp(otc.getXTemp());
-            oort.setYTemp(otc.getYTemp());
-            oort.setDateUt(otc.getDateUt());
-            oort.setFlux(otc.getFlux());
-            oort.setFlag(otc.getFlag());
-            oort.setFlagChb((float)0);
-            oort.setBackground(otc.getBackground());
-            oort.setThreshold(otc.getThreshold());
-            oort.setMagAper(otc.getMagAper());
-            oort.setMagerrAper(otc.getMagerrAper());
-            oort.setEllipticity(otc.getEllipticity());
-            oort.setClassStar(otc.getClassStar());
-            oort.setOtFlag(false);
-            oort.setFfId(ff.getFfId());
-            if (!otorl1Dao.exist(oort)) {
-              otorl1Dao.save(oort);
-            }
-          }
-        } else {//二级OT
-          List<OTCatalog> otcs = otcDao.getOT2Catalog(ufu.getStorePath() + "/" + ufu.getFileName());
-          for (OTCatalog otc : otcs) {
+          String otListPath = ufu.getStorePath();
+          String orgImg = otc.getImageName(); //M2_03_140630_1_255020_0024.fit
+          String fileDate = orgImg.substring(6, 12);  //140828
+          String dpmName = "M" + orgImg.substring(3, 5);
+          int dpmId = Integer.parseInt(orgImg.substring(3, 5));  //应该在数据库中通过dpmName查询
+          int number = Integer.parseInt(orgImg.substring(22, 26));
 
-            String orgImg = otc.getImageName();
-            String otListPath = ufu.getStorePath();
-            String fileDate = otc.getFileDate();
-            int number = Integer.parseInt(orgImg.substring(22, 26));
+          FitsFile ff = new FitsFile();
+          ff.setFileName(orgImg);
+          ffDao.save(ff);
 
-            FitsFile ff = new FitsFile();
-            ff.setFileName(orgImg);
-            ffDao.save(ff);
+          OtLevel2 otLv2 = new OtLevel2();
+          otLv2.setRa(otc.getRaD());
+          otLv2.setDec(otc.getDecD());
+          otLv2.setFoundTimeUtc(otc.getDateUt());
+          otLv2.setIdentify(orgImg.substring(0, 21));
+          otLv2.setXtemp(otc.getXTemp());
+          otLv2.setYtemp(otc.getYTemp());
+          otLv2.setLastFfNumber(number);
+          otLv2.setDpmId(dpmId);
+          otLv2.setDateStr(fileDate);
 
-            OtObserveRecord oort = new OtObserveRecord();
-            oort.setRaD(otc.getRaD());
-            oort.setDecD(otc.getDecD());
-            oort.setX(otc.getX());
-            oort.setY(otc.getY());
-            oort.setXTemp(otc.getXTemp());
-            oort.setYTemp(otc.getYTemp());
-            oort.setDateUt(otc.getDateUt());
-            oort.setFlux(otc.getFlux());
-            oort.setFlag(otc.getFlag());
-            oort.setFlagChb(otc.getFlagChb());
-            oort.setBackground(otc.getBackground());
-            oort.setThreshold(otc.getThreshold());
-            oort.setMagAper(otc.getMagAper());
-            oort.setMagerrAper(otc.getMagerrAper());
-            oort.setEllipticity(otc.getEllipticity());
-            oort.setClassStar(otc.getClassStar());
-            oort.setOtFlag(otc.getOtFlag());
+          OtObserveRecord oor = new OtObserveRecord();
+          oor.setFfId(ff.getFfId());
+          oor.setRaD(otc.getRaD());
+          oor.setDecD(otc.getDecD());
+          oor.setX(otc.getX());
+          oor.setY(otc.getY());
+          oor.setXTemp(otc.getXTemp());
+          oor.setYTemp(otc.getYTemp());
+          oor.setDateUt(otc.getDateUt());
+          oor.setFlux(otc.getFlux());
+          oor.setFlag(otc.getFlag());
+          //oor.setFlagChb(otc.getFlagChb());
+          oor.setBackground(otc.getBackground());
+          oor.setThreshold(otc.getThreshold());
+          oor.setMagAper(otc.getMagAper());
+          oor.setMagerrAper(otc.getMagerrAper());
+          oor.setEllipticity(otc.getEllipticity());
+          oor.setClassStar(otc.getClassStar());
+          //oor.setOtFlag(otc.getOtFlag());
+          oor.setFfNumber(number);
+          oor.setDateStr(fileDate);
+          oor.setDpmId(dpmId);
+          oor.setRequestCut(false);
+          oor.setSuccessCut(false);
 
-            oort.setFfId(ff.getFfId());
+          if (getOtLv2Dao().existInLatestN(otLv2)) {
 
-            if (!otorDao.exist(oort)) {
+            String cutImg = String.format("%s_%04d.fit", otLv2.getName(), oor.getFfNumber());
+            FitsFileCut ffc = new FitsFileCut();
+            ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
+            ffc.setFileName(cutImg);
+            ffc.setOtId(otLv2.getOtId());
+            ffc.setNumber(number);
+            ffc.setFfId(ff.getFfId());
+            ffcDao.save(ffc);
+            
+            oor.setOtId(otLv2.getOtId());
+            oor.setFfcId(ffc.getFfcId());
+            otorDao.save(oor);
+          } else {
 
-              OtLevel2 ob = new OtLevel2();
-              ob.setRa(otc.getRaD());
-              ob.setDec(otc.getDecD());
-              ob.setFoundTimeUtc(otc.getDateUt());
-              ob.setIdentify(orgImg.substring(0, 21));
-              ob.setXtemp(otc.getXTemp());
-              ob.setYtemp(otc.getYTemp());
-              ob.setLastFfNumber(number);
+            otorDao.save(oor);
+            List<OtObserveRecord> oors = otorDao.matchLatestN(oor);
+            if (oors.size() >= 2) {
+              OtObserveRecord oor1 = oors.get(0);
 
-              /**
-               * 判断该OT是否存在，如果不存在则为该OT取名，并插入数据库，如果存在则取出该OT的ID
-               * 为了保证OT切图命名的唯一性，约定该OT所有切图的后缀（X和Y）都以OT首次出现帧中OT
-               * 所对应的X、Y坐标为准（解决四舍五入问题）。
-               */
-              if (otbDao.exist(ob)) {
-                OtLevel2 tOb = otbDao.getById(ob.getOtId());
-                if (tOb.getLastFfNumber() > ob.getLastFfNumber()) {
-                  ob.setName(tOb.getName());
-                  otbDao.update(ob);
-                } else {
-                  ob.setXtemp(tOb.getXtemp());
-                  ob.setYtemp(tOb.getYtemp());
-                }
-              } else {
-                int otNumber = otnDao.getNumberByDate(fileDate);
-                String otName = String.format("%s_%05d", fileDate, otNumber);
-                ob.setName(otName);
-                otbDao.save(ob);
+              int otNumber = otnDao.getNumberByDate(fileDate);
+              String otName = String.format("%s_%05d", fileDate, otNumber);
+
+              OtLevel2 tOtLv2 = new OtLevel2();
+              tOtLv2.setName(otName);
+              tOtLv2.setRa(oor1.getRaD());
+              tOtLv2.setDec(oor1.getDecD());
+              tOtLv2.setFoundTimeUtc(oor1.getDateUt());
+              tOtLv2.setIdentify(otLv2.getIdentify());
+              tOtLv2.setXtemp(oor1.getXTemp());
+              tOtLv2.setYtemp(oor1.getYTemp());
+              tOtLv2.setLastFfNumber(oor1.getFfNumber());
+              tOtLv2.setTotal(oors.size() + 1);
+              tOtLv2.setDpmId(oor1.getDpmId());
+              tOtLv2.setDateStr(fileDate);
+              otLv2Dao.save(tOtLv2);
+
+              for (OtObserveRecord tOor : oors) {
+                String cutImg = String.format("%s_%04d.fit", tOtLv2.getName(), tOor.getFfNumber());
+                FitsFileCut ffc = new FitsFileCut();
+                ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
+                ffc.setFileName(cutImg);
+                ffc.setOtId(tOtLv2.getOtId());
+                ffc.setNumber(tOor.getFfNumber());
+                ffc.setFfId(tOor.getFfId());
+                ffcDao.save(ffc);
+                
+                tOor.setOtId(tOtLv2.getOtId());
+                tOor.setFfcId(ffc.getFfcId());
+                otorDao.update(tOor);
               }
-              oort.setOtId(ob.getOtId());
-
-              int xtemp = Math.round(ob.getXtemp());
-              int ytemp = Math.round(ob.getYtemp());
-              String cutImg = String.format("%s_OT_X%04dY%04d.fit",
-                      orgImg.substring(0, orgImg.indexOf('.')), xtemp, ytemp);
-              FitsFileCut ffc = new FitsFileCut();
-              ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
-              ffc.setFileName(cutImg);
-              ffc.setOtId(ob.getOtId());
-              ffc.setNumber(number);
-              ffc.setFfId(ff.getFfId());
-              ffcDao.save(ffc);
-              oort.setFfcId(ffc.getFfcId());
-
-              otorDao.save(oort);
             }
           }
         }
@@ -252,20 +240,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   }
 
   /**
-   * @return the otbDao
-   */
-  public OtLevel2Dao getOtbDao() {
-    return otbDao;
-  }
-
-  /**
-   * @param otbDao the otbDao to set
-   */
-  public void setOtbDao(OtLevel2Dao otbDao) {
-    this.otbDao = otbDao;
-  }
-
-  /**
    * @return the dpmDao
    */
   public DataProcessMachineDAO getDpmDao() {
@@ -280,16 +254,30 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   }
 
   /**
-   * @return the otorl1Dao
+   * @return the otLv2Dao
    */
-  public OtObserveRecordLevel1DAO getOtorl1Dao() {
-    return otorl1Dao;
+  public OtLevel2Dao getOtLv2Dao() {
+    return otLv2Dao;
   }
 
   /**
-   * @param otorl1Dao the otorl1Dao to set
+   * @param otLv2Dao the otLv2Dao to set
    */
-  public void setOtorl1Dao(OtObserveRecordLevel1DAO otorl1Dao) {
-    this.otorl1Dao = otorl1Dao;
+  public void setOtLv2Dao(OtLevel2Dao otLv2Dao) {
+    this.otLv2Dao = otLv2Dao;
+  }
+
+  /**
+   * @return the rootPath
+   */
+  public String getRootPath() {
+    return rootPath;
+  }
+
+  /**
+   * @param rootPath the rootPath to set
+   */
+  public void setRootPath(String rootPath) {
+    this.rootPath = rootPath;
   }
 }

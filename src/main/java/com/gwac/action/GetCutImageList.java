@@ -36,9 +36,9 @@ import org.apache.struts2.convention.annotation.Result;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-public class MultipleFileUploadAction extends ActionSupport {
+public class GetCutImageList extends ActionSupport {
 
-  private static final Log log = LogFactory.getLog(MultipleFileUploadAction.class);
+  private static final Log log = LogFactory.getLog(GetCutImageList.class);
   private UploadFileServiceImpl ufService;
   private ConfigFileDao cfDao;
   private String dpmName;

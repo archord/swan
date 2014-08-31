@@ -35,10 +35,10 @@
   </bean>
 
   <!-- Cron Trigger, run every 5 seconds -->
-  <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+<!--  <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="runMeJob" />
     <property name="cronExpression" value="0/5 * * * * ?" />
-  </bean>
+  </bean>-->
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="jobDetails">

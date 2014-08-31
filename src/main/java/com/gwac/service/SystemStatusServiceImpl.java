@@ -24,14 +24,7 @@ public class SystemStatusServiceImpl implements SystemStatusService {
     List<DataProcessMachine> dpms = getDpmDao().findAll();
     for(DataProcessMachine dpm : dpms){
       List<OtLevel2> ot2s = getOtbDao().getOtLevel2ByDpmName(dpm.getName());
-      for(OtLevel2 ot2: ot2s){
-        if(ot2.getLastFfNumber()==dpm.getCurProcessNumber()){
-          ot2.setSuccOccurTimes((short)(ot2.getSuccOccurTimes()+1));
-        }else{
-          ot2.setMaxSuccOccurTimes(ot2.getSuccOccurTimes());
-          ot2.setSuccOccurTimes((short)0);
-        }
-      }
+
       getOtbDao().save(ot2s);
     }
   }

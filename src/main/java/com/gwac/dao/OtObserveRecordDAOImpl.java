@@ -24,6 +24,15 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
+  public List<String> getUnCuttedStarList(int dpmId) {
+    String sql = "select ff.file_name, oor.x, oor.y, ffc.file_name "
+            + " from ot_observe_record oor "
+            + " left join fits_file ff on oor.ff_id=ff.ff_id "
+            + " left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
+            + " where oor.dpm_id=" + dpmId;
+    return null;
+  }
+
   @Override
   public Boolean exist(OtObserveRecord obj) {
     Boolean flag = false;
@@ -39,6 +48,22 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
       flag = true;
     }
     return flag;
+  }
+
+  public List<OtObserveRecord> matchLatestN(OtObserveRecord obj) {
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record "
+            + " where ff_number>" + (obj.getFfNumber() - 5)
+            + " and dpm_id=" + obj.getDpmId()
+            + " and abs(x_temp-" + obj.getXTemp() + ")<2 "
+            + " and abs(y_temp-" + obj.getYTemp() + ")<2 "
+            + " order by ff_number asc";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    if (!q.list().isEmpty()) {
+      BigInteger objId = (BigInteger) q.list().get(0);
+      obj.setOorId(objId.longValue());
+    }
+    return null;
   }
 
   public int countRecordByOtName(String otName) {

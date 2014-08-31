@@ -14,6 +14,8 @@ import java.util.List;
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
 
   public Boolean exist(OtLevel2 obj);
+  
+  public Boolean existInLatestN(OtLevel2 obj);
 
   public OtLevel2 getOtLevel2ByName(String otName);
 

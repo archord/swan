@@ -49,10 +49,29 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return flag;
   }
 
+  public Boolean existInLatestN(OtLevel2 obj) {
+    Boolean flag = false;
+    Session session = getCurrentSession();
+    //should add "and date_str="+obj.getDataStr()
+    String sql = "select ot_id, name from ot_level2 "
+            + " where last_ff_number>" + (obj.getLastFfNumber() - 5)
+            + " and dpm_id=" + obj.getDpmId()
+            + " and abs(xtemp-" + obj.getXtemp() + ")<2 "
+            + " and abs(ytemp-" + obj.getYtemp() + ")<2 ";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    if (!q.list().isEmpty()) {
+      OtLevel2 tObj = (OtLevel2) q.list().get(0);
+      obj.setOtId(tObj.getOtId());
+      obj.setName(tObj.getName());
+      flag = true;
+    }
+    return flag;
+  }
+
   public List<OtLevel2> findRecord1(int start, int resultSize, String[] orderNames, int[] sort) {
 
     String sql = "select ol2 from OtLevel2 ol2 join fetch ol2.otType ";
-    if (orderNames != null && sort != null && orderNames.length > 0 && sort.length>0) {
+    if (orderNames != null && sort != null && orderNames.length > 0 && sort.length > 0) {
       sql += "order by ";
       if (orderNames.length == sort.length) {
         for (int i = 0; i < orderNames.length; i++) {
