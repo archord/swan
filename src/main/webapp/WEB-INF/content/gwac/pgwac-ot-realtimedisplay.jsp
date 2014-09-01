@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Flot Examples: AJAX</title>
+    <title>OT分布实时概览图-XY</title>
     <link href="<%=request.getContextPath()%>/styles/examples.css" rel="stylesheet" type="text/css">
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/excanvas.compiled.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.js"></script>
@@ -29,36 +29,58 @@
         };
 
         var plot = [];
-        var dataObj = [];
-        var otl2 = [];
-        var otl2cur = [];
+        var otLv1 = [];
+        var otLv2 = [];
+        var otLv2Cur = [];
+        var ot1 = [];
+        var ot2 = [];
+        var ot2cur = [];
+        var ot1Label = [];
+        var ot2Label = [];
+        var ot2curLabel = [];
         var drawData = [];
         for (var m = 0; m < 12; m++) {
-          otl2[m] = [];
-          otl2cur[m] = [];
+          ot1[m] = [];
+          ot2[m] = [];
+          ot2cur[m] = [];
+          ot1Label[m] = [];
+          ot2Label[m] = [];
+          ot2curLabel[m] = [];
         }
         var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action";
         function onDataReceived(result) {
-          dataObj = result.gridModel;
-          for (var i = 0; i < dataObj.length; i++) {
-            var mNum = parseInt(dataObj[i].dpmName.substring(1));
-            if (dataObj[i].lastFfNumber === 722 || dataObj[i].lastFfNumber === 592) {
-              otl2cur[mNum].push([dataObj[i].xtemp, dataObj[i].ytemp]);
-            } else {
-              otl2[mNum].push([dataObj[i].xtemp, dataObj[i].ytemp]);
-            }
+          otLv1 = result.otLv1;
+          otLv2 = result.otLv2;
+          otLv2Cur = result.otLv2Cur;
+          for (var i = 0; i < otLv1.length; i++) {
+            ot1[otLv1[i].dpmId].push([otLv1[i].XTemp, otLv1[i].YTemp]);
+            ot1Label[otLv1[i].dpmId].push([otLv1[i].dpmId, otLv1[i].ffNumber]);
+          }
+          for (var i = 0; i < otLv2.length; i++) {
+            ot2[otLv2[i].dpmId].push([otLv2[i].xtemp, otLv2[i].ytemp]);
+            ot2Label[otLv2[i].dpmId].push([otLv2[i].identify, otLv2[i].name]);
+          }
+          for (var i = 0; i < otLv2Cur.length; i++) {
+            ot2cur[otLv2Cur[i].dpmId].push([otLv2Cur[i].xtemp, otLv2Cur[i].ytemp]);
+            ot2curLabel[otLv2Cur[i].dpmId].push([otLv2Cur[i].identify, otLv2Cur[i].name]);
           }
           for (var m = 0; m < 12; m++) {
             drawData[m] = [
               {
-                label: "ot-level2",
-                data: otl2[m],
+                label: "ot1",
+                data: ot1[m],
                 color: '#71c73e',
                 points: {show: true, radius: 1}
               },
               {
-                label: "ot-level2-cur",
-                data: otl2cur[m],
+                label: "ot2",
+                data: ot2[m],
+                color: '#77b7c5',
+                points: {show: true, radius: 2}
+              },
+              {
+                label: "ot2-cur",
+                data: ot2cur[m],
                 color: 'purple',
                 points: {show: true, radius: 3}
               }
@@ -84,7 +106,6 @@
           opacity: 0.80
         }).appendTo("body");
 
-
         function plotAndBind(number) {
           var id = "#placeholder" + (number + 1);
           plot[number] = $.plot(id, drawData[number], option1);
@@ -93,9 +114,25 @@
             if (item) {
               var x = item.datapoint[0].toFixed(2);
               var y = item.datapoint[1].toFixed(2);
-              $("#tooltip").html(dataObj[item.dataIndex].identify + " (" + x + ", " + y + ")")
-                      .css({top: item.pageY + 5, left: item.pageX + 5})
-                      .fadeIn(200);
+              if (item.series.label === "ot1") {
+                var mName = "";
+                if (ot1Label[number][item.dataIndex][0] < 10) {
+                  mName = "M0" + ot1Label[number][item.dataIndex][0];
+                } else {
+                  mName = "M" + ot1Label[number][item.dataIndex][0];
+                }
+                $("#tooltip").html(mName + "-" + ot1Label[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
+                        .css({top: item.pageY + 5, left: item.pageX + 5})
+                        .fadeIn(200);
+              } else if (item.series.label === "ot2") {
+                $("#tooltip").html(ot2Label[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+                        .css({top: item.pageY + 5, left: item.pageX + 5})
+                        .fadeIn(200);
+              } else if (item.series.label === "ot2-cur") {
+                $("#tooltip").html(ot2curLabel[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+                        .css({top: item.pageY + 5, left: item.pageX + 5})
+                        .fadeIn(200);
+              }
             } else {
               $("#tooltip").hide();
             }
@@ -103,8 +140,12 @@
 
           $(id).bind("plotclick", function(event, pos, item) {
             if (item) {
-              openDialog(dataObj[item.dataIndex].name);
-              plot[number].highlight(item.series, item.datapoint);
+              if (item.series.label === "ot2") {
+              openDialog(ot2Label[number][item.dataIndex][1]);
+              } else if (item.series.label === "ot2-cur") {
+              openDialog(ot2curLabel[number][item.dataIndex][1]);
+              }
+//              plot[number].highlight(item.series, item.datapoint);
             }
           });
         }

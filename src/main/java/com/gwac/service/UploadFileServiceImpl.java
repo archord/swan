@@ -4,8 +4,10 @@
  */
 package com.gwac.service;
 
+import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.DataProcessMachine;
 import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import java.io.File;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +45,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String cfgDir;
   private UploadFileRecordDao ufrDao;
   private UploadFileUnstoreDao ufuDao;
+  private DataProcessMachineDAO dpmDao;
 
   public UploadFileServiceImpl() {
   }
@@ -61,6 +65,48 @@ public class UploadFileServiceImpl implements UploadFileService {
       input = new FileInputStream(getConfigPath() + configFile);
       Properties cfile = new Properties();
       cfile.load(input);
+
+      String dateStr = cfile.getProperty("date");
+      String dpmName = cfile.getProperty("dpmname");
+      String curProcNumber = cfile.getProperty("curprocnumber");
+      String dfInfo = cfile.getProperty("dfinfo");
+      if (dpmName != null && curProcNumber != null && dfInfo != null) {
+        System.out.println("dpmName=" + dpmName);
+        System.out.println("curProcNumber=" + curProcNumber);
+        System.out.println("dfInfo=" + dfInfo);
+        dpmName = dpmName.toUpperCase();
+        Pattern p = Pattern.compile("[ ]+");
+        String[] strs = p.split(dfInfo);
+        float totalSize = 0;
+        float leftSize = 0;
+        float percent = 0;
+        if (strs[2].contains("T")) {
+          totalSize = Float.parseFloat(strs[2].replace('T', ' '));
+        } else if (strs[2].contains("G")) {
+          totalSize = Float.parseFloat(strs[2].replace('G', ' ')) / (float) 1024.0;
+        } else if (strs[2].contains("M")) {
+          totalSize = Float.parseFloat(strs[2].replace('M', ' ')) / (float) (1024.0 * 1024.0);
+        }
+        if (strs[3].contains("T")) {
+          leftSize = Float.parseFloat(strs[3].replace('T', ' '));
+        } else if (strs[3].contains("G")) {
+          leftSize = Float.parseFloat(strs[3].replace('G', ' ')) / (float) 1024.0;
+        } else if (strs[3].contains("M")) {
+          leftSize = Float.parseFloat(strs[3].replace('M', ' ')) / (float) (1024.0 * 1024.0);
+        }
+        if (strs[5].contains("%")) {
+          percent = Float.parseFloat(strs[5].replace('%', ' '));
+        }
+        System.out.println(totalSize);
+        System.out.println(leftSize);
+        System.out.println(percent);
+        
+        DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
+        dpm.setCurProcessNumber(Integer.parseInt(curProcNumber));
+        dpm.setTotalStorageSize(totalSize);
+        dpm.setUsedStorageSize(leftSize);
+        dpmDao.update(dpm);
+      }
 
       String tmpStr = cfile.getProperty("otlist");
       otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
@@ -397,5 +443,19 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setRootDir(String rootDir) {
     this.rootDir = rootDir;
+  }
+
+  /**
+   * @return the dpmDao
+   */
+  public DataProcessMachineDAO getDpmDao() {
+    return dpmDao;
+  }
+
+  /**
+   * @param dpmDao the dpmDao to set
+   */
+  public void setDpmDao(DataProcessMachineDAO dpmDao) {
+    this.dpmDao = dpmDao;
   }
 }

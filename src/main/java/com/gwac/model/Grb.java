@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-8-30 13:00:35 by Hibernate Tools 3.6.0
+// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -22,11 +22,11 @@ public class Grb  implements java.io.Serializable {
 
      private long grbId;
      private String grbName;
-     private Date triggerTime;
-     private String triggerType;
+     private Float triggerDec;
      private String triggerName;
      private Float triggerRa;
-     private Float triggerDec;
+     private Date triggerTime;
+     private String triggerType;
 
     public Grb() {
     }
@@ -35,14 +35,14 @@ public class Grb  implements java.io.Serializable {
     public Grb(long grbId) {
         this.grbId = grbId;
     }
-    public Grb(long grbId, String grbName, Date triggerTime, String triggerType, String triggerName, Float triggerRa, Float triggerDec) {
+    public Grb(long grbId, String grbName, Float triggerDec, String triggerName, Float triggerRa, Date triggerTime, String triggerType) {
        this.grbId = grbId;
        this.grbName = grbName;
-       this.triggerTime = triggerTime;
-       this.triggerType = triggerType;
+       this.triggerDec = triggerDec;
        this.triggerName = triggerName;
        this.triggerRa = triggerRa;
-       this.triggerDec = triggerDec;
+       this.triggerTime = triggerTime;
+       this.triggerType = triggerType;
     }
    
      @Id 
@@ -67,24 +67,14 @@ public class Grb  implements java.io.Serializable {
         this.grbName = grbName;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="trigger_time", length=29)
-    public Date getTriggerTime() {
-        return this.triggerTime;
+    
+    @Column(name="trigger_dec", precision=8, scale=8)
+    public Float getTriggerDec() {
+        return this.triggerDec;
     }
     
-    public void setTriggerTime(Date triggerTime) {
-        this.triggerTime = triggerTime;
-    }
-
-    
-    @Column(name="trigger_type")
-    public String getTriggerType() {
-        return this.triggerType;
-    }
-    
-    public void setTriggerType(String triggerType) {
-        this.triggerType = triggerType;
+    public void setTriggerDec(Float triggerDec) {
+        this.triggerDec = triggerDec;
     }
 
     
@@ -107,14 +97,24 @@ public class Grb  implements java.io.Serializable {
         this.triggerRa = triggerRa;
     }
 
-    
-    @Column(name="trigger_dec", precision=8, scale=8)
-    public Float getTriggerDec() {
-        return this.triggerDec;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="trigger_time", length=29)
+    public Date getTriggerTime() {
+        return this.triggerTime;
     }
     
-    public void setTriggerDec(Float triggerDec) {
-        this.triggerDec = triggerDec;
+    public void setTriggerTime(Date triggerTime) {
+        this.triggerTime = triggerTime;
+    }
+
+    
+    @Column(name="trigger_type")
+    public String getTriggerType() {
+        return this.triggerType;
+    }
+    
+    public void setTriggerType(String triggerType) {
+        this.triggerType = triggerType;
     }
 
 

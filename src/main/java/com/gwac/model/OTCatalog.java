@@ -28,7 +28,7 @@ public class OTCatalog {
   private Float magAper;
   private Float magerrAper;
   private Float ellipticity;
-  private Short classStar;
+  private Float classStar;
   private Boolean otFlag;
   
   public String getFileDate(){
@@ -284,14 +284,14 @@ public class OTCatalog {
   /**
    * @return the classStar
    */
-  public Short getClassStar() {
+  public Float getClassStar() {
     return classStar;
   }
 
   /**
    * @param classStar the classStar to set
    */
-  public void setClassStar(Short classStar) {
+  public void setClassStar(Float classStar) {
     this.classStar = classStar;
   }
 

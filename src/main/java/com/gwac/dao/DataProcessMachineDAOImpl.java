@@ -17,7 +17,17 @@ import org.hibernate.Session;
 public class DataProcessMachineDAOImpl extends BaseHibernateDaoImpl<DataProcessMachine> implements DataProcessMachineDAO {
 
   private static final Log log = LogFactory.getLog(DataProcessMachineDAOImpl.class);
-  
+
+  public void updateByName(DataProcessMachine dpm) {
+    Session session = getCurrentSession();
+    String sql = "update data_process_machine set cur_process_number=";
+
+//    pStmt = session.connection().prepareStatement(sql);
+//    rs = pStmt.executeQuery();
+    
+//    session.createSQLQuery(sql).executeUpdate();
+  }
+
   public DataProcessMachine getDpmByName(String name) {
     Session session = getCurrentSession();
     String sql = "select * from data_process_machine where name='" + name + "';";

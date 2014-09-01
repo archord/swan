@@ -34,7 +34,7 @@ public class OtObserveRecordShow  implements java.io.Serializable {
      private Float magAper;
      private Float magerrAper;
      private Float ellipticity;
-     private Short classStar;
+     private Float classStar;
      private Boolean otFlag;
 
     public OtObserveRecordShow() {
@@ -44,7 +44,7 @@ public class OtObserveRecordShow  implements java.io.Serializable {
     public OtObserveRecordShow(long oortId) {
         this.oortId = oortId;
     }
-    public OtObserveRecordShow(long oortId, Long otId, Long ffId, Long ffcId, Short otTypeId, Float raD, Float decD, Float x, Float y, Float XTemp, Float YTemp, Date dateUt, Float flux, Boolean flag, Float flagChb, Float background, Float threshold, Float magAper, Float magerrAper, Float ellipticity, Short classStar, Boolean otFlag) {
+    public OtObserveRecordShow(long oortId, Long otId, Long ffId, Long ffcId, Short otTypeId, Float raD, Float decD, Float x, Float y, Float XTemp, Float YTemp, Date dateUt, Float flux, Boolean flag, Float flagChb, Float background, Float threshold, Float magAper, Float magerrAper, Float ellipticity, Float classStar, Boolean otFlag) {
        this.oortId = oortId;
        this.otId = otId;
        this.ffId = ffId;
@@ -209,11 +209,11 @@ public class OtObserveRecordShow  implements java.io.Serializable {
     public void setEllipticity(Float ellipticity) {
         this.ellipticity = ellipticity;
     }
-    public Short getClassStar() {
+    public Float getClassStar() {
         return this.classStar;
     }
     
-    public void setClassStar(Short classStar) {
+    public void setClassStar(Float classStar) {
         this.classStar = classStar;
     }
     public Boolean getOtFlag() {

@@ -24,13 +24,43 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
-  public List<String> getUnCuttedStarList(int dpmId) {
-    String sql = "select ff.file_name, oor.x, oor.y, ffc.file_name "
+  public String getUnCuttedStarList(int dpmId) {
+    Session session = getCurrentSession();
+    String sql = "select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
             + " from ot_observe_record oor "
-            + " left join fits_file ff on oor.ff_id=ff.ff_id "
-            + " left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
-            + " where oor.dpm_id=" + dpmId;
-    return null;
+            + " inner join fits_file ff on oor.ff_id=ff.ff_id "
+            + " inner join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
+            + " where oor.ot_id>0 and oor.request_cut=false and oor.dpm_id=" + dpmId;
+    Query q = session.createSQLQuery(sql);
+    Iterator itor = q.list().iterator();
+    
+    StringBuilder rst = new StringBuilder();
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      try {
+        rst.append(row[0]);
+        rst.append(" ");
+        rst.append(row[1]);
+        rst.append(" ");
+        rst.append(row[2]);
+        rst.append(" ");
+        rst.append(row[3]);
+        rst.append("\n");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return rst.toString();
+  }
+
+  public List<OtObserveRecord> getLatestNLv1OT(int n) {
+    Session session = getCurrentSession();
+    String sql = "select oor.* "
+            + "from ot_observe_record oor "
+            + "inner join data_process_machine dpm on oor.dpm_id = dpm.dpm_id and oor.ff_number>dpm.cur_process_number-" + n + " "
+            + "where oor.ot_id=0;";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
   }
 
   @Override
@@ -54,16 +84,13 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Session session = getCurrentSession();
     String sql = "select * from ot_observe_record "
             + " where ff_number>" + (obj.getFfNumber() - 5)
+            + " and ot_id=0"
             + " and dpm_id=" + obj.getDpmId()
             + " and abs(x_temp-" + obj.getXTemp() + ")<2 "
             + " and abs(y_temp-" + obj.getYTemp() + ")<2 "
             + " order by ff_number asc";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
-    if (!q.list().isEmpty()) {
-      BigInteger objId = (BigInteger) q.list().get(0);
-      obj.setOorId(objId.longValue());
-    }
-    return null;
+    return q.list();
   }
 
   public int countRecordByOtName(String otName) {
@@ -112,18 +139,19 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         Date dateUt = (Date) row[11];
         float flux = (Float) row[12];
         Boolean flag = (Boolean) row[13];
-        float flagChb = (Float) row[14];
+//        float flagChb = (Float) row[14];
         float background = (Float) row[15];
         float threshold = (Float) row[16];
         float magAper = (Float) row[17];
         float magerrAper = (Float) row[18];
         float ellipticity = (Float) row[19];
-        Short ClassStar = (Short) row[20];
+        float ClassStar = (Float) row[20];
         Boolean otFlag = (Boolean) row[21];
-        String ffFileName = (String) row[22];
-        String ffStorePath = (String) row[23];
-        String ffcFileName = (String) row[24];
-        String ffcStorePath = (String) row[25];
+        //ff_number,dpm_id,date_str,request_cut,success_cut
+        String ffFileName = (String) row[27];
+        String ffStorePath = (String) row[28];
+        String ffcFileName = (String) row[29];
+        String ffcStorePath = (String) row[30];
 
         OtObserveRecordShow oors = new OtObserveRecordShow();
         oors.setBackground(background);
@@ -138,7 +166,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         oors.setFfcName(ffcFileName);
         oors.setFfcPath(ffcStorePath);
         oors.setFlag(flag);
-        oors.setFlagChb(flagChb);
+//        oors.setFlagChb(flagChb);
         oors.setFlux(flux);
         oors.setMagAper(magAper);
         oors.setMagerrAper(magerrAper);
@@ -187,18 +215,19 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         Date dateUt = (Date) row[11];
         float flux = (Float) row[12];
         Boolean flag = (Boolean) row[13];
-        float flagChb = (Float) row[14];
+//        float flagChb = (Float) row[14];
         float background = (Float) row[15];
         float threshold = (Float) row[16];
         float magAper = (Float) row[17];
         float magerrAper = (Float) row[18];
         float ellipticity = (Float) row[19];
-        Short ClassStar = (Short) row[20];
+        float ClassStar = (Float) row[20];
         Boolean otFlag = (Boolean) row[21];
-        String ffFileName = (String) row[22];
-        String ffStorePath = (String) row[23];
-        String ffcFileName = (String) row[24];
-        String ffcStorePath = (String) row[25];
+        //ff_number,dpm_id,date_str,request_cut,success_cut
+        String ffFileName = (String) row[27];
+        String ffStorePath = (String) row[28];
+        String ffcFileName = (String) row[29];
+        String ffcStorePath = (String) row[30];
 
         OtObserveRecordShow oors = new OtObserveRecordShow();
         oors.setBackground(background);
@@ -213,7 +242,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         oors.setFfcName(ffcFileName);
         oors.setFfcPath(ffcStorePath);
         oors.setFlag(flag);
-        oors.setFlagChb(flagChb);
+//        oors.setFlagChb(flagChb);
         oors.setFlux(flux);
         oors.setMagAper(magAper);
         oors.setMagerrAper(magerrAper);

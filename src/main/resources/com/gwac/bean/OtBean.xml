@@ -10,7 +10,8 @@
   </bean>
   
   <bean class="com.gwac.action.GetOtXYList">
-    <property name="obDao" ref="otbDao" />
+    <property name="otDao" ref="otbDao" />
+    <property name="oorDao" ref="otORDao" />
   </bean>
 	
   <bean id="otbDao" class="com.gwac.dao.OtLevel2DaoImpl" >

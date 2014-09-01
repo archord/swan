@@ -20,6 +20,24 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
 
+  public List<OtLevel2> getCurOccurLv2OT() {
+    Session session = getCurrentSession();
+    String sql = "select ol2.* "
+            + "from ot_level2 ol2 "
+            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number ";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+  
+  public List<OtLevel2> getNCurOccurLv2OT() {
+    Session session = getCurrentSession();
+    String sql = "select ol2.* "
+            + "from ot_level2 ol2 "
+            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number ";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+
   @Override
   public OtLevel2 getOtLevel2ByName(String otName) {
     Session session = getCurrentSession();
@@ -49,23 +67,20 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return flag;
   }
 
-  public Boolean existInLatestN(OtLevel2 obj) {
+  public OtLevel2 existInLatestN(OtLevel2 obj) {
     Boolean flag = false;
     Session session = getCurrentSession();
     //should add "and date_str="+obj.getDataStr()
-    String sql = "select ot_id, name from ot_level2 "
+    String sql = "select * from ot_level2 "
             + " where last_ff_number>" + (obj.getLastFfNumber() - 5)
             + " and dpm_id=" + obj.getDpmId()
             + " and abs(xtemp-" + obj.getXtemp() + ")<2 "
             + " and abs(ytemp-" + obj.getYtemp() + ")<2 ";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     if (!q.list().isEmpty()) {
-      OtLevel2 tObj = (OtLevel2) q.list().get(0);
-      obj.setOtId(tObj.getOtId());
-      obj.setName(tObj.getName());
-      flag = true;
+      return (OtLevel2) q.list().get(0);
     }
-    return flag;
+    return null;
   }
 
   public List<OtLevel2> findRecord1(int start, int resultSize, String[] orderNames, int[] sort) {

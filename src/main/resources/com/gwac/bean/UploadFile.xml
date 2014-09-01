@@ -20,6 +20,7 @@
   <bean id="ufService" class="com.gwac.service.UploadFileServiceImpl" >
     <property name="ufrDao" ref="ufrDao" />
     <property name="ufuDao" ref="ufuDao" />
+    <property name="dpmDao" ref="dpmDao" />	
   </bean>
 	
   <bean id="ufuDao" class="com.gwac.dao.UploadFileUnstoreDaoImpl" >

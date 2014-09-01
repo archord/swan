@@ -22,7 +22,6 @@ import java.util.List;
 public class OTCatalogDaoImpl implements OTCatalogDao {
 
   public List<OTCatalog> getOT1Catalog(String path) {
-    
     BufferedReader br = null;
     String line = "";
     String splitBy = " ";
@@ -57,7 +56,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         ot.setMagAper(Float.parseFloat(strs[12]));
         ot.setMagerrAper(Float.parseFloat(strs[13]));
         ot.setEllipticity(Float.parseFloat(strs[14]));
-        ot.setClassStar(Short.parseShort(strs[15]));
+        ot.setClassStar(Float.parseFloat(strs[15]));
 //        ot.setOtFlag(Boolean.parseBoolean(strs[17]));
 
         otList.add(ot);
@@ -68,6 +67,8 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (Exception e) {
       e.printStackTrace();
     } finally {
       if (br != null) {
@@ -116,7 +117,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         ot.setMagAper(Float.parseFloat(strs[13]));
         ot.setMagerrAper(Float.parseFloat(strs[14]));
         ot.setEllipticity(Float.parseFloat(strs[15]));
-        ot.setClassStar(Short.parseShort(strs[16]));
+        ot.setClassStar(Float.parseFloat(strs[16]));
         ot.setOtFlag(Boolean.parseBoolean(strs[17]));
 
         otList.add(ot);

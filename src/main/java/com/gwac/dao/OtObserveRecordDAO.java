@@ -21,6 +21,10 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize);
 
   public Boolean exist(OtObserveRecord obj);
-  
+
   public List<OtObserveRecord> matchLatestN(OtObserveRecord obj);
+
+  public List<OtObserveRecord> getLatestNLv1OT(int n);
+
+  public String getUnCuttedStarList(int dpmId);
 }

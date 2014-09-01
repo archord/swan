@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-8-30 13:00:35 by Hibernate Tools 3.6.0
+// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -18,9 +18,9 @@ public class OtType  implements java.io.Serializable {
 
 
      private short otTypeId;
-     private String otTypeName;
-     private String otTableName;
      private String comments;
+     private String otTableName;
+     private String otTypeName;
 
     public OtType() {
     }
@@ -29,11 +29,11 @@ public class OtType  implements java.io.Serializable {
     public OtType(short otTypeId) {
         this.otTypeId = otTypeId;
     }
-    public OtType(short otTypeId, String otTypeName, String otTableName, String comments) {
+    public OtType(short otTypeId, String comments, String otTableName, String otTypeName) {
        this.otTypeId = otTypeId;
-       this.otTypeName = otTypeName;
-       this.otTableName = otTableName;
        this.comments = comments;
+       this.otTableName = otTableName;
+       this.otTypeName = otTypeName;
     }
    
      @Id 
@@ -49,13 +49,13 @@ public class OtType  implements java.io.Serializable {
     }
 
     
-    @Column(name="ot_type_name")
-    public String getOtTypeName() {
-        return this.otTypeName;
+    @Column(name="comments", length=1024)
+    public String getComments() {
+        return this.comments;
     }
     
-    public void setOtTypeName(String otTypeName) {
-        this.otTypeName = otTypeName;
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     
@@ -69,13 +69,13 @@ public class OtType  implements java.io.Serializable {
     }
 
     
-    @Column(name="comments", length=1024)
-    public String getComments() {
-        return this.comments;
+    @Column(name="ot_type_name")
+    public String getOtTypeName() {
+        return this.otTypeName;
     }
     
-    public void setComments(String comments) {
-        this.comments = comments;
+    public void setOtTypeName(String otTypeName) {
+        this.otTypeName = otTypeName;
     }
 
 

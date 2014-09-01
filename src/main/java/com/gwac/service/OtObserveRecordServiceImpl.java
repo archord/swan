@@ -42,10 +42,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
   public void storeOTCatalog() {
     List<UploadFileUnstore> ufus = ufuDao.findAll();
+    System.out.println("ufu number:" + ufus.size());
     if (ufus != null) {
       for (UploadFileUnstore ufu : ufus) {
-
+        System.out.println("path=" + ufu.getFileName());
         List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + ufu.getStorePath() + "/" + ufu.getFileName());
+        System.out.println("ot catalog number:" + otcs.size());
         for (OTCatalog otc : otcs) {
 
           String otListPath = ufu.getStorePath();
@@ -71,6 +73,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           otLv2.setDateStr(fileDate);
 
           OtObserveRecord oor = new OtObserveRecord();
+          oor.setOtId((long)0);
+          oor.setFfcId((long)0);
           oor.setFfId(ff.getFfId());
           oor.setRaD(otc.getRaD());
           oor.setDecD(otc.getDecD());
@@ -95,24 +99,42 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           oor.setRequestCut(false);
           oor.setSuccessCut(false);
 
-          if (getOtLv2Dao().existInLatestN(otLv2)) {
+          if (Math.abs(otLv2.getXtemp() - 1765.576) < 2 && Math.abs(otLv2.getYtemp() - 150.5287) < 2) {
+            System.out.println(otLv2.getLastFfNumber() + " " + otLv2.getXtemp() + " " + otLv2.getYtemp());
+          }
 
-            String cutImg = String.format("%s_%04d.fit", otLv2.getName(), oor.getFfNumber());
+          OtLevel2 tlv2 = otLv2Dao.existInLatestN(otLv2);
+          if (tlv2 != null) {
+            tlv2.setTotal(tlv2.getTotal()+1);
+            tlv2.setLastFfNumber(otLv2.getLastFfNumber());
+            tlv2.setXtemp(otLv2.getXtemp());
+            tlv2.setYtemp(otLv2.getYtemp());
+            tlv2.setRa(otLv2.getRa());
+            tlv2.setDec(otLv2.getDec());
+            otLv2Dao.update(tlv2);
+
+            String cutImg = String.format("%s_%04d.fit", tlv2.getName(), oor.getFfNumber());
             FitsFileCut ffc = new FitsFileCut();
             ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
             ffc.setFileName(cutImg);
-            ffc.setOtId(otLv2.getOtId());
+            ffc.setOtId(tlv2.getOtId());
             ffc.setNumber(number);
             ffc.setFfId(ff.getFfId());
             ffcDao.save(ffc);
-            
-            oor.setOtId(otLv2.getOtId());
+
+            oor.setOtId(tlv2.getOtId());
             oor.setFfcId(ffc.getFfcId());
             otorDao.save(oor);
           } else {
 
             otorDao.save(oor);
             List<OtObserveRecord> oors = otorDao.matchLatestN(oor);
+            System.out.println("********************************* ");
+            System.out.println("oors size: " + oors.size());
+            System.out.println("ff_number: " + oor.getFfNumber()); 
+            for (OtObserveRecord tOor : oors) {
+              System.out.println(tOor.getFfNumber() + " " + tOor.getXTemp() + " " + tOor.getYTemp());
+            }
             if (oors.size() >= 2) {
               OtObserveRecord oor1 = oors.get(0);
 
@@ -128,12 +150,18 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setXtemp(oor1.getXTemp());
               tOtLv2.setYtemp(oor1.getYTemp());
               tOtLv2.setLastFfNumber(oor1.getFfNumber());
-              tOtLv2.setTotal(oors.size() + 1);
+              tOtLv2.setTotal(oors.size());
               tOtLv2.setDpmId(oor1.getDpmId());
               tOtLv2.setDateStr(fileDate);
               otLv2Dao.save(tOtLv2);
+              System.out.println("ot name: " + otName);
+              System.out.println("*********************************");
 
               for (OtObserveRecord tOor : oors) {
+                System.out.println("otId: " + tOor.getOtId());
+                if (tOor.getOtId() != 0) {
+                  continue;
+                }
                 String cutImg = String.format("%s_%04d.fit", tOtLv2.getName(), tOor.getFfNumber());
                 FitsFileCut ffc = new FitsFileCut();
                 ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
@@ -142,7 +170,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
                 ffc.setNumber(tOor.getFfNumber());
                 ffc.setFfId(tOor.getFfId());
                 ffcDao.save(ffc);
-                
+
                 tOor.setOtId(tOtLv2.getOtId());
                 tOor.setFfcId(ffc.getFfcId());
                 otorDao.update(tOor);

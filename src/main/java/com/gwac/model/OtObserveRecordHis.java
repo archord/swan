@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-8-30 13:00:35 by Hibernate Tools 3.6.0
+// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -21,32 +21,32 @@ public class OtObserveRecordHis  implements java.io.Serializable {
 
 
      private long oorId;
-     private Long otId;
-     private Long ffId;
-     private Long ffcId;
-     private Short otTypeId;
-     private Float raD;
-     private Float decD;
-     private Float x;
-     private Float y;
      private Float XTemp;
      private Float YTemp;
+     private Float background;
+     private Float classStar;
+     private String dateStr;
      private Date dateUt;
-     private Float flux;
+     private Float decD;
+     private Integer dpmId;
+     private Float ellipticity;
+     private Long ffId;
+     private Integer ffNumber;
+     private Long ffcId;
      private Boolean flag;
      private Float flagChb;
-     private Float background;
-     private Float threshold;
+     private Float flux;
      private Float magAper;
      private Float magerrAper;
-     private Float ellipticity;
-     private Short classStar;
      private Boolean otFlag;
-     private Integer ffNumber;
-     private Integer dpmId;
-     private String dateStr;
+     private Long otId;
+     private Short otTypeId;
+     private Float raD;
      private Boolean requestCut;
      private Boolean successCut;
+     private Float threshold;
+     private Float x;
+     private Float y;
 
     public OtObserveRecordHis() {
     }
@@ -55,34 +55,34 @@ public class OtObserveRecordHis  implements java.io.Serializable {
     public OtObserveRecordHis(long oorId) {
         this.oorId = oorId;
     }
-    public OtObserveRecordHis(long oorId, Long otId, Long ffId, Long ffcId, Short otTypeId, Float raD, Float decD, Float x, Float y, Float XTemp, Float YTemp, Date dateUt, Float flux, Boolean flag, Float flagChb, Float background, Float threshold, Float magAper, Float magerrAper, Float ellipticity, Short classStar, Boolean otFlag, Integer ffNumber, Integer dpmId, String dateStr, Boolean requestCut, Boolean successCut) {
+    public OtObserveRecordHis(long oorId, Float XTemp, Float YTemp, Float background, Float classStar, String dateStr, Date dateUt, Float decD, Integer dpmId, Float ellipticity, Long ffId, Integer ffNumber, Long ffcId, Boolean flag, Float flagChb, Float flux, Float magAper, Float magerrAper, Boolean otFlag, Long otId, Short otTypeId, Float raD, Boolean requestCut, Boolean successCut, Float threshold, Float x, Float y) {
        this.oorId = oorId;
-       this.otId = otId;
-       this.ffId = ffId;
-       this.ffcId = ffcId;
-       this.otTypeId = otTypeId;
-       this.raD = raD;
-       this.decD = decD;
-       this.x = x;
-       this.y = y;
        this.XTemp = XTemp;
        this.YTemp = YTemp;
+       this.background = background;
+       this.classStar = classStar;
+       this.dateStr = dateStr;
        this.dateUt = dateUt;
-       this.flux = flux;
+       this.decD = decD;
+       this.dpmId = dpmId;
+       this.ellipticity = ellipticity;
+       this.ffId = ffId;
+       this.ffNumber = ffNumber;
+       this.ffcId = ffcId;
        this.flag = flag;
        this.flagChb = flagChb;
-       this.background = background;
-       this.threshold = threshold;
+       this.flux = flux;
        this.magAper = magAper;
        this.magerrAper = magerrAper;
-       this.ellipticity = ellipticity;
-       this.classStar = classStar;
        this.otFlag = otFlag;
-       this.ffNumber = ffNumber;
-       this.dpmId = dpmId;
-       this.dateStr = dateStr;
+       this.otId = otId;
+       this.otTypeId = otTypeId;
+       this.raD = raD;
        this.requestCut = requestCut;
        this.successCut = successCut;
+       this.threshold = threshold;
+       this.x = x;
+       this.y = y;
     }
    
      @Id 
@@ -95,86 +95,6 @@ public class OtObserveRecordHis  implements java.io.Serializable {
     
     public void setOorId(long oorId) {
         this.oorId = oorId;
-    }
-
-    
-    @Column(name="ot_id")
-    public Long getOtId() {
-        return this.otId;
-    }
-    
-    public void setOtId(Long otId) {
-        this.otId = otId;
-    }
-
-    
-    @Column(name="ff_id")
-    public Long getFfId() {
-        return this.ffId;
-    }
-    
-    public void setFfId(Long ffId) {
-        this.ffId = ffId;
-    }
-
-    
-    @Column(name="ffc_id")
-    public Long getFfcId() {
-        return this.ffcId;
-    }
-    
-    public void setFfcId(Long ffcId) {
-        this.ffcId = ffcId;
-    }
-
-    
-    @Column(name="ot_type_id")
-    public Short getOtTypeId() {
-        return this.otTypeId;
-    }
-    
-    public void setOtTypeId(Short otTypeId) {
-        this.otTypeId = otTypeId;
-    }
-
-    
-    @Column(name="ra_d", precision=8, scale=8)
-    public Float getRaD() {
-        return this.raD;
-    }
-    
-    public void setRaD(Float raD) {
-        this.raD = raD;
-    }
-
-    
-    @Column(name="dec_d", precision=8, scale=8)
-    public Float getDecD() {
-        return this.decD;
-    }
-    
-    public void setDecD(Float decD) {
-        this.decD = decD;
-    }
-
-    
-    @Column(name="x", precision=8, scale=8)
-    public Float getX() {
-        return this.x;
-    }
-    
-    public void setX(Float x) {
-        this.x = x;
-    }
-
-    
-    @Column(name="y", precision=8, scale=8)
-    public Float getY() {
-        return this.y;
-    }
-    
-    public void setY(Float y) {
-        this.y = y;
     }
 
     
@@ -197,6 +117,36 @@ public class OtObserveRecordHis  implements java.io.Serializable {
         this.YTemp = YTemp;
     }
 
+    
+    @Column(name="background", precision=8, scale=8)
+    public Float getBackground() {
+        return this.background;
+    }
+    
+    public void setBackground(Float background) {
+        this.background = background;
+    }
+
+    
+    @Column(name="class_star")
+    public Float getClassStar() {
+        return this.classStar;
+    }
+    
+    public void setClassStar(Float classStar) {
+        this.classStar = classStar;
+    }
+
+    
+    @Column(name="date_str", length=6)
+    public String getDateStr() {
+        return this.dateStr;
+    }
+    
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr;
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_ut", length=29)
     public Date getDateUt() {
@@ -208,13 +158,63 @@ public class OtObserveRecordHis  implements java.io.Serializable {
     }
 
     
-    @Column(name="flux", precision=8, scale=8)
-    public Float getFlux() {
-        return this.flux;
+    @Column(name="dec_d", precision=8, scale=8)
+    public Float getDecD() {
+        return this.decD;
     }
     
-    public void setFlux(Float flux) {
-        this.flux = flux;
+    public void setDecD(Float decD) {
+        this.decD = decD;
+    }
+
+    
+    @Column(name="dpm_id")
+    public Integer getDpmId() {
+        return this.dpmId;
+    }
+    
+    public void setDpmId(Integer dpmId) {
+        this.dpmId = dpmId;
+    }
+
+    
+    @Column(name="ellipticity", precision=8, scale=8)
+    public Float getEllipticity() {
+        return this.ellipticity;
+    }
+    
+    public void setEllipticity(Float ellipticity) {
+        this.ellipticity = ellipticity;
+    }
+
+    
+    @Column(name="ff_id")
+    public Long getFfId() {
+        return this.ffId;
+    }
+    
+    public void setFfId(Long ffId) {
+        this.ffId = ffId;
+    }
+
+    
+    @Column(name="ff_number")
+    public Integer getFfNumber() {
+        return this.ffNumber;
+    }
+    
+    public void setFfNumber(Integer ffNumber) {
+        this.ffNumber = ffNumber;
+    }
+
+    
+    @Column(name="ffc_id")
+    public Long getFfcId() {
+        return this.ffcId;
+    }
+    
+    public void setFfcId(Long ffcId) {
+        this.ffcId = ffcId;
     }
 
     
@@ -238,23 +238,13 @@ public class OtObserveRecordHis  implements java.io.Serializable {
     }
 
     
-    @Column(name="background", precision=8, scale=8)
-    public Float getBackground() {
-        return this.background;
+    @Column(name="flux", precision=8, scale=8)
+    public Float getFlux() {
+        return this.flux;
     }
     
-    public void setBackground(Float background) {
-        this.background = background;
-    }
-
-    
-    @Column(name="threshold", precision=8, scale=8)
-    public Float getThreshold() {
-        return this.threshold;
-    }
-    
-    public void setThreshold(Float threshold) {
-        this.threshold = threshold;
+    public void setFlux(Float flux) {
+        this.flux = flux;
     }
 
     
@@ -278,26 +268,6 @@ public class OtObserveRecordHis  implements java.io.Serializable {
     }
 
     
-    @Column(name="ellipticity", precision=8, scale=8)
-    public Float getEllipticity() {
-        return this.ellipticity;
-    }
-    
-    public void setEllipticity(Float ellipticity) {
-        this.ellipticity = ellipticity;
-    }
-
-    
-    @Column(name="class_star")
-    public Short getClassStar() {
-        return this.classStar;
-    }
-    
-    public void setClassStar(Short classStar) {
-        this.classStar = classStar;
-    }
-
-    
     @Column(name="ot_flag")
     public Boolean getOtFlag() {
         return this.otFlag;
@@ -308,33 +278,33 @@ public class OtObserveRecordHis  implements java.io.Serializable {
     }
 
     
-    @Column(name="ff_number")
-    public Integer getFfNumber() {
-        return this.ffNumber;
+    @Column(name="ot_id")
+    public Long getOtId() {
+        return this.otId;
     }
     
-    public void setFfNumber(Integer ffNumber) {
-        this.ffNumber = ffNumber;
-    }
-
-    
-    @Column(name="dpm_id")
-    public Integer getDpmId() {
-        return this.dpmId;
-    }
-    
-    public void setDpmId(Integer dpmId) {
-        this.dpmId = dpmId;
+    public void setOtId(Long otId) {
+        this.otId = otId;
     }
 
     
-    @Column(name="date_str", length=6)
-    public String getDateStr() {
-        return this.dateStr;
+    @Column(name="ot_type_id")
+    public Short getOtTypeId() {
+        return this.otTypeId;
     }
     
-    public void setDateStr(String dateStr) {
-        this.dateStr = dateStr;
+    public void setOtTypeId(Short otTypeId) {
+        this.otTypeId = otTypeId;
+    }
+
+    
+    @Column(name="ra_d", precision=8, scale=8)
+    public Float getRaD() {
+        return this.raD;
+    }
+    
+    public void setRaD(Float raD) {
+        this.raD = raD;
     }
 
     
@@ -355,6 +325,36 @@ public class OtObserveRecordHis  implements java.io.Serializable {
     
     public void setSuccessCut(Boolean successCut) {
         this.successCut = successCut;
+    }
+
+    
+    @Column(name="threshold", precision=8, scale=8)
+    public Float getThreshold() {
+        return this.threshold;
+    }
+    
+    public void setThreshold(Float threshold) {
+        this.threshold = threshold;
+    }
+
+    
+    @Column(name="x", precision=8, scale=8)
+    public Float getX() {
+        return this.x;
+    }
+    
+    public void setX(Float x) {
+        this.x = x;
+    }
+
+    
+    @Column(name="y", precision=8, scale=8)
+    public Float getY() {
+        return this.y;
+    }
+    
+    public void setY(Float y) {
+        this.y = y;
     }
 
 
