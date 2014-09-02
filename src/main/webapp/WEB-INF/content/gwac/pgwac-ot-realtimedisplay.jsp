@@ -14,6 +14,9 @@
       $(function() {
 
         var option1 = {
+          series: {
+            shadowSize: 0	// Drawing is faster without shadows
+          },
           points: {
             show: true
           },
@@ -28,6 +31,7 @@
           yaxis: {min: 0, max: 3200}
         };
 
+        var reqNum = 1;
         var plot = [];
         var otLv1 = [];
         var otLv2 = [];
@@ -85,16 +89,26 @@
                 points: {show: true, radius: 3}
               }
             ];
-            plotAndBind(m);
+          }
+
+          if (reqNum === 1) {
+            for (var m = 0; m < 12; m++) {
+              plotAndBind(m);
+            }
+            reqNum++;
+          } else {
+            for (var m = 0; m < 12; m++) {
+              plot[m].setData(drawData[m]);
+              plot[m].draw();
+            }
           }
         }
 
-        $.ajax({
-          url: dataurl,
-          type: "GET",
-          dataType: "json",
-          success: onDataReceived
-        });
+          $.ajax({url: dataurl, type: "GET", dataType: "json", success: onDataReceived});
+//        function update() {
+//          setTimeout(update, 5000);
+//        }
+//        update();
 
 
         $("<div id='tooltip'></div>").css({
@@ -141,9 +155,9 @@
           $(id).bind("plotclick", function(event, pos, item) {
             if (item) {
               if (item.series.label === "ot2") {
-              openDialog(ot2Label[number][item.dataIndex][1]);
+                openDialog(ot2Label[number][item.dataIndex][1]);
               } else if (item.series.label === "ot2-cur") {
-              openDialog(ot2curLabel[number][item.dataIndex][1]);
+                openDialog(ot2curLabel[number][item.dataIndex][1]);
               }
 //              plot[number].highlight(item.series, item.datapoint);
             }
