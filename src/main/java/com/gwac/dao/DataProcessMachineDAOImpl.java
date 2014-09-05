@@ -39,6 +39,17 @@ public class DataProcessMachineDAOImpl extends BaseHibernateDaoImpl<DataProcessM
     }
   }
 
+  public DataProcessMachine getDpmById(long id) {
+    Session session = getCurrentSession();
+    String sql = "select * from data_process_machine where dpm_id=" + id;
+    Query q = session.createSQLQuery(sql).addEntity(DataProcessMachine.class);
+    if (!q.list().isEmpty()) {
+      return (DataProcessMachine) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+
 //  public Number count() {
 //    String sql = "select count(*) from data_process_machine;";
 //    Session curSession = getCurrentSession();

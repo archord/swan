@@ -5,6 +5,7 @@
 package com.gwac.service;
 
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.DataProcessMachine;
@@ -46,6 +47,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private UploadFileRecordDao ufrDao;
   private UploadFileUnstoreDao ufuDao;
   private DataProcessMachineDAO dpmDao;
+  private FitsFileCutDAO ffcDao;
 
   public UploadFileServiceImpl() {
   }
@@ -66,14 +68,15 @@ public class UploadFileServiceImpl implements UploadFileService {
       Properties cfile = new Properties();
       cfile.load(input);
 
-      String dateStr = cfile.getProperty("date");
-      String dpmName = cfile.getProperty("dpmname");
-      String curProcNumber = cfile.getProperty("curprocnumber");
-      String dfInfo = cfile.getProperty("dfinfo");
-      if (dpmName != null && curProcNumber != null && dfInfo != null) {
-        System.out.println("dpmName=" + dpmName);
-        System.out.println("curProcNumber=" + curProcNumber);
-        System.out.println("dfInfo=" + dfInfo);
+      String dateStr = cfile.getProperty("date").trim();
+      String dpmName = cfile.getProperty("dpmname").trim();
+      String curProcNumber = cfile.getProperty("curprocnumber").trim();
+      String dfInfo = cfile.getProperty("dfinfo").trim();
+      if (dpmName != null && curProcNumber != null && dfInfo != null
+              && !dpmName.isEmpty() && !curProcNumber.isEmpty() && !dfInfo.isEmpty()) {
+        log.debug("dpmName=" + dpmName);
+        log.debug("curProcNumber=" + curProcNumber);
+        log.debug("dfInfo=" + dfInfo);
         dpmName = dpmName.toUpperCase();
         Pattern p = Pattern.compile("[ ]+");
         String[] strs = p.split(dfInfo);
@@ -97,10 +100,10 @@ public class UploadFileServiceImpl implements UploadFileService {
         if (strs[5].contains("%")) {
           percent = Float.parseFloat(strs[5].replace('%', ' '));
         }
-        System.out.println(totalSize);
-        System.out.println(leftSize);
-        System.out.println(percent);
-        
+        log.debug(totalSize);
+        log.debug(leftSize);
+        log.debug(percent);
+
         DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
         dpm.setCurProcessNumber(Integer.parseInt(curProcNumber));
         dpm.setTotalStorageSize(totalSize);
@@ -108,25 +111,25 @@ public class UploadFileServiceImpl implements UploadFileService {
         dpmDao.update(dpm);
       }
 
-      String tmpStr = cfile.getProperty("otlist");
+      String tmpStr = cfile.getProperty("otlist").trim();
       otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
       if (otList != null) {
         fNum += otList.length;
       }
 
-      tmpStr = cfile.getProperty("starlist");
+      tmpStr = cfile.getProperty("starlist").trim();
       starList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
       if (starList != null) {
         fNum += starList.length;
       }
 
-      tmpStr = cfile.getProperty("origimage");
+      tmpStr = cfile.getProperty("origimage").trim();
       origImage = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
       if (origImage != null) {
         fNum += origImage.length;
       }
 
-      tmpStr = cfile.getProperty("cutimages");
+      tmpStr = cfile.getProperty("cutimages").trim();
       cutImages = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
       if (cutImages != null) {
         fNum += cutImages.length;
@@ -333,6 +336,9 @@ public class UploadFileServiceImpl implements UploadFileService {
               FileUtils.moveFile(tfile1, tfile2);
               obj.setUploadSuccess(Boolean.TRUE);
               fileNum++;
+              if (tStr.indexOf(".jpg") > 0) {
+                ffcDao.uploadSuccessCutByName(tStr.substring(0, tStr.indexOf('.')));
+              }
             } else {
               obj.setUploadSuccess(Boolean.FALSE);
               log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
@@ -457,5 +463,12 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setDpmDao(DataProcessMachineDAO dpmDao) {
     this.dpmDao = dpmDao;
+  }
+
+  /**
+   * @param ffcDao the ffcDao to set
+   */
+  public void setFfcDao(FitsFileCutDAO ffcDao) {
+    this.ffcDao = ffcDao;
   }
 }

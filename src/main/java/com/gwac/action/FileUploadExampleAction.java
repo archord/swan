@@ -11,28 +11,31 @@ package com.gwac.action;
 import java.io.File;
 
 import com.opensymphony.xwork2.ActionSupport;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class FileUploadExampleAction extends ActionSupport {
 
+  private static final Log log = LogFactory.getLog(FileUploadExampleAction.class);
   private File[] uploads;
   private String[] fileUploadContentType;
   private String[] fileUploadFileName;
 
   public String execute() throws Exception {
-    System.out.println("\n\n upload2");
-    System.out.println("files:");
+    log.debug("\n\n upload2");
+    log.debug("files:");
     for (File u : getUploads()) {
-      System.out.println("*** " + u + "\t" + u.length());
+      log.debug("*** " + u + "\t" + u.length());
     }
-    System.out.println("filenames:");
+    log.debug("filenames:");
     for (String n : fileUploadFileName) {
-      System.out.println("*** " + n);
+      log.debug("*** " + n);
     }
-    System.out.println("content types:");
+    log.debug("content types:");
     for (String c : fileUploadContentType) {
-      System.out.println("*** " + c);
+      log.debug("*** " + c);
     }
-    System.out.println("\n\n");
+    log.debug("\n\n");
     return SUCCESS;
 
   }

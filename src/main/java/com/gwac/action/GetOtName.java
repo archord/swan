@@ -59,7 +59,7 @@ public class GetOtName extends ActionSupport {
     if (flag) {
       List<OtLevel2> objs = onrService.getOtNames(requestList);
       for(OtLevel2 obj:objs){
-        System.out.println("");
+        log.debug("");
       }
 
     } else {

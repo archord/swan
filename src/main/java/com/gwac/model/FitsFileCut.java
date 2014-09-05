@@ -24,26 +24,34 @@ public class FitsFileCut  implements java.io.Serializable {
      private Short dpmId;
      private Long ffId;
      private String fileName;
+     private Float imgX;
+     private Float imgY;
      private Boolean isTemplateCut;
      private Integer number;
      private Long otId;
+     private Boolean requestCut;
      private Long starId;
      private String storePath;
+     private Boolean successCut;
      private Long templateFfcId;
 
     public FitsFileCut() {
     }
 
-    public FitsFileCut(Short dpmId, Long ffId, String fileName, Boolean isTemplateCut, Integer number, Long otId, Long starId, String storePath, Long templateFfcId) {
+    public FitsFileCut(Short dpmId, Long ffId, String fileName, Float imgX, Float imgY, Boolean isTemplateCut, Integer number, Long otId, Boolean requestCut, Long starId, String storePath, Boolean successCut, Long templateFfcId) {
        this.dpmId = dpmId;
        this.ffId = ffId;
        this.fileName = fileName;
+       this.imgX = imgX;
+       this.imgY = imgY;
        this.isTemplateCut = isTemplateCut;
        this.number = number;
        this.otId = otId;
        this.starId = starId;
        this.storePath = storePath;
        this.templateFfcId = templateFfcId;
+       this.requestCut = requestCut;
+       this.successCut = successCut;
     }
    
      @GenericGenerator(name="generator", strategy="seqhilo", parameters={@Parameter(name="max_lo", value="49"), @Parameter(name="sequence", value="ffc_id_seq")})@Id @GeneratedValue(generator="generator")
@@ -147,6 +155,68 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setTemplateFfcId(Long templateFfcId) {
         this.templateFfcId = templateFfcId;
     }
+
+  /**
+   * @return the requestCut
+   */
+    
+  @Column(name="request_cut")
+  public Boolean getRequestCut() {
+    return requestCut;
+  }
+
+  /**
+   * @param requestCut the requestCut to set
+   */
+  public void setRequestCut(Boolean requestCut) {
+    this.requestCut = requestCut;
+  }
+
+  /**
+   * @return the successCut
+   */
+  
+  @Column(name="success_cut")
+  public Boolean getSuccessCut() {
+    return successCut;
+  }
+
+  /**
+   * @param successCut the successCut to set
+   */
+  public void setSuccessCut(Boolean successCut) {
+    this.successCut = successCut;
+  }
+
+  /**
+   * @return the imgX
+   */
+  @Column(name="img_x")
+  public Float getImgX() {
+    return imgX;
+  }
+
+  /**
+   * @param imgX the imgX to set
+   */
+  public void setImgX(Float imgX) {
+    this.imgX = imgX;
+  }
+
+  /**
+   * @return the imgY
+   */
+  @Column(name="img_y")
+  public Float getImgY() {
+    return imgY;
+  }
+
+  /**
+   * @param imgY the imgY to set
+   */
+  public void setImgY(Float imgY) {
+    this.imgY = imgY;
+  }
 
 
 

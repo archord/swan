@@ -84,7 +84,7 @@ public class GetDpmList extends ActionSupport implements SessionAware {
     log.debug("to="+to);
     log.debug("size=" + gridModel.size());
 //    for(DataProcessMachine dpm: gridModel){
-//      System.out.println("name="+dpm.getName());
+//      log.debug("name="+dpm.getName());
 //    }
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);

@@ -21,6 +21,7 @@
     <property name="ufrDao" ref="ufrDao" />
     <property name="ufuDao" ref="ufuDao" />
     <property name="dpmDao" ref="dpmDao" />	
+    <property name="ffcDao" ref="ffcDao" />
   </bean>
 	
   <bean id="ufuDao" class="com.gwac.dao.UploadFileUnstoreDaoImpl" >

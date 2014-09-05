@@ -8,11 +8,8 @@ package com.gwac.action;
  *
  * @author xy
  */
-import com.gwac.dao.ConfigFileDao;
-import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.model.ConfigFile;
-import com.gwac.model.OtObserveRecord;
-import com.gwac.service.UploadFileServiceImpl;
+import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
@@ -21,12 +18,8 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -47,7 +40,7 @@ public class GetCutImageList extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(GetCutImageList.class);
   private String dpmName;
-  private OtObserveRecordDAO oorDao;
+  private FitsFileCutDAO ffcDao;
   private InputStream fileInputStream;
   private String fileName;
   private String echo = "";
@@ -69,6 +62,7 @@ public class GetCutImageList extends ActionSupport {
     }
 
     if (flag) {
+      dpmName = dpmName.trim();
       String rootPath = getText("gwac.data.root.directory");
       String destPath = rootPath;
       if (destPath.charAt(destPath.length() - 1) != '/') {
@@ -77,8 +71,9 @@ public class GetCutImageList extends ActionSupport {
         destPath += "tmp/";
       }
 //      fileName = dpmName + "-" + ((int) (Math.random() * 1000) + 1) + ".lst";
-      fileName = dpmName + ".lst";
-      System.out.println("destPath=" + destPath + fileName);
+//      fileName = dpmName + ".lst";
+      fileName = dpmName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
+      log.debug("request cut image list destPath=" + destPath + fileName);
       File tmpDir = new File(destPath);
       if (!tmpDir.exists()) {
         tmpDir.mkdirs();
@@ -88,7 +83,7 @@ public class GetCutImageList extends ActionSupport {
         file.createNewFile();
       }
       int dpmId = Integer.parseInt(dpmName.substring(1));
-      String content = oorDao.getUnCuttedStarList(dpmId);
+      String content = ffcDao.getUnCuttedStarList(dpmId);
       FileWriter fw = new FileWriter(file.getAbsoluteFile());
       BufferedWriter bw = new BufferedWriter(fw);
       bw.write(content);
@@ -129,7 +124,7 @@ public class GetCutImageList extends ActionSupport {
         destPath += "tmp/";
       }
       fileName = dpmName + "-" + ((int) (Math.random() * 1000) + 1) + ".lst";
-      System.out.println("destPath=" + destPath + fileName);
+      log.debug("destPath=" + destPath + fileName);
       File tmpDir = new File(destPath);
       if (!tmpDir.exists()) {
         tmpDir.mkdirs();
@@ -139,7 +134,7 @@ public class GetCutImageList extends ActionSupport {
         file.createNewFile();
       }
       int dpmId = Integer.parseInt(dpmName.substring(1));
-      String content = oorDao.getUnCuttedStarList(dpmId);
+      String content = ffcDao.getUnCuttedStarList(dpmId);
       FileWriter fw = new FileWriter(file.getAbsoluteFile());
       BufferedWriter bw = new BufferedWriter(fw);
       bw.write(content);
@@ -179,9 +174,10 @@ public class GetCutImageList extends ActionSupport {
   }
 
   /**
-   * @param oorDao the oorDao to set
+   * @param ffcDao the ffcDao to set
    */
-  public void setOorDao(OtObserveRecordDAO oorDao) {
-    this.oorDao = oorDao;
+  public void setFfcDao(FitsFileCutDAO ffcDao) {
+    this.ffcDao = ffcDao;
   }
+
 }

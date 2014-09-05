@@ -51,12 +51,12 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
   @SuppressWarnings("unchecked")
   public String execute() {
 
-    System.out.println("startDate=" + startDate);
-    System.out.println("endDate=" + endDate);
-    System.out.println("xTemp=" + xTemp);
-    System.out.println("yTemp=" + yTemp);
-    System.out.println("telscope=" + telscope);
-    System.out.println("searchRadius=" + searchRadius);
+    log.debug("startDate=" + startDate);
+    log.debug("endDate=" + endDate);
+    log.debug("xTemp=" + xTemp);
+    log.debug("yTemp=" + yTemp);
+    log.debug("telscope=" + telscope);
+    log.debug("searchRadius=" + searchRadius);
 
     Number tn = obDao.count();
     if (tn != null) {

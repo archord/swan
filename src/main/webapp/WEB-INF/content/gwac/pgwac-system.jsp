@@ -4,6 +4,7 @@
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags" %>
 
 <strong>
+  <a href="<%=request.getContextPath() %>/ccd_image_realtime.html" target="_blank">CCD图像预览&nbsp;&nbsp;&nbsp;</a>
   <a href="<%=request.getContextPath() %>/newhtmlrealTimeOtDistribution.html" target="_blank">OT实时分布1&nbsp;&nbsp;&nbsp;</a>
   <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay.action" target="_blank">OT实时分布2&nbsp;&nbsp;&nbsp;</a>
   <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank">OT实时分布3&nbsp;&nbsp;&nbsp;</a>

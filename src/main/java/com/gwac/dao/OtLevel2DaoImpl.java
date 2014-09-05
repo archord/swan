@@ -19,6 +19,21 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
+  
+  public void updateAllFileCuttedById(long id){
+    
+    Session session = getCurrentSession();
+    String sql = "update ot_level2 set all_file_cutted=true where ot_id="+id;
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  public List<OtLevel2> getMissedFFCLv2OT() {
+
+    Session session = getCurrentSession();
+    String sql = "select * from ot_level2 where all_file_cutted=false order by ot_id";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
 
   public List<OtLevel2> getCurOccurLv2OT() {
     Session session = getCurrentSession();
@@ -28,7 +43,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
-  
+
   public List<OtLevel2> getNCurOccurLv2OT() {
     Session session = getCurrentSession();
     String sql = "select ol2.* "
@@ -51,13 +66,14 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   }
 
   @Override
-  public Boolean exist(OtLevel2 obj) {
+  public Boolean exist(OtLevel2 obj, float errorBox) {
     Boolean flag = false;
     Session session = getCurrentSession();
     String sql = "select ot_id from ot_level2 where identify='"
             + obj.getIdentify()
-            + "' and abs(xtemp-" + obj.getXtemp() + ")<2 "
-            + " and abs(ytemp-" + obj.getYtemp() + ")<2 ";
+            //            + "' and abs(xtemp-" + obj.getXtemp() + ")<" + errorBox + " "
+            //            + " and abs(ytemp-" + obj.getYtemp() + ")<" + errorBox + " "
+            + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
       BigInteger otId = (BigInteger) q.list().get(0);
@@ -67,15 +83,16 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return flag;
   }
 
-  public OtLevel2 existInLatestN(OtLevel2 obj) {
+  public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox) {
     Boolean flag = false;
     Session session = getCurrentSession();
     //should add "and date_str="+obj.getDataStr()
     String sql = "select * from ot_level2 "
             + " where last_ff_number>" + (obj.getLastFfNumber() - 5)
             + " and dpm_id=" + obj.getDpmId()
-            + " and abs(xtemp-" + obj.getXtemp() + ")<2 "
-            + " and abs(ytemp-" + obj.getYtemp() + ")<2 ";
+            //            + " and abs(xtemp-" + obj.getXtemp() + ")<" + errorBox + " "
+            //            + " and abs(ytemp-" + obj.getYtemp() + ")<" + errorBox + " "
+            + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     if (!q.list().isEmpty()) {
       return (OtLevel2) q.list().get(0);

@@ -33,9 +33,9 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
     otLv1 = oorDao.getLatestNLv1OT(40);
     otLv2 = otDao.getNCurOccurLv2OT();
     otLv2Cur = otDao.getCurOccurLv2OT();
-    System.out.println("otLv1:"+otLv1.size());
-    System.out.println("otLv2:"+otLv2.size());
-    System.out.println("otLv2Cur:"+otLv2Cur.size());
+    log.debug("otLv1:"+otLv1.size());
+    log.debug("otLv2:"+otLv2.size());
+    log.debug("otLv2Cur:"+otLv2Cur.size());
     return SUCCESS;
   }
 

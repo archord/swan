@@ -33,9 +33,6 @@
 
         var reqNum = 1;
         var plot = [];
-        var otLv1 = [];
-        var otLv2 = [];
-        var otLv2Cur = [];
         var ot1 = [];
         var ot2 = [];
         var ot2cur = [];
@@ -43,6 +40,9 @@
         var ot2Label = [];
         var ot2curLabel = [];
         var drawData = [];
+        var ot2curInterval = null;
+        var intervalTime = 1500;
+        var requestTime = 15000;
         for (var m = 0; m < 12; m++) {
           ot1[m] = [];
           ot2[m] = [];
@@ -53,33 +53,56 @@
         }
         var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action";
         function onDataReceived(result) {
-          otLv1 = result.otLv1;
-          otLv2 = result.otLv2;
-          otLv2Cur = result.otLv2Cur;
+          var otLv1 = result.otLv1;
+          var otLv2 = result.otLv2;
+          var otLv2Cur = result.otLv2Cur;
+          for (var m = 0; m < 12; m++) {
+            while (ot1[m].length > 0) {
+              ot1[m].pop();
+            }
+            while (ot1Label[m].length > 0) {
+              ot1Label[m].pop();
+            }
+            while (ot2[m].length > 0) {
+              ot2[m].pop();
+            }
+            while (ot2Label[m].length > 0) {
+              ot2Label[m].pop();
+            }
+            while (ot2cur[m].length > 0) {
+              ot2cur[m].pop();
+            }
+            while (ot2curLabel[m].length > 0) {
+              ot2curLabel[m].pop();
+            }
+          }
           for (var i = 0; i < otLv1.length; i++) {
-            ot1[otLv1[i].dpmId].push([otLv1[i].XTemp, otLv1[i].YTemp]);
-            ot1Label[otLv1[i].dpmId].push([otLv1[i].dpmId, otLv1[i].ffNumber]);
+            ot1[otLv1[i].dpmId - 1].push([otLv1[i].XTemp, otLv1[i].YTemp]);
+            ot1Label[otLv1[i].dpmId - 1].push([otLv1[i].dpmId, otLv1[i].ffNumber]);
           }
           for (var i = 0; i < otLv2.length; i++) {
-            ot2[otLv2[i].dpmId].push([otLv2[i].xtemp, otLv2[i].ytemp]);
-            ot2Label[otLv2[i].dpmId].push([otLv2[i].identify, otLv2[i].name]);
+            ot2[otLv2[i].dpmId - 1].push([otLv2[i].xtemp, otLv2[i].ytemp]);
+//            ot2Label[otLv2[i].dpmId - 1].push([otLv2[i].identify, otLv2[i].name]);
+            ot2Label[otLv2[i].dpmId - 1].push([otLv2[i].dpmId, otLv2[i].lastFfNumber, otLv2[i].name]);
           }
           for (var i = 0; i < otLv2Cur.length; i++) {
-            ot2cur[otLv2Cur[i].dpmId].push([otLv2Cur[i].xtemp, otLv2Cur[i].ytemp]);
-            ot2curLabel[otLv2Cur[i].dpmId].push([otLv2Cur[i].identify, otLv2Cur[i].name]);
+            ot2cur[otLv2Cur[i].dpmId - 1].push([otLv2Cur[i].xtemp, otLv2Cur[i].ytemp]);
+//            ot2curLabel[otLv2Cur[i].dpmId - 1].push([otLv2Cur[i].identify, otLv2Cur[i].name]);
+            ot2curLabel[otLv2Cur[i].dpmId - 1].push([otLv2Cur[i].dpmId, otLv2Cur[i].lastFfNumber, otLv2Cur[i].name]);
           }
+          
           for (var m = 0; m < 12; m++) {
             drawData[m] = [
               {
                 label: "ot1",
                 data: ot1[m],
                 color: '#71c73e',
-                points: {show: true, radius: 1}
+                points: {show: true, radius: 0.5}
               },
               {
                 label: "ot2",
                 data: ot2[m],
-                color: '#77b7c5',
+                color: '#f59fb4', //#77b7c5
                 points: {show: true, radius: 2}
               },
               {
@@ -98,17 +121,22 @@
             reqNum++;
           } else {
             for (var m = 0; m < 12; m++) {
-              plot[m].setData(drawData[m]);
+              plot[m].setData(drawData[m]);//drawData[m]
               plot[m].draw();
             }
+            reqNum++;
           }
+          if (ot2curInterval !== null) {
+            clearInterval(ot2curInterval);
+          }
+          ot2curInterval = setInterval(highlightCurOT2, intervalTime);
         }
 
+        function update() {
           $.ajax({url: dataurl, type: "GET", dataType: "json", success: onDataReceived});
-//        function update() {
-//          setTimeout(update, 5000);
-//        }
-//        update();
+          setTimeout(update, requestTime);
+        }
+        update();
 
 
         $("<div id='tooltip'></div>").css({
@@ -123,7 +151,6 @@
         function plotAndBind(number) {
           var id = "#placeholder" + (number + 1);
           plot[number] = $.plot(id, drawData[number], option1);
-
           $(id).bind("plothover", function(event, pos, item) {
             if (item) {
               var x = item.datapoint[0].toFixed(2);
@@ -139,11 +166,29 @@
                         .css({top: item.pageY + 5, left: item.pageX + 5})
                         .fadeIn(200);
               } else if (item.series.label === "ot2") {
-                $("#tooltip").html(ot2Label[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+//                $("#tooltip").html(ot2Label[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+//                        .css({top: item.pageY + 5, left: item.pageX + 5})
+//                        .fadeIn(200);
+                var mName = "";
+                if (ot2Label[number][item.dataIndex][0] < 10) {
+                  mName = "M0" + ot2Label[number][item.dataIndex][0];
+                } else {
+                  mName = "M" + ot2Label[number][item.dataIndex][0];
+                }
+                $("#tooltip").html(mName + "-" + ot2Label[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
                         .css({top: item.pageY + 5, left: item.pageX + 5})
                         .fadeIn(200);
               } else if (item.series.label === "ot2-cur") {
-                $("#tooltip").html(ot2curLabel[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+//                $("#tooltip").html(ot2curLabel[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+//                        .css({top: item.pageY + 5, left: item.pageX + 5})
+//                        .fadeIn(200);
+                var mName = "";
+                if (ot2curLabel[number][item.dataIndex][0] < 10) {
+                  mName = "M0" + ot2curLabel[number][item.dataIndex][0];
+                } else {
+                  mName = "M" + ot2curLabel[number][item.dataIndex][0];
+                }
+                $("#tooltip").html(mName + "-" + ot2curLabel[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
                         .css({top: item.pageY + 5, left: item.pageX + 5})
                         .fadeIn(200);
               }
@@ -151,17 +196,33 @@
               $("#tooltip").hide();
             }
           });
-
           $(id).bind("plotclick", function(event, pos, item) {
             if (item) {
               if (item.series.label === "ot2") {
-                openDialog(ot2Label[number][item.dataIndex][1]);
+                openDialog(ot2Label[number][item.dataIndex][2]);
               } else if (item.series.label === "ot2-cur") {
-                openDialog(ot2curLabel[number][item.dataIndex][1]);
+                openDialog(ot2curLabel[number][item.dataIndex][2]);
               }
 //              plot[number].highlight(item.series, item.datapoint);
             }
           });
+        }
+
+        function highlightCurOT2() {
+          for (var m = 0; m < 12; m++) {
+            for (var ii = 0; ii < ot2cur[m].length; ii++) {
+              plot[m].highlight(2, ii);
+            }
+          }
+          setTimeout(unHighlightCurOT2, 50);
+        }
+
+        function unHighlightCurOT2() {
+          for (var m = 0; m < 12; m++) {
+            for (var ii = 0; ii < ot2cur[m].length; ii++) {
+              plot[m].unhighlight(2, ii);
+            }
+          }
         }
 
         function openDialog(otName) {
@@ -180,6 +241,45 @@
                   ',top=' + iTop +
                   ',left=' + iLeft +
                   ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
+        }
+
+        function flotclickFunction(event, pos, item) {
+          if (item) {
+            if (item.series.label === "ot2") {
+              openDialog(ot2Label[number][item.dataIndex][1]);
+            } else if (item.series.label === "ot2-cur") {
+              openDialog(ot2curLabel[number][item.dataIndex][1]);
+            }
+//              plot[number].highlight(item.series, item.datapoint);
+          }
+        }
+
+        function plothoverFunction(event, pos, item) {
+          if (item) {
+            var x = item.datapoint[0].toFixed(2);
+            var y = item.datapoint[1].toFixed(2);
+            if (item.series.label === "ot1") {
+              var mName = "";
+              if (ot1Label[number][item.dataIndex][0] < 10) {
+                mName = "M0" + ot1Label[number][item.dataIndex][0];
+              } else {
+                mName = "M" + ot1Label[number][item.dataIndex][0];
+              }
+              $("#tooltip").html(mName + "-" + ot1Label[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
+                      .css({top: item.pageY + 5, left: item.pageX + 5})
+                      .fadeIn(200);
+            } else if (item.series.label === "ot2") {
+              $("#tooltip").html(ot2Label[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+                      .css({top: item.pageY + 5, left: item.pageX + 5})
+                      .fadeIn(200);
+            } else if (item.series.label === "ot2-cur") {
+              $("#tooltip").html(ot2curLabel[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
+                      .css({top: item.pageY + 5, left: item.pageX + 5})
+                      .fadeIn(200);
+            }
+          } else {
+            $("#tooltip").hide();
+          }
         }
       });
 

@@ -17,7 +17,6 @@
           <entry key="runMeTask" value-ref="runMeTask" />
         </map>
       </property>
-
   </bean-->
 
   <bean id="dataStoreJob" 
@@ -26,12 +25,25 @@
     <property name="targetMethod" value="storeOT" /> 
   </bean> 
 
+  <bean id="addMissedCutImageJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="ffcService" /> 
+    <property name="targetMethod" value="addMissedCutImages" /> 
+  </bean> 
+
   <!-- Simple Trigger, run every 15 seconds -->
-  <bean id="simpleTrigger" 
+  <bean id="dataStoreTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="dataStoreJob" />
     <property name="repeatInterval" value="15000" />
     <property name="startDelay" value="10000" />
+  </bean>
+  
+  <bean id="addMissedCutImageTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="addMissedCutImageJob" />
+    <property name="repeatInterval" value="75000" />
+    <property name="startDelay" value="15000" />
   </bean>
 
   <!-- Cron Trigger, run every 5 seconds -->
@@ -44,11 +56,13 @@
     <property name="jobDetails">
       <list>
         <ref bean="dataStoreJob" />
+        <ref bean="addMissedCutImageJob" />
       </list>
     </property>
     <property name="triggers">
       <list>
-        <ref bean="simpleTrigger" />
+        <ref bean="dataStoreTrigger" />
+        <ref bean="addMissedCutImageTrigger" />
       </list>
     </property>
   </bean>

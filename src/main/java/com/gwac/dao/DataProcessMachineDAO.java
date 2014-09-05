@@ -15,4 +15,6 @@ public interface DataProcessMachineDAO extends BaseHibernateDao<DataProcessMachi
   public DataProcessMachine getDpmByName(String name);
 
   public void updateByName(DataProcessMachine dpm);
+
+  public DataProcessMachine getDpmById(long id);
 }

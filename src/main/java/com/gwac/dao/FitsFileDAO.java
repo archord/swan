@@ -10,6 +10,7 @@ import com.gwac.model.FitsFile;
  *
  * @author xy
  */
-public interface FitsFileDAO  extends BaseHibernateDao<FitsFile>{
-  
+public interface FitsFileDAO extends BaseHibernateDao<FitsFile> {
+
+  public FitsFile getByName(String ffName);
 }

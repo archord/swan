@@ -2,6 +2,8 @@ package com.gwac.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public abstract class BaseHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
 
+  private static final Log log = LogFactory.getLog(BaseHibernateDaoImpl.class);
   public static final int SORT_ASC = 1;
   public static final int SORT_DESC = 2;
   private Class<T> clazz;
@@ -40,14 +43,14 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
     try {
       Session curSession = getCurrentSession();
       if (curSession == null) {
-        System.out.println("curSession is null!");
+        log.debug("curSession is null!");
         return null;
       } else {
         List<T> list = curSession.createCriteria(clazz).list();
         return list;
       }
     } catch (HibernateException ex) {
-      System.out.println(ex.toString());
+      log.debug(ex.toString());
     }
     return null;
   }

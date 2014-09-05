@@ -94,6 +94,9 @@ public class MultipleFileUploadAction extends ActionSupport {
     //没有设置存储文件夹名, 使用当前日期，作为存储文件夹名。
     //Do not set data store directory name, use current date, as data store directory name
     if (flag) {
+      dpmName = dpmName.trim();
+      currentDirectory = currentDirectory.trim();
+      configFileFileName = configFileFileName.trim();
       //由于跨天问题，这里不再自行判断currentDirectory是否为空，前面已将currentDirectory设置为必选项
       /*
        if (this.getCurrentDirectory() == null || this.getCurrentDirectory().isEmpty()) {
@@ -107,9 +110,9 @@ public class MultipleFileUploadAction extends ActionSupport {
       String rootPath = getText("gwac.data.root.directory");
       String destPath = rootPath;
       if (destPath.charAt(destPath.length() - 1) != '/') {
-        destPath += "/" + getCurrentDirectory() + "/" + getDpmName() + "/";
+        destPath += "/" + currentDirectory + "/" + dpmName + "/";
       } else {
-        destPath += getCurrentDirectory() + "/" + getDpmName() + "/";
+        destPath += currentDirectory + "/" + dpmName + "/";
       }
 
       //接收参数配置文件
@@ -131,7 +134,7 @@ public class MultipleFileUploadAction extends ActionSupport {
       //接受数据文件
       int i = 0;
       for (File file : fileUpload) {
-        File destFile = new File(destPath, fileUploadFileName.get(i++));
+        File destFile = new File(destPath, fileUploadFileName.get(i++).trim());
         //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
         if (destFile.exists()) {
           FileUtils.forceDelete(destFile);
@@ -192,19 +195,8 @@ public class MultipleFileUploadAction extends ActionSupport {
     this.fileUploadContentType = fileUploadContentType;
   }
 
-  public List<String> getFileUploadFileName() {
-    return fileUploadFileName;
-  }
-
   public void setFileUploadFileName(List<String> fileUploadFileName) {
     this.fileUploadFileName = fileUploadFileName;
-  }
-
-  /**
-   * @return the currentDirectory
-   */
-  public String getCurrentDirectory() {
-    return currentDirectory;
   }
 
   /**
@@ -229,13 +221,6 @@ public class MultipleFileUploadAction extends ActionSupport {
   }
 
   /**
-   * @return the configFileFileName
-   */
-  public String getConfigFileFileName() {
-    return configFileFileName;
-  }
-
-  /**
    * @param configFileFileName the configFileFileName to set
    */
   public void setConfigFileFileName(String configFileFileName) {
@@ -254,13 +239,6 @@ public class MultipleFileUploadAction extends ActionSupport {
    */
   public void setEcho(String echo) {
     this.echo = echo;
-  }
-
-  /**
-   * @return the dpmName
-   */
-  public String getDpmName() {
-    return dpmName;
   }
 
   /**

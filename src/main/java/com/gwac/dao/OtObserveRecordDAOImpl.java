@@ -33,7 +33,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + " where oor.ot_id>0 and oor.request_cut=false and oor.dpm_id=" + dpmId;
     Query q = session.createSQLQuery(sql);
     Iterator itor = q.list().iterator();
-    
+
     StringBuilder rst = new StringBuilder();
     while (itor.hasNext()) {
       Object[] row = (Object[]) itor.next();
@@ -50,6 +50,8 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         e.printStackTrace();
       }
     }
+    sql = "update ot_observe_record set request_cut=true where ot_id>0 and request_cut=false and dpm_id=" + dpmId;
+    session.createSQLQuery(sql).executeUpdate();
     return rst.toString();
   }
 
@@ -64,13 +66,16 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   }
 
   @Override
-  public Boolean exist(OtObserveRecord obj) {
+  public Boolean exist(OtObserveRecord obj, float errorBox) {
+    log.debug("************************");
+    log.debug("errorBox="+errorBox);
     Boolean flag = false;
     Session session = getCurrentSession();
     String sql = "select oort_id from ot_observe_record where ff_id="
             + obj.getFfId()
-            + " and abs(x_temp-" + obj.getXTemp() + ")<2 "
-            + " and abs(y_temp-" + obj.getYTemp() + ")<2 ";
+//            + " and abs(x_temp-" + obj.getXTemp() + ")<" + errorBox + " "
+//            + " and abs(y_temp-" + obj.getYTemp() + ")<" + errorBox + " "
+            + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
       BigInteger objId = (BigInteger) q.list().get(0);
@@ -80,14 +85,15 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return flag;
   }
 
-  public List<OtObserveRecord> matchLatestN(OtObserveRecord obj) {
+  public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox) {
+    log.debug("************************");
+    log.debug("errorBox="+errorBox);
     Session session = getCurrentSession();
     String sql = "select * from ot_observe_record "
             + " where ff_number>" + (obj.getFfNumber() - 5)
             + " and ot_id=0"
             + " and dpm_id=" + obj.getDpmId()
-            + " and abs(x_temp-" + obj.getXTemp() + ")<2 "
-            + " and abs(y_temp-" + obj.getYTemp() + ")<2 "
+            + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " "
             + " order by ff_number asc";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();

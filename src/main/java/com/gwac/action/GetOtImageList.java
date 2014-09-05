@@ -36,7 +36,7 @@ public class GetOtImageList extends ActionSupport {
     setStartImgNum(ob.getLastFfNumber());
     totalImage = ffcList.size();
     for (FitsFileCut ffc : ffcList) {
-      ffc.setFileName(ffc.getFileName().replace("fit", "png"));
+      ffc.setFileName(ffc.getFileName()+".jpg");
       ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
     }
     return SUCCESS;

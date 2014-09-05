@@ -4,6 +4,18 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
+  <bean id="ffcService" class="com.gwac.service.FitsFileCutServiceImpl">
+    <property name="ffDao" ref="ffDao" />
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="otlv2Dao" ref="otbDao" />
+    <property name="dpmDao" ref="dpmDao" />
+    <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetCutImageList">
+    <property name="ffcDao" ref="ffcDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetOtImageList">
     <property name="ffcDao" ref="ffcDao" />
     <property name="obDao" ref="otbDao" />

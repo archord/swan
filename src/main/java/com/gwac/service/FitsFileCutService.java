@@ -13,5 +13,5 @@ import com.gwac.model.UploadFileRecord;
  * @author xy
  */
 public interface FitsFileCutService {
-  public void storeFitsFileCutInfo(UploadFileRecord obj);
+  public void addMissedCutImages();
 }

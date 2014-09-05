@@ -73,7 +73,7 @@ public class PostgresCopyTestDaoImpl extends BaseHibernateDaoImpl<OtObserveRecor
             CopyManager cpManager = pgcon.getCopyAPI();
             fr = new FileReader(fname);
             if (fr == null) {
-              System.out.println("cannot open file!");
+              log.debug("cannot open file!");
             }
             cpManager.copyIn(sql, fr);
           } catch (FileNotFoundException ex) {

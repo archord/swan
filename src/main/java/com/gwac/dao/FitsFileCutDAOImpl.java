@@ -6,6 +6,7 @@ package com.gwac.dao;
 
 import com.gwac.model.FitsFileCut;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,6 +16,51 @@ import org.hibernate.Session;
  * @author xy
  */
 public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implements FitsFileCutDAO {
+
+  public List<FitsFileCut> getCutImageByOtId(long otId) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from fits_file_cut where ot_id=" + otId + " order by number";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
+
+  public void uploadSuccessCutByName(String fileName) {
+
+    Session session = getCurrentSession();
+    String sql = "update fits_file_cut set success_cut=true where file_name='" + fileName + "'";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  public String getUnCuttedStarList(int dpmId) {
+    Session session = getCurrentSession();
+    String sql = "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
+            + " from fits_file_cut ffc "
+            + " inner join fits_file ff on ffc.ff_id=ff.ff_id "
+            + " where ffc.request_cut=false and ffc.dpm_id=" + dpmId;
+    Query q = session.createSQLQuery(sql);
+    Iterator itor = q.list().iterator();
+
+    StringBuilder rst = new StringBuilder();
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      try {
+        rst.append(row[0]);
+        rst.append(" ");
+        rst.append(row[1]);
+        rst.append(" ");
+        rst.append(row[2]);
+        rst.append(" ");
+        rst.append(row[3]);
+        rst.append("\n");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    sql = "update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId;
+    session.createSQLQuery(sql).executeUpdate();
+    return rst.toString();
+  }
 
   /**
    * 通过OT名称，查询该OT所有的切图
@@ -31,9 +77,9 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
 //	    + "where ffc.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "') "
 //	    + "order by ffc.number;";
     String sql = "select * "
-	    + "from fits_file_cut ffc "
-	    + "where ffc.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "') "
-	    + "order by ffc.number;";
+            + "from fits_file_cut ffc "
+            + "where ffc.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "') "
+            + "order by ffc.number;";
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     List rstList = q.list();
 //    for (int i = 0; i < rstList.size(); i++) {

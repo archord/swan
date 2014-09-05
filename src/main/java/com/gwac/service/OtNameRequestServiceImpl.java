@@ -23,6 +23,7 @@ public class OtNameRequestServiceImpl implements OtNameRequestService {
 
   private OtLevel2Dao obDao;
   private OtNumberDao otnDao;
+  private float errorBox;
 
   public List<OtLevel2> parseParaFile(File paraFile) {
 
@@ -73,7 +74,7 @@ public class OtNameRequestServiceImpl implements OtNameRequestService {
     for (OtLevel2 ob : obs) {
       //向数据库添加OT名字，需要在此时添加OT的所有相关属性信息，即相当于要先把OT观测列表先传输一遍
       //另一方面，GWAC为实时数据处理，如果处理流程依赖服务器，在服务器出问题时，GWAC流程就中断了。。
-      if (!obDao.exist(ob)) {
+      if (!obDao.exist(ob, errorBox)) {
         String fileDate = ob.getIdentify().substring(6, 12);
         int otNumber = otnDao.getNumberByDate(fileDate);
         String otName = String.format("%s_%05d", fileDate, otNumber);
@@ -95,5 +96,12 @@ public class OtNameRequestServiceImpl implements OtNameRequestService {
    */
   public void setObDao(OtLevel2Dao obDao) {
     this.obDao = obDao;
+  }
+
+  /**
+   * @param errorBox the errorBox to set
+   */
+  public void setErrorBox(float errorBox) {
+    this.errorBox = errorBox;
   }
 }

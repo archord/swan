@@ -17,10 +17,6 @@ public class DataStoreTimerTask {
   public void storeOT(){
     otORService.storeOTCatalog();
   }
-  
-  public void moveDataToHisTable(){
-    
-  }
 
   /**
    * @return the otORService
