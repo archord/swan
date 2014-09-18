@@ -29,7 +29,6 @@ import org.apache.commons.logging.LogFactory;
 public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordServiceImpl.class);
-
   private UploadFileUnstoreDao ufuDao;
   private OTCatalogDao otcDao;
   private OtNumberDao otnDao;
@@ -40,6 +39,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private DataProcessMachineDAO dpmDao;
   private String rootPath;
   private float errorBox;
+  private int successiveImageNumber;
+  private int occurNumber;
 
   public void storeOTCatalog() {
     List<UploadFileUnstore> ufus = ufuDao.findAll();
@@ -107,8 +108,11 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           oor.setRequestCut(false);
           oor.setSuccessCut(false);
 
-          OtLevel2 tlv2 = otLv2Dao.existInLatestN(otLv2, errorBox);
+          OtLevel2 tlv2 = otLv2Dao.existInLatestN(otLv2, errorBox, successiveImageNumber);
           if (tlv2 != null) {
+            if (tlv2.getFirstFfNumber() > number) {
+              tlv2.setFirstFfNumber(number);
+            }
             tlv2.setTotal(tlv2.getTotal() + 1);
             tlv2.setLastFfNumber(otLv2.getLastFfNumber());
             tlv2.setXtemp(otLv2.getXtemp());
@@ -137,14 +141,14 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           } else {
 
             otorDao.save(oor);
-            List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox);
+            List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
             log.debug("********************************* ");
             log.debug("oors size: " + oors.size());
             log.debug("ff_number: " + oor.getFfNumber());
             for (OtObserveRecord tOor : oors) {
               log.debug(tOor.getFfNumber() + " " + tOor.getXTemp() + " " + tOor.getYTemp());
             }
-            if (oors.size() >= 2) {
+            if (oors.size() >= occurNumber) {
               OtObserveRecord oor1 = oors.get(0);
 
               int otNumber = otnDao.getNumberByDate(fileDate);
@@ -158,11 +162,14 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setIdentify(otLv2.getIdentify());
               tOtLv2.setXtemp(oor1.getXTemp());
               tOtLv2.setYtemp(oor1.getYTemp());
-              tOtLv2.setLastFfNumber(oor1.getFfNumber());
+              tOtLv2.setLastFfNumber(oors.get(oors.size()-1).getFfNumber());  //已有序列的最大一个编号（最后一个），数据库中查询时，按照升序排列
               tOtLv2.setTotal(oors.size());
               tOtLv2.setDpmId(oor1.getDpmId());
               tOtLv2.setDateStr(fileDate);
               tOtLv2.setAllFileCutted(false);
+              tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
+              tOtLv2.setCuttedFfNumber(0);
+              
               otLv2Dao.save(tOtLv2);
               log.debug("ot name: " + otName);
               log.debug("*********************************");
@@ -200,6 +207,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   public List<OtObserveRecord> getOtOR() {
     return otorDao.findAll();
   }
+
   /**
    * @return the otorDao
    */
@@ -331,5 +339,19 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setErrorBox(float errorBox) {
     this.errorBox = errorBox;
+  }
+
+  /**
+   * @param successiveImageNumber the successiveImageNumber to set
+   */
+  public void setSuccessiveImageNumber(int successiveImageNumber) {
+    this.successiveImageNumber = successiveImageNumber;
+  }
+
+  /**
+   * @param occurNumber the occurNumber to set
+   */
+  public void setOccurNumber(int occurNumber) {
+    this.occurNumber = occurNumber;
   }
 }

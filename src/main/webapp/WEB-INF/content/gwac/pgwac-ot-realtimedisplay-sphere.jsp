@@ -41,11 +41,18 @@
         var ot2curLabel = [];
         var drawData = [];
         var ot2curInterval = null;
+        var uhtime = 50;
         var intervalTime = 1500;
         var requestTime = 15000;
 
         var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action";
         function onDataReceived(result) {
+          
+          if (ot2curInterval !== null) {
+            unHighlightCurOT2();
+            clearInterval(ot2curInterval);
+          }
+          
           var otLv1 = result.otLv1;
           var otLv2 = result.otLv2;
           var otLv2Cur = result.otLv2Cur;
@@ -106,9 +113,6 @@
             plot.setData(drawData);//drawData
             plot.draw();
             reqNum++;
-          }
-          if (ot2curInterval !== null) {
-            clearInterval(ot2curInterval);
           }
           ot2curInterval = setInterval(highlightCurOT2, intervalTime);
         }
@@ -186,7 +190,7 @@
           for (var ii = 0; ii < ot2cur.length; ii++) {
             plot.highlight(2, ii);
           }
-          setTimeout(unHighlightCurOT2, 50);
+          setTimeout(unHighlightCurOT2, uhtime);
         }
 
         function unHighlightCurOT2() {

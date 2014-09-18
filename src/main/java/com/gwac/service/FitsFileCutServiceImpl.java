@@ -22,39 +22,51 @@ import org.apache.commons.logging.LogFactory;
  * @author xy
  */
 public class FitsFileCutServiceImpl implements FitsFileCutService {
-  
+
   private static final Log log = LogFactory.getLog(FitsFileCutServiceImpl.class);
   private FitsFileDAO ffDao;
   private FitsFileCutDAO ffcDao;
   private OtLevel2Dao otlv2Dao;
   private DataProcessMachineDAO dpmDao;
   private int successiveImageNumber;
-  
+  private int headTailCutNumber;
+
+  public void addMissedCutImages1() {
+  }
+
   public void addMissedCutImages() {
-    
+
     int totalAddCutImages = 0;
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
-    log.info("miss cutted otlv2 "+otlv2s.size());
+    log.info("miss cutted otlv2 " + otlv2s.size());
     for (OtLevel2 otlv2 : otlv2s) {
-      
-      List<FitsFileCut> ffcs = ffcDao.getCutImageByOtId(otlv2.getOtId());
-      log.info("ot_id:"+otlv2.getOtId());
+
+      List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), otlv2.getCuttedFfNumber());
+
+      if (ffcs.isEmpty()) {
+        continue;
+      }
+
+      otlv2.setCuttedFfNumber(ffcs.get(ffcs.size() - 1).getNumber());
+      otlv2Dao.update(otlv2);
+
+      log.info("ot_id:" + otlv2.getOtId());
       log.info("ffc ids: ");
-      for(FitsFileCut ffc:ffcs){
+      for (FitsFileCut ffc : ffcs) {
         log.info(ffc.getNumber());
       }
-      
+
       log.info("add head missed image");
       //add head missed image
       FitsFileCut headFFC = ffcs.get(0);
       int headNum = headFFC.getNumber();
-      
-      int tNum = headNum - (successiveImageNumber - 1);
+
+      int tNum = headNum - (headTailCutNumber - 1);
       if (tNum < 1) {
         tNum = 1;  //number start from 1
       }
       for (int i = tNum; i < headNum; i++) {
-        log.info(i);
+        log.info("add number " + i);
         String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
         FitsFile tff = ffDao.getByName(ffName);
         if (tff == null) {
@@ -76,16 +88,16 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         totalAddCutImages++;
       }
 
-      log.info("add head center image");
+      log.info("add center missed image");
       //add center missed image
       for (int i = 0; i < ffcs.size() - 1; i++) {
-        
+
         FitsFileCut curFFC = ffcs.get(i);
         int firstNum = curFFC.getNumber();
         int secondNum = ffcs.get(i + 1).getNumber();
-        
+
         for (int j = firstNum + 1; j < secondNum; j++) {
-          log.info(j);
+          log.info("add number " + j);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), j);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
@@ -114,12 +126,13 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       int curProcessNumber = dpm.getCurProcessNumber();
       FitsFileCut lastFFC = ffcs.get(ffcs.size() - 1);
       int lastNumber = lastFFC.getNumber();
-      log.info("curProcessNumber"+curProcessNumber);
+      log.info("curProcessNumber" + curProcessNumber);
+
       //如果超过5(successiveImageNumber)帧没有再出现新的图像，则标示该OT不会再出新的观测序列
       if (curProcessNumber - lastNumber >= successiveImageNumber) {
-        tNum = lastNumber + (successiveImageNumber - 1);
-        for (int i = lastNumber+1; i <= tNum; i++) {
-          log.info(i);
+        tNum = lastNumber + (headTailCutNumber - 1);
+        for (int i = lastNumber + 1; i <= tNum; i++) {
+          log.info("add number " + i);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
@@ -180,5 +193,11 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   public void setSuccessiveImageNumber(int successiveImageNumber) {
     this.successiveImageNumber = successiveImageNumber;
   }
-  
+
+  /**
+   * @param headTailCutNumber the headTailCutNumber to set
+   */
+  public void setHeadTailCutNumber(int headTailCutNumber) {
+    this.headTailCutNumber = headTailCutNumber;
+  }
 }

@@ -13,11 +13,13 @@ import java.util.List;
  */
 public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
 
+  public void moveDataToHisTable();
+
   public void uploadSuccessCutByName(String fileName);
 
   public String getUnCuttedStarList(int dpmId);
 
   public List<FitsFileCut> getCutImageByOtName(String otName);
 
-  public List<FitsFileCut> getCutImageByOtId(long otId);
+  public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId);
 }

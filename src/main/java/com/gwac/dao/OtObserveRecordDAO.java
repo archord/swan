@@ -4,8 +4,8 @@
  */
 package com.gwac.dao;
 
-import com.gwac.model.OtObserveRecordShow;
 import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordShow;
 import java.util.List;
 
 /**
@@ -13,6 +13,8 @@ import java.util.List;
  * @author xy
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
+
+  public void moveDataToHisTable();
 
   public List<OtObserveRecordShow> getRecordByOtId(long otId);
 
@@ -22,7 +24,7 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
 
   public Boolean exist(OtObserveRecord obj, float errorBox);
 
-  public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox);
+  public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox, int n);
 
   public List<OtObserveRecord> getLatestNLv1OT(int n);
 

@@ -20,6 +20,8 @@
     <property name="dpmDao" ref="dpmDao" />	
     <property name="rootPath" value="${gwac.data.root.directory}" />	
     <property name="errorBox" value="${gwac.errorbox}" />	
+    <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
+    <property name="occurNumber" value="${gwac.occur.image.number}" />
   </bean>
 	
   <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >

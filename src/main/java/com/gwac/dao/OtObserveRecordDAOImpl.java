@@ -24,6 +24,13 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
+  public void moveDataToHisTable(){
+    
+    Session session = getCurrentSession();
+    String sql = "WITH moved_rows AS ( DELETE FROM ot_observe_record RETURNING * ) INSERT INTO ot_observe_record_his SELECT * FROM moved_rows;";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
   public String getUnCuttedStarList(int dpmId) {
     Session session = getCurrentSession();
     String sql = "select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
@@ -85,12 +92,12 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return flag;
   }
 
-  public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox) {
+  public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox, int n) {
     log.debug("************************");
     log.debug("errorBox="+errorBox);
     Session session = getCurrentSession();
     String sql = "select * from ot_observe_record "
-            + " where ff_number>" + (obj.getFfNumber() - 5)
+            + " where ff_number>" + (obj.getFfNumber() - n)
             + " and ot_id=0"
             + " and dpm_id=" + obj.getDpmId()
             + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " "

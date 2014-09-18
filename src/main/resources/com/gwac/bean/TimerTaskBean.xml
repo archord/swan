@@ -31,6 +31,12 @@
     <property name="targetMethod" value="addMissedCutImages" /> 
   </bean> 
 
+  <bean id="dataBackupJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="dataBackupService" /> 
+    <property name="targetMethod" value="backupData" /> 
+  </bean> 
+
   <!-- Simple Trigger, run every 15 seconds -->
   <bean id="dataStoreTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -46,23 +52,25 @@
     <property name="startDelay" value="15000" />
   </bean>
 
-  <!-- Cron Trigger, run every 5 seconds -->
-<!--  <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-    <property name="jobDetail" ref="runMeJob" />
-    <property name="cronExpression" value="0/5 * * * * ?" />
-  </bean>-->
+  <!-- Cron Trigger, every day 10 o'clock -->
+  <bean id="dataBackupTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="dataBackupJob" />
+    <property name="cronExpression" value="0 0 10 * * ?"/>
+  </bean>
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="jobDetails">
       <list>
         <ref bean="dataStoreJob" />
         <ref bean="addMissedCutImageJob" />
+        <ref bean="dataBackupJob" />
       </list>
     </property>
     <property name="triggers">
       <list>
         <ref bean="dataStoreTrigger" />
         <ref bean="addMissedCutImageTrigger" />
+        <ref bean="dataBackupTrigger" />
       </list>
     </property>
   </bean>

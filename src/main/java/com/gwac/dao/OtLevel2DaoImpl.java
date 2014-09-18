@@ -20,6 +20,13 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
   
+  public void moveDataToHisTable(){
+    
+    Session session = getCurrentSession();
+    String sql = "WITH moved_rows AS ( DELETE FROM ot_level2 RETURNING * ) INSERT INTO ot_level2_his SELECT * FROM moved_rows;";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
   public void updateAllFileCuttedById(long id){
     
     Session session = getCurrentSession();
@@ -83,12 +90,12 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return flag;
   }
 
-  public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox) {
+  public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox, int n) {
     Boolean flag = false;
     Session session = getCurrentSession();
     //should add "and date_str="+obj.getDataStr()
     String sql = "select * from ot_level2 "
-            + " where last_ff_number>" + (obj.getLastFfNumber() - 5)
+            + " where last_ff_number>" + (obj.getLastFfNumber() - n)
             + " and dpm_id=" + obj.getDpmId()
             //            + " and abs(xtemp-" + obj.getXtemp() + ")<" + errorBox + " "
             //            + " and abs(ytemp-" + obj.getYtemp() + ")<" + errorBox + " "

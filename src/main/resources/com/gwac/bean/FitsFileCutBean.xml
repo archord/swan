@@ -10,6 +10,7 @@
     <property name="otlv2Dao" ref="otbDao" />
     <property name="dpmDao" ref="dpmDao" />
     <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
+    <property name="headTailCutNumber" value="${gwac.image.head.tail.cut.number}" />
   </bean>
   
   <bean class="com.gwac.action.GetCutImageList">
