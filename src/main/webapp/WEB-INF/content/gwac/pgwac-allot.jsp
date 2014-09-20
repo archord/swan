@@ -69,18 +69,18 @@
         <td>望远镜：</td>
         <td><select name="telscope" >
             <option value="all">All</option>
-            <option value="M01">M01</option>
-            <option value="M02">M02</option>
-            <option value="M03">M03</option>
-            <option value="M04">M04</option>
-            <option value="M05">M05</option>
-            <option value="M06">M06</option>
-            <option value="M07">M07</option>
-            <option value="M08">M08</option>
-            <option value="M09">M09</option>
-            <option value="M10">M10</option>
-            <option value="M11">M11</option>
-            <option value="M12">M12</option>
+            <option value="1">M01</option>
+            <option value="2">M02</option>
+            <option value="3">M03</option>
+            <option value="4">M04</option>
+            <option value="5">M05</option>
+            <option value="6">M06</option>
+            <option value="7">M07</option>
+            <option value="8">M08</option>
+            <option value="9">M09</option>
+            <option value="10">M10</option>
+            <option value="11">M11</option>
+            <option value="12">M12</option>
           </select>
         </td>
         <td>搜索半径：</td>

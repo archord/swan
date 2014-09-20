@@ -133,6 +133,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             ffc.setImgY(oor.getY());
             ffc.setRequestCut(false);
             ffc.setSuccessCut(false);
+            ffc.setIsMissed(false);
             ffcDao.save(ffc);
 
             oor.setOtId(tlv2.getOtId());
@@ -162,14 +163,14 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setIdentify(otLv2.getIdentify());
               tOtLv2.setXtemp(oor1.getXTemp());
               tOtLv2.setYtemp(oor1.getYTemp());
-              tOtLv2.setLastFfNumber(oors.get(oors.size()-1).getFfNumber());  //已有序列的最大一个编号（最后一个），数据库中查询时，按照升序排列
+              tOtLv2.setLastFfNumber(oors.get(oors.size() - 1).getFfNumber());  //已有序列的最大一个编号（最后一个），数据库中查询时，按照升序排列
               tOtLv2.setTotal(oors.size());
               tOtLv2.setDpmId(oor1.getDpmId());
               tOtLv2.setDateStr(fileDate);
               tOtLv2.setAllFileCutted(false);
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
-              
+
               otLv2Dao.save(tOtLv2);
               log.debug("ot name: " + otName);
               log.debug("*********************************");
@@ -191,6 +192,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
                 ffc.setImgY(tOor.getY());
                 ffc.setRequestCut(false);
                 ffc.setSuccessCut(false);
+                ffc.setIsMissed(false);
                 ffcDao.save(ffc);
 
                 tOor.setOtId(tOtLv2.getOtId());

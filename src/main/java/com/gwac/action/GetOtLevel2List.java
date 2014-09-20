@@ -64,17 +64,17 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
       int[] sorts = {2, 2};
       gridModel = obDao.findRecord(from, rows, orderNames, sorts);
 
+      Number tn = obDao.count();
+      if (tn != null) {
+        records = tn.intValue();
+      } else {
+        records = 0;
+      }
     } else {
       gridModel = obDao.queryOtLevel2(startDate, endDate, telscope, xtemp, ytemp, searchRadius, from, rows);
+      records = obDao.countOtLevel2(startDate, endDate, telscope, xtemp, ytemp, searchRadius, from, rows);
     }
 
-    Number tn = obDao.count();
-    if (tn != null) {
-      records = tn.intValue();
-    } else {
-      records = 0;
-    };
-    
     if (totalrows != null) {
       records = totalrows;
     }

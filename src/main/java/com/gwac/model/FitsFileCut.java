@@ -26,6 +26,7 @@ public class FitsFileCut  implements java.io.Serializable {
      private String fileName;
      private Float imgX;
      private Float imgY;
+     private Boolean isMissed;
      private Boolean isTemplateCut;
      private Integer number;
      private Long otId;
@@ -38,7 +39,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public FitsFileCut() {
     }
 
-    public FitsFileCut(Short dpmId, Long ffId, String fileName, Float imgX, Float imgY, Boolean isTemplateCut, Integer number, Long otId, Boolean requestCut, Long starId, String storePath, Boolean successCut, Long templateFfcId) {
+    public FitsFileCut(Short dpmId, Long ffId, String fileName, Float imgX, Float imgY, Boolean isMissed, Boolean isTemplateCut, Integer number, Long otId, Boolean requestCut, Long starId, String storePath, Boolean successCut, Long templateFfcId) {
        this.dpmId = dpmId;
        this.ffId = ffId;
        this.fileName = fileName;
@@ -52,6 +53,7 @@ public class FitsFileCut  implements java.io.Serializable {
        this.templateFfcId = templateFfcId;
        this.requestCut = requestCut;
        this.successCut = successCut;
+       this.isMissed = isMissed;
     }
    
      @GenericGenerator(name="generator", strategy="seqhilo", parameters={@Parameter(name="max_lo", value="49"), @Parameter(name="sequence", value="ffc_id_seq")})@Id @GeneratedValue(generator="generator")
@@ -216,6 +218,21 @@ public class FitsFileCut  implements java.io.Serializable {
    */
   public void setImgY(Float imgY) {
     this.imgY = imgY;
+  }
+
+  /**
+   * @return the isMissed
+   */
+  @Column(name="is_missed")
+  public Boolean getIsMissed() {
+    return isMissed;
+  }
+
+  /**
+   * @param isMissed the isMissed to set
+   */
+  public void setIsMissed(Boolean isMissed) {
+    this.isMissed = isMissed;
   }
 
 

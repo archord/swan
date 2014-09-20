@@ -27,7 +27,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
   public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId) {
 
     Session session = getCurrentSession();
-    String sql = "select * from fits_file_cut where ot_id=" + otId + " and number>" + lastCuttedId + " order by number asc";
+    String sql = "select * from fits_file_cut where ot_id=" + otId + " and number>=" + lastCuttedId + " order by number asc";
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     return q.list();
   }
@@ -85,7 +85,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
 //	    + "order by ffc.number;";
     String sql = "select * "
             + "from fits_file_cut ffc "
-            + "where ffc.is_missed=false and ffc.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "') "
+            + "where ffc.success_cut=true and ffc.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "') "
             + "order by ffc.number;";
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     List rstList = q.list();

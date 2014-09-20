@@ -24,6 +24,9 @@ import org.apache.commons.logging.LogFactory;
 public class FitsFileCutServiceImpl implements FitsFileCutService {
 
   private static final Log log = LogFactory.getLog(FitsFileCutServiceImpl.class);
+
+  private static boolean running = true;
+
   private FitsFileDAO ffDao;
   private FitsFileCutDAO ffcDao;
   private OtLevel2Dao otlv2Dao;
@@ -32,61 +35,91 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   private int headTailCutNumber;
 
   public void addMissedCutImages1() {
+    System.out.println("running=" + running);
+    if (running == true) {
+      running = false;
+      System.out.println("set running=" + running);
+    } else {
+      System.out.println("running=" + running + " waiting...");
+      return;
+    }
+    try {
+      Thread.sleep(10000);
+    } catch (InterruptedException ex) {
+      ex.printStackTrace();
+    }
+    if (running == false) {
+      running = true;
+      System.out.println("set running=" + true);
+    }
   }
 
   public void addMissedCutImages() {
+
+    if (running == true) {
+      log.info("start job addMissedCutImagesJob...");
+      running = false;
+    } else {
+      log.info("job addMissedCutImagesJob is running, jump this scheduler.");
+      return;
+    }
 
     int totalAddCutImages = 0;
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
     log.info("miss cutted otlv2 " + otlv2s.size());
     for (OtLevel2 otlv2 : otlv2s) {
 
-      List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), otlv2.getCuttedFfNumber());
+      int cuttedFfNumber = otlv2.getCuttedFfNumber();
+
+      List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), cuttedFfNumber);
 
       if (ffcs.isEmpty()) {
-        continue;
+        return;
       }
-
       otlv2.setCuttedFfNumber(ffcs.get(ffcs.size() - 1).getNumber());
       otlv2Dao.update(otlv2);
 
       log.info("ot_id:" + otlv2.getOtId());
-      log.info("ffc ids: ");
+      log.info("all ffc ids: ");
       for (FitsFileCut ffc : ffcs) {
         log.info(ffc.getNumber());
       }
 
-      log.info("add head missed image");
       //add head missed image
       FitsFileCut headFFC = ffcs.get(0);
       int headNum = headFFC.getNumber();
 
-      int tNum = headNum - (headTailCutNumber - 1);
-      if (tNum < 1) {
-        tNum = 1;  //number start from 1
-      }
-      for (int i = tNum; i < headNum; i++) {
-        log.info("add number " + i);
-        String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
-        FitsFile tff = ffDao.getByName(ffName);
-        if (tff == null) {
-          log.error("add missed cut fits file, can't find orig fits file " + ffName);
-          continue;
+      if (headNum == otlv2.getFirstFfNumber()) {
+
+        log.info("add head missed image");
+        int tNum = headNum - headTailCutNumber;
+        if (tNum < 1) {
+          tNum = 1;  //number start from 1
         }
-        FitsFileCut ffc = new FitsFileCut();
-        ffc.setFfId(tff.getFfId());
-        ffc.setStorePath(headFFC.getStorePath());
-        ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
-        ffc.setOtId(otlv2.getOtId());
-        ffc.setNumber(i);
-        ffc.setDpmId(headFFC.getDpmId());
-        ffc.setImgX(headFFC.getImgX());
-        ffc.setImgY(headFFC.getImgY());
-        ffc.setRequestCut(false);
-        ffc.setSuccessCut(false);
-        ffcDao.save(ffc);
-        totalAddCutImages++;
-      }
+        for (int i = tNum; i < headNum; i++) {
+          log.info("add number " + i);
+          String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
+          FitsFile tff = ffDao.getByName(ffName);
+          if (tff == null) {
+            log.error("add missed cut fits file, can't find orig fits file " + ffName);
+            continue;
+          }
+          FitsFileCut ffc = new FitsFileCut();
+          ffc.setFfId(tff.getFfId());
+          ffc.setStorePath(headFFC.getStorePath());
+          ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
+          ffc.setOtId(otlv2.getOtId());
+          ffc.setNumber(i);
+          ffc.setDpmId(headFFC.getDpmId());
+          ffc.setImgX(headFFC.getImgX());
+          ffc.setImgY(headFFC.getImgY());
+          ffc.setRequestCut(false);
+          ffc.setSuccessCut(false);
+          ffc.setIsMissed(true);
+          ffcDao.save(ffc);
+          totalAddCutImages++;
+        }
+      } 
 
       log.info("add center missed image");
       //add center missed image
@@ -115,6 +148,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setImgY(curFFC.getImgY());
           ffc.setRequestCut(false);
           ffc.setSuccessCut(false);
+          ffc.setIsMissed(true);
           ffcDao.save(ffc);
           totalAddCutImages++;
         }
@@ -126,11 +160,12 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       int curProcessNumber = dpm.getCurProcessNumber();
       FitsFileCut lastFFC = ffcs.get(ffcs.size() - 1);
       int lastNumber = lastFFC.getNumber();
+//      int lastNumber = otlv2.getLastFfNumber();
       log.info("curProcessNumber" + curProcessNumber);
 
       //如果超过5(successiveImageNumber)帧没有再出现新的图像，则标示该OT不会再出新的观测序列
       if (curProcessNumber - lastNumber >= successiveImageNumber) {
-        tNum = lastNumber + (headTailCutNumber - 1);
+        int tNum = lastNumber + headTailCutNumber;
         for (int i = lastNumber + 1; i <= tNum; i++) {
           log.info("add number " + i);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
@@ -150,6 +185,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setImgY(lastFFC.getImgY());
           ffc.setRequestCut(false);
           ffc.setSuccessCut(false);
+          ffc.setIsMissed(true);
           ffcDao.save(ffc);
           totalAddCutImages++;
         }
@@ -157,6 +193,11 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       }
     }
     log.info("total add cut images " + totalAddCutImages);
+
+    if (running == false) {
+      running = true;
+      log.info("job addMissedCutImagesJob is done.");
+    }
   }
 
   /**

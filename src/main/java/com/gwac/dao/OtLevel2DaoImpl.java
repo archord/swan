@@ -162,7 +162,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       } else if (!endDate.isEmpty()) {
         sql += " where found_time_utc<'" + endDate + " 23:59:59' ";
       } else if (!tsp.equalsIgnoreCase("all")) {
-        sql += " where dpm_name='" + tsp + "' ";
+        sql += " where dpm_id='" + tsp + "' ";
       } else if (xtemp == 0.0) {
         sql += " where abs(xtemp-" + xtemp + ")<" + radius;
       } else if (ytemp == 0.0) {
@@ -186,7 +186,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         }
       }
       if (!tsp.equalsIgnoreCase("all")) {
-        sql += " dpm_name='" + tsp + "' ";
+        sql += " dpm_id='" + tsp + "' ";
         if (tParNum < parNum) {
           sql += " and ";
           tParNum++;
@@ -207,7 +207,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         }
       }
     }
-    sql += " order by dpm_name, found_time_utc";
+    sql += " order by dpm_id, found_time_utc";
 
     Session session = getCurrentSession();
 //    sql = "select * from ot_level2 "
@@ -221,6 +221,92 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     q.setFirstResult(start);
     q.setMaxResults(resultSize);
     return q.list();
+  }
+
+  public int countOtLevel2(String startDate, String endDate, String tsp, float xtemp, float ytemp, float radius, int start, int resultSize) {
+
+    int parNum = 0;
+    if (!startDate.isEmpty()) {
+      parNum++;
+    }
+    if (!endDate.isEmpty()) {
+      parNum++;
+    }
+    if (!tsp.equalsIgnoreCase("all")) {
+      parNum++;
+    }
+    if (xtemp != 0.0) {
+      parNum++;
+    }
+    if (ytemp != 0.0) {
+      parNum++;
+    }
+    if (radius < 2.0) {
+      radius = 2;
+    }
+
+    String sql = "select count(*) from ot_level2 ";
+
+    if (parNum == 1) {
+      if (!startDate.isEmpty()) {
+        sql += " where found_time_utc>'" + startDate + " 00:00:00' ";
+      } else if (!endDate.isEmpty()) {
+        sql += " where found_time_utc<'" + endDate + " 23:59:59' ";
+      } else if (!tsp.equalsIgnoreCase("all")) {
+        sql += " where dpm_id='" + tsp + "' ";
+      } else if (xtemp == 0.0) {
+        sql += " where abs(xtemp-" + xtemp + ")<" + radius;
+      } else if (ytemp == 0.0) {
+        sql += " where abs(ytemp-" + ytemp + ")<" + radius;
+      }
+    } else if (parNum >= 2) {
+      int tParNum = 1;
+      sql += " where ";
+      if (!startDate.isEmpty()) {
+        sql += " found_time_utc>'" + startDate + " 00:00:00' ";
+        if (tParNum < parNum) {
+          sql += " and ";
+          tParNum++;
+        }
+      }
+      if (!endDate.isEmpty()) {
+        sql += " found_time_utc<'" + endDate + " 23:59:59' ";
+        if (tParNum < parNum) {
+          sql += " and ";
+          tParNum++;
+        }
+      }
+      if (!tsp.equalsIgnoreCase("all")) {
+        sql += " dpm_id='" + tsp + "' ";
+        if (tParNum < parNum) {
+          sql += " and ";
+          tParNum++;
+        }
+      }
+      if (xtemp != 0.0) {
+        sql += " abs(xtemp-" + xtemp + ")<" + radius;
+        if (tParNum < parNum) {
+          sql += " and ";
+          tParNum++;
+        }
+      }
+      if (ytemp != 0.0) {
+        sql += " abs(ytemp-" + ytemp + ")<" + radius;
+        if (tParNum < parNum) {
+          sql += " and ";
+          tParNum++;
+        }
+      }
+    }
+
+    int tNum = 0;
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    if (!q.list().isEmpty()) {
+      BigInteger objId = (BigInteger) q.list().get(0);
+      tNum = objId.intValue();
+    }
+    return tNum;
   }
 
   public List<OtLevel2> getOtLevel2ByDpmName(String dpmName) {

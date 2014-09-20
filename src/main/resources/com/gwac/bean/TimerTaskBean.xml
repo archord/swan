@@ -48,8 +48,8 @@
   <bean id="addMissedCutImageTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="addMissedCutImageJob" />
-    <property name="repeatInterval" value="75000" />
-    <property name="startDelay" value="15000" />
+    <property name="repeatInterval" value="15000" />
+    <property name="startDelay" value="17500" />
   </bean>
 
   <!-- Cron Trigger, every day 10 o'clock -->

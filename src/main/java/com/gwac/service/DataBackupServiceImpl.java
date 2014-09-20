@@ -18,17 +18,30 @@ public class DataBackupServiceImpl implements DataBackupService{
   
   private static final Log log = LogFactory.getLog(DataBackupServiceImpl.class);
   
+  private static boolean running = true;
+  
   private OtLevel2Dao otlv2Dao;
   private FitsFileCutDAO ffcDao;
   private OtObserveRecordDAO oorDao;
 
   public void backupData() {
     
-    log.info("start backup data...");
+    if (running == true) {
+      log.info("start job dataBackupJob...");
+      running = false;
+    } else {
+      log.info("job dataBackupJob is running, jump this scheduler.");
+      return;
+    }
+    
     otlv2Dao.moveDataToHisTable();
     ffcDao.moveDataToHisTable();
     oorDao.moveDataToHisTable();
-    log.info("end backup data...");
+    
+    if (running == false) {
+      running = true;
+      log.info("job dataBackupJob is done.");
+    }
     
   }
 

@@ -23,9 +23,6 @@ public class SystemStatusServiceImpl implements SystemStatusService {
     
     List<DataProcessMachine> dpms = getDpmDao().findAll();
     for(DataProcessMachine dpm : dpms){
-      List<OtLevel2> ot2s = getOtbDao().getOtLevel2ByDpmName(dpm.getName());
-
-      getOtbDao().save(ot2s);
     }
   }
 

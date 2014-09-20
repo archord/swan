@@ -14,6 +14,9 @@
       $(function() {
 
         var option1 = {
+          legend: {
+            show: true
+          },
           series: {
             shadowSize: 0	// Drawing is faster without shadows
           },
@@ -54,12 +57,12 @@
         }
         var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action";
         function onDataReceived(result) {
-          
+
           if (ot2curInterval !== null) {
             unHighlightCurOT2();
             clearInterval(ot2curInterval);
           }
-          
+
           var otLv1 = result.otLv1;
           var otLv2 = result.otLv2;
           var otLv2Cur = result.otLv2Cur;
@@ -97,7 +100,7 @@
 //            ot2curLabel[otLv2Cur[i].dpmId - 1].push([otLv2Cur[i].identify, otLv2Cur[i].name]);
             ot2curLabel[otLv2Cur[i].dpmId - 1].push([otLv2Cur[i].dpmId, otLv2Cur[i].lastFfNumber, otLv2Cur[i].name]);
           }
-          
+
           for (var m = 0; m < 12; m++) {
             drawData[m] = [
               {
