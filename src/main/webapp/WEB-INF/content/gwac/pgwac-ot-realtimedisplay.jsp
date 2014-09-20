@@ -9,29 +9,36 @@
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/excanvas.compiled.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.js"></script>
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.categories.js"></script>
     <script type="text/javascript">
 
       $(function() {
 
+        function formate1(val, axis) {
+          return (val).toFixed(axis.tickDecimals);
+        }
+        function formate2(val, axis) {
+          return (val*100).toFixed(0) + "%";
+        }
         var option1 = {
-          legend: {
-            show: true
-          },
-          series: {
-            shadowSize: 0	// Drawing is faster without shadows
-          },
-          points: {
-            show: true
-          },
-          grid: {
-            hoverable: true,
-            clickable: true
-          },
-          selection: {
-            mode: "xy"
-          },
-          xaxis: {min: 0, max: 3200},
-          yaxis: {min: 0, max: 3200}
+          legend: {show: false},
+          // Drawing is faster without shadows
+          series: {shadowSize: 0},
+          points: {show: true},
+          grid: {hoverable: true, clickable: true},
+          selection: {mode: "xy"},
+          xaxis: {show: true, min: 0, max: 3200, tickSize: 1000, tickFormatter: formate1},
+          yaxis: {show: true, min: 0, max: 3200, tickSize: 1000, tickFormatter: formate1}
+        };
+        var option2 = {
+          legend: {show: true, container: "#ot-legend", noColumns: 3},
+          // Drawing is faster without shadows
+          series: {shadowSize: 0},
+          points: {show: true},
+          grid: {hoverable: true, clickable: true},
+          selection: {mode: "xy"},
+          xaxis: {show: true, min: 0, max: 3200, tickSize: 1000, tickFormatter: formate1},
+          yaxis: {show: true, min: 0, max: 3200, tickSize: 1000, tickFormatter: formate1}
         };
 
         var reqNum = 1;
@@ -145,6 +152,25 @@
         }
         update();
 
+        var data11 = [["M", 0.7],["1", 0.1], ["2", 0.5], ["3", 0.8], ["4", 0.3], ["5", 0.2],
+          ["6", 0.5], ["7", 0.7], ["8", 0.9], ["9", 0.3], ["10", 0.1], ["11", 0.2],
+          ["12", 0.3]];
+
+        $.plot("#sys-disk-usage", [data11], {
+          series: {
+          color: "#77b7c5",  //E8E800 77b7c5 AB5800
+            bars: {
+              show: true,
+              barWidth: 0.3,
+              align: "center",
+              fillColor: { colors: [{ opacity: 0.5 }, { opacity: 1}] }
+            }
+          },
+          xaxis: {
+            mode: "categories"
+          },
+          yaxis: {show: true, min: 0, max: 0.99, tickFormatter: formate2}
+        });
 
         $("<div id='tooltip'></div>").css({
           position: "absolute",
@@ -157,7 +183,11 @@
 
         function plotAndBind(number) {
           var id = "#placeholder" + (number + 1);
-          plot[number] = $.plot(id, drawData[number], option1);
+          if (number === 3) {
+            plot[number] = $.plot(id, drawData[number], option2);
+          } else {
+            plot[number] = $.plot(id, drawData[number], option1);
+          }
           $(id).bind("plothover", function(event, pos, item) {
             if (item) {
               var x = item.datapoint[0].toFixed(2);
@@ -295,21 +325,37 @@
   <body>
 
     <div id="content">
-      <div class="demo-container">
-        <div id="placeholder1" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder2" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder3" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder4" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder5" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder6" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder7" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder8" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder9" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder10" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder11" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
-        <div id="placeholder12" class="demo-placeholder" style="float:left; width:23%; height: 30%; margin:5px;"></div>
+      <div id="ot-show">
+        <div id="ot-show-title">
+          <span>OT分布实时概览图</span>
+          <div id="ot-legend"></div>
+        </div>
+        <div id="ot-show-container">
+          <div id="placeholder1" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder2" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder3" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder4" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder5" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder6" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder7" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder8" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder9" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder10" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder11" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder12" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+        </div>
+      </div>
+      <div id="sysinfo">
+        <div id="sysinfo-title">
+          <span>系统磁盘容量监测</span>
+        </div>
+        <div id="sys-disk-usage"></div>
       </div>
     </div>
-
+    <div id="footer">
+      <p style="text-align: center;">
+        版权所有 <a href="http://svom.bao.ac.cn" title="OpenSource CSS Layout">NAOC GWAC</a>
+      </p>
+    </div>
   </body>
 </html>

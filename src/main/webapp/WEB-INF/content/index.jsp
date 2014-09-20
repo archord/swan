@@ -118,7 +118,7 @@
       <div class="ym-wrapper">
         <div class="ym-wbox">
           <p style="text-align: center;">
-            版权所有 <a href="http://svom.bao.ac.cn" title="OpenSource CSS Layout">NAOC SVOM GWAC</a>
+            版权所有 <a href="http://svom.bao.ac.cn" title="OpenSource CSS Layout">NAOC GWAC</a>
           </p>
         </div>
       </div>
