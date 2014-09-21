@@ -6,6 +6,7 @@ package com.gwac.dao;
 
 import com.gwac.model.OTCatalog;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,6 +15,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -21,6 +24,8 @@ import java.util.List;
  */
 public class OTCatalogDaoImpl implements OTCatalogDao {
 
+  private static final Log log = LogFactory.getLog(OTCatalogDaoImpl.class);
+  
   public List<OTCatalog> getOT1Catalog(String path) {
     BufferedReader br = null;
     String line = "";
@@ -29,7 +34,12 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     try {
-      br = new BufferedReader(new FileReader(path));
+      File tfile = new File(path);
+      if(!tfile.exists()){
+        log.error("file not exist " + tfile);
+        return otList;
+      }
+      br = new BufferedReader(new FileReader(tfile));
       while ((line = br.readLine()) != null) {
         if(line.charAt(0)=='#'){
           continue;

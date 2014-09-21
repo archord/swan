@@ -57,10 +57,10 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   public void addMissedCutImages() {
 
     if (running == true) {
-      log.info("start job addMissedCutImagesJob...");
+//      log.info("start job addMissedCutImagesJob...");
       running = false;
     } else {
-      log.info("job addMissedCutImagesJob is running, jump this scheduler.");
+//      log.info("job addMissedCutImagesJob is running, jump this scheduler.");
       return;
     }
 
@@ -79,8 +79,8 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       otlv2.setCuttedFfNumber(ffcs.get(ffcs.size() - 1).getNumber());
       otlv2Dao.update(otlv2);
 
-      log.info("ot_id:" + otlv2.getOtId());
-      log.info("all ffc ids: ");
+//      log.info("ot_id:" + otlv2.getOtId());
+//      log.info("all ffc ids: ");
       for (FitsFileCut ffc : ffcs) {
         log.info(ffc.getNumber());
       }
@@ -91,13 +91,13 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
 
       if (headNum == otlv2.getFirstFfNumber()) {
 
-        log.info("add head missed image");
+//        log.info("add head missed image");
         int tNum = headNum - headTailCutNumber;
         if (tNum < 1) {
           tNum = 1;  //number start from 1
         }
         for (int i = tNum; i < headNum; i++) {
-          log.info("add number " + i);
+//          log.info("add number " + i);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
@@ -121,7 +121,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         }
       } 
 
-      log.info("add center missed image");
+//      log.info("add center missed image");
       //add center missed image
       for (int i = 0; i < ffcs.size() - 1; i++) {
 
@@ -130,7 +130,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         int secondNum = ffcs.get(i + 1).getNumber();
 
         for (int j = firstNum + 1; j < secondNum; j++) {
-          log.info("add number " + j);
+//          log.info("add number " + j);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), j);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
@@ -154,20 +154,20 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         }
       }
 
-      log.info("add tail missed image");
+//      log.info("add tail missed image");
       //add tail missed image
       DataProcessMachine dpm = dpmDao.getDpmById(otlv2.getDpmId());
       int curProcessNumber = dpm.getCurProcessNumber();
       FitsFileCut lastFFC = ffcs.get(ffcs.size() - 1);
       int lastNumber = lastFFC.getNumber();
 //      int lastNumber = otlv2.getLastFfNumber();
-      log.info("curProcessNumber" + curProcessNumber);
+//      log.info("curProcessNumber " + curProcessNumber);
 
       //如果超过5(successiveImageNumber)帧没有再出现新的图像，则标示该OT不会再出新的观测序列
       if (curProcessNumber - lastNumber >= successiveImageNumber) {
         int tNum = lastNumber + headTailCutNumber;
         for (int i = lastNumber + 1; i <= tNum; i++) {
-          log.info("add number " + i);
+//          log.info("add number " + i);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
@@ -196,7 +196,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
 
     if (running == false) {
       running = true;
-      log.info("job addMissedCutImagesJob is done.");
+//      log.info("job addMissedCutImagesJob is done.");
     }
   }
 

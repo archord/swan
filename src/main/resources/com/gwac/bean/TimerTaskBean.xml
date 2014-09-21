@@ -37,6 +37,12 @@
     <property name="targetMethod" value="backupData" /> 
   </bean> 
 
+  <bean id="fileTransferJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="fileTransferService" /> 
+    <property name="targetMethod" value="transFile" /> 
+  </bean> 
+
   <!-- Simple Trigger, run every 15 seconds -->
   <bean id="dataStoreTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -57,6 +63,13 @@
     <property name="jobDetail" ref="dataBackupJob" />
     <property name="cronExpression" value="0 0 10 * * ?"/>
   </bean>
+  
+  <bean id="fileTransferTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="fileTransferJob" />
+    <property name="repeatInterval" value="60000" />
+    <property name="startDelay" value="20000" />
+  </bean>
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="jobDetails">
@@ -64,6 +77,7 @@
         <ref bean="dataStoreJob" />
         <ref bean="addMissedCutImageJob" />
         <ref bean="dataBackupJob" />
+        <ref bean="fileTransferJob" />
       </list>
     </property>
     <property name="triggers">
@@ -71,6 +85,7 @@
         <ref bean="dataStoreTrigger" />
         <ref bean="addMissedCutImageTrigger" />
         <ref bean="dataBackupTrigger" />
+        <ref bean="fileTransferTrigger" />
       </list>
     </property>
   </bean>

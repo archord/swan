@@ -64,7 +64,12 @@ public class UploadFileServiceImpl implements UploadFileService {
     InputStream input = null;
     int fNum = 0;
     try {
-      input = new FileInputStream(getConfigPath() + configFile);
+      File tfile = new File(configPath, configFile);
+      if(!tfile.exists()){
+        log.error("file not exist: "+ tfile);
+        return 0;
+      }
+      input = new FileInputStream(tfile);
       Properties cfile = new Properties();
       cfile.load(input);
 
@@ -72,11 +77,11 @@ public class UploadFileServiceImpl implements UploadFileService {
       String dpmName = cfile.getProperty("dpmname").trim();
       String curProcNumber = cfile.getProperty("curprocnumber").trim();
       String dfInfo = cfile.getProperty("dfinfo").trim();
+      log.debug("dpmName=" + dpmName + ".");
+      log.debug("curProcNumber=" + curProcNumber + ".");
+      log.debug("dfInfo=" + dfInfo + ".");
       if (dpmName != null && curProcNumber != null && dfInfo != null
               && !dpmName.isEmpty() && !curProcNumber.isEmpty() && !dfInfo.isEmpty()) {
-        log.debug("dpmName=" + dpmName);
-        log.debug("curProcNumber=" + curProcNumber);
-        log.debug("dfInfo=" + dfInfo);
         dpmName = dpmName.toUpperCase();
         Pattern p = Pattern.compile("[ ]+");
         String[] strs = p.split(dfInfo);
@@ -169,11 +174,17 @@ public class UploadFileServiceImpl implements UploadFileService {
     File tfile1 = null;
     File tfile2 = null;
     try {
+
+      String tpath = path + otLDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
       if (otList != null) {
         for (String tStr : otList) {
+          tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            String tpath = path + otLDir;
-            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -192,6 +203,7 @@ public class UploadFileServiceImpl implements UploadFileService {
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
             if (tfile1.exists()) {
               if (tfile2.exists()) {
+                log.info("delete file: " + tfile2);
                 FileUtils.forceDelete(tfile2);
               }
               //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
@@ -210,7 +222,8 @@ public class UploadFileServiceImpl implements UploadFileService {
         }
       }
     } catch (IOException ex) {
-      ex.printStackTrace();
+      log.info("move file errror:");
+      log.error(ex);
     }
     return fileNum;
   }
@@ -221,11 +234,17 @@ public class UploadFileServiceImpl implements UploadFileService {
     File tfile1 = null;
     File tfile2 = null;
     try {
+
+      String tpath = path + starLDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
       if (starList != null) {
         for (String tStr : starList) {
+          tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            String tpath = path + starLDir;
-            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -243,6 +262,7 @@ public class UploadFileServiceImpl implements UploadFileService {
 
             if (tfile1.exists()) {
               if (tfile2.exists()) {
+                log.info("delete file: " + tfile2);
                 FileUtils.forceDelete(tfile2);
               }
               //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
@@ -261,7 +281,8 @@ public class UploadFileServiceImpl implements UploadFileService {
         }
       }
     } catch (IOException ex) {
-      ex.printStackTrace();
+      log.info("move file errror:");
+      log.error(ex);
     }
     return fileNum;
   }
@@ -272,11 +293,17 @@ public class UploadFileServiceImpl implements UploadFileService {
     File tfile1 = null;
     File tfile2 = null;
     try {
+
+      String tpath = path + orgIDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
       if (origImage != null) {
         for (String tStr : origImage) {
+          tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            String tpath = path + orgIDir;
-            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -288,6 +315,7 @@ public class UploadFileServiceImpl implements UploadFileService {
 
             if (tfile1.exists()) {
               if (tfile2.exists()) {
+                log.info("delete file: " + tfile2);
                 FileUtils.forceDelete(tfile2);
               }
               //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
@@ -303,7 +331,8 @@ public class UploadFileServiceImpl implements UploadFileService {
         }
       }
     } catch (IOException ex) {
-      ex.printStackTrace();
+      log.info("move file errror:");
+      log.error(ex);
     }
     return fileNum;
   }
@@ -314,11 +343,17 @@ public class UploadFileServiceImpl implements UploadFileService {
     File tfile1 = null;
     File tfile2 = null;
     try {
+
+      String tpath = path + cutIDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
       if (cutImages != null) {
         for (String tStr : cutImages) {
+          tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            String tpath = path + cutIDir;
-            tStr = tStr.trim();
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -330,6 +365,7 @@ public class UploadFileServiceImpl implements UploadFileService {
 
             if (tfile1.exists()) {
               if (tfile2.exists()) {
+                log.info("delete file: " + tfile2);
                 FileUtils.forceDelete(tfile2);
               }
               //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
@@ -348,7 +384,8 @@ public class UploadFileServiceImpl implements UploadFileService {
         }
       }
     } catch (IOException ex) {
-      ex.printStackTrace();
+      log.info("move file errror:");
+      log.error(ex);
     }
     return fileNum;
   }

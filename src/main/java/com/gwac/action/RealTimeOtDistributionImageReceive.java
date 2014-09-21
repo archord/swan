@@ -56,18 +56,27 @@ public class RealTimeOtDistributionImageReceive extends ActionSupport {
     if (fileUpload != null && fileUploadFileName != null && getFileUpload().exists() && !fileUploadFileName.isEmpty()) {
       String destPath = getText("gwac.data.root.directory");
       if (destPath.charAt(destPath.length() - 1) != '/') {
-	destPath += "/";
+        destPath += "/";
       }
 
       //接收参数配置文件
       String otDstPath = destPath + getText("gwac.real.time.ot.distribution") + "/";
+
+      File tDir = new File(otDstPath);
+      if (!tDir.exists()) {
+        tDir.mkdirs();
+      }
+
+      log.info("receive file, path: " + otDstPath + ", name: " + fileUploadFileName);
       File otDstImage = new File(otDstPath, fileUploadFileName);
       if (otDstImage.exists()) {
-	FileUtils.forceDelete(otDstImage);
+        FileUtils.forceDelete(otDstImage);
       }
-      FileUtils.moveFile(getFileUpload(), otDstImage);
+      if (fileUpload != null && fileUpload.exists()) {
+        FileUtils.moveFile(fileUpload, otDstImage);
+      }
       echo += "upload success. file name is " + fileUploadFileName + "\n";
-    }else{
+    } else {
       echo += "upload error. upload file does not exist.\n";
     }
     log.info(echo);
@@ -126,5 +135,5 @@ public class RealTimeOtDistributionImageReceive extends ActionSupport {
   public void setFileUploadFileName(String fileUploadFileName) {
     this.fileUploadFileName = fileUploadFileName;
   }
-  
+
 }

@@ -54,7 +54,7 @@ public class MultipleFileUploadAction extends ActionSupport {
     @Result(location = "manage/result.jsp", name = SUCCESS),
     @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})
-  public String upload() throws Exception {
+  public String upload() {
 
     boolean flag = true;
     String result = SUCCESS;
@@ -62,32 +62,32 @@ public class MultipleFileUploadAction extends ActionSupport {
 
     //必须设置传输机器名称
     if (null == dpmName) {
-      setEcho(getEcho() + "Must set machine name(dpmName).\n");
+      setEcho(echo + "Must set machine name(dpmName).\n");
       flag = false;
     }
 
     //必须设置传输机器名称
     if (null == currentDirectory) {
-      setEcho(getEcho() + "Must set current date(currentDirectory).\n");
+      setEcho(echo + "Must set current date(currentDirectory).\n");
       flag = false;
     }
 
     //必须传输参数配置文件
     //Must transform parameter config file
     if (null == configFile) {
-      setEcho(getEcho() + "Must upload config file(configFile).\n");
+      setEcho(echo + "Must upload config file(configFile).\n");
       flag = false;
     }
 
     //必须传输数据文件
     //Must transform data file
     if (fileUpload.isEmpty()) {
-      setEcho(getEcho() + "Must upload data file(fileUpload).\n");
+      setEcho(echo + "Must upload data file(fileUpload).\n");
       flag = false;
     }
 
     if (fileUpload.size() != fileUploadFileName.size()) {
-      setEcho(getEcho() + "Upload data error，please retry or contact manager!\n");
+      setEcho(echo + "Upload data error，please retry or contact manager!\n");
       flag = false;
     }
 
@@ -97,6 +97,11 @@ public class MultipleFileUploadAction extends ActionSupport {
       dpmName = dpmName.trim();
       currentDirectory = currentDirectory.trim();
       configFileFileName = configFileFileName.trim();
+      if (dpmName.isEmpty() || currentDirectory.isEmpty() || configFileFileName.isEmpty()) {
+        setEcho(echo + "parameter error!\n");
+        log.error("parameter error!");
+        return ERROR;
+      }
       //由于跨天问题，这里不再自行判断currentDirectory是否为空，前面已将currentDirectory设置为必选项
       /*
        if (this.getCurrentDirectory() == null || this.getCurrentDirectory().isEmpty()) {
@@ -115,51 +120,79 @@ public class MultipleFileUploadAction extends ActionSupport {
         destPath += currentDirectory + "/" + dpmName + "/";
       }
 
-      //接收参数配置文件
-      String confPath = destPath + getText("gwac.data.cfgfile.directory") + "/";
-      File confFile = new File(confPath, configFileFileName);
-      if (confFile.exists()) {
-        FileUtils.forceDelete(confFile);
-      }
-      FileUtils.moveFile(configFile, confFile);
-      ConfigFile cf = new ConfigFile();
-      cf.setFileName(configFileFileName);
-      cf.setStorePath(confPath.substring(rootPath.length() + 1));
-      cf.setIsSync(false);
-      cf.setIsStore(false);
-      if (!cfDao.exist(cf)) {
-        cfDao.save(cf);
-      }
+      try {
 
-      //接受数据文件
-      int i = 0;
-      for (File file : fileUpload) {
-        File destFile = new File(destPath, fileUploadFileName.get(i++).trim());
-        //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-        if (destFile.exists()) {
-          FileUtils.forceDelete(destFile);
+        File destDir = new File(destPath);
+        if (!destDir.exists()) {
+          log.info(destDir + " dose not exist.");
+          destDir.mkdirs();
         }
-        FileUtils.moveFile(file, destFile);
-      }
 
-      ufService.setConfigPath(confPath);
-      ufService.setConfigFile(configFileFileName);
-      ufService.setRootDir(rootPath);
-      ufService.setOtLDir(getText("gwac.data.otlist.directory"));
-      ufService.setStarLDir(getText("gwac.data.starlist.directory"));
-      ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
-      ufService.setCutIDir(getText("gwac.data.cutimages.directory"));
-      ufService.setCfgDir(getText("gwac.data.cfgfile.directory"));
+        //接收参数配置文件
+        String confPath = destPath + getText("gwac.data.cfgfile.directory") + "/";
+        File confDir = new File(confPath);
+        if (!confDir.exists()) {
+          confDir.mkdir();
+        }
 
-      int shouldFNum = ufService.parseConfigFile();
-      int validFNum = ufService.checkAndMoveDataFile(destPath);
-      if (validFNum != i || validFNum != shouldFNum) {
-        setEcho(getEcho() + "Warning: should upload " + shouldFNum + " files, actual upload " + i
-                + " files, " + validFNum + " valid files.\n");
-      } else {
-        setEcho(getEcho() + "Upload success，total upload " + validFNum + " files.\n");
+        File confFile = new File(confPath, configFileFileName);
+        log.info("receive file: " + confFile);
+        log.info("source file: " + configFile);
+        if (confFile.exists()) {
+          log.info("delete file: " + confFile);
+          FileUtils.forceDelete(confFile);
+        }
+        FileUtils.moveFile(configFile, confFile);
+
+        ConfigFile cf = new ConfigFile();
+        cf.setFileName(configFileFileName);
+        cf.setStorePath(confPath.substring(rootPath.length() + 1));
+        cf.setIsSync(false);
+        cf.setIsStore(false);
+        if (!cfDao.exist(cf)) {
+          cfDao.save(cf);
+        }
+
+        //接受数据文件
+        int i = 0;
+        for (File file : fileUpload) {
+          String tfilename = fileUploadFileName.get(i++).trim();
+          if (tfilename.isEmpty()) {
+            continue;
+          }
+          File destFile = new File(destPath, tfilename);
+          log.info("receive file: " + destFile);
+          log.info("source file: " + file);
+          //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+          if (destFile.exists()) {
+            log.info("delete file: " + destFile);
+            FileUtils.forceDelete(destFile);
+          }
+          FileUtils.moveFile(file, destFile);
+        }
+
+        ufService.setConfigPath(confPath);
+        ufService.setConfigFile(configFileFileName);
+        ufService.setRootDir(rootPath);
+        ufService.setOtLDir(getText("gwac.data.otlist.directory"));
+        ufService.setStarLDir(getText("gwac.data.starlist.directory"));
+        ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
+        ufService.setCutIDir(getText("gwac.data.cutimages.directory"));
+        ufService.setCfgDir(getText("gwac.data.cfgfile.directory"));
+
+        int shouldFNum = ufService.parseConfigFile();
+        int validFNum = ufService.checkAndMoveDataFile(destPath);
+        if (validFNum != i || validFNum != shouldFNum) {
+          setEcho(echo + "Warning: should upload " + shouldFNum + " files, actual upload " + i
+                  + " files, " + validFNum + " valid files.\n");
+        } else {
+          setEcho(echo + "Upload success，total upload " + validFNum + " files.\n");
+        }
+        //otORDao.saveOTCopy(configFileFileName);
+      } catch (Exception ex) {
+        log.info("receive file errror:");
+        log.error(ex);
       }
-      //otORDao.saveOTCopy(configFileFileName);
     } else {
       result = ERROR;
     }
@@ -170,7 +203,7 @@ public class MultipleFileUploadAction extends ActionSupport {
      * 在这里将结果信息存储在session中，在jsp页面获得返回信息。
      */
     ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", getEcho());
+    ctx.getSession().put("echo", echo);
 
     return result;
   }

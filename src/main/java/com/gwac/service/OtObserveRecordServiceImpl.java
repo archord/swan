@@ -53,9 +53,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         ufuDao.delete(ufu);
       }
       for (UploadFileUnstore ufu : ufus) {
-        log.debug("path=" + ufu.getFileName());
+//        log.debug("path=" + ufu.getFileName());
         List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + ufu.getStorePath() + "/" + ufu.getFileName());
-        log.debug("ot catalog number:" + otcs.size());
+//        log.debug("ot catalog number:" + otcs.size());
         for (OTCatalog otc : otcs) {
 
           String otListPath = ufu.getStorePath();
@@ -143,9 +143,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
             otorDao.save(oor);
             List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
-            log.debug("********************************* ");
-            log.debug("oors size: " + oors.size());
-            log.debug("ff_number: " + oor.getFfNumber());
+//            log.debug("********************************* ");
+//            log.debug("oors size: " + oors.size());
+//            log.debug("ff_number: " + oor.getFfNumber());
             for (OtObserveRecord tOor : oors) {
               log.debug(tOor.getFfNumber() + " " + tOor.getXTemp() + " " + tOor.getYTemp());
             }
@@ -172,11 +172,11 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setCuttedFfNumber(0);
 
               otLv2Dao.save(tOtLv2);
-              log.debug("ot name: " + otName);
-              log.debug("*********************************");
+//              log.debug("ot name: " + otName);
+//              log.debug("*********************************");
 
               for (OtObserveRecord tOor : oors) {
-                log.debug("otId: " + tOor.getOtId());
+//                log.debug("otId: " + tOor.getOtId());
                 if (tOor.getOtId() != 0) {
                   continue;
                 }

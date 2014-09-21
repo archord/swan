@@ -18,6 +18,7 @@
   <import resource="com/gwac/bean/FitsFileCutBean.xml"/>
   <import resource="com/gwac/bean/ConfigFile.xml"/>
   <import resource="com/gwac/bean/DataBackupBean.xml"/>
+  <import resource="com/gwac/bean/FileTransferBean.xml"/>
   
  
 </beans>
