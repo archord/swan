@@ -66,7 +66,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
 
     int totalAddCutImages = 0;
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
-    log.info("miss cutted otlv2 " + otlv2s.size());
+//    log.info("miss cutted otlv2 " + otlv2s.size());
     for (OtLevel2 otlv2 : otlv2s) {
 
       int cuttedFfNumber = otlv2.getCuttedFfNumber();
@@ -81,9 +81,9 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
 
 //      log.info("ot_id:" + otlv2.getOtId());
 //      log.info("all ffc ids: ");
-      for (FitsFileCut ffc : ffcs) {
-        log.info(ffc.getNumber());
-      }
+//      for (FitsFileCut ffc : ffcs) {
+//        log.info(ffc.getNumber());
+//      }
 
       //add head missed image
       FitsFileCut headFFC = ffcs.get(0);
@@ -192,7 +192,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         otlv2Dao.updateAllFileCuttedById(otlv2.getOtId());
       }
     }
-    log.info("total add cut images " + totalAddCutImages);
+//    log.info("total add cut images " + totalAddCutImages);
 
     if (running == false) {
       running = true;

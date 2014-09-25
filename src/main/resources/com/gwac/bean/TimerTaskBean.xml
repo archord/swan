@@ -47,7 +47,7 @@
   <bean id="dataStoreTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="dataStoreJob" />
-    <property name="repeatInterval" value="15000" />
+    <property name="repeatInterval" value="5000" />
     <property name="startDelay" value="10000" />
   </bean>
   
@@ -67,8 +67,8 @@
   <bean id="fileTransferTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="fileTransferJob" />
-    <property name="repeatInterval" value="60000" />
-    <property name="startDelay" value="20000" />
+    <property name="repeatInterval" value="6000000000" />
+    <property name="startDelay" value="2000000000000000000" />
   </bean>
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

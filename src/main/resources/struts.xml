@@ -22,17 +22,6 @@
  	
   <package name="default" namespace="/" extends="struts-default">
     
-    <action name="multipleFileUploadAction" 
-                class="com.gwac.action.MultipleFileUploadAction" 
-                method="display">
-      <result name="none">manage/fileUpload.jsp</result>
-    </action>
- 
-    <action name="uploadaaAction" 
-            class="com.gwac.action.MultipleFileUploadAction" 
-            method="upload">
-      <result name="success">manage/result.jsp</result>
-    </action>
     
     <action name="resultActionabc" class="com.gwac.action.FileUploadAction">
       <interceptor-ref name="exception"/>
@@ -56,15 +45,7 @@
       <result name="error">manage/result.jsp</result>
  
     </action>
-    
-		
-    <!--action name="addCustomerAction" class="customerAction" method="addCustomer" >
-      <result name="success">customer.jsp</result>
-    </action-->
-	
-    <!--action name="listCustomerAction" class="customerAction" method="listCustomer" >
-      <result name="success">customer.jsp</result>
-    </action-->
+
 		
   </package>
 	

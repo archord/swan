@@ -21,10 +21,10 @@ public class DataStoreTimerTask {
   
   public void storeOT(){
     if (running == true) {
-      log.info("start job storeOtObserveRecordJob...");
+//      log.info("start job storeOtObserveRecordJob...");
       running = false;
     } else {
-      log.info("job storeOtObserveRecordJob is running, jump this scheduler.");
+//      log.info("job storeOtObserveRecordJob is running, jump this scheduler.");
       return;
     }
     
@@ -32,7 +32,7 @@ public class DataStoreTimerTask {
     
     if (running == false) {
       running = true;
-      log.info("job storeOtObserveRecordJob is done.");
+//      log.info("job storeOtObserveRecordJob is done.");
     }
   }
 

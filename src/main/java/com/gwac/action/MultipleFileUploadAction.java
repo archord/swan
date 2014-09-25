@@ -36,6 +36,11 @@ import org.apache.struts2.convention.annotation.Result;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
+
+//@ParentPackage(value="struts-default")
+
+//@Controller()
+//@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MultipleFileUploadAction extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(MultipleFileUploadAction.class);
@@ -136,8 +141,11 @@ public class MultipleFileUploadAction extends ActionSupport {
         }
 
         File confFile = new File(confPath, configFileFileName);
-        log.info("receive file: " + confFile);
-        log.info("source file: " + configFile);
+//        log.info(this.toString());
+//        log.info("currentDirectory: " + currentDirectory);
+//        log.info("dpmName: " + dpmName);
+//        log.info("receive file: " + confFile);
+//        log.info("source file: " + configFile);
         if (confFile.exists()) {
           log.info("delete file: " + confFile);
           FileUtils.forceDelete(confFile);
@@ -161,8 +169,8 @@ public class MultipleFileUploadAction extends ActionSupport {
             continue;
           }
           File destFile = new File(destPath, tfilename);
-          log.info("receive file: " + destFile);
-          log.info("source file: " + file);
+//          log.info("receive file: " + destFile);
+//          log.info("source file: " + file);
           //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
           if (destFile.exists()) {
             log.info("delete file: " + destFile);

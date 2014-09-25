@@ -44,7 +44,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
   public void storeOTCatalog() {
     List<UploadFileUnstore> ufus = ufuDao.findAll();
-    log.debug("ufu number:" + ufus.size());
+//    log.debug("ufu number:" + ufus.size());
     if (ufus != null) {
       /**
        * 应该注意，删除操作应该和插入操作是一个事物，相应信息入库后在删除数据。

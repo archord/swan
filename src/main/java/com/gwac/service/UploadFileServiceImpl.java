@@ -77,9 +77,9 @@ public class UploadFileServiceImpl implements UploadFileService {
       String dpmName = cfile.getProperty("dpmname").trim();
       String curProcNumber = cfile.getProperty("curprocnumber").trim();
       String dfInfo = cfile.getProperty("dfinfo").trim();
-      log.debug("dpmName=" + dpmName + ".");
-      log.debug("curProcNumber=" + curProcNumber + ".");
-      log.debug("dfInfo=" + dfInfo + ".");
+//      log.debug("dpmName=" + dpmName + ".");
+//      log.debug("curProcNumber=" + curProcNumber + ".");
+//      log.debug("dfInfo=" + dfInfo + ".");
       if (dpmName != null && curProcNumber != null && dfInfo != null
               && !dpmName.isEmpty() && !curProcNumber.isEmpty() && !dfInfo.isEmpty()) {
         dpmName = dpmName.toUpperCase();
