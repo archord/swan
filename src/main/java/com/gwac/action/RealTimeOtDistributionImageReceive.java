@@ -8,17 +8,12 @@ package com.gwac.action;
  *
  * @author xy
  */
-import com.gwac.dao.ConfigFileDao;
-import com.gwac.model.ConfigFile;
-import com.gwac.service.UploadFileServiceImpl;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -52,7 +47,7 @@ public class RealTimeOtDistributionImageReceive extends ActionSupport {
 
     boolean flag = true;
     String result = SUCCESS;
-    echo = "";
+    System.out.println("echo="+echo);
     if (fileUpload != null && fileUploadFileName != null && getFileUpload().exists() && !fileUploadFileName.isEmpty()) {
       String destPath = getText("gwac.data.root.directory");
       if (destPath.charAt(destPath.length() - 1) != '/') {

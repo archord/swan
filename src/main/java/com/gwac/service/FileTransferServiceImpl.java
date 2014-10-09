@@ -7,6 +7,7 @@ package com.gwac.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +17,16 @@ import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 /**
  *
@@ -24,7 +35,6 @@ import org.apache.commons.logging.LogFactory;
 public class FileTransferServiceImpl implements FileTransferService {
 
   private static final Log log = LogFactory.getLog(FileTransferServiceImpl.class);
-
   private static boolean running = true;
 
   public void transFile() {
@@ -67,7 +77,7 @@ public class FileTransferServiceImpl implements FileTransferService {
       Calendar c1 = Calendar.getInstance();
       c1.setTime(new Date());
       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd H:m:s");
-      
+
       PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("/home/gwac/transferRecord.log", true)));
       out.println(format.format(c1.getTime()) + "\t" + speed);
       out.close();
@@ -75,6 +85,63 @@ public class FileTransferServiceImpl implements FileTransferService {
     } catch (Exception e) {
       log.info("exception happened - here");
       e.printStackTrace();
+    }
+
+    if (running == false) {
+      running = true;
+      log.info("job fileTransferJob is done.");
+    }
+  }
+
+  public void transFile2() {
+
+    if (running == true) {
+      log.info("start job fileTransferJob...");
+      running = false;
+    } else {
+      log.info("job fileTransferJob is running, jump this scheduler.");
+      return;
+    }
+
+    CloseableHttpClient httpclient = HttpClients.createDefault();
+    try {
+      HttpPost httppost = new HttpPost("http://159.226.88.94:8077/gwac/realTimeOtDstImageUpload.action");
+
+      FileBody bin = new FileBody(new File("/data/gwac_data/140428/M01/cfgfile/M1_01_140428_1_200060_0023.properties"));
+      StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
+
+      HttpEntity reqEntity = MultipartEntityBuilder.create()
+              .addPart("fileUpload", bin)
+              .addPart("comment", comment)
+              .build();
+
+
+      httppost.setEntity(reqEntity);
+
+      System.out.println("executing request " + httppost.getRequestLine());
+      CloseableHttpResponse response = httpclient.execute(httppost);
+      try {
+        System.out.println("----------------------------------------");
+        System.out.println(response.getStatusLine());
+        HttpEntity resEntity = response.getEntity();
+        if (resEntity != null) {
+          System.out.println("Response content length: " + resEntity.getContentLength());
+        }
+        EntityUtils.consume(resEntity);
+      } catch (Exception e) {
+        e.printStackTrace();
+      } finally {
+        response.close();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+
+    } finally {
+      try {
+        httpclient.close();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
     }
 
     if (running == false) {

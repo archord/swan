@@ -7,6 +7,7 @@ package com.gwac.dao;
 
 import com.gwac.model.ConfigFile;
 import java.math.BigInteger;
+import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -29,4 +30,16 @@ public class ConfigFileDaoImpl extends BaseHibernateDaoImpl<ConfigFile> implemen
     return flag;
   }
 
+  public List<ConfigFile> getTopNUnSync(int topn) {
+
+    String sql = "with updated_rows as"
+            + "(with tmp as (select min(cf_id) min_id from config_file where is_sync=false) "
+            + "update config_file set is_sync=true "
+            + "where cf_id<(select min_id+" + topn + " from tmp) and cf_id>=(select min_id from tmp) returning *) "
+            + "select * from updated_rows;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(ConfigFile.class);
+    return q.list();
+  }
 }
