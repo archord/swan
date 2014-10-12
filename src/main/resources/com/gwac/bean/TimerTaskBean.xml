@@ -43,19 +43,25 @@
     <property name="targetMethod" value="transFile" /> 
   </bean> 
 
+  <bean id="dataSyncJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="dataSyncService" /> 
+    <property name="targetMethod" value="syncData" /> 
+  </bean> 
+
   <!-- Simple Trigger, run every 15 seconds -->
   <bean id="dataStoreTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="dataStoreJob" />
-    <property name="repeatInterval" value="5000" />
-    <property name="startDelay" value="10000" />
+    <property name="repeatInterval" value="500000000000000" /> <!-- 5000  -->
+    <property name="startDelay" value="100000000000000" />  <!-- 10000  -->
   </bean>
   
   <bean id="addMissedCutImageTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="addMissedCutImageJob" />
-    <property name="repeatInterval" value="15000" />
-    <property name="startDelay" value="17500" />
+    <property name="repeatInterval" value="1500000000000" /> <!-- 15000  -->
+    <property name="startDelay" value="175000000000" /> <!-- 17500  -->
   </bean>
 
   <!-- Cron Trigger, every day 10 o'clock -->
@@ -67,8 +73,15 @@
   <bean id="fileTransferTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="fileTransferJob" />
-    <property name="repeatInterval" value="6000000000" />
-    <property name="startDelay" value="2000000000000000000" />
+    <property name="repeatInterval" value="6000000000000" /> <!-- 60000   -->
+    <property name="startDelay" value="200000000000" /> <!-- 20000  -->
+  </bean>
+  
+  <bean id="dataSyncTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="dataSyncJob" />
+    <property name="repeatInterval" value="20000" /> <!--  -->
+    <property name="startDelay" value="10000" /> <!--  -->
   </bean>
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -78,6 +91,7 @@
         <ref bean="addMissedCutImageJob" />
         <ref bean="dataBackupJob" />
         <ref bean="fileTransferJob" />
+        <ref bean="dataSyncJob" />
       </list>
     </property>
     <property name="triggers">
@@ -86,6 +100,7 @@
         <ref bean="addMissedCutImageTrigger" />
         <ref bean="dataBackupTrigger" />
         <ref bean="fileTransferTrigger" />
+        <ref bean="dataSyncTrigger" />
       </list>
     </property>
   </bean>

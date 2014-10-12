@@ -44,8 +44,13 @@ public class DataSyncServiceImpl implements DataSyncService {
   private String serverUrl;
   private String uploadUrl;
   private int mchNum;
+  private Boolean isBeiJingServer;
 
   public void syncData() {
+    
+    if(isBeiJingServer){
+      return;
+    }
 
     if (running == true) {
       log.info("start job fileTransferJob...");
@@ -54,6 +59,16 @@ public class DataSyncServiceImpl implements DataSyncService {
       log.info("job fileTransferJob is running, jump this scheduler.");
       return;
     }
+    
+    log.info("rootDir="+rootDir);
+    log.info("otLDir="+otLDir);
+    log.info("starLDir="+starLDir);
+    log.info("orgIDir="+orgIDir);
+    log.info("cutIDir="+cutIDir);
+    log.info("cfgDir="+cfgDir);
+    log.info("serverUrl="+serverUrl);
+    log.info("uploadUrl="+uploadUrl);
+    log.info("mchNum="+mchNum);
 
     List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
     for (ConfigFile cf : cfs) {
@@ -91,6 +106,8 @@ public class DataSyncServiceImpl implements DataSyncService {
       if (!tfile.exists()) {
         log.error("file not exist: " + tfile);
         return 0;
+      }else{
+        log.info("read config file: " + tfile.getAbsolutePath());
       }
       input = new FileInputStream(tfile);
       Properties cfile = new Properties();
@@ -98,6 +115,10 @@ public class DataSyncServiceImpl implements DataSyncService {
 
       String dateStr = cfile.getProperty("date").trim();
       String dpmName = cfile.getProperty("dpmname").trim();
+      
+      if(dpmName.isEmpty()){
+        dpmName = configFile.substring(0, 1)+configFile.substring(3, 5);
+      }
 
       String tmpStr = cfile.getProperty("otlist").trim();
       otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
@@ -134,47 +155,64 @@ public class DataSyncServiceImpl implements DataSyncService {
       mpEntity.addPart("configFile", new FileBody(tfile));
 
       String rootPath = rootDir + "/" + dateStr + "/" + dpmName + "/";
+      log.info("rootPath="+rootPath);
+      
+      if(otList!=null)
       for (String tName : otList) {
-        String tpath = rootPath + otLDir + "/" + tName;
+        String tpath = rootPath + otLDir + "/" + tName.trim();
         File tfile1 = new File(tpath);
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
+        }else{
+          log.info(tfile1.getAbsolutePath()+" does not exist!");
         }
       }
+      
+      if(starList!=null)
       for (String tName : starList) {
-        String tpath = rootPath + otLDir + "/" + tName;
+        String tpath = rootPath + starLDir + "/" + tName.trim();
         File tfile1 = new File(tpath);
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
+        }else{
+          log.info(tfile1.getAbsolutePath()+" does not exist!");
         }
       }
+      
+      if(origImage!=null)
       for (String tName : origImage) {
-        String tpath = rootPath + otLDir + "/" + tName;
+        String tpath = rootPath + orgIDir + "/" + tName.trim();
         File tfile1 = new File(tpath);
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
+        }else{
+          log.info(tfile1.getAbsolutePath()+" does not exist!");
         }
       }
+      
+      if(cutImages!=null)
       for (String tName : cutImages) {
-        String tpath = rootPath + otLDir + "/" + tName;
+        String tpath = rootPath + cutIDir + "/" + tName.trim();
         File tfile1 = new File(tpath);
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
+        }else{
+          log.info(tfile1.getAbsolutePath()+" does not exist!");
         }
       }
 
       HttpEntity reqEntity = mpEntity.build();
       httppost.setEntity(reqEntity);
 
-      System.out.println("executing request " + httppost.getRequestLine());
+      log.info("executing request " + httppost.getRequestLine());
       CloseableHttpResponse response = httpclient.execute(httppost);
       try {
         System.out.println("----------------------------------------");
         System.out.println(response.getStatusLine());
         HttpEntity resEntity = response.getEntity();
         if (resEntity != null) {
-          System.out.println("Response content length: " + resEntity.getContentLength());
-          System.out.println("Response content: " + IOUtils.toString(resEntity.getContent()));
+          log.info("Response content length: " + resEntity.getContentLength());
+          log.info("Response content: " + IOUtils.toString(resEntity.getContent()));
         }
         EntityUtils.consume(resEntity);
       } catch (Exception e) {
@@ -257,5 +295,33 @@ public class DataSyncServiceImpl implements DataSyncService {
    */
   public void setServerUrl(String serverUrl) {
     this.serverUrl = serverUrl;
+  }
+
+  /**
+   * @param mchNum the mchNum to set
+   */
+  public void setMchNum(int mchNum) {
+    this.mchNum = mchNum;
+  }
+
+  /**
+   * @return the uploadUrl
+   */
+  public String getUploadUrl() {
+    return uploadUrl;
+  }
+
+  /**
+   * @param uploadUrl the uploadUrl to set
+   */
+  public void setUploadUrl(String uploadUrl) {
+    this.uploadUrl = uploadUrl;
+  }
+
+  /**
+   * @param isBeiJingServer the isBeiJingServer to set
+   */
+  public void setIsBeiJingServer(Boolean isBeiJingServer) {
+    this.isBeiJingServer = isBeiJingServer;
   }
 }
