@@ -88,6 +88,8 @@ public class GetCutImageList extends ActionSupport {
       BufferedWriter bw = new BufferedWriter(fw);
       bw.write(content);
       bw.close();
+      log.info("ot file name "+file.getAbsolutePath());
+      log.info("ot list file "+ fileName +" size "+ file.length());
     } else {
       result = ERROR;
     }

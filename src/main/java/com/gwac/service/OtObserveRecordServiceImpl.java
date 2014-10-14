@@ -146,9 +146,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 //            log.debug("********************************* ");
 //            log.debug("oors size: " + oors.size());
 //            log.debug("ff_number: " + oor.getFfNumber());
-            for (OtObserveRecord tOor : oors) {
-              log.debug(tOor.getFfNumber() + " " + tOor.getXTemp() + " " + tOor.getYTemp());
-            }
+//            for (OtObserveRecord tOor : oors) {
+//              log.debug(tOor.getFfNumber() + " " + tOor.getXTemp() + " " + tOor.getYTemp());
+//            }
             if (oors.size() >= occurNumber) {
               OtObserveRecord oor1 = oors.get(0);
 

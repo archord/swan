@@ -9,11 +9,11 @@
     <property name="cfDao" ref="cfDao" />	
   </bean>
   
-  <bean class="com.gwac.action.GetUploadFileUnstoreList">
+  <bean class="com.gwac.action.GetUploadFileUnstoreList"  scope="prototype">
     <property name="ufuDao" ref="ufuDao" />	
   </bean>
   
-  <bean class="com.gwac.action.GetUploadFileRecordList">
+  <bean class="com.gwac.action.GetUploadFileRecordList"  scope="prototype">
     <property name="ufrDao" ref="ufrDao" />	
   </bean>
 

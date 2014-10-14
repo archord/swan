@@ -5,11 +5,11 @@
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
   
-  <bean class="com.gwac.action.GetOtLevel2List">
+  <bean class="com.gwac.action.GetOtLevel2List"  scope="prototype">
     <property name="obDao" ref="otbDao" />
   </bean>
   
-  <bean class="com.gwac.action.GetOtXYList">
+  <bean class="com.gwac.action.GetOtXYList"  scope="prototype">
     <property name="otDao" ref="otbDao" />
     <property name="oorDao" ref="otORDao" />
   </bean>

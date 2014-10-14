@@ -13,11 +13,11 @@
     <property name="headTailCutNumber" value="${gwac.image.head.tail.cut.number}" />
   </bean>
   
-  <bean class="com.gwac.action.GetCutImageList">
+  <bean class="com.gwac.action.GetCutImageList"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
   </bean>
   
-  <bean class="com.gwac.action.GetOtImageList">
+  <bean class="com.gwac.action.GetOtImageList"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
     <property name="obDao" ref="otbDao" />
   </bean>

@@ -105,9 +105,9 @@ public class UploadFileServiceImpl implements UploadFileService {
         if (strs[5].contains("%")) {
           percent = Float.parseFloat(strs[5].replace('%', ' '));
         }
-        log.debug(totalSize);
-        log.debug(leftSize);
-        log.debug(percent);
+//        log.debug(totalSize);
+//        log.debug(leftSize);
+//        log.debug(percent);
 
         DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
         dpm.setCurProcessNumber(Integer.parseInt(curProcNumber));

@@ -53,22 +53,22 @@ public class DataSyncServiceImpl implements DataSyncService {
     }
 
     if (running == true) {
-      log.info("start job fileTransferJob...");
+//      log.info("start job fileTransferJob...");
       running = false;
     } else {
-      log.info("job fileTransferJob is running, jump this scheduler.");
+//      log.info("job fileTransferJob is running, jump this scheduler.");
       return;
     }
     
-    log.info("rootDir="+rootDir);
-    log.info("otLDir="+otLDir);
-    log.info("starLDir="+starLDir);
-    log.info("orgIDir="+orgIDir);
-    log.info("cutIDir="+cutIDir);
-    log.info("cfgDir="+cfgDir);
-    log.info("serverUrl="+serverUrl);
-    log.info("uploadUrl="+uploadUrl);
-    log.info("mchNum="+mchNum);
+//    log.info("rootDir="+rootDir);
+//    log.info("otLDir="+otLDir);
+//    log.info("starLDir="+starLDir);
+//    log.info("orgIDir="+orgIDir);
+//    log.info("cutIDir="+cutIDir);
+//    log.info("cfgDir="+cfgDir);
+//    log.info("serverUrl="+serverUrl);
+//    log.info("uploadUrl="+uploadUrl);
+//    log.info("mchNum="+mchNum);
 
     List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
     for (ConfigFile cf : cfs) {
@@ -77,7 +77,7 @@ public class DataSyncServiceImpl implements DataSyncService {
 
     if (running == false) {
       running = true;
-      log.info("job fileTransferJob is done.");
+//      log.info("job fileTransferJob is done.");
     }
   }
 
