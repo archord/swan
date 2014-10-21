@@ -15,6 +15,15 @@ import java.util.List;
  */
 public class CommonFunction {
   
+  public static String getCurTimeString(){
+    return getTimeString(new Date());
+  }
+  
+  public static String getTimeString(Date date){
+    SimpleDateFormat formatter = new SimpleDateFormat ("HHmmssSSS"); 
+    return formatter.format(date);
+  }
+  
   public static String getCurDateString(){
     return getDateString(new Date());
   }
@@ -29,7 +38,7 @@ public class CommonFunction {
   }
   
   public static String getDateTimeString(Date date){
-    SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMddHHmmss"); 
+    SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMddHHmmssSSS"); 
     return formatter.format(date);
   }
   

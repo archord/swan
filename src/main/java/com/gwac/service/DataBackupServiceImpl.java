@@ -27,10 +27,10 @@ public class DataBackupServiceImpl implements DataBackupService{
   public void backupData() {
     
     if (running == true) {
-      log.info("start job dataBackupJob...");
+      log.debug("start job dataBackupJob...");
       running = false;
     } else {
-      log.info("job dataBackupJob is running, jump this scheduler.");
+      log.debug("job dataBackupJob is running, jump this scheduler.");
       return;
     }
     
@@ -40,7 +40,7 @@ public class DataBackupServiceImpl implements DataBackupService{
     
     if (running == false) {
       running = true;
-      log.info("job dataBackupJob is done.");
+      log.debug("job dataBackupJob is done.");
     }
     
   }

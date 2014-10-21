@@ -28,7 +28,7 @@ public class FitsFileDAOImpl extends BaseHibernateDaoImpl<FitsFile> implements F
 
     if (!q.list().isEmpty()) {
       return (FitsFile) q.list().get(0);
-    }else{
+    } else {
       return null;
     }
   }
@@ -43,13 +43,9 @@ public class FitsFileDAOImpl extends BaseHibernateDaoImpl<FitsFile> implements F
     if (q.list().isEmpty()) {
       super.save(obj);
     } else {
-      try {
-        BigInteger ffId = (BigInteger) q.list().get(0);
-        obj.setFfId(ffId.longValue());
-        log.warn("file " + obj.getFileName() + " already exist!");
-      } catch (ClassCastException cce) {
-        cce.printStackTrace();
-      }
+      BigInteger ffId = (BigInteger) q.list().get(0);
+      obj.setFfId(ffId.longValue());
+      log.debug("source fits file " + obj.getFileName() + " already exist!");
     }
   }
 }

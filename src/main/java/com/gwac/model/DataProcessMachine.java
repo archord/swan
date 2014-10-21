@@ -1,6 +1,7 @@
 package com.gwac.model;
 // Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class DataProcessMachine implements java.io.Serializable {
   private Integer curProcessNumber;
   private Float totalStorageSize;
   private Float usedStorageSize;
+  private Date monitorImageTime;
 
   public DataProcessMachine() {
   }
@@ -106,6 +108,21 @@ public class DataProcessMachine implements java.io.Serializable {
 
   public void setUsedStorageSize(Float usedStorageSize) {
     this.usedStorageSize = usedStorageSize;
+  }
+
+  /**
+   * @return the monitorImageTime
+   */
+  @Column(name = "monitor_image_time")
+  public Date getMonitorImageTime() {
+    return monitorImageTime;
+  }
+
+  /**
+   * @param monitorImageTime the monitorImageTime to set
+   */
+  public void setMonitorImageTime(Date monitorImageTime) {
+    this.monitorImageTime = monitorImageTime;
   }
 
 }

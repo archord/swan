@@ -8,6 +8,10 @@
     <property name="ufService" ref="ufService" />	
     <property name="cfDao" ref="cfDao" />	
   </bean>
+
+  <bean class="com.gwac.action.RealTimeOtDistributionImageReceive" scope="prototype">
+    <property name="dpmDao" ref="dpmDao" />	
+  </bean>
   
   <bean class="com.gwac.action.GetUploadFileUnstoreList"  scope="prototype">
     <property name="ufuDao" ref="ufuDao" />	

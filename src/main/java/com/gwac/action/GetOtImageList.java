@@ -26,6 +26,8 @@ public class GetOtImageList extends ActionSupport {
   private OtLevel2Dao obDao;
   private int totalImage;
   private int startImgNum;
+  private String ra;
+  private String dec;
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
@@ -33,6 +35,8 @@ public class GetOtImageList extends ActionSupport {
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
     ffcList = ffcDao.getCutImageByOtName(getOtName());
     OtLevel2 ob = obDao.getOtLevel2ByName(otName);
+    setRa(ob.getRa() + "") ;
+    setDec(ob.getDec() + "");
     setStartImgNum(ob.getLastFfNumber());
     totalImage = ffcList.size();
     for (FitsFileCut ffc : ffcList) {
@@ -111,4 +115,33 @@ public class GetOtImageList extends ActionSupport {
   public void setStartImgNum(int startImgNum) {
     this.startImgNum = startImgNum;
   }
+
+  /**
+   * @return the ra
+   */
+  public String getRa() {
+    return ra;
+  }
+
+  /**
+   * @param ra the ra to set
+   */
+  public void setRa(String ra) {
+    this.ra = ra;
+  }
+
+  /**
+   * @return the dec
+   */
+  public String getDec() {
+    return dec;
+  }
+
+  /**
+   * @param dec the dec to set
+   */
+  public void setDec(String dec) {
+    this.dec = dec;
+  }
+
 }

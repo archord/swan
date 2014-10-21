@@ -11,6 +11,10 @@
 <!--  <bean id="editDPMEntry" class="com.gwac.action.EditDPMEntry">
     <property name="dpmDao" ref="dpmDao" />	
   </bean>-->
+
+  <bean class="com.gwac.action.GetDpmMonitorImageTime" scope="prototype">
+    <property name="dpmDao" ref="dpmDao" />	
+  </bean>
   
   <bean id="dpmService" class="com.gwac.service.DataProcessMachineServiceImpl">
     <property name="dpmDao" ref="dpmDao" />	

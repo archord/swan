@@ -73,7 +73,7 @@
   <bean id="fileTransferTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="fileTransferJob" />
-    <property name="repeatInterval" value="60000" /> <!-- 60000   -->
+    <property name="repeatInterval" value="10000" /> <!-- 60000   -->
     <property name="startDelay" value="20000" /> <!-- 20000  -->
   </bean>
   

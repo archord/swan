@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,13 +44,14 @@ public class GetCutImageList extends ActionSupport {
   private FitsFileCutDAO ffcDao;
   private InputStream fileInputStream;
   private String fileName;
+  private String rootWebDir;
   private String echo = "";
 
   @Action(value = "getCutImageList", results = {
     @Result(location = "forward.jsp", name = SUCCESS),
     @Result(location = "forward.jsp", name = INPUT),
     @Result(location = "forward.jsp", name = ERROR)})
-  public String upload() throws Exception {
+  public String upload() {
 
     boolean flag = true;
     String result = SUCCESS;
@@ -62,7 +64,6 @@ public class GetCutImageList extends ActionSupport {
     }
 
     if (flag) {
-      dpmName = dpmName.trim();
       String rootPath = getText("gwac.data.root.directory");
       String destPath = rootPath;
       if (destPath.charAt(destPath.length() - 1) != '/') {
@@ -70,41 +71,54 @@ public class GetCutImageList extends ActionSupport {
       } else {
         destPath += "tmp/";
       }
-//      fileName = dpmName + "-" + ((int) (Math.random() * 1000) + 1) + ".lst";
-//      fileName = dpmName + ".lst";
-      fileName = dpmName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
-      log.debug("request cut image list destPath=" + destPath + fileName);
       File tmpDir = new File(destPath);
       if (!tmpDir.exists()) {
         tmpDir.mkdirs();
+        log.debug("create dir " + tmpDir);
       }
-      File file = new File(destPath, fileName);
-      if (!file.exists()) {
-        file.createNewFile();
-      }
+
+      dpmName = dpmName.trim();
       int dpmId = Integer.parseInt(dpmName.substring(1));
       String content = ffcDao.getUnCuttedStarList(dpmId);
-      FileWriter fw = new FileWriter(file.getAbsoluteFile());
-      BufferedWriter bw = new BufferedWriter(fw);
-      bw.write(content);
-      bw.close();
-      log.info("ot file name "+file.getAbsolutePath());
-      log.info("ot list file "+ fileName +" size "+ file.length());
+      try {
+        if (!content.isEmpty()) {
+          fileName = dpmName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
+          File file = new File(destPath, fileName);
+          if (!file.exists()) {
+            file.createNewFile();
+            log.debug("create cut image list file " + file);
+          }
+          FileWriter fw = new FileWriter(file.getAbsoluteFile());
+          BufferedWriter bw = new BufferedWriter(fw);
+          bw.write(content);
+          bw.close();
+        } else {
+          fileName = "empty.lst";
+          File file = new File(destPath, fileName);
+          if (!file.exists()) {
+            file.createNewFile();
+            log.debug("create empty file " + file);
+          }
+          log.debug("no cut images found at this time.");
+        }
+      } catch (IOException ex) {
+        log.error("create or write file error ", ex);
+      }
     } else {
       result = ERROR;
     }
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
-    ctx.getSession().put("fileName", "/images/tmp/"+fileName);
+    ctx.getSession().put("fileName", rootWebDir+"/tmp/" + fileName);
     return result;
   }
 
-  @Action(value = "getCutImageList1", results = { 
-    @Result(name = "success", type = "stream", 
-            params = { "contentType", "application/octet-stream", 
-              "inputName", "fileInputStream", 
-              "contentDisposition", "attachment;filename=\"${fileName}\"", 
-              "bufferSize", "4096" }) })
+  @Action(value = "getCutImageList1", results = {
+    @Result(name = "success", type = "stream",
+            params = {"contentType", "application/octet-stream",
+              "inputName", "fileInputStream",
+              "contentDisposition", "attachment;filename=\"${fileName}\"",
+              "bufferSize", "4096"})})
   public String upload1() throws Exception {
 
     boolean flag = true;
@@ -180,6 +194,13 @@ public class GetCutImageList extends ActionSupport {
    */
   public void setFfcDao(FitsFileCutDAO ffcDao) {
     this.ffcDao = ffcDao;
+  }
+
+  /**
+   * @param rootWebDir the rootWebDir to set
+   */
+  public void setRootWebDir(String rootWebDir) {
+    this.rootWebDir = rootWebDir;
   }
 
 }

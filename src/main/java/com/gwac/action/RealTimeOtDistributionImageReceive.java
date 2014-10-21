@@ -8,6 +8,7 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.DataProcessMachineDAO;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
@@ -32,22 +33,23 @@ import org.apache.struts2.convention.annotation.Result;
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
 public class RealTimeOtDistributionImageReceive extends ActionSupport {
-
+  
   private static final Log log = LogFactory.getLog(RealTimeOtDistributionImageReceive.class);
-
+  
   private File fileUpload;
   private String fileUploadFileName;
   private String echo = "";
-
+  private DataProcessMachineDAO dpmDao;
+  
   @Action(value = "realTimeOtDstImageUpload", results = {
     @Result(location = "manage/result.jsp", name = SUCCESS),
     @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() throws Exception {
-
+    
     boolean flag = true;
     String result = SUCCESS;
-    System.out.println("echo="+echo);
+    System.out.println("echo=" + echo);
     if (fileUpload != null && fileUploadFileName != null && getFileUpload().exists() && !fileUploadFileName.isEmpty()) {
       String destPath = getText("gwac.data.root.directory");
       if (destPath.charAt(destPath.length() - 1) != '/') {
@@ -56,35 +58,42 @@ public class RealTimeOtDistributionImageReceive extends ActionSupport {
 
       //接收参数配置文件
       String otDstPath = destPath + getText("gwac.real.time.ot.distribution") + "/";
-
+      
       File tDir = new File(otDstPath);
       if (!tDir.exists()) {
         tDir.mkdirs();
       }
-
-      log.info("receive file, path: " + otDstPath + ", name: " + fileUploadFileName);
+      
       File otDstImage = new File(otDstPath, fileUploadFileName);
+      log.debug("receive file " + otDstImage);
+      
       if (otDstImage.exists()) {
         FileUtils.forceDelete(otDstImage);
       }
       if (fileUpload != null && fileUpload.exists()) {
         FileUtils.moveFile(fileUpload, otDstImage);
       }
-      echo += "upload success. file name is " + fileUploadFileName + "\n";
+      
+      if (fileUploadFileName.endsWith("ccdimg.jpg")) {
+        int dpmId = Integer.parseInt(fileUploadFileName.substring(1, 3));
+        dpmDao.updateMonitorImageTime(dpmId);
+      }
+      
+      echo += "success, file name is " + fileUploadFileName + "\n";
     } else {
-      echo += "upload error. upload file does not exist.\n";
+      echo += "error, upload file does not exist.\n";
     }
-    log.info(echo);
+    log.debug(echo);
     /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
      * 用jsp的out，则不会有两个空行。
      * 在这里将结果信息存储在session中，在jsp页面获得返回信息。
      */
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", getEcho());
-
+    
     return result;
   }
-
+  
   public String display() {
     return NONE;
   }
@@ -131,4 +140,11 @@ public class RealTimeOtDistributionImageReceive extends ActionSupport {
     this.fileUploadFileName = fileUploadFileName;
   }
 
+  /**
+   * @param dpmDao the dpmDao to set
+   */
+  public void setDpmDao(DataProcessMachineDAO dpmDao) {
+    this.dpmDao = dpmDao;
+  }
+  
 }

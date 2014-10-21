@@ -1,0 +1,120 @@
+<%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title>GWAC CCD图像实时预览</title>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.js"></script>
+    <script type="text/javascript">
+
+      $(function() {
+        var dataurl = "<%=request.getContextPath()%>/get-dpm-monitor-image-time.action";
+        
+        function onImageReceived(result) {
+          var dpms = result.dpms;
+          for (var i = 0; i < dpms.length; i++) {
+            $("#span" + dpms[i].dpmId).html(dpms[i].name+" ("+dpms[i].curProcessNumber+"-"+dpms[i].monitorImageTime.replace("T", " ")+")");
+          }
+        }
+        
+        function updateImage() {
+          for (var i = 1; i <= 12; i++) {
+            var orgSrc = $('#img' + i).attr('src');
+            orgSrc += "?timestamp=123456";
+            orgSrc = orgSrc.substring(0, orgSrc.indexOf('?'));
+            orgSrc += "?timestamp=" + new Date().getTime();
+            $("#img" + i).attr("src", orgSrc);
+          }
+          $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
+        }
+        setInterval(updateImage, 15000);
+        
+        function shijian()
+        {
+          var date = new Date();
+          var xiaoshi = date.getHours();
+          var fen = date.getMinutes();
+          var miao = date.getSeconds();
+          if (fen <= 9)fen = "0" + fen;
+          if (miao <= 9)miao = "0" + miao;
+          var xianshi = "<font class='b'>" + xiaoshi + ":" + fen + ":" + miao + "</font>";
+          $("#a").html(xianshi);
+        }
+        setInterval(shijian, 1000);
+      });
+    </script>
+    <style type="text/css">
+      <!--
+      .style3 {font-size: 18px}
+      .style5 {
+        font-size: 16px;
+        font-weight: bold;
+      }
+      .style6 {font-size: 14px}
+      .style7 {font-size: 12px}
+      -->
+    </style></head>
+
+  <body>
+    <table width="900" border="0">
+      <!--=E to get the time-->
+      <!--=E ======================-->
+      <tr>
+        <td  bgcolor="#CCCCFF">
+          <div align="center">
+            <span class="style3">----- Mini-GWAC ccdimg monitor ----- </span>
+            <div id="a"></div>
+            <!--=E ===============-->
+          </div></td>
+      </tr>
+
+      <tr>
+        <td>
+          <table width="1810" border="1" style="color: blue;">
+            <tr>
+              <td width="235"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span1">M01</span> </div></td>
+              <td width="235"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span2">M02</span> </div></td>
+              <td width="213"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span3">M03</span></div></td>
+              <td width="213"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span4">M04</span></div></td>
+            </tr>
+            <tr>
+              <td height="250"><div align="center"><a href="#"><img id="img1" src="/images/realTimeOtDistribution/M01_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img2" src="/images/realTimeOtDistribution/M02_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img3" src="/images/realTimeOtDistribution/M03_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img4" src="/images/realTimeOtDistribution/M04_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+            </tr>
+            <tr>
+              <td width="235"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span5">M05</span> </div></td>
+              <td width="235"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span6">M06</span> </div></td>
+              <td width="213"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span7">M07</span></div></td>
+              <td width="213"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span8">M08</span></div></td>
+            </tr>
+            <tr>
+              <td height="250"><div align="center"><a href="#"><img id="img5" src="/images/realTimeOtDistribution/M05_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img6" src="/images/realTimeOtDistribution/M06_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img7" src="/images/realTimeOtDistribution/M07_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img8" src="/images/realTimeOtDistribution/M08_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+            </tr>
+            <tr>
+              <td width="235"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span9">M09</span> </div></td>
+              <td width="235"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span10">M10</span> </div></td>
+              <td width="213"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span11">M11</span></div></td>
+              <td width="213"  bgcolor="#CCCCFF"><div align="center" class="style6"><span id="span12">M12</span></div></td>
+            </tr>
+            <tr>
+              <td height="250"><div align="center"><a href="#"><img id="img9" src="/images/realTimeOtDistribution/M09_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img10" src="/images/realTimeOtDistribution/M10_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img11" src="/images/realTimeOtDistribution/M11_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+              <td><div align="center"><a href="#"><img id="img12" src="/images/realTimeOtDistribution/M12_ccdimg.jpg" width="450" height="250" border="0"/></a></div></td>
+            </tr>
+          </table>
+      <tr>
+        <td  bgcolor="#CCCCFF"><div align="center">
+            <p class="style7">Copyright: GWAC project. Created by L.P. Xin</p>
+          </div></td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,10 +1,13 @@
 package com.gwac.action;
 
+import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.model.DataProcessMachine;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.opensymphony.xwork2.ActionSupport;
+import java.io.File;
 import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,6 +29,11 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
   private List<OtLevel2> otLv2Cur;
   private OtLevel2Dao otDao = null;
   private OtObserveRecordDAO oorDao = null;
+  private List<DataProcessMachine> dpms;
+  private DataProcessMachineDAO dpmDao;
+
+  private String dataDisk;
+  private float masterUsage;
 
   @SuppressWarnings("unchecked")
   public String execute() {
@@ -33,14 +41,24 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
     otLv1 = oorDao.getLatestNLv1OT(40);
     otLv2 = otDao.getNCurOccurLv2OT();
     otLv2Cur = otDao.getCurOccurLv2OT();
-    log.debug("otLv1:"+otLv1.size());
-    log.debug("otLv2:"+otLv2.size());
-    log.debug("otLv2Cur:"+otLv2Cur.size());
+    dpms = dpmDao.getAllDpms();
+    setMasterUsage();
     return SUCCESS;
   }
 
   public void setSession(Map<String, Object> session) {
     this.session = session;
+  }
+
+  public void setMasterUsage() {
+    if (dataDisk != null && !dataDisk.isEmpty()) {
+      File file = new File(dataDisk);
+      long totalSpace = file.getTotalSpace(); //total disk space in bytes.
+      long freeSpace = file.getFreeSpace(); //unallocated / free disk space in bytes.
+      masterUsage = (float) 1.0 * (totalSpace - freeSpace) / totalSpace;
+    } else {
+      masterUsage = (float) 1.0;
+    }
   }
 
   /**
@@ -97,5 +115,47 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
    */
   public void setOorDao(OtObserveRecordDAO oorDao) {
     this.oorDao = oorDao;
+  }
+
+  /**
+   * @param dpmDao the dpmDao to set
+   */
+  public void setDpmDao(DataProcessMachineDAO dpmDao) {
+    this.dpmDao = dpmDao;
+  }
+
+  /**
+   * @return the dpms
+   */
+  public List<DataProcessMachine> getDpms() {
+    return dpms;
+  }
+
+  /**
+   * @param dpms the dpms to set
+   */
+  public void setDpms(List<DataProcessMachine> dpms) {
+    this.dpms = dpms;
+  }
+
+  /**
+   * @return the masterUsage
+   */
+  public float getMasterUsage() {
+    return masterUsage;
+  }
+
+  /**
+   * @param masterUsage the masterUsage to set
+   */
+  public void setMasterUsage(float masterUsage) {
+    this.masterUsage = masterUsage;
+  }
+
+  /**
+   * @param dataDisk the dataDisk to set
+   */
+  public void setDataDisk(String dataDisk) {
+    this.dataDisk = dataDisk;
   }
 }

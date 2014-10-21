@@ -63,10 +63,10 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
 
   @SuppressWarnings("unchecked")
   public String execute() {
-    log.info("Page " + getPage() + " Rows " + getRows()
-            + " Sorting Order " + getSord() + " Index Row :" + getSidx());
-    log.info("Search :" + searchField + " " + searchOper + " "
-            + searchString);
+//    log.info("Page " + getPage() + " Rows " + getRows()
+//            + " Sorting Order " + getSord() + " Index Row :" + getSidx());
+//    log.info("Search :" + searchField + " " + searchOper + " "
+//            + searchString);
 
     // Calucalate until rows ware selected
     int to = (rows * page);
@@ -81,13 +81,13 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
 
     // Count all record (select count(*) from )
     records = otorDao.countRecordByOtName(otName);
-    log.debug("records=" + records);
-    log.info("records=" + records);
+//    log.debug("records=" + records);
+//    log.info("records=" + records);
 
     if (totalrows != null) {
       records = totalrows;
     }
-    log.info("records=" + records);
+//    log.info("records=" + records);
 
     // Set to = max rows
     if (to > records) {
@@ -96,11 +96,11 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
 
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
-    log.info("from=" + from);
-    log.info("to=" + to);
-    log.info("size=" + gridModel.size());
-    log.info("records=" + records);
-    log.info("total=" + total);
+//    log.info("from=" + from);
+//    log.info("to=" + to);
+//    log.info("size=" + gridModel.size());
+//    log.info("records=" + records);
+//    log.info("total=" + total);
 
     return SUCCESS;
   }

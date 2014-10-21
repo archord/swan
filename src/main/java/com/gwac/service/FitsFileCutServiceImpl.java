@@ -34,74 +34,44 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   private int successiveImageNumber;
   private int headTailCutNumber;
 
-  public void addMissedCutImages1() {
-    System.out.println("running=" + running);
-    if (running == true) {
-      running = false;
-      System.out.println("set running=" + running);
-    } else {
-      System.out.println("running=" + running + " waiting...");
-      return;
-    }
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException ex) {
-      ex.printStackTrace();
-    }
-    if (running == false) {
-      running = true;
-      System.out.println("set running=" + true);
-    }
-  }
-
   public void addMissedCutImages() {
 
+    long startTime=0;
+    long endTime=0;
     if (running == true) {
-//      log.info("start job addMissedCutImagesJob...");
+      log.debug("start job addMissedCutImagesJob.");
       running = false;
+      startTime = System.nanoTime();
     } else {
-//      log.info("job addMissedCutImagesJob is running, jump this scheduler.");
+      log.warn("job addMissedCutImagesJob is running, jump this scheduler.");
       return;
     }
 
-    int totalAddCutImages = 0;
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
-//    log.info("miss cutted otlv2 " + otlv2s.size());
     for (OtLevel2 otlv2 : otlv2s) {
-
       int cuttedFfNumber = otlv2.getCuttedFfNumber();
-
       List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), cuttedFfNumber);
-
       if (ffcs.isEmpty()) {
-        return;
+        log.warn("otlv2 "+ otlv2.getOtId() + " is not cut done, but uncuted ffcs is empty.");
+        continue;
       }
       otlv2.setCuttedFfNumber(ffcs.get(ffcs.size() - 1).getNumber());
       otlv2Dao.update(otlv2);
-
-//      log.info("ot_id:" + otlv2.getOtId());
-//      log.info("all ffc ids: ");
-//      for (FitsFileCut ffc : ffcs) {
-//        log.info(ffc.getNumber());
-//      }
 
       //add head missed image
       FitsFileCut headFFC = ffcs.get(0);
       int headNum = headFFC.getNumber();
 
       if (headNum == otlv2.getFirstFfNumber()) {
-
-//        log.info("add head missed image");
         int tNum = headNum - headTailCutNumber;
         if (tNum < 1) {
           tNum = 1;  //number start from 1
         }
         for (int i = tNum; i < headNum; i++) {
-//          log.info("add number " + i);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
-            log.error("add missed cut fits file, can't find orig fits file " + ffName);
+            log.warn("add missed cut fits file, can't find orig fits file " + ffName);
             continue;
           }
           FitsFileCut ffc = new FitsFileCut();
@@ -117,7 +87,6 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setSuccessCut(false);
           ffc.setIsMissed(true);
           ffcDao.save(ffc);
-          totalAddCutImages++;
         }
       } 
 
@@ -134,7 +103,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), j);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
-            log.error("add missed cut fits file, can't find orig fits file " + ffName);
+            log.warn("add missed cut fits file, can't find orig fits file " + ffName);
             continue;
           }
           FitsFileCut ffc = new FitsFileCut();
@@ -150,7 +119,6 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setSuccessCut(false);
           ffc.setIsMissed(true);
           ffcDao.save(ffc);
-          totalAddCutImages++;
         }
       }
 
@@ -171,7 +139,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
-            log.error("add missed cut fits file, can't find orig fits file " + ffName);
+            log.warn("add missed cut fits file, can't find orig fits file " + ffName);
             continue;
           }
           FitsFileCut ffc = new FitsFileCut();
@@ -187,17 +155,17 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setSuccessCut(false);
           ffc.setIsMissed(true);
           ffcDao.save(ffc);
-          totalAddCutImages++;
         }
         otlv2Dao.updateAllFileCuttedById(otlv2.getOtId());
       }
     }
-//    log.info("total add cut images " + totalAddCutImages);
 
     if (running == false) {
       running = true;
-//      log.info("job addMissedCutImagesJob is done.");
+      log.debug("job addMissedCutImagesJob is done.");
     }
+    endTime = System.nanoTime();
+    log.debug("fitsfilecut consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
   }
 
   /**

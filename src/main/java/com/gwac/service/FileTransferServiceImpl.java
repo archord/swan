@@ -12,6 +12,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,73 +45,126 @@ public class FileTransferServiceImpl implements FileTransferService {
 
   private static final Log log = LogFactory.getLog(FileTransferServiceImpl.class);
   private static boolean running = true;
-
   private Boolean isBeiJingServer;
-  
-  public void transFile2() {
-    
-    if(isBeiJingServer){
+
+  private WatchService watcher;
+  private Boolean isSuccess = false;
+
+//  void FileTransferServiceImpl() {
+//    try {
+//      System.out.println("123");
+//      watcher = FileSystems.getDefault().newWatchService();
+//      Path dir = Paths.get("E:/TestData/gwacTest");
+//      dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
+//      System.out.println("Watch Service registered for dir: " + dir.getFileName());
+//      isSuccess = true;
+//    } catch (IOException ex) {
+//      isSuccess = false;
+//      ex.printStackTrace();
+//    }
+//  }
+
+  public void transFile() {
+      System.out.println("123");
+    try {
+      System.out.println("123");
+      watcher = FileSystems.getDefault().newWatchService();
+      Path dir = Paths.get("E:/TestData/gwacTest");
+      dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
+      System.out.println("Watch Service registered for dir: " + dir.getFileName());
+      isSuccess = true;
+    } catch (IOException ex) {
+      isSuccess = false;
+      ex.printStackTrace();
+    }
+
+    if (isBeiJingServer || !isSuccess) {
       return;
     }
 
     if (running == true) {
-      log.info("start job fileTransferJob...");
+      log.debug("start job fileTransferJob...");
       running = false;
     } else {
-      log.info("job fileTransferJob is running, jump this scheduler.");
+      log.warn("job fileTransferJob is running, jump this scheduler.");
       return;
     }
-
-    CloseableHttpClient httpclient = HttpClients.createDefault();
     try {
-      HttpPost httppost = new HttpPost("http://159.226.88.94:8077/gwac/realTimeOtDstImageUpload.action");
+      WatchKey key = watcher.poll();
+      if(key!=null)
+      for (WatchEvent<?> event : key.pollEvents()) {
+        WatchEvent.Kind<?> kind = event.kind();
+        WatchEvent<Path> ev = (WatchEvent<Path>) event;
+        Path fileName = ev.context();
+        System.out.println(kind.name() + ": " + fileName);
 
-      FileBody bin = new FileBody(new File("/data/gwac_data/140428/M01/cfgfile/M1_01_140428_1_200060_0023.properties"));
-      StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
-
-      HttpEntity reqEntity = MultipartEntityBuilder.create()
-              .addPart("fileUpload", bin)
-              .addPart("comment", comment)
-              .build();
-
-
-      httppost.setEntity(reqEntity);
-
-      System.out.println("executing request " + httppost.getRequestLine());
-      CloseableHttpResponse response = httpclient.execute(httppost);
-      try {
-        System.out.println("----------------------------------------");
-        System.out.println(response.getStatusLine());
-        HttpEntity resEntity = response.getEntity();
-        if (resEntity != null) {
-          System.out.println("Response content length: " + resEntity.getContentLength());
+        if (kind == ENTRY_MODIFY) {
+          System.out.println("My source file has changed!!!");
         }
-        EntityUtils.consume(resEntity);
-      } catch (Exception e) {
-        e.printStackTrace();
-      } finally {
-        response.close();
       }
-    } catch (Exception e) {
-      e.printStackTrace();
 
-    } finally {
-      try {
-        httpclient.close();
-      } catch (IOException ex) {
-        ex.printStackTrace();
+      boolean valid = key.reset();
+      if (!valid) {
+        return;
       }
+    } catch (Exception ex) {
     }
 
+//    CloseableHttpClient httpclient = HttpClients.createDefault();
+//    try {
+//      HttpPost httppost = new HttpPost("http://159.226.88.94:8077/gwac/realTimeOtDstImageUpload.action");
+//
+//      FileBody bin = new FileBody(new File("/data/gwac_data/140428/M01/cfgfile/M1_01_140428_1_200060_0023.properties"));
+//      StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
+//
+//      HttpEntity reqEntity = MultipartEntityBuilder.create()
+//              .addPart("fileUpload", bin)
+//              .addPart("comment", comment)
+//              .build();
+//
+//      httppost.setEntity(reqEntity);
+//
+//      System.out.println("executing request " + httppost.getRequestLine());
+//      CloseableHttpResponse response = httpclient.execute(httppost);
+//      try {
+//        System.out.println("----------------------------------------");
+//        System.out.println(response.getStatusLine());
+//        HttpEntity resEntity = response.getEntity();
+//        if (resEntity != null) {
+//          System.out.println("Response content length: " + resEntity.getContentLength());
+//        }
+//        EntityUtils.consume(resEntity);
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      } finally {
+//        response.close();
+//      }
+//  }
+//  catch (Exception e
+//
+//  
+//    ) {
+//      e.printStackTrace();
+//
+//  }
+//
+//  
+//    finally {
+//      try {
+//      httpclient.close();
+//    } catch (IOException ex) {
+//      ex.printStackTrace();
+//    }
+//  }
     if (running == false) {
       running = true;
-      log.info("job fileTransferJob is done.");
+      log.debug("job fileTransferJob is done.");
     }
   }
-  
-  public void transFile() {
-    
-    if(isBeiJingServer){
+
+  public void transFile3() {
+
+    if (isBeiJingServer) {
       return;
     }
 

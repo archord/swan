@@ -15,6 +15,7 @@
   
   <bean class="com.gwac.action.GetCutImageList"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
+    <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
   </bean>
   
   <bean class="com.gwac.action.GetOtImageList"  scope="prototype">

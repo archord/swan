@@ -53,22 +53,22 @@ public class DataSyncServiceImpl implements DataSyncService {
     }
 
     if (running == true) {
-//      log.info("start job fileTransferJob...");
+      log.debug("start job fileTransferJob...");
       running = false;
     } else {
-//      log.info("job fileTransferJob is running, jump this scheduler.");
+      log.warn("job fileTransferJob is running, jump this scheduler.");
       return;
     }
     
-//    log.info("rootDir="+rootDir);
-//    log.info("otLDir="+otLDir);
-//    log.info("starLDir="+starLDir);
-//    log.info("orgIDir="+orgIDir);
-//    log.info("cutIDir="+cutIDir);
-//    log.info("cfgDir="+cfgDir);
-//    log.info("serverUrl="+serverUrl);
-//    log.info("uploadUrl="+uploadUrl);
-//    log.info("mchNum="+mchNum);
+    log.debug("rootDir="+rootDir);
+    log.debug("otLDir="+otLDir);
+    log.debug("starLDir="+starLDir);
+    log.debug("orgIDir="+orgIDir);
+    log.debug("cutIDir="+cutIDir);
+    log.debug("cfgDir="+cfgDir);
+    log.debug("serverUrl="+serverUrl);
+    log.debug("uploadUrl="+uploadUrl);
+    log.debug("mchNum="+mchNum);
 
     List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
     for (ConfigFile cf : cfs) {
@@ -77,11 +77,11 @@ public class DataSyncServiceImpl implements DataSyncService {
 
     if (running == false) {
       running = true;
-//      log.info("job fileTransferJob is done.");
+      log.debug("job fileTransferJob is done.");
     }
   }
 
-  private int syncConfigFile(ConfigFile cf) {
+  private void syncConfigFile(ConfigFile cf) {
 
     String configPath;
     String configFile;
@@ -104,10 +104,10 @@ public class DataSyncServiceImpl implements DataSyncService {
        */
       File tfile = new File(configPath, configFile);
       if (!tfile.exists()) {
-        log.error("file not exist: " + tfile);
-        return 0;
+        log.warn(tfile + " not exist.");
+        return;
       }else{
-        log.info("read config file: " + tfile.getAbsolutePath());
+        log.debug("read config file: " + tfile.getAbsolutePath());
       }
       input = new FileInputStream(tfile);
       Properties cfile = new Properties();
@@ -144,7 +144,6 @@ public class DataSyncServiceImpl implements DataSyncService {
         fNum += cutImages.length;
       }
 
-
       /**
        * 发送配置文件及数据文件
        */
@@ -155,7 +154,7 @@ public class DataSyncServiceImpl implements DataSyncService {
       mpEntity.addPart("configFile", new FileBody(tfile));
 
       String rootPath = rootDir + "/" + dateStr + "/" + dpmName + "/";
-      log.info("rootPath="+rootPath);
+      log.debug("rootPath="+rootPath);
       
       if(otList!=null)
       for (String tName : otList) {
@@ -164,7 +163,7 @@ public class DataSyncServiceImpl implements DataSyncService {
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
         }else{
-          log.info(tfile1.getAbsolutePath()+" does not exist!");
+          log.warn(tfile1.getAbsolutePath()+" not exist!");
         }
       }
       
@@ -175,7 +174,7 @@ public class DataSyncServiceImpl implements DataSyncService {
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
         }else{
-          log.info(tfile1.getAbsolutePath()+" does not exist!");
+          log.warn(tfile1.getAbsolutePath()+" not exist!");
         }
       }
       
@@ -186,7 +185,7 @@ public class DataSyncServiceImpl implements DataSyncService {
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
         }else{
-          log.info(tfile1.getAbsolutePath()+" does not exist!");
+          log.warn(tfile1.getAbsolutePath()+" not exist!");
         }
       }
       
@@ -197,48 +196,44 @@ public class DataSyncServiceImpl implements DataSyncService {
         if(tfile1.exists()){
           mpEntity.addPart("fileUpload", new FileBody(tfile1));
         }else{
-          log.info(tfile1.getAbsolutePath()+" does not exist!");
+          log.warn(tfile1.getAbsolutePath()+" not exist!");
         }
       }
 
       HttpEntity reqEntity = mpEntity.build();
       httppost.setEntity(reqEntity);
-
-      log.info("executing request " + httppost.getRequestLine());
       CloseableHttpResponse response = httpclient.execute(httppost);
       try {
-        System.out.println("----------------------------------------");
-        System.out.println(response.getStatusLine());
+        log.debug(response.getStatusLine());
         HttpEntity resEntity = response.getEntity();
         if (resEntity != null) {
-          log.info("Response content length: " + resEntity.getContentLength());
-          log.info("Response content: " + IOUtils.toString(resEntity.getContent()));
+          log.debug("response content: " + IOUtils.toString(resEntity.getContent()));
         }
         EntityUtils.consume(resEntity);
-      } catch (Exception e) {
-        e.printStackTrace();
+      } catch (IOException ex) {
+        log.error("read response error", ex);
+      } catch (IllegalStateException ex) {
+        log.error("get content error", ex);
       } finally {
         response.close();
       }
 
-    } catch (Exception ex) {
-      log.error("load property file error!");
-      ex.printStackTrace();
+    } catch (IOException ex) {
+      log.error("read property file or send request error", ex);
     } finally {
       if (input != null) {
         try {
           input.close();
         } catch (IOException ex) {
-          ex.printStackTrace();
+          log.error("close properties error", ex);
         }
         try {
           httpclient.close();
         } catch (IOException ex) {
-          ex.printStackTrace();
+          log.error("close httpclient error", ex);
         }
       }
     }
-    return fNum;
   }
 
   /**

@@ -143,12 +143,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
             otorDao.save(oor);
             List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
-//            log.debug("********************************* ");
-//            log.debug("oors size: " + oors.size());
-//            log.debug("ff_number: " + oor.getFfNumber());
-//            for (OtObserveRecord tOor : oors) {
-//              log.debug(tOor.getFfNumber() + " " + tOor.getXTemp() + " " + tOor.getYTemp());
-//            }
             if (oors.size() >= occurNumber) {
               OtObserveRecord oor1 = oors.get(0);
 
@@ -170,13 +164,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setAllFileCutted(false);
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
-
               otLv2Dao.save(tOtLv2);
-//              log.debug("ot name: " + otName);
-//              log.debug("*********************************");
 
               for (OtObserveRecord tOor : oors) {
-//                log.debug("otId: " + tOor.getOtId());
                 if (tOor.getOtId() != 0) {
                   continue;
                 }

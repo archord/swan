@@ -11,12 +11,14 @@ package com.gwac.action;
 import com.gwac.dao.ConfigFileDao;
 import com.gwac.model.ConfigFile;
 import com.gwac.service.UploadFileServiceImpl;
+import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
@@ -36,9 +38,7 @@ import org.apache.struts2.convention.annotation.Result;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-
 //@ParentPackage(value="struts-default")
-
 //@Controller()
 //@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MultipleFileUploadAction extends ActionSupport {
@@ -92,7 +92,7 @@ public class MultipleFileUploadAction extends ActionSupport {
     }
 
     if (fileUpload.size() != fileUploadFileName.size()) {
-      setEcho(echo + "Upload data error，please retry or contact manager!\n");
+      setEcho(echo + "Upload data error，please check upload command and retry!\n");
       flag = false;
     }
 
@@ -129,8 +129,8 @@ public class MultipleFileUploadAction extends ActionSupport {
 
         File destDir = new File(destPath);
         if (!destDir.exists()) {
-          log.info(destDir + " dose not exist.");
           destDir.mkdirs();
+          log.debug("create dir " + destDir);
         }
 
         //接收参数配置文件
@@ -138,16 +138,13 @@ public class MultipleFileUploadAction extends ActionSupport {
         File confDir = new File(confPath);
         if (!confDir.exists()) {
           confDir.mkdir();
+          log.debug("create dir " + confDir);
         }
 
+        configFileFileName = configFileFileName.replace(".", "_" + CommonFunction.getCurTimeString() + ".");
         File confFile = new File(confPath, configFileFileName);
-//        log.info(this.toString());
-//        log.info("currentDirectory: " + currentDirectory);
-//        log.info("dpmName: " + dpmName);
-//        log.info("receive file: " + confFile);
-//        log.info("source file: " + configFile);
         if (confFile.exists()) {
-          log.info("delete file: " + confFile);
+          log.warn(confFile + " already exist, delete it.");
           FileUtils.forceDelete(confFile);
         }
         FileUtils.moveFile(configFile, confFile);
@@ -173,7 +170,7 @@ public class MultipleFileUploadAction extends ActionSupport {
 //          log.info("source file: " + file);
           //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
           if (destFile.exists()) {
-            log.info("delete file: " + destFile);
+            log.warn(destFile + " already exist, delete it.");
             FileUtils.forceDelete(destFile);
           }
           FileUtils.moveFile(file, destFile);
@@ -191,21 +188,20 @@ public class MultipleFileUploadAction extends ActionSupport {
         int shouldFNum = ufService.parseConfigFile();
         int validFNum = ufService.checkAndMoveDataFile(destPath);
         if (validFNum != i || validFNum != shouldFNum) {
-          setEcho(echo + "Warning: should upload " + shouldFNum + " files, actual upload " + i
+          setEcho(echo + "warn: should upload " + shouldFNum + " files, actual upload " + i
                   + " files, " + validFNum + " valid files.\n");
         } else {
-          setEcho(echo + "Upload success，total upload " + validFNum + " files.\n");
+          setEcho(echo + "success, total upload " + validFNum + " files.\n");
         }
         //otORDao.saveOTCopy(configFileFileName);
-      } catch (Exception ex) {
-        log.info("receive file errror:");
-        log.error(ex);
+      } catch (IOException ex) {
+        log.error("delete or move file errror ", ex);
       }
     } else {
       result = ERROR;
     }
 
-    log.info(echo);
+    log.debug(echo);
     /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
      * 用jsp的out，则不会有两个空行。
      * 在这里将结果信息存储在session中，在jsp页面获得返回信息。

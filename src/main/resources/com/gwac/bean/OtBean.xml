@@ -12,6 +12,8 @@
   <bean class="com.gwac.action.GetOtXYList"  scope="prototype">
     <property name="otDao" ref="otbDao" />
     <property name="oorDao" ref="otORDao" />
+    <property name="dpmDao" ref="dpmDao" />	
+    <property name="dataDisk" value="${gwac.data.disk}" />	
   </bean>
 	
   <bean id="otbDao" class="com.gwac.dao.OtLevel2DaoImpl" >

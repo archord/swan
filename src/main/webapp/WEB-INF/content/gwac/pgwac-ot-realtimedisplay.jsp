@@ -18,7 +18,7 @@
           return (val).toFixed(axis.tickDecimals);
         }
         function formate2(val, axis) {
-          return (val*100).toFixed(0) + "%";
+          return (val * 100).toFixed(0) + "%";
         }
         var option1 = {
           legend: {show: false},
@@ -43,6 +43,7 @@
 
         var reqNum = 1;
         var plot = [];
+        var diskUsage = [];
         var ot1 = [];
         var ot2 = [];
         var ot2cur = [];
@@ -144,6 +145,29 @@
             reqNum++;
           }
           ot2curInterval = setInterval(highlightCurOT2, intervalTime);
+
+          var dpms = result.dpms;
+          diskUsage[0] = ["M", result.masterUsage];
+          for (var m = 0; m < dpms.length; m++) {
+            diskUsage[m+1] = [m+1, dpms[m].usedStorageSize/dpms[m].totalStorageSize];
+            console.log(dpms[m].usedStorageSize+" "+dpms[m].totalStorageSize+" "+diskUsage[m+1]);
+          }
+
+          $.plot("#sys-disk-usage", [diskUsage], {
+            series: {
+              color: "#77b7c5", //E8E800 77b7c5 AB5800
+              bars: {
+                show: true,
+                barWidth: 0.3,
+                align: "center",
+                fillColor: {colors: [{opacity: 0.5}, {opacity: 1}]}
+              }
+            },
+            xaxis: {
+              mode: "categories"
+            },
+            yaxis: {show: true, min: 0, max: 0.99, tickFormatter: formate2}
+          });
         }
 
         function update() {
@@ -151,26 +175,6 @@
           setTimeout(update, requestTime);
         }
         update();
-
-        var data11 = [["M", 0.7],["1", 0.1], ["2", 0.5], ["3", 0.8], ["4", 0.3], ["5", 0.2],
-          ["6", 0.5], ["7", 0.7], ["8", 0.9], ["9", 0.3], ["10", 0.1], ["11", 0.2],
-          ["12", 0.3]];
-
-        $.plot("#sys-disk-usage", [data11], {
-          series: {
-          color: "#77b7c5",  //E8E800 77b7c5 AB5800
-            bars: {
-              show: true,
-              barWidth: 0.3,
-              align: "center",
-              fillColor: { colors: [{ opacity: 0.5 }, { opacity: 1}] }
-            }
-          },
-          xaxis: {
-            mode: "categories"
-          },
-          yaxis: {show: true, min: 0, max: 0.99, tickFormatter: formate2}
-        });
 
         $("<div id='tooltip'></div>").css({
           position: "absolute",

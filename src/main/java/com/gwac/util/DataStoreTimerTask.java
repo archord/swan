@@ -21,19 +21,22 @@ public class DataStoreTimerTask {
   
   public void storeOT(){
     if (running == true) {
-//      log.info("start job storeOtObserveRecordJob...");
+      log.debug("start job storeOtObserveRecordJob...");
       running = false;
     } else {
-//      log.info("job storeOtObserveRecordJob is running, jump this scheduler.");
+      log.warn("job storeOtObserveRecordJob is running, jump this scheduler.");
       return;
     }
     
+    long startTime=System.nanoTime();
     otORService.storeOTCatalog();
+    long endTime=System.nanoTime();
     
     if (running == false) {
       running = true;
-//      log.info("job storeOtObserveRecordJob is done.");
+      log.debug("job storeOtObserveRecordJob is done.");
     }
+    log.debug("store ot observe record consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
   }
 
   /**
