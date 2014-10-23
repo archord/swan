@@ -5,9 +5,10 @@
 package com.gwac.dao;
 
 import com.gwac.model.FitsFileCut;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -16,6 +17,8 @@ import org.hibernate.Session;
  * @author xy
  */
 public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implements FitsFileCutDAO {
+
+  private static final Log log = LogFactory.getLog(FitsFileCutDAOImpl.class);
 
   public void moveDataToHisTable() {
 
@@ -46,13 +49,17 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
 //            + " inner join fits_file ff on ffc.ff_id=ff.ff_id "
 //            + " where ffc.request_cut=false and ffc.dpm_id=" + dpmId;
     String sql = "with updated_rows as "
-            + "(update fits_file_cut set request_cut=true where request_cut=false and dpm_id="+ dpmId +" returning *) "
+            + "(update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId + " returning *) "
             + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
             + "from updated_rows ffc "
             + "inner join fits_file ff on ffc.ff_id=ff.ff_id;";
     Query q = session.createSQLQuery(sql);
-    Iterator itor = q.list().iterator();
+    List tlst = q.list();
+    if (tlst.size() > 0) {
+      log.debug("get " + tlst.size() + " cut images.");
+    }
 
+    Iterator itor = tlst.iterator();
     StringBuilder rst = new StringBuilder();
     while (itor.hasNext()) {
       Object[] row = (Object[]) itor.next();

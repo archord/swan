@@ -143,6 +143,7 @@ public class MultipleFileUploadAction extends ActionSupport {
 
         configFileFileName = configFileFileName.replace(".", "_" + CommonFunction.getCurTimeString() + ".");
         File confFile = new File(confPath, configFileFileName);
+        log.debug("receive file " + confFile);
         if (confFile.exists()) {
           log.warn(confFile + " already exist, delete it.");
           FileUtils.forceDelete(confFile);
@@ -165,6 +166,7 @@ public class MultipleFileUploadAction extends ActionSupport {
           if (tfilename.isEmpty()) {
             continue;
           }
+          log.debug("receive file " + tfilename);
           File destFile = new File(destPath, tfilename);
 //          log.info("receive file: " + destFile);
 //          log.info("source file: " + file);

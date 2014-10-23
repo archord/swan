@@ -150,7 +150,7 @@
           diskUsage[0] = ["M", result.masterUsage];
           for (var m = 0; m < dpms.length; m++) {
             diskUsage[m+1] = [m+1, dpms[m].usedStorageSize/dpms[m].totalStorageSize];
-            console.log(dpms[m].usedStorageSize+" "+dpms[m].totalStorageSize+" "+diskUsage[m+1]);
+//            console.log(dpms[m].usedStorageSize+" "+dpms[m].totalStorageSize+" "+diskUsage[m+1]);
           }
 
           $.plot("#sys-disk-usage", [diskUsage], {

@@ -154,7 +154,9 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       radius = 2;
     }
 
-    String sql = "select * from ot_level2 ";
+    String sqlprefix1 = "select * from ot_level2 ";
+    String sqlprefix2 = "select * from ot_level2_his ";
+    String sql = "";
 
     if (parNum == 1) {
       if (!startDate.isEmpty()) {
@@ -209,15 +211,11 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     }
     sql += " order by dpm_id, found_time_utc";
 
+    sqlprefix1 += sql;
+    sqlprefix2 += sql;
+    String unionSql = sqlprefix1 + " union " + sqlprefix2;
     Session session = getCurrentSession();
-//    sql = "select * from ot_level2 "
-//            + "where found_time_utc>'" + startDate + " 00:00:00' "
-//            + "and found_time_utc<'" + endDate + " 23:59:59' "
-//            + "and dpm_name='" + tsp + "' "
-//            + "and abs(xtemp-" + xtemp + ")<" + radius + " "
-//            + "and abs(ytemp-" + ytemp + ")<" + radius + " "
-//            + "order by found_time_utc";
-    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
     q.setFirstResult(start);
     q.setMaxResults(resultSize);
     return q.list();

@@ -93,8 +93,6 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   }
 
   public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox, int n) {
-    log.debug("************************");
-    log.debug("errorBox="+errorBox);
     Session session = getCurrentSession();
     String sql = "select * from ot_observe_record "
             + " where ff_number>" + (obj.getFfNumber() - n)

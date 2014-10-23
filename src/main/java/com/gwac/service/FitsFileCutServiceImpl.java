@@ -48,7 +48,9 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     }
 
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
+    log.debug(otlv2s.size()+" otlv2s wait to be cut.");
     for (OtLevel2 otlv2 : otlv2s) {
+      log.debug("otlv2(id="+otlv2.getOtId()+") add it's uncutted image to DB.");
       int cuttedFfNumber = otlv2.getCuttedFfNumber();
       List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), cuttedFfNumber);
       if (ffcs.isEmpty()) {
@@ -71,7 +73,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
-            log.warn("add missed cut fits file, can't find orig fits file " + ffName);
+            log.warn(":, can't find orig fits file " + ffName);
             continue;
           }
           FitsFileCut ffc = new FitsFileCut();

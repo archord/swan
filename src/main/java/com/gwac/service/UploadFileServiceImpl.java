@@ -65,8 +65,8 @@ public class UploadFileServiceImpl implements UploadFileService {
     int fNum = 0;
     try {
       File tfile = new File(configPath, configFile);
-      if(!tfile.exists()){
-        log.error("file not exist: "+ tfile);
+      if (!tfile.exists()) {
+        log.error("file not exist: " + tfile);
         return 0;
       }
       input = new FileInputStream(tfile);
@@ -185,6 +185,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : otList) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
+            log.debug("receive file " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -201,23 +202,29 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj2.setUploadDate(new Date());
 
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-            if (tfile1.exists()) {
-              if (tfile2.exists()) {
-                log.info("delete file: " + tfile2);
+            
+            if (tfile2.exists()) {
+              if (tfile1.exists()) {
+                log.warn(tfile2 + " already exist, delete it.");
                 FileUtils.forceDelete(tfile2);
+                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
               }
-              //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-              FileUtils.moveFile(tfile1, tfile2);
-              obj.setUploadSuccess(Boolean.TRUE);
-              obj2.setUploadSuccess(Boolean.TRUE);
-              fileNum++;
             } else {
-              obj.setUploadSuccess(Boolean.FALSE);
-              obj2.setUploadSuccess(Boolean.FALSE);
-              log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              if (tfile1.exists()) {
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+                obj2.setUploadSuccess(Boolean.TRUE);
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                obj2.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufuDao.save(obj);
+              ufrDao.save(obj2);
             }
-            ufuDao.save(obj);
-            ufrDao.save(obj2);
           }
         }
       }
@@ -245,6 +252,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : starList) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
+            log.debug("receive file " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -260,23 +268,28 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj2.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj2.setUploadDate(new Date());
 
-            if (tfile1.exists()) {
-              if (tfile2.exists()) {
-                log.info("delete file: " + tfile2);
+            if (tfile2.exists()) {
+              if (tfile1.exists()) {
+                log.warn(tfile2 + " already exist, delete it.");
                 FileUtils.forceDelete(tfile2);
+                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
               }
-              //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-              FileUtils.moveFile(tfile1, tfile2);
-              obj.setUploadSuccess(Boolean.TRUE);
-              obj2.setUploadSuccess(Boolean.TRUE);
-              fileNum++;
             } else {
-              obj.setUploadSuccess(Boolean.FALSE);
-              obj2.setUploadSuccess(Boolean.FALSE);
-              log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              if (tfile1.exists()) {
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+                obj2.setUploadSuccess(Boolean.TRUE);
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                obj2.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufuDao.save(obj);
+              ufrDao.save(obj2);
             }
-            ufuDao.save(obj);
-            ufrDao.save(obj2);
           }
         }
       }
@@ -304,6 +317,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : origImage) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
+            log.debug("receive file " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -313,20 +327,25 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj.setFileType('3');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
 
-            if (tfile1.exists()) {
-              if (tfile2.exists()) {
-                log.info("delete file: " + tfile2);
+            if (tfile2.exists()) {
+              if (tfile1.exists()) {
+                log.warn(tfile2 + " already exist, delete it.");
                 FileUtils.forceDelete(tfile2);
+                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
               }
-              //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-              FileUtils.moveFile(tfile1, tfile2);
-              obj.setUploadSuccess(Boolean.TRUE);
-              fileNum++;
             } else {
-              log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
-              obj.setUploadSuccess(Boolean.FALSE);
+              if (tfile1.exists()) {
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufrDao.save(obj);
             }
-            ufrDao.save(obj);
           }
         }
       }
@@ -354,6 +373,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : cutImages) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
+            log.debug("receive file " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -363,23 +383,28 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj.setFileType('4');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
 
-            if (tfile1.exists()) {
-              if (tfile2.exists()) {
-                log.info("delete file: " + tfile2);
+            if (tfile2.exists()) {
+              if (tfile1.exists()) {
+                log.warn(tfile2 + " already exist, delete it.");
                 FileUtils.forceDelete(tfile2);
-              }
-              //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-              FileUtils.moveFile(tfile1, tfile2);
-              obj.setUploadSuccess(Boolean.TRUE);
-              fileNum++;
-              if (tStr.indexOf(".jpg") > 0) {
-                ffcDao.uploadSuccessCutByName(tStr.substring(0, tStr.indexOf('.')));
+                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
               }
             } else {
-              obj.setUploadSuccess(Boolean.FALSE);
-              log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              if (tfile1.exists()) {
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+                if (tStr.indexOf(".jpg") > 0) {
+                  ffcDao.uploadSuccessCutByName(tStr.substring(0, tStr.indexOf('.')));
+                }
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufrDao.save(obj);
             }
-            ufrDao.save(obj);
           }
         }
       }

@@ -28,6 +28,7 @@
           }
           $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
         }
+        updateImage();
         setInterval(updateImage, 15000);
         
         function shijian()

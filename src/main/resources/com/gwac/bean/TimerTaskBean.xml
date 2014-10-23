@@ -67,7 +67,7 @@
   <!-- Cron Trigger, every day 10 o'clock -->
   <bean id="dataBackupTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="dataBackupJob" />
-    <property name="cronExpression" value="0 0 10 * * ?"/>
+    <property name="cronExpression" value="0 0 17 * * ?"/>
   </bean>
   
   <bean id="fileTransferTrigger" 

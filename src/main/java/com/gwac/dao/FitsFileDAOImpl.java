@@ -45,7 +45,7 @@ public class FitsFileDAOImpl extends BaseHibernateDaoImpl<FitsFile> implements F
     } else {
       BigInteger ffId = (BigInteger) q.list().get(0);
       obj.setFfId(ffId.longValue());
-      log.debug("source fits file " + obj.getFileName() + " already exist!");
+//      log.debug("source fits file " + obj.getFileName() + " already exist!");
     }
   }
 }

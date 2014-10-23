@@ -59,16 +59,6 @@ public class DataSyncServiceImpl implements DataSyncService {
       log.warn("job fileTransferJob is running, jump this scheduler.");
       return;
     }
-    
-    log.debug("rootDir="+rootDir);
-    log.debug("otLDir="+otLDir);
-    log.debug("starLDir="+starLDir);
-    log.debug("orgIDir="+orgIDir);
-    log.debug("cutIDir="+cutIDir);
-    log.debug("cfgDir="+cfgDir);
-    log.debug("serverUrl="+serverUrl);
-    log.debug("uploadUrl="+uploadUrl);
-    log.debug("mchNum="+mchNum);
 
     List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
     for (ConfigFile cf : cfs) {

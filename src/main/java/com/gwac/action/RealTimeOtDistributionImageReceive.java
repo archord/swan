@@ -49,7 +49,6 @@ public class RealTimeOtDistributionImageReceive extends ActionSupport {
     
     boolean flag = true;
     String result = SUCCESS;
-    System.out.println("echo=" + echo);
     if (fileUpload != null && fileUploadFileName != null && getFileUpload().exists() && !fileUploadFileName.isEmpty()) {
       String destPath = getText("gwac.data.root.directory");
       if (destPath.charAt(destPath.length() - 1) != '/') {
