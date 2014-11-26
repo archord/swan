@@ -60,6 +60,7 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   private Map<String, Object> session;
   private OtObserveRecordDAO otorDao;
   private String otName;
+  private String dateStr;
 
   @SuppressWarnings("unchecked")
   public String execute() {
@@ -77,8 +78,12 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
 
     int[] sorts = {2};
     //gridModel = otorDao.findRecord(from, rows, orderNames, sorts);
-    setGridModel(otorDao.getRecordByOtName(otName, from, rows));
-
+    if (dateStr!=null && !dateStr.isEmpty()) {
+      setGridModel(otorDao.getRecordByOtNameFromHis(otName, from, rows));
+    } else {
+      setGridModel(otorDao.getRecordByOtName(otName, from, rows));
+    }
+    System.out.println("otName=" + otName);
     // Count all record (select count(*) from )
     records = otorDao.countRecordByOtName(otName);
 //    log.debug("records=" + records);
@@ -259,5 +264,19 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
    */
   public void setGridModel(List<OtObserveRecordShow> gridModel) {
     this.gridModel = gridModel;
+  }
+
+  /**
+   * @return the dateStr
+   */
+  public String getDateStr() {
+    return dateStr;
+  }
+
+  /**
+   * @param dateStr the dateStr to set
+   */
+  public void setDateStr(String dateStr) {
+    this.dateStr = dateStr;
   }
 }

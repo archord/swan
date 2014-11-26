@@ -22,4 +22,6 @@ public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
   public List<FitsFileCut> getCutImageByOtName(String otName);
 
   public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId);
+  
+  public List<FitsFileCut> getCutImageByOtNameFromHis(String otName);
 }

@@ -29,9 +29,15 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
 
   public List<OtLevel2> getCurOccurLv2OT();
 
+  public List<OtLevel2> getCurOccurLv2OTByDate(String dateStr);
+
   public List<OtLevel2> getNCurOccurLv2OT();
+
+  public List<OtLevel2> getNCurOccurLv2OTByDate(String dateStr);
 
   public List<OtLevel2> getMissedFFCLv2OT();
 
   public void updateAllFileCuttedById(long id);
+
+  public OtLevel2 getOtLevel2ByNameFromHis(String otName);
 }

@@ -6,6 +6,7 @@ package com.gwac.dao;
 
 import com.gwac.model.OtLevel2;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,10 +61,42 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
+  public List<OtLevel2> getCurOccurLv2OTByDate(String dateStr) {
+    Session session = getCurrentSession();
+    String sql = "select ol2.* "
+            + "from ot_level2_his ol2 "
+            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
+            + "where ol2.date_str='"+dateStr+"'";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+
+  public List<OtLevel2> getNCurOccurLv2OTByDate(String dateStr) {
+    Session session = getCurrentSession();
+    String sql = "select ol2.* "
+            + "from ot_level2_his ol2 "
+            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number "
+            + "where ol2.date_str='"+dateStr+"'";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+
   @Override
   public OtLevel2 getOtLevel2ByName(String otName) {
     Session session = getCurrentSession();
     String sql = "select * from ot_level2 where name='" + otName + "';";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    if (!q.list().isEmpty()) {
+      return (OtLevel2) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public OtLevel2 getOtLevel2ByNameFromHis(String otName) {
+    Session session = getCurrentSession();
+    String sql = "select * from ot_level2_his where name='" + otName + "';";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     if (!q.list().isEmpty()) {
       return (OtLevel2) q.list().get(0);
@@ -213,7 +246,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
     sqlprefix1 += sql;
     sqlprefix2 += sql;
-    String unionSql = sqlprefix1 + " union " + sqlprefix2;
+    String unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
     q.setFirstResult(start);
@@ -243,7 +276,9 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       radius = 2;
     }
 
-    String sql = "select count(*) from ot_level2 ";
+    String sqlprefix1 = "select count(*) from ot_level2 ";
+    String sqlprefix2 = "select count(*) from ot_level2_his ";
+    String sql = "";
 
     if (parNum == 1) {
       if (!startDate.isEmpty()) {
@@ -296,15 +331,20 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         }
       }
     }
+    
+    sqlprefix1 += sql;
+    sqlprefix2 += sql;
+    String unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";
 
-    int tNum = 0;
+    int total = 0;
     Session session = getCurrentSession();
-    Query q = session.createSQLQuery(sql);
-    if (!q.list().isEmpty()) {
-      BigInteger objId = (BigInteger) q.list().get(0);
-      tNum = objId.intValue();
+    Query q = session.createSQLQuery(unionSql);
+    Iterator itor = q.list().iterator();
+    while (itor.hasNext()) {
+      BigInteger tNum = (BigInteger) itor.next();
+      total += tNum.intValue();
     }
-    return tNum;
+    return total;
   }
 
   public List<OtLevel2> getOtLevel2ByDpmName(String dpmName) {

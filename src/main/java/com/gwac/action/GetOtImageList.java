@@ -28,19 +28,34 @@ public class GetOtImageList extends ActionSupport {
   private int startImgNum;
   private String ra;
   private String dec;
+  private String dateStr;
+  OtLevel2 ob;
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
-    ffcList = ffcDao.getCutImageByOtName(getOtName());
-    OtLevel2 ob = obDao.getOtLevel2ByName(otName);
-    setRa(ob.getRa() + "") ;
-    setDec(ob.getDec() + "");
-    setStartImgNum(ob.getLastFfNumber());
+
+    if (dateStr!=null && !dateStr.isEmpty()) {
+      ffcList = ffcDao.getCutImageByOtNameFromHis(otName);
+      ob = obDao.getOtLevel2ByNameFromHis(otName);
+    } else {
+      ffcList = ffcDao.getCutImageByOtName(otName);
+      ob = obDao.getOtLevel2ByName(otName);
+    }
+    if (ob != null) {
+      setRa(ob.getRa() + "");
+      setDec(ob.getDec() + "");
+      setStartImgNum(ob.getLastFfNumber());
+    }else{
+      setRa("");
+      setDec("");
+      setStartImgNum(0);
+    }
+    
     totalImage = ffcList.size();
     for (FitsFileCut ffc : ffcList) {
-      ffc.setFileName(ffc.getFileName()+".jpg");
+      ffc.setFileName(ffc.getFileName() + ".jpg");
       ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
     }
     return SUCCESS;
@@ -142,6 +157,20 @@ public class GetOtImageList extends ActionSupport {
    */
   public void setDec(String dec) {
     this.dec = dec;
+  }
+
+  /**
+   * @param dateStr the dateStr to set
+   */
+  public void setDateStr(String dateStr) {
+    this.dateStr = dateStr;
+  }
+
+  /**
+   * @return the dateStr
+   */
+  public String getDateStr() {
+    return dateStr;
   }
 
 }

@@ -253,8 +253,9 @@
     </div>
   </div>
   <div id="otRecord">
-    <s:url var="remoteurl" action="ot-observe-record" namespace="/">
+    <s:url var="remoteurl" action="ot-observe-record" namespace="/" escapeAmp="false">
       <s:param name="otName" value="%{otName}" /> 
+      <s:param name="dateStr" value="%{dateStr}" /> 
     </s:url>
     <!--width="700" resizable="true" 
     shrinkToFit="true" 自动调节到表格的宽度 -->

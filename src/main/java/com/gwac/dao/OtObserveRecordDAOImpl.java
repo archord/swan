@@ -199,6 +199,86 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return oorss;
   }
 
+  public List<OtObserveRecordShow> getRecordByOtNameFromHis(String otName, int start, int resultSize) {
+
+    ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
+    Session session = getCurrentSession();
+    String sql = "select oor.*, ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath "
+            + "from ot_observe_record_his oor "
+            + "left join fits_file ff on oor.ff_id=ff.ff_id "
+            + "left join fits_file_cut_his ffc on oor.ffc_id=ffc.ffc_id "
+            + "where oor.ot_id=(select ob.ot_id from ot_level2_his ob where name='" + otName + "') "
+            + "order by oor.date_ut";
+    Query q = session.createSQLQuery(sql);
+    q.setFirstResult(start);
+    q.setMaxResults(resultSize);
+    Iterator itor = q.list().iterator();
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      try {
+        BigInteger otID = (BigInteger) row[0];
+        BigInteger ffId = (BigInteger) row[1];
+        BigInteger ffcId = (BigInteger) row[2];
+        BigInteger oortId = (BigInteger) row[3];
+        Short otTypeId = (Short) row[4];
+        float raD = (Float) row[5];
+        float decD = (Float) row[6];
+        float x = (Float) row[7];
+        float y = (Float) row[8];
+        float xTemp = (Float) row[9];
+        float yTemp = (Float) row[10];
+        Date dateUt = (Date) row[11];
+        float flux = (Float) row[12];
+        Boolean flag = (Boolean) row[13];
+//        float flagChb = (Float) row[14];
+        float background = (Float) row[15];
+        float threshold = (Float) row[16];
+        float magAper = (Float) row[17];
+        float magerrAper = (Float) row[18];
+        float ellipticity = (Float) row[19];
+        float ClassStar = (Float) row[20];
+        Boolean otFlag = (Boolean) row[21];
+        //ff_number,dpm_id,date_str,request_cut,success_cut
+        String ffFileName = (String) row[27];
+        String ffStorePath = (String) row[28];
+        String ffcFileName = (String) row[29];
+        String ffcStorePath = (String) row[30];
+
+        OtObserveRecordShow oors = new OtObserveRecordShow();
+        oors.setBackground(background);
+        oors.setClassStar(ClassStar);
+        oors.setDateUt(dateUt);
+        oors.setDecD(decD);
+        oors.setEllipticity(ellipticity);
+        oors.setFfId(ffId.longValue());
+        oors.setFfName(ffFileName);
+        oors.setFfPath(ffStorePath);
+        oors.setFfcId(ffcId.longValue());
+        oors.setFfcName(ffcFileName);
+        oors.setFfcPath(ffcStorePath);
+        oors.setFlag(flag);
+//        oors.setFlagChb(flagChb);
+        oors.setFlux(flux);
+        oors.setMagAper(magAper);
+        oors.setMagerrAper(magerrAper);
+        oors.setOortId(oortId.longValue());
+        oors.setOtFlag(otFlag);
+        oors.setOtId(otID.longValue());
+        oors.setRaD(raD);
+        oors.setThreshold(threshold);
+        oors.setX(x);
+        oors.setXTemp(xTemp);
+        oors.setY(y);
+        oors.setYTemp(yTemp);
+        oors.setOtTypeId(otTypeId);
+        oorss.add(oors);
+      } catch (ClassCastException cce) {
+        cce.printStackTrace();
+      }
+    }
+    return oorss;
+  }
+  
   public List<OtObserveRecordShow> getRecordByOtId(long otId) {
 
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();

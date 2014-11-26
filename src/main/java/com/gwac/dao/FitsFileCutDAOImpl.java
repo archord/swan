@@ -93,4 +93,15 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     return q.list();
   }
+  
+  public List<FitsFileCut> getCutImageByOtNameFromHis(String otName) {
+
+    Session session = getCurrentSession();
+    String sql = "select * "
+            + "from fits_file_cut_his ffc "
+            + "where ffc.success_cut=true and ffc.ot_id=(select ot_id from ot_level2_his ob where ob.name='" + otName + "') "
+            + "order by ffc.number;";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
 }

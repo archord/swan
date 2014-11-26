@@ -21,6 +21,8 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   public int countRecordByOtName(String otName);
 
   public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize);
+  
+  public List<OtObserveRecordShow> getRecordByOtNameFromHis(String otName, int start, int resultSize);
 
   public Boolean exist(OtObserveRecord obj, float errorBox);
 

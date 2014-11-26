@@ -32,15 +32,24 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
   private List<DataProcessMachine> dpms;
   private DataProcessMachineDAO dpmDao;
 
+  private String dateStr;
   private String dataDisk;
   private float masterUsage;
 
   @SuppressWarnings("unchecked")
   public String execute() {
 
-    otLv1 = oorDao.getLatestNLv1OT(40);
-    otLv2 = otDao.getNCurOccurLv2OT();
-    otLv2Cur = otDao.getCurOccurLv2OT();
+    if (dateStr!=null && !dateStr.isEmpty()) {
+      String queryDate = dateStr.substring(2, 4) +dateStr.substring(5, 7)+dateStr.substring(8);
+//      System.out.println("queryDate="+queryDate);
+      otLv1 = new ArrayList();
+      otLv2 = otDao.getNCurOccurLv2OTByDate(queryDate);
+      otLv2Cur = otDao.getCurOccurLv2OTByDate(queryDate);
+    } else {
+      otLv1 = oorDao.getLatestNLv1OT(40);
+      otLv2 = otDao.getNCurOccurLv2OT();
+      otLv2Cur = otDao.getCurOccurLv2OT();
+    }
     dpms = dpmDao.getAllDpms();
     setMasterUsage();
     return SUCCESS;
@@ -157,5 +166,12 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
    */
   public void setDataDisk(String dataDisk) {
     this.dataDisk = dataDisk;
+  }
+
+  /**
+   * @param dateStr the dateStr to set
+   */
+  public void setDateStr(String dateStr) {
+    this.dateStr = dateStr;
   }
 }

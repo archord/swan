@@ -28,7 +28,19 @@
 //    window.open("<s:property value="otDetail"/>?otName=" + otName,
 //	    'otDetailWindow',
 //	    'height=500,width=800,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,status=yes');
-    openwindow("<s:property value="otDetail"/>?otName=" + otName,
+    var dateStr = "";
+    var dateToStr = $("#to").val();
+    if (dateToStr !== "") {
+      var dateTo = new Date(dateToStr);
+      var curDate = new Date();
+      if (dateTo < curDate) {
+        dateStr = dateToStr;
+      }
+    }
+    if (dateStr === curDate) {
+      dateStr = "";
+    }
+    openwindow("<s:property value="otDetail"/>?otName=" + otName + "&dateStr=" + dateStr,
             '_blank', 800, 500, 800, 500);
     return false;
   }
