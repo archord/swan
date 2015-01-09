@@ -9,6 +9,7 @@
     <property name="locations">
       <list>
         <value>classpath:database-postgres-master.properties</value>
+        <value>classpath:database-mysql-ot2search.properties</value>
         <value>classpath:systemconfig.properties</value>
       </list>
     </property>
@@ -19,6 +20,13 @@
     <property name="url" value="${jdbc.url}" />
     <property name="username" value="${jdbc.username}" />
     <property name="password" value="${jdbc.password}" />
+  </bean>
+ 
+  <bean id="dataSourceMsql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${msyql.jdbc.driverClassName}" />
+    <property name="url" value="${msyql.jdbc.url}" />
+    <property name="username" value="${msyql.jdbc.username}" />
+    <property name="password" value="${msyql.jdbc.password}" />
   </bean>
  
 </beans>

@@ -39,8 +39,8 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
   @SuppressWarnings("unchecked")
   public String execute() {
 
-    if (dateStr!=null && !dateStr.isEmpty()) {
-      String queryDate = dateStr.substring(2, 4) +dateStr.substring(5, 7)+dateStr.substring(8);
+    if (dateStr != null && !dateStr.isEmpty()) {
+      String queryDate = dateStr.substring(2, 4) + dateStr.substring(5, 7) + dateStr.substring(8);
 //      System.out.println("queryDate="+queryDate);
       otLv1 = new ArrayList();
       otLv2 = otDao.getNCurOccurLv2OTByDate(queryDate);
@@ -62,9 +62,13 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
   public void setMasterUsage() {
     if (dataDisk != null && !dataDisk.isEmpty()) {
       File file = new File(dataDisk);
-      long totalSpace = file.getTotalSpace(); //total disk space in bytes.
-      long freeSpace = file.getFreeSpace(); //unallocated / free disk space in bytes.
-      masterUsage = (float) 1.0 * (totalSpace - freeSpace) / totalSpace;
+      if (file.exists()) {
+        long totalSpace = file.getTotalSpace(); //total disk space in bytes.
+        long freeSpace = file.getFreeSpace(); //unallocated / free disk space in bytes.
+        masterUsage = (float) 1.0 * (totalSpace - freeSpace) / totalSpace;
+      }else{
+        masterUsage = (float) 1.0;
+      }
     } else {
       masterUsage = (float) 1.0;
     }

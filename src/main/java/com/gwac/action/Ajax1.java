@@ -19,10 +19,11 @@
 
 package com.gwac.action;
 
+import com.gwac.util.CommonFunction;
+import com.opensymphony.xwork2.ActionSupport;
+import java.util.Date;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
-
-import com.opensymphony.xwork2.ActionSupport;
 
 public class Ajax1 extends ActionSupport {
 
@@ -30,6 +31,11 @@ public class Ajax1 extends ActionSupport {
 
     @Action(value = "/ajax1", results = { @Result(location = "ajax1.jsp", name = "success") })
     public String execute() throws Exception {
+      Date date =  new Date();
+      System.out.println("date="+date);
+      double jd = CommonFunction.dateToJulian(CommonFunction.getUTCDate(date));
+      System.out.println("jd="+jd);
+      System.out.println("jd="+(jd-2400000.5));
 	return SUCCESS;
     }
 }

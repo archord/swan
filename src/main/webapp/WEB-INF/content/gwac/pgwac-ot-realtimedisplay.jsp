@@ -25,7 +25,12 @@
           dateStr="";
         }
         var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action?dateStr=" + dateStr;
-        $.ajax({url: dataurl, type: "GET", dataType: "json", success: onDataReceived});
+        //$.ajax({url: dataurl, type: "GET", dataType: "json", success: onDataReceived, error:aa});
+        $.ajax({url: dataurl, type: "GET", success: onDataReceived, error:aa});
+      }
+      
+      function aa(){
+        console.log("ajax error");
       }
 
       function onDateChange() {
