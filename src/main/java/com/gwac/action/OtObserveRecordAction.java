@@ -83,7 +83,7 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
     } else {
       setGridModel(otorDao.getRecordByOtName(otName, from, rows));
     }
-    System.out.println("otName=" + otName);
+    
     // Count all record (select count(*) from )
     records = otorDao.countRecordByOtName(otName);
 //    log.debug("records=" + records);

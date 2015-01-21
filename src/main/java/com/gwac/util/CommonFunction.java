@@ -15,12 +15,16 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
  * @author xy
  */
 public class CommonFunction {
+  
+  private static final Log log = LogFactory.getLog(CommonFunction.class);
 
   public static String getCurTimeString() {
     return getTimeString(new Date());
@@ -54,6 +58,22 @@ public class CommonFunction {
     return formatter.format(date);
   }
 
+  /**
+   * 
+   * @param dateStr
+   * @param formater yyyy-MM-dd HH:mm:ss
+   * @return  
+   */
+  public static Date stringToDate(String dateStr, String formater) {
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat(formater);
+      return sdf.parse(dateStr);
+    } catch (ParseException ex) {
+      log.error("string to date error.", ex);
+    }
+    return new Date();
+  }
+
   public static List<Integer> getMissedNumber(List<Integer> nums) {
     List<Integer> mNums = new ArrayList<Integer>();
     for (int i = 0; i < nums.size() - 1; i++) {
@@ -65,9 +85,9 @@ public class CommonFunction {
   }
 
   public static Date getUTCDate(Date date) {
-    SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+    SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-    SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+    SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Date dateStr = null;
     try {
       dateStr = dateFormatLocal.parse(dateFormatGmt.format(date));

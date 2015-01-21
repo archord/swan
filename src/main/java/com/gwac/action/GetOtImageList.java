@@ -3,9 +3,11 @@ package com.gwac.action;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OtLevel2;
+import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -25,16 +27,19 @@ public class GetOtImageList extends ActionSupport {
   private String otName;
   private List<FitsFileCut> ffcList;
   private FitsFileCutDAO ffcDao;
+  private FitsFileCutRefDAO ffcrDao;
   private OtLevel2Dao obDao;
+  private OtObserveRecordDAO otorDao;
   private int totalImage;
   private int startImgNum;
   private String ra;
   private String dec;
   private String dateStr;
   private OtLevel2 ob;
-  private FitsFileCutRefDAO ffcrDao;
   private String ffcrStorePath;
   private String ffcrFileName;
+  private String ffcrGenerateTime;
+  private String otOpticalVaration;
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
@@ -68,10 +73,14 @@ public class GetOtImageList extends ActionSupport {
     if (ffcrs != null && ffcrs.size() > 0) {
       setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath());
       setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
+      setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss")+"(U)");
     } else {
       setFfcrStorePath("");
       setFfcrFileName("");
+      setFfcrGenerateTime("");
     }
+    
+    otOpticalVaration = otorDao.getOtOpticalVaration(otName);
 
     return SUCCESS;
   }
@@ -228,6 +237,41 @@ public class GetOtImageList extends ActionSupport {
    */
   public void setFfcrFileName(String ffcrFileName) {
     this.ffcrFileName = ffcrFileName;
+  }
+
+  /**
+   * @return the ffcrGenerateTime
+   */
+  public String getFfcrGenerateTime() {
+    return ffcrGenerateTime;
+  }
+
+  /**
+   * @param ffcrGenerateTime the ffcrGenerateTime to set
+   */
+  public void setFfcrGenerateTime(String ffcrGenerateTime) {
+    this.ffcrGenerateTime = ffcrGenerateTime;
+  }
+
+  /**
+   * @return the otOpticalVaration
+   */
+  public String getOtOpticalVaration() {
+    return otOpticalVaration;
+  }
+
+  /**
+   * @param otOpticalVaration the otOpticalVaration to set
+   */
+  public void setOtOpticalVaration(String otOpticalVaration) {
+    this.otOpticalVaration = otOpticalVaration;
+  }
+
+  /**
+   * @param otorDao the otorDao to set
+   */
+  public void setOtorDao(OtObserveRecordDAO otorDao) {
+    this.otorDao = otorDao;
   }
 
 }

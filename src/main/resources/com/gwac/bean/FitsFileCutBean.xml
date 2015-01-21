@@ -27,6 +27,7 @@
     <property name="ffcDao" ref="ffcDao" />
     <property name="obDao" ref="otbDao" />
     <property name="ffcrDao" ref="ffcrDao" />
+    <property name="otorDao" ref="otORDao" />
   </bean>
 	
   <bean id="ffcDao" class="com.gwac.dao.FitsFileCutDAOImpl" >

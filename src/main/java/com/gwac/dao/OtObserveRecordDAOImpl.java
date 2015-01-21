@@ -6,8 +6,10 @@ package com.gwac.dao;
 
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtObserveRecordShow;
+import com.gwac.util.CommonFunction;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -24,14 +26,86 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
-  public void moveDataToHisTable(){
-    
+  @Override
+  public void moveDataToHisTable() {
+
     Session session = getCurrentSession();
     String sql = "WITH moved_rows AS ( DELETE FROM ot_observe_record RETURNING * ) INSERT INTO ot_observe_record_his SELECT * FROM moved_rows;";
     session.createSQLQuery(sql).executeUpdate();
   }
-  
+
+  @Override
+  public String getOtOpticalVaration(String otName) {
+    Session session = getCurrentSession();
+    String sql = "select oor.date_ut, oor.mag_aper, oor.oor_id "
+            + " from ot_observe_record_his oor "
+            + " inner join ot_level2_his ot2 on ot2.ot_id=oor.ot_id and ot2.name='" + otName + "' "
+            + " order by oor_id asc";
+
+    Query q = session.createSQLQuery(sql);
+    Iterator itor = q.list().iterator();
+
+    Date baseDate = CommonFunction.stringToDate("2015-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(baseDate);
+    double baseDay = cal.getTimeInMillis() / (1000.0 * 3600 * 24);
+
+    StringBuilder sb = new StringBuilder();
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      try {
+        cal.setTime((Date) row[0]);
+        double now = cal.getTimeInMillis() / (1000.0 * 3600 * 24);
+        sb.append("[");
+        sb.append(now - baseDay);
+        sb.append(",");
+        sb.append(row[1]);
+        sb.append("],");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    String tStr = sb.toString();
+    if (tStr.isEmpty()) {
+      tStr = "[]";
+    } else {
+      tStr = "[" + tStr + "]";
+    }
+    return tStr;
+  }
+
   public String getUnCuttedStarList(int dpmId) {
+    Session session = getCurrentSession();
+    String sql = "select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
+            + " from ot_observe_record oor "
+            + " inner join fits_file ff on oor.ff_id=ff.ff_id "
+            + " inner join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
+            + " where oor.ot_id>0 and oor.request_cut=false and oor.dpm_id=" + dpmId;
+    Query q = session.createSQLQuery(sql);
+    Iterator itor = q.list().iterator();
+
+    StringBuilder rst = new StringBuilder();
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      try {
+        rst.append(row[0]);
+        rst.append(" ");
+        rst.append(row[1]);
+        rst.append(" ");
+        rst.append(row[2]);
+        rst.append(" ");
+        rst.append(row[3]);
+        rst.append("\n");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    sql = "update ot_observe_record set request_cut=true where ot_id>0 and request_cut=false and dpm_id=" + dpmId;
+    session.createSQLQuery(sql).executeUpdate();
+    return rst.toString();
+  }
+
+  public String getUnCuttedStarList_bck(int dpmId) {
     Session session = getCurrentSession();
     String sql = "select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
             + " from ot_observe_record oor "
@@ -75,13 +149,13 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   @Override
   public Boolean exist(OtObserveRecord obj, float errorBox) {
     log.debug("************************");
-    log.debug("errorBox="+errorBox);
+    log.debug("errorBox=" + errorBox);
     Boolean flag = false;
     Session session = getCurrentSession();
     String sql = "select oort_id from ot_observe_record where ff_id="
             + obj.getFfId()
-//            + " and abs(x_temp-" + obj.getXTemp() + ")<" + errorBox + " "
-//            + " and abs(y_temp-" + obj.getYTemp() + ")<" + errorBox + " "
+            //            + " and abs(x_temp-" + obj.getXTemp() + ")<" + errorBox + " "
+            //            + " and abs(y_temp-" + obj.getYTemp() + ")<" + errorBox + " "
             + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
@@ -278,7 +352,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     }
     return oorss;
   }
-  
+
   public List<OtObserveRecordShow> getRecordByOtId(long otId) {
 
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();

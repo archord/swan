@@ -31,4 +31,6 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   public List<OtObserveRecord> getLatestNLv1OT(int n);
 
   public String getUnCuttedStarList(int dpmId);
+  
+  public String getOtOpticalVaration(String otName);
 }

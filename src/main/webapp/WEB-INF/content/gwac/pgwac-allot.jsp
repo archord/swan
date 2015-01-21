@@ -35,7 +35,7 @@
       dateStr = "";
     }
     openwindow(url+"?otName=" + otName + "&dateStr=" + dateStr,
-            '_blank', 850, 500, 850, 500);
+            '_blank', 850, 600, 850, 600);
     return false;
   }
   function openwindow(url, name, width, height, iWidth, iHeight)

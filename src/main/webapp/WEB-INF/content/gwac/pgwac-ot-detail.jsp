@@ -16,7 +16,7 @@
     <meta http-equiv="keywords" content="struts2, jquery, jquery-ui, plugin, showcase, jqgrid" />
     <meta http-equiv="description" content="A Showcase for the Struts2 jQuery Plugin" />
 
-    <title>OT详细页面</title>
+    <title>OT-<s:property value="otName"/>-详细页面</title>
 
     <s:if test="%{theme == 'showcase' || theme == null}">
       <sj:head debug="true" compressed="true" jquerytheme="showcase" customBasepath="themes" 
@@ -50,6 +50,8 @@
   <!-- Extend the Struts2 jQuery Plugin with an richtext editor -->
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/extendplugin.js"></script>
   <script src="${pageContext.request.contextPath}/js/jquery.carouFredSel-6.2.1-packed.js" type="text/javascript"></script>
+  <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.js"></script>
+  <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.categories.js"></script>
   <script type="text/javascript">
     $(function() {
       function setNavi($c, $i) {
@@ -94,6 +96,47 @@
         //$('#carousel').trigger('slideTo', startImgNum);
       });
 
+      $("<div id='tooltip'></div>").css({
+        position: "absolute",
+        display: "none",
+        border: "1px solid #fdd",
+        padding: "2px",
+        "background-color": "#fee",
+        opacity: 0.80
+      }).appendTo("body");
+
+      var option1 = {
+        legend: {show: false},
+        series: {shadowSize: 0},
+        points: {show: true},
+        lines: {show: true, fill: false},
+        grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
+        selection: {mode: "xy"},
+        xaxis: {show: true, tickColor: 'transparent'},
+        yaxis: {show: true, tickDecimals: 1, tickFormatter: formate1}
+      };
+      //min: 0, max: 10, tickSize: 1, 
+
+      function formate1(val, axis) {
+        return (val).toFixed(axis.tickDecimals);
+      }
+      var graphData = [{
+          data: <s:property value="otOpticalVaration"/>,
+          color: '#71c73e',
+          points: {radius: 4} //fillColor: '#77b7c5'
+        }
+      ];
+      $.plot("#ot-curve", graphData, option1);
+
+      $("#ot-curve").bind("plothover", function(event, pos, item) {
+        if (item) {
+          var x = item.datapoint[0].toFixed(6);
+          var y = item.datapoint[1].toFixed(2);
+          $("#tooltip").html(x + ", " + y).css({top: item.pageY + 5, left: item.pageX + 5}).fadeIn(200);
+        } else {
+          $("#tooltip").hide();
+        }
+      });
     });
 
     function formatLink(cellvalue, options, rowObject) {
@@ -101,25 +144,37 @@
       searchUrl += <s:property value="ra"/> + "%20" + <s:property value="dec"/>;
       return "<a href='" + searchUrl + "' title='点击在simbad搜寻OT对应坐标' target='_blank'>" + cellvalue + "</a>";
     }
+
   </script>
   <style type="text/css">
 
+    body{ text-align:center} 
+
+    #main{
+      width: 810px;
+      background-color: #fff;
+      margin:0 auto;
+    }
+
     #cut-image-show{
-      border: 1px solid #ccc;
-      margin: 10px 10px 10px 10px;
+      /*border: 1px solid #ccc;*/
+      margin: 10px 0px 0px 0px;
       background-color: #fff;
       width: 810px;
       height: 430px;
-      box-shadow: 0 5px 10px #ccc;
+      /*box-shadow: 0 5px 10px #ccc;*/
     }
 
-    #ref-image{
-      width: 404px;
-      height: 400px;
-      padding: 0px;
-      margin: 0px 4px 0px 0px;
-      float: left;
+    #ot-curve-show{
+      /*margin: 10px 10px 10px 10px;*/
+      background-color: #fff;
+      width: 810px;
+      height: 200px;
     }
+
+    #ot-curve{width: 100%; height: 180px;}
+    #ot-curve-title{width: 100%;  height: 20px; text-align:center;}
+    #ref-image{width: 404px;height: 400px;padding: 0px;margin: 0px 4px 0px 0px;float: left;}
 
     #carousel-wrapper {
       width: 400px;
@@ -136,7 +191,7 @@
     #otRecord{
       width: 810px;
       padding: 0px;
-      margin: 10px;
+      /*margin: 10px;*/
       float: left;
     }
 
@@ -174,7 +229,7 @@
       z-index: 20;
       vertical-align: bottom;
     }
-    #pagenumber, #title, #pager, #reset {
+    #pagenumber, #title, #title2, #pager, #reset {
       font-size: 12px;
       margin: 0;
       padding: 0;
@@ -185,6 +240,11 @@
     #title {
       text-align: center;
       width:160px;
+      float: left;
+    }
+    #title2 {
+      text-align: center;
+      width:380px;
       float: left;
     }
     #reset{
@@ -229,102 +289,114 @@
     }
     #prev {
       background: url(${pageContext.request.contextPath}/gwac_images/imageGallery/ui/prev.png) 0 0 no-repeat transparent;
-      left: 220px;
+      right: 220px;
     }
     #next {
       background: url(${pageContext.request.contextPath}/gwac_images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
-      right: 220px;
+      left: 220px;
     }
 
   </style>
 </head>
 <body>
-  <div id="cut-image-show">
-    <div id="ref-image">
-      <img src="<s:property value="ffcrStorePath"/>/<s:property value="ffcrFileName"/>" 
-           alt="<s:property value="ffcrFileName"/>" 
-           title="<s:property value="ffcrFileName"/>" 
-           width="400" height="400" border="0" />
-    </div>
-    <div id="carousel-wrapper">
-      <div id="inner">
-        <div id="carousel">
-          <s:iterator value="ffcList">
-            <img src="<s:property value="storePath"/>/<s:property value="fileName"/>" 
-                 alt="<s:property value="fileName"/>" 
-                 title="<s:property value="fileName"/>" 
-                 width="400" height="400" border="0" />
-          </s:iterator>
+  <div id="main">
+    <div id="cut-image-show">
+      <div id="ref-image">
+        <div>
+          <img src="<s:property value="ffcrStorePath"/>/<s:property value="ffcrFileName"/>" 
+               alt="<s:property value="ffcrFileName"/>" 
+               title="<s:property value="ffcrFileName"/>" 
+               width="400" height="400" border="0" />
         </div>
-        <div id="navi">
-          <div id="timer"></div>
-          <a id="prev" href="#"></a>
-          <a id="play" href="#"></a>
-          <a id="next" href="#"></a>
+        <div id="navi2">
+          <p id="title2">模板时间：<s:property value="ffcrGenerateTime"/></p>
         </div>
       </div>
-      <div id="navi2">
-        <p id="pagenumber">显示第<span style="font-weight:bold;font-size: 14px;"></span>帧，共<s:property value="totalImage"/>帧</p>
-        <p id="title"></p>
-        <p id="reset"><a href="#">跳转到OT起始帧</a><input type="hidden" id="startImgNum" value="<s:property value="startImgNum"/>"/></p>
+      <div id="carousel-wrapper">
+        <div id="inner">
+          <div id="carousel">
+            <s:iterator value="ffcList">
+              <img src="<s:property value="storePath"/>/<s:property value="fileName"/>" 
+                   alt="<s:property value="fileName"/>" 
+                   title="<s:property value="fileName"/>" 
+                   width="400" height="400" border="0" />
+            </s:iterator>
+          </div>
+          <div id="navi">
+            <div id="timer"></div>
+            <a id="prev" href="#"></a>
+            <a id="play" href="#"></a>
+            <a id="next" href="#"></a>
+          </div>
+        </div>
+        <div id="navi2">
+          <p id="pagenumber">显示第<span style="font-weight:bold;font-size: 14px;"></span>帧，共<s:property value="totalImage"/>帧</p>
+          <p id="title"></p>
+          <p id="reset"><a href="#">跳转到OT起始帧</a><input type="hidden" id="startImgNum" value="<s:property value="startImgNum"/>"/></p>
+        </div>
       </div>
     </div>
+    <div id="ot-curve-show">
+      <div id="ot-curve-title">
+        <span>OT光变曲线（日期基于2015-01-01 00:00:00）</span>
+      </div>
+      <div id="ot-curve"></div>
+    </div>
+    <div id="otRecord">
+      <s:url var="remoteurl" action="ot-observe-record" namespace="/" escapeAmp="false">
+        <s:param name="otName" value="%{otName}" /> 
+        <s:param name="dateStr" value="%{dateStr}" /> 
+      </s:url>
+      <!--width="700" resizable="true" 
+      shrinkToFit="true" 自动调节到表格的宽度 autowidth="true"
+      scroll="true"添加之后不分页
+      -->
+      <sjg:grid 
+        id="gridtable" 
+        width="808"
+        hiddengrid="true"
+        caption="OT观测记录详细信息" 
+        dataType="json" 
+        href="%{remoteurl}" 
+        pager="true" 
+        gridModel="gridModel"
+        rowList="10,15,20" 
+        rowNum="10" 
+        rownumbers="true"
+        viewrecords="true">
+        <sjg:gridColumn name="ffName"   index="ffName"	  title="原FITS图" width="250"
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="dateUt" index="dateUt" title="时间(UTC)" formatter="date" width="150"  
+                        formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="raD"    index="raD"	  title="RA" width="80"  formatter="formatLink"
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="decD"    index="decD"	  title="DEC" width="80"  formatter="formatLink"
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="XTemp"    index="xTemp"	  title="模板X" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="YTemp"    index="yTemp"	  title="模板Y" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="x"    index="x"	  title="X" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="y"    index="y"	  title="Y" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="flux"    index="flux"		  title="流量" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="background"    index="background"		  title="背景" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="threshold"    index="threshold"		  title="阈值" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="magAper"    index="magAper"		  title="星等" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="magerrAper"    index="magerrAper"		  title="星等误差" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="ellipticity"    index="ellipticity"		  title="椭率" width="80" 
+                        sortable="false" align="center"/>
+        <sjg:gridColumn name="classStar"    index="classStar"		  title="分类星" width="80" 
+                        sortable="false" align="center"/>
+      </sjg:grid>
+    </div>
   </div>
-  <div id="otRecord">
-    <s:url var="remoteurl" action="ot-observe-record" namespace="/" escapeAmp="false">
-      <s:param name="otName" value="%{otName}" /> 
-      <s:param name="dateStr" value="%{dateStr}" /> 
-    </s:url>
-    <!--width="700" resizable="true" 
-    shrinkToFit="true" 自动调节到表格的宽度 autowidth="true"
-    scroll="true"添加之后不分页
-    -->
-    <sjg:grid 
-      id="gridtable" 
-      width="810"
-      hiddengrid="true"
-      caption="OT观测记录详细信息" 
-      dataType="json" 
-      href="%{remoteurl}" 
-      pager="true" 
-      gridModel="gridModel"
-      rowList="10,15,20" 
-      rowNum="10" 
-      rownumbers="true"
-      viewrecords="true">
-      <sjg:gridColumn name="ffName"   index="ffName"	  title="原FITS图" width="250"
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="raD"    index="raD"	  title="RA" width="80"  formatter="formatLink"
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="decD"    index="decD"	  title="DEC" width="80"  formatter="formatLink"
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="XTemp"    index="xTemp"	  title="模板X" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="YTemp"    index="yTemp"	  title="模板Y" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="x"    index="x"	  title="X" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="y"    index="y"	  title="Y" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="flux"    index="flux"		  title="流量" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="background"    index="background"		  title="背景" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="threshold"    index="threshold"		  title="阈值" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="magAper"    index="magAper"		  title="星等" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="magerrAper"    index="magerrAper"		  title="星等误差" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="ellipticity"    index="ellipticity"		  title="椭率" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="classStar"    index="classStar"		  title="分类星" width="80" 
-                      sortable="false" align="center"/>
-      <sjg:gridColumn name="dateUt" index="dateUt" title="时间(UTC)" formatter="date" width="150"  
-                      formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
-                      sortable="false" align="center"/>
-    </sjg:grid>
-  </div>
-
 </body>
 </html>

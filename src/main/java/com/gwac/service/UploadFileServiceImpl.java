@@ -418,8 +418,6 @@ public class UploadFileServiceImpl implements UploadFileService {
                 String dateStr = tStr.substring(tStr.indexOf("ref_") + 4, tStr.indexOf(".jpg"));
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
                 Date genDate = sdf.parse(dateStr.replace('T', ' '));
-                System.out.println(dateStr);
-                System.out.println(genDate);
 
                 FitsFileCutRef ffcr = new FitsFileCutRef();
                 ffcr.setFileName(tStr.substring(0, tStr.indexOf(".jpg")));
