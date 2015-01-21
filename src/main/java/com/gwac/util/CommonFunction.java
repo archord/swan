@@ -49,6 +49,11 @@ public class CommonFunction {
     return formatter.format(date);
   }
 
+  public static String getDateTimeString(Date date, String formater) {
+    SimpleDateFormat formatter = new SimpleDateFormat(formater);
+    return formatter.format(date);
+  }
+
   public static List<Integer> getMissedNumber(List<Integer> nums) {
     List<Integer> mNums = new ArrayList<Integer>();
     for (int i = 0; i < nums.size() - 1; i++) {

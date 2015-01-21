@@ -28,7 +28,7 @@
     <b>fileUpload:&nbsp;文件n，</b> 
     后面的值有“@”。待上传的所有文件都以该参赛进行传递。单次传送总文件大小不超过1ooMB。<br/>
     <b>url: 传输地址，</b>
-    默认为：http://localhost:8080/svom/uploadAction.action
+    默认为：<%=request.getContextPath()%>/uploadAction.action
   </p>
   <br/>
 </div>
@@ -55,4 +55,4 @@
   </s:form>
 
 </div>
-<img id="indicator" src="images/indicator.gif" alt="Loading..." style="display:none"/>
+<img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>

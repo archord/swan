@@ -18,16 +18,10 @@
 
 <script type="text/javascript">
   function formatLink(cellvalue, options, rowObject) {
-    return "<a href='#' title='点击查看OT详细' onClick='return openDialog(\"" + cellvalue + "\");'>" + cellvalue + "</a>";
+    return "<a href='#' title='点击查看OT详细' onClick='return openDialog(\"<s:property value="otDetail"/>" + "\", \"" + cellvalue + "\");'>" + cellvalue + "</a>";
   }
 
-  function openDialog(otName) {
-    //$("#ot_detail").load("<s:property value="otDetail"/>?otName=" + otName);
-    //$("#ot_detail").load("/svom/imageGallery.html");
-    //$("#ot_detail").dialog('open');
-//    window.open("<s:property value="otDetail"/>?otName=" + otName,
-//	    'otDetailWindow',
-//	    'height=500,width=800,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,status=yes');
+  function openDialog(url,otName) {
     var dateStr = "";
     var dateToStr = $("#to").val();
     if (dateToStr !== "") {
@@ -40,8 +34,8 @@
     if (dateStr === curDate) {
       dateStr = "";
     }
-    openwindow("<s:property value="otDetail"/>?otName=" + otName + "&dateStr=" + dateStr,
-            '_blank', 800, 500, 800, 500);
+    openwindow(url+"?otName=" + otName + "&dateStr=" + dateStr,
+            '_blank', 850, 500, 850, 500);
     return false;
   }
   function openwindow(url, name, width, height, iWidth, iHeight)

@@ -13,6 +13,11 @@
     <property name="headTailCutNumber" value="${gwac.image.head.tail.cut.number}" />
   </bean>
   
+  <bean class="com.gwac.action.GetCutImageRefList"  scope="prototype">
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
+  </bean>
+  
   <bean class="com.gwac.action.GetCutImageList"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
     <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
@@ -21,12 +26,20 @@
   <bean class="com.gwac.action.GetOtImageList"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
     <property name="obDao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
   </bean>
 	
   <bean id="ffcDao" class="com.gwac.dao.FitsFileCutDAOImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">
       <value>com.gwac.model.FitsFileCut</value>
+    </property>
+  </bean>
+	
+  <bean id="ffcrDao" class="com.gwac.dao.FitsFileCutRefDAOImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FitsFileCutRef</value>
     </property>
   </bean>
 	

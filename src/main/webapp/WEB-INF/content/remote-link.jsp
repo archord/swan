@@ -20,7 +20,7 @@
 		>
 	Run AJAX Action
 </sj:a>
-<img id="indicator" src="images/indicator.gif" alt="Loading..." style="display:none"/>
+<img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>
 
 <div class="code ui-widget-content ui-corner-all">
 	<strong>Code:</strong>

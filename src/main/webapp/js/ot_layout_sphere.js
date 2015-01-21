@@ -203,7 +203,7 @@ function unHighlightCurOT2() {
 }
 
 function openDialog(otName) {
-  openwindow("get-ot-image-list.action?otName=" + otName, '_blank', 800, 500, 800, 500);
+  openwindow("get-ot-image-list.action?otName=" + otName, '_blank', 850, 500, 850, 500);
   return false;
 }
 function openwindow(url, name, width, height, iWidth, iHeight)

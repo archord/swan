@@ -1,5 +1,6 @@
 <%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<s:url var="otDetail" action="get-ot-image-list" namespace="/"/>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -17,6 +18,7 @@
 
       var requestTime = 15000;
       var timerId;
+      var openUrl = "<s:property value="otDetail"/>";
 
       function update() {
         var curDate = new Date().Format("yyyy-MM-dd");
@@ -30,7 +32,7 @@
       }
       
       function aa(){
-        console.log("ajax error");
+        console.log("server error");
       }
 
       function onDateChange() {

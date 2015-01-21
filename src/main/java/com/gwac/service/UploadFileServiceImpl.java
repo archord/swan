@@ -6,15 +6,19 @@ package com.gwac.service;
 
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.DataProcessMachine;
+import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
@@ -48,6 +52,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private UploadFileUnstoreDao ufuDao;
   private DataProcessMachineDAO dpmDao;
   private FitsFileCutDAO ffcDao;
+  private FitsFileCutRefDAO ffcrDao;
 
   public UploadFileServiceImpl() {
   }
@@ -202,7 +207,6 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj2.setUploadDate(new Date());
 
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-            
             if (tfile2.exists()) {
               if (tfile1.exists()) {
                 log.warn(tfile2 + " already exist, delete it.");
@@ -405,6 +409,28 @@ public class UploadFileServiceImpl implements UploadFileService {
               }
               ufrDao.save(obj);
             }
+
+            /**
+             * 解析模板截图时间
+             */
+            if (tfile2.exists() && tStr.endsWith("jpg") && tStr.contains("ref")) {
+              try {
+                String dateStr = tStr.substring(tStr.indexOf("ref_") + 4, tStr.indexOf(".jpg"));
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
+                Date genDate = sdf.parse(dateStr.replace('T', ' '));
+                System.out.println(dateStr);
+                System.out.println(genDate);
+
+                FitsFileCutRef ffcr = new FitsFileCutRef();
+                ffcr.setFileName(tStr.substring(0, tStr.indexOf(".jpg")));
+                ffcr.setGenerateTime(genDate);
+                ffcr.setSuccessCut(Boolean.TRUE);
+                ffcrDao.updateByName(ffcr);
+
+              } catch (ParseException ex) {
+                log.error("parse ref cut image date error.");
+              }
+            }
           }
         }
       }
@@ -532,5 +558,19 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setFfcDao(FitsFileCutDAO ffcDao) {
     this.ffcDao = ffcDao;
+  }
+
+  /**
+   * @return the ffcrDao
+   */
+  public FitsFileCutRefDAO getFfcrDao() {
+    return ffcrDao;
+  }
+
+  /**
+   * @param ffcrDao the ffcrDao to set
+   */
+  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
+    this.ffcrDao = ffcrDao;
   }
 }

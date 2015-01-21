@@ -61,7 +61,7 @@
               <h5 class="ui-state-default" style="background: none; border: none;"> <s:text name="showcase.version"/></h5>
               </div>
             </div>
-            <div id="themebox" class="ym-g25 ym-gr">
+<!--            <div id="themebox" class="ym-g25 ym-gr">
               <s:form id="themeform" action="index" theme="simple">
                 <div>
                   <s:select id="selected_theme" name="theme" list="themes" emptyOption="true" onchange="changeTheme(this.value);"/><br/>
@@ -70,8 +70,8 @@
                   <sj:submit id="submitThemeform" formIds="themeform" listenTopics="themeformTopic" cssStyle="display: none;"/>
                 </div>
               </s:form>
-              <img id="myDefaultIndicator" src="images/ajax-loader.gif" alt="Loading..." style="display:none"/>
-            </div>
+              <img id="myDefaultIndicator" src="gwac_images/ajax-loader.gif" alt="Loading..." style="display:none"/>
+            </div>-->
           </div>
         </div>
       </div>

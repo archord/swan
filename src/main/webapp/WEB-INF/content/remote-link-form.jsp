@@ -25,7 +25,7 @@
 		>
 	Submit form here
 </sj:a>
-<img id="indicator" src="images/indicator.gif" alt="Loading..." style="display:none"/>
+<img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>
 
 <div class="code ui-widget-content ui-corner-all">
 	<strong>Code:</strong>
@@ -44,7 +44,7 @@
     &gt;
       Submit form here
     &lt;/sj:a&gt;
-    &lt;img id=&quot;indicator&quot; src=&quot;images/indicator.gif&quot; alt=&quot;Loading...&quot; style=&quot;display:none&quot;/&gt;    
+    &lt;img id=&quot;indicator&quot; src=&quot;gwac_images/indicator.gif&quot; alt=&quot;Loading...&quot; style=&quot;display:none&quot;/&gt;    
 	  </pre>
 </div>
 

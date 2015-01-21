@@ -104,48 +104,60 @@
   </script>
   <style type="text/css">
 
-    #carousel-wrapper {
+    #cut-image-show{
       border: 1px solid #ccc;
+      margin: 10px 10px 10px 10px;
       background-color: #fff;
-      width: 600px;
+      width: 810px;
       height: 430px;
-      padding-bottom: 0px;
-      padding-left: 20px;
-      padding-right: 20px;
-      padding-top: 20px;
-      margin: -220px 0 0 -320px;
-      position: absolute;
-      left: 50%;
-      top: 230px;
       box-shadow: 0 5px 10px #ccc;
     }
 
-    #otRecord{
-      width: 1380px;
+    #ref-image{
+      width: 404px;
+      height: 400px;
       padding: 0px;
-      margin: 0 0 0 0;
-      position: absolute;
+      margin: 0px 4px 0px 0px;
       float: left;
-      top: 480px;
+    }
+
+    #carousel-wrapper {
+      width: 400px;
+      height: 430px;
+      padding: 0px;
+      margin: 0px;
+      float: right;
+      /*position: absolute;*/
+      /*left: 50%;*/
+      /*top: 230px;*/
+      /*box-shadow: 0 5px 10px #ccc;*/
+    }
+
+    #otRecord{
+      width: 810px;
+      padding: 0px;
+      margin: 10px;
+      float: left;
     }
 
     #inner {
       position: relative;
-      width: 600px;
+      width: 400px;
       height: 400px;
       overflow: hidden;
       text-align: center;
     }
     #carousel{
-      width: 400px;
-      left: 100px;
+      position: relative;
+      /*width: 400px;*/
+      /*left: 100px;*/
     }
 
     #navi {
       background-color: #333;
       background-color: rgba(30, 30, 30, 0.8);
       border-top: 1px solid #000;
-      width: 600px;
+      width: 400px;
       height: 70px;
       position: absolute;
       bottom: -60px;
@@ -153,10 +165,10 @@
       z-index: 10;
     }
     #navi2 {
-      width: 600px;
+      width: 380px;
       height: 30px;
-      margin: 0 20px 0 20px;
-      position: absolute;
+      padding: 0px 10px 0px 10px;
+      position: relative;
       bottom: 0px;
       left: 0;
       z-index: 20;
@@ -168,12 +180,11 @@
       padding: 0;
     }
     #pagenumber {
-      width: 130px;
       float: left;
     }
     #title {
       text-align: center;
-      width: 360px;
+      width:160px;
       float: left;
     }
     #reset{
@@ -209,47 +220,54 @@
       width: 53px;
       height: 53px;
       top: 10px;
-      background: url(${pageContext.request.contextPath}/images/imageGallery/ui/pause.png) 0 0 no-repeat transparent;
+      background: url(${pageContext.request.contextPath}/gwac_images/imageGallery/ui/pause.png) 0 0 no-repeat transparent;
       left: 50%;
       margin-left: -27px;
     }
     #play.paused {
-      background: url(${pageContext.request.contextPath}/images/imageGallery/ui/play.png) 0 0 no-repeat transparent;
+      background: url(${pageContext.request.contextPath}/gwac_images/imageGallery/ui/play.png) 0 0 no-repeat transparent;
     }
     #prev {
-      background: url(${pageContext.request.contextPath}/images/imageGallery/ui/prev.png) 0 0 no-repeat transparent;
+      background: url(${pageContext.request.contextPath}/gwac_images/imageGallery/ui/prev.png) 0 0 no-repeat transparent;
       left: 220px;
     }
     #next {
-      background: url(${pageContext.request.contextPath}/images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
+      background: url(${pageContext.request.contextPath}/gwac_images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
       right: 220px;
     }
 
   </style>
 </head>
 <body>
-
-  <div id="carousel-wrapper">
-    <div id="inner">
-      <div id="carousel">
-        <s:iterator value="ffcList">
-          <img src="<s:property value="storePath"/>/<s:property value="fileName"/>" 
-               alt="<s:property value="fileName"/>" 
-               title="<s:property value="fileName"/>" 
-               width="400" height="400" border="0" />
-        </s:iterator>
-      </div>
-      <div id="navi">
-        <div id="timer"></div>
-        <a id="prev" href="#"></a>
-        <a id="play" href="#"></a>
-        <a id="next" href="#"></a>
-      </div>
+  <div id="cut-image-show">
+    <div id="ref-image">
+      <img src="<s:property value="ffcrStorePath"/>/<s:property value="ffcrFileName"/>" 
+           alt="<s:property value="ffcrFileName"/>" 
+           title="<s:property value="ffcrFileName"/>" 
+           width="400" height="400" border="0" />
     </div>
-    <div id="navi2">
-      <p id="pagenumber">显示第<span style="font-weight:bold;font-size: 14px;"></span>帧，共<s:property value="totalImage"/>帧</p>
-      <p id="title"></p>
-      <p id="reset"><a href="#">跳转到OT起始帧</a><input type="hidden" id="startImgNum" value="<s:property value="startImgNum"/>"/></p>
+    <div id="carousel-wrapper">
+      <div id="inner">
+        <div id="carousel">
+          <s:iterator value="ffcList">
+            <img src="<s:property value="storePath"/>/<s:property value="fileName"/>" 
+                 alt="<s:property value="fileName"/>" 
+                 title="<s:property value="fileName"/>" 
+                 width="400" height="400" border="0" />
+          </s:iterator>
+        </div>
+        <div id="navi">
+          <div id="timer"></div>
+          <a id="prev" href="#"></a>
+          <a id="play" href="#"></a>
+          <a id="next" href="#"></a>
+        </div>
+      </div>
+      <div id="navi2">
+        <p id="pagenumber">显示第<span style="font-weight:bold;font-size: 14px;"></span>帧，共<s:property value="totalImage"/>帧</p>
+        <p id="title"></p>
+        <p id="reset"><a href="#">跳转到OT起始帧</a><input type="hidden" id="startImgNum" value="<s:property value="startImgNum"/>"/></p>
+      </div>
     </div>
   </div>
   <div id="otRecord">
@@ -258,9 +276,13 @@
       <s:param name="dateStr" value="%{dateStr}" /> 
     </s:url>
     <!--width="700" resizable="true" 
-    shrinkToFit="true" 自动调节到表格的宽度 -->
+    shrinkToFit="true" 自动调节到表格的宽度 autowidth="true"
+    scroll="true"添加之后不分页
+    -->
     <sjg:grid 
       id="gridtable" 
+      width="810"
+      hiddengrid="true"
       caption="OT观测记录详细信息" 
       dataType="json" 
       href="%{remoteurl}" 
@@ -279,6 +301,10 @@
       <sjg:gridColumn name="XTemp"    index="xTemp"	  title="模板X" width="80" 
                       sortable="false" align="center"/>
       <sjg:gridColumn name="YTemp"    index="yTemp"	  title="模板Y" width="80" 
+                      sortable="false" align="center"/>
+      <sjg:gridColumn name="x"    index="x"	  title="X" width="80" 
+                      sortable="false" align="center"/>
+      <sjg:gridColumn name="y"    index="y"	  title="Y" width="80" 
                       sortable="false" align="center"/>
       <sjg:gridColumn name="flux"    index="flux"		  title="流量" width="80" 
                       sortable="false" align="center"/>
@@ -299,11 +325,6 @@
                       sortable="false" align="center"/>
     </sjg:grid>
   </div>
-
-  <!--        <img src="images/imageGallery/rally1.jpg" alt="rally1" width="600" height="400" border="0" />
-      <img src="images/imageGallery/rally2.jpg" alt="rally2" width="600" height="400" border="0" />
-      <img src="images/imageGallery/rally3.jpg" alt="rally3" width="600" height="400" border="0" />
-      <img src="images/imageGallery/rally4.jpg" alt="rally4" width="600" height="400" border="0" />-->
 
 </body>
 </html>

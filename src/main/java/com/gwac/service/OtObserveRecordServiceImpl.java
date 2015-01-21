@@ -6,6 +6,7 @@ package com.gwac.service;
 
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.OTCatalogDao;
 import com.gwac.dao.OtLevel2Dao;
@@ -14,11 +15,13 @@ import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
+import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OTCatalog;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.UploadFileUnstore;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,6 +40,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private FitsFileCutDAO ffcDao;
   private OtObserveRecordDAO otorDao;
   private DataProcessMachineDAO dpmDao;
+  private FitsFileCutRefDAO ffcrDao;
   private String rootPath;
   private float errorBox;
   private int successiveImageNumber;
@@ -165,6 +169,20 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
               otLv2Dao.save(tOtLv2);
+
+              String ffcrName = String.format("%s_%04d_ref", otName, tOtLv2.getFirstFfNumber());
+              log.debug("ffcrName="+ffcrName);
+              log.debug("otId="+tOtLv2.getOtId());
+              
+              FitsFileCutRef ffcr = new FitsFileCutRef();
+              ffcr.setDpmId(tOtLv2.getDpmId());
+              ffcr.setFfId(ff.getFfId());
+              ffcr.setFileName(ffcrName);
+              ffcr.setOtId(tOtLv2.getOtId());
+              ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/cutimages");
+              ffcr.setRequestCut(false);
+              ffcr.setSuccessCut(false);
+              ffcrDao.save(ffcr);
 
               for (OtObserveRecord tOor : oors) {
                 if (tOor.getOtId() != 0) {
@@ -345,5 +363,19 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setOccurNumber(int occurNumber) {
     this.occurNumber = occurNumber;
+  }
+
+  /**
+   * @return the ffcrDao
+   */
+  public FitsFileCutRefDAO getFfcrDao() {
+    return ffcrDao;
+  }
+
+  /**
+   * @param ffcrDao the ffcrDao to set
+   */
+  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
+    this.ffcrDao = ffcrDao;
   }
 }

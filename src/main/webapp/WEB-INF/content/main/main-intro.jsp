@@ -15,7 +15,7 @@
     GWAC为国家天文台广角望远镜相机阵列。
   </p>
   <p>
-  <img width="400px" src="/svom/images/gwac_r.jpg"/>
+  <img width="400px" src="<%=request.getContextPath()%>/gwac_images/gwac_r.jpg"/>
   </p>
 
 </div>

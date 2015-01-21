@@ -273,8 +273,8 @@ function openDialog(otName) {
   if (dateStr === curDate) {
     dateStr = "";
   }
-  var dataurl = "get-ot-image-list.action?otName=" + otName + "&dateStr=" + dateStr;
-  openwindow(dataurl, '_blank', 800, 500, 800, 500);
+  var dataurl = openUrl+"?otName=" + otName + "&dateStr=" + dateStr;
+  openwindow(dataurl, '_blank', 850, 500, 850, 500);
   return false;
 }
 function openwindow(url, name, width, height, iWidth, iHeight)

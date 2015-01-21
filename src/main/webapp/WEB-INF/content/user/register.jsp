@@ -30,5 +30,5 @@
     </div>
   </fieldset>
 </s:form>
-<img id="indicator" src="images/indicator.gif" alt="Loading..." style="display:none"/>
+<img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>
 

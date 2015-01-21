@@ -1,8 +1,10 @@
 package com.gwac.action;
 
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.FitsFileCut;
+import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OtLevel2;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
@@ -29,14 +31,17 @@ public class GetOtImageList extends ActionSupport {
   private String ra;
   private String dec;
   private String dateStr;
-  OtLevel2 ob;
+  private OtLevel2 ob;
+  private FitsFileCutRefDAO ffcrDao;
+  private String ffcrStorePath;
+  private String ffcrFileName;
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
 
-    if (dateStr!=null && !dateStr.isEmpty()) {
+    if (dateStr != null && !dateStr.isEmpty()) {
       ffcList = ffcDao.getCutImageByOtNameFromHis(otName);
       ob = obDao.getOtLevel2ByNameFromHis(otName);
     } else {
@@ -47,17 +52,27 @@ public class GetOtImageList extends ActionSupport {
       setRa(ob.getRa() + "");
       setDec(ob.getDec() + "");
       setStartImgNum(ob.getLastFfNumber());
-    }else{
+    } else {
       setRa("");
       setDec("");
       setStartImgNum(0);
     }
-    
+
     totalImage = ffcList.size();
     for (FitsFileCut ffc : ffcList) {
       ffc.setFileName(ffc.getFileName() + ".jpg");
       ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
     }
+
+    List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtName(otName);
+    if (ffcrs != null && ffcrs.size() > 0) {
+      setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath());
+      setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
+    } else {
+      setFfcrStorePath("");
+      setFfcrFileName("");
+    }
+
     return SUCCESS;
   }
 
@@ -171,6 +186,48 @@ public class GetOtImageList extends ActionSupport {
    */
   public String getDateStr() {
     return dateStr;
+  }
+
+  /**
+   * @return the ffcrDao
+   */
+  public FitsFileCutRefDAO getFfcrDao() {
+    return ffcrDao;
+  }
+
+  /**
+   * @param ffcrDao the ffcrDao to set
+   */
+  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
+    this.ffcrDao = ffcrDao;
+  }
+
+  /**
+   * @return the ffcrStorePath
+   */
+  public String getFfcrStorePath() {
+    return ffcrStorePath;
+  }
+
+  /**
+   * @param ffcrStorePath the ffcrStorePath to set
+   */
+  public void setFfcrStorePath(String ffcrStorePath) {
+    this.ffcrStorePath = ffcrStorePath;
+  }
+
+  /**
+   * @return the ffcrFileName
+   */
+  public String getFfcrFileName() {
+    return ffcrFileName;
+  }
+
+  /**
+   * @param ffcrFileName the ffcrFileName to set
+   */
+  public void setFfcrFileName(String ffcrFileName) {
+    this.ffcrFileName = ffcrFileName;
   }
 
 }
