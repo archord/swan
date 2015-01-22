@@ -37,12 +37,19 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   @Override
   public String getOtOpticalVaration(String otName) {
     Session session = getCurrentSession();
-    String sql = "select oor.date_ut, oor.mag_aper, oor.oor_id "
-            + " from ot_observe_record_his oor "
-            + " inner join ot_level2_his ot2 on ot2.ot_id=oor.ot_id and ot2.name='" + otName + "' "
-            + " order by oor_id asc";
+    String sql1 = "select oor.date_ut, oor.mag_aper, oor.oor_id "
+            + " from ot_observe_record oor "
+            + " inner join ot_level2 ot2 on ot2.ot_id=oor.ot_id and ot2.name='" + otName + "' "
+            + " order by oor.oor_id asc";
+    
+    String sql2 = "select oorh.date_ut, oorh.mag_aper, oorh.oor_id "
+            + " from ot_observe_record_his oorh "
+            + " inner join ot_level2_his ot2h on ot2h.ot_id=oorh.ot_id and ot2h.name='" + otName + "' "
+            + " order by oorh.oor_id asc";
+    
+    String unionSql = "(" + sql1 + ") union (" + sql2 + ")";
 
-    Query q = session.createSQLQuery(sql);
+    Query q = session.createSQLQuery(sql1);
     Iterator itor = q.list().iterator();
 
     Date baseDate = CommonFunction.stringToDate("2015-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss");

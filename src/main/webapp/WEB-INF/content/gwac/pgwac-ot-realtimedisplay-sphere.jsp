@@ -58,6 +58,7 @@
         <div id="placeholder1" class="demo-placeholder" style="float:left; width:100%; height: 100%;"></div>
       </div>
     </div>
-
+    
+    <div id="tooltip" style="position: absolute; display: none; border: 1px solid rgb(255, 221, 221); padding: 2px; opacity: 0.8; background-color: rgb(255, 238, 238);"></div>
   </body>
 </html>

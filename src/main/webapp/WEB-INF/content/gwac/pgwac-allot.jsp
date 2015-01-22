@@ -58,20 +58,20 @@
 <div style="width:650px;text-align: left;">
   <s:form id="getOtListForm"  action="query-ot-level2" theme="simple" cssClass="yform" namespace="/">
     <table style="margin:auto; width:90%;">
-      <tr>
+      <tr style="height:20px;">
         <td>开始日期(UTC)：</td>
         <!--value="yesterday" value="today" -->
         <td><sj:datepicker id="from" name="startDate" displayFormat="yy-mm-dd" label="开始日期" /></td>
         <td>结束日期(UTC)：</td>
         <td><sj:datepicker  id="to" name="endDate" displayFormat="yy-mm-dd" label="结束日期" /></td>
       </tr>
-      <tr>
+      <tr style="height:20px;">
         <td>模板X坐标：</td>
         <td><sj:textfield name="xtemp" /></td>
         <td>模板Y坐标：</td>
         <td><sj:textfield name="ytemp" /></td>
       </tr>
-      <tr>
+      <tr style="height:20px;">
         <td>望远镜：</td>
         <td><select name="telscope" >
             <option value="all">All</option>
@@ -92,7 +92,7 @@
         <td>搜索半径：</td>
         <td><sj:textfield name="searchRadius" /></td>
       </tr>
-      <tr><td colspan="4" style="text-align: center;">
+      <tr style="height:20px;"><td colspan="4" style="text-align: center;">
           <sj:a
             button="true"
             onClickTopics="reloadOtGrid"
@@ -111,7 +111,8 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
 <!--不能添加loadonce="true"，否则上面的“搜索”提交不起作用-->
 <sjg:grid 
   id="gridtable" 
-  caption="上传文件历史记录" 
+  shrinkToFit="true"
+  caption="二级OT列表" 
   dataType="json" 
   href="%{remoteurl}" 
   pager="true" 
@@ -133,7 +134,7 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="ytemp"    index="ytemp"	  title="模板Y" width="80" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="190" 
+  <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="250" 
                   sortable="false" align="center"/>
   <sjg:gridColumn name="total"    index="total"	  title="记录总数" width="70" 
                   sortable="false" align="center"/>

@@ -81,6 +81,7 @@
         <div id="sys-disk-usage"></div>
       </div>
     </div>
+    <div id="tooltip" style="position: absolute; display: none; border: 1px solid rgb(255, 221, 221); padding: 2px; opacity: 0.8; background-color: rgb(255, 238, 238);"></div>
     <div id="footer">
       <p style="text-align: center;">
         版权所有 <a href="http://svom.bao.ac.cn" title="OpenSource CSS Layout">NAOC GWAC</a>

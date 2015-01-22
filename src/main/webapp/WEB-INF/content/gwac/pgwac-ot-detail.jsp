@@ -113,7 +113,7 @@
         grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
         selection: {mode: "xy"},
         xaxis: {show: true, tickColor: 'transparent'},
-        yaxis: {show: true, tickDecimals: 1, tickFormatter: formate1}
+        yaxis: {show: true, tickSize: 0.05, tickDecimals: 2, tickFormatter: formate1}
       };
       //min: 0, max: 10, tickSize: 1, 
 
@@ -130,9 +130,9 @@
 
       $("#ot-curve").bind("plothover", function(event, pos, item) {
         if (item) {
-          var x = item.datapoint[0].toFixed(6);
+          var x = item.datapoint[0].toFixed(4);
           var y = item.datapoint[1].toFixed(2);
-          $("#tooltip").html(x + ", " + y).css({top: item.pageY + 5, left: item.pageX + 5}).fadeIn(200);
+          $("#tooltip").html(x + ", " + y).css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
         } else {
           $("#tooltip").hide();
         }

@@ -151,7 +151,7 @@ function plotAndBind() {
           mName = "M" + ot1Label[item.dataIndex][0];
         }
         $("#tooltip").html(mName + "-" + ot1Label[item.dataIndex][1] + " (" + x + ", " + y + ")")
-                .css({top: item.pageY + 5, left: item.pageX + 5})
+                .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
       } else if (item.series.label === "ot2") {
         var mName = "";
@@ -161,7 +161,7 @@ function plotAndBind() {
           mName = "M" + ot2Label[item.dataIndex][0];
         }
         $("#tooltip").html(mName + "-" + ot2Label[item.dataIndex][1] + " (" + x + ", " + y + ")")
-                .css({top: item.pageY + 5, left: item.pageX + 5})
+                .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
       } else if (item.series.label === "ot2-cur") {
         var mName = "";
@@ -171,7 +171,7 @@ function plotAndBind() {
           mName = "M" + ot2curLabel[item.dataIndex][0];
         }
         $("#tooltip").html(mName + "-" + ot2curLabel[item.dataIndex][1] + " (" + x + ", " + y + ")")
-                .css({top: item.pageY + 5, left: item.pageX + 5})
+                .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
       }
     } else {
