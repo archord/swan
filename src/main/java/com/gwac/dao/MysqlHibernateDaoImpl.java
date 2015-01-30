@@ -12,7 +12,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional("transactionManager2")
 public abstract class MysqlHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
 
   private static final Log log = LogFactory.getLog(MysqlHibernateDaoImpl.class);

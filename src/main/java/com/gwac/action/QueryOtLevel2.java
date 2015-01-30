@@ -2,6 +2,7 @@ package com.gwac.action;
 
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtLevel2QueryParameter;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
 import org.apache.commons.logging.Log;
@@ -9,6 +10,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
 
+/**
+ * 目前已经被GetOtLevel2List取代
+ * @author xy
+ */
 @Result(name = "success", type = "json")
 public class QueryOtLevel2 extends ActionSupport implements SessionAware {
 
@@ -41,22 +46,11 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
   private OtLevel2Dao obDao = null;
-  private String startDate;
-  private String endDate;
-  private float xTemp;
-  private float yTemp;
-  private String telscope;
-  private float searchRadius;
+
+  private OtLevel2QueryParameter ot2qp;
 
   @SuppressWarnings("unchecked")
   public String execute() {
-
-    log.debug("startDate=" + startDate);
-    log.debug("endDate=" + endDate);
-    log.debug("xTemp=" + xTemp);
-    log.debug("yTemp=" + yTemp);
-    log.debug("telscope=" + telscope);
-    log.debug("searchRadius=" + searchRadius);
 
     Number tn = obDao.count();
     if (tn != null) {
@@ -74,6 +68,8 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
 
     // Calculate the first row to read
     int from = to - rows;
+    ot2qp.setStart(from);
+    ot2qp.setSize(rows);
 
     // Set to = max rows
     if (to > records) {
@@ -82,7 +78,7 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
 
     String[] orderNames = {"foundTimeUtc", "name"};
     int[] sorts = {2, 2};
-    gridModel = obDao.queryOtLevel2(startDate, endDate, telscope, xTemp, yTemp, searchRadius, from, rows);
+    gridModel = obDao.queryOtLevel2(ot2qp);
 
     // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
@@ -226,86 +222,17 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @return the xTemp
+   * @return the ot2qp
    */
-  public float getXTemp() {
-    return xTemp;
+  public OtLevel2QueryParameter getOt2qp() {
+    return ot2qp;
   }
 
   /**
-   * @param xTemp the xTemp to set
+   * @param ot2qp the ot2qp to set
    */
-  public void setXTemp(float xTemp) {
-    this.xTemp = xTemp;
+  public void setOt2qp(OtLevel2QueryParameter ot2qp) {
+    this.ot2qp = ot2qp;
   }
 
-  /**
-   * @return the yTemp
-   */
-  public float getYTemp() {
-    return yTemp;
-  }
-
-  /**
-   * @param yTemp the yTemp to set
-   */
-  public void setYTemp(float yTemp) {
-    this.yTemp = yTemp;
-  }
-
-  /**
-   * @return the telscope
-   */
-  public String getTelscope() {
-    return telscope;
-  }
-
-  /**
-   * @param telscope the telscope to set
-   */
-  public void setTelscope(String telscope) {
-    this.telscope = telscope;
-  }
-
-  /**
-   * @return the searchRadius
-   */
-  public float getSearchRadius() {
-    return searchRadius;
-  }
-
-  /**
-   * @param searchRadius the searchRadius to set
-   */
-  public void setSearchRadius(float searchRadius) {
-    this.searchRadius = searchRadius;
-  }
-
-  /**
-   * @return the startDate
-   */
-  public String getStartDate() {
-    return startDate;
-  }
-
-  /**
-   * @param startDate the startDate to set
-   */
-  public void setStartDate(String startDate) {
-    this.startDate = startDate;
-  }
-
-  /**
-   * @return the endDate
-   */
-  public String getEndDate() {
-    return endDate;
-  }
-
-  /**
-   * @param endDate the endDate to set
-   */
-  public void setEndDate(String endDate) {
-    this.endDate = endDate;
-  }
 }

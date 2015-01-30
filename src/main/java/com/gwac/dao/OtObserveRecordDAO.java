@@ -4,6 +4,7 @@
  */
 package com.gwac.dao;
 
+import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtObserveRecordShow;
 import java.util.List;
@@ -18,11 +19,9 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
 
   public List<OtObserveRecordShow> getRecordByOtId(long otId);
 
-  public int countRecordByOtName(String otName);
+  public int countRecordByOtName(String otName, Boolean queryHis);
 
-  public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize);
-  
-  public List<OtObserveRecordShow> getRecordByOtNameFromHis(String otName, int start, int resultSize);
+  public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis);
 
   public Boolean exist(OtObserveRecord obj, float errorBox);
 
@@ -32,5 +31,5 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
 
   public String getUnCuttedStarList(int dpmId);
   
-  public String getOtOpticalVaration(String otName);
+  public String getOtOpticalVaration(OtLevel2 ot2, Boolean queryHis);
 }

@@ -60,52 +60,24 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   private Map<String, Object> session;
   private OtObserveRecordDAO otorDao;
   private String otName;
-  private String dateStr;
+  private Boolean queryHis;
 
   @SuppressWarnings("unchecked")
   public String execute() {
-//    log.info("Page " + getPage() + " Rows " + getRows()
-//            + " Sorting Order " + getSord() + " Index Row :" + getSidx());
-//    log.info("Search :" + searchField + " " + searchOper + " "
-//            + searchString);
-
-    // Calucalate until rows ware selected
-    int to = (rows * page);
-
-    // Calculate the first row to read
-    int from = to - rows;
-    String[] orderNames = {"dateUt"};
-
-    int[] sorts = {2};
-    //gridModel = otorDao.findRecord(from, rows, orderNames, sorts);
-    if (dateStr!=null && !dateStr.isEmpty()) {
-      setGridModel(otorDao.getRecordByOtNameFromHis(otName, from, rows));
-    } else {
-      setGridModel(otorDao.getRecordByOtName(otName, from, rows));
-    }
     
-    // Count all record (select count(*) from )
-    records = otorDao.countRecordByOtName(otName);
-//    log.debug("records=" + records);
-//    log.info("records=" + records);
+    int to = (rows * page);
+    int from = to - rows;
+    
+    gridModel = otorDao.getRecordByOtName(otName, from, rows, queryHis);
+    records = otorDao.countRecordByOtName(otName, queryHis);
 
     if (totalrows != null) {
       records = totalrows;
     }
-//    log.info("records=" + records);
-
-    // Set to = max rows
     if (to > records) {
       to = records;
     }
-
-    // Calculate total Pages
     total = (int) Math.ceil((double) records / (double) rows);
-//    log.info("from=" + from);
-//    log.info("to=" + to);
-//    log.info("size=" + gridModel.size());
-//    log.info("records=" + records);
-//    log.info("total=" + total);
 
     return SUCCESS;
   }
@@ -267,16 +239,17 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   }
 
   /**
-   * @return the dateStr
+   * @return the queryHis
    */
-  public String getDateStr() {
-    return dateStr;
+  public Boolean getQueryHis() {
+    return queryHis;
   }
 
   /**
-   * @param dateStr the dateStr to set
+   * @param queryHis the queryHis to set
    */
-  public void setDateStr(String dateStr) {
-    this.dateStr = dateStr;
+  public void setQueryHis(Boolean queryHis) {
+    this.queryHis = queryHis;
   }
+
 }

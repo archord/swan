@@ -23,7 +23,9 @@ import org.apache.commons.logging.LogFactory;
  * @author xy
  */
 public class CommonFunction {
-  
+
+  public static final float MINFLOAT = (float) 0.000001;
+
   private static final Log log = LogFactory.getLog(CommonFunction.class);
 
   public static String getCurTimeString() {
@@ -59,10 +61,10 @@ public class CommonFunction {
   }
 
   /**
-   * 
+   *
    * @param dateStr
    * @param formater yyyy-MM-dd HH:mm:ss
-   * @return  
+   * @return
    */
   public static Date stringToDate(String dateStr, String formater) {
     try {

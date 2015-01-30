@@ -2,6 +2,8 @@ package com.gwac.action;
 
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtLevel2QueryParameter;
+import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
 import org.apache.commons.logging.Log;
@@ -41,12 +43,7 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
   private OtLevel2Dao obDao = null;
-  private String startDate;
-  private String endDate;
-  private float xtemp;
-  private float ytemp;
-  private String telscope;
-  private float searchRadius;
+  private OtLevel2QueryParameter ot2qp;
 
   @SuppressWarnings("unchecked")
 //  @Transactional(readOnly=true)
@@ -56,24 +53,11 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
     int to = (rows * page);
     // Calculate the first row to read
     int from = to - rows;
+    ot2qp.setStart(from);
+    ot2qp.setSize(rows);
 
-    if (startDate.isEmpty() && endDate.isEmpty() && telscope.equalsIgnoreCase("all")
-            && xtemp == 0.0 && ytemp == 0.0) {
-
-      String[] orderNames = {"foundTimeUtc", "name"};
-      int[] sorts = {2, 2};
-      gridModel = obDao.findRecord(from, rows, orderNames, sorts);
-
-      Number tn = obDao.count();
-      if (tn != null) {
-        records = tn.intValue();
-      } else {
-        records = 0;
-      }
-    } else {
-      gridModel = obDao.queryOtLevel2(startDate, endDate, telscope, xtemp, ytemp, searchRadius, from, rows);
-      records = obDao.countOtLevel2(startDate, endDate, telscope, xtemp, ytemp, searchRadius, from, rows);
-    }
+    gridModel = obDao.queryOtLevel2(ot2qp);
+    records = obDao.countOtLevel2(ot2qp);
 
     if (totalrows != null) {
       records = totalrows;
@@ -226,86 +210,16 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @return the startDate
+   * @return the ot2qp
    */
-  public String getStartDate() {
-    return startDate;
+  public OtLevel2QueryParameter getOt2qp() {
+    return ot2qp;
   }
 
   /**
-   * @param startDate the startDate to set
+   * @param ot2qp the ot2qp to set
    */
-  public void setStartDate(String startDate) {
-    this.startDate = startDate;
-  }
-
-  /**
-   * @return the endDate
-   */
-  public String getEndDate() {
-    return endDate;
-  }
-
-  /**
-   * @param endDate the endDate to set
-   */
-  public void setEndDate(String endDate) {
-    this.endDate = endDate;
-  }
-
-  /**
-   * @return the telscope
-   */
-  public String getTelscope() {
-    return telscope;
-  }
-
-  /**
-   * @param telscope the telscope to set
-   */
-  public void setTelscope(String telscope) {
-    this.telscope = telscope;
-  }
-
-  /**
-   * @return the searchRadius
-   */
-  public float getSearchRadius() {
-    return searchRadius;
-  }
-
-  /**
-   * @param searchRadius the searchRadius to set
-   */
-  public void setSearchRadius(float searchRadius) {
-    this.searchRadius = searchRadius;
-  }
-
-  /**
-   * @return the xtemp
-   */
-  public float getXtemp() {
-    return xtemp;
-  }
-
-  /**
-   * @param xtemp the xtemp to set
-   */
-  public void setXtemp(float xtemp) {
-    this.xtemp = xtemp;
-  }
-
-  /**
-   * @return the ytemp
-   */
-  public float getYtemp() {
-    return ytemp;
-  }
-
-  /**
-   * @param ytemp the ytemp to set
-   */
-  public void setYtemp(float ytemp) {
-    this.ytemp = ytemp;
+  public void setOt2qp(OtLevel2QueryParameter ot2qp) {
+    this.ot2qp = ot2qp;
   }
 }

@@ -17,25 +17,32 @@ import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
 
 @Actions({
-  @Action(value = "/get-ot-image-list", results = {
+  @Action(value = "/get-ot-detail", results = {
     @Result(location = "gwac/pgwac-ot-detail.jsp", name = "success"),
     @Result(location = "gwac/pgwac-ot-detail.jsp", name = "input")})})
-public class GetOtImageList extends ActionSupport {
+public class GetOtDetail extends ActionSupport {
 
   private static final long serialVersionUID = -3454448234588641394L;
-  private static final Log log = LogFactory.getLog(GetOtImageList.class);
-  private String otName;
-  private List<FitsFileCut> ffcList;
+  private static final Log log = LogFactory.getLog(GetOtDetail.class);
+
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
   private OtLevel2Dao obDao;
   private OtObserveRecordDAO otorDao;
+  /**
+   * 查询条件
+   */
+  private String otName;
+  private Boolean queryHis;
+  /**
+   * 返回结果
+   */
+  private OtLevel2 ob;
+  private List<FitsFileCut> ffcList;
   private int totalImage;
   private int startImgNum;
   private String ra;
   private String dec;
-  private String dateStr;
-  private OtLevel2 ob;
   private String ffcrStorePath;
   private String ffcrFileName;
   private String ffcrGenerateTime;
@@ -45,18 +52,18 @@ public class GetOtImageList extends ActionSupport {
   public String execute() throws Exception {
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
-
-    if (dateStr != null && !dateStr.isEmpty()) {
-      ffcList = ffcDao.getCutImageByOtNameFromHis(otName);
-      ob = obDao.getOtLevel2ByNameFromHis(otName);
-    } else {
-      ffcList = ffcDao.getCutImageByOtName(otName);
-      ob = obDao.getOtLevel2ByName(otName);
+    
+    if(queryHis==null){
+      queryHis = false;
     }
+
+    ob = obDao.getOtLevel2ByName(otName, queryHis);
+    ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
+
     if (ob != null) {
       setRa(ob.getRa() + "");
       setDec(ob.getDec() + "");
-      setStartImgNum(ob.getLastFfNumber());
+      setStartImgNum(ob.getFirstFfNumber());
     } else {
       setRa("");
       setDec("");
@@ -69,18 +76,18 @@ public class GetOtImageList extends ActionSupport {
       ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
     }
 
-    List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtName(otName);
+    List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
     if (ffcrs != null && ffcrs.size() > 0) {
       setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath());
       setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
-      setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss")+"(U)");
+      setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
     } else {
       setFfcrStorePath("");
       setFfcrFileName("");
       setFfcrGenerateTime("");
     }
-    
-    otOpticalVaration = otorDao.getOtOpticalVaration(otName);
+
+    otOpticalVaration = otorDao.getOtOpticalVaration(ob, queryHis);
 
     return SUCCESS;
   }
@@ -184,20 +191,6 @@ public class GetOtImageList extends ActionSupport {
   }
 
   /**
-   * @param dateStr the dateStr to set
-   */
-  public void setDateStr(String dateStr) {
-    this.dateStr = dateStr;
-  }
-
-  /**
-   * @return the dateStr
-   */
-  public String getDateStr() {
-    return dateStr;
-  }
-
-  /**
    * @return the ffcrDao
    */
   public FitsFileCutRefDAO getFfcrDao() {
@@ -272,6 +265,34 @@ public class GetOtImageList extends ActionSupport {
    */
   public void setOtorDao(OtObserveRecordDAO otorDao) {
     this.otorDao = otorDao;
+  }
+
+  /**
+   * @return the queryHis
+   */
+  public Boolean getQueryHis() {
+    return queryHis;
+  }
+
+  /**
+   * @param queryHis the queryHis to set
+   */
+  public void setQueryHis(Boolean queryHis) {
+    this.queryHis = queryHis;
+  }
+
+  /**
+   * @return the ob
+   */
+  public OtLevel2 getOb() {
+    return ob;
+  }
+
+  /**
+   * @param ob the ob to set
+   */
+  public void setOb(OtLevel2 ob) {
+    this.ob = ob;
   }
 
 }

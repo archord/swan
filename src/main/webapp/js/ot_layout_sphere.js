@@ -203,7 +203,14 @@ function unHighlightCurOT2() {
 }
 
 function openDialog(otName) {
-  openwindow("get-ot-image-list.action?otName=" + otName, '_blank', 850, 500, 850, 500);
+  var curDate = new Date().Format("yyyy-MM-dd");
+  var dateStr = $("#showDate").val();
+  var queryHis = 'true';
+  if (dateStr === curDate) {
+    queryHis = 'false';
+  }
+  var dataurl = openUrl+"?otName=" + otName + "&queryHis=" + queryHis;
+  openwindow(dataurl, '_blank', 850, 500, 850, 500);
   return false;
 }
 function openwindow(url, name, width, height, iWidth, iHeight)

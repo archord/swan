@@ -5,6 +5,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtLevel2QueryParameter;
+import com.gwac.util.CommonFunction;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.List;
@@ -20,18 +22,18 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
-  
-  public void moveDataToHisTable(){
-    
+
+  public void moveDataToHisTable() {
+
     Session session = getCurrentSession();
     String sql = "WITH moved_rows AS ( DELETE FROM ot_level2 RETURNING * ) INSERT INTO ot_level2_his SELECT * FROM moved_rows;";
     session.createSQLQuery(sql).executeUpdate();
   }
-  
-  public void updateAllFileCuttedById(long id){
-    
+
+  public void updateAllFileCuttedById(long id) {
+
     Session session = getCurrentSession();
-    String sql = "update ot_level2 set all_file_cutted=true where ot_id="+id;
+    String sql = "update ot_level2 set all_file_cutted=true where ot_id=" + id;
     session.createSQLQuery(sql).executeUpdate();
   }
 
@@ -66,7 +68,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "select ol2.* "
             + "from ot_level2_his ol2 "
             + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
-            + "where ol2.date_str='"+dateStr+"'";
+            + "where ol2.date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
@@ -76,16 +78,26 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "select ol2.* "
             + "from ot_level2_his ol2 "
             + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number "
-            + "where ol2.date_str='"+dateStr+"'";
+            + "where ol2.date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
 
   @Override
-  public OtLevel2 getOtLevel2ByName(String otName) {
+  public OtLevel2 getOtLevel2ByName(String otName, Boolean queryHis) {
+
+    String sql1 = "select * from ot_level2 where name='" + otName + "'";
+    String sql2 = "select * from ot_level2_his where name='" + otName + "'";
+
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = "(" + sql1 + ") union (" + sql2 + ")";
+    } else {
+      unionSql = sql1;
+    }
+    
     Session session = getCurrentSession();
-    String sql = "select * from ot_level2 where name='" + otName + "';";
-    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
     if (!q.list().isEmpty()) {
       return (OtLevel2) q.list().get(0);
     } else {
@@ -111,8 +123,6 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ot_id from ot_level2 where identify='"
             + obj.getIdentify()
-            //            + "' and abs(xtemp-" + obj.getXtemp() + ")<" + errorBox + " "
-            //            + " and abs(ytemp-" + obj.getYtemp() + ")<" + errorBox + " "
             + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
@@ -126,12 +136,11 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox, int n) {
     Boolean flag = false;
     Session session = getCurrentSession();
-    //should add "and date_str="+obj.getDataStr()
+
     String sql = "select * from ot_level2 "
             + " where last_ff_number>" + (obj.getLastFfNumber() - n)
             + " and dpm_id=" + obj.getDpmId()
-            //            + " and abs(xtemp-" + obj.getXtemp() + ")<" + errorBox + " "
-            //            + " and abs(ytemp-" + obj.getYtemp() + ")<" + errorBox + " "
+            //            + " and date_str='"+obj.getDateStr() + "'"
             + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     if (!q.list().isEmpty()) {
@@ -165,176 +174,76 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
-  public List<OtLevel2> queryOtLevel2(String startDate, String endDate, String tsp, float xtemp, float ytemp, float radius, int start, int resultSize) {
+  public List<OtLevel2> queryOtLevel2(OtLevel2QueryParameter ot2qp) {
 
-    int parNum = 0;
-    if (!startDate.isEmpty()) {
-      parNum++;
-    }
-    if (!endDate.isEmpty()) {
-      parNum++;
-    }
-    if (!tsp.equalsIgnoreCase("all")) {
-      parNum++;
-    }
-    if (xtemp != 0.0) {
-      parNum++;
-    }
-    if (ytemp != 0.0) {
-      parNum++;
-    }
-    if (radius < 2.0) {
-      radius = 2;
-    }
-
-    String sqlprefix1 = "select * from ot_level2 ";
-    String sqlprefix2 = "select * from ot_level2_his ";
+    String sqlprefix1 = "select * from ot_level2 where 1=1 ";
+    String sqlprefix2 = "select * from ot_level2_his where 1=1 ";
     String sql = "";
 
-    if (parNum == 1) {
-      if (!startDate.isEmpty()) {
-        sql += " where found_time_utc>'" + startDate + " 00:00:00' ";
-      } else if (!endDate.isEmpty()) {
-        sql += " where found_time_utc<'" + endDate + " 23:59:59' ";
-      } else if (!tsp.equalsIgnoreCase("all")) {
-        sql += " where dpm_id='" + tsp + "' ";
-      } else if (xtemp == 0.0) {
-        sql += " where abs(xtemp-" + xtemp + ")<" + radius;
-      } else if (ytemp == 0.0) {
-        sql += " where abs(ytemp-" + ytemp + ")<" + radius;
-      }
-    } else if (parNum >= 2) {
-      int tParNum = 1;
-      sql += " where ";
-      if (!startDate.isEmpty()) {
-        sql += " found_time_utc>'" + startDate + " 00:00:00' ";
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (!endDate.isEmpty()) {
-        sql += " found_time_utc<'" + endDate + " 23:59:59' ";
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (!tsp.equalsIgnoreCase("all")) {
-        sql += " dpm_id='" + tsp + "' ";
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (xtemp != 0.0) {
-        sql += " abs(xtemp-" + xtemp + ")<" + radius;
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (ytemp != 0.0) {
-        sql += " abs(ytemp-" + ytemp + ")<" + radius;
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
+    if (!ot2qp.getStartDate().isEmpty()) {
+      sql += " and found_time_utc>'" + ot2qp.getStartDate() + " 00:00:00' ";
     }
-    sql += " order by dpm_id, found_time_utc";
-
-    sqlprefix1 += sql;
-    sqlprefix2 += sql;
-    String unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";
-    Session session = getCurrentSession();
-    Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
-    q.setFirstResult(start);
-    q.setMaxResults(resultSize);
-    return q.list();
-  }
-
-  public int countOtLevel2(String startDate, String endDate, String tsp, float xtemp, float ytemp, float radius, int start, int resultSize) {
-
-    int parNum = 0;
-    if (!startDate.isEmpty()) {
-      parNum++;
+    if (!ot2qp.getEndDate().isEmpty()) {
+      sql += " and found_time_utc<'" + ot2qp.getEndDate() + " 23:59:59' ";
     }
-    if (!endDate.isEmpty()) {
-      parNum++;
+    if (!ot2qp.getTelscope().equalsIgnoreCase("all")) {
+      sql += " and dpm_id='" + ot2qp.getTelscope() + "' ";
     }
-    if (!tsp.equalsIgnoreCase("all")) {
-      parNum++;
-    }
-    if (xtemp != 0.0) {
-      parNum++;
-    }
-    if (ytemp != 0.0) {
-      parNum++;
-    }
-    if (radius < 2.0) {
-      radius = 2;
-    }
-
-    String sqlprefix1 = "select count(*) from ot_level2 ";
-    String sqlprefix2 = "select count(*) from ot_level2_his ";
-    String sql = "";
-
-    if (parNum == 1) {
-      if (!startDate.isEmpty()) {
-        sql += " where found_time_utc>'" + startDate + " 00:00:00' ";
-      } else if (!endDate.isEmpty()) {
-        sql += " where found_time_utc<'" + endDate + " 23:59:59' ";
-      } else if (!tsp.equalsIgnoreCase("all")) {
-        sql += " where dpm_id='" + tsp + "' ";
-      } else if (xtemp == 0.0) {
-        sql += " where abs(xtemp-" + xtemp + ")<" + radius;
-      } else if (ytemp == 0.0) {
-        sql += " where abs(ytemp-" + ytemp + ")<" + radius;
-      }
-    } else if (parNum >= 2) {
-      int tParNum = 1;
-      sql += " where ";
-      if (!startDate.isEmpty()) {
-        sql += " found_time_utc>'" + startDate + " 00:00:00' ";
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (!endDate.isEmpty()) {
-        sql += " found_time_utc<'" + endDate + " 23:59:59' ";
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (!tsp.equalsIgnoreCase("all")) {
-        sql += " dpm_id='" + tsp + "' ";
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (xtemp != 0.0) {
-        sql += " abs(xtemp-" + xtemp + ")<" + radius;
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
-      if (ytemp != 0.0) {
-        sql += " abs(ytemp-" + ytemp + ")<" + radius;
-        if (tParNum < parNum) {
-          sql += " and ";
-          tParNum++;
-        }
-      }
+    if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
+      sql += " and abs(xtemp-" + ot2qp.getXtemp() + ")<" + ot2qp.getPlaneRadius();
+      sql += " and abs(ytemp-" + ot2qp.getYtemp() + ")<" + ot2qp.getPlaneRadius();
+    } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
+      sql += " and abs(ra-" + ot2qp.getRa() + ")<" + ot2qp.getSphereRadius();
+      sql += " and abs(dec-" + ot2qp.getDec() + ")<" + ot2qp.getSphereRadius();
     }
     
     sqlprefix1 += sql;
     sqlprefix2 += sql;
-    String unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";
+
+    String unionSql = "";
+    if (ot2qp.getQueryHis()) {
+      unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")  order by found_time_utc desc";
+    } else {
+      unionSql = sqlprefix1 + " order by found_time_utc desc";
+    }
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
+    q.setFirstResult(ot2qp.getStart());
+    q.setMaxResults(ot2qp.getSize());
+    return q.list();
+  }
+
+  public int countOtLevel2(OtLevel2QueryParameter ot2qp) {
+
+    String sqlprefix1 = "select count(*) from ot_level2 where 1=1 ";
+    String sqlprefix2 = "select count(*) from ot_level2_his where 1=1 ";
+    String sql = "";
+
+    if (!ot2qp.getStartDate().isEmpty()) {
+      sql += " and found_time_utc>'" + ot2qp.getStartDate() + " 00:00:00' ";
+    }
+    if (!ot2qp.getEndDate().isEmpty()) {
+      sql += " and found_time_utc<'" + ot2qp.getEndDate() + " 23:59:59' ";
+    }
+    if (!ot2qp.getTelscope().equalsIgnoreCase("all")) {
+      sql += " and dpm_id='" + ot2qp.getTelscope() + "' ";
+    }
+    if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
+      sql += " and abs(xtemp-" + ot2qp.getXtemp() + ")<" + ot2qp.getPlaneRadius();
+      sql += " and abs(ytemp-" + ot2qp.getYtemp() + ")<" + ot2qp.getPlaneRadius();
+    } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
+      sql += " and abs(ra-" + ot2qp.getRa() + ")<" + ot2qp.getSphereRadius();
+      sql += " and abs(dec-" + ot2qp.getDec() + ")<" + ot2qp.getSphereRadius();
+    }
+
+    sqlprefix1 += sql;
+    sqlprefix2 += sql;
+    String unionSql = "";
+    if (ot2qp.getQueryHis()) {
+      unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";
+    } else {
+      unionSql = sqlprefix1;
+    }
 
     int total = 0;
     Session session = getCurrentSession();

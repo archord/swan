@@ -9,7 +9,7 @@
     <property name="cfDao" ref="cfDao" />	
   </bean>
 
-  <bean class="com.gwac.action.RealTimeOtDistributionImageReceive" scope="prototype">
+  <bean class="com.gwac.action.GwacFileReceive" scope="prototype">
     <property name="dpmDao" ref="dpmDao" />	
   </bean>
   

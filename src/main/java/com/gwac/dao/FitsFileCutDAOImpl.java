@@ -76,6 +76,28 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
 //    session.createSQLQuery(sql).executeUpdate();
     return rst.toString();
   }
+  
+  public List<FitsFileCut> getCutImageByOtId(long otId, Boolean queryHis) {
+    
+    String sql1 = "select * "
+            + "from fits_file_cut ffc "
+            + "where ffc.success_cut=true and ffc.ot_id=" + otId;
+    
+    String sql2 = "select * "
+            + "from fits_file_cut_his ffc "
+            + "where ffc.success_cut=true and ffc.ot_id=" + otId;
+
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by number";
+    } else {
+      unionSql = sql1 + "order by number";
+    }
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
 
   /**
    * 通过OT名称，查询该OT所有的切图

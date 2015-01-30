@@ -4,7 +4,16 @@
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags" %>
 
 <strong>
-  <a href="<%=request.getContextPath() %>/gwac/pgwac-ccd-image-realtime.action" target="_blank">CCD图像预览&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-fwhm.action" target="_blank">半高全宽&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-objnum.action" target="_blank">星的数目&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-bgbright.action" target="_blank">背景亮度&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-limitmag.action" target="_blank">极限星等&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-diffmag.action" target="_blank">亮星星等差&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-track.action" target="_blank">图像偏移量&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-xyrms.action" target="_blank">图像对齐精度&nbsp;&nbsp;&nbsp;</a>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-timeneed.action" target="_blank">数据处理消耗时间&nbsp;&nbsp;&nbsp;</a>
+  <br/><br/>
+  <a href="<%=request.getContextPath() %>/gwac/pgwac-min-ccd-image-realtime.action" target="_blank">CCD图像预览&nbsp;&nbsp;&nbsp;</a>
   <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay.action" target="_blank">OT实时分布-XY&nbsp;&nbsp;&nbsp;</a>
   <a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank">OT实时分布-RaDec&nbsp;&nbsp;&nbsp;</a>
   <!--<a href="<%=request.getContextPath() %>/gwac/pgwac-ot-realtimedisplay-sphere2.action" target="_blank">OT实时分布4&nbsp;&nbsp;&nbsp;</a>-->

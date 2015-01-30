@@ -32,16 +32,16 @@ import org.apache.struts2.convention.annotation.Result;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-public class RealTimeOtDistributionImageReceive extends ActionSupport {
+public class GwacFileReceive extends ActionSupport {
   
-  private static final Log log = LogFactory.getLog(RealTimeOtDistributionImageReceive.class);
+  private static final Log log = LogFactory.getLog(GwacFileReceive.class);
   
   private File fileUpload;
   private String fileUploadFileName;
   private String echo = "";
   private DataProcessMachineDAO dpmDao;
   
-  @Action(value = "realTimeOtDstImageUpload", results = {
+  @Action(value = "gwacFileReceive", results = {
     @Result(location = "manage/result.jsp", name = SUCCESS),
     @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})

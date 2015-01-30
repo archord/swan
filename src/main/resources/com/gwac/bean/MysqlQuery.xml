@@ -4,11 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  
+  <bean id="ot2CheckService" class="com.gwac.service.Ot2CheckServiceImpl" >
+    <property name="cvsDao" ref="cvsDao" />
+    <property name="ot2Dao" ref="otbDao" />
+  </bean>
 	
   <bean id="cvsDao" class="com.gwac.dao.CVSQueryDaoImpl" >
     <property name="sessionFactory" ref="sessionFactoryMysql" />
     <property name="clazz">
-      <value>com.gwac.model.ConfigFile</value>
+      <value>com.gwac.model2.Cvs</value>
     </property>
   </bean>
  

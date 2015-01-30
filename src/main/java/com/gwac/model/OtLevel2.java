@@ -38,11 +38,12 @@ public class OtLevel2 implements java.io.Serializable {
   private Integer total;
   private Float xtemp;
   private Float ytemp;
+  private Boolean isMatch;
 
   public OtLevel2() {
   }
 
-  public OtLevel2(Boolean allFileCutted, String comments, Integer cuttedFfNumber, String dateStr, Float dec, Integer dpmId, Integer firstFfNumber, Date foundTimeUtc, String identify, Boolean isRecognize, Integer lastFfNumber, String name, Short otType, Float ra, Integer total, Float xtemp, Float ytemp) {
+  public OtLevel2(Boolean allFileCutted, String comments, Integer cuttedFfNumber, String dateStr, Float dec, Integer dpmId, Integer firstFfNumber, Date foundTimeUtc, String identify, Boolean isRecognize, Integer lastFfNumber, String name, Short otType, Float ra, Integer total, Float xtemp, Float ytemp, Boolean isMatch) {
     this.allFileCutted = allFileCutted;
     this.comments = comments;
     this.cuttedFfNumber = cuttedFfNumber;
@@ -60,6 +61,7 @@ public class OtLevel2 implements java.io.Serializable {
     this.total = total;
     this.xtemp = xtemp;
     this.ytemp = ytemp;
+    this.isMatch = isMatch;
   }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -247,6 +249,21 @@ public class OtLevel2 implements java.io.Serializable {
    */
   public void setFirstFfNumber(Integer firstFfNumber) {
     this.firstFfNumber = firstFfNumber;
+  }
+
+  /**
+   * @return the isMatch
+   */
+  @Column(name = "is_match")
+  public Boolean getIsMatch() {
+    return isMatch;
+  }
+
+  /**
+   * @param isMatch the isMatch to set
+   */
+  public void setIsMatch(Boolean isMatch) {
+    this.isMatch = isMatch;
   }
 
 }

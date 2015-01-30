@@ -270,10 +270,11 @@ function unHighlightCurOT2() {
 function openDialog(otName) {
   var curDate = new Date().Format("yyyy-MM-dd");
   var dateStr = $("#showDate").val();
+  var queryHis = 'true';
   if (dateStr === curDate) {
-    dateStr = "";
+    queryHis = 'false';
   }
-  var dataurl = openUrl+"?otName=" + otName + "&dateStr=" + dateStr;
+  var dataurl = openUrl+"?otName=" + otName + "&queryHis=" + queryHis;
   openwindow(dataurl, '_blank', 850, 500, 850, 500);
   return false;
 }

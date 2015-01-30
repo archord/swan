@@ -14,7 +14,7 @@
   width="800"
   height="500"
   />
-<s:url var="otDetail" action="get-ot-image-list" namespace="/"/>
+<s:url var="otDetail" action="get-ot-detail" namespace="/"/>
 
 <script type="text/javascript">
   function formatLink(cellvalue, options, rowObject) {
@@ -22,19 +22,8 @@
   }
 
   function openDialog(url,otName) {
-    var dateStr = "";
-    var dateToStr = $("#to").val();
-    if (dateToStr !== "") {
-      var dateTo = new Date(dateToStr);
-      var curDate = new Date();
-      if (dateTo < curDate) {
-        dateStr = dateToStr;
-      }
-    }
-    if (dateStr === curDate) {
-      dateStr = "";
-    }
-    openwindow(url+"?otName=" + otName + "&dateStr=" + dateStr,
+    var queryHis = $("#queryHis").val();
+    openwindow(url+"?otName=" + otName + "&queryHis=" + queryHis,
             '_blank', 850, 600, 850, 600);
     return false;
   }
@@ -61,19 +50,31 @@
       <tr style="height:20px;">
         <td>开始日期(UTC)：</td>
         <!--value="yesterday" value="today" -->
-        <td><sj:datepicker id="from" name="startDate" displayFormat="yy-mm-dd" label="开始日期" /></td>
+        <td><sj:datepicker id="from" name="ot2qp.startDate" displayFormat="yy-mm-dd" label="开始日期" /></td>
         <td>结束日期(UTC)：</td>
-        <td><sj:datepicker  id="to" name="endDate" displayFormat="yy-mm-dd" label="结束日期" /></td>
+        <td><sj:datepicker  id="to" name="ot2qp.endDate" displayFormat="yy-mm-dd" label="结束日期" /></td>
       </tr>
       <tr style="height:20px;">
         <td>模板X坐标：</td>
-        <td><sj:textfield name="xtemp" /></td>
+        <td><sj:textfield name="ot2qp.xtemp" /></td>
         <td>模板Y坐标：</td>
-        <td><sj:textfield name="ytemp" /></td>
+        <td><sj:textfield name="ot2qp.ytemp" /></td>
+      </tr>
+      <tr style="height:20px;">
+        <td>Ra：</td>
+        <td><sj:textfield name="ot2qp.ra" /></td>
+        <td>Dec：</td>
+        <td><sj:textfield name="ot2qp.dec" /></td>
+      </tr>
+      <tr style="height:20px;">
+        <td>图像坐标搜索半径：</td>
+        <td><sj:textfield name="ot2qp.planeRadius" /></td>
+        <td>天球坐标搜索半径：</td>
+        <td><sj:textfield name="ot2qp.sphereRadius" /></td>
       </tr>
       <tr style="height:20px;">
         <td>望远镜：</td>
-        <td><select name="telscope" >
+        <td><select name="ot2qp.telscope" >
             <option value="all">All</option>
             <option value="1">M01</option>
             <option value="2">M02</option>
@@ -89,8 +90,11 @@
             <option value="12">M12</option>
           </select>
         </td>
-        <td>搜索半径：</td>
-        <td><sj:textfield name="searchRadius" /></td>
+        <td>是否查询历史表：</td>
+        <td><select name="ot2qp.queryHis" id="queryHis">
+            <option value="false">否</option>
+            <option value="true">是</option>
+          </select></td>
       </tr>
       <tr style="height:20px;"><td colspan="4" style="text-align: center;">
           <sj:a

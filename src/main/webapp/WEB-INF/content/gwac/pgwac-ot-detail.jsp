@@ -13,8 +13,8 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
-    <meta http-equiv="keywords" content="struts2, jquery, jquery-ui, plugin, showcase, jqgrid" />
-    <meta http-equiv="description" content="A Showcase for the Struts2 jQuery Plugin" />
+    <meta http-equiv="keywords" content=",国家天文台，svom, gwac，望远镜阵列" />
+    <meta http-equiv="description" content="GWAC数据展示页面" />
 
     <title>OT-<s:property value="otName"/>-详细页面</title>
 
@@ -113,17 +113,22 @@
         grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
         selection: {mode: "xy"},
         xaxis: {show: true, tickColor: 'transparent'},
-        yaxis: {show: true, tickSize: 0.05, tickDecimals: 2, tickFormatter: formate1}
+        yaxis: {show: true, tickDecimals: 2, tickFormatter: formate1, transform:formate2, inverseTransform: formate2 }
       };
-      //min: 0, max: 10, tickSize: 1, 
+      //min: 0, max: 10, tickSize: 1, tickDecimals: 2,
 
       function formate1(val, axis) {
         return (val).toFixed(axis.tickDecimals);
       }
+      
+      function formate2(val) {
+        return -val;
+      }
+      
       var graphData = [{
           data: <s:property value="otOpticalVaration"/>,
           color: '#71c73e',
-          points: {radius: 4} //fillColor: '#77b7c5'
+          points: {radius: 2} //fillColor: '#77b7c5'
         }
       ];
       $.plot("#ot-curve", graphData, option1);
@@ -338,14 +343,14 @@
     </div>
     <div id="ot-curve-show">
       <div id="ot-curve-title">
-        <span>OT光变曲线（日期基于2015-01-01 00:00:00）</span>
+        <span>OT光变曲线（X轴为时间，单位/分钟，开始于<s:date name="ob.foundTimeUtc" format="yyyy-MM-dd HH:mm:ss" />U，Y轴为星等值）</span>
       </div>
       <div id="ot-curve"></div>
     </div>
     <div id="otRecord">
       <s:url var="remoteurl" action="ot-observe-record" namespace="/" escapeAmp="false">
         <s:param name="otName" value="%{otName}" /> 
-        <s:param name="dateStr" value="%{dateStr}" /> 
+        <s:param name="queryHis" value="%{queryHis}" /> 
       </s:url>
       <!--width="700" resizable="true" 
       shrinkToFit="true" 自动调节到表格的宽度 autowidth="true"

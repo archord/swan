@@ -21,13 +21,6 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
 
   private static final Log log = LogFactory.getLog(FitsFileCutRefDAOImpl.class);
 
-  public void moveDataToHisTable() {
-
-    Session session = getCurrentSession();
-    String sql = "WITH moved_rows AS ( DELETE FROM fits_file_cut RETURNING * ) INSERT INTO fits_file_cut_his SELECT * FROM moved_rows;";
-    session.createSQLQuery(sql).executeUpdate();
-  }
-
   public void updateByName(FitsFileCutRef ffcr) {
 
     Session session = getCurrentSession();
@@ -70,6 +63,18 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
 //    session.createSQLQuery(sql).executeUpdate();
     return rst.toString();
   }
+  
+  
+  public List<FitsFileCutRef> getCutImageByOtId(long otId) {
+
+    Session session = getCurrentSession();
+    String sql = "select * "
+            + "from fits_file_cut_ref ffcr "
+            + "where ffcr.success_cut=true and ffcr.ot_id='" + otId + "';";
+    
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
+    return q.list();
+  }
 
   /**
    * 通过OT名称，查询该OT所有的切图
@@ -88,14 +93,4 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
     return q.list();
   }
   
-  public List<FitsFileCutRef> getCutImageByOtNameFromHis(String otName) {
-
-    Session session = getCurrentSession();
-    String sql = "select * "
-            + "from fits_file_cut_his ffc "
-            + "where ffc.success_cut=true and ffc.ot_id=(select ot_id from ot_level2_his ob where ob.name='" + otName + "') "
-            + "order by ffc.number;";
-    Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
-    return q.list();
-  }
 }

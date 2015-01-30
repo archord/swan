@@ -4,19 +4,11 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title>GWAC CCD图像实时预览</title>
+    <title>Mini-GWAC fwhm Monitor</title>
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.js"></script>
     <script type="text/javascript">
 
       $(function() {
-        var dataurl = "<%=request.getContextPath()%>/get-dpm-monitor-image-time.action";
-        
-        function onImageReceived(result) {
-          var dpms = result.dpms;
-          for (var i = 0; i < dpms.length; i++) {
-            $("#span" + dpms[i].dpmId).html(dpms[i].name+" ("+dpms[i].curProcessNumber+"-"+dpms[i].monitorImageTime.replace("T", " ")+")");
-          }
-        }
         
         function updateImage() {
           for (var i = 1; i <= 12; i++) {
@@ -26,7 +18,6 @@
             orgSrc += "?timestamp=" + new Date().getTime();
             $("#img" + i).attr("src", orgSrc);
           }
-          $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
         }
         updateImage();
         setInterval(updateImage, 15000);
@@ -65,7 +56,7 @@
       <tr>
         <td>
           <div align="center">
-            <span class="style3">----- Mini-GWAC ccdimg monitor ----- </span>
+            <span class="style3">----- Mini-GWAC fwhm Monitor ----- </span>
             <div id="a"></div>
             <!--=E ===============-->
           </div></td>
@@ -82,13 +73,13 @@
             </tr>
             <tr>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M01_ccdimg.jpg"><img id="img1" src="/images/realTimeOtDistribution/M01_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M01_fwhm.jpg"><img id="img1" src="/images/realTimeOtDistribution/M01_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M02_ccdimg.jpg"><img id="img2" src="/images/realTimeOtDistribution/M02_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M02_fwhm.jpg"><img id="img2" src="/images/realTimeOtDistribution/M02_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M03_ccdimg.jpg"><img id="img3" src="/images/realTimeOtDistribution/M03_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M03_fwhm.jpg"><img id="img3" src="/images/realTimeOtDistribution/M03_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M04_ccdimg.jpg"><img id="img4" src="/images/realTimeOtDistribution/M04_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M04_fwhm.jpg"><img id="img4" src="/images/realTimeOtDistribution/M04_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
             </tr>
             <tr>
               <td width="454"><div align="center" class="style6"><span id="span5">M05</span> </div></td>
@@ -98,13 +89,13 @@
             </tr>
             <tr>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M05_ccdimg.jpg"><img id="img5" src="/images/realTimeOtDistribution/M05_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M05_fwhm.jpg"><img id="img5" src="/images/realTimeOtDistribution/M05_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M06_ccdimg.jpg"><img id="img6" src="/images/realTimeOtDistribution/M06_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M06_fwhm.jpg"><img id="img6" src="/images/realTimeOtDistribution/M06_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M07_ccdimg.jpg"><img id="img7" src="/images/realTimeOtDistribution/M07_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M07_fwhm.jpg"><img id="img7" src="/images/realTimeOtDistribution/M07_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M08_ccdimg.jpg"><img id="img8" src="/images/realTimeOtDistribution/M08_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M08_fwhm.jpg"><img id="img8" src="/images/realTimeOtDistribution/M08_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
             </tr>
             <tr>
               <td width="454"><div align="center" class="style6"><span id="span9">M09</span> </div></td>
@@ -114,13 +105,13 @@
             </tr>
             <tr>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M09_ccdimg.jpg"><img id="img9" src="/images/realTimeOtDistribution/M09_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M09_fwhm.jpg"><img id="img9" src="/images/realTimeOtDistribution/M09_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M10_ccdimg.jpg"><img id="img10" src="/images/realTimeOtDistribution/M10_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M10_fwhm.jpg"><img id="img10" src="/images/realTimeOtDistribution/M10_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M11_ccdimg.jpg"><img id="img11" src="/images/realTimeOtDistribution/M11_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M11_fwhm.jpg"><img id="img11" src="/images/realTimeOtDistribution/M11_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
               <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M12_ccdimg.jpg"><img id="img12" src="/images/realTimeOtDistribution/M12_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+                  <a href="/images/realTimeOtDistribution/M12_fwhm.jpg"><img id="img12" src="/images/realTimeOtDistribution/M12_fwhm.jpg" class="imgStyle" border="0"/></a></div></td>
             </tr>
           </table>
       <tr>

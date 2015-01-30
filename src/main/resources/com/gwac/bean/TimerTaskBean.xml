@@ -49,6 +49,12 @@
     <property name="targetMethod" value="syncData" /> 
   </bean> 
 
+  <bean id="ot2CheckJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="ot2CheckService" /> 
+    <property name="targetMethod" value="searchOT2" /> 
+  </bean> 
+
   <!-- Simple Trigger, run every 15 seconds -->
   <bean id="dataStoreTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -84,24 +90,33 @@
     <property name="repeatInterval" value="20000" /> <!-- 20000  -->
     <property name="startDelay" value="25000" /> <!-- 25000  -->
   </bean>
+  
+  <bean id="ot2CheckTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="ot2CheckJob" />
+    <property name="repeatInterval" value="20000000000000000" /> <!-- 20000  -->
+    <property name="startDelay" value="15000" /> <!-- 25000  -->
+  </bean>
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="jobDetails">
       <list>
-        <ref bean="dataStoreJob" />
+<!--        <ref bean="dataStoreJob" />
         <ref bean="addMissedCutImageJob" />
-        <ref bean="dataBackupJob" />
+        <ref bean="dataBackupJob" />-->
         <!--<ref bean="fileTransferJob" />-->
-        <ref bean="dataSyncJob" />
+        <!--<ref bean="dataSyncJob" />-->
+        <!--<ref bean="ot2CheckJob" />-->
       </list>
     </property>
     <property name="triggers">
       <list>
-        <ref bean="dataStoreTrigger" />
+<!--        <ref bean="dataStoreTrigger" />
         <ref bean="addMissedCutImageTrigger" />
-        <ref bean="dataBackupTrigger" />
+        <ref bean="dataBackupTrigger" />-->
         <!--<ref bean="fileTransferTrigger" />-->
-        <ref bean="dataSyncTrigger" />
+        <!--<ref bean="dataSyncTrigger" />-->
+        <!--<ref bean="ot2CheckTrigger" />-->
       </list>
     </property>
   </bean>

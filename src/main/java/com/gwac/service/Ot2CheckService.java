@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.dao;
+package com.gwac.service;
 
 import com.gwac.model.OtLevel2;
 import com.gwac.model2.Cvs;
-import java.util.List;
 
 /**
  *
  * @author xy
  */
-public interface CVSQueryDao extends BaseHibernateDao<Cvs> {
-  
-  public List<Cvs> queryByOt2(OtLevel2 ot2, float searchRadius, float mag);
+public interface Ot2CheckService {
+
+  public void searchOT2(float searchRadius, float mag);
 
 }

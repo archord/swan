@@ -11,13 +11,13 @@ package com.gwac.util;
  */
 public class SearchBoxSphere {
 
-  double ra;
-  double dec;
-  double minRa;
-  double maxRa;
-  double minDec;
-  double maxDec;
-  double searchRadius;
+  private double ra;
+  private double dec;
+  private double minRa;
+  private double maxRa;
+  private double minDec;
+  private double maxDec;
+  private double searchRadius;
 
   public SearchBoxSphere() {
     ra = 0;
@@ -55,14 +55,14 @@ public class SearchBoxSphere {
     if (!(ra > 360.0 || ra < 0.0 || dec > 90.0 || dec < -90.0 || searchRadius > 20.0)) {
       minDec = dec - searchRadius;
       maxDec = dec + searchRadius;
-      if (maxDec > 90.0) {
+      if (getMaxDec() > 90.0) {
         maxDec = 90;
       }
-      if (minDec < -90.0) {
+      if (getMinDec() < -90.0) {
         minDec = 90;
       }
 
-      double tDec = Math.abs(maxDec) > Math.abs(minDec) ? Math.abs(maxDec) : Math.abs(minDec);
+      double tDec = Math.abs(getMaxDec()) > Math.abs(getMinDec()) ? Math.abs(getMaxDec()) : Math.abs(getMinDec());
       double cosd = Math.cos(tDec * 0.0174532925);
       if (cosd > searchRadius / 180.0) {
         maxRa = (ra + searchRadius / cosd + 360.0) % 360.0;
@@ -71,7 +71,7 @@ public class SearchBoxSphere {
         maxRa = 360;
         minRa = 0;
       }
-      if (minRa > maxRa) {
+      if (getMinRa() > getMaxRa()) {
         /**赤经范围跨越0（360）*/
         flag = 2;
       } else {
@@ -79,6 +79,34 @@ public class SearchBoxSphere {
       }
     }
     return flag;
+  }
+
+  /**
+   * @return the minRa
+   */
+  public double getMinRa() {
+    return minRa;
+  }
+
+  /**
+   * @return the maxRa
+   */
+  public double getMaxRa() {
+    return maxRa;
+  }
+
+  /**
+   * @return the minDec
+   */
+  public double getMinDec() {
+    return minDec;
+  }
+
+  /**
+   * @return the maxDec
+   */
+  public double getMaxDec() {
+    return maxDec;
   }
 
 }

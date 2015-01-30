@@ -23,7 +23,7 @@
     <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
   </bean>
   
-  <bean class="com.gwac.action.GetOtImageList"  scope="prototype">
+  <bean class="com.gwac.action.GetOtDetail"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
     <property name="obDao" ref="otbDao" />
     <property name="ffcrDao" ref="ffcrDao" />

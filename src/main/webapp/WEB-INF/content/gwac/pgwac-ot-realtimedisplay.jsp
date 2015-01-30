@@ -1,6 +1,6 @@
 <%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<s:url var="otDetail" action="get-ot-image-list" namespace="/"/>
+<s:url var="otDetail" action="get-ot-detail" namespace="/"/>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -28,10 +28,10 @@
         }
         var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action?dateStr=" + dateStr;
         //$.ajax({url: dataurl, type: "GET", dataType: "json", success: onDataReceived, error:aa});
-        $.ajax({url: dataurl, type: "GET", success: onDataReceived, error:aa});
+        $.ajax({url: dataurl, type: "GET", success: onDataReceived, error:errorLog});
       }
       
-      function aa(){
+      function errorLog(){
         console.log("server error");
       }
 
@@ -56,7 +56,7 @@
       <div id="ot-show">
         <div id="ot-show-title">
           <span>OT分布实时概览图</span>
-          <input id="showDate" name="showDate" type="text" readOnly="true" style="font-size: 14px;width:100px;height:20px" onClick="WdatePicker()" onchange="onDateChange()"/>
+          <input id="showDate" name="showDate" type="text" readOnly="true" style="font-size: 14px;width:80px;height:20px" onClick="WdatePicker()" onchange="onDateChange()"/>
           <div id="ot-legend"></div>
         </div>
         <div id="ot-show-container">
