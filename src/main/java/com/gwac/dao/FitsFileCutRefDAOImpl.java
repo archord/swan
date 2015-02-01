@@ -43,7 +43,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
     Query q = session.createSQLQuery(sql);
     List tlst = q.list();
     if (tlst.size() > 0) {
-      log.debug("get " + tlst.size() + " cut images.");
+      log.debug("get " + tlst.size() + " ref cut images.");
     }
 
     Iterator itor = tlst.iterator();

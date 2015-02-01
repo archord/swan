@@ -44,10 +44,6 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
 
   public String getUnCuttedStarList(int dpmId) {
     Session session = getCurrentSession();
-//    String sql = "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
-//            + " from fits_file_cut ffc "
-//            + " inner join fits_file ff on ffc.ff_id=ff.ff_id "
-//            + " where ffc.request_cut=false and ffc.dpm_id=" + dpmId;
     String sql = "with updated_rows as "
             + "(update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId + " returning *) "
             + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
@@ -72,8 +68,6 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
       rst.append(row[3]);
       rst.append("\n");
     }
-//    sql = "update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId;
-//    session.createSQLQuery(sql).executeUpdate();
     return rst.toString();
   }
   

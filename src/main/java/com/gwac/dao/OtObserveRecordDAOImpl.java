@@ -92,13 +92,20 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return tStr;
   }
 
+  /**
+   * 该方法并没有使用，取而代之的是FitsFileCutDAOImpl的getUnCuttedStarList
+   * @param dpmId
+   * @return 
+   */
   public String getUnCuttedStarList(int dpmId) {
-    Session session = getCurrentSession();
-    String sql = "select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
-            + " from ot_observe_record oor "
+    
+    String sql = "WITH updated_rows AS "
+            + " ( update ot_observe_record set request_cut=true where ot_id>0 and request_cut=false and dpm_id="+ dpmId +" RETURNING * ) "
+            + " select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
+            + " from updated_rows oor "
             + " inner join fits_file ff on oor.ff_id=ff.ff_id "
-            + " inner join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
-            + " where oor.ot_id>0 and oor.request_cut=false and oor.dpm_id=" + dpmId;
+            + " inner join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id ";
+    Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);
     Iterator itor = q.list().iterator();
 
@@ -118,39 +125,6 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         e.printStackTrace();
       }
     }
-    sql = "update ot_observe_record set request_cut=true where ot_id>0 and request_cut=false and dpm_id=" + dpmId;
-    session.createSQLQuery(sql).executeUpdate();
-    return rst.toString();
-  }
-
-  public String getUnCuttedStarList_bck(int dpmId) {
-    Session session = getCurrentSession();
-    String sql = "select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
-            + " from ot_observe_record oor "
-            + " inner join fits_file ff on oor.ff_id=ff.ff_id "
-            + " inner join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
-            + " where oor.ot_id>0 and oor.request_cut=false and oor.dpm_id=" + dpmId;
-    Query q = session.createSQLQuery(sql);
-    Iterator itor = q.list().iterator();
-
-    StringBuilder rst = new StringBuilder();
-    while (itor.hasNext()) {
-      Object[] row = (Object[]) itor.next();
-      try {
-        rst.append(row[0]);
-        rst.append(" ");
-        rst.append(row[1]);
-        rst.append(" ");
-        rst.append(row[2]);
-        rst.append(" ");
-        rst.append(row[3]);
-        rst.append("\n");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    sql = "update ot_observe_record set request_cut=true where ot_id>0 and request_cut=false and dpm_id=" + dpmId;
-    session.createSQLQuery(sql).executeUpdate();
     return rst.toString();
   }
 

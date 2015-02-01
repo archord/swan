@@ -6,14 +6,49 @@
 
   
   <bean id="ot2CheckService" class="com.gwac.service.Ot2CheckServiceImpl" >
-    <property name="cvsDao" ref="cvsDao" />
     <property name="ot2Dao" ref="otbDao" />
+    <property name="cvsDao" ref="cvsDao" />
+    <property name="moDao" ref="moDao" />
+    <property name="mpDao" ref="mpDao" />
+    <property name="rc3Dao" ref="rc3Dao" />
+    <property name="ottDao" ref="ottDao" />
+    <property name="ot2mDao" ref="ot2mDao" />
+    <property name="mergedSearchbox" value="${mingwac.merged.searchbox}" />	
+    <property name="cvsSearchbox" value="${mingwac.cvs.searchbox}" />	
+    <property name="rc3Searchbox" value="${mingwac.rc3.searchbox}" />	
+    <property name="minorPlanetSearchbox" value="${mingwac.minorplanet.searchbox}" />	
+    <property name="mergedMag" value="${mingwac.merged.mag}" />	
+    <property name="cvsMag" value="${mingwac.cvs.mag}" />	
+    <property name="rc3MinMag" value="${mingwac.rc3.minmag}" />	
+    <property name="rc3MaxMag" value="${mingwac.rc3.maxmag}" />	
+    <property name="minorPlanetMag" value="${mingwac.minorplanet.mag}" />	
   </bean>
 	
   <bean id="cvsDao" class="com.gwac.dao.CVSQueryDaoImpl" >
     <property name="sessionFactory" ref="sessionFactoryMysql" />
     <property name="clazz">
       <value>com.gwac.model2.Cvs</value>
+    </property>
+  </bean>
+	
+  <bean id="moDao" class="com.gwac.dao.MergedOtherDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactoryMysql" />
+    <property name="clazz">
+      <value>com.gwac.model2.MergedOther</value>
+    </property>
+  </bean>
+	
+  <bean id="mpDao" class="com.gwac.dao.MinorPlanetDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactoryMysql" />
+    <property name="clazz">
+      <value>com.gwac.model2.MinorPlanet</value>
+    </property>
+  </bean>
+	
+  <bean id="rc3Dao" class="com.gwac.dao.Rc3DaoImpl" >
+    <property name="sessionFactory" ref="sessionFactoryMysql" />
+    <property name="clazz">
+      <value>com.gwac.model2.Rc3</value>
     </property>
   </bean>
  

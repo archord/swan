@@ -106,7 +106,7 @@
         <ref bean="dataBackupJob" />-->
         <!--<ref bean="fileTransferJob" />-->
         <!--<ref bean="dataSyncJob" />-->
-        <!--<ref bean="ot2CheckJob" />-->
+        <ref bean="ot2CheckJob" />
       </list>
     </property>
     <property name="triggers">
@@ -116,7 +116,7 @@
         <ref bean="dataBackupTrigger" />-->
         <!--<ref bean="fileTransferTrigger" />-->
         <!--<ref bean="dataSyncTrigger" />-->
-        <!--<ref bean="ot2CheckTrigger" />-->
+        <ref bean="ot2CheckTrigger" />
       </list>
     </property>
   </bean>

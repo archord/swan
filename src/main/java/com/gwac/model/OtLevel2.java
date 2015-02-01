@@ -38,12 +38,12 @@ public class OtLevel2 implements java.io.Serializable {
   private Integer total;
   private Float xtemp;
   private Float ytemp;
-  private Boolean isMatch;
+  private Short isMatch;
 
   public OtLevel2() {
   }
 
-  public OtLevel2(Boolean allFileCutted, String comments, Integer cuttedFfNumber, String dateStr, Float dec, Integer dpmId, Integer firstFfNumber, Date foundTimeUtc, String identify, Boolean isRecognize, Integer lastFfNumber, String name, Short otType, Float ra, Integer total, Float xtemp, Float ytemp, Boolean isMatch) {
+  public OtLevel2(Boolean allFileCutted, String comments, Integer cuttedFfNumber, String dateStr, Float dec, Integer dpmId, Integer firstFfNumber, Date foundTimeUtc, String identify, Boolean isRecognize, Integer lastFfNumber, String name, Short otType, Float ra, Integer total, Float xtemp, Float ytemp, Short isMatch) {
     this.allFileCutted = allFileCutted;
     this.comments = comments;
     this.cuttedFfNumber = cuttedFfNumber;
@@ -255,14 +255,14 @@ public class OtLevel2 implements java.io.Serializable {
    * @return the isMatch
    */
   @Column(name = "is_match")
-  public Boolean getIsMatch() {
+  public Short getIsMatch() {
     return isMatch;
   }
 
   /**
    * @param isMatch the isMatch to set
    */
-  public void setIsMatch(Boolean isMatch) {
+  public void setIsMatch(Short isMatch) {
     this.isMatch = isMatch;
   }
 

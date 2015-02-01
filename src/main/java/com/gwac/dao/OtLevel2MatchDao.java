@@ -3,17 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
 
-import com.gwac.model.OtLevel2;
-import com.gwac.model2.Cvs;
+package com.gwac.dao;
+
+import com.gwac.model.OtLevel2Match;
 
 /**
  *
  * @author xy
  */
-public interface Ot2CheckService {
-
-  public void searchOT2();
-
+public interface OtLevel2MatchDao extends BaseHibernateDao<OtLevel2Match> {
+  public OtLevel2Match getByOt2Id(long ot2Id);
 }

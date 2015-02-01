@@ -19,6 +19,8 @@
   <import resource="com/gwac/bean/ConfigFile.xml"/>
   <import resource="com/gwac/bean/DataBackupBean.xml"/>
   <import resource="com/gwac/bean/FileTransferBean.xml"/>
+  <import resource="com/gwac/bean/OtType.xml"/>
+  <import resource="com/gwac/bean/OtLevel2Match.xml"/>
   
   <import resource="com/gwac/bean/MysqlQuery.xml"/>
  

@@ -5,11 +5,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.UploadFileUnstore;
+import java.util.List;
 
 /**
  *
  * @author xy
  */
-public interface UploadFileUnstoreDao extends BaseHibernateDao<UploadFileUnstore>{
-  
+public interface UploadFileUnstoreDao extends BaseHibernateDao<UploadFileUnstore> {
+
+  public List<UploadFileUnstore> getOTLevel1File();
 }

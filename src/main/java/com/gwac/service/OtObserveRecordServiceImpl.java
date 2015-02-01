@@ -47,15 +47,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private int occurNumber;
 
   public void storeOTCatalog() {
-    List<UploadFileUnstore> ufus = ufuDao.findAll();
+    List<UploadFileUnstore> ufus = ufuDao.getOTLevel1File();
 //    log.debug("ufu number:" + ufus.size());
     if (ufus != null) {
-      /**
-       * 应该注意，删除操作应该和插入操作是一个事物，相应信息入库后在删除数据。
-       */
-      for (UploadFileUnstore ufu : ufus) {
-        ufuDao.delete(ufu);
-      }
       for (UploadFileUnstore ufu : ufus) {
 //        log.debug("path=" + ufu.getFileName());
         List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + ufu.getStorePath() + "/" + ufu.getFileName());

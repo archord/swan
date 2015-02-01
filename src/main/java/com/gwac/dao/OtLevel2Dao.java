@@ -41,4 +41,8 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public void updateAllFileCuttedById(long id);
 
   public OtLevel2 getOtLevel2ByNameFromHis(String otName);
+  
+  public void updateIsMatch(OtLevel2 ot2);
+  
+  public List<OtLevel2> getUnMatched();
 }

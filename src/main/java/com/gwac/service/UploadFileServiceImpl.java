@@ -197,13 +197,13 @@ public class UploadFileServiceImpl implements UploadFileService {
             UploadFileUnstore obj = new UploadFileUnstore();
             obj.setStorePath(tpath.substring(rootDir.length() + 1));
             obj.setFileName(tStr);
-            obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4
+            obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5
             obj.setUploadDate(new Date());
 
             UploadFileRecord obj2 = new UploadFileRecord();
             obj2.setStorePath(tpath.substring(rootDir.length() + 1));
             obj2.setFileName(tStr);
-            obj2.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4
+            obj2.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5
             obj2.setUploadDate(new Date());
 
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
