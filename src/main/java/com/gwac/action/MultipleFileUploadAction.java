@@ -67,32 +67,32 @@ public class MultipleFileUploadAction extends ActionSupport {
 
     //必须设置传输机器名称
     if (null == dpmName) {
-      setEcho(echo + "Must set machine name(dpmName).\n");
+      setEcho(echo + "Error, must set machine name(dpmName).\n");
       flag = false;
     }
 
     //必须设置传输机器名称
     if (null == currentDirectory) {
-      setEcho(echo + "Must set current date(currentDirectory).\n");
+      setEcho(echo + "Error, must set current date(currentDirectory).\n");
       flag = false;
     }
 
     //必须传输参数配置文件
-    //Must transform parameter config file
+    //Error, must transform parameter config file
     if (null == configFile) {
-      setEcho(echo + "Must upload config file(configFile).\n");
+      setEcho(echo + "Error, must upload config file(configFile).\n");
       flag = false;
     }
 
     //必须传输数据文件
-    //Must transform data file
+    //Error, must transform data file
     if (fileUpload.isEmpty()) {
-      setEcho(echo + "Must upload data file(fileUpload).\n");
+      setEcho(echo + "Error, must upload data file(fileUpload).\n");
       flag = false;
     }
 
     if (fileUpload.size() != fileUploadFileName.size()) {
-      setEcho(echo + "Upload data error，please check upload command and retry!\n");
+      setEcho(echo + "Error，please check upload command and retry!\n");
       flag = false;
     }
 
@@ -103,8 +103,8 @@ public class MultipleFileUploadAction extends ActionSupport {
       currentDirectory = currentDirectory.trim();
       configFileFileName = configFileFileName.trim();
       if (dpmName.isEmpty() || currentDirectory.isEmpty() || configFileFileName.isEmpty()) {
-        setEcho(echo + "parameter error!\n");
-        log.error("parameter error!");
+        setEcho(echo + "Error, parameter error!\n");
+        log.error(echo);
         return ERROR;
       }
       //由于跨天问题，这里不再自行判断currentDirectory是否为空，前面已将currentDirectory设置为必选项
@@ -190,10 +190,10 @@ public class MultipleFileUploadAction extends ActionSupport {
         int shouldFNum = ufService.parseConfigFile();
         int validFNum = ufService.checkAndMoveDataFile(destPath);
         if (validFNum != i || validFNum != shouldFNum) {
-          setEcho(echo + "warn: should upload " + shouldFNum + " files, actual upload " + i
+          setEcho(echo + "Warn: should upload " + shouldFNum + " files, actual upload " + i
                   + " files, " + validFNum + " valid files.\n");
         } else {
-          setEcho(echo + "success, total upload " + validFNum + " files.\n");
+          setEcho(echo + "Success, total upload " + validFNum + " files.\n");
         }
         //otORDao.saveOTCopy(configFileFileName);
       } catch (IOException ex) {

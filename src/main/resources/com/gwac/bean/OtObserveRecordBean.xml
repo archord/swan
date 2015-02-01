@@ -8,22 +8,6 @@
   <bean class="com.gwac.action.OtObserveRecordAction">
     <property name="otorDao" ref="otORDao" />
   </bean>
-
-  <bean id="otORService" class="com.gwac.service.OtObserveRecordServiceImpl" >
-    <property name="otorDao" ref="otORDao" />
-    <property name="ufuDao" ref="ufuDao" />
-    <property name="otcDao" ref="otcDao" />
-    <property name="otnDao" ref="otnDao" />
-    <property name="otLv2Dao" ref="otbDao" />
-    <property name="ffDao" ref="ffDao" />
-    <property name="ffcDao" ref="ffcDao" />
-    <property name="dpmDao" ref="dpmDao" />	
-    <property name="ffcrDao" ref="ffcrDao" />
-    <property name="rootPath" value="${gwac.data.root.directory}" />	
-    <property name="errorBox" value="${gwac.errorbox}" />	
-    <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
-    <property name="occurNumber" value="${gwac.occur.image.number}" />
-  </bean>
 	
   <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >
     <property name="sessionFactory" ref="sessionFactory" />

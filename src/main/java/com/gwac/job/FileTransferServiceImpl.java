@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,6 +38,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
+ * 通过监控文件状态的改变，来将状态改变的文件进行同步，目前未实现
  *
  * @author xy
  */
@@ -46,26 +47,52 @@ public class FileTransferServiceImpl implements FileTransferService {
   private static final Log log = LogFactory.getLog(FileTransferServiceImpl.class);
   private static boolean running = true;
   private Boolean isBeiJingServer;
+  private Boolean isTestServer;
 
   private WatchService watcher;
   private Boolean isSuccess = false;
 
-//  void FileTransferServiceImpl() {
-//    try {
-//      System.out.println("123");
-//      watcher = FileSystems.getDefault().newWatchService();
-//      Path dir = Paths.get("E:/TestData/gwacTest");
-//      dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
-//      System.out.println("Watch Service registered for dir: " + dir.getFileName());
-//      isSuccess = true;
-//    } catch (IOException ex) {
-//      isSuccess = false;
-//      ex.printStackTrace();
-//    }
-//  }
+  public void startJob() {
+
+    if (isBeiJingServer || isTestServer) {
+      return;
+    }
+
+    if (running == true) {
+      log.debug("start job...");
+      running = false;
+    } else {
+      log.warn("job is running, jump this scheduler.");
+      return;
+    }
+
+    long startTime = System.nanoTime();
+//    transFile();
+    long endTime = System.nanoTime();
+
+    if (running == false) {
+      running = true;
+      log.debug("job is done.");
+    }
+    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+  }
+
+  void test() {
+    try {
+      System.out.println("123");
+      watcher = FileSystems.getDefault().newWatchService();
+      Path dir = Paths.get("E:/TestData/gwacTest");
+      dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
+      System.out.println("Watch Service registered for dir: " + dir.getFileName());
+      isSuccess = true;
+    } catch (IOException ex) {
+      isSuccess = false;
+      ex.printStackTrace();
+    }
+  }
 
   public void transFile() {
-      System.out.println("123");
+    System.out.println("123");
     try {
       System.out.println("123");
       watcher = FileSystems.getDefault().newWatchService();
@@ -91,15 +118,16 @@ public class FileTransferServiceImpl implements FileTransferService {
     }
     try {
       WatchKey key = watcher.poll();
-      if(key!=null)
-      for (WatchEvent<?> event : key.pollEvents()) {
-        WatchEvent.Kind<?> kind = event.kind();
-        WatchEvent<Path> ev = (WatchEvent<Path>) event;
-        Path fileName = ev.context();
-        System.out.println(kind.name() + ": " + fileName);
+      if (key != null) {
+        for (WatchEvent<?> event : key.pollEvents()) {
+          WatchEvent.Kind<?> kind = event.kind();
+          WatchEvent<Path> ev = (WatchEvent<Path>) event;
+          Path fileName = ev.context();
+          System.out.println(kind.name() + ": " + fileName);
 
-        if (kind == ENTRY_MODIFY) {
-          System.out.println("My source file has changed!!!");
+          if (kind == ENTRY_MODIFY) {
+            System.out.println("My source file has changed!!!");
+          }
         }
       }
 
@@ -110,52 +138,6 @@ public class FileTransferServiceImpl implements FileTransferService {
     } catch (Exception ex) {
     }
 
-//    CloseableHttpClient httpclient = HttpClients.createDefault();
-//    try {
-//      HttpPost httppost = new HttpPost("http://159.226.88.94:8077/gwac/realTimeOtDstImageUpload.action");
-//
-//      FileBody bin = new FileBody(new File("/data/gwac_data/140428/M01/cfgfile/M1_01_140428_1_200060_0023.properties"));
-//      StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
-//
-//      HttpEntity reqEntity = MultipartEntityBuilder.create()
-//              .addPart("fileUpload", bin)
-//              .addPart("comment", comment)
-//              .build();
-//
-//      httppost.setEntity(reqEntity);
-//
-//      System.out.println("executing request " + httppost.getRequestLine());
-//      CloseableHttpResponse response = httpclient.execute(httppost);
-//      try {
-//        System.out.println("----------------------------------------");
-//        System.out.println(response.getStatusLine());
-//        HttpEntity resEntity = response.getEntity();
-//        if (resEntity != null) {
-//          System.out.println("Response content length: " + resEntity.getContentLength());
-//        }
-//        EntityUtils.consume(resEntity);
-//      } catch (Exception e) {
-//        e.printStackTrace();
-//      } finally {
-//        response.close();
-//      }
-//  }
-//  catch (Exception e
-//
-//  
-//    ) {
-//      e.printStackTrace();
-//
-//  }
-//
-//  
-//    finally {
-//      try {
-//      httpclient.close();
-//    } catch (IOException ex) {
-//      ex.printStackTrace();
-//    }
-//  }
     if (running == false) {
       running = true;
       log.debug("job fileTransferJob is done.");
@@ -227,6 +209,13 @@ public class FileTransferServiceImpl implements FileTransferService {
    */
   public void setIsBeiJingServer(Boolean isBeiJingServer) {
     this.isBeiJingServer = isBeiJingServer;
+  }
+
+  /**
+   * @param isTestServer the isTestServer to set
+   */
+  public void setIsTestServer(Boolean isTestServer) {
+    this.isTestServer = isTestServer;
   }
 
 }

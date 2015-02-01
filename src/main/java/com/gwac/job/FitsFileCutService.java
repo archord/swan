@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.gwac.service;
+package com.gwac.job;
 
 import com.gwac.model.UploadFileRecord;
 
@@ -13,5 +13,5 @@ import com.gwac.model.UploadFileRecord;
  * @author xy
  */
 public interface FitsFileCutService {
-  public void addMissedCutImages();
+  public void startJob();
 }

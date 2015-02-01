@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
@@ -18,7 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * 根据OtObserveRecordService产生的有观测记录的切图序列，计算序列中缺失的切图文件。
  * @author xy
  */
 public class FitsFileCutServiceImpl implements FitsFileCutService {
@@ -26,6 +26,8 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   private static final Log log = LogFactory.getLog(FitsFileCutServiceImpl.class);
 
   private static boolean running = true;
+  private Boolean isBeiJingServer;
+  private Boolean isTestServer;
 
   private FitsFileDAO ffDao;
   private FitsFileCutDAO ffcDao;
@@ -33,28 +35,43 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   private DataProcessMachineDAO dpmDao;
   private int successiveImageNumber;
   private int headTailCutNumber;
+  
+  
+  public void startJob(){
+    
+    if(isTestServer){
+      return;
+    }
+    
+    if (running == true) {
+      log.debug("start job...");
+      running = false;
+    } else {
+      log.warn("job is running, jump this scheduler.");
+      return;
+    }
+    
+    long startTime=System.nanoTime();
+    addMissedCutImages();
+    long endTime=System.nanoTime();
+    
+    if (running == false) {
+      running = true;
+      log.debug("job is done.");
+    }
+    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+  }
 
   public void addMissedCutImages() {
 
-    long startTime=0;
-    long endTime=0;
-    if (running == true) {
-      log.debug("start job addMissedCutImagesJob.");
-      running = false;
-      startTime = System.nanoTime();
-    } else {
-      log.warn("job addMissedCutImagesJob is running, jump this scheduler.");
-      return;
-    }
-
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
-    log.debug(otlv2s.size()+" otlv2s wait to be cut.");
+//    log.debug(otlv2s.size() + " otlv2s wait to be cut.");
     for (OtLevel2 otlv2 : otlv2s) {
-      log.debug("otlv2(id="+otlv2.getOtId()+") add it's uncutted image to DB.");
+//      log.debug("otlv2(id=" + otlv2.getOtId() + ") add it's uncutted image to DB.");
       int cuttedFfNumber = otlv2.getCuttedFfNumber();
       List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), cuttedFfNumber);
       if (ffcs.isEmpty()) {
-        log.warn("otlv2 "+ otlv2.getOtId() + " is not cut done, but uncuted ffcs is empty.");
+        log.warn("otlv2 " + otlv2.getOtId() + " is not cut done, but uncuted ffcs is empty.");
         continue;
       }
       otlv2.setCuttedFfNumber(ffcs.get(ffcs.size() - 1).getNumber());
@@ -73,7 +90,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
           FitsFile tff = ffDao.getByName(ffName);
           if (tff == null) {
-            log.warn(":, can't find orig fits file " + ffName);
+            log.warn("can't find orig fits file " + ffName);
             continue;
           }
           FitsFileCut ffc = new FitsFileCut();
@@ -90,7 +107,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setIsMissed(true);
           ffcDao.save(ffc);
         }
-      } 
+      }
 
 //      log.info("add center missed image");
       //add center missed image
@@ -161,13 +178,6 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         otlv2Dao.updateAllFileCuttedById(otlv2.getOtId());
       }
     }
-
-    if (running == false) {
-      running = true;
-      log.debug("job addMissedCutImagesJob is done.");
-    }
-    endTime = System.nanoTime();
-    log.debug("fitsfilecut consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
   }
 
   /**
@@ -210,5 +220,19 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
    */
   public void setHeadTailCutNumber(int headTailCutNumber) {
     this.headTailCutNumber = headTailCutNumber;
+  }
+
+  /**
+   * @param isBeiJingServer the isBeiJingServer to set
+   */
+  public void setIsBeiJingServer(Boolean isBeiJingServer) {
+    this.isBeiJingServer = isBeiJingServer;
+  }
+
+  /**
+   * @param isTestServer the isTestServer to set
+   */
+  public void setIsTestServer(Boolean isTestServer) {
+    this.isTestServer = isTestServer;
   }
 }

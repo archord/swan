@@ -16,6 +16,13 @@ import org.hibernate.Session;
  * @author xy
  */
 public class ConfigFileDaoImpl extends BaseHibernateDaoImpl<ConfigFile> implements ConfigFileDao {
+  
+  public void moveDataToHisTable() {
+
+    Session session = getCurrentSession();
+    String sql = "WITH moved_rows AS ( DELETE FROM config_file RETURNING * ) INSERT INTO config_file_his SELECT * FROM moved_rows;";
+    session.createSQLQuery(sql).executeUpdate();
+  }
 
   public Boolean exist(ConfigFile obj) {
     Boolean flag = false;

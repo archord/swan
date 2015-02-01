@@ -416,15 +416,16 @@ public class UploadFileServiceImpl implements UploadFileService {
             if (tfile2.exists() && tStr.endsWith("jpg") && tStr.contains("ref")) {
               try {
                 String dateStr = tStr.substring(tStr.indexOf("ref_") + 4, tStr.indexOf(".jpg"));
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
-                Date genDate = sdf.parse(dateStr.replace('T', ' '));
+                if (dateStr != null && dateStr.length() == 15) {
+                  SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
+                  Date genDate = sdf.parse(dateStr.replace('T', ' '));
 
-                FitsFileCutRef ffcr = new FitsFileCutRef();
-                ffcr.setFileName(tStr.substring(0, tStr.indexOf(".jpg")));
-                ffcr.setGenerateTime(genDate);
-                ffcr.setSuccessCut(Boolean.TRUE);
-                ffcrDao.updateByName(ffcr);
-
+                  FitsFileCutRef ffcr = new FitsFileCutRef();
+                  ffcr.setFileName(tStr.substring(0, tStr.indexOf(".jpg")));
+                  ffcr.setGenerateTime(genDate);
+                  ffcr.setSuccessCut(Boolean.TRUE);
+                  ffcrDao.updateByName(ffcr);
+                }
               } catch (ParseException ex) {
                 log.error("parse ref cut image date error.");
               }

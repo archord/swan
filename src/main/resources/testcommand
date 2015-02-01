@@ -1,4 +1,4 @@
-curl  http://10.36.1.154:8080/svom/uploadAction.action \
+curl  http://url/gwac/uploadAction.action \
 -F dpmName=m01 \
 -F currentDirectory=20140505 \
 -F configFile=@data-upload-config.properties \
@@ -7,3 +7,12 @@ curl  http://10.36.1.154:8080/svom/uploadAction.action \
 -F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.png \
 -F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.fit \
 -F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.png 
+
+curl  http://url/gwac/gwacFileReceive.action \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.png \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.png 
+
+curl  http://url:8077/gwac/gwacFileReceive.action -F fileUpload=@gwac-20150201.sql
+curl  http://url:8077/gwac/realTimeOtDstImageUpload.action -F fileUpload=@gwac-20150201.sql

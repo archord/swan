@@ -13,6 +13,8 @@ import java.util.List;
  * @author xy
  */
 public interface ConfigFileDao extends BaseHibernateDao<ConfigFile> {
+  
+  public void moveDataToHisTable();
 
   public Boolean exist(ConfigFile obj);
 

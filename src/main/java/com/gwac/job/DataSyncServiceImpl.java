@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 import com.gwac.dao.ConfigFileDao;
 import com.gwac.model.ConfigFile;
@@ -27,13 +27,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- *
+ * 数据同步
+ * 根据传输配置文件，将一级OT列表，切图，模板切图等传输到另一个服务器
  * @author xy
  */
 public class DataSyncServiceImpl implements DataSyncService {
 
   private static final Log log = LogFactory.getLog(DataSyncServiceImpl.class);
-  private static boolean running = true;
   private ConfigFileDao cfDao;
   private String rootDir;
   private String otLDir;
@@ -43,32 +43,38 @@ public class DataSyncServiceImpl implements DataSyncService {
   private String cfgDir;
   private String serverUrl;
   private String uploadUrl;
-  private int mchNum;
+  private int mchNum; //gwac.machine.number
+  
+  private static boolean running = true;
   private Boolean isBeiJingServer;
-
-  public void syncData() {
+  private Boolean isTestServer;
+  
+  public void startJob(){
     
-    if(isBeiJingServer){
+    if(isBeiJingServer || isTestServer){
       return;
     }
-
+    
     if (running == true) {
-      log.debug("start job fileTransferJob...");
+      log.debug("start job...");
       running = false;
     } else {
-      log.warn("job fileTransferJob is running, jump this scheduler.");
+      log.warn("job is running, jump this scheduler.");
       return;
     }
-
+    
+    long startTime=System.nanoTime();
     List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
     for (ConfigFile cf : cfs) {
       syncConfigFile(cf);
     }
-
+    long endTime=System.nanoTime();
+    
     if (running == false) {
       running = true;
-      log.debug("job fileTransferJob is done.");
+      log.debug("job is done.");
     }
+    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
   }
 
   private void syncConfigFile(ConfigFile cf) {
@@ -308,5 +314,12 @@ public class DataSyncServiceImpl implements DataSyncService {
    */
   public void setIsBeiJingServer(Boolean isBeiJingServer) {
     this.isBeiJingServer = isBeiJingServer;
+  }
+
+  /**
+   * @param isTestServer the isTestServer to set
+   */
+  public void setIsTestServer(Boolean isTestServer) {
+    this.isTestServer = isTestServer;
   }
 }

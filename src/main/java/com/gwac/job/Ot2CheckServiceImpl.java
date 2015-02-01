@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 import com.gwac.dao.CVSQueryDao;
 import com.gwac.dao.MergedOtherDao;
@@ -23,7 +23,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * 二级OT查询，验证二级OT是否是已知星，变星，小行星等
+ * 目前在北京不能验证
  * @author xy
  */
 public class Ot2CheckServiceImpl implements Ot2CheckService {
@@ -49,6 +50,35 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   
   private OtTypeDao ottDao;
   private OtLevel2MatchDao ot2mDao;
+  
+  private static boolean running = true;
+  private Boolean isBeiJingServer;
+  private Boolean isTestServer;
+  
+  public void startJob(){
+    
+    if(isBeiJingServer || isTestServer){
+      return;
+    }
+    
+    if (running == true) {
+      log.debug("start job...");
+      running = false;
+    } else {
+      log.warn("job is running, jump this scheduler.");
+      return;
+    }
+    
+    long startTime=System.nanoTime();
+    searchOT2();
+    long endTime=System.nanoTime();
+    
+    if (running == false) {
+      running = true;
+      log.debug("job is done.");
+    }
+    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+  }
 
   public void searchOT2() {
 
@@ -59,7 +89,6 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2m.setOtId(ot2.getOtId()); 
       
       Boolean flag = false;
-      long startTime = System.nanoTime();
       Cvs tcvs = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
       if (tcvs != null) {
         OtType ott = ottDao.getOtTypeByTableName("cvs");
@@ -89,15 +118,13 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
-      long endTime = System.nanoTime();
+      
       if (flag) {
         ot2.setIsMatch((short)2);
         ot2Dao.updateIsMatch(ot2);
-        log.debug("ot2 " + ot2.getName() + " query time " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
       }
 
     }
-    log.debug("end searchOT2.");
   }
 
   /**
@@ -360,6 +387,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    */
   public void setOt2mDao(OtLevel2MatchDao ot2mDao) {
     this.ot2mDao = ot2mDao;
+  }
+
+  /**
+   * @param isBeiJingServer the isBeiJingServer to set
+   */
+  public void setIsBeiJingServer(Boolean isBeiJingServer) {
+    this.isBeiJingServer = isBeiJingServer;
+  }
+
+  /**
+   * @param isTestServer the isTestServer to set
+   */
+  public void setIsTestServer(Boolean isTestServer) {
+    this.isTestServer = isTestServer;
   }
 
 }

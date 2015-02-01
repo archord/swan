@@ -85,7 +85,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     if (queryHis) {
       unionSql = "(" + sql1 + ") union (" + sql2 + ") order by number";
     } else {
-      unionSql = sql1 + "order by number";
+      unionSql = sql1 + " order by number";
     }
     
     Session session = getCurrentSession();

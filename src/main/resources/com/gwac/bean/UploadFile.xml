@@ -11,6 +11,7 @@
 
   <bean class="com.gwac.action.GwacFileReceive" scope="prototype">
     <property name="dpmDao" ref="dpmDao" />	
+    <property name="sfDao" ref="sfDao" />	
   </bean>
   
   <bean class="com.gwac.action.GetUploadFileUnstoreList"  scope="prototype">

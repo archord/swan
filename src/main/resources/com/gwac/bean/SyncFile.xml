@@ -4,9 +4,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-  <bean id="otORService" class="com.gwac.service.OtObserveRecordServiceImpl" >
-    <property name="otbDao" ref="otbDao" />
-    <property name="dpmDao" ref="dpmDao" />	
+  <bean id="sfDao" class="com.gwac.dao.SyncFileDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.SyncFile</value>
+    </property>
   </bean>
-	
+ 
 </beans>

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
@@ -26,7 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
+ * 解析一级OT列表文件，计算二级OT，切图，模板切图。
  * @author xy
  */
 public class OtObserveRecordServiceImpl implements OtObserveRecordService {
@@ -45,8 +45,40 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private float errorBox;
   private int successiveImageNumber;
   private int occurNumber;
+  
+  private static boolean running = true;
+  private Boolean isBeiJingServer;
+  private Boolean isTestServer;
+  
+  public void startJob(){
+    
+    if(isTestServer){
+      return;
+    }
+    
+    if (running == true) {
+      log.debug("start job...");
+      running = false;
+    } else {
+      log.warn("job is running, jump this scheduler.");
+      return;
+    }
+    
+    long startTime=System.nanoTime();
+    parseLevel1Ot();
+    long endTime=System.nanoTime();
+    
+    if (running == false) {
+      running = true;
+      log.debug("job is done.");
+    }
+    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+  }
 
-  public void storeOTCatalog() {
+  /**
+   * 解析一级OT列表文件，得出二级OT，切图文件名称，二级OT模板切图名称
+   */
+  public void parseLevel1Ot() {
     List<UploadFileUnstore> ufus = ufuDao.getOTLevel1File();
 //    log.debug("ufu number:" + ufus.size());
     if (ufus != null) {
@@ -208,10 +240,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     }
   }
 
-  public List<OtObserveRecord> getOtOR() {
-    return otorDao.findAll();
-  }
-
   /**
    * @return the otorDao
    */
@@ -371,5 +399,19 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
+  }
+
+  /**
+   * @param isBeiJingServer the isBeiJingServer to set
+   */
+  public void setIsBeiJingServer(Boolean isBeiJingServer) {
+    this.isBeiJingServer = isBeiJingServer;
+  }
+
+  /**
+   * @param isTestServer the isTestServer to set
+   */
+  public void setIsTestServer(Boolean isTestServer) {
+    this.isTestServer = isTestServer;
   }
 }

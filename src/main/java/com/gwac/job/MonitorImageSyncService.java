@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 /**
  *
  * @author xy
  */
-public interface DataSyncService {
+public interface MonitorImageSyncService {
 
-  public void syncData();
+  public void startJob();
 }

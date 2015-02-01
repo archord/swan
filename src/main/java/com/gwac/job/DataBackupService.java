@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 /**
  *
@@ -10,5 +10,5 @@ package com.gwac.service;
  */
 public interface DataBackupService {
 
-  public void backupData();
+  public void startJob();
 }
