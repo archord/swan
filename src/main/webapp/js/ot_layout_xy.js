@@ -217,7 +217,7 @@ function plotAndBind(number) {
         } else {
           mName = "M" + ot2Label[number][item.dataIndex][0];
         }
-        $("#tooltip").html(mName + "-" + ot2Label[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
+        $("#tooltip").html(ot2Label[number][item.dataIndex][2] + "<br/>" + mName + "-" + ot2Label[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
                 .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
       } else if (item.series.label === "ot2-cur") {
@@ -230,7 +230,7 @@ function plotAndBind(number) {
         } else {
           mName = "M" + ot2curLabel[number][item.dataIndex][0];
         }
-        $("#tooltip").html(mName + "-" + ot2curLabel[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
+        $("#tooltip").html(ot2Label[number][item.dataIndex][2] + "<br/>" + mName + "-" + ot2curLabel[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
                 .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
       }

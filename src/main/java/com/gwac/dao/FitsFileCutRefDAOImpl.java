@@ -32,6 +32,11 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  /**
+   * 查询望远镜dpmId所对应的没有请求过的（request_cut=false）所有OT模板切图
+   * @param dpmId
+   * @return 
+   */
   public String getUnCuttedStarList(int dpmId) {
     Session session = getCurrentSession();
     String sql = "with updated_rows as "
