@@ -29,7 +29,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
   public List<OTCatalog> getOT1Catalog(String path) {
     BufferedReader br = null;
     String line = "";
-    String splitBy = " ";
+    String splitBy = " +";
     List<OTCatalog> otList = new ArrayList<OTCatalog>();
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

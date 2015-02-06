@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.gwac.dao;
 
 import com.gwac.model.OtLevel2;
@@ -18,15 +17,15 @@ import org.hibernate.Session;
  * @author xy
  */
 public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> implements MinorPlanetDao {
-  
+
   @Override
-  public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag) {
+  public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName) {
 
     SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();
-      String sql = "select * from aoop_longlat_56968 where mag < " + mag + " and ";
+      String sql = "select * from " + tableName + " where ";
       if (tflag == 1) {
         sql += "RAdeg between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
         sql += "DEdeg between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";

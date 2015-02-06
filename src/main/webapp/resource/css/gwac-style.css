@@ -1,10 +1,3 @@
-/* 
-    Document   : gwac-style
-    Created on : Dec 24, 2013, 10:23:46 AM
-    Author     : xy
-    Description:
-        Purpose of the stylesheet follows.
-*/
 
 table.table-style{
   text-align: left;
@@ -21,10 +14,24 @@ table.table-style tr td{
   padding-right: 20px;
 }
 
-#getOtBaseListForm table td{
-  font-size: 12px;
+form#getOtListForm table td{
+  font-size: 14px;
   padding: 3px;
 }
-#getOtBaseListForm table td input{
+form#getOtListForm table td input{
   height: 22px;
+}
+
+#main_content{
+  margin: auto;
+}
+
+.ot-query-grid {
+  margin: auto;
+}
+
+.ot-query-form{
+  width:800px;
+  text-align: left;
+  /*margin: auto;*/
 }

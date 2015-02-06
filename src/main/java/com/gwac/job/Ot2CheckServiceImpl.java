@@ -17,6 +17,8 @@ import com.gwac.model.OtLevel2Match;
 import com.gwac.model.OtType;
 import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
+import com.gwac.model2.MinorPlanet;
+import com.gwac.model2.Rc3;
 import com.gwac.util.CommonFunction;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -118,7 +120,37 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
-      
+
+      Rc3 trc3 = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
+      if (trc3 != null) {
+        OtType ott = ottDao.getOtTypeByTableName("rc3");
+        ot2m.setOtTypeId(ott.getOtTypeId());
+        ot2m.setMatchId(trc3.getIdnum());
+        ot2m.setRa(trc3.getRadeg());
+        ot2m.setDec(trc3.getDedeg());
+        ot2m.setMag(trc3.getMvmag());
+        ot2mDao.save(ot2m);
+        
+        String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
+        log.debug("rc3Info: " + moInfo);
+        flag = true;
+      }
+
+      /*
+      MinorPlanet tmp = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);
+      if (tmp != null) {
+        OtType ott = ottDao.getOtTypeByTableName("minor_planet");
+        ot2m.setOtTypeId(ott.getOtTypeId());
+        ot2m.setMatchId(tmp.getIdnum());
+        ot2m.setRa(tmp.getLon());
+        ot2m.setDec(tmp.getLat());
+        ot2mDao.save(ot2m);
+        
+        String moInfo = tmp.getIdnum() + " " + tmp.getLon() + " " + tmp.getLat();
+        log.debug("moInfo: " + moInfo);
+        flag = true;
+      }
+      */
       if (flag) {
         ot2.setIsMatch((short)2);
         ot2Dao.updateIsMatch(ot2);
@@ -163,6 +195,41 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       }
     }
     return minObj;
+  }
+
+  public Rc3 matchOt2InRc3(OtLevel2 ot2, float searchRadius, float minMag, float maxMag) {
+
+    List<Rc3> objs = rc3Dao.queryByOt2(ot2, searchRadius, minMag, maxMag);
+    double minDis = searchRadius;
+    Rc3 minObj = null;
+    for (Rc3 obj : objs) {
+      double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRadeg(), obj.getDedeg());
+      if (tDis < minDis) {
+        minDis = tDis;
+        minObj = obj;
+      }
+    }
+    return minObj;
+  }
+
+  public MinorPlanet matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
+
+    List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, "table_name");
+    double minDis = searchRadius;
+    MinorPlanet minObj = null;
+    for (MinorPlanet obj : objs) {
+      double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon(), obj.getLat());
+      if (tDis < minDis) {
+        minDis = tDis;
+        minObj = obj;
+      }
+    }
+    return minObj;
+  }
+  
+  public String getMinorPlanetTableName(){
+    String prefix = "aoop_longlat_";
+    return "";
   }
 
   /**

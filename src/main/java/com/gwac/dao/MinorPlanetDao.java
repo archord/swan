@@ -16,5 +16,5 @@ import java.util.List;
  */
 public interface MinorPlanetDao extends BaseHibernateDao<MinorPlanet> {
   
-  public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag);
+  public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName);
 }

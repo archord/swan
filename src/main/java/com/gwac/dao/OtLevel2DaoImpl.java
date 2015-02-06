@@ -22,10 +22,10 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
-  
-  public void updateIsMatch(OtLevel2 ot2){
-    
-    String sql = "update ot_level2 set is_match="+ot2.getIsMatch()+" where ot_id="+ot2.getOtId();
+
+  public void updateIsMatch(OtLevel2 ot2) {
+
+    String sql = "update ot_level2 set is_match=" + ot2.getIsMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
@@ -112,7 +112,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     } else {
       unionSql = sql1;
     }
-    
+
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
     if (!q.list().isEmpty()) {
@@ -197,6 +197,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sqlprefix2 = "select * from ot_level2_his where 1=1 ";
     String sql = "";
 
+    double cosd = Math.cos(ot2qp.getDec() * 0.0174532925);
+
     if (!ot2qp.getStartDate().isEmpty()) {
       sql += " and found_time_utc>'" + ot2qp.getStartDate() + " 00:00:00' ";
     }
@@ -210,10 +212,10 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       sql += " and abs(xtemp-" + ot2qp.getXtemp() + ")<" + ot2qp.getPlaneRadius();
       sql += " and abs(ytemp-" + ot2qp.getYtemp() + ")<" + ot2qp.getPlaneRadius();
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
-      sql += " and abs(ra-" + ot2qp.getRa() + ")<" + ot2qp.getSphereRadius();
+      sql += " and abs(ra-" + ot2qp.getRa() + ")/" + cosd + "<" + ot2qp.getSphereRadius();
       sql += " and abs(dec-" + ot2qp.getDec() + ")<" + ot2qp.getSphereRadius();
     }
-    
+
     sqlprefix1 += sql;
     sqlprefix2 += sql;
 

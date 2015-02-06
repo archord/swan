@@ -44,7 +44,7 @@
 
 <s:property value="echo" escape="%{escape}"/>
 
-<div style="width:650px;text-align: left;">
+<div class="ot-query-form">
   <s:form id="getOtListForm"  action="query-ot-level2" theme="simple" cssClass="yform" namespace="/">
     <table style="margin:auto; width:90%;">
       <tr style="height:20px;">
@@ -61,9 +61,9 @@
         <td><sj:textfield name="ot2qp.ytemp" /></td>
       </tr>
       <tr style="height:20px;">
-        <td>Ra：</td>
+        <td>Ra(度)：</td>
         <td><sj:textfield name="ot2qp.ra" /></td>
-        <td>Dec：</td>
+        <td>Dec(度)：</td>
         <td><sj:textfield name="ot2qp.dec" /></td>
       </tr>
       <tr style="height:20px;">
@@ -73,7 +73,7 @@
         <td><sj:textfield name="ot2qp.sphereRadius" /></td>
       </tr>
       <tr style="height:20px;">
-        <td>望远镜：</td>
+        <td>CCD：</td>
         <td><select name="ot2qp.telscope" >
             <option value="all">All</option>
             <option value="1">M01</option>
@@ -115,6 +115,8 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
 <!--不能添加loadonce="true"，否则上面的“搜索”提交不起作用-->
 <sjg:grid 
   id="gridtable" 
+  cssClass="ot-query-grid"
+  cssStyle="margin:auto;"
   shrinkToFit="true"
   caption="二级OT列表" 
   dataType="json" 
@@ -124,7 +126,7 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   rowList="10,15,20" 
   rowNum="15" 
   rownumbers="true"
-  width="650"
+  width="800"
   viewrecords="true"
   reloadTopics="reloadOtGrid"
   formIds="getOtListForm">

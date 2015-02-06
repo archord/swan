@@ -31,7 +31,7 @@
 
     <link href="${pageContext.request.contextPath}/themes/showcase/jquery-ui.css?s2j=3.6.1" rel="stylesheet" type="text/css" />
     <link href="${pageContext.request.contextPath}/styles/flexible-grids.css" rel="stylesheet" type="text/css" />
-    <link href="${pageContext.request.contextPath}/styles/gwac-style.css" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/resource/css/gwac-style.css" rel="stylesheet" type="text/css" />
     <!--[if lte IE 7]>
     <link href="${pageContext.request.contextPath}/yaml/core/iehacks.min.css" rel="stylesheet" type="text/css" />
     <![endif]-->

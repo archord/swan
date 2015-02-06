@@ -23,7 +23,7 @@
 @import url(../yaml/forms/gray-theme.css);
 
 @import url(../yaml/screen/typography.css);
-@import url(../yaml/screen/screen-FULLPAGE-layout.css);
+/*@import url(../yaml/screen/screen-FULLPAGE-layout.css);*/
 
 /* import print layout | Druck-Layout einbinden */
 @import url(../yaml/print/print.css);
