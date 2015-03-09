@@ -9,9 +9,10 @@
     <title>OT分布实时概览图-XY</title>
     <link href="<%=request.getContextPath()%>/styles/examples.css" rel="stylesheet" type="text/css">
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/excanvas.compiled.js"></script><![endif]-->
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.categories.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.categories.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.resize.min.js"></script>
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/ot_layout_xy.js"></script>
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript">
@@ -60,18 +61,18 @@
           <div id="ot-legend"></div>
         </div>
         <div id="ot-show-container">
-          <div id="placeholder1" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder2" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder3" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder4" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder5" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder6" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder7" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder8" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder9" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder10" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder11" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
-          <div id="placeholder12" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:5px;"></div>
+          <div id="placeholder1" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder2" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder3" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder4" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder5" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder6" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder7" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder8" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder9" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder10" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder11" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
+          <div id="placeholder12" class="demo-placeholder" style="float:left; width:23.5%; height: 34%; margin:0px;"></div>
         </div>
       </div>
       <div id="sysinfo">
