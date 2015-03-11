@@ -90,7 +90,7 @@
                             .datum({type: "Point", coordinates: [0, 0]})
                             .attr("class", "origin")
                             .attr("d", path.pointRadius(5));
-                    origin.on("mouseover", function(d,i) {
+                    origin.on("mouseover", function(d, i) {
                       console.log(d.coordinates);
                       console.log(i);
                       tooltip.text("X:" + d3.event.pageX + ", Y:" + d3.event.pageY);
@@ -102,7 +102,9 @@
                     svg.append("path")
                             .datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
                             .attr("class", "equator")
-                            .attr("d", path);
+                            .attr("d", path)
+                            .append("title")
+                            .text("equator");
                     svg.append("path")
                             .datum(graticule)
                             .attr("class", "graticule")
@@ -111,7 +113,14 @@
                     var landObj = svg.append("path")
                             .datum(land)
                             .attr("class", "land")
-                            .attr("d", path);
+                            .attr("d", path)
+                            .append("title")
+                            .text(function(d) {
+                              console.log(d.geometry.coordinates);
+                              return "bbbb";
+                            });
+                    console.log(path);
+                    console.log(landObj);
                     landObj.on("click", landClick);
                     var cc = svg.append("path")
                             .datum(countries[0])
@@ -121,6 +130,13 @@
                     svg.append("path")
                             .datum(borders)
                             .attr("class", "borders")
+                            .attr("d", path);
+                    svg.append("image")
+                            .attr("xlink:href", "/gwac/resource/images/pings.png")
+                            .attr("width", 40)
+                            .attr("height", 40)
+                            .attr("x", 10)
+                            .attr("y", 10)
                             .attr("d", path);
                   });
 

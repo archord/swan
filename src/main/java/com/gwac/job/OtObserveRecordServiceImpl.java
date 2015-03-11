@@ -138,7 +138,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           oor.setRequestCut(false);
           oor.setSuccessCut(false);
 
-          OtLevel2 tlv2 = otLv2Dao.existInLatestN(otLv2, errorBox, successiveImageNumber);
+          OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
           if (tlv2 != null) {
             if (tlv2.getFirstFfNumber() > number) {
               tlv2.setFirstFfNumber(number);
@@ -194,6 +194,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setAllFileCutted(false);
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
+              tOtLv2.setIsMatch((short)0);
               otLv2Dao.save(tOtLv2);
 
               String ffcrName = String.format("%s_%04d_ref", otName, tOtLv2.getFirstFfNumber());

@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface OtTypeDao extends BaseHibernateDao<OtType> {
   
-  public OtType getOtTypeByTableName(String tableName);
+  public OtType getOtTypeByTypeName(String typeName);
 }

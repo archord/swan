@@ -27,6 +27,22 @@ public class CommonFunction {
   public static final float MINFLOAT = (float) 0.000001;
 
   private static final Log log = LogFactory.getLog(CommonFunction.class);
+  
+  public static float hmsToDegree(String str){
+    String[] strs = str.split(":");
+    float h = Float.parseFloat(strs[0]);
+    float m = Float.parseFloat(strs[1]);
+    float s = Float.parseFloat(strs[2]);
+    return (h + m/60 + s/60/60)*15;
+  }
+  
+  public static float dmsToDegree(String str){
+    String[] strs = str.split(":");
+    float d = Float.parseFloat(strs[0]);
+    float m = Float.parseFloat(strs[1]);
+    float s = Float.parseFloat(strs[2]);
+    return d + m/60 + s/60/60;
+  }
 
   public static String getCurTimeString() {
     return getTimeString(new Date());
@@ -100,6 +116,17 @@ public class CommonFunction {
   }
 
   public static double dateToJulian(Date date) {
+
+    Calendar cal = Calendar.getInstance();
+    cal.set(1858, 10, 17, 0, 0, 0);
+    double day1 = cal.getTimeInMillis() / 86400000.0;
+    cal.setTime(date);
+    double day2 = cal.getTimeInMillis() / 86400000.0;
+
+    return (day2 - day1);
+  }
+
+  public static double dateToJulian_err(Date date) {
 
     GregorianCalendar calendar = new GregorianCalendar();
     calendar.setTime(date);

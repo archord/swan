@@ -66,7 +66,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
-            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number ";
+            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
+            + "where ol2.is_match!=2";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
@@ -75,7 +76,22 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
-            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number ";
+            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number "
+            + "where ol2.is_match!=2";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+
+  public List<OtLevel2> getMatchedLv2OT() {
+    Session session = getCurrentSession();
+    String sql = "select ol2.* from ot_level2 ol2 where ol2.is_match=2";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+
+  public List<OtLevel2> getMatchedLv2OTByDate(String dateStr) {
+    Session session = getCurrentSession();
+    String sql = "select ol2.* from ot_level2_his ol2 where ol2.is_match=2 and ol2.date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
@@ -148,6 +164,21 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       flag = true;
     }
     return flag;
+  }
+
+  public OtLevel2 existInAll(OtLevel2 obj, float errorBox) {
+    Boolean flag = false;
+    Session session = getCurrentSession();
+
+    String sql = "select * from ot_level2 "
+            + " where dpm_id=" + obj.getDpmId()
+            //            + " and date_str='"+obj.getDateStr() + "'"
+            + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    if (!q.list().isEmpty()) {
+      return (OtLevel2) q.list().get(0);
+    }
+    return null;
   }
 
   public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox, int n) {

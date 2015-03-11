@@ -17,9 +17,9 @@ import org.hibernate.Session;
 public class OtTypeDaoImpl extends BaseHibernateDaoImpl<OtType> implements OtTypeDao {
 
   @Override
-  public OtType getOtTypeByTableName(String tableName) {
+  public OtType getOtTypeByTypeName(String typeName) {
 
-    String sql = "select * from ot_type where ot_table_name='" + tableName + "'";
+    String sql = "select * from ot_type where ot_type_name='" + typeName + "'";
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql).addEntity(OtType.class);
     List<OtType> otts = q.list();

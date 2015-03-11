@@ -27,6 +27,7 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
   private List<OtObserveRecord> otLv1;
   private List<OtLevel2> otLv2;
   private List<OtLevel2> otLv2Cur;
+  private List<OtLevel2> otLv2Mch;
   private OtLevel2Dao otDao = null;
   private OtObserveRecordDAO oorDao = null;
   private List<DataProcessMachine> dpms;
@@ -45,10 +46,12 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
       otLv1 = new ArrayList();
       otLv2 = otDao.getNCurOccurLv2OTByDate(queryDate);
       otLv2Cur = otDao.getCurOccurLv2OTByDate(queryDate);
+      otLv2Mch = otDao.getMatchedLv2OTByDate(queryDate);
     } else {
       otLv1 = oorDao.getLatestNLv1OT(40); //40
       otLv2 = otDao.getNCurOccurLv2OT();
       otLv2Cur = otDao.getCurOccurLv2OT();
+      otLv2Mch = otDao.getMatchedLv2OT();
     }
     dpms = dpmDao.getAllDpms();
     setMasterUsage();
@@ -177,5 +180,12 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
    */
   public void setDateStr(String dateStr) {
     this.dateStr = dateStr;
+  }
+
+  /**
+   * @return the otLv2Mch
+   */
+  public List<OtLevel2> getOtLv2Mch() {
+    return otLv2Mch;
   }
 }

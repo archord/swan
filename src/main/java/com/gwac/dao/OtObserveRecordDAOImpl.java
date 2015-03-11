@@ -64,6 +64,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
      * 天 86400000.0 小时 3600000.0 分钟 60000.0
      */
     double baseDay = cal.getTimeInMillis() / 60000.0;
+//    double baseDay = CommonFunction.dateToJulian(baseDate)*1440;
 
     StringBuilder sb = new StringBuilder();
     while (itor.hasNext()) {
@@ -74,6 +75,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
          * 天 86400000.0 小时 3600000.0 分钟 60000.0
          */
         double now = cal.getTimeInMillis() / 60000.0;
+//        double now = CommonFunction.dateToJulian((Date) row[0])*1440;
         sb.append("[");
         sb.append(now - baseDay);
         sb.append(",");

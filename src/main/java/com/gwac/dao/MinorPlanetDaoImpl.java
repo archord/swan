@@ -20,23 +20,39 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
 
   @Override
   public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName) {
+    
+    double maxRaSpeed = getMaxAbsValue(tableName, "DLON");
+    double maxDecSpeed = getMaxAbsValue(tableName, "DLAT");
 
-    SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
-    int tflag = sbs.calSearchBox();
-    if (tflag != 0) {
+    SearchBoxSphere sbs1 = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), maxRaSpeed);
+    SearchBoxSphere sbs2 = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), maxDecSpeed);
+    int tflag1 = sbs1.calSearchBox();
+    int tflag2 = sbs2.calSearchBox();
+    if (tflag1 != 0 && tflag2 != 0) {
       Session session = getCurrentSession();
       String sql = "select * from " + tableName + " where ";
-      if (tflag == 1) {
-        sql += "RAdeg between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
-        sql += "DEdeg between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+      if (tflag1 == 1) {
+        sql += "LON between " + sbs1.getMinRa() + " and " + sbs1.getMaxRa() + " and ";
       } else {
-        sql += "(RAdeg > " + sbs.getMinRa() + " or RAdeg <" + sbs.getMaxRa() + ") and ";
-        sql += "DEdeg between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+        sql += "(LON > " + sbs1.getMinRa() + " or LON <" + sbs1.getMaxRa() + ") and ";
+      }
+      if (tflag2 == 1) {
+        sql += "LAT between " + sbs2.getMinDec() + " and " + sbs2.getMaxDec() + " ";
+      } else {
+        sql += "LAT between " + sbs2.getMinDec() + " and " + sbs2.getMaxDec() + " ";
       }
 
       Query q = session.createSQLQuery(sql).addEntity(MinorPlanet.class);
       return q.list();
     }
     return null;
+  }
+
+  public Double getMaxAbsValue(String tableName, String name) {
+
+    Session session = getCurrentSession();
+    String sql = "select max(abs(" + name + ")) from " + tableName + ";";
+    Query q = session.createSQLQuery(sql);
+    return (Double) q.list().get(0);
   }
 }

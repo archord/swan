@@ -20,13 +20,14 @@ import com.gwac.model2.MergedOther;
 import com.gwac.model2.MinorPlanet;
 import com.gwac.model2.Rc3;
 import com.gwac.util.CommonFunction;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * 二级OT查询，验证二级OT是否是已知星，变星，小行星等
- * 目前在北京不能验证
+ * 二级OT查询，验证二级OT是否是已知星，变星，小行星等 目前在北京不能验证
+ *
  * @author xy
  */
 public class Ot2CheckServiceImpl implements Ot2CheckService {
@@ -49,20 +50,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private MergedOtherDao moDao;
   private MinorPlanetDao mpDao;
   private Rc3Dao rc3Dao;
-  
+
   private OtTypeDao ottDao;
   private OtLevel2MatchDao ot2mDao;
-  
+
   private static boolean running = true;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
-  
-  public void startJob(){
-    
-    if(isBeiJingServer || isTestServer){
+
+  public void startJob() {
+
+    if (isBeiJingServer || !isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -70,37 +71,37 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       log.warn("job is running, jump this scheduler.");
       return;
     }
-    
-    long startTime=System.nanoTime();
+
+    long startTime = System.nanoTime();
     searchOT2();
-    long endTime=System.nanoTime();
-    
+    long endTime = System.nanoTime();
+
     if (running == false) {
       running = true;
       log.debug("job is done.");
     }
-    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
   public void searchOT2() {
 
     List<OtLevel2> ot2s = ot2Dao.getUnMatched();
     for (OtLevel2 ot2 : ot2s) {
-      
+
       OtLevel2Match ot2m = new OtLevel2Match();
-      ot2m.setOtId(ot2.getOtId()); 
-      
+      ot2m.setOtId(ot2.getOtId());
+
       Boolean flag = false;
       Cvs tcvs = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
       if (tcvs != null) {
-        OtType ott = ottDao.getOtTypeByTableName("cvs");
+        OtType ott = ottDao.getOtTypeByTypeName("cvs");
         ot2m.setOtTypeId(ott.getOtTypeId());
         ot2m.setMatchId(tcvs.getIdnum());
         ot2m.setRa(tcvs.getRadeg());
         ot2m.setDec(tcvs.getDedeg());
         ot2m.setMag(tcvs.getMag());
         ot2mDao.save(ot2m);
-        
+
         String cvsInfo = tcvs.getCvsid() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag();
         log.debug("cvsInfo: " + cvsInfo);
         flag = true;
@@ -108,14 +109,14 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
       MergedOther tmo = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
       if (tmo != null) {
-        OtType ott = ottDao.getOtTypeByTableName("merged_other");
+        OtType ott = ottDao.getOtTypeByTypeName("merged_other");
         ot2m.setOtTypeId(ott.getOtTypeId());
         ot2m.setMatchId(tmo.getIdnum());
         ot2m.setRa(tmo.getRadeg());
         ot2m.setDec(tmo.getDedeg());
         ot2m.setMag(tmo.getMag());
         ot2mDao.save(ot2m);
-        
+
         String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
         log.debug("moInfo: " + moInfo);
         flag = true;
@@ -123,39 +124,37 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
       Rc3 trc3 = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
       if (trc3 != null) {
-        OtType ott = ottDao.getOtTypeByTableName("rc3");
+        OtType ott = ottDao.getOtTypeByTypeName("rc3");
         ot2m.setOtTypeId(ott.getOtTypeId());
         ot2m.setMatchId(trc3.getIdnum());
         ot2m.setRa(trc3.getRadeg());
         ot2m.setDec(trc3.getDedeg());
         ot2m.setMag(trc3.getMvmag());
         ot2mDao.save(ot2m);
-        
+
         String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
         log.debug("rc3Info: " + moInfo);
         flag = true;
       }
 
-      /*
-      MinorPlanet tmp = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);
+      MinorPlanet tmp = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
       if (tmp != null) {
-        OtType ott = ottDao.getOtTypeByTableName("minor_planet");
+        OtType ott = ottDao.getOtTypeByTypeName("minor_planet");
         ot2m.setOtTypeId(ott.getOtTypeId());
         ot2m.setMatchId(tmp.getIdnum());
         ot2m.setRa(tmp.getLon());
         ot2m.setDec(tmp.getLat());
         ot2mDao.save(ot2m);
-        
-        String moInfo = tmp.getIdnum() + " " + tmp.getLon() + " " + tmp.getLat();
+
+        String moInfo = tmp.getIdnum() + " " + tmp.getMpid() + " " + tmp.getLon() + " " + tmp.getLat();
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
-      */
+
       if (flag) {
-        ot2.setIsMatch((short)2);
+        ot2.setIsMatch((short) 2);
         ot2Dao.updateIsMatch(ot2);
       }
-
     }
   }
 
@@ -214,11 +213,13 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
   public MinorPlanet matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
 
-    List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, "table_name");
+    List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, getMinorPlanetTableName());
     double minDis = searchRadius;
     MinorPlanet minObj = null;
+    float day = (float) CommonFunction.dateToJulian(CommonFunction.getUTCDate(new Date()));
     for (MinorPlanet obj : objs) {
-      double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon(), obj.getLat());
+      float subDay = day - obj.getMjd();
+      double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon() + obj.getDlon() * subDay, obj.getLat() + obj.getDlat() * subDay);
       if (tDis < minDis) {
         minDis = tDis;
         minObj = obj;
@@ -226,10 +227,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
     return minObj;
   }
-  
-  public String getMinorPlanetTableName(){
-    String prefix = "aoop_longlat_";
-    return "";
+
+  public String getMinorPlanetTableName() {
+    OtType ott = ottDao.getOtTypeByTypeName("minor_planet");
+    return ott.getOtTableName() + CommonFunction.getDateString(CommonFunction.getUTCDate(new Date()));
   }
 
   /**

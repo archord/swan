@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>OT分布实时概览图-天球坐标</title>
     <style>
-      body{background-color: black;}
+      body{background-color: white;}
       path {fill: none;stroke-linejoin: round;}
       .sphere{stroke: #636B62;stroke-width: 1.5px;}
       .graticule{stroke: #a9a9a9;}
@@ -27,12 +27,12 @@
     </div>
 
     <!--for f1()--->
-<!--<script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.js"></script>-->
+<script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.js"></script>
     <!--for f2()--->
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.v3.min.js"></script>
+    <!--<script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.v3.min.js"></script>-->
     <script type="text/javascript">
 
-      f2();
+      f1();
 
       function f2() {
 
@@ -112,7 +112,10 @@
         var sphere = {type: "Sphere"},
         graticule = d3.geo.graticule()();
 
-        d3.timer(function(elapsed) {
+//        d3.timer(draw);
+        draw();
+        d3.select(self.frameElement).style("height", height + "px");
+        function draw(elapsed) {
           var render = d3.geo.pipeline()
                   .source(d3.geo.jsonSource)
                   .pipe(d3.geo.rotate, 0, -.5, 0)
@@ -137,9 +140,7 @@
           context.stroke();
 
           context.restore();
-        });
-
-        d3.select(self.frameElement).style("height", height + "px");
+        }
       }
     </script>
   </body>

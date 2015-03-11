@@ -24,9 +24,11 @@ var diskUsage = [];
 var ot1 = [];
 var ot2 = [];
 var ot2cur = [];
+var ot2mch = [];
 var ot1Label = [];
 var ot2Label = [];
 var ot2curLabel = [];
+var ot2mchLabel = [];
 var drawData = [];
 var ot2curInterval = null;
 var uhtime = 50;
@@ -36,9 +38,11 @@ for (var m = 0; m < 12; m++) {
   ot1[m] = [];
   ot2[m] = [];
   ot2cur[m] = [];
+  ot2mch[m] = [];
   ot1Label[m] = [];
   ot2Label[m] = [];
   ot2curLabel[m] = [];
+  ot2mchLabel[m] = [];
 }
 
 var option1 = {
@@ -52,7 +56,7 @@ var option1 = {
   yaxis: {show: true, min: 0, max: 3200, tickSize: 1000, tickFormatter: formate1}
 };
 var option2 = {
-  legend: {show: true, container: "#ot-legend", noColumns: 3},
+  legend: {show: true, container: "#ot-legend", noColumns: 4},
   // Drawing is faster without shadows
   series: {shadowSize: 0},
   points: {show: true},
@@ -80,6 +84,7 @@ function onDataReceived(result) {
   var otLv1 = result.otLv1;
   var otLv2 = result.otLv2;
   var otLv2Cur = result.otLv2Cur;
+  var otLv2Mch = result.otLv2Mch;
   for (var m = 0; m < 12; m++) {
     while (ot1[m].length > 0) {
       ot1[m].pop();
@@ -99,6 +104,12 @@ function onDataReceived(result) {
     while (ot2curLabel[m].length > 0) {
       ot2curLabel[m].pop();
     }
+    while (ot2cur[m].length > 0) {
+      ot2mch[m].pop();
+    }
+    while (ot2curLabel[m].length > 0) {
+      ot2mchLabel[m].pop();
+    }
   }
   for (var i = 0; i < otLv1.length; i++) {
     ot1[otLv1[i].dpmId - 1].push([otLv1[i].XTemp, otLv1[i].YTemp]);
@@ -114,6 +125,10 @@ function onDataReceived(result) {
 //            ot2curLabel[otLv2Cur[i].dpmId - 1].push([otLv2Cur[i].identify, otLv2Cur[i].name]);
     ot2curLabel[otLv2Cur[i].dpmId - 1].push([otLv2Cur[i].dpmId, otLv2Cur[i].lastFfNumber, otLv2Cur[i].name]);
   }
+  for (var i = 0; i < otLv2Mch.length; i++) {
+    ot2mch[otLv2Mch[i].dpmId - 1].push([otLv2Mch[i].xtemp, otLv2Mch[i].ytemp]);
+    ot2mchLabel[otLv2Mch[i].dpmId - 1].push([otLv2Mch[i].dpmId, otLv2Mch[i].lastFfNumber, otLv2Mch[i].name]);
+  }
 
   for (var m = 0; m < 12; m++) {
     drawData[m] = [
@@ -122,6 +137,12 @@ function onDataReceived(result) {
         data: ot1[m],
         color: '#71c73e',
         points: {show: true, radius: 0.5}
+      },
+      {
+        label: "ot2-mch",
+        data: ot2mch[m],
+        color: '#99CCCC',
+        points: {show: true, radius: 2}
       },
       {
         label: "ot2",
@@ -208,9 +229,6 @@ function plotAndBind(number) {
                 .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
       } else if (item.series.label === "ot2") {
-//                $("#tooltip").html(ot2Label[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
-//                        .css({top: item.pageY - 35, left: item.pageX + 5})
-//                        .fadeIn(200);
         var mName = "";
         if (ot2Label[number][item.dataIndex][0] < 10) {
           mName = "M0" + ot2Label[number][item.dataIndex][0];
@@ -220,17 +238,24 @@ function plotAndBind(number) {
         $("#tooltip").html(ot2Label[number][item.dataIndex][2] + "<br/>" + mName + "-" + ot2Label[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
                 .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
+      } else if (item.series.label === "ot2-mch") {
+        var mName = "";
+        if (ot2mchLabel[number][item.dataIndex][0] < 10) {
+          mName = "M0" + ot2mchLabel[number][item.dataIndex][0];
+        } else {
+          mName = "M" + ot2mchLabel[number][item.dataIndex][0];
+        }
+        $("#tooltip").html(ot2mchLabel[number][item.dataIndex][2] + "<br/>" + mName + "-" + ot2mchLabel[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
+                .css({top: item.pageY - 35, left: item.pageX + 5})
+                .fadeIn(200);
       } else if (item.series.label === "ot2-cur") {
-//                $("#tooltip").html(ot2curLabel[number][item.dataIndex][0] + " (" + x + ", " + y + ")")
-//                        .css({top: item.pageY - 35, left: item.pageX + 5})
-//                        .fadeIn(200);
         var mName = "";
         if (ot2curLabel[number][item.dataIndex][0] < 10) {
           mName = "M0" + ot2curLabel[number][item.dataIndex][0];
         } else {
           mName = "M" + ot2curLabel[number][item.dataIndex][0];
         }
-        $("#tooltip").html(ot2Label[number][item.dataIndex][2] + "<br/>" + mName + "-" + ot2curLabel[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
+        $("#tooltip").html(ot2curLabel[number][item.dataIndex][2] + "<br/>" + mName + "-" + ot2curLabel[number][item.dataIndex][1] + " (" + x + ", " + y + ")")
                 .css({top: item.pageY - 35, left: item.pageX + 5})
                 .fadeIn(200);
       }
@@ -244,6 +269,8 @@ function plotAndBind(number) {
         openDialog(ot2Label[number][item.dataIndex][2]);
       } else if (item.series.label === "ot2-cur") {
         openDialog(ot2curLabel[number][item.dataIndex][2]);
+      }else if (item.series.label === "ot2-mch") {
+        openDialog(ot2mchLabel[number][item.dataIndex][2]);
       }
 //              plot[number].highlight(item.series, item.datapoint);
     }

@@ -390,7 +390,7 @@
                         sortable="false" align="center"/>
         <sjg:gridColumn name="background"    index="background"		  title="背景" width="80" 
                         sortable="false" align="center"/>
-        <sjg:gridColumn name="threshold"    index="threshold"		  title="阈值" width="80" 
+        <sjg:gridColumn name="threshold"    index="threshold"		  title="半高全宽" width="80" 
                         sortable="false" align="center"/>
         <sjg:gridColumn name="magAper"    index="magAper"		  title="星等" width="80" 
                         sortable="false" align="center"/>

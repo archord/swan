@@ -17,6 +17,8 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public void moveDataToHisTable();
 
   public Boolean exist(OtLevel2 obj, float errorBox);
+  
+  public OtLevel2 existInAll(OtLevel2 obj, float errorBox);
 
   public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox, int n);
 
@@ -27,6 +29,10 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public List<OtLevel2> queryOtLevel2(OtLevel2QueryParameter ot2qp);
 
   public int countOtLevel2(OtLevel2QueryParameter ot2qp);
+  
+  public List<OtLevel2> getMatchedLv2OT();
+  
+  public List<OtLevel2> getMatchedLv2OTByDate(String dateStr);
 
   public List<OtLevel2> getCurOccurLv2OT();
 
