@@ -60,7 +60,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
   public void startJob() {
 
-    if (isBeiJingServer || !isTestServer) {
+    if (isBeiJingServer || isTestServer) {
       return;
     }
 

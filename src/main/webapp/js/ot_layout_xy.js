@@ -280,7 +280,7 @@ function plotAndBind(number) {
 function highlightCurOT2() {
   for (var m = 0; m < 12; m++) {
     for (var ii = 0; ii < ot2cur[m].length; ii++) {
-      plot[m].highlight(2, ii);
+      plot[m].highlight(3, ii);
     }
   }
   setTimeout(unHighlightCurOT2, uhtime);
@@ -289,7 +289,7 @@ function highlightCurOT2() {
 function unHighlightCurOT2() {
   for (var m = 0; m < 12; m++) {
     for (var ii = 0; ii < ot2cur[m].length; ii++) {
-      plot[m].unhighlight(2, ii);
+      plot[m].unhighlight(3, ii);
     }
   }
 }
@@ -302,7 +302,7 @@ function openDialog(otName) {
     queryHis = 'false';
   }
   var dataurl = openUrl+"?otName=" + otName + "&queryHis=" + queryHis;
-  openwindow(dataurl, '_blank', 850, 500, 850, 500);
+  openwindow(dataurl, '_blank', 1050, 600, 1050, 600);
   return false;
 }
 function openwindow(url, name, width, height, iWidth, iHeight)

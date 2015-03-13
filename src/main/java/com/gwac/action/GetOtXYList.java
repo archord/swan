@@ -48,7 +48,7 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
       otLv2Cur = otDao.getCurOccurLv2OTByDate(queryDate);
       otLv2Mch = otDao.getMatchedLv2OTByDate(queryDate);
     } else {
-      otLv1 = oorDao.getLatestNLv1OT(40); //40
+      otLv1 = oorDao.getLatestNLv1OT(40); //40 2000
       otLv2 = otDao.getNCurOccurLv2OT();
       otLv2Cur = otDao.getCurOccurLv2OT();
       otLv2Mch = otDao.getMatchedLv2OT();

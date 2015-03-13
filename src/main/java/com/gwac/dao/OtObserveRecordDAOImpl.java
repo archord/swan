@@ -35,21 +35,27 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  /**
+   * 返回OT的光变和位置变化字符串，中间用=隔开
+   * @param ot2
+   * @param queryHis
+   * @return 
+   */
   @Override
   public String getOtOpticalVaration(OtLevel2 ot2, Boolean queryHis) {
     Session session = getCurrentSession();
-    String sql1 = "select oor.date_ut, oor.mag_aper, oor.oor_id "
+    String sql1 = "select oor.date_ut, oor.mag_aper, oor.x_temp, oor.y_temp, oor.oor_id "
             + " from ot_observe_record oor "
             + " where oor.ot_id=" + ot2.getOtId();
 
-    String sql2 = "select oorh.date_ut, oorh.mag_aper, oorh.oor_id "
+    String sql2 = "select oorh.date_ut, oorh.mag_aper, oor.x_temp, oor.y_temp, oorh.oor_id "
             + " from ot_observe_record_his oorh "
             + " where oorh.ot_id=" + ot2.getOtId();
 
     String unionSql = "";
-    if(queryHis){
+    if (queryHis) {
       unionSql = sql1 + " union " + sql2 + " order by oor_id asc";
-    }else{
+    } else {
       unionSql = sql1 + " order by oor_id asc";
     }
 
@@ -67,6 +73,9 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 //    double baseDay = CommonFunction.dateToJulian(baseDate)*1440;
 
     StringBuilder sb = new StringBuilder();
+    StringBuilder sb2 = new StringBuilder();
+    int i = 0;
+    float x0 = 0, y0 = 0, xn, yn;
     while (itor.hasNext()) {
       Object[] row = (Object[]) itor.next();
       try {
@@ -81,28 +90,49 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         sb.append(",");
         sb.append(row[1]);
         sb.append("],");
+
+        //计算后面的记录与首条记录位置偏差
+        if (i == 0) {
+          x0 = (Float) row[2];
+          y0 = (Float) row[3];
+          i++;
+        }
+        xn = (Float) row[2];
+        yn = (Float) row[3];
+        sb2.append("[");
+        sb2.append(xn - x0);
+        sb2.append(",");
+        sb2.append(yn - y0);
+        sb2.append("],");
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     String tStr = sb.toString();
+    String tStr2 = sb2.toString();
     if (tStr.isEmpty()) {
       tStr = "[]";
     } else {
       tStr = "[" + tStr + "]";
     }
-    return tStr;
+    if (tStr2.isEmpty()) {
+      tStr2 = "[]";
+    } else {
+      tStr2 = "[" + tStr2 + "]";
+    }
+    return tStr+"="+tStr2;
   }
 
   /**
    * 该方法并没有使用，取而代之的是FitsFileCutDAOImpl的getUnCuttedStarList
+   *
    * @param dpmId
-   * @return 
+   * @return
    */
   public String getUnCuttedStarList(int dpmId) {
-    
+
     String sql = "WITH updated_rows AS "
-            + " ( update ot_observe_record set request_cut=true where ot_id>0 and request_cut=false and dpm_id="+ dpmId +" RETURNING * ) "
+            + " ( update ot_observe_record set request_cut=true where ot_id>0 and request_cut=false and dpm_id=" + dpmId + " RETURNING * ) "
             + " select ff.file_name ffname, oor.x, oor.y, ffc.file_name ffcname "
             + " from updated_rows oor "
             + " inner join fits_file ff on oor.ff_id=ff.ff_id "
@@ -175,18 +205,18 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     String sql1 = "select count(*) "
             + "from ot_observe_record oor "
             + "where oor.ot_id=(select ob.ot_id from ot_level2 ob where name='" + otName + "') ";
-    
+
     String sql2 = "select count(*) "
             + "from ot_observe_record_his oor "
             + "where oor.ot_id=(select ob.ot_id from ot_level2_his ob where name='" + otName + "') ";
-    
+
     String unionSql = "";
     if (queryHis) {
       unionSql = sql1 + " union " + sql2;
     } else {
       unionSql = sql1;
     }
-    
+
     int total = 0;
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql);
@@ -212,14 +242,14 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut_his ffc on oor.ffc_id=ffc.ffc_id "
             + "where oor.ot_id=(select ob.ot_id from ot_level2_his ob where name='" + otName + "') ";
-    
+
     String unionSql = "";
     if (queryHis) {
       unionSql = sql1 + " union " + sql2 + " order by date_ut";
     } else {
       unionSql = sql1 + " order by date_ut";
     }
-    
+
     Query q = session.createSQLQuery(unionSql);
     q.setFirstResult(start);
     q.setMaxResults(resultSize);

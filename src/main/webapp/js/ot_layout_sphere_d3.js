@@ -1,284 +1,174 @@
 
 (function($) {
-    
-    function maybeCall(thing, ctx) {
-        return (typeof thing == 'function') ? (thing.call(ctx)) : thing;
+
+  function maybeCall(thing, ctx) {
+    return (typeof thing == 'function') ? (thing.call(ctx)) : thing;
+  }
+
+  function Gwac(placeholder, root, url) {
+    this.placeholder = placeholder;
+    this.rootUrl = root;
+    this.url = root + "/" + url;
+    this.pingsUrl = this.rootUrl + "/resource/images/pings.png";
+  }
+
+  Gwac.prototype = {
+    reqNum: 1,
+    curSerialNum: 0,
+    graticule: {data: d3.geo.graticule()(), class: "graticule"}, //球面网格，经度纬度方向上以10度为间隔
+    sphere: {data: {type: "Sphere"}, class: "sphere"}, //投影平面外侧圆
+    equator: {data: {type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]}, class: "equator"}, //赤道
+    primemeridian: {data: {type: "LineString", coordinates: [[0, 90], [0, 0], [0, -90]]}, class: "primemeridian"}, //本初子午线
+    origin: {data: {type: "Point", coordinates: [0, 0]}, class: "origin"}, //原点
+    templateborder: {data: {type: "Polygon", coordinates: []}, class: "templateborder"},
+    galacticplane: {data: {type: "LineString", coordinates: []}, class: "galacticplane"},
+    eclipticplane: {data: {type: "LineString", coordinates: []}, class: "eclipticplane"},
+    horizon: {data: {type: "LineString", coordinates: []}, class: "horizon"},
+    ot1Data: {type: "Point", class: "ot1", radius: 1, stars: []},
+    ot1Data2: {data: {type: "MultiPoint", coordinates: []}, class: "ot1", radius: 1},
+    ot2Data: {type: "Point", class: "ot2", radius: 2, stars: []},
+    ot2mchData: {type: "Point", class: "ot2mch", radius: 2, stars: []},
+    ot2curData: {type: "Point", class: "ot2cur", radius: 3, stars: []},
+    ot2newData: {type: "Point", class: "ot2new", radius: 3, stars: []},
+    varstarData: {type: "Point", class: "varstar", radius: 3, stars: []},
+    reqData: {},
+    ot1: [],
+    ot2: [],
+    ot2mch: [],
+    ot2cur: [],
+    ot2new: [],
+    varstar: [],
+    parseData: function(reqData) {
+      this.reqData = reqData;
+//      this.ot1Data.stars = reqData.otLv1;
+//      this.ot2Data.stars = reqData.otLv2;
+//      this.ot2mchData.stars = reqData.otLv2Mch;
+//      this.ot2curData.stars = reqData.otLv2Cur;
+//      this.ot2newData.stars = reqData.otLv2New;
+//      this.varstarData.stars = reqData.otVarStar;
+    },
+    draw: function() {
+
+      var gwac = this;
+      d3.select(gwac.placeholder + " svg").remove();
+
+      var degrees = 180 / Math.PI;
+      var time = Date.now();
+      var ratio = window.devicePixelRatio || 1;
+      var p = ratio;
+      var width = $(gwac.placeholder).width();
+      var height = $(gwac.placeholder).height();
+      var scale = height / 3 - 1;  //显示的大小,相对于单位长度
+      var clipAngle = 90 - 5;  //投影显示的部分，180显示整个球 1E-6
+      var precision = 0.1; //线采样精度
+      var rotate = [20, -40, 0]; //初始角度
+      var velocity = [.01, 0, 0]; //转速
+
+      var projection = d3.geo.orthographic()
+              .scale(scale)
+              .translate([width / 2, height / 2])
+              .clipAngle(clipAngle)
+              .clipExtent([[-1, -1], [width + 1, height + 1]])
+              .precision(precision);
+
+      var path = d3.geo.path().projection(projection);
+      var svg = d3.select("#sphereDisplay").append("svg").attr("width", width).attr("height", height);
+      var tooltip = d3.select("#tooltip");
+
+      var zoom = d3.geo.zoom().projection(projection)
+              .scaleExtent([scale, Infinity])
+              .on("zoom", function() {
+                svg.selectAll("*").remove();
+                svg.append("image").attr("xlink:href", gwac.pingsUrl).attr("width", 40).attr("height", 40).attr("x", 10).attr("y", 10);
+                svg.append("path").datum(gwac.graticule.data).attr("class", gwac.graticule.class).attr("d", path);
+                svg.append("path").datum(gwac.sphere.data).attr("class", gwac.sphere.class).attr("d", path);
+                svg.append("path").datum(gwac.equator.data).attr("class", gwac.equator.class).attr("d", path);
+                svg.append("path").datum(gwac.primemeridian.data).attr("class", gwac.primemeridian.class).attr("d", path);
+
+//                for (var i = 0; i < gwac.reqData.otLv1.length; i++) {
+//                  var tstar = gwac.reqData.otLv1[i];
+//                  var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
+//                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.raD, tstar.decD]}).attr("class", gwac.ot1Data.class).attr("d", path);
+//                  tnode.append("title").text(mName + "(" + tstar.raD + "," + tstar.decD + ")");
+//                }
+                /*ot1使用MultiPoint*/
+                 var ot1coor = gwac.ot1Data2.data.coordinates;
+                 while (ot1coor.length > 0) {
+                 ot1coor.pop();
+                 }
+                 for (var i = 0; i < gwac.reqData.otLv1.length; i++) {
+                 var tstar = gwac.reqData.otLv1[i];
+                 ot1coor.push([tstar.raD, tstar.decD]);
+                 }
+                 var ot1node = svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", path);
+                 
+                for (var i = 0; i < gwac.reqData.otLv2.length; i++) {
+                  var tstar = gwac.reqData.otLv2[i];
+                  var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
+                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2Data.class).attr("d", path);
+                  tnode.append("title").text(tstar.name + "," + mName + "(" + tstar.ra + "," + tstar.dec + ")");
+                }
+                for (var i = 0; i < gwac.reqData.otLv2Mch.length; i++) {
+                  var tstar = gwac.reqData.otLv2Mch[i];
+                  var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
+                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2mchData.class).attr("d", path);
+                  tnode.append("title").text(tstar.name + "," + mName + "(" + tstar.ra + "," + tstar.dec + ")");
+                }
+                for (var i = 0; i < gwac.reqData.otLv2Cur.length; i++) {
+                  var tstar = gwac.reqData.otLv2Cur[i];
+                  var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
+                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2curData.class).attr("d", path);
+                  tnode.append("title").text(tstar.name + "," + mName + "(" + tstar.ra + "," + tstar.dec + ")");
+                }
+                svg.append("path").datum(gwac.origin.data).attr("class", gwac.origin.class).attr("d", path.pointRadius(1)).append("title").text("origin(0,0)");
+              });
+
+      svg.call(zoom).call(zoom.event);
+
+//      gwac.zoomBounds(projection, zoom, path, gwac.getBounds());
+      gwac.zoomBounds(projection, zoom, path, gwac.ot1Data2.data);
+      svg.transition().ease("quad-in-out")
+              .duration(2000)
+              .call(zoom.projection(projection).event);
+//      
+//      var dt = 0;
+//      var feature = svg.selectAll("path");
+//      projection.rotate([rotate[0] + velocity[0] * dt, rotate[1] + velocity[1] * dt, rotate[2] + velocity[2] * dt]);
+//      feature.attr("d", path);
+    },
+    getBounds: function() {
+      var gwac = this;
+      var bounds = {type: "Feature", geometry: {type: "Polygon", coordinates: [[[30, 30], [0, 10], [10, 0], [0, -10], [-10, 0]]]}};
+//      for (var i = 0; i < gwac.reqData.otLv1.length; i++) {
+//        var tstar = gwac.reqData.otLv1[i];
+//      }
+      return bounds;
+    },
+    zoomBounds: function(projection, zoom, path, o) {
+
+      var gwac = this;
+      var width = $(gwac.placeholder).width();
+      var height = $(gwac.placeholder).height();
+      var centroid = d3.geo.centroid(o),
+              clip = projection.clipExtent();
+
+      projection.rotate(true ? [-centroid[0], -centroid[1]] : zoom.rotateTo(centroid))
+              .clipExtent(null)
+              .scale(1)
+              .translate([0, 0]);
+
+      var b = path.bounds(o),
+              k = Math.min(1000, .45 / Math.max(Math.max(Math.abs(b[1][0]), Math.abs(b[0][0])) / width, Math.max(Math.abs(b[1][1]), Math.abs(b[0][1])) / height));
+
+      projection.clipExtent(clip)
+              .scale(k)
+              .translate([width / 2, height / 2]);
     }
-    
-    function Gwac(element, options) {
-        this.$element = $(element);
-        this.options = options;
-        this.enabled = true;
-        this.fixTitle();
-    }
-    
-    Gwac.prototype = {
-        show: function() {
-            var title = this.getTitle();
-            if (title && this.enabled) {
-                var $tip = this.tip();
-                
-                $tip.find('.gwac-inner')[this.options.html ? 'html' : 'text'](title);
-                $tip[0].className = 'gwac'; // reset classname in case of dynamic gravity
-                $tip.remove().css({top: 0, left: 0, visibility: 'hidden', display: 'block'}).prependTo(document.body);
-                
-                var pos = $.extend({}, this.$element.offset(), {
-                    width: this.$element[0].offsetWidth || 0,
-                    height: this.$element[0].offsetHeight || 0
-                });
+  };
 
-                if (typeof this.$element[0].nearestViewportElement == 'object') {
-                    // SVG
-					var el = this.$element[0];
-                    var rect = el.getBoundingClientRect();
-					pos.width = rect.width;
-					pos.height = rect.height;
-                }
+  $.gwac = function(placeholder, root, url) {
+    var gwac = new Gwac(placeholder, root, url);
+    return gwac;
+  };
 
-                
-                var actualWidth = $tip[0].offsetWidth,
-                    actualHeight = $tip[0].offsetHeight,
-                    gravity = maybeCall(this.options.gravity, this.$element[0]);
-                
-                var tp;
-                switch (gravity.charAt(0)) {
-                    case 'n':
-                        tp = {top: pos.top + pos.height + this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
-                        break;
-                    case 's':
-                        tp = {top: pos.top - actualHeight - this.options.offset, left: pos.left + pos.width / 2 - actualWidth / 2};
-                        break;
-                    case 'e':
-                        tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth - this.options.offset};
-                        break;
-                    case 'w':
-                        tp = {top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width + this.options.offset};
-                        break;
-                }
-                
-                if (gravity.length == 2) {
-                    if (gravity.charAt(1) == 'w') {
-                        tp.left = pos.left + pos.width / 2 - 15;
-                    } else {
-                        tp.left = pos.left + pos.width / 2 - actualWidth + 15;
-                    }
-                }
-                
-                $tip.css(tp).addClass('gwac-' + gravity);
-                $tip.find('.gwac-arrow')[0].className = 'gwac-arrow gwac-arrow-' + gravity.charAt(0);
-                if (this.options.className) {
-                    $tip.addClass(maybeCall(this.options.className, this.$element[0]));
-                }
-                
-                if (this.options.fade) {
-                    $tip.stop().css({opacity: 0, display: 'block', visibility: 'visible'}).animate({opacity: this.options.opacity});
-                } else {
-                    $tip.css({visibility: 'visible', opacity: this.options.opacity});
-                }
-
-                var t = this;
-                var set_hovered  = function(set_hover){
-                    return function(){
-                        t.$tip.stop();
-                        t.tipHovered = set_hover;
-                        if (!set_hover){
-                            if (t.options.delayOut === 0) {
-                                t.hide();
-                            } else {
-                                setTimeout(function() { 
-                                    if (t.hoverState == 'out') t.hide(); }, t.options.delayOut);
-                            }
-                        }
-                    };
-                };
-               $tip.hover(set_hovered(true), set_hovered(false));
-            }
-        },
-        
-        hide: function() {
-            if (this.options.fade) {
-                this.tip().stop().fadeOut(function() { $(this).remove(); });
-            } else {
-                this.tip().remove();
-            }
-        },
-        
-        fixTitle: function() {
-            var $e = this.$element;
-            
-            if ($e.attr('title') || typeof($e.attr('original-title')) != 'string') {
-                $e.attr('original-title', $e.attr('title') || '').removeAttr('title');
-            }
-            if (typeof $e.context.nearestViewportElement == 'object'){                                                        
-                if ($e.children('title').length){
-                    $e.append('<original-title>' + ($e.children('title').text() || '') + '</original-title>')
-                        .children('title').remove();
-                }
-            }
-        },
-        
-        getTitle: function() {
-            
-            var title, $e = this.$element, o = this.options;
-            this.fixTitle();
-
-            if (typeof o.title == 'string') {
-                var title_name = o.title == 'title' ? 'original-title' : o.title;
-                if ($e.children(title_name).length){
-                    title = $e.children(title_name).html();
-                } else{
-                    title = $e.attr(title_name);
-                }
-                
-            } else if (typeof o.title == 'function') {
-                title = o.title.call($e[0]);
-            }
-            title = ('' + title).replace(/(^\s*|\s*$)/, "");
-            return title || o.fallback;
-        },
-        
-        tip: function() {
-            if (!this.$tip) {
-                this.$tip = $('<div class="gwac"></div>').html('<div class="gwac-arrow"></div><div class="gwac-inner"></div>');
-            }
-            return this.$tip;
-        },
-        
-        validate: function() {
-            if (!this.$element[0].parentNode) {
-                this.hide();
-                this.$element = null;
-                this.options = null;
-            }
-        },
-        
-        enable: function() { this.enabled = true; },
-        disable: function() { this.enabled = false; },
-        toggleEnabled: function() { this.enabled = !this.enabled; }
-    };
-    
-    $.fn.gwac = function(options) {
-        
-        if (options === true) {
-            return this.data('gwac');
-        } else if (typeof options == 'string') {
-            var gwac = this.data('gwac');
-            if (gwac) gwac[options]();
-            return this;
-        }
-        
-        options = $.extend({}, $.fn.gwac.defaults, options);
-
-        if (options.hoverlock && options.delayOut === 0) {
-	    options.delayOut = 100;
-	}
-        
-        function get(ele) {
-            var gwac = $.data(ele, 'gwac');
-            if (!gwac) {
-                gwac = new Gwac(ele, $.fn.gwac.elementOptions(ele, options));
-                $.data(ele, 'gwac', gwac);
-            }
-            return gwac;
-        }
-        
-        function enter() {
-            var gwac = get(this);
-            gwac.hoverState = 'in';
-            if (options.delayIn === 0) {
-                gwac.show();
-            } else {
-                gwac.fixTitle();
-                setTimeout(function() { if (gwac.hoverState == 'in') gwac.show(); }, options.delayIn);
-            }
-        }
-        
-        function leave() {
-            var gwac = get(this);
-            gwac.hoverState = 'out';
-            if (options.delayOut === 0) {
-                gwac.hide();
-            } else {
-                var to = function() {
-                    if (!gwac.tipHovered || !options.hoverlock){
-                        if (gwac.hoverState == 'out') gwac.hide(); 
-                    }
-                };
-                setTimeout(to, options.delayOut);
-            }    
-        }
-
-        if (options.trigger != 'manual') {
-            var binder = options.live ? 'live' : 'bind',
-                eventIn = options.trigger == 'hover' ? 'mouseenter' : 'focus',
-                eventOut = options.trigger == 'hover' ? 'mouseleave' : 'blur';
-            this[binder](eventIn, enter)[binder](eventOut, leave);
-        }
-        
-        return this;
-        
-    };
-    
-    $.fn.gwac.defaults = {
-        className: null,
-        delayIn: 0,
-        delayOut: 0,
-        fade: false,
-        fallback: '',
-        gravity: 'n',
-        html: false,
-        live: false,
-        offset: 0,
-        opacity: 0.8,
-        title: 'title',
-        trigger: 'hover',
-        hoverlock: false
-    };
-    
-    // Overwrite this method to provide options on a per-element basis.
-    // For example, you could store the gravity in a 'gwac-gravity' attribute:
-    // return $.extend({}, options, {gravity: $(ele).attr('gwac-gravity') || 'n' });
-    // (remember - do not modify 'options' in place!)
-    $.fn.gwac.elementOptions = function(ele, options) {
-        return $.metadata ? $.extend({}, options, $(ele).metadata()) : options;
-    };
-    
-    $.fn.gwac.autoNS = function() {
-        return $(this).offset().top > ($(document).scrollTop() + $(window).height() / 2) ? 's' : 'n';
-    };
-    
-    $.fn.gwac.autoWE = function() {
-        return $(this).offset().left > ($(document).scrollLeft() + $(window).width() / 2) ? 'e' : 'w';
-    };
-    
-    /**
-     * yields a closure of the supplied parameters, producing a function that takes
-     * no arguments and is suitable for use as an autogravity function like so:
-     *
-     * @param margin (int) - distance from the viewable region edge that an
-     *        element should be before setting its tooltip's gravity to be away
-     *        from that edge.
-     * @param prefer (string, e.g. 'n', 'sw', 'w') - the direction to prefer
-     *        if there are no viewable region edges effecting the tooltip's
-     *        gravity. It will try to vary from this minimally, for example,
-     *        if 'sw' is preferred and an element is near the right viewable 
-     *        region edge, but not the top edge, it will set the gravity for
-     *        that element's tooltip to be 'se', preserving the southern
-     *        component.
-     */
-     $.fn.gwac.autoBounds = function(margin, prefer) {
-		return function() {
-			var dir = {ns: prefer[0], ew: (prefer.length > 1 ? prefer[1] : false)},
-			    boundTop = $(document).scrollTop() + margin,
-			    boundLeft = $(document).scrollLeft() + margin,
-			    $this = $(this);
-
-			if ($this.offset().top < boundTop) dir.ns = 'n';
-			if ($this.offset().left < boundLeft) dir.ew = 'w';
-			if ($(window).width() + $(document).scrollLeft() - $this.offset().left < margin) dir.ew = 'e';
-			if ($(window).height() + $(document).scrollTop() - $this.offset().top < margin) dir.ns = 's';
-
-			return dir.ns + (dir.ew ? dir.ew : '');
-		};
-    };
 })(jQuery);

@@ -90,10 +90,14 @@
         });
       });
 
-      $('#reset').on('click', function() {
+      $('#start').on('click', function() {
         var startImgNum = $('#startImgNum').val();
-        alert(startImgNum);
-        //$('#carousel').trigger('slideTo', startImgNum);
+        $('#carousel').trigger('slideTo', 0);
+      });
+
+      $('#end').on('click', function() {
+        var totalImg = $('#totalImg').val();
+        $('#carousel').trigger('slideTo', totalImg - 1);
       });
 
       $("<div id='tooltip'></div>").css({
@@ -113,25 +117,40 @@
         grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
         selection: {mode: "xy"},
         xaxis: {show: true, tickColor: 'transparent'},
-        yaxis: {show: true, tickDecimals: 2, tickFormatter: formate1, transform:formate2, inverseTransform: formate2 }
+        yaxis: {show: true, tickDecimals: 2, tickFormatter: formate1, transform: formate2, inverseTransform: formate2}
       };
       //min: 0, max: 10, tickSize: 1, tickDecimals: 2,
 
       function formate1(val, axis) {
         return (val).toFixed(axis.tickDecimals);
       }
-      
+
       function formate2(val) {
         return -val;
       }
-      
-      var graphData = [{
+
+      function formate3(val) {
+        return val;
+      }
+
+      var opticalData = [{
           data: <s:property value="otOpticalVaration"/>,
           color: '#71c73e',
           points: {radius: 2} //fillColor: '#77b7c5'
         }
       ];
-      $.plot("#ot-curve", graphData, option1);
+
+      var positionData = [{
+          data: <s:property value="otPositionVaration"/>,
+          color: '#77b7c5',
+          points: {radius: 1} //fillColor: '#77b7c5'
+        }
+      ];
+      $.plot("#ot-curve", opticalData, option1);
+      option1.lines.show = false;
+      option1.yaxis.transform = formate3;
+      option1.yaxis.inverseTransform = formate3;
+      $.plot("#ot-position-curve", positionData, option1);
 
       $("#ot-curve").bind("plothover", function(event, pos, item) {
         if (item) {
@@ -156,29 +175,43 @@
     body{ text-align:center} 
 
     #main{
-      width: 810px;
+      width: 1000px;
       background-color: #fff;
       margin:0 auto;
+      text-align:center
     }
 
     #cut-image-show{
       /*border: 1px solid #ccc;*/
-      margin: 10px 0px 0px 0px;
+      margin: 10px auto;
       background-color: #fff;
       width: 810px;
       height: 430px;
       /*box-shadow: 0 5px 10px #ccc;*/
     }
 
-    #ot-curve-show{
+    #ot-curves{
       /*margin: 10px 10px 10px 10px;*/
       background-color: #fff;
-      width: 810px;
+      width: 1000px;
       height: 200px;
+      float:left;
     }
 
-    #ot-curve{width: 100%; height: 180px;}
-    #ot-curve-title{width: 100%;  height: 20px; text-align:center;}
+    #ot-curve-show{
+      width: 600px;
+      height: 200px;
+      float:left;
+    }
+
+    #ot-position-var{
+      width: 400px;
+      height: 200px;
+      float:left;
+    }
+
+    #ot-curve,#ot-position-curve{width: 100%; height: 180px;}
+    #ot-curve-title,#ot-position-var-title{width: 100%;  height: 20px; text-align:center;}
     #ref-image{width: 404px;height: 400px;padding: 0px;margin: 0px 4px 0px 0px;float: left;}
 
     #carousel-wrapper {
@@ -194,7 +227,7 @@
     }
 
     #otRecord{
-      width: 810px;
+      width: 1000px;
       padding: 0px;
       /*margin: 10px;*/
       float: left;
@@ -234,7 +267,7 @@
       z-index: 20;
       vertical-align: bottom;
     }
-    #pagenumber, #title, #title2, #pager, #reset {
+    #pagenumber, #title, #title2, #pager, #start, #end {
       font-size: 12px;
       margin: 0;
       padding: 0;
@@ -252,7 +285,12 @@
       width:380px;
       float: left;
     }
-    #reset{
+    #start{
+      margin-left:5px;
+      float: left;
+    }
+    #end{
+      margin-left:5px;
       float: right;
     }
 
@@ -337,15 +375,24 @@
         <div id="navi2">
           <p id="pagenumber">显示第<span style="font-weight:bold;font-size: 14px;"></span>帧，共<s:property value="totalImage"/>帧</p>
           <p id="title"></p>
-          <p id="reset"><a href="#">跳转到OT起始帧</a><input type="hidden" id="startImgNum" value="<s:property value="startImgNum"/>"/></p>
+          <p id="start"><a href="#">起始帧</a><input type="hidden" id="startImgNum" value="<s:property value="startImgNum"/>"/></p>
+          <p id="end"><a href="#">结束帧</a><input type="hidden" id="totalImg" value="<s:property value="totalImage"/>"/></p>
         </div>
       </div>
     </div>
-    <div id="ot-curve-show">
-      <div id="ot-curve-title">
-        <span>OT光变曲线（X轴为时间，单位/分钟，开始于<s:date name="ob.foundTimeUtc" format="yyyy-MM-dd HH:mm:ss" />U，Y轴为星等值）</span>
+    <div id="ot-curves">
+      <div id="ot-curve-show">
+        <div id="ot-curve-title">
+          <span>OT光变曲线（X轴为时间，单位/分钟，开始于<s:date name="ob.foundTimeUtc" format="yyyy-MM-dd HH:mm:ss" />U，Y轴为星等值）</span>
+        </div>
+        <div id="ot-curve"></div>
       </div>
-      <div id="ot-curve"></div>
+      <div id="ot-position-var">
+        <div id="ot-position-var-title">
+          <span>OT坐标变化（与首帧差值，单位/像素，xy轴分别为模板XY坐标）</span>
+        </div>
+        <div id="ot-position-curve"></div>
+      </div>
     </div>
     <div id="otRecord">
       <s:url var="remoteurl" action="ot-observe-record" namespace="/" escapeAmp="false">
@@ -358,7 +405,7 @@
       -->
       <sjg:grid 
         id="gridtable" 
-        width="808"
+        width="1000"
         hiddengrid="true"
         caption="OT观测记录详细信息" 
         dataType="json" 
@@ -374,9 +421,9 @@
         <sjg:gridColumn name="dateUt" index="dateUt" title="时间(UTC)" formatter="date" width="150"  
                         formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
                         sortable="false" align="center"/>
-        <sjg:gridColumn name="raD"    index="raD"	  title="RA" width="80"  formatter="formatLink"
+        <sjg:gridColumn name="raD"    index="raD"	  title="RA" width="120"  formatter="formatLink"
                         sortable="false" align="center"/>
-        <sjg:gridColumn name="decD"    index="decD"	  title="DEC" width="80"  formatter="formatLink"
+        <sjg:gridColumn name="decD"    index="decD"	  title="DEC" width="120"  formatter="formatLink"
                         sortable="false" align="center"/>
         <sjg:gridColumn name="XTemp"    index="xTemp"	  title="模板X" width="80" 
                         sortable="false" align="center"/>

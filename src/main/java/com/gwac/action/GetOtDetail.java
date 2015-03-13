@@ -47,6 +47,7 @@ public class GetOtDetail extends ActionSupport {
   private String ffcrFileName;
   private String ffcrGenerateTime;
   private String otOpticalVaration;
+  private String otPositionVaration;
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
@@ -87,7 +88,9 @@ public class GetOtDetail extends ActionSupport {
       setFfcrGenerateTime("");
     }
 
-    otOpticalVaration = otorDao.getOtOpticalVaration(ob, queryHis);
+    String tmp[] = otorDao.getOtOpticalVaration(ob, queryHis).split("=");
+    otOpticalVaration = tmp[0];
+    otPositionVaration = tmp[1];
 
     return SUCCESS;
   }
@@ -293,6 +296,13 @@ public class GetOtDetail extends ActionSupport {
    */
   public void setOb(OtLevel2 ob) {
     this.ob = ob;
+  }
+
+  /**
+   * @return the otPositionVaration
+   */
+  public String getOtPositionVaration() {
+    return otPositionVaration;
   }
 
 }
