@@ -116,26 +116,26 @@ public class DataSyncServiceImpl implements DataSyncService {
         dpmName = configFile.substring(0, 1)+configFile.substring(3, 5);
       }
 
-      String tmpStr = cfile.getProperty("otlist").trim();
-      otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      String tmpStr = cfile.getProperty("otlist");
+      otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (otList != null) {
         fNum += otList.length;
       }
 
-      tmpStr = cfile.getProperty("starlist").trim();
-      starList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      tmpStr = cfile.getProperty("starlist");
+      starList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (starList != null) {
         fNum += starList.length;
       }
 
-      tmpStr = cfile.getProperty("origimage").trim();
-      origImage = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      tmpStr = cfile.getProperty("origimage");
+      origImage = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (origImage != null) {
         fNum += origImage.length;
       }
 
-      tmpStr = cfile.getProperty("cutimages").trim();
-      cutImages = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      tmpStr = cfile.getProperty("cutimages");
+      cutImages = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (cutImages != null) {
         fNum += cutImages.length;
       }

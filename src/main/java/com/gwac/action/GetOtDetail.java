@@ -79,7 +79,7 @@ public class GetOtDetail extends ActionSupport {
 
     List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
     if (ffcrs != null && ffcrs.size() > 0) {
-      setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath());
+      setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/");
       setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
       setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
     } else {

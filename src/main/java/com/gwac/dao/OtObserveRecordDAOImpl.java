@@ -48,7 +48,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + " from ot_observe_record oor "
             + " where oor.ot_id=" + ot2.getOtId();
 
-    String sql2 = "select oorh.date_ut, oorh.mag_aper, oor.x_temp, oor.y_temp, oorh.oor_id "
+    String sql2 = "select oorh.date_ut, oorh.mag_aper, oorh.x_temp, oorh.y_temp, oorh.oor_id "
             + " from ot_observe_record_his oorh "
             + " where oorh.ot_id=" + ot2.getOtId();
 

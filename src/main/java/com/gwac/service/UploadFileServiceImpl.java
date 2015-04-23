@@ -41,6 +41,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String[] starList;
   private String[] origImage;
   private String[] cutImages;
+  private String[] varList;
   //系统配置文件信息
   private String rootDir;
   private String otLDir;
@@ -48,6 +49,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String orgIDir;
   private String cutIDir;
   private String cfgDir;
+  private String varLDir;
   private UploadFileRecordDao ufrDao;
   private UploadFileUnstoreDao ufuDao;
   private DataProcessMachineDAO dpmDao;
@@ -121,26 +123,32 @@ public class UploadFileServiceImpl implements UploadFileService {
         dpmDao.update(dpm);
       }
 
-      String tmpStr = cfile.getProperty("otlist").trim();
-      otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      String tmpStr = cfile.getProperty("otlist");
+      otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (otList != null) {
         fNum += otList.length;
       }
 
-      tmpStr = cfile.getProperty("starlist").trim();
-      starList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      tmpStr = cfile.getProperty("varilist");
+      varList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
+      if (varList != null) {
+        fNum += varList.length;
+      }
+
+      tmpStr = cfile.getProperty("starlist");
+      starList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (starList != null) {
         fNum += starList.length;
       }
 
-      tmpStr = cfile.getProperty("origimage").trim();
-      origImage = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      tmpStr = cfile.getProperty("origimage");
+      origImage = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (origImage != null) {
         fNum += origImage.length;
       }
 
-      tmpStr = cfile.getProperty("cutimages").trim();
-      cutImages = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.split(",");
+      tmpStr = cfile.getProperty("cutimages");
+      cutImages = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (cutImages != null) {
         fNum += cutImages.length;
       }
@@ -170,6 +178,8 @@ public class UploadFileServiceImpl implements UploadFileService {
     fileNum += storeOrigImage(path);
     //存储切图文件
     fileNum += storeCutImage(path);
+    //存储变星列表
+    fileNum += storeVarList(path);
     return fileNum;
   }
 
@@ -197,13 +207,79 @@ public class UploadFileServiceImpl implements UploadFileService {
             UploadFileUnstore obj = new UploadFileUnstore();
             obj.setStorePath(tpath.substring(rootDir.length() + 1));
             obj.setFileName(tStr);
-            obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5
+            obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
             obj.setUploadDate(new Date());
 
             UploadFileRecord obj2 = new UploadFileRecord();
             obj2.setStorePath(tpath.substring(rootDir.length() + 1));
             obj2.setFileName(tStr);
-            obj2.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5
+            obj2.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
+            obj2.setUploadDate(new Date());
+
+            //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+            if (tfile2.exists()) {
+              if (tfile1.exists()) {
+                log.warn(tfile2 + " already exist, delete it.");
+                FileUtils.forceDelete(tfile2);
+                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+              }
+            } else {
+              if (tfile1.exists()) {
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+                obj2.setUploadSuccess(Boolean.TRUE);
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                obj2.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufuDao.save(obj);
+              ufrDao.save(obj2);
+            }
+          }
+        }
+      }
+    } catch (IOException ex) {
+      log.info("move file errror:");
+      log.error(ex);
+    }
+    return fileNum;
+  }
+
+  public int storeVarList(String path) {
+
+    int fileNum = 0;
+    File tfile1 = null;
+    File tfile2 = null;
+    try {
+
+      String tpath = path + varLDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
+      if (varList != null) {
+        for (String tStr : varList) {
+          tStr = tStr.trim();
+          if (!tStr.isEmpty()) {
+            log.debug("receive varlist file " + tStr);
+            tfile1 = new File(path, tStr);
+            tfile2 = new File(tpath + "/", tStr);
+
+            UploadFileUnstore obj = new UploadFileUnstore();
+            obj.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj.setFileName(tStr);
+            obj.setFileType('6');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
+            obj.setUploadDate(new Date());
+
+            UploadFileRecord obj2 = new UploadFileRecord();
+            obj2.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj2.setFileName(tStr);
+            obj2.setFileType('6');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
             obj2.setUploadDate(new Date());
 
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
@@ -571,5 +647,12 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
+  }
+
+  /**
+   * @param varLDir the varLDir to set
+   */
+  public void setVarLDir(String varLDir) {
+    this.varLDir = varLDir;
   }
 }

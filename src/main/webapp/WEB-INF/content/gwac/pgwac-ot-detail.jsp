@@ -147,7 +147,7 @@
         }
       ];
       $.plot("#ot-curve", opticalData, option1);
-      option1.lines.show = false;
+      option1.lines.show = true;
       option1.yaxis.transform = formate3;
       option1.yaxis.inverseTransform = formate3;
       $.plot("#ot-position-curve", positionData, option1);
@@ -346,7 +346,7 @@
     <div id="cut-image-show">
       <div id="ref-image">
         <div>
-          <img src="<s:property value="ffcrStorePath"/>/<s:property value="ffcrFileName"/>" 
+          <img src="<s:property value="ffcrStorePath"/><s:property value="ffcrFileName"/>" 
                alt="<s:property value="ffcrFileName"/>" 
                title="<s:property value="ffcrFileName"/>" 
                width="400" height="400" border="0" />

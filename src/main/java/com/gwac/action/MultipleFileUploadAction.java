@@ -186,6 +186,7 @@ public class MultipleFileUploadAction extends ActionSupport {
         ufService.setOrgIDir(getText("gwac.data.origimage.directory"));
         ufService.setCutIDir(getText("gwac.data.cutimages.directory"));
         ufService.setCfgDir(getText("gwac.data.cfgfile.directory"));
+        ufService.setVarLDir(getText("gwac.data.varlist.directory"));
 
         int shouldFNum = ufService.parseConfigFile();
         int validFNum = ufService.checkAndMoveDataFile(destPath);

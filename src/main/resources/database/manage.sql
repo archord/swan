@@ -4,6 +4,9 @@ WITH moved_rows AS ( DELETE FROM config_file RETURNING * ) INSERT INTO config_fi
 ##将某天的记录由历史库插入到当前库
 INSERT INTO config_file SELECT * FROM config_file_his where substring(store_path, 1,6)='150129';
 INSERT INTO ot_level2 SELECT * FROM ot_level2_his where date_str='150310';
+INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='150310';
+INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='150310';
+INSERT INTO fits_file_cut SELECT * FROM fits_file_cut_his where substring(store_path, 1,6)='150312';
 
 ##统计模板切图表中，某天切图未返回的数量
 select dpm_id, count(ot_id) from fits_file_cut_ref where length(file_name)=21 and substring(store_path, 1, 6)='150129' group by dpm_id order by dpm_id;
@@ -16,6 +19,9 @@ delete from config_file;
 delete from fits_file_cut;
 delete from ot_observe_record;
 delete from ot_level2;
+delete from upload_file_unstore;
+delete from var_star_record;
+update data_process_machine set cur_process_number=0;
 
 ##归档
 WITH moved_rows AS ( DELETE FROM ot_level2 RETURNING * ) INSERT INTO ot_level2_his SELECT * FROM moved_rows;
