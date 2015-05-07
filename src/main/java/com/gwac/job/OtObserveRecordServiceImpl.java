@@ -8,10 +8,12 @@ import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.FitsFileDAO;
+import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OTCatalogDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.dao.ProcessStatusDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
@@ -20,7 +22,9 @@ import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.OTCatalog;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
+import com.gwac.model.ProcessStatus;
 import com.gwac.model.UploadFileUnstore;
+import com.gwac.util.CommonFunction;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,6 +57,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private OtObserveRecordDAO otorDao;
   private DataProcessMachineDAO dpmDao;
   private FitsFileCutRefDAO ffcrDao;
+  private ProcessStatusDao psDao;
+  private ImageStatusParameterDao ispDao;
   private String rootPath;
   private float errorBox;
   private int successiveImageNumber;
@@ -79,12 +85,18 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     long startTime = System.nanoTime();
     parseLevel1Ot();
     long endTime = System.nanoTime();
+    double time1 = 1.0 * (endTime - startTime) / 1e9;
+
+    startTime = System.nanoTime();
+    parseImageStatusParm();
+    endTime = System.nanoTime();
+    double time2 = 1.0 * (endTime - startTime) / 1e9;
 
     if (running == false) {
       running = true;
       log.debug("job is done.");
     }
-    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+    log.debug("job consume: parse ot1 " + time1 + " seconds, parse image status parameter " + time2 + ".");
   }
 
   /**
@@ -93,6 +105,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   public void parseImageStatusParm() {
 
     List<UploadFileUnstore> ufus = ufuDao.getImgStatusFile();
+//    log.debug("size=" + ufus.size());
     if (ufus != null) {
       List<ImageStatusParameter> isps = new ArrayList<ImageStatusParameter>();
       InputStream input = null;
@@ -114,94 +127,178 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             if (tStr != null && tStr2 != null && !tStr.isEmpty() && !tStr2.isEmpty()) {
               isp.setTimeObsUt(df.parse(tStr + " " + tStr2));
               tStr = cfile.getProperty("Obj_Num");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setObjNum(Integer.parseInt(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setObjNum(Integer.parseInt(tStr.trim()));
+                }
               }
               tStr = cfile.getProperty("bgbright");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setBgBright(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setBgBright(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("Fwhm");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setFwhm(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setFwhm(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("S2N");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setFwhm(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setS2n(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("AverLimit");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setAvgLimit(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setAvgLimit(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("Extinc");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setExtinc(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setExtinc(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("xshift");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setXshift(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setXshift(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("yshift");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setYshift(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setYshift(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("xrms");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setXrms(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setXrms(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("yrms");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setYrms(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setYrms(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("OC1");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setOt1Num(Integer.parseInt(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setOt1Num(Integer.parseInt(tStr));
+                }
               }
               tStr = cfile.getProperty("VC1");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setVar1Num(Integer.parseInt(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setVar1Num(Integer.parseInt(tStr));
+                }
               }
               tStr = cfile.getProperty("Image");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                FitsFile ff = new FitsFile();
-                ff.setFileName(tStr.trim());
-                ffDao.save(ff);
-                isp.setFfId(ff.getFfId());
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  FitsFile ff = new FitsFile();
+                  ff.setFileName(tStr);
+                  ffDao.save(ff);
+                  isp.setFfId(ff.getFfId());
+
+                  int dpmId = Integer.parseInt(tStr.substring(3, 5));  //应该在数据库中通过dpmName查询
+                  int number = Integer.parseInt(tStr.substring(22, 26));
+                  isp.setDpmId(dpmId);
+                  isp.setPrcNum(number);
+                }
               }
               tStr = cfile.getProperty("RA");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setMountRa(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  if (tStr.contains(":")) {
+                    isp.setMountRa(CommonFunction.dmsToDegree(tStr));
+                  } else {
+                    isp.setMountRa(Float.parseFloat(tStr));
+                  }
+                }
               }
               tStr = cfile.getProperty("DEC");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setMountDec(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  if (tStr.contains(":")) {
+                    isp.setMountDec(CommonFunction.dmsToDegree(tStr));
+                  } else {
+                    isp.setMountDec(Float.parseFloat(tStr));
+                  }
+                }
               }
-//              tStr = cfile.getProperty("state");
-//              if (tStr != null && !tStr.trim().isEmpty()) {
-//                isp.setFwhm(Float.parseFloat(tStr.trim()));
-//              }
+              tStr = cfile.getProperty("State");
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  ProcessStatus ps = new ProcessStatus();
+                  ps.setPsName(tStr);
+                  psDao.save(ps);
+                  isp.setProcStageId(ps.getPsId());
+                }
+              }
               tStr = cfile.getProperty("TimeProcess");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setProcTime(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setProcTime(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("ellipticity");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setAvgEllipticity(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setAvgEllipticity(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("tempset");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setTemperatureSet(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setTemperatureSet(Float.parseFloat(tStr));
+                }
               }
               tStr = cfile.getProperty("tempact");
-              if (tStr != null && !tStr.trim().isEmpty()) {
-                isp.setTemperatureActual(Float.parseFloat(tStr.trim()));
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setTemperatureActual(Float.parseFloat(tStr));
+                }
               }
+              isps.add(isp);
+              ispDao.save(isp);
             }
+          } catch (NumberFormatException ex) {
+            log.error(ufu.getFileName());
+            log.error(ex);
           } catch (FileNotFoundException ex) {
+            log.error(ufu.getFileName());
             log.error(ex);
           } catch (IOException ex) {
+            log.error(ufu.getFileName());
             log.error(ex);
           } catch (ParseException ex) {
+            log.error(ufu.getFileName());
             log.error(ex);
           } finally {
             if (input != null) {
@@ -214,8 +311,10 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           }
         }
       }
+//      if (!isps.isEmpty()) {
+//        ispDao.save(isps);
+//      }
     }
-
   }
 
   /**
@@ -557,5 +656,33 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setIsTestServer(Boolean isTestServer) {
     this.isTestServer = isTestServer;
+  }
+
+  /**
+   * @return the psDao
+   */
+  public ProcessStatusDao getPsDao() {
+    return psDao;
+  }
+
+  /**
+   * @param psDao the psDao to set
+   */
+  public void setPsDao(ProcessStatusDao psDao) {
+    this.psDao = psDao;
+  }
+
+  /**
+   * @return the ispDao
+   */
+  public ImageStatusParameterDao getIspDao() {
+    return ispDao;
+  }
+
+  /**
+   * @param ispDao the ispDao to set
+   */
+  public void setIspDao(ImageStatusParameterDao ispDao) {
+    this.ispDao = ispDao;
   }
 }

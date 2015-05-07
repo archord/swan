@@ -310,6 +310,7 @@ public class ImageStatusParameter  implements java.io.Serializable {
   /**
    * @return the dpmId
    */
+    @Column(name="dpm_id")
   public int getDpmId() {
     return dpmId;
   }
@@ -324,6 +325,7 @@ public class ImageStatusParameter  implements java.io.Serializable {
   /**
    * @return the prcNum
    */
+    @Column(name="prc_num")
   public int getPrcNum() {
     return prcNum;
   }

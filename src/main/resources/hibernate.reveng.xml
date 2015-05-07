@@ -2,6 +2,5 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="gwac"/>
-  <table-filter match-name="image_status_parameter"/>
-  <table-filter match-name="image_status_parameter_his"/>
+  <table-filter match-name="process_status"/>
 </hibernate-reverse-engineering>

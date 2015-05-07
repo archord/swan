@@ -5,8 +5,22 @@
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
   
-  <bean class="com.gwac.action.OtObserveRecordAction">
+  <bean class="com.gwac.action.OtObserveRecordAction" scope="prototype">
     <property name="otorDao" ref="otORDao" />
+  </bean>
+	
+  <bean id="psDao" class="com.gwac.dao.ProcessStatusDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.ProcessStatus</value>
+    </property>
+  </bean>
+	
+  <bean id="ispDao" class="com.gwac.dao.ImageStatusParameterDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.ImageStatusParameter</value>
+    </property>
   </bean>
 	
   <bean id="otORDao" class="com.gwac.dao.OtObserveRecordDAOImpl" >

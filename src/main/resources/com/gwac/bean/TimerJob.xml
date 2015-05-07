@@ -14,6 +14,8 @@
     <property name="ffcDao" ref="ffcDao" />
     <property name="dpmDao" ref="dpmDao" />	
     <property name="ffcrDao" ref="ffcrDao" />
+    <property name="psDao" ref="psDao" />
+    <property name="ispDao" ref="ispDao" />
     <property name="rootPath" value="${gwac.data.root.directory}" />	
     <property name="errorBox" value="${gwac.errorbox}" />	
     <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
@@ -84,6 +86,7 @@
     <property name="otlv2Dao" ref="otbDao" />
     <property name="oorDao" ref="otORDao" />
     <property name="cfDao" ref="cfDao" />
+    <property name="ispDao" ref="ispDao" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />
   </bean>
