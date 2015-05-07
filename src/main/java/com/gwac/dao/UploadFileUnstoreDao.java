@@ -14,4 +14,6 @@ import java.util.List;
 public interface UploadFileUnstoreDao extends BaseHibernateDao<UploadFileUnstore> {
 
   public List<UploadFileUnstore> getOTLevel1File();
+  public List<UploadFileUnstore> getImgStatusFile();
+  public List<UploadFileUnstore> getVarStarListFile();
 }

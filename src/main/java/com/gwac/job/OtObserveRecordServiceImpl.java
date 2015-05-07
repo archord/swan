@@ -16,17 +16,29 @@ import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
+import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.OTCatalog;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.UploadFileUnstore;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
  * 解析一级OT列表文件，计算二级OT，切图，模板切图。
+ *
  * @author xy
  */
 public class OtObserveRecordServiceImpl implements OtObserveRecordService {
@@ -45,17 +57,17 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private float errorBox;
   private int successiveImageNumber;
   private int occurNumber;
-  
+
   private static boolean running = true;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
-  
-  public void startJob(){
-    
-    if(isTestServer){
+
+  public void startJob() {
+
+    if (isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -63,16 +75,147 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
       log.warn("job is running, jump this scheduler.");
       return;
     }
-    
-    long startTime=System.nanoTime();
+
+    long startTime = System.nanoTime();
     parseLevel1Ot();
-    long endTime=System.nanoTime();
-    
+    long endTime = System.nanoTime();
+
     if (running == false) {
       running = true;
       log.debug("job is done.");
     }
-    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+  }
+
+  /**
+   * 解析图像状态参数文件
+   */
+  public void parseImageStatusParm() {
+
+    List<UploadFileUnstore> ufus = ufuDao.getImgStatusFile();
+    if (ufus != null) {
+      List<ImageStatusParameter> isps = new ArrayList<ImageStatusParameter>();
+      InputStream input = null;
+      DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      for (UploadFileUnstore ufu : ufus) {
+
+        File tfile = new File(rootPath + "/" + ufu.getStorePath(), ufu.getFileName());
+        if (tfile.exists()) {
+          try {
+            input = new FileInputStream(tfile);
+            Properties cfile = new Properties();
+            cfile.load(input);
+
+            ImageStatusParameter isp = new ImageStatusParameter();
+            String tStr = cfile.getProperty("DateObsUT");
+            String tStr2 = cfile.getProperty("TimeObsUT");
+            tStr = tStr.trim();
+            tStr2 = tStr2.trim();
+            if (tStr != null && tStr2 != null && !tStr.isEmpty() && !tStr2.isEmpty()) {
+              isp.setTimeObsUt(df.parse(tStr + " " + tStr2));
+              tStr = cfile.getProperty("Obj_Num");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setObjNum(Integer.parseInt(tStr.trim()));
+              }
+              tStr = cfile.getProperty("bgbright");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setBgBright(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("Fwhm");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setFwhm(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("S2N");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setFwhm(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("AverLimit");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setAvgLimit(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("Extinc");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setExtinc(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("xshift");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setXshift(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("yshift");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setYshift(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("xrms");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setXrms(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("yrms");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setYrms(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("OC1");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setOt1Num(Integer.parseInt(tStr.trim()));
+              }
+              tStr = cfile.getProperty("VC1");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setVar1Num(Integer.parseInt(tStr.trim()));
+              }
+              tStr = cfile.getProperty("Image");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                FitsFile ff = new FitsFile();
+                ff.setFileName(tStr.trim());
+                ffDao.save(ff);
+                isp.setFfId(ff.getFfId());
+              }
+              tStr = cfile.getProperty("RA");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setMountRa(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("DEC");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setMountDec(Float.parseFloat(tStr.trim()));
+              }
+//              tStr = cfile.getProperty("state");
+//              if (tStr != null && !tStr.trim().isEmpty()) {
+//                isp.setFwhm(Float.parseFloat(tStr.trim()));
+//              }
+              tStr = cfile.getProperty("TimeProcess");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setProcTime(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("ellipticity");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setAvgEllipticity(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("tempset");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setTemperatureSet(Float.parseFloat(tStr.trim()));
+              }
+              tStr = cfile.getProperty("tempact");
+              if (tStr != null && !tStr.trim().isEmpty()) {
+                isp.setTemperatureActual(Float.parseFloat(tStr.trim()));
+              }
+            }
+          } catch (FileNotFoundException ex) {
+            log.error(ex);
+          } catch (IOException ex) {
+            log.error(ex);
+          } catch (ParseException ex) {
+            log.error(ex);
+          } finally {
+            if (input != null) {
+              try {
+                input.close();
+              } catch (IOException ex) {
+                log.error(ex);
+              }
+            }
+          }
+        }
+      }
+    }
+
   }
 
   /**
@@ -194,13 +337,13 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setAllFileCutted(false);
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
-              tOtLv2.setIsMatch((short)0);
+              tOtLv2.setIsMatch((short) 0);
               otLv2Dao.save(tOtLv2);
 
               String ffcrName = String.format("%s_%04d_ref", otName, tOtLv2.getFirstFfNumber());
-              log.debug("ffcrName="+ffcrName);
-              log.debug("otId="+tOtLv2.getOtId());
-              
+              log.debug("ffcrName=" + ffcrName);
+              log.debug("otId=" + tOtLv2.getOtId());
+
               FitsFileCutRef ffcr = new FitsFileCutRef();
               ffcr.setDpmId(tOtLv2.getDpmId());
               ffcr.setFfId(ff.getFfId());

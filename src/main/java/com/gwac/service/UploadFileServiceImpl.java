@@ -42,6 +42,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String[] origImage;
   private String[] cutImages;
   private String[] varList;
+  private String[] imgStatus;
   //系统配置文件信息
   private String rootDir;
   private String otLDir;
@@ -50,6 +51,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String cutIDir;
   private String cfgDir;
   private String varLDir;
+  private String imgSDir;
   private UploadFileRecordDao ufrDao;
   private UploadFileUnstoreDao ufuDao;
   private DataProcessMachineDAO dpmDao;
@@ -153,6 +155,12 @@ public class UploadFileServiceImpl implements UploadFileService {
         fNum += cutImages.length;
       }
 
+      tmpStr = cfile.getProperty("imgstatus");
+      imgStatus = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
+      if (imgStatus != null) {
+        fNum += imgStatus.length;
+      }
+
     } catch (Exception ex) {
       ex.printStackTrace();
     } finally {
@@ -180,6 +188,74 @@ public class UploadFileServiceImpl implements UploadFileService {
     fileNum += storeCutImage(path);
     //存储变星列表
     fileNum += storeVarList(path);
+    //存储图像处理状态
+    fileNum += storeImgStatus(path);
+    return fileNum;
+  }
+
+  public int storeImgStatus(String path) {
+
+    int fileNum = 0;
+    File tfile1 = null;
+    File tfile2 = null;
+    try {
+
+      String tpath = path + imgSDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
+      if (imgStatus != null) {
+        for (String tStr : imgStatus) {
+          tStr = tStr.trim();
+          if (!tStr.isEmpty()) {
+            log.debug("receive imgStatus " + tStr);
+            tfile1 = new File(path, tStr);
+            tfile2 = new File(tpath + "/", tStr);
+
+            UploadFileUnstore obj = new UploadFileUnstore();
+            obj.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj.setFileName(tStr);
+            obj.setFileType('7');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7
+            obj.setUploadDate(new Date());
+
+            UploadFileRecord obj2 = new UploadFileRecord();
+            obj2.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj2.setFileName(tStr);
+            obj2.setFileType('7');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7
+            obj2.setUploadDate(new Date());
+
+            //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+            if (tfile2.exists()) {
+              if (tfile1.exists()) {
+                log.warn(tfile2 + " already exist, delete it.");
+                FileUtils.forceDelete(tfile2);
+                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+              }
+            } else {
+              if (tfile1.exists()) {
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+                obj2.setUploadSuccess(Boolean.TRUE);
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                obj2.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufuDao.save(obj);
+              ufrDao.save(obj2);
+            }
+          }
+        }
+      }
+    } catch (IOException ex) {
+      log.info("move file errror:");
+      log.error(ex);
+    }
     return fileNum;
   }
 
@@ -200,7 +276,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : otList) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            log.debug("receive file " + tStr);
+            log.debug("receive otList " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -332,7 +408,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : starList) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            log.debug("receive file " + tStr);
+            log.debug("receive starList " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -397,7 +473,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : origImage) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            log.debug("receive file " + tStr);
+            log.debug("receive origImage " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -453,7 +529,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : cutImages) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            log.debug("receive file " + tStr);
+            log.debug("receive cutImages " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
 
@@ -654,5 +730,12 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setVarLDir(String varLDir) {
     this.varLDir = varLDir;
+  }
+
+  /**
+   * @param imgSDir the imgSDir to set
+   */
+  public void setImgSDir(String imgSDir) {
+    this.imgSDir = imgSDir;
   }
 }
