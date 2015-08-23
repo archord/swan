@@ -48,6 +48,8 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
   @SuppressWarnings("unchecked")
 //  @Transactional(readOnly=true)
   public String execute() {
+      
+      log.debug("get ot level2 list");
 
     // Calucalate until rows ware selected
     int to = (rows * page);
@@ -55,6 +57,7 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
     int from = to - rows;
     ot2qp.setStart(from);
     ot2qp.setSize(rows);
+    log.debug(ot2qp.toString());
 
     gridModel = obDao.queryOtLevel2(ot2qp);
     records = obDao.countOtLevel2(ot2qp);

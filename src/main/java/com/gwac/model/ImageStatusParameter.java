@@ -47,6 +47,10 @@ public class ImageStatusParameter  implements java.io.Serializable {
      private Float temperatureActual;
      private int dpmId;
      private int prcNum;
+     protected float exposureTime;
+     protected float imgCenterRa;
+     protected float imgCenterDec;
+     protected Date procEndTime;
 
     public ImageStatusParameter() {
     }
@@ -336,6 +340,67 @@ public class ImageStatusParameter  implements java.io.Serializable {
   public void setPrcNum(int prcNum) {
     this.prcNum = prcNum;
   }
+
+    /**
+     * @return the exposureTime
+     */
+    @Column(name="exposure_time", precision=8, scale=8)
+    public float getExposureTime() {
+        return exposureTime;
+    }
+
+    /**
+     * @param exposureTime the exposureTime to set
+     */
+    public void setExposureTime(float exposureTime) {
+        this.exposureTime = exposureTime;
+    }
+
+    /**
+     * @return the imgCenterRa
+     */
+    @Column(name="img_center_ra", precision=8, scale=8)
+    public float getImgCenterRa() {
+        return imgCenterRa;
+    }
+
+    /**
+     * @param imgCenterRa the imgCenterRa to set
+     */
+    public void setImgCenterRa(float imgCenterRa) {
+        this.imgCenterRa = imgCenterRa;
+    }
+
+    /**
+     * @return the imgCenterDec
+     */
+    @Column(name="img_center_dec", precision=8, scale=8)
+    public float getImgCenterDec() {
+        return imgCenterDec;
+    }
+
+    /**
+     * @param imgCenterDec the imgCenterDec to set
+     */
+    public void setImgCenterDec(float imgCenterDec) {
+        this.imgCenterDec = imgCenterDec;
+    }
+
+    /**
+     * @return the procEndTime
+     */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="proc_end_time", length=29)
+    public Date getProcEndTime() {
+        return procEndTime;
+    }
+
+    /**
+     * @param procEndTime the procEndTime to set
+     */
+    public void setProcEndTime(Date procEndTime) {
+        this.procEndTime = procEndTime;
+    }
 
 
 

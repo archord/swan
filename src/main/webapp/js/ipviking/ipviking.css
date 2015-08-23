@@ -202,13 +202,13 @@ nav ul li a:hover {
     box-shadow: 0 0 5px 5px rgb(40, 50, 80);
 }
 
-.box {
+/*.box {
     position: absolute;
     z-index: 20;
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000;
-}
+}*/
 
 .gray-bg {
     background: rgb(51,51,51);  
@@ -617,7 +617,7 @@ a.toggle {
 #origin-legend p .icon-one {
     font-size: 20px;
     padding-top: 12px;
-    margin-right: ;
+    margin-right: 0px;
 }
 
 #origin-legend p .icon-ten {

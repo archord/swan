@@ -27,6 +27,13 @@ public class OtLevel2QueryParameter {
   private int start;
   private int size;
   
+  public String toString(){
+      return "startDate=" + startDate + ", endDate=" + endDate + ", xtemp=" + xtemp + 
+              ", ytemp=" + ytemp + ", planeRadius=" + planeRadius + ", ra=" + ra + 
+              ", dec=" + dec + ", sphereRadius=" + sphereRadius + ", telscope=" + 
+              telscope + ", queryHis=" + queryHis;
+  }
+  
   public Boolean isEmpty(){
     
     if (startDate.isEmpty() && endDate.isEmpty() && telscope.equalsIgnoreCase("all")

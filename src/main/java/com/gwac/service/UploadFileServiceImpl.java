@@ -187,7 +187,7 @@ public class UploadFileServiceImpl implements UploadFileService {
     //存储切图文件
     fileNum += storeCutImage(path);
     //存储变星列表
-    fileNum += storeVarList(path);
+    //fileNum += storeVarList(path);
     //存储图像处理状态
     fileNum += storeImgStatus(path);
     return fileNum;

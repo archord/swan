@@ -110,6 +110,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
       List<ImageStatusParameter> isps = new ArrayList<ImageStatusParameter>();
       InputStream input = null;
       DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      DateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");
       for (UploadFileUnstore ufu : ufus) {
 
         File tfile = new File(rootPath + "/" + ufu.getStorePath(), ufu.getFileName());
@@ -147,7 +148,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
                   isp.setFwhm(Float.parseFloat(tStr));
                 }
               }
-              tStr = cfile.getProperty("S2N");
+              tStr = cfile.getProperty("AverDeltaMag");
               if (tStr != null) {
                 tStr = tStr.trim();
                 if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
@@ -214,8 +215,10 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               if (tStr != null) {
                 tStr = tStr.trim();
                 if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  tStr2 = cfile.getProperty("DirData");
                   FitsFile ff = new FitsFile();
                   ff.setFileName(tStr);
+                  ff.setStorePath(tStr2);
                   ffDao.save(ff);
                   isp.setFfId(ff.getFfId());
 
@@ -225,7 +228,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
                   isp.setPrcNum(number);
                 }
               }
-              tStr = cfile.getProperty("RA");
+              tStr = cfile.getProperty("ra_mount");
               if (tStr != null) {
                 tStr = tStr.trim();
                 if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
@@ -236,7 +239,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
                   }
                 }
               }
-              tStr = cfile.getProperty("DEC");
+              tStr = cfile.getProperty("dec_mount");
               if (tStr != null) {
                 tStr = tStr.trim();
                 if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
@@ -283,6 +286,34 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
                 tStr = tStr.trim();
                 if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
                   isp.setTemperatureActual(Float.parseFloat(tStr));
+                }
+              }
+              tStr = cfile.getProperty("exptime");
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setExposureTime(Float.parseFloat(tStr));
+                }
+              }
+              tStr = cfile.getProperty("ra_imgCenter");
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setImgCenterRa(Float.parseFloat(tStr));
+                }
+              }
+              tStr = cfile.getProperty("dec_imgCenter");
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setImgCenterDec(Float.parseFloat(tStr));
+                }
+              }
+              tStr = cfile.getProperty("TimeProcessEnd");
+              if (tStr != null) {
+                tStr = tStr.trim();
+                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+                  isp.setProcEndTime(df2.parse(tStr));
                 }
               }
               isps.add(isp);
