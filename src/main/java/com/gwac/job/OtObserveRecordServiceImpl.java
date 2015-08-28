@@ -24,6 +24,7 @@ import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.ProcessStatus;
 import com.gwac.model.UploadFileUnstore;
+import com.gwac.service.CheckImageStatusThenSendFWHM;
 import com.gwac.util.CommonFunction;
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,6 +63,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private String rootPath;
   private float errorBox;
   private int successiveImageNumber;
+  protected int firstNMarkNumber;
   private int occurNumber;
 
   private static boolean running = true;
@@ -318,6 +320,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               }
               isps.add(isp);
               ispDao.save(isp);
+              
+//              CheckImageStatusThenSendFWHM cis = new CheckImageStatusThenSendFWHM(isp);
+//              cis.chechStatus();
             }
           } catch (NumberFormatException ex) {
             log.error(ufu.getFileName());
@@ -411,6 +416,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           oor.setRequestCut(false);
           oor.setSuccessCut(false);
 
+          //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
+          //existInLatestN与最近5幅比较
           OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
           if (tlv2 != null) {
             if (tlv2.getFirstFfNumber() > number) {
@@ -468,6 +475,11 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
               tOtLv2.setIsMatch((short) 0);
+              if(oor1.getFfNumber()<=firstNMarkNumber){
+                  tOtLv2.setFirstNMark(true);
+              }else{
+                  tOtLv2.setFirstNMark(false);
+              }
               otLv2Dao.save(tOtLv2);
 
               String ffcrName = String.format("%s_%04d_ref", otName, tOtLv2.getFirstFfNumber());
@@ -716,4 +728,11 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   public void setIspDao(ImageStatusParameterDao ispDao) {
     this.ispDao = ispDao;
   }
+
+    /**
+     * @param firstNMarkNumber the firstNMarkNumber to set
+     */
+    public void setFirstNMarkNumber(int firstNMarkNumber) {
+        this.firstNMarkNumber = firstNMarkNumber;
+    }
 }

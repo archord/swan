@@ -16,6 +16,8 @@ public interface DataProcessMachineDAO extends BaseHibernateDao<DataProcessMachi
   public List<DataProcessMachine> getAllDpms();
 
   public void updateMonitorImageTime(int dpmId);
+  
+  public void updateLastActiveTime(String dmpName);
 
   public DataProcessMachine getDpmByName(String name);
 

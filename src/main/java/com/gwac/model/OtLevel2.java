@@ -39,6 +39,7 @@ public class OtLevel2 implements java.io.Serializable {
   private Float xtemp;
   private Float ytemp;
   private Short isMatch;
+  protected Boolean firstNMark;
 
   public OtLevel2() {
   }
@@ -265,5 +266,20 @@ public class OtLevel2 implements java.io.Serializable {
   public void setIsMatch(Short isMatch) {
     this.isMatch = isMatch;
   }
+
+    /**
+     * @return the firstNMark
+     */
+  @Column(name = "first_n_mark")
+    public Boolean getFirstNMark() {
+        return firstNMark;
+    }
+
+    /**
+     * @param firstNMark the firstNMark to set
+     */
+    public void setFirstNMark(Boolean firstNMark) {
+        this.firstNMark = firstNMark;
+    }
 
 }

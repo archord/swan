@@ -39,176 +39,180 @@ import org.apache.struts2.convention.annotation.Result;
 //加了这句化，文件传不上来
 public class GwacFileReceive extends ActionSupport {
 
-  private static final Log log = LogFactory.getLog(GwacFileReceive.class);
+    private static final Log log = LogFactory.getLog(GwacFileReceive.class);
 
-  private DataProcessMachineDAO dpmDao;
-  private SyncFileDao sfDao;
+    private DataProcessMachineDAO dpmDao;
+    private SyncFileDao sfDao;
 
-  private List<File> fileUpload = new ArrayList<File>();
-  private List<String> fileUploadContentType = new ArrayList<String>();
-  private List<String> fileUploadFileName = new ArrayList<String>();
-  private String echo = "";
+    private List<File> fileUpload = new ArrayList<File>();
+    private List<String> fileUploadContentType = new ArrayList<String>();
+    private List<String> fileUploadFileName = new ArrayList<String>();
+    private String echo = "";
 
-  @Action(value = "gwacFileReceive", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
-    @Result(location = "manage/result.jsp", name = ERROR)})
-  public String upload() throws Exception {
+    @Action(value = "gwacFileReceive", results = {
+        @Result(location = "manage/result.jsp", name = SUCCESS),
+        @Result(location = "manage/result.jsp", name = INPUT),
+        @Result(location = "manage/result.jsp", name = ERROR)})
+    public String upload() throws Exception {
 
-    boolean flag = true;
-    String result = SUCCESS;
+        boolean flag = true;
+        String result = SUCCESS;
 
-    if (fileUpload.isEmpty()) {
-      setEcho(echo + "Error, must upload data file(fileUpload).\n");
-      flag = false;
+        if (fileUpload.isEmpty()) {
+            setEcho(echo + "Error, must upload data file(fileUpload).\n");
+            flag = false;
+        }
+
+        if (fileUpload.size() != fileUploadFileName.size()) {
+            setEcho(echo + "Error，please check upload command and retry!\n");
+            flag = false;
+        }
+
+        if (flag) {
+            String destPath = getText("gwac.data.root.directory");
+            if (destPath.charAt(destPath.length() - 1) != '/') {
+                destPath += "/";
+            }
+
+            //接收参数配置文件
+            String storeDirName = getText("gwac.monitorimage.directory");
+            String otDstPath = destPath + storeDirName + "/";
+
+            File tDir = new File(otDstPath);
+            if (!tDir.exists()) {
+                tDir.mkdirs();
+            }
+
+            //接受文件
+            int i = 0;
+            for (File file : fileUpload) {
+                String tfilename = fileUploadFileName.get(i++).trim();
+                if (tfilename.isEmpty()) {
+                    continue;
+                }
+                File destFile = new File(otDstPath, tfilename);
+                log.debug("receive file " + tfilename);
+                //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+                if (destFile.exists()) {
+                    log.warn(destFile + " already exist, delete it.");
+                    FileUtils.forceDelete(destFile);
+                }
+                if (file != null && file.exists()) {
+                    FileUtils.moveFile(file, destFile);
+                }
+
+                if (tfilename.endsWith("ccdimg.jpg")) {
+                    try {
+                        int dpmId = Integer.parseInt(tfilename.substring(1, 3));
+                        dpmDao.updateMonitorImageTime(dpmId);
+                    } catch (NumberFormatException nfe) {
+                        log.error("ccd img name " + tfilename + " wrong formate!");
+                    }
+                }
+
+                SyncFile tsf = new SyncFile();
+                tsf.setFileName(tfilename);
+                tsf.setIsSync(false);
+                tsf.setIsSyncSuccess(false);
+                tsf.setPath(storeDirName);
+                tsf.setStoreTime(new Date());
+                sfDao.save(tsf);
+            }
+
+            echo += "success\n";
+        } else {
+            result = ERROR;
+        }
+        log.debug(echo);
+        /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
+         * 用jsp的out，则不会有两个空行。
+         * 在这里将结果信息存储在session中，在jsp页面获得返回信息。
+         */
+        ActionContext ctx = ActionContext.getContext();
+        ctx.getSession().put("echo", getEcho());
+
+        return result;
     }
 
-    if (fileUpload.size() != fileUploadFileName.size()) {
-      setEcho(echo + "Error，please check upload command and retry!\n");
-      flag = false;
+    public String display() {
+        return NONE;
     }
 
-    if (flag) {
-      String destPath = getText("gwac.data.root.directory");
-      if (destPath.charAt(destPath.length() - 1) != '/') {
-        destPath += "/";
-      }
-
-      //接收参数配置文件
-      String storeDirName = getText("gwac.monitorimage.directory");
-      String otDstPath = destPath + storeDirName + "/";
-
-      File tDir = new File(otDstPath);
-      if (!tDir.exists()) {
-        tDir.mkdirs();
-      }
-
-      //接受文件
-      int i = 0;
-      for (File file : fileUpload) {
-        String tfilename = fileUploadFileName.get(i++).trim();
-        if (tfilename.isEmpty()) {
-          continue;
-        }
-        File destFile = new File(otDstPath, tfilename);
-        log.debug("receive file " + tfilename);
-        //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-        if (destFile.exists()) {
-          log.warn(destFile + " already exist, delete it.");
-          FileUtils.forceDelete(destFile);
-        }
-        if (file != null && file.exists()) {
-          FileUtils.moveFile(file, destFile);
-        }
-
-        if (tfilename.endsWith("ccdimg.jpg")) {
-          int dpmId = Integer.parseInt(tfilename.substring(1, 3));
-          dpmDao.updateMonitorImageTime(dpmId);
-        }
-        
-        SyncFile tsf = new SyncFile();
-        tsf.setFileName(tfilename);
-        tsf.setIsSync(false);
-        tsf.setIsSyncSuccess(false);
-        tsf.setPath(storeDirName);
-        tsf.setStoreTime(new Date());
-        sfDao.save(tsf);
-      }
-
-      echo += "success\n";
-    } else {
-      result = ERROR;
-    }
-    log.debug(echo);
-    /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
-     * 用jsp的out，则不会有两个空行。
-     * 在这里将结果信息存储在session中，在jsp页面获得返回信息。
+    /**
+     * @return the echo
      */
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", getEcho());
+    public String getEcho() {
+        return echo;
+    }
 
-    return result;
-  }
+    /**
+     * @param echo the echo to set
+     */
+    public void setEcho(String echo) {
+        this.echo = echo;
+    }
 
-  public String display() {
-    return NONE;
-  }
+    /**
+     * @param dpmDao the dpmDao to set
+     */
+    public void setDpmDao(DataProcessMachineDAO dpmDao) {
+        this.dpmDao = dpmDao;
+    }
 
-  /**
-   * @return the echo
-   */
-  public String getEcho() {
-    return echo;
-  }
+    /**
+     * @return the fileUpload
+     */
+    public List<File> getFileUpload() {
+        return fileUpload;
+    }
 
-  /**
-   * @param echo the echo to set
-   */
-  public void setEcho(String echo) {
-    this.echo = echo;
-  }
+    /**
+     * @param fileUpload the fileUpload to set
+     */
+    public void setFileUpload(List<File> fileUpload) {
+        this.fileUpload = fileUpload;
+    }
 
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
-  }
+    /**
+     * @return the fileUploadContentType
+     */
+    public List<String> getFileUploadContentType() {
+        return fileUploadContentType;
+    }
 
-  /**
-   * @return the fileUpload
-   */
-  public List<File> getFileUpload() {
-    return fileUpload;
-  }
+    /**
+     * @param fileUploadContentType the fileUploadContentType to set
+     */
+    public void setFileUploadContentType(List<String> fileUploadContentType) {
+        this.fileUploadContentType = fileUploadContentType;
+    }
 
-  /**
-   * @param fileUpload the fileUpload to set
-   */
-  public void setFileUpload(List<File> fileUpload) {
-    this.fileUpload = fileUpload;
-  }
+    /**
+     * @return the fileUploadFileName
+     */
+    public List<String> getFileUploadFileName() {
+        return fileUploadFileName;
+    }
 
-  /**
-   * @return the fileUploadContentType
-   */
-  public List<String> getFileUploadContentType() {
-    return fileUploadContentType;
-  }
+    /**
+     * @param fileUploadFileName the fileUploadFileName to set
+     */
+    public void setFileUploadFileName(List<String> fileUploadFileName) {
+        this.fileUploadFileName = fileUploadFileName;
+    }
 
-  /**
-   * @param fileUploadContentType the fileUploadContentType to set
-   */
-  public void setFileUploadContentType(List<String> fileUploadContentType) {
-    this.fileUploadContentType = fileUploadContentType;
-  }
+    /**
+     * @return the sfDao
+     */
+    public SyncFileDao getSfDao() {
+        return sfDao;
+    }
 
-  /**
-   * @return the fileUploadFileName
-   */
-  public List<String> getFileUploadFileName() {
-    return fileUploadFileName;
-  }
-
-  /**
-   * @param fileUploadFileName the fileUploadFileName to set
-   */
-  public void setFileUploadFileName(List<String> fileUploadFileName) {
-    this.fileUploadFileName = fileUploadFileName;
-  }
-
-  /**
-   * @return the sfDao
-   */
-  public SyncFileDao getSfDao() {
-    return sfDao;
-  }
-
-  /**
-   * @param sfDao the sfDao to set
-   */
-  public void setSfDao(SyncFileDao sfDao) {
-    this.sfDao = sfDao;
-  }
+    /**
+     * @param sfDao the sfDao to set
+     */
+    public void setSfDao(SyncFileDao sfDao) {
+        this.sfDao = sfDao;
+    }
 
 }

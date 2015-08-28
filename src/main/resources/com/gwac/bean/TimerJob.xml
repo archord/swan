@@ -22,6 +22,7 @@
     <property name="occurNumber" value="${gwac.occur.image.number}" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="firstNMarkNumber" value="${gwac.first.n.mark.number}" />
   </bean>
   
   <bean id="ot2CheckService" class="com.gwac.job.Ot2CheckServiceImpl" >

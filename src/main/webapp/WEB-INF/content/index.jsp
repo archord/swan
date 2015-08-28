@@ -58,7 +58,7 @@
         <li class="events"><s:url var="url1" action="gwac/pgwac-system"/>
           <sj:a id="gwacsystemlink" href="%{url1}" targets="main_content">系统监测信息导航</sj:a></li>
         <li class="timeline"><s:url var="url6" action="gwac/pgwac-allot"/>
-          <sj:a id="gwacallotlink" href="%{url6}" targets="main_content">OT列表</sj:a></li>
+          <sj:a id="gwacallotlink" href="%{url6}" targets="main_content">二级OT查询</sj:a></li>
 <!--        <li class="calendar"><s:url var="url8" action="manage/pfile-upload"/>
           <sj:a id="gwacuploadfilelink" href="%{url8}" targets="main_content">上传文件</sj:a></li>-->
         <li class="sep settings"><s:url var="url11" action="gwac/pupload-unstore"/>
