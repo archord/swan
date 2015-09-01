@@ -10,6 +10,7 @@ import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OTCatalogDao;
+import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
@@ -20,6 +21,7 @@ import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.OTCatalog;
+import com.gwac.model.ObservationSky;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.ProcessStatus;
@@ -60,6 +62,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private FitsFileCutRefDAO ffcrDao;
   private ProcessStatusDao psDao;
   private ImageStatusParameterDao ispDao;
+  protected ObservationSkyDao skyDao;
+  
   private String rootPath;
   private float errorBox;
   private int successiveImageNumber;
@@ -372,6 +376,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           String dpmName = "M" + orgImg.substring(3, 5);
           int dpmId = Integer.parseInt(orgImg.substring(3, 5));  //应该在数据库中通过dpmName查询
           int number = Integer.parseInt(orgImg.substring(22, 26));
+          String skyName = orgImg.substring(6, 12);
+          ObservationSky sky = skyDao.getByName(skyName);
 
           FitsFile ff = new FitsFile();
           ff.setFileName(orgImg);
@@ -388,6 +394,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           otLv2.setDpmId(dpmId);
           otLv2.setDateStr(fileDate);
           otLv2.setAllFileCutted(false);
+          otLv2.setSkyId(sky.getSkyId());
 
           OtObserveRecord oor = new OtObserveRecord();
           oor.setOtId((long) 0);
@@ -415,6 +422,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           oor.setDpmId(dpmId);
           oor.setRequestCut(false);
           oor.setSuccessCut(false);
+          oor.setSkyId(sky.getSkyId());
 
           //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
           //existInLatestN与最近5幅比较
@@ -475,6 +483,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
               tOtLv2.setIsMatch((short) 0);
+              tOtLv2.setSkyId(oor1.getSkyId());
               if(oor1.getFfNumber()<=firstNMarkNumber){
                   tOtLv2.setFirstNMark(true);
               }else{
@@ -734,5 +743,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
      */
     public void setFirstNMarkNumber(int firstNMarkNumber) {
         this.firstNMarkNumber = firstNMarkNumber;
+    }
+
+    /**
+     * @param skyDao the skyDao to set
+     */
+    public void setSkyDao(ObservationSkyDao skyDao) {
+        this.skyDao = skyDao;
     }
 }

@@ -29,10 +29,12 @@ import org.apache.struts2.convention.annotation.Result;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* curl command example: */
-/* curl -F currentDirectory=dirName */
-/* -F configFile=@configFileName */
+/* curl http://localhost/uploadAction.action */
+/* -F dpmName=M01 */
+/* -F currentDirectory=150830 */
+/* -F configFile=@config.properties */
 /* -F fileUpload=@simulationUI2.tar.gz */
-/* -F fileUpload=@simulationUI.tar.gz http://localhost:8080/svom/resultAction.action*/
+/* -F fileUpload=@simulationUI.tar.gz*/
 /**
  * @author xy
  */

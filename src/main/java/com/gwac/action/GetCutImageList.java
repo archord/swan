@@ -27,11 +27,8 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
-/* curl command example: */
-/* curl -F currentDirectory=dirName */
-/* -F configFile=@configFileName */
-/* -F fileUpload=@simulationUI2.tar.gz */
-/* -F fileUpload=@simulationUI.tar.gz http://localhost:8080/svom/resultAction.action*/
+/* wget command example: */
+/* wget http://190.168.1.25/getCutImageList.action?dpmName=M01 -O aa.list*/
 /**
  * @author xy
  */

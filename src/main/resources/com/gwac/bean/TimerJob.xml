@@ -16,6 +16,7 @@
     <property name="ffcrDao" ref="ffcrDao" />
     <property name="psDao" ref="psDao" />
     <property name="ispDao" ref="ispDao" />
+    <property name="skyDao" ref="skyDao" />
     <property name="rootPath" value="${gwac.data.root.directory}" />	
     <property name="errorBox" value="${gwac.errorbox}" />	
     <property name="successiveImageNumber" value="${gwac.successive.image.number}" />

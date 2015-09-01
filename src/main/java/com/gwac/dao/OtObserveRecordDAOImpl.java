@@ -194,6 +194,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + " where ff_number>" + (obj.getFfNumber() - n)
             + " and ot_id=0"
             + " and dpm_id=" + obj.getDpmId()
+            + " and sky_id=" + obj.getSkyId()
             + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " "
             + " order by ff_number asc";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);

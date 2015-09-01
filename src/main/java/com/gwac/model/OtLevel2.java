@@ -39,7 +39,8 @@ public class OtLevel2 implements java.io.Serializable {
   private Float xtemp;
   private Float ytemp;
   private Short isMatch;
-  protected Boolean firstNMark;
+  private Boolean firstNMark;
+  protected Short skyId;
 
   public OtLevel2() {
   }
@@ -280,6 +281,21 @@ public class OtLevel2 implements java.io.Serializable {
      */
     public void setFirstNMark(Boolean firstNMark) {
         this.firstNMark = firstNMark;
+    }
+
+    /**
+     * @return the skyId
+     */
+  @Column(name = "sky_id")
+    public Short getSkyId() {
+        return skyId;
+    }
+
+    /**
+     * @param skyId the skyId to set
+     */
+    public void setSkyId(Short skyId) {
+        this.skyId = skyId;
     }
 
 }

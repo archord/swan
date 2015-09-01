@@ -9,6 +9,13 @@
     <property name="otorDao" ref="otORDao" />
   </bean>
 	
+  <bean id="skyDao" class="com.gwac.dao.ObservationSkyDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.ObservationSky</value>
+    </property>
+  </bean>
+	
   <bean id="psDao" class="com.gwac.dao.ProcessStatusDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">

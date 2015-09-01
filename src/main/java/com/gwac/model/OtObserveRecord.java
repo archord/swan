@@ -50,6 +50,7 @@ public class OtObserveRecord  implements java.io.Serializable {
      private Float threshold;
      private Float x;
      private Float y;
+     protected Short skyId;
 
     public OtObserveRecord() {
     }
@@ -353,6 +354,21 @@ public class OtObserveRecord  implements java.io.Serializable {
     
     public void setY(Float y) {
         this.y = y;
+    }
+
+    /**
+     * @return the skyId
+     */
+  @Column(name = "sky_id")
+    public Short getSkyId() {
+        return skyId;
+    }
+
+    /**
+     * @param skyId the skyId to set
+     */
+    public void setSkyId(Short skyId) {
+        this.skyId = skyId;
     }
 
 

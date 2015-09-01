@@ -28,6 +28,7 @@
     <property name="dpmDao" ref="dpmDao" />	
     <property name="ffcDao" ref="ffcDao" />
     <property name="ffcrDao" ref="ffcrDao" />
+    <property name="skyDao" ref="skyDao" />
     <property name="rootDir" value="${gwac.data.root.directory}" />
     <property name="otLDir" value="${gwac.data.otlist.directory}" />
     <property name="starLDir" value="${gwac.data.starlist.directory}" />
@@ -36,6 +37,8 @@
     <property name="cfgDir" value="${gwac.data.cfgfile.directory}" />
     <property name="varLDir" value="${gwac.data.varlist.directory}" />
     <property name="imgSDir" value="${gwac.data.imgstatus.directory}" />
+    <property name="otListSubDir" value="${gwac.data.otlistsub.directory}" />
+    <property name="cutImagesSubDir" value="${gwac.data.cutimagessub.directory}" />
   </bean>
 	
   <bean id="ufuDao" class="com.gwac.dao.UploadFileUnstoreDaoImpl" >
