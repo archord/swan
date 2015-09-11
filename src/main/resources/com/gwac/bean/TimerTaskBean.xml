@@ -13,9 +13,9 @@
       </property>
   </bean-->
 
-  <bean id="otlevel1Job" 
+  <bean id="imageStatusParmJob" 
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
-    <property name="targetObject" ref="otlevel1Service" /> 
+    <property name="targetObject" ref="imageStatusParmService" /> 
     <property name="targetMethod" value="startJob" /> 
   </bean> 
 
@@ -56,9 +56,9 @@
   </bean> 
 
   <!-- Simple Trigger, run every 15 seconds -->
-  <bean id="otlevel1Trigger" 
+  <bean id="imageStatusParmTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-    <property name="jobDetail" ref="otlevel1Job" />
+    <property name="jobDetail" ref="imageStatusParmJob" />
     <property name="repeatInterval" value="15000" /> <!-- 5000  -->
     <property name="startDelay" value="10000" />  <!-- 10000  -->
   </bean>
@@ -108,7 +108,7 @@
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="jobDetails">
       <list>
-        <ref bean="otlevel1Job" />
+        <ref bean="imageStatusParmJob" />
         <ref bean="addMissedCutImageJob" />
         <ref bean="moveDataToHisJob" />
         <!--<ref bean="fileTransferJob" />-->
@@ -119,7 +119,7 @@
     </property>
     <property name="triggers">
       <list>
-        <ref bean="otlevel1Trigger" />
+        <ref bean="imageStatusParmTrigger" />
         <ref bean="addMissedCutImageTrigger" />
         <ref bean="moveDataToHisTrigger" />
         <!--<ref bean="fileTransferTrigger" />-->

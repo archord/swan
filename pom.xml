@@ -24,6 +24,22 @@
   </build>
   
   <dependencies>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-core</artifactId>
+      <version>${activemq-version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.activemq</groupId>
+          <artifactId>activeio-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
     <!--    <dependency>
       <groupId>c3p0</groupId>
       <artifactId>c3p0</artifactId>
@@ -98,6 +114,11 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
       <version>${spring.version}</version>
     </dependency>
     <dependency>
@@ -325,6 +346,7 @@
     <servlet.port>8080</servlet.port>
     <copyright.year>2014</copyright.year>
     <db.name>xy</db.name>
+    
 
     <!-- Framework dependency versions  -->
     <struts2.version>2.3.16.3</struts2.version> <!-- 2.3.15.1  2.3.14.3  2.3.16.3-->
@@ -335,6 +357,8 @@
     <sl4j.version>1.7.2</sl4j.version>
     
     <quartz.version>1.8.6</quartz.version>
+    
+    <activemq-version>5.7.0</activemq-version>
     
     <hsqldb.version>2.2.9</hsqldb.version>
     <mysql.version>5.1.25</mysql.version>

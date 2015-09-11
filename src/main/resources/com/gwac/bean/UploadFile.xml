@@ -29,6 +29,8 @@
     <property name="ffcDao" ref="ffcDao" />
     <property name="ffcrDao" ref="ffcrDao" />
     <property name="skyDao" ref="skyDao" />
+    <property name="jmsTemplate" ref="jmsTemplate" />
+    <property name="otlistDest" ref="otlistDest" />
     <property name="rootDir" value="${gwac.data.root.directory}" />
     <property name="otLDir" value="${gwac.data.otlist.directory}" />
     <property name="starLDir" value="${gwac.data.starlist.directory}" />

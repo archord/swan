@@ -4,6 +4,7 @@
  */
 package com.gwac.service;
 
+import com.gwac.activemq.OTListMessageCreator;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
@@ -24,9 +25,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
+import javax.jms.Destination;
+import org.apache.activemq.command.ActiveMQMapMessage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
 /**
  *
@@ -64,7 +69,10 @@ public class UploadFileServiceImpl implements UploadFileService {
   private DataProcessMachineDAO dpmDao;
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
-  protected ObservationSkyDao skyDao;
+  private ObservationSkyDao skyDao;
+  
+  private JmsTemplate jmsTemplate;
+  private Destination otlistDest;
 
   public UploadFileServiceImpl() {
   }
@@ -465,6 +473,9 @@ public class UploadFileServiceImpl implements UploadFileService {
                 fileNum++;
                 obj.setUploadSuccess(Boolean.TRUE);
                 obj2.setUploadSuccess(Boolean.TRUE);
+                MessageCreator tmc = new OTListMessageCreator(obj);
+                jmsTemplate.send(otlistDest, tmc);
+                
               } else {
                 obj.setUploadSuccess(Boolean.FALSE);
                 obj2.setUploadSuccess(Boolean.FALSE);
@@ -917,4 +928,19 @@ public class UploadFileServiceImpl implements UploadFileService {
   public void setSkyDao(ObservationSkyDao skyDao) {
     this.skyDao = skyDao;
   }
+
+  /**
+   * @param jmsTemplate the jmsTemplate to set
+   */
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+
+  /**
+   * @param otlistDest the otlistDest to set
+   */
+  public void setOtlistDest(Destination otlistDest) {
+    this.otlistDest = otlistDest;
+  }
+
 }

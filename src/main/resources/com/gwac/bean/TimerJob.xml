@@ -3,49 +3,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-
-  <bean id="otlevel1Service" class="com.gwac.job.OtObserveRecordServiceImpl" >
-    <property name="otorDao" ref="otORDao" />
-    <property name="ufuDao" ref="ufuDao" />
-    <property name="otcDao" ref="otcDao" />
-    <property name="otnDao" ref="otnDao" />
-    <property name="otLv2Dao" ref="otbDao" />
-    <property name="ffDao" ref="ffDao" />
-    <property name="ffcDao" ref="ffcDao" />
-    <property name="dpmDao" ref="dpmDao" />	
-    <property name="ffcrDao" ref="ffcrDao" />
-    <property name="psDao" ref="psDao" />
-    <property name="ispDao" ref="ispDao" />
-    <property name="skyDao" ref="skyDao" />
-    <property name="rootPath" value="${gwac.data.root.directory}" />	
-    <property name="errorBox" value="${gwac.errorbox}" />	
-    <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
-    <property name="occurNumber" value="${gwac.occur.image.number}" />
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
-    <property name="firstNMarkNumber" value="${gwac.first.n.mark.number}" />
-  </bean>
-  
-  <bean id="ot2CheckService" class="com.gwac.job.Ot2CheckServiceImpl" >
-    <property name="ot2Dao" ref="otbDao" />
-    <property name="cvsDao" ref="cvsDao" />
-    <property name="moDao" ref="moDao" />
-    <property name="mpDao" ref="mpDao" />
-    <property name="rc3Dao" ref="rc3Dao" />
-    <property name="ottDao" ref="ottDao" />
-    <property name="ot2mDao" ref="ot2mDao" />
-    <property name="mergedSearchbox" value="${mingwac.merged.searchbox}" />	
-    <property name="cvsSearchbox" value="${mingwac.cvs.searchbox}" />	
-    <property name="rc3Searchbox" value="${mingwac.rc3.searchbox}" />	
-    <property name="minorPlanetSearchbox" value="${mingwac.minorplanet.searchbox}" />	
-    <property name="mergedMag" value="${mingwac.merged.mag}" />	
-    <property name="cvsMag" value="${mingwac.cvs.mag}" />	
-    <property name="rc3MinMag" value="${mingwac.rc3.minmag}" />	
-    <property name="rc3MaxMag" value="${mingwac.rc3.maxmag}" />	
-    <property name="minorPlanetMag" value="${mingwac.minorplanet.mag}" />	
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
-  </bean>
   
   <bean id="ffcService" class="com.gwac.job.FitsFileCutServiceImpl">
     <property name="ffDao" ref="ffDao" />
