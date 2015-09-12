@@ -23,6 +23,7 @@ public class OTListMessageCreator implements MessageCreator {
   public Message createMessage(Session session) throws JMSException {
     
     MapMessage message = session.createMapMessage();
+    message.setLong("ufuId", otList.getUfuId());
     message.setString("storePath", otList.getStorePath());
     message.setString("fileName", otList.getFileName());
     log.debug("send otList message: " + otList.getStorePath() + "/" + otList.getFileName());

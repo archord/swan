@@ -1,0 +1,80 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL">
+            <value>tcp://127.0.0.1:61616</value>
+        </property>
+    </bean>
+
+    <bean id="pooledJmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+        <property name="connectionFactory">
+            <ref local="jmsFactory"/>
+        </property>
+    </bean>
+    
+    <bean id="otlistDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+        <constructor-arg value="OT_LIST" />
+    </bean>
+    
+    <!-- Spring JMS Template -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory">
+            <ref local="pooledJmsFactory"/>
+        </property>
+    </bean>   
+
+    <bean id="otListListener" class="com.gwac.activemq.OTListListener">
+        <property name="otObserveRecordService" ref="otObserveRecordService" />
+    </bean>
+
+    <bean id="javaConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsFactory"/>
+        <property name="destination" ref="otlistDest" />
+        <property name="messageListener" ref="otListListener" />
+    </bean>
+    
+  <bean id="otObserveRecordService" class="com.gwac.service.OtObserveRecordServiceImpl" >
+    <property name="otorDao" ref="otORDao" />
+    <property name="otcDao" ref="otcDao" />
+    <property name="otnDao" ref="otnDao" />
+    <property name="otLv2Dao" ref="otbDao" />
+    <property name="ffDao" ref="ffDao" />
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="dpmDao" ref="dpmDao" />	
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="skyDao" ref="skyDao" />
+    <property name="ufuDao" ref="ufuDao" />
+    <property name="rootPath" value="${gwac.data.root.directory}" />	
+    <property name="cutIDir" value="${gwac.data.cutimages.directory}" />
+    <property name="errorBox" value="${gwac.errorbox}" />	
+    <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
+    <property name="occurNumber" value="${gwac.occur.image.number}" />
+    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="firstNMarkNumber" value="${gwac.first.n.mark.number}" />
+  </bean>
+  
+  <bean id="ot2CheckService" class="com.gwac.job.Ot2CheckServiceImpl" >
+    <property name="ot2Dao" ref="otbDao" />
+    <property name="cvsDao" ref="cvsDao" />
+    <property name="moDao" ref="moDao" />
+    <property name="mpDao" ref="mpDao" />
+    <property name="rc3Dao" ref="rc3Dao" />
+    <property name="ottDao" ref="ottDao" />
+    <property name="ot2mDao" ref="ot2mDao" />
+    <property name="mergedSearchbox" value="${mingwac.merged.searchbox}" />	
+    <property name="cvsSearchbox" value="${mingwac.cvs.searchbox}" />	
+    <property name="rc3Searchbox" value="${mingwac.rc3.searchbox}" />	
+    <property name="minorPlanetSearchbox" value="${mingwac.minorplanet.searchbox}" />	
+    <property name="mergedMag" value="${mingwac.merged.mag}" />	
+    <property name="cvsMag" value="${mingwac.cvs.mag}" />	
+    <property name="rc3MinMag" value="${mingwac.rc3.minmag}" />	
+    <property name="rc3MaxMag" value="${mingwac.rc3.maxmag}" />	
+    <property name="minorPlanetMag" value="${mingwac.minorplanet.mag}" />	
+    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+    <property name="isTestServer" value="${gwac.server.test}" />
+  </bean>
+  
+</beans>

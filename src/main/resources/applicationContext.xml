@@ -22,6 +22,8 @@
   <import resource="com/gwac/bean/TimerTaskBean.xml"/>
   <import resource="com/gwac/bean/UploadFile.xml"/>
   <import resource="com/gwac/bean/UserInfoBean.xml"/>
+  <import resource="com/gwac/bean/ImageStatusParameter.xml"/>
+  <import resource="com/gwac/bean/ActivemqOT.xml"/>
   
  
 </beans>

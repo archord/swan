@@ -1,5 +1,6 @@
 package com.gwac.activemq;
 
+import com.gwac.model.UploadFileUnstore;
 import com.gwac.service.OtObserveRecordService;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -12,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class OTListListener implements MessageListener {
-  
+
   private static final Log log = LogFactory.getLog(OTListListener.class);
   private OtObserveRecordService otObserveRecordService;
 
@@ -20,9 +21,11 @@ public class OTListListener implements MessageListener {
   public void onMessage(Message message) {
     try {
       MapMessage map = (MapMessage) message;
+      long ufuId = map.getLong("ufuId");
       String storePath = map.getString("storePath");
       String fileName = map.getString("fileName");
-      otObserveRecordService.parseLevel1Ot(storePath, fileName);
+      log.debug("receive otlist " + storePath + "/" + fileName);
+      otObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
     } catch (JMSException e) {
       log.error(e);
     }

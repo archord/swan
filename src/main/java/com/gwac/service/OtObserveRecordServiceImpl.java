@@ -13,6 +13,7 @@ import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
@@ -20,6 +21,8 @@ import com.gwac.model.OTCatalog;
 import com.gwac.model.ObservationSky;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
+import com.gwac.model.UploadFileUnstore;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordServiceImpl.class);
-  
+
   private OTCatalogDao otcDao;
   private OtNumberDao otnDao;
   private OtLevel2Dao otLv2Dao;
@@ -42,6 +45,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private DataProcessMachineDAO dpmDao;
   private FitsFileCutRefDAO ffcrDao;
   private ObservationSkyDao skyDao;
+  private UploadFileUnstoreDao ufuDao;
 
   private String rootPath;
   private String cutIDir;
@@ -56,14 +60,15 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
   /**
    * 解析一级OT列表文件，得出二级OT，切图文件名称，二级OT模板切图名称
+   *
    * @param storePath
    * @param fileName
    */
   @Override
-  public void parseLevel1Ot(String storePath, String fileName) {
-    
-    if (storePath != null && fileName != null && !storePath.isEmpty() && !fileName.isEmpty()) {
-      
+  public void parseLevel1Ot(long ufuId, String storePath, String fileName) {
+
+    if (storePath != null && fileName != null) {
+
       List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
       for (OTCatalog otc : otcs) {
 
@@ -121,7 +126,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setSuccessCut(false);
         oor.setSkyId(sky.getSkyId());
 
-          //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
+        //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较
         OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
         if (tlv2 != null) {
@@ -138,7 +143,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
           String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
           FitsFileCut ffc = new FitsFileCut();
-          ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/"+ cutIDir);
+          ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
           ffc.setFileName(cutImg);
           ffc.setOtId(tlv2.getOtId());
           ffc.setNumber(number);
@@ -197,7 +202,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             ffcr.setFfId(ff.getFfId());
             ffcr.setFileName(ffcrName);
             ffcr.setOtId(tOtLv2.getOtId());
-            ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/"+ cutIDir);
+            ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
             ffcr.setRequestCut(false);
             ffcr.setSuccessCut(false);
             ffcrDao.save(ffcr);
@@ -208,7 +213,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               }
               String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
               FitsFileCut ffc = new FitsFileCut();
-              ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/"+ cutIDir);
+              ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
               ffc.setFileName(cutImg);
               ffc.setOtId(tOtLv2.getOtId());
               ffc.setNumber(tOor.getFfNumber());
@@ -228,7 +233,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           }
         }
       }
-
+      ufuDao.updateProcessDoneTime(ufuId);
     }
   }
 
@@ -412,5 +417,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setCutIDir(String cutIDir) {
     this.cutIDir = cutIDir;
+  }
+
+  /**
+   * @param ufuDao the ufuDao to set
+   */
+  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
+    this.ufuDao = ufuDao;
   }
 }

@@ -8,6 +8,7 @@ package com.gwac.dao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model2.MinorPlanet;
 import com.gwac.util.SearchBoxSphere;
+import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,7 +21,7 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
 
   @Override
   public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName) {
-    
+
     double maxRaSpeed = getMaxAbsValue(tableName, "DLON");
     double maxDecSpeed = getMaxAbsValue(tableName, "DLAT");
 
@@ -54,5 +55,19 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
     String sql = "select max(abs(" + name + ")) from " + tableName + ";";
     Query q = session.createSQLQuery(sql);
     return (Double) q.list().get(0);
+  }
+
+  @Override
+  public boolean tableExists(String tableName) {
+
+    String sql = "SELECT count(*) "
+            + "FROM information_schema.tables "
+            + "WHERE table_schema = 'catalogue' "
+            + "AND table_name = '" + tableName + "'"
+            + "LIMIT 1;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    return ((BigInteger) q.list().get(0)).intValue() > 0;
   }
 }

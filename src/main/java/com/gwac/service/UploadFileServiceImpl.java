@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import javax.jms.Destination;
-import org.apache.activemq.command.ActiveMQMapMessage;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,6 +40,7 @@ public class UploadFileServiceImpl implements UploadFileService {
 
   private static final Log log = LogFactory.getLog(UploadFileServiceImpl.class);
   //单次传输配置文件信息
+  private Date sendTime = null;
   private String storePath;
   private String configPath;
   private String configFile;
@@ -70,7 +70,7 @@ public class UploadFileServiceImpl implements UploadFileService {
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
   private ObservationSkyDao skyDao;
-  
+
   private JmsTemplate jmsTemplate;
   private Destination otlistDest;
 
@@ -103,6 +103,13 @@ public class UploadFileServiceImpl implements UploadFileService {
       String curProcNumber = cfile.getProperty("curprocnumber");
       String dfInfo = cfile.getProperty("dfinfo");
       String otlist = cfile.getProperty("otlist");
+      String sendTimeStr = cfile.getProperty("timeSend");
+
+      if (sendTimeStr != null && !sendTimeStr.isEmpty()) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        sendTime = sdf.parse(sendTimeStr);
+      }
+
 //      log.debug("dpmName=" + dpmName + ".");
 //      log.debug("curProcNumber=" + curProcNumber + ".");
 //      log.debug("dfInfo=" + dfInfo + ".");
@@ -200,14 +207,18 @@ public class UploadFileServiceImpl implements UploadFileService {
         fNum += cutImagesSub.length;
       }
 
-    } catch (Exception ex) {
-      ex.printStackTrace();
+    } catch (IOException ex) {
+      log.error("read property file error", ex);
+    } catch (ParseException ex) {
+      log.error("parse send time error", ex);
+    } catch (NumberFormatException ex) {
+      log.error("parse number error", ex);
     } finally {
       if (input != null) {
         try {
           input.close();
-        } catch (IOException e) {
-          e.printStackTrace();
+        } catch (IOException ex) {
+          log.error("close property file error", ex);
         }
       }
     }
@@ -451,6 +462,9 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj.setFileName(tStr);
             obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
             obj.setUploadDate(new Date());
+            if (sendTime != null) {
+              obj.setSendTime(sendTime);
+            }
 
             UploadFileRecord obj2 = new UploadFileRecord();
             obj2.setStorePath(tpath.substring(rootDir.length() + 1));
@@ -459,29 +473,33 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj2.setUploadDate(new Date());
 
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-            if (tfile2.exists()) {
+//            if (tfile2.exists()) {
+//              if (tfile1.exists()) {
+//                log.warn(tfile2 + " already exist, delete it.");
+//                FileUtils.forceDelete(tfile2);
+//                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+//                FileUtils.moveFile(tfile1, tfile2);
+//                fileNum++;
+//              }
+//            } else 
+            {
               if (tfile1.exists()) {
-                log.warn(tfile2 + " already exist, delete it.");
-                FileUtils.forceDelete(tfile2);
-                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-              }
-            } else {
-              if (tfile1.exists()) {
+                if (tfile2.exists()) {
+                  FileUtils.forceDelete(tfile2);
+                }
                 FileUtils.moveFile(tfile1, tfile2);
                 fileNum++;
                 obj.setUploadSuccess(Boolean.TRUE);
                 obj2.setUploadSuccess(Boolean.TRUE);
+                ufuDao.save(obj); //所有的文件都应该上传上来，如果有没上传上来的，不处理，只在ufr表中记录。
                 MessageCreator tmc = new OTListMessageCreator(obj);
                 jmsTemplate.send(otlistDest, tmc);
-                
+
               } else {
                 obj.setUploadSuccess(Boolean.FALSE);
                 obj2.setUploadSuccess(Boolean.FALSE);
                 log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
               }
-              ufuDao.save(obj);
               ufrDao.save(obj2);
             }
           }

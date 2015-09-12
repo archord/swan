@@ -11,5 +11,5 @@ import com.gwac.job.*;
  * @author xy
  */
 public interface OtObserveRecordService {
-  public void parseLevel1Ot(String storePath, String fileName);
+  public void parseLevel1Ot(long ufuId, String storePath, String fileName);
 }

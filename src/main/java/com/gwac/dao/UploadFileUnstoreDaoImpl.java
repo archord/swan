@@ -61,4 +61,11 @@ public class UploadFileUnstoreDaoImpl extends BaseHibernateDaoImpl<UploadFileUns
     Query q = session.createSQLQuery(sql).addEntity(UploadFileUnstore.class);
     return q.list();
   }
+
+  @Override
+  public void updateProcessDoneTime(long ufuId) {
+    Session session = getCurrentSession();
+    String sql = "update upload_file_unstore set process_done_time=current_timestamp where ufu_id=" + ufuId;
+    session.createSQLQuery(sql).executeUpdate();
+  }
 }

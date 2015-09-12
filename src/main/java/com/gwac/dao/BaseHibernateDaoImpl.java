@@ -24,7 +24,7 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
   public void setClazz(final Class<T> clazzToSet) {
     clazz = clazzToSet;
   }
-
+  
   public Number count() {
     return (Number) getCurrentSession().createCriteria(clazz).setProjection(Projections.rowCount()).uniqueResult();
   }

@@ -31,6 +31,8 @@ public class UploadFileUnstore  implements java.io.Serializable {
      private String storePath;
      private Date uploadDate;
      private Boolean uploadSuccess;
+     private Date sendTime;
+     private Date processDoneTime;
 
     public UploadFileUnstore() {
     }
@@ -104,6 +106,38 @@ public class UploadFileUnstore  implements java.io.Serializable {
     public void setUploadSuccess(Boolean uploadSuccess) {
         this.uploadSuccess = uploadSuccess;
     }
+
+  /**
+   * @return the sendTime
+   */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="send_time", length=29)
+  public Date getSendTime() {
+    return sendTime;
+  }
+
+  /**
+   * @param sendTime the sendTime to set
+   */
+  public void setSendTime(Date sendTime) {
+    this.sendTime = sendTime;
+  }
+
+  /**
+   * @return the processDoneTime
+   */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="process_done_time", length=29)
+  public Date getProcessDoneTime() {
+    return processDoneTime;
+  }
+
+  /**
+   * @param processDoneTime the processDoneTime to set
+   */
+  public void setProcessDoneTime(Date processDoneTime) {
+    this.processDoneTime = processDoneTime;
+  }
 
 
 

@@ -18,7 +18,7 @@ import org.hibernate.Session;
  * @author xy
  */
 public class CVSQueryDaoImpl extends MysqlHibernateDaoImpl<Cvs> implements CVSQueryDao {
-
+  
   @Override
   public List<Cvs> queryByOt2(OtLevel2 ot2, float searchRadius, float mag) {
 
