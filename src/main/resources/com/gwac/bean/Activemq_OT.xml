@@ -25,7 +25,9 @@
         </property>
     </bean>   
 
-    <bean id="otListListener" class="com.gwac.activemq.OTListListener"/>
+    <bean id="otListListener" class="com.gwac.activemq.OTListListener">
+        <property name="otObserveRecordService" ref="otObserveRecordService" />
+    </bean>
 
     <bean id="javaConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="jmsFactory"/>
@@ -33,7 +35,7 @@
         <property name="messageListener" ref="otListListener" />
     </bean>
     
-  <bean id="otObserveRecordService" class="com.gwac.job.OtObserveRecordServiceImpl" >
+  <bean id="otObserveRecordService" class="com.gwac.service.OtObserveRecordServiceImpl" >
     <property name="otorDao" ref="otORDao" />
     <property name="otcDao" ref="otcDao" />
     <property name="otnDao" ref="otnDao" />
@@ -43,6 +45,7 @@
     <property name="dpmDao" ref="dpmDao" />	
     <property name="ffcrDao" ref="ffcrDao" />
     <property name="skyDao" ref="skyDao" />
+    <property name="ufuDao" ref="ufuDao" />
     <property name="rootPath" value="${gwac.data.root.directory}" />	
     <property name="cutIDir" value="${gwac.data.cutimages.directory}" />
     <property name="errorBox" value="${gwac.errorbox}" />	
