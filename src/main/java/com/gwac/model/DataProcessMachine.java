@@ -27,6 +27,7 @@ public class DataProcessMachine implements java.io.Serializable {
   private Float totalStorageSize;
   private Float usedStorageSize;
   private Date monitorImageTime;
+  private Date lastActiveTime;
   protected Short curSkyId;
 
   public DataProcessMachine() {
@@ -116,7 +117,6 @@ public class DataProcessMachine implements java.io.Serializable {
    * @return the monitorImageTime
    */
   @Column(name = "monitor_image_time")
-  @Temporal(javax.persistence.TemporalType.DATE)
   public Date getMonitorImageTime() {
     return monitorImageTime;
   }
@@ -141,6 +141,21 @@ public class DataProcessMachine implements java.io.Serializable {
    */
   public void setCurSkyId(Short curSkyId) {
     this.curSkyId = curSkyId;
+  }
+
+  /**
+   * @return the lastActiveTime
+   */
+  @Column(name = "last_active_time")
+  public Date getLastActiveTime() {
+    return lastActiveTime;
+  }
+
+  /**
+   * @param lastActiveTime the lastActiveTime to set
+   */
+  public void setLastActiveTime(Date lastActiveTime) {
+    this.lastActiveTime = lastActiveTime;
   }
 
 }

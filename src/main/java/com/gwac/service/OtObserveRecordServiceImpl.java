@@ -186,7 +186,10 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setCuttedFfNumber(0);
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
-            if (oor1.getFfNumber() <= firstNMarkNumber) {
+            
+            int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
+            
+            if (oor1.getFfNumber() - firstRecordNumber <= firstNMarkNumber) {
               tOtLv2.setFirstNMark(true);
             } else {
               tOtLv2.setFirstNMark(false);

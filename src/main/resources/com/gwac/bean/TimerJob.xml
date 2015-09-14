@@ -46,6 +46,7 @@
     <property name="oorDao" ref="otORDao" />
     <property name="cfDao" ref="cfDao" />
     <property name="ispDao" ref="ispDao" />
+    <property name="dpmDao" ref="dpmDao" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />
   </bean>

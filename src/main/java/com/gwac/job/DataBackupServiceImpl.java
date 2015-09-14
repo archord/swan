@@ -5,6 +5,7 @@
 package com.gwac.job;
 
 import com.gwac.dao.ConfigFileDao;
+import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
@@ -29,6 +30,7 @@ public class DataBackupServiceImpl implements DataBackupService{
   private OtObserveRecordDAO oorDao;
   private ConfigFileDao cfDao;
   private ImageStatusParameterDao ispDao;
+  private DataProcessMachineDAO dpmDao;
   
   public void startJob(){
     
@@ -50,6 +52,7 @@ public class DataBackupServiceImpl implements DataBackupService{
     oorDao.moveDataToHisTable();
     cfDao.moveDataToHisTable();
     ispDao.moveDataToHisTable();
+    dpmDao.everyDayInit();
     long endTime=System.nanoTime();
     
     if (running == false) {
@@ -120,6 +123,13 @@ public class DataBackupServiceImpl implements DataBackupService{
    */
   public void setIspDao(ImageStatusParameterDao ispDao) {
     this.ispDao = ispDao;
+  }
+
+  /**
+   * @param dpmDao the dpmDao to set
+   */
+  public void setDpmDao(DataProcessMachineDAO dpmDao) {
+    this.dpmDao = dpmDao;
   }
   
 }

@@ -7,7 +7,7 @@
     <property name="hibernate.connection.url">jdbc:postgresql://190.168.1.25:5432/gwac</property>
     <property name="hibernate.connection.username">gwac</property>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
-    
+   
     <mapping class="com.gwac.model.OtObserveRecordHis"/>
     <mapping class="com.gwac.model.SystemStatus"/>
     <mapping class="com.gwac.model.Environment"/>
@@ -31,11 +31,13 @@
     <mapping class="com.gwac.model.OTCatalog"/>
     <mapping class="com.gwac.model.OtType"/>
     <mapping class="com.gwac.model.StarKnowObserveRecord"/>
+    <mapping class="com.gwac.model.VarStarRecord"/>
     <mapping class="com.gwac.model.Grb"/>
     <mapping class="com.gwac.model.OtObserveRecord"/>
-    <mapping class="com.gwac.model.StarListFile"/>
     <mapping class="com.gwac.model.ObservationSky"/>
+    <mapping class="com.gwac.model.StarListFile"/>
     <mapping class="com.gwac.model.ProcessStatus"/>
+    <mapping class="com.gwac.model.VarStarRecordHis"/>
     <mapping class="com.gwac.model.ImageStatusParameter"/>
     <mapping class="com.gwac.model.FitsFileCut"/>
     <mapping class="com.gwac.model.OtLevel2QueryParameter"/>

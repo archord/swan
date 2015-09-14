@@ -24,4 +24,10 @@ public interface DataProcessMachineDAO extends BaseHibernateDao<DataProcessMachi
   public void updateByName(DataProcessMachine dpm);
 
   public DataProcessMachine getDpmById(long id);
+  
+  public void updateFirstRecordNumber(String dpmName, int number);
+  
+  public int getFirstRecordNumber(String dpmName);
+  
+  public void everyDayInit();
 }

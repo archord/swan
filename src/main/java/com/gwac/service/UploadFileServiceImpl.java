@@ -151,7 +151,7 @@ public class UploadFileServiceImpl implements UploadFileService {
           dpm.setTotalStorageSize(totalSize);
           dpm.setUsedStorageSize(leftSize);
           if (!otlist.isEmpty()) {
-            String skyName = otlist.substring(6, 12);
+            String skyName = otlist.substring(15, 21);
             ObservationSky sky = skyDao.getByName(skyName);
             dpm.setCurSkyId(sky.getSkyId());
           }
@@ -453,6 +453,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : otList) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
+            
             log.debug("receive otList " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
@@ -501,6 +502,12 @@ public class UploadFileServiceImpl implements UploadFileService {
                 log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
               }
               ufrDao.save(obj2);
+            }
+            
+            String dpmName = "M" + tStr.substring(3, 5);
+            int curNumber = Integer.parseInt(tStr.substring(22, 26));
+            if(dpmDao.getFirstRecordNumber(dpmName)==0){
+              dpmDao.updateFirstRecordNumber(dpmName, curNumber);
             }
           }
         }

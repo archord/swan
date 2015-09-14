@@ -112,7 +112,7 @@
         <ref bean="addMissedCutImageJob" />
         <ref bean="moveDataToHisJob" />
         <!--<ref bean="fileTransferJob" />-->
-        <ref bean="dataSyncJob" />
+        <!--<ref bean="dataSyncJob" />-->
         <ref bean="ot2CheckJob" />
         <ref bean="monitorImageSyncJob" />
       </list>
@@ -123,7 +123,7 @@
         <ref bean="addMissedCutImageTrigger" />
         <ref bean="moveDataToHisTrigger" />
         <!--<ref bean="fileTransferTrigger" />-->
-        <ref bean="dataSyncTrigger" />
+<!--        <ref bean="dataSyncTrigger" />-->
         <ref bean="ot2CheckTrigger" />
         <ref bean="monitorImageSyncTrigger" />
       </list>
