@@ -30,6 +30,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 
 /**
  * 解析一级OT列表文件，计算二级OT，切图，模板切图。
@@ -364,17 +366,30 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
   }
 
   public Boolean chechStatus(ImageStatusParameter isp) {
-    Boolean s1 = isp.getXrms() < 0.13 && isp.getYrms() < 0.13
-            && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
-            && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
-            && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
-            && isp.getS2n() < 0.5 && isp.getAvgLimit() > 12
-            && isp.getFwhm() < 10 && isp.getFwhm() > 1;
-    Boolean s2 = (isp.getXshift() + 99) < 0.00001
-            && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
-            && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
-            && isp.getFwhm() < 10 && isp.getFwhm() > 1;  //&& isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
-    return s1 || s2;
+    
+    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    try {
+      log.debug(ow.writeValueAsString(isp));
+    } catch (IOException ex) {
+      Logger.getLogger(ImageStatusParmServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    Boolean flag = false;
+    if (isp != null) {
+      Boolean s1 = isp.getXrms() < 0.13 && isp.getYrms() < 0.13
+              && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
+              && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
+              && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
+              && isp.getS2n() < 0.5 && isp.getAvgLimit() > 12
+              && isp.getFwhm() < 10 && isp.getFwhm() > 1;
+      Boolean s2 = (isp.getXshift() + 99) < 0.00001
+              && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
+              && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
+              && isp.getFwhm() < 10 && isp.getFwhm() > 1;  //&& isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
+      flag = s1 || s2;
+    }else{
+      log.error("image status is null");
+    }
+    return flag;
   }
 
   public String getFWHMMessage(ImageStatusParameter isp) {

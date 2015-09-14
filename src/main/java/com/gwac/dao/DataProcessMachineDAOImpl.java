@@ -90,7 +90,7 @@ public class DataProcessMachineDAOImpl extends BaseHibernateDaoImpl<DataProcessM
     int number = 0;
     Session session = getCurrentSession();
     String sql = "select first_record_number from data_process_machine where name='" + dpmName + "'";
-    Query q = session.createSQLQuery(sql).addEntity(DataProcessMachine.class);
+    Query q = session.createSQLQuery(sql);
     List tlist = q.list();
     if (!tlist.isEmpty()) {
       number = (Integer) tlist.get(0);

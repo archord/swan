@@ -233,7 +233,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
     Session session = getCurrentSession();
-    String sql1 = "select oor.*, ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath "
+    String sql1 = "select ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath, oor.*"
             + "from ot_observe_record oor "
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
@@ -258,33 +258,34 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     while (itor.hasNext()) {
       Object[] row = (Object[]) itor.next();
       try {
-        BigInteger otID = (BigInteger) row[0];
-        BigInteger ffId = (BigInteger) row[1];
-        BigInteger ffcId = (BigInteger) row[2];
-        BigInteger oortId = (BigInteger) row[3];
-        Short otTypeId = (Short) row[4];
-        float raD = (Float) row[5];
-        float decD = (Float) row[6];
-        float x = (Float) row[7];
-        float y = (Float) row[8];
-        float xTemp = (Float) row[9];
-        float yTemp = (Float) row[10];
-        Date dateUt = (Date) row[11];
-        float flux = (Float) row[12];
-        Boolean flag = (Boolean) row[13];
-//        float flagChb = (Float) row[14];
-        float background = (Float) row[15];
-        float threshold = (Float) row[16];
-        float magAper = (Float) row[17];
-        float magerrAper = (Float) row[18];
-        float ellipticity = (Float) row[19];
-        float ClassStar = (Float) row[20];
-        Boolean otFlag = (Boolean) row[21];
         //ff_number,dpm_id,date_str,request_cut,success_cut
-        String ffFileName = (String) row[27];
-        String ffStorePath = (String) row[28];
-        String ffcFileName = (String) row[29];
-        String ffcStorePath = (String) row[30];
+        String ffFileName = (String) row[0];
+        String ffStorePath = (String) row[1];
+        String ffcFileName = (String) row[2];
+        String ffcStorePath = (String) row[3];
+        
+        BigInteger otID = (BigInteger) row[4];
+        BigInteger ffId = (BigInteger) row[5];
+        BigInteger ffcId = (BigInteger) row[6];
+        BigInteger oortId = (BigInteger) row[7];
+        Short otTypeId = (Short) row[8];
+        float raD = (Float) row[9];
+        float decD = (Float) row[10];
+        float x = (Float) row[11];
+        float y = (Float) row[12];
+        float xTemp = (Float) row[13];
+        float yTemp = (Float) row[14];
+        Date dateUt = (Date) row[15];
+        float flux = (Float) row[16];
+        Boolean flag = (Boolean) row[17];
+//        float flagChb = (Float) row[18];
+        float background = (Float) row[19];
+        float threshold = (Float) row[20];
+        float magAper = (Float) row[21];
+        float magerrAper = (Float) row[22];
+        float ellipticity = (Float) row[23];
+        float ClassStar = (Float) row[24];
+        Boolean otFlag = (Boolean) row[25];
 
         OtObserveRecordShow oors = new OtObserveRecordShow();
         oors.setBackground(background);
