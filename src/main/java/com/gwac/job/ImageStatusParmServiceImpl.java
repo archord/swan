@@ -348,25 +348,16 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
             log.debug("image status do not meet send status.");
           }
         }
+        out.close();
+        socket.close();
       } catch (IOException ex) {
         log.error("send message error", ex);
-      } finally {
-        try {
-          if (out != null) {
-            out.close();
-          }
-          if (socket != null || !socket.isClosed()) {
-            socket.close();
-          }
-        } catch (IOException ex) {
-          log.error("close socket error", ex);
-        }
       }
     }
   }
 
   public Boolean chechStatus(ImageStatusParameter isp) {
-    
+
     ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     try {
       log.debug(ow.writeValueAsString(isp));
@@ -374,7 +365,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
       Logger.getLogger(ImageStatusParmServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
     }
     Boolean flag = false;
-    if (isp != null) {
+    if (isp != null && isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
+            && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
+            && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
       Boolean s1 = isp.getXrms() < 0.13 && isp.getYrms() < 0.13
               && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
               && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
@@ -386,8 +379,8 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
               && isp.getFwhm() < 10 && isp.getFwhm() > 1;  //&& isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
       flag = s1 || s2;
-    }else{
-      log.error("image status is null");
+    } else {
+      log.error("image status is null or has null porperties!");
     }
     return flag;
   }

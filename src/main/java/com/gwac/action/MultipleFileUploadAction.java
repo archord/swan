@@ -163,7 +163,9 @@ public class MultipleFileUploadAction extends ActionSupport {
 
         //接受数据文件
         int i = 0;
+        long fileTotalSize = configFile.length();
         for (File file : fileUpload) {
+          fileTotalSize += file.length();
           String tfilename = fileUploadFileName.get(i++).trim();
           if (tfilename.isEmpty()) {
             continue;
@@ -178,6 +180,15 @@ public class MultipleFileUploadAction extends ActionSupport {
             FileUtils.forceDelete(destFile);
           }
           FileUtils.moveFile(file, destFile);
+        }
+        if (fileTotalSize * 1.0 / 1048576 > 100.0) {
+          log.debug("total file size is " + fileTotalSize * 1.0 / 1048576 + " beyond 100MB, confile is "
+                  + configFileFileName + ", total file " + fileUploadFileName.size());
+          i = 0;
+          log.debug(configFileFileName + ": " + configFile.length() * 1.0 / 1048576);
+          for (File file : fileUpload) {
+            log.debug(fileUploadFileName.get(i++).trim() + ": " + file.length() * 1.0 / 1048576);
+          }
         }
 
         ufService.setConfigPath(confPath);
