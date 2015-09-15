@@ -67,6 +67,8 @@ public class MultipleFileUploadAction extends ActionSupport {
     String result = SUCCESS;
     echo = "";
 
+    log.debug("dpmName=" + dpmName + ",configFile=" + configFileFileName);
+
     //必须设置传输机器名称
     if (null == dpmName) {
       setEcho(echo + "Error, must set machine name(dpmName).\n");
@@ -166,6 +168,19 @@ public class MultipleFileUploadAction extends ActionSupport {
         long fileTotalSize = configFile.length();
         for (File file : fileUpload) {
           fileTotalSize += file.length();
+        }
+        if (fileTotalSize * 1.0 / 1048576 > 100.0) {
+          log.debug("total file size is " + fileTotalSize * 1.0 / 1048576 + " beyond 100MB, confile is "
+                  + configFileFileName + ", total file " + fileUploadFileName.size());
+          i = 0;
+          log.debug(configFileFileName + ": " + configFile.length() * 1.0 / 1048576 + "MB");
+          for (File file : fileUpload) {
+            log.debug(fileUploadFileName.get(i++).trim() + ": " + file.length() * 1.0 / 1048576 + "MB");
+          }
+        }
+
+        i = 0;
+        for (File file : fileUpload) {
           String tfilename = fileUploadFileName.get(i++).trim();
           if (tfilename.isEmpty()) {
             continue;
@@ -180,15 +195,6 @@ public class MultipleFileUploadAction extends ActionSupport {
             FileUtils.forceDelete(destFile);
           }
           FileUtils.moveFile(file, destFile);
-        }
-        if (fileTotalSize * 1.0 / 1048576 > 100.0) {
-          log.debug("total file size is " + fileTotalSize * 1.0 / 1048576 + " beyond 100MB, confile is "
-                  + configFileFileName + ", total file " + fileUploadFileName.size());
-          i = 0;
-          log.debug(configFileFileName + ": " + configFile.length() * 1.0 / 1048576);
-          for (File file : fileUpload) {
-            log.debug(fileUploadFileName.get(i++).trim() + ": " + file.length() * 1.0 / 1048576);
-          }
         }
 
         ufService.setConfigPath(confPath);

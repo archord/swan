@@ -26,12 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
 
 /**
  * 解析一级OT列表文件，计算二级OT，切图，模板切图。
@@ -358,12 +354,6 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
 
   public Boolean chechStatus(ImageStatusParameter isp) {
 
-    ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    try {
-      log.debug(ow.writeValueAsString(isp));
-    } catch (IOException ex) {
-      Logger.getLogger(ImageStatusParmServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-    }
     Boolean flag = false;
     if (isp != null && isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
             && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
