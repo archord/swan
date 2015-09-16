@@ -322,32 +322,34 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
         }
       }
 
-      String ip = "190.168.1.32"; //190.168.1.32
-      int port = 18851;
-      Socket socket = null;
-      DataOutputStream out = null;
-      try {
-        socket = new Socket(ip, port);
-        out = new DataOutputStream(socket.getOutputStream());
-        for (ImageStatusParameter isp : isps) {
-          if (chechStatus(isp)) {
-            String tmsg = getFWHMMessage(isp);
-            out.write(tmsg.getBytes());
-            out.flush();
-            log.debug("send message to " + ip + " : " + tmsg);
-            try {
-              Thread.sleep(100);
-            } catch (InterruptedException ex) {
-              log.error("sleep error!", ex);
+      if (isps.size() > 0) {
+        try {
+          String ip = "190.168.1.32"; //190.168.1.32
+          int port = 18851;
+          Socket socket = null;
+          DataOutputStream out = null;
+          socket = new Socket(ip, port);
+          out = new DataOutputStream(socket.getOutputStream());
+          for (ImageStatusParameter isp : isps) {
+            if (chechStatus(isp)) {
+              String tmsg = getFWHMMessage(isp);
+              out.write(tmsg.getBytes());
+              out.flush();
+              log.debug("send message to " + ip + " : " + tmsg);
+              try {
+                Thread.sleep(100);
+              } catch (InterruptedException ex) {
+                log.error("sleep error!", ex);
+              }
+            } else {
+              log.debug("image status do not meet send status.");
             }
-          } else {
-            log.debug("image status do not meet send status.");
           }
+          out.close();
+          socket.close();
+        } catch (IOException ex) {
+          log.error("send message error", ex);
         }
-        out.close();
-        socket.close();
-      } catch (IOException ex) {
-        log.error("send message error", ex);
       }
     }
   }
