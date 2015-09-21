@@ -335,7 +335,7 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               String tmsg = getFWHMMessage(isp);
               out.write(tmsg.getBytes());
               out.flush();
-              log.debug("send message to " + ip + " : " + tmsg);
+              log.debug("send message， dpmId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
               try {
                 Thread.sleep(100);
               } catch (InterruptedException ex) {
