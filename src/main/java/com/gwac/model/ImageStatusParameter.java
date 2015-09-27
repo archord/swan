@@ -47,10 +47,11 @@ public class ImageStatusParameter  implements java.io.Serializable {
      private Float temperatureActual;
      private int dpmId;
      private int prcNum;
-     protected float exposureTime;
-     protected float imgCenterRa;
-     protected float imgCenterDec;
-     protected Date procEndTime;
+     private float exposureTime;
+     private float imgCenterRa;
+     private float imgCenterDec;
+     private Date procEndTime;
+     private boolean sendSuccess;
 
     public ImageStatusParameter() {
     }
@@ -401,6 +402,20 @@ public class ImageStatusParameter  implements java.io.Serializable {
     public void setProcEndTime(Date procEndTime) {
         this.procEndTime = procEndTime;
     }
+
+  /**
+   * @return the sendSuccess
+   */
+  public boolean isSendSuccess() {
+    return sendSuccess;
+  }
+
+  /**
+   * @param sendSuccess the sendSuccess to set
+   */
+  public void setSendSuccess(boolean sendSuccess) {
+    this.sendSuccess = sendSuccess;
+  }
 
 
 

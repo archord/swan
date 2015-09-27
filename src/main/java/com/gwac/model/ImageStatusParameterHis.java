@@ -42,6 +42,13 @@ public class ImageStatusParameterHis  implements java.io.Serializable {
      private Float avgEllipticity;
      private Float temperatureSet;
      private Float temperatureActual;
+     private int dpmId;
+     private int prcNum;
+     private float exposureTime;
+     private float imgCenterRa;
+     private float imgCenterDec;
+     private Date procEndTime;
+     private boolean sendSuccess;
 
     public ImageStatusParameterHis() {
     }
@@ -296,6 +303,104 @@ public class ImageStatusParameterHis  implements java.io.Serializable {
     public void setTemperatureActual(Float temperatureActual) {
         this.temperatureActual = temperatureActual;
     }
+
+  /**
+   * @return the dpmId
+   */
+  public int getDpmId() {
+    return dpmId;
+  }
+
+  /**
+   * @param dpmId the dpmId to set
+   */
+  public void setDpmId(int dpmId) {
+    this.dpmId = dpmId;
+  }
+
+  /**
+   * @return the prcNum
+   */
+  public int getPrcNum() {
+    return prcNum;
+  }
+
+  /**
+   * @param prcNum the prcNum to set
+   */
+  public void setPrcNum(int prcNum) {
+    this.prcNum = prcNum;
+  }
+
+  /**
+   * @return the exposureTime
+   */
+  public float getExposureTime() {
+    return exposureTime;
+  }
+
+  /**
+   * @param exposureTime the exposureTime to set
+   */
+  public void setExposureTime(float exposureTime) {
+    this.exposureTime = exposureTime;
+  }
+
+  /**
+   * @return the imgCenterRa
+   */
+  public float getImgCenterRa() {
+    return imgCenterRa;
+  }
+
+  /**
+   * @param imgCenterRa the imgCenterRa to set
+   */
+  public void setImgCenterRa(float imgCenterRa) {
+    this.imgCenterRa = imgCenterRa;
+  }
+
+  /**
+   * @return the imgCenterDec
+   */
+  public float getImgCenterDec() {
+    return imgCenterDec;
+  }
+
+  /**
+   * @param imgCenterDec the imgCenterDec to set
+   */
+  public void setImgCenterDec(float imgCenterDec) {
+    this.imgCenterDec = imgCenterDec;
+  }
+
+  /**
+   * @return the procEndTime
+   */
+  public Date getProcEndTime() {
+    return procEndTime;
+  }
+
+  /**
+   * @param procEndTime the procEndTime to set
+   */
+  public void setProcEndTime(Date procEndTime) {
+    this.procEndTime = procEndTime;
+  }
+
+  /**
+   * @return the sendSuccess
+   */
+  public boolean isSendSuccess() {
+    return sendSuccess;
+  }
+
+  /**
+   * @param sendSuccess the sendSuccess to set
+   */
+  public void setSendSuccess(boolean sendSuccess) {
+    this.sendSuccess = sendSuccess;
+  }
 
 
 

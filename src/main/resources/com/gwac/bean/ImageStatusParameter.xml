@@ -10,6 +10,7 @@
     <property name="ffDao" ref="ffDao" />
     <property name="psDao" ref="psDao" />
     <property name="ispDao" ref="ispDao" />
+    <property name="dpmDao" ref="dpmDao" />
     <property name="rootPath" value="${gwac.data.root.directory}" />	
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />

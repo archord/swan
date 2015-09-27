@@ -4,10 +4,12 @@
  */
 package com.gwac.job;
 
+import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.ProcessStatusDao;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.DataProcessMachine;
 import com.gwac.model.FitsFile;
 import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.ProcessStatus;
@@ -24,8 +26,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -41,6 +45,7 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
   private FitsFileDAO ffDao;
   private ProcessStatusDao psDao;
   private ImageStatusParameterDao ispDao;
+  private DataProcessMachineDAO dpmDao;
 
   private String rootPath;
 
@@ -81,276 +86,287 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
 
     List<UploadFileUnstore> ufus = ufuDao.getImgStatusFile();
     log.debug("size=" + ufus.size());
-    if (ufus != null) {
 
-      List<ImageStatusParameter> isps = new ArrayList<ImageStatusParameter>();
-      InputStream input = null;
+    if (!ufus.isEmpty()) {
+      List<ImageStatusParameter> isps = new ArrayList<>();
       DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       DateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");
+
       for (UploadFileUnstore ufu : ufus) {
-        log.debug("ufuId=" + ufu.getUfuId());
+
         File tfile = new File(rootPath + "/" + ufu.getStorePath(), ufu.getFileName());
-        log.debug(tfile.getAbsolutePath());
         if (tfile.exists()) {
-          try {
-            input = new FileInputStream(tfile);
+          log.debug("start parse file, ufuId=" + ufu.getUfuId() + ", " + tfile.getAbsolutePath());
+
+          try (InputStream input = new FileInputStream(tfile)) {
+
+            String tStr;
+            String tStr2;
+            int dpmId = -1;
+            int prcNum = -1;
+            Date imageTime = null;
+
             Properties cfile = new Properties();
             cfile.load(input);
 
-            ImageStatusParameter isp = new ImageStatusParameter();
-            String tStr = cfile.getProperty("DateObsUT");
-            String tStr2 = cfile.getProperty("TimeObsUT");
-            tStr = tStr.trim();
-            tStr2 = tStr2.trim();
-            if (tStr != null && tStr2 != null && !tStr.isEmpty() && !tStr2.isEmpty()) {
-              isp.setTimeObsUt(df.parse(tStr + " " + tStr2));
+            String dateObsUT = cfile.getProperty("DateObsUT");
+            String timeObsUT = cfile.getProperty("TimeObsUT");
+            String imageName = cfile.getProperty("Image");
+
+            if (StringUtils.isNotBlank(dateObsUT) && StringUtils.isNotBlank(timeObsUT)) {
+              try {
+                imageTime = df.parse(dateObsUT.trim() + " " + timeObsUT.trim());
+              } catch (ParseException ex) {
+                log.error("parse image status file: " + ufu.getFileName()
+                        + ", error imageTime: " + dateObsUT.trim() + " " + timeObsUT.trim(), ex);
+              }
+            }
+
+            if (StringUtils.isNotBlank(imageName)) {
+              String dpmName = "M" + imageName.substring(3, 5);  //应该在数据库中通过dpmName查询
+              String numberStr = imageName.substring(22, 26);
+              DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
+              if (dpm != null) {
+                dpmId = dpm.getDpmId();
+              }
+              if (StringUtils.isNumeric(numberStr)) {
+                prcNum = Integer.parseInt(numberStr);
+              }
+            }
+
+            //时间，机器编号，图像编号，任何一个不正常，该条记录没有意义
+            if (imageTime != null && dpmId != -1 && prcNum != -1) {
+              ImageStatusParameter isp = new ImageStatusParameter();
+
+              isp.setTimeObsUt(imageTime);
+              isp.setDpmId(dpmId);
+              isp.setPrcNum(prcNum);
+
               tStr = cfile.getProperty("Obj_Num");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setObjNum(Integer.parseInt(tStr.trim()));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setObjNum(Integer.parseInt(tStr.trim()));
+              } else {
+                isp.setObjNum(-99);
               }
+
               tStr = cfile.getProperty("bgbright");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setBgBright(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setBgBright(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setBgBright(new Float(-99));
               }
+
               tStr = cfile.getProperty("Fwhm");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setFwhm(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setFwhm(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setFwhm(new Float(-99));
               }
+
               tStr = cfile.getProperty("AverDeltaMag");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setS2n(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setS2n(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setS2n(new Float(-99));
               }
+
               tStr = cfile.getProperty("AverLimit");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setAvgLimit(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setAvgLimit(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setAvgLimit(new Float(-99));
               }
+
               tStr = cfile.getProperty("Extinc");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setExtinc(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setExtinc(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setExtinc(new Float(-99));
               }
               tStr = cfile.getProperty("xshift");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setXshift(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setXshift(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setXshift(new Float(-99));
               }
               tStr = cfile.getProperty("yshift");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setYshift(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setYshift(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setYshift(new Float(-99));
               }
               tStr = cfile.getProperty("xrms");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setXrms(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setXrms(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setXrms(new Float(-99));
               }
               tStr = cfile.getProperty("yrms");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setYrms(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setYrms(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setYrms(new Float(-99));
               }
               tStr = cfile.getProperty("OC1");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setOt1Num(Integer.parseInt(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setOt1Num(Integer.parseInt(tStr.trim()));
+              } else {
+                isp.setOt1Num(-99);
               }
               tStr = cfile.getProperty("VC1");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setVar1Num(Integer.parseInt(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setVar1Num(Integer.parseInt(tStr));
+              } else {
+                isp.setVar1Num(-99);
               }
-              tStr = cfile.getProperty("Image");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  tStr2 = cfile.getProperty("DirData");
-                  FitsFile ff = new FitsFile();
-                  ff.setFileName(tStr);
-                  ff.setStorePath(tStr2);
-                  ffDao.save(ff);
-                  isp.setFfId(ff.getFfId());
 
-                  int dpmId = Integer.parseInt(tStr.substring(3, 5));  //应该在数据库中通过dpmName查询
-                  int number = Integer.parseInt(tStr.substring(22, 26));
-                  isp.setDpmId(dpmId);
-                  isp.setPrcNum(number);
-                }
-              }
+              tStr2 = cfile.getProperty("DirData");
+              FitsFile ff = new FitsFile();
+              ff.setFileName(imageName);
+              ff.setStorePath(tStr2);
+              ffDao.save(ff);
+              isp.setFfId(ff.getFfId());
+
               tStr = cfile.getProperty("ra_mount");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  if (tStr.contains(":")) {
-                    isp.setMountRa(CommonFunction.dmsToDegree(tStr));
-                  } else {
-                    isp.setMountRa(Float.parseFloat(tStr));
-                  }
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setMountRa(Float.parseFloat(tStr.trim()));
+              } else if (tStr.contains(":")) {
+                isp.setMountRa(CommonFunction.dmsToDegree(tStr));
               }
+
               tStr = cfile.getProperty("dec_mount");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  if (tStr.contains(":")) {
-                    isp.setMountDec(CommonFunction.dmsToDegree(tStr));
-                  } else {
-                    isp.setMountDec(Float.parseFloat(tStr));
-                  }
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setMountDec(Float.parseFloat(tStr.trim()));
+              } else if (tStr.contains(":")) {
+                isp.setMountDec(CommonFunction.dmsToDegree(tStr));
               }
+
               tStr = cfile.getProperty("State");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  ProcessStatus ps = new ProcessStatus();
-                  ps.setPsName(tStr);
-                  psDao.save(ps);
-                  isp.setProcStageId(ps.getPsId());
-                }
+              if (StringUtils.isNotBlank(tStr) && !StringUtils.equalsIgnoreCase(tStr, "nan")) {
+                ProcessStatus ps = new ProcessStatus();
+                ps.setPsName(tStr);
+                psDao.save(ps);
+                isp.setProcStageId(ps.getPsId());
               }
+
               tStr = cfile.getProperty("TimeProcess");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setProcTime(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setProcTime(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setProcTime(new Float(-99));
               }
+
               tStr = cfile.getProperty("ellipticity");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setAvgEllipticity(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setAvgEllipticity(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setAvgEllipticity(new Float(-99));
               }
+
               tStr = cfile.getProperty("tempset");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setTemperatureSet(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setTemperatureSet(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setTemperatureSet(new Float(-99));
               }
+
               tStr = cfile.getProperty("tempact");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setTemperatureActual(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setTemperatureActual(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setTemperatureActual(new Float(-99));
               }
+
               tStr = cfile.getProperty("exptime");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setExposureTime(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setExposureTime(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setExposureTime(new Float(-99));
               }
+
               tStr = cfile.getProperty("ra_imgCenter");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setImgCenterRa(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setImgCenterRa(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setImgCenterRa(new Float(-99));
               }
+
               tStr = cfile.getProperty("dec_imgCenter");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
-                  isp.setImgCenterDec(Float.parseFloat(tStr));
-                }
+              if (StringUtils.isNumericSpace(tStr)) {
+                isp.setImgCenterDec(Float.parseFloat(tStr.trim()));
+              } else {
+                isp.setImgCenterDec(new Float(-99));
               }
+
               tStr = cfile.getProperty("TimeProcessEnd");
-              if (tStr != null) {
-                tStr = tStr.trim();
-                if (!tStr.isEmpty() && !tStr.equalsIgnoreCase("nan")) {
+              if (StringUtils.isNotBlank(tStr)) {
+                try {
                   isp.setProcEndTime(df2.parse(tStr));
+                } catch (ParseException ex) {
+                  log.error("parse image status file: " + ufu.getFileName() + ", error procEndTiime: " + tStr, ex);
                 }
               }
+              isp.setSendSuccess(false);
               isps.add(isp);
               ispDao.save(isp);
             }
-          } catch (NumberFormatException ex) {
-            log.error(ufu.getFileName());
-            log.error(ex);
-          } catch (FileNotFoundException ex) {
-            log.error(ufu.getFileName());
-            log.error(ex);
-          } catch (IOException ex) {
-            log.error(ufu.getFileName());
-            log.error(ex);
-          } catch (ParseException ex) {
-            log.error(ufu.getFileName());
-            log.error(ex);
-          } finally {
-            if (input != null) {
-              try {
-                input.close();
-              } catch (IOException ex) {
-                log.error(ex);
-              }
+
+            try {
+              input.close();
+            } catch (IOException ex) {
+              log.error("close property file InputStream error.", ex);
             }
+          } catch (IOException ex) {
+            log.error("parse image status file: " + ufu.getFileName(), ex);
           }
         } else {
-          log.error("file not exists!");
+          log.error("ufuId=" + ufu.getUfuId() + ", " + tfile.getAbsolutePath() + " not exists!");
         }
       }
 
-      if (isps.size() > 0) {
+      if (!isBeiJingServer && isps.size() > 0) {
+        String ip = "190.168.1.32"; //190.168.1.32
+        int port = 18851;
+        Socket socket = null;
+        DataOutputStream out = null;
+
         try {
-          String ip = "190.168.1.32"; //190.168.1.32
-          int port = 18851;
-          Socket socket = null;
-          DataOutputStream out = null;
           socket = new Socket(ip, port);
           out = new DataOutputStream(socket.getOutputStream());
           for (ImageStatusParameter isp : isps) {
             if (chechStatus(isp)) {
               String tmsg = getFWHMMessage(isp);
-              out.write(tmsg.getBytes());
-              out.flush();
-              log.debug("send message， dpmId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+              try {
+                out.write(tmsg.getBytes());
+                out.flush();
+                log.debug("send fwhm， dpmId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+              } catch (IOException ex) {
+                log.error("send fwhm, send message error.", ex);
+              }
+              isp.setSendSuccess(true);
+              ispDao.update(isp);
+              
               try {
                 Thread.sleep(100);
               } catch (InterruptedException ex) {
-                log.error("sleep error!", ex);
+                log.error("send fwhm, delay error.", ex);
               }
             } else {
-              log.debug("image status do not meet send status.");
+              log.debug("send fwhm, image status do not meet send status.");
             }
           }
-          out.close();
-          socket.close();
+
+          try {
+            out.close();
+            socket.close();
+          } catch (IOException ex) {
+            log.error("send fwhm, close socket error.", ex);
+          }
         } catch (IOException ex) {
-          log.error("send message error", ex);
+          log.error("send fwhm, cannot connect to server.", ex);
         }
       }
+
     }
   }
 
@@ -437,6 +453,13 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
    */
   public void setIsTestServer(Boolean isTestServer) {
     this.isTestServer = isTestServer;
+  }
+
+  /**
+   * @param dpmDao the dpmDao to set
+   */
+  public void setDpmDao(DataProcessMachineDAO dpmDao) {
+    this.dpmDao = dpmDao;
   }
 
 }
