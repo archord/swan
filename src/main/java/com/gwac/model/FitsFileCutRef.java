@@ -91,7 +91,7 @@ public class FitsFileCutRef implements java.io.Serializable {
     this.storePath = storePath;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
+//  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "generate_time", length = 29)
   public Date getGenerateTime() {
     return this.generateTime;

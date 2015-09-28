@@ -94,7 +94,7 @@ public class ImageStatusParameterHis  implements java.io.Serializable {
         this.ispId = ispId;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_obs_ut", length=29)
     public Date getTimeObsUt() {
         return this.timeObsUt;

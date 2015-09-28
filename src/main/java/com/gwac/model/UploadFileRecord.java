@@ -85,7 +85,7 @@ public class UploadFileRecord  implements java.io.Serializable {
         this.storePath = storePath;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="upload_date", length=29)
     public Date getUploadDate() {
         return this.uploadDate;

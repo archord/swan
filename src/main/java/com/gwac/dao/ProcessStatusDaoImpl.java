@@ -16,18 +16,30 @@ import org.hibernate.Session;
  * @author xy
  */
 public class ProcessStatusDaoImpl extends BaseHibernateDaoImpl<ProcessStatus> implements ProcessStatusDao {
-  
+
   @Override
   public void save(ProcessStatus obj) {
     Session session = getCurrentSession();
     //createSQLQuery createQuery
-    String sql = "select ps_id from process_status where lower(ps_name)=lower('" + obj.getPsName()+ "')";
+    String sql = "select ps_id from process_status where lower(ps_name)=lower('" + obj.getPsName() + "')";
     Query q = session.createSQLQuery(sql);
     if (q.list().isEmpty()) {
       super.save(obj);
     } else {
       Short psId = (Short) q.list().get(0);
       obj.setPsId(psId);
+    }
+  }
+
+  @Override
+  public ProcessStatus getByPsId(short id) {
+    Session session = getCurrentSession();
+    String sql = "select * from process_status where ps_id=" + id + ";";
+    Query q = session.createSQLQuery(sql).addEntity(ProcessStatus.class);
+    if (!q.list().isEmpty()) {
+      return (ProcessStatus) q.list().get(0);
+    } else {
+      return null;
     }
   }
 

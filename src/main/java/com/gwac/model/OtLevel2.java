@@ -117,7 +117,7 @@ public class OtLevel2 implements java.io.Serializable {
     this.dpmId = dpmId;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
+//  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "found_time_utc", length = 29)
   public Date getFoundTimeUtc() {
     return this.foundTimeUtc;

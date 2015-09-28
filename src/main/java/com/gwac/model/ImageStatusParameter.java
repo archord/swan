@@ -51,7 +51,7 @@ public class ImageStatusParameter  implements java.io.Serializable {
      private float imgCenterRa;
      private float imgCenterDec;
      private Date procEndTime;
-     private boolean sendSuccess;
+     private Boolean sendSuccess;
 
     public ImageStatusParameter() {
     }
@@ -102,7 +102,7 @@ public class ImageStatusParameter  implements java.io.Serializable {
         this.ispId = ispId;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_obs_ut", length=29)
     public Date getTimeObsUt() {
         return this.timeObsUt;
@@ -390,7 +390,7 @@ public class ImageStatusParameter  implements java.io.Serializable {
     /**
      * @return the procEndTime
      */
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="proc_end_time", length=29)
     public Date getProcEndTime() {
         return procEndTime;
@@ -406,14 +406,15 @@ public class ImageStatusParameter  implements java.io.Serializable {
   /**
    * @return the sendSuccess
    */
-  public boolean isSendSuccess() {
+    @Column(name="send_success")
+  public Boolean getSendSuccess() {
     return sendSuccess;
   }
 
   /**
    * @param sendSuccess the sendSuccess to set
    */
-  public void setSendSuccess(boolean sendSuccess) {
+  public void setSendSuccess(Boolean sendSuccess) {
     this.sendSuccess = sendSuccess;
   }
 

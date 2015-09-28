@@ -71,7 +71,7 @@ public class Environment  implements java.io.Serializable {
         this.cloudPercent = cloudPercent;
     }
 
-    @Temporal(TemporalType.DATE)
+//    @Temporal(TemporalType.DATE)
     @Column(name="date", length=13)
     public Date getDate() {
         return this.date;
@@ -111,7 +111,7 @@ public class Environment  implements java.io.Serializable {
         this.temperature = temperature;
     }
 
-    @Temporal(TemporalType.TIME)
+//    @Temporal(TemporalType.TIME)
     @Column(name="time", length=15)
     public Date getTime() {
         return this.time;

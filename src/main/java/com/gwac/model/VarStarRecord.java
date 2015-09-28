@@ -191,7 +191,7 @@ public class VarStarRecord  implements java.io.Serializable {
         this.YTemp = YTemp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_ut", length=29)
     public Date getDateUt() {
         return this.dateUt;

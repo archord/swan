@@ -63,7 +63,7 @@ public class UserInfo  implements java.io.Serializable {
         this.address = address;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date", length=29)
     public Date getCreateDate() {
         return this.createDate;

@@ -97,7 +97,7 @@ public class Grb  implements java.io.Serializable {
         this.triggerRa = triggerRa;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="trigger_time", length=29)
     public Date getTriggerTime() {
         return this.triggerTime;

@@ -57,7 +57,6 @@ public class DpmIsAlive extends ActionSupport {
             dpmDao.updateLastActiveTime(dpm);
             echo += "success\n";
         }
-        log.debug(echo);
         
         /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
          * 用jsp的out，则不会有两个空行。

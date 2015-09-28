@@ -105,7 +105,7 @@ public class OtLevel3  implements java.io.Serializable {
         this.dpmName = dpmName;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="found_time_utc", length=29)
     public Date getFoundTimeUtc() {
         return this.foundTimeUtc;

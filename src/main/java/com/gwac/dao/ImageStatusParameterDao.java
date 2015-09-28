@@ -24,4 +24,6 @@ public interface ImageStatusParameterDao extends BaseHibernateDao<ImageStatusPar
   
   public List<ImageStatusParameter> getLatestParmOfAllDpm();
   
+  public ImageStatusParameter getPreviousStatus(ImageStatusParameter isp);
+  
 }

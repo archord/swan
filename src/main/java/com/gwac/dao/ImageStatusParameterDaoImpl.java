@@ -5,6 +5,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.ImageStatusParameter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,6 +27,21 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     Session session = getCurrentSession();
     String sql = "WITH moved_rows AS ( DELETE FROM image_status_parameter RETURNING * ) INSERT INTO image_status_parameter_his SELECT * FROM moved_rows;";
     session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public ImageStatusParameter getPreviousStatus(ImageStatusParameter isp) {
+
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    Session session = getCurrentSession();
+    String sql = "select * from image_status_parameter where dpm_id=" + isp.getDpmId()
+            + " and prc_num=" + (isp.getPrcNum() - 1) + " and date(time_obs_ut)=date('" + df.format(isp.getTimeObsUt()) + "')";
+    Query q = session.createSQLQuery(sql).addEntity(ImageStatusParameter.class);
+    if (!q.list().isEmpty()) {
+      return (ImageStatusParameter) q.list().get(0);
+    } else {
+      return null;
+    }
   }
 
   @Override

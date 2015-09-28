@@ -13,5 +13,5 @@ import java.util.List;
  * @author xy
  */
 public interface ProcessStatusDao extends BaseHibernateDao<ProcessStatus> {
-    
+    public ProcessStatus getByPsId(short id);
 }

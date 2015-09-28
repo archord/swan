@@ -87,7 +87,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
         this.storePath = storePath;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="upload_date", length=29)
     public Date getUploadDate() {
         return this.uploadDate;
@@ -110,7 +110,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
   /**
    * @return the sendTime
    */
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="send_time", length=29)
   public Date getSendTime() {
     return sendTime;
@@ -126,7 +126,7 @@ public class UploadFileUnstore  implements java.io.Serializable {
   /**
    * @return the processDoneTime
    */
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="process_done_time", length=29)
   public Date getProcessDoneTime() {
     return processDoneTime;

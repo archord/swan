@@ -91,7 +91,7 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
         this.cmpStarId = cmpStarId;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="datetime", length=29)
     public Date getDatetime() {
         return this.datetime;
