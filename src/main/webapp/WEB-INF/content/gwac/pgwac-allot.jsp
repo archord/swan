@@ -24,7 +24,7 @@
   function openDialog(url,otName) {
     var queryHis = $("#queryHis").val();
     openwindow(url+"?otName=" + otName + "&queryHis=" + queryHis,
-            '_blank', 850, 600, 850, 600);
+            '_blank', 1050, 600, 1050, 600);
     return false;
   }
   function openwindow(url, name, width, height, iWidth, iHeight)
