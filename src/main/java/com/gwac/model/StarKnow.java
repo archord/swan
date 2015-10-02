@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -18,10 +18,10 @@ public class StarKnow  implements java.io.Serializable {
 
 
      private long starId;
+     private String starName;
+     private Float ra;
      private Float dec;
      private Float mag;
-     private Float ra;
-     private String starName;
      private Short vtId;
 
     public StarKnow() {
@@ -31,12 +31,12 @@ public class StarKnow  implements java.io.Serializable {
     public StarKnow(long starId) {
         this.starId = starId;
     }
-    public StarKnow(long starId, Float dec, Float mag, Float ra, String starName, Short vtId) {
+    public StarKnow(long starId, String starName, Float ra, Float dec, Float mag, Short vtId) {
        this.starId = starId;
+       this.starName = starName;
+       this.ra = ra;
        this.dec = dec;
        this.mag = mag;
-       this.ra = ra;
-       this.starName = starName;
        this.vtId = vtId;
     }
    
@@ -50,6 +50,26 @@ public class StarKnow  implements java.io.Serializable {
     
     public void setStarId(long starId) {
         this.starId = starId;
+    }
+
+    
+    @Column(name="star_name")
+    public String getStarName() {
+        return this.starName;
+    }
+    
+    public void setStarName(String starName) {
+        this.starName = starName;
+    }
+
+    
+    @Column(name="ra", precision=8, scale=8)
+    public Float getRa() {
+        return this.ra;
+    }
+    
+    public void setRa(Float ra) {
+        this.ra = ra;
     }
 
     
@@ -70,26 +90,6 @@ public class StarKnow  implements java.io.Serializable {
     
     public void setMag(Float mag) {
         this.mag = mag;
-    }
-
-    
-    @Column(name="ra", precision=8, scale=8)
-    public Float getRa() {
-        return this.ra;
-    }
-    
-    public void setRa(Float ra) {
-        this.ra = ra;
-    }
-
-    
-    @Column(name="star_name")
-    public String getStarName() {
-        return this.starName;
-    }
-    
-    public void setStarName(String starName) {
-        this.starName = starName;
     }
 
     

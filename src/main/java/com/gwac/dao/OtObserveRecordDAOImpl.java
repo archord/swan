@@ -188,6 +188,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return flag;
   }
 
+  @Override
   public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox, int n) {
     Session session = getCurrentSession();
     String sql = "select * from ot_observe_record "
@@ -195,12 +196,14 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + " and ot_id=0"
             + " and dpm_id=" + obj.getDpmId()
             + " and sky_id=" + obj.getSkyId()
+            + " and data_produce_method='" + obj.getDataProduceMethod() + "'"
             + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " "
             + " order by ff_number asc";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
 
+  @Override
   public int countRecordByOtName(String otName, Boolean queryHis) {
 
     String sql1 = "select count(*) "
@@ -229,6 +232,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return total;
   }
 
+  @Override
   public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis) {
 
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
@@ -238,7 +242,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
             + "where oor.ot_id=(select ob.ot_id from ot_level2 ob where name='" + otName + "') ";
-    String sql2 = "select oor.*, ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath "
+    String sql2 = "select ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath, oor.*"
             + "from ot_observe_record_his oor "
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut_his ffc on oor.ffc_id=ffc.ffc_id "
@@ -322,6 +326,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return oorss;
   }
 
+  @Override
   public List<OtObserveRecordShow> getRecordByOtId(long otId) {
 
     ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();

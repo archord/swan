@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -19,8 +19,8 @@ public class StarListFile  implements java.io.Serializable {
 
      private long slfId;
      private Short dpmId;
-     private String fileName;
      private String storePath;
+     private String fileName;
 
     public StarListFile() {
     }
@@ -29,11 +29,11 @@ public class StarListFile  implements java.io.Serializable {
     public StarListFile(long slfId) {
         this.slfId = slfId;
     }
-    public StarListFile(long slfId, Short dpmId, String fileName, String storePath) {
+    public StarListFile(long slfId, Short dpmId, String storePath, String fileName) {
        this.slfId = slfId;
        this.dpmId = dpmId;
-       this.fileName = fileName;
        this.storePath = storePath;
+       this.fileName = fileName;
     }
    
      @Id 
@@ -59,16 +59,6 @@ public class StarListFile  implements java.io.Serializable {
     }
 
     
-    @Column(name="file_name")
-    public String getFileName() {
-        return this.fileName;
-    }
-    
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    
     @Column(name="store_path")
     public String getStorePath() {
         return this.storePath;
@@ -76,6 +66,16 @@ public class StarListFile  implements java.io.Serializable {
     
     public void setStorePath(String storePath) {
         this.storePath = storePath;
+    }
+
+    
+    @Column(name="file_name")
+    public String getFileName() {
+        return this.fileName;
+    }
+    
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
 

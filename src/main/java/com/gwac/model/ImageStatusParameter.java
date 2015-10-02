@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2015-5-7 8:30:31 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -45,11 +45,11 @@ public class ImageStatusParameter  implements java.io.Serializable {
      private Float avgEllipticity;
      private Float temperatureSet;
      private Float temperatureActual;
-     private int dpmId;
-     private int prcNum;
-     private float exposureTime;
-     private float imgCenterRa;
-     private float imgCenterDec;
+     private Integer dpmId;
+     private Integer prcNum;
+     private Float exposureTime;
+     private Float imgCenterRa;
+     private Float imgCenterDec;
      private Date procEndTime;
      private Boolean sendSuccess;
 
@@ -60,7 +60,7 @@ public class ImageStatusParameter  implements java.io.Serializable {
     public ImageStatusParameter(long ispId) {
         this.ispId = ispId;
     }
-    public ImageStatusParameter(long ispId, Date timeObsUt, Integer objNum, Float bgBright, Float fwhm, Float s2n, Float avgLimit, Float extinc, Float xshift, Float yshift, Float xrms, Float yrms, Integer ot1Num, Integer var1Num, Long ffId, Float mountRa, Float mountDec, Short procStageId, Float procTime, Float avgEllipticity, Float temperatureSet, Float temperatureActual, int dpmId, int prcNum) {
+    public ImageStatusParameter(long ispId, Date timeObsUt, Integer objNum, Float bgBright, Float fwhm, Float s2n, Float avgLimit, Float extinc, Float xshift, Float yshift, Float xrms, Float yrms, Integer ot1Num, Integer var1Num, Long ffId, Float mountRa, Float mountDec, Short procStageId, Float procTime, Float avgEllipticity, Float temperatureSet, Float temperatureActual, Integer dpmId, Integer prcNum, Float exposureTime, Float imgCenterRa, Float imgCenterDec, Date procEndTime, Boolean sendSuccess) {
        this.ispId = ispId;
        this.timeObsUt = timeObsUt;
        this.objNum = objNum;
@@ -85,12 +85,17 @@ public class ImageStatusParameter  implements java.io.Serializable {
        this.temperatureActual = temperatureActual;
        this.dpmId = dpmId;
        this.prcNum = prcNum;
+       this.exposureTime = exposureTime;
+       this.imgCenterRa = imgCenterRa;
+       this.imgCenterDec = imgCenterDec;
+       this.procEndTime = procEndTime;
+       this.sendSuccess = sendSuccess;
     }
    
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
     @Parameter(name = "max_lo", value = "49"),
     @Parameter(name = "sequence", value = "isp_id_seq")})
-  @Id
+     @Id 
   @GeneratedValue(generator = "generator")
 
   @Column(name = "isp_id", unique = true, nullable = false)
@@ -102,7 +107,7 @@ public class ImageStatusParameter  implements java.io.Serializable {
         this.ispId = ispId;
     }
 
-//    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="time_obs_ut", length=29)
     public Date getTimeObsUt() {
         return this.timeObsUt;
@@ -312,111 +317,75 @@ public class ImageStatusParameter  implements java.io.Serializable {
         this.temperatureActual = temperatureActual;
     }
 
-  /**
-   * @return the dpmId
-   */
+    
     @Column(name="dpm_id")
-  public int getDpmId() {
-    return dpmId;
-  }
-
-  /**
-   * @param dpmId the dpmId to set
-   */
-  public void setDpmId(int dpmId) {
-    this.dpmId = dpmId;
-  }
-
-  /**
-   * @return the prcNum
-   */
-    @Column(name="prc_num")
-  public int getPrcNum() {
-    return prcNum;
-  }
-
-  /**
-   * @param prcNum the prcNum to set
-   */
-  public void setPrcNum(int prcNum) {
-    this.prcNum = prcNum;
-  }
-
-    /**
-     * @return the exposureTime
-     */
-    @Column(name="exposure_time", precision=8, scale=8)
-    public float getExposureTime() {
-        return exposureTime;
+    public Integer getDpmId() {
+        return this.dpmId;
+    }
+    
+    public void setDpmId(Integer dpmId) {
+        this.dpmId = dpmId;
     }
 
-    /**
-     * @param exposureTime the exposureTime to set
-     */
-    public void setExposureTime(float exposureTime) {
+    
+    @Column(name="prc_num")
+    public Integer getPrcNum() {
+        return this.prcNum;
+    }
+    
+    public void setPrcNum(Integer prcNum) {
+        this.prcNum = prcNum;
+    }
+
+    
+    @Column(name="exposure_time", precision=8, scale=8)
+    public Float getExposureTime() {
+        return this.exposureTime;
+    }
+    
+    public void setExposureTime(Float exposureTime) {
         this.exposureTime = exposureTime;
     }
 
-    /**
-     * @return the imgCenterRa
-     */
+    
     @Column(name="img_center_ra", precision=8, scale=8)
-    public float getImgCenterRa() {
-        return imgCenterRa;
+    public Float getImgCenterRa() {
+        return this.imgCenterRa;
     }
-
-    /**
-     * @param imgCenterRa the imgCenterRa to set
-     */
-    public void setImgCenterRa(float imgCenterRa) {
+    
+    public void setImgCenterRa(Float imgCenterRa) {
         this.imgCenterRa = imgCenterRa;
     }
 
-    /**
-     * @return the imgCenterDec
-     */
+    
     @Column(name="img_center_dec", precision=8, scale=8)
-    public float getImgCenterDec() {
-        return imgCenterDec;
+    public Float getImgCenterDec() {
+        return this.imgCenterDec;
     }
-
-    /**
-     * @param imgCenterDec the imgCenterDec to set
-     */
-    public void setImgCenterDec(float imgCenterDec) {
+    
+    public void setImgCenterDec(Float imgCenterDec) {
         this.imgCenterDec = imgCenterDec;
     }
 
-    /**
-     * @return the procEndTime
-     */
-//    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="proc_end_time", length=29)
     public Date getProcEndTime() {
-        return procEndTime;
+        return this.procEndTime;
     }
-
-    /**
-     * @param procEndTime the procEndTime to set
-     */
+    
     public void setProcEndTime(Date procEndTime) {
         this.procEndTime = procEndTime;
     }
 
-  /**
-   * @return the sendSuccess
-   */
+    
     @Column(name="send_success")
-  public Boolean getSendSuccess() {
-    return sendSuccess;
-  }
-
-  /**
-   * @param sendSuccess the sendSuccess to set
-   */
-  public void setSendSuccess(Boolean sendSuccess) {
-    this.sendSuccess = sendSuccess;
-  }
+    public Boolean getSendSuccess() {
+        return this.sendSuccess;
+    }
+    
+    public void setSendSuccess(Boolean sendSuccess) {
+        this.sendSuccess = sendSuccess;
+    }
 
 
 

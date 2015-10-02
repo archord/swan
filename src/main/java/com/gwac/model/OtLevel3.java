@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -21,21 +21,21 @@ public class OtLevel3  implements java.io.Serializable {
 
 
      private long otId;
-     private String comments;
+     private String name;
+     private Float ra;
      private Float dec;
-     private String dpmName;
      private Date foundTimeUtc;
      private String identify;
-     private Boolean isRecognize;
-     private Integer lastFfNumber;
-     private Short maxSuccOccurTimes;
-     private String name;
-     private Short otType;
-     private Float ra;
-     private Short succOccurTimes;
-     private Integer total;
      private Float xtemp;
      private Float ytemp;
+     private Integer lastFfNumber;
+     private Integer total;
+     private Short succOccurTimes;
+     private Short maxSuccOccurTimes;
+     private Boolean isRecognize;
+     private Short otType;
+     private String comments;
+     private String dpmName;
 
     public OtLevel3() {
     }
@@ -44,23 +44,23 @@ public class OtLevel3  implements java.io.Serializable {
     public OtLevel3(long otId) {
         this.otId = otId;
     }
-    public OtLevel3(long otId, String comments, Float dec, String dpmName, Date foundTimeUtc, String identify, Boolean isRecognize, Integer lastFfNumber, Short maxSuccOccurTimes, String name, Short otType, Float ra, Short succOccurTimes, Integer total, Float xtemp, Float ytemp) {
+    public OtLevel3(long otId, String name, Float ra, Float dec, Date foundTimeUtc, String identify, Float xtemp, Float ytemp, Integer lastFfNumber, Integer total, Short succOccurTimes, Short maxSuccOccurTimes, Boolean isRecognize, Short otType, String comments, String dpmName) {
        this.otId = otId;
-       this.comments = comments;
+       this.name = name;
+       this.ra = ra;
        this.dec = dec;
-       this.dpmName = dpmName;
        this.foundTimeUtc = foundTimeUtc;
        this.identify = identify;
-       this.isRecognize = isRecognize;
-       this.lastFfNumber = lastFfNumber;
-       this.maxSuccOccurTimes = maxSuccOccurTimes;
-       this.name = name;
-       this.otType = otType;
-       this.ra = ra;
-       this.succOccurTimes = succOccurTimes;
-       this.total = total;
        this.xtemp = xtemp;
        this.ytemp = ytemp;
+       this.lastFfNumber = lastFfNumber;
+       this.total = total;
+       this.succOccurTimes = succOccurTimes;
+       this.maxSuccOccurTimes = maxSuccOccurTimes;
+       this.isRecognize = isRecognize;
+       this.otType = otType;
+       this.comments = comments;
+       this.dpmName = dpmName;
     }
    
      @Id 
@@ -76,13 +76,23 @@ public class OtLevel3  implements java.io.Serializable {
     }
 
     
-    @Column(name="comments", length=1024)
-    public String getComments() {
-        return this.comments;
+    @Column(name="name", length=12)
+    public String getName() {
+        return this.name;
     }
     
-    public void setComments(String comments) {
-        this.comments = comments;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
+    @Column(name="ra", precision=8, scale=8)
+    public Float getRa() {
+        return this.ra;
+    }
+    
+    public void setRa(Float ra) {
+        this.ra = ra;
     }
 
     
@@ -95,17 +105,7 @@ public class OtLevel3  implements java.io.Serializable {
         this.dec = dec;
     }
 
-    
-    @Column(name="dpm_name", length=3)
-    public String getDpmName() {
-        return this.dpmName;
-    }
-    
-    public void setDpmName(String dpmName) {
-        this.dpmName = dpmName;
-    }
-
-//    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="found_time_utc", length=29)
     public Date getFoundTimeUtc() {
         return this.foundTimeUtc;
@@ -126,86 +126,6 @@ public class OtLevel3  implements java.io.Serializable {
     }
 
     
-    @Column(name="is_recognize")
-    public Boolean getIsRecognize() {
-        return this.isRecognize;
-    }
-    
-    public void setIsRecognize(Boolean isRecognize) {
-        this.isRecognize = isRecognize;
-    }
-
-    
-    @Column(name="last_ff_number")
-    public Integer getLastFfNumber() {
-        return this.lastFfNumber;
-    }
-    
-    public void setLastFfNumber(Integer lastFfNumber) {
-        this.lastFfNumber = lastFfNumber;
-    }
-
-    
-    @Column(name="max_succ_occur_times")
-    public Short getMaxSuccOccurTimes() {
-        return this.maxSuccOccurTimes;
-    }
-    
-    public void setMaxSuccOccurTimes(Short maxSuccOccurTimes) {
-        this.maxSuccOccurTimes = maxSuccOccurTimes;
-    }
-
-    
-    @Column(name="name", length=12)
-    public String getName() {
-        return this.name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    
-    @Column(name="ot_type")
-    public Short getOtType() {
-        return this.otType;
-    }
-    
-    public void setOtType(Short otType) {
-        this.otType = otType;
-    }
-
-    
-    @Column(name="ra", precision=8, scale=8)
-    public Float getRa() {
-        return this.ra;
-    }
-    
-    public void setRa(Float ra) {
-        this.ra = ra;
-    }
-
-    
-    @Column(name="succ_occur_times")
-    public Short getSuccOccurTimes() {
-        return this.succOccurTimes;
-    }
-    
-    public void setSuccOccurTimes(Short succOccurTimes) {
-        this.succOccurTimes = succOccurTimes;
-    }
-
-    
-    @Column(name="total")
-    public Integer getTotal() {
-        return this.total;
-    }
-    
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
-
-    
     @Column(name="xtemp", precision=8, scale=8)
     public Float getXtemp() {
         return this.xtemp;
@@ -223,6 +143,86 @@ public class OtLevel3  implements java.io.Serializable {
     
     public void setYtemp(Float ytemp) {
         this.ytemp = ytemp;
+    }
+
+    
+    @Column(name="last_ff_number")
+    public Integer getLastFfNumber() {
+        return this.lastFfNumber;
+    }
+    
+    public void setLastFfNumber(Integer lastFfNumber) {
+        this.lastFfNumber = lastFfNumber;
+    }
+
+    
+    @Column(name="total")
+    public Integer getTotal() {
+        return this.total;
+    }
+    
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    
+    @Column(name="succ_occur_times")
+    public Short getSuccOccurTimes() {
+        return this.succOccurTimes;
+    }
+    
+    public void setSuccOccurTimes(Short succOccurTimes) {
+        this.succOccurTimes = succOccurTimes;
+    }
+
+    
+    @Column(name="max_succ_occur_times")
+    public Short getMaxSuccOccurTimes() {
+        return this.maxSuccOccurTimes;
+    }
+    
+    public void setMaxSuccOccurTimes(Short maxSuccOccurTimes) {
+        this.maxSuccOccurTimes = maxSuccOccurTimes;
+    }
+
+    
+    @Column(name="is_recognize")
+    public Boolean getIsRecognize() {
+        return this.isRecognize;
+    }
+    
+    public void setIsRecognize(Boolean isRecognize) {
+        this.isRecognize = isRecognize;
+    }
+
+    
+    @Column(name="ot_type")
+    public Short getOtType() {
+        return this.otType;
+    }
+    
+    public void setOtType(Short otType) {
+        this.otType = otType;
+    }
+
+    
+    @Column(name="comments", length=1024)
+    public String getComments() {
+        return this.comments;
+    }
+    
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    
+    @Column(name="dpm_name", length=3)
+    public String getDpmName() {
+        return this.dpmName;
+    }
+    
+    public void setDpmName(String dpmName) {
+        this.dpmName = dpmName;
     }
 
 

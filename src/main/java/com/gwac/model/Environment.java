@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -21,14 +21,14 @@ public class Environment  implements java.io.Serializable {
 
 
      private long envId;
-     private Float cloudPercent;
      private Date date;
-     private Float humidity;
-     private Float seeing;
-     private Float temperature;
      private Date time;
      private String wather;
      private Float windSpeed;
+     private Float temperature;
+     private Float humidity;
+     private Float seeing;
+     private Float cloudPercent;
 
     public Environment() {
     }
@@ -37,16 +37,16 @@ public class Environment  implements java.io.Serializable {
     public Environment(long envId) {
         this.envId = envId;
     }
-    public Environment(long envId, Float cloudPercent, Date date, Float humidity, Float seeing, Float temperature, Date time, String wather, Float windSpeed) {
+    public Environment(long envId, Date date, Date time, String wather, Float windSpeed, Float temperature, Float humidity, Float seeing, Float cloudPercent) {
        this.envId = envId;
-       this.cloudPercent = cloudPercent;
        this.date = date;
-       this.humidity = humidity;
-       this.seeing = seeing;
-       this.temperature = temperature;
        this.time = time;
        this.wather = wather;
        this.windSpeed = windSpeed;
+       this.temperature = temperature;
+       this.humidity = humidity;
+       this.seeing = seeing;
+       this.cloudPercent = cloudPercent;
     }
    
      @Id 
@@ -61,17 +61,7 @@ public class Environment  implements java.io.Serializable {
         this.envId = envId;
     }
 
-    
-    @Column(name="cloud_percent", precision=8, scale=8)
-    public Float getCloudPercent() {
-        return this.cloudPercent;
-    }
-    
-    public void setCloudPercent(Float cloudPercent) {
-        this.cloudPercent = cloudPercent;
-    }
-
-//    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     @Column(name="date", length=13)
     public Date getDate() {
         return this.date;
@@ -81,37 +71,7 @@ public class Environment  implements java.io.Serializable {
         this.date = date;
     }
 
-    
-    @Column(name="humidity", precision=8, scale=8)
-    public Float getHumidity() {
-        return this.humidity;
-    }
-    
-    public void setHumidity(Float humidity) {
-        this.humidity = humidity;
-    }
-
-    
-    @Column(name="seeing", precision=8, scale=8)
-    public Float getSeeing() {
-        return this.seeing;
-    }
-    
-    public void setSeeing(Float seeing) {
-        this.seeing = seeing;
-    }
-
-    
-    @Column(name="temperature", precision=8, scale=8)
-    public Float getTemperature() {
-        return this.temperature;
-    }
-    
-    public void setTemperature(Float temperature) {
-        this.temperature = temperature;
-    }
-
-//    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIME)
     @Column(name="time", length=15)
     public Date getTime() {
         return this.time;
@@ -139,6 +99,46 @@ public class Environment  implements java.io.Serializable {
     
     public void setWindSpeed(Float windSpeed) {
         this.windSpeed = windSpeed;
+    }
+
+    
+    @Column(name="temperature", precision=8, scale=8)
+    public Float getTemperature() {
+        return this.temperature;
+    }
+    
+    public void setTemperature(Float temperature) {
+        this.temperature = temperature;
+    }
+
+    
+    @Column(name="humidity", precision=8, scale=8)
+    public Float getHumidity() {
+        return this.humidity;
+    }
+    
+    public void setHumidity(Float humidity) {
+        this.humidity = humidity;
+    }
+
+    
+    @Column(name="seeing", precision=8, scale=8)
+    public Float getSeeing() {
+        return this.seeing;
+    }
+    
+    public void setSeeing(Float seeing) {
+        this.seeing = seeing;
+    }
+
+    
+    @Column(name="cloud_percent", precision=8, scale=8)
+    public Float getCloudPercent() {
+        return this.cloudPercent;
+    }
+    
+    public void setCloudPercent(Float cloudPercent) {
+        this.cloudPercent = cloudPercent;
     }
 
 

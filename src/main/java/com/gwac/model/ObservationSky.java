@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2015-8-31 18:41:40 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -54,7 +54,7 @@ public class ObservationSky  implements java.io.Serializable {
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
     @Parameter(name = "max_lo", value = "49"),
     @Parameter(name = "sequence", value = "sky_id_seq")})
-  @Id
+     @Id 
   @GeneratedValue(generator = "generator")
     @Column(name="sky_id", unique=true, nullable=false)
     public short getSkyId() {

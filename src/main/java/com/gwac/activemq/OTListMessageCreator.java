@@ -13,20 +13,21 @@ import org.springframework.jms.core.MessageCreator;
 public class OTListMessageCreator implements MessageCreator {
   
   private static final Log log = LogFactory.getLog(OTListMessageCreator.class);
-  private final UploadFileUnstore otList;
+  private final UploadFileUnstore fileInfo;
   
-  public OTListMessageCreator(UploadFileUnstore otList) {
-    this.otList = otList;
+  public OTListMessageCreator(UploadFileUnstore fileInfo) {
+    this.fileInfo = fileInfo;
   }
   
   @Override
   public Message createMessage(Session session) throws JMSException {
     
     MapMessage message = session.createMapMessage();
-    message.setLong("ufuId", otList.getUfuId());
-    message.setString("storePath", otList.getStorePath());
-    message.setString("fileName", otList.getFileName());
-    log.debug("send otList message: " + otList.getStorePath() + "/" + otList.getFileName());
+    message.setChar("fileType", fileInfo.getFileType());
+    message.setLong("ufuId", fileInfo.getUfuId());
+    message.setString("storePath", fileInfo.getStorePath());
+    message.setString("fileName", fileInfo.getFileName());
+    log.debug("send fileInfo message: " + fileInfo.getStorePath() + "/" + fileInfo.getFileName());
     return message;
   }
   

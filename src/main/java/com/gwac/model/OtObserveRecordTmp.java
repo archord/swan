@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -21,24 +21,24 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
 
 
      private long oorId;
-     private Long cmpStarId;
-     private Date datetime;
-     private Float dec;
-     private Float ellipticity;
-     private Long ffId;
-     private Long ffcId;
-     private Float flux;
-     private Float fluxErr;
-     private Float fwhm;
-     private Float mag;
-     private Float magErr;
-     private Long mchStarId;
      private Long otId;
-     private Short otTypeId;
+     private Long ffId;
      private Float ra;
-     private Float signalNoise;
+     private Float dec;
      private Float x;
      private Float y;
+     private Date datetime;
+     private Float mag;
+     private Float magErr;
+     private Float ellipticity;
+     private Float signalNoise;
+     private Float fwhm;
+     private Float flux;
+     private Float fluxErr;
+     private Long cmpStarId;
+     private Long mchStarId;
+     private Long ffcId;
+     private Short otTypeId;
 
     public OtObserveRecordTmp() {
     }
@@ -47,26 +47,26 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     public OtObserveRecordTmp(long oorId) {
         this.oorId = oorId;
     }
-    public OtObserveRecordTmp(long oorId, Long cmpStarId, Date datetime, Float dec, Float ellipticity, Long ffId, Long ffcId, Float flux, Float fluxErr, Float fwhm, Float mag, Float magErr, Long mchStarId, Long otId, Short otTypeId, Float ra, Float signalNoise, Float x, Float y) {
+    public OtObserveRecordTmp(long oorId, Long otId, Long ffId, Float ra, Float dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId, Long ffcId, Short otTypeId) {
        this.oorId = oorId;
-       this.cmpStarId = cmpStarId;
-       this.datetime = datetime;
-       this.dec = dec;
-       this.ellipticity = ellipticity;
-       this.ffId = ffId;
-       this.ffcId = ffcId;
-       this.flux = flux;
-       this.fluxErr = fluxErr;
-       this.fwhm = fwhm;
-       this.mag = mag;
-       this.magErr = magErr;
-       this.mchStarId = mchStarId;
        this.otId = otId;
-       this.otTypeId = otTypeId;
+       this.ffId = ffId;
        this.ra = ra;
-       this.signalNoise = signalNoise;
+       this.dec = dec;
        this.x = x;
        this.y = y;
+       this.datetime = datetime;
+       this.mag = mag;
+       this.magErr = magErr;
+       this.ellipticity = ellipticity;
+       this.signalNoise = signalNoise;
+       this.fwhm = fwhm;
+       this.flux = flux;
+       this.fluxErr = fluxErr;
+       this.cmpStarId = cmpStarId;
+       this.mchStarId = mchStarId;
+       this.ffcId = ffcId;
+       this.otTypeId = otTypeId;
     }
    
      @Id 
@@ -82,43 +82,13 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     }
 
     
-    @Column(name="cmp_star_id")
-    public Long getCmpStarId() {
-        return this.cmpStarId;
+    @Column(name="ot_id")
+    public Long getOtId() {
+        return this.otId;
     }
     
-    public void setCmpStarId(Long cmpStarId) {
-        this.cmpStarId = cmpStarId;
-    }
-
-//    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="datetime", length=29)
-    public Date getDatetime() {
-        return this.datetime;
-    }
-    
-    public void setDatetime(Date datetime) {
-        this.datetime = datetime;
-    }
-
-    
-    @Column(name="dec", precision=8, scale=8)
-    public Float getDec() {
-        return this.dec;
-    }
-    
-    public void setDec(Float dec) {
-        this.dec = dec;
-    }
-
-    
-    @Column(name="ellipticity", precision=8, scale=8)
-    public Float getEllipticity() {
-        return this.ellipticity;
-    }
-    
-    public void setEllipticity(Float ellipticity) {
-        this.ellipticity = ellipticity;
+    public void setOtId(Long otId) {
+        this.otId = otId;
     }
 
     
@@ -132,43 +102,53 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     }
 
     
-    @Column(name="ffc_id")
-    public Long getFfcId() {
-        return this.ffcId;
+    @Column(name="ra", precision=8, scale=8)
+    public Float getRa() {
+        return this.ra;
     }
     
-    public void setFfcId(Long ffcId) {
-        this.ffcId = ffcId;
-    }
-
-    
-    @Column(name="flux", precision=8, scale=8)
-    public Float getFlux() {
-        return this.flux;
-    }
-    
-    public void setFlux(Float flux) {
-        this.flux = flux;
+    public void setRa(Float ra) {
+        this.ra = ra;
     }
 
     
-    @Column(name="flux_err", precision=8, scale=8)
-    public Float getFluxErr() {
-        return this.fluxErr;
+    @Column(name="dec", precision=8, scale=8)
+    public Float getDec() {
+        return this.dec;
     }
     
-    public void setFluxErr(Float fluxErr) {
-        this.fluxErr = fluxErr;
+    public void setDec(Float dec) {
+        this.dec = dec;
     }
 
     
-    @Column(name="fwhm", precision=8, scale=8)
-    public Float getFwhm() {
-        return this.fwhm;
+    @Column(name="x", precision=8, scale=8)
+    public Float getX() {
+        return this.x;
     }
     
-    public void setFwhm(Float fwhm) {
-        this.fwhm = fwhm;
+    public void setX(Float x) {
+        this.x = x;
+    }
+
+    
+    @Column(name="y", precision=8, scale=8)
+    public Float getY() {
+        return this.y;
+    }
+    
+    public void setY(Float y) {
+        this.y = y;
+    }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="datetime", length=29)
+    public Date getDatetime() {
+        return this.datetime;
+    }
+    
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
 
     
@@ -192,43 +172,13 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     }
 
     
-    @Column(name="mch_star_id")
-    public Long getMchStarId() {
-        return this.mchStarId;
+    @Column(name="ellipticity", precision=8, scale=8)
+    public Float getEllipticity() {
+        return this.ellipticity;
     }
     
-    public void setMchStarId(Long mchStarId) {
-        this.mchStarId = mchStarId;
-    }
-
-    
-    @Column(name="ot_id")
-    public Long getOtId() {
-        return this.otId;
-    }
-    
-    public void setOtId(Long otId) {
-        this.otId = otId;
-    }
-
-    
-    @Column(name="ot_type_id")
-    public Short getOtTypeId() {
-        return this.otTypeId;
-    }
-    
-    public void setOtTypeId(Short otTypeId) {
-        this.otTypeId = otTypeId;
-    }
-
-    
-    @Column(name="ra", precision=8, scale=8)
-    public Float getRa() {
-        return this.ra;
-    }
-    
-    public void setRa(Float ra) {
-        this.ra = ra;
+    public void setEllipticity(Float ellipticity) {
+        this.ellipticity = ellipticity;
     }
 
     
@@ -242,23 +192,73 @@ public class OtObserveRecordTmp  implements java.io.Serializable {
     }
 
     
-    @Column(name="x", precision=8, scale=8)
-    public Float getX() {
-        return this.x;
+    @Column(name="fwhm", precision=8, scale=8)
+    public Float getFwhm() {
+        return this.fwhm;
     }
     
-    public void setX(Float x) {
-        this.x = x;
+    public void setFwhm(Float fwhm) {
+        this.fwhm = fwhm;
     }
 
     
-    @Column(name="y", precision=8, scale=8)
-    public Float getY() {
-        return this.y;
+    @Column(name="flux", precision=8, scale=8)
+    public Float getFlux() {
+        return this.flux;
     }
     
-    public void setY(Float y) {
-        this.y = y;
+    public void setFlux(Float flux) {
+        this.flux = flux;
+    }
+
+    
+    @Column(name="flux_err", precision=8, scale=8)
+    public Float getFluxErr() {
+        return this.fluxErr;
+    }
+    
+    public void setFluxErr(Float fluxErr) {
+        this.fluxErr = fluxErr;
+    }
+
+    
+    @Column(name="cmp_star_id")
+    public Long getCmpStarId() {
+        return this.cmpStarId;
+    }
+    
+    public void setCmpStarId(Long cmpStarId) {
+        this.cmpStarId = cmpStarId;
+    }
+
+    
+    @Column(name="mch_star_id")
+    public Long getMchStarId() {
+        return this.mchStarId;
+    }
+    
+    public void setMchStarId(Long mchStarId) {
+        this.mchStarId = mchStarId;
+    }
+
+    
+    @Column(name="ffc_id")
+    public Long getFfcId() {
+        return this.ffcId;
+    }
+    
+    public void setFfcId(Long ffcId) {
+        this.ffcId = ffcId;
+    }
+
+    
+    @Column(name="ot_type_id")
+    public Short getOtTypeId() {
+        return this.otTypeId;
+    }
+    
+    public void setOtTypeId(Short otTypeId) {
+        this.otTypeId = otTypeId;
     }
 
 

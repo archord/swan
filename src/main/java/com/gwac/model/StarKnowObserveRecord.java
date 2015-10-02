@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -21,22 +21,22 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
 
 
      private long skorId;
-     private Long cmpStarId;
-     private Date datetime;
-     private Float dec;
-     private Float ellipticity;
-     private Long ffId;
-     private Float flux;
-     private Float fluxErr;
-     private Float fwhm;
-     private Float mag;
-     private Float magErr;
-     private Long mchStarId;
-     private Float ra;
-     private Float signalNoise;
      private Long starId;
+     private Long ffId;
+     private Float ra;
+     private Float dec;
      private Float x;
      private Float y;
+     private Date datetime;
+     private Float mag;
+     private Float magErr;
+     private Float ellipticity;
+     private Float signalNoise;
+     private Float fwhm;
+     private Float flux;
+     private Float fluxErr;
+     private Long cmpStarId;
+     private Long mchStarId;
 
     public StarKnowObserveRecord() {
     }
@@ -45,24 +45,24 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     public StarKnowObserveRecord(long skorId) {
         this.skorId = skorId;
     }
-    public StarKnowObserveRecord(long skorId, Long cmpStarId, Date datetime, Float dec, Float ellipticity, Long ffId, Float flux, Float fluxErr, Float fwhm, Float mag, Float magErr, Long mchStarId, Float ra, Float signalNoise, Long starId, Float x, Float y) {
+    public StarKnowObserveRecord(long skorId, Long starId, Long ffId, Float ra, Float dec, Float x, Float y, Date datetime, Float mag, Float magErr, Float ellipticity, Float signalNoise, Float fwhm, Float flux, Float fluxErr, Long cmpStarId, Long mchStarId) {
        this.skorId = skorId;
-       this.cmpStarId = cmpStarId;
-       this.datetime = datetime;
-       this.dec = dec;
-       this.ellipticity = ellipticity;
-       this.ffId = ffId;
-       this.flux = flux;
-       this.fluxErr = fluxErr;
-       this.fwhm = fwhm;
-       this.mag = mag;
-       this.magErr = magErr;
-       this.mchStarId = mchStarId;
-       this.ra = ra;
-       this.signalNoise = signalNoise;
        this.starId = starId;
+       this.ffId = ffId;
+       this.ra = ra;
+       this.dec = dec;
        this.x = x;
        this.y = y;
+       this.datetime = datetime;
+       this.mag = mag;
+       this.magErr = magErr;
+       this.ellipticity = ellipticity;
+       this.signalNoise = signalNoise;
+       this.fwhm = fwhm;
+       this.flux = flux;
+       this.fluxErr = fluxErr;
+       this.cmpStarId = cmpStarId;
+       this.mchStarId = mchStarId;
     }
    
      @Id 
@@ -78,43 +78,13 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     }
 
     
-    @Column(name="cmp_star_id")
-    public Long getCmpStarId() {
-        return this.cmpStarId;
+    @Column(name="star_id")
+    public Long getStarId() {
+        return this.starId;
     }
     
-    public void setCmpStarId(Long cmpStarId) {
-        this.cmpStarId = cmpStarId;
-    }
-
-//    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="datetime", length=29)
-    public Date getDatetime() {
-        return this.datetime;
-    }
-    
-    public void setDatetime(Date datetime) {
-        this.datetime = datetime;
-    }
-
-    
-    @Column(name="dec", precision=8, scale=8)
-    public Float getDec() {
-        return this.dec;
-    }
-    
-    public void setDec(Float dec) {
-        this.dec = dec;
-    }
-
-    
-    @Column(name="ellipticity", precision=8, scale=8)
-    public Float getEllipticity() {
-        return this.ellipticity;
-    }
-    
-    public void setEllipticity(Float ellipticity) {
-        this.ellipticity = ellipticity;
+    public void setStarId(Long starId) {
+        this.starId = starId;
     }
 
     
@@ -128,33 +98,53 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     }
 
     
-    @Column(name="flux", precision=8, scale=8)
-    public Float getFlux() {
-        return this.flux;
+    @Column(name="ra", precision=8, scale=8)
+    public Float getRa() {
+        return this.ra;
     }
     
-    public void setFlux(Float flux) {
-        this.flux = flux;
-    }
-
-    
-    @Column(name="flux_err", precision=8, scale=8)
-    public Float getFluxErr() {
-        return this.fluxErr;
-    }
-    
-    public void setFluxErr(Float fluxErr) {
-        this.fluxErr = fluxErr;
+    public void setRa(Float ra) {
+        this.ra = ra;
     }
 
     
-    @Column(name="fwhm", precision=8, scale=8)
-    public Float getFwhm() {
-        return this.fwhm;
+    @Column(name="dec", precision=8, scale=8)
+    public Float getDec() {
+        return this.dec;
     }
     
-    public void setFwhm(Float fwhm) {
-        this.fwhm = fwhm;
+    public void setDec(Float dec) {
+        this.dec = dec;
+    }
+
+    
+    @Column(name="x", precision=8, scale=8)
+    public Float getX() {
+        return this.x;
+    }
+    
+    public void setX(Float x) {
+        this.x = x;
+    }
+
+    
+    @Column(name="y", precision=8, scale=8)
+    public Float getY() {
+        return this.y;
+    }
+    
+    public void setY(Float y) {
+        this.y = y;
+    }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="datetime", length=29)
+    public Date getDatetime() {
+        return this.datetime;
+    }
+    
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
     }
 
     
@@ -178,23 +168,13 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     }
 
     
-    @Column(name="mch_star_id")
-    public Long getMchStarId() {
-        return this.mchStarId;
+    @Column(name="ellipticity", precision=8, scale=8)
+    public Float getEllipticity() {
+        return this.ellipticity;
     }
     
-    public void setMchStarId(Long mchStarId) {
-        this.mchStarId = mchStarId;
-    }
-
-    
-    @Column(name="ra", precision=8, scale=8)
-    public Float getRa() {
-        return this.ra;
-    }
-    
-    public void setRa(Float ra) {
-        this.ra = ra;
+    public void setEllipticity(Float ellipticity) {
+        this.ellipticity = ellipticity;
     }
 
     
@@ -208,33 +188,53 @@ public class StarKnowObserveRecord  implements java.io.Serializable {
     }
 
     
-    @Column(name="star_id")
-    public Long getStarId() {
-        return this.starId;
+    @Column(name="fwhm", precision=8, scale=8)
+    public Float getFwhm() {
+        return this.fwhm;
     }
     
-    public void setStarId(Long starId) {
-        this.starId = starId;
-    }
-
-    
-    @Column(name="x", precision=8, scale=8)
-    public Float getX() {
-        return this.x;
-    }
-    
-    public void setX(Float x) {
-        this.x = x;
+    public void setFwhm(Float fwhm) {
+        this.fwhm = fwhm;
     }
 
     
-    @Column(name="y", precision=8, scale=8)
-    public Float getY() {
-        return this.y;
+    @Column(name="flux", precision=8, scale=8)
+    public Float getFlux() {
+        return this.flux;
     }
     
-    public void setY(Float y) {
-        this.y = y;
+    public void setFlux(Float flux) {
+        this.flux = flux;
+    }
+
+    
+    @Column(name="flux_err", precision=8, scale=8)
+    public Float getFluxErr() {
+        return this.fluxErr;
+    }
+    
+    public void setFluxErr(Float fluxErr) {
+        this.fluxErr = fluxErr;
+    }
+
+    
+    @Column(name="cmp_star_id")
+    public Long getCmpStarId() {
+        return this.cmpStarId;
+    }
+    
+    public void setCmpStarId(Long cmpStarId) {
+        this.cmpStarId = cmpStarId;
+    }
+
+    
+    @Column(name="mch_star_id")
+    public Long getMchStarId() {
+        return this.mchStarId;
+    }
+    
+    public void setMchStarId(Long mchStarId) {
+        this.mchStarId = mchStarId;
     }
 
 

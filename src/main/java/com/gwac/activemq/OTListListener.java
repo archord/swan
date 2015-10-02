@@ -16,16 +16,26 @@ public class OTListListener implements MessageListener {
 
   private static final Log log = LogFactory.getLog(OTListListener.class);
   private OtObserveRecordService otObserveRecordService;
+  private OtObserveRecordService otVarObserveRecordService;
 
   @Override
   public void onMessage(Message message) {
     try {
       MapMessage map = (MapMessage) message;
+      char fileType = map.getChar("fileType");
       long ufuId = map.getLong("ufuId");
       String storePath = map.getString("storePath");
       String fileName = map.getString("fileName");
-      log.debug("receive otlist " + storePath + "/" + fileName);
-      otObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
+      log.debug("receive message, fileType=" + fileType + ",  file=otlist " + storePath + "/" + fileName);
+      if (fileType == '1') {
+        otObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
+      } else if (fileType == '6') {
+        otVarObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
+      } else if (fileType == '8') {
+
+      } else {
+        log.error("wrong fileType");
+      }
     } catch (JMSException e) {
       log.error(e);
     }
@@ -36,6 +46,13 @@ public class OTListListener implements MessageListener {
    */
   public void setOtObserveRecordService(OtObserveRecordService otObserveRecordService) {
     this.otObserveRecordService = otObserveRecordService;
+  }
+
+  /**
+   * @param otVarObserveRecordService the otVarObserveRecordService to set
+   */
+  public void setOtVarObserveRecordService(OtObserveRecordService otVarObserveRecordService) {
+    this.otVarObserveRecordService = otVarObserveRecordService;
   }
 
 }

@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2015-9-12 20:09:53 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -191,7 +191,7 @@ public class VarStarRecordHis  implements java.io.Serializable {
         this.YTemp = YTemp;
     }
 
-//    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="date_ut", length=29)
     public Date getDateUt() {
         return this.dateUt;

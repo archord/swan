@@ -553,27 +553,40 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj2.setUploadDate(new Date());
 
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-            if (tfile2.exists()) {
+//            if (tfile2.exists()) {
+//              if (tfile1.exists()) {
+//                log.warn(tfile2 + " already exist, delete it.");
+//                FileUtils.forceDelete(tfile2);
+//                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+//                FileUtils.moveFile(tfile1, tfile2);
+//                fileNum++;
+//              }
+//            } else 
+            {
               if (tfile1.exists()) {
-                log.warn(tfile2 + " already exist, delete it.");
-                FileUtils.forceDelete(tfile2);
-                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-              }
-            } else {
-              if (tfile1.exists()) {
+                if (tfile2.exists()) {
+                  FileUtils.forceDelete(tfile2);
+                }
                 FileUtils.moveFile(tfile1, tfile2);
                 fileNum++;
                 obj.setUploadSuccess(Boolean.TRUE);
                 obj2.setUploadSuccess(Boolean.TRUE);
+                ufuDao.save(obj); //所有的文件都应该上传上来，如果有没上传上来的，不处理，只在ufr表中记录。
+                MessageCreator tmc = new OTListMessageCreator(obj);
+                jmsTemplate.send(otlistDest, tmc);
+
               } else {
                 obj.setUploadSuccess(Boolean.FALSE);
                 obj2.setUploadSuccess(Boolean.FALSE);
                 log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
               }
-              ufuDao.save(obj);
               ufrDao.save(obj2);
+            }
+            
+            String dpmName = "M" + tStr.substring(3, 5);
+            int curNumber = Integer.parseInt(tStr.substring(22, 26));
+            if(dpmDao.getFirstRecordNumber(dpmName)==0){
+              dpmDao.updateFirstRecordNumber(dpmName, curNumber);
             }
           }
         }

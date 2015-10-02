@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -18,12 +18,12 @@ public class Telescope  implements java.io.Serializable {
 
 
      private short tspId;
-     private String ccdType;
+     private String name;
+     private Float ra;
      private Float dec;
      private Short diameter;
      private Float focalRatio;
-     private String name;
-     private Float ra;
+     private String ccdType;
 
     public Telescope() {
     }
@@ -32,14 +32,14 @@ public class Telescope  implements java.io.Serializable {
     public Telescope(short tspId) {
         this.tspId = tspId;
     }
-    public Telescope(short tspId, String ccdType, Float dec, Short diameter, Float focalRatio, String name, Float ra) {
+    public Telescope(short tspId, String name, Float ra, Float dec, Short diameter, Float focalRatio, String ccdType) {
        this.tspId = tspId;
-       this.ccdType = ccdType;
+       this.name = name;
+       this.ra = ra;
        this.dec = dec;
        this.diameter = diameter;
        this.focalRatio = focalRatio;
-       this.name = name;
-       this.ra = ra;
+       this.ccdType = ccdType;
     }
    
      @Id 
@@ -55,13 +55,23 @@ public class Telescope  implements java.io.Serializable {
     }
 
     
-    @Column(name="ccd_type")
-    public String getCcdType() {
-        return this.ccdType;
+    @Column(name="name")
+    public String getName() {
+        return this.name;
     }
     
-    public void setCcdType(String ccdType) {
-        this.ccdType = ccdType;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
+    @Column(name="ra", precision=8, scale=8)
+    public Float getRa() {
+        return this.ra;
+    }
+    
+    public void setRa(Float ra) {
+        this.ra = ra;
     }
 
     
@@ -95,23 +105,13 @@ public class Telescope  implements java.io.Serializable {
     }
 
     
-    @Column(name="name")
-    public String getName() {
-        return this.name;
+    @Column(name="ccd_type")
+    public String getCcdType() {
+        return this.ccdType;
     }
     
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    
-    @Column(name="ra", precision=8, scale=8)
-    public Float getRa() {
-        return this.ra;
-    }
-    
-    public void setRa(Float ra) {
-        this.ra = ra;
+    public void setCcdType(String ccdType) {
+        this.ccdType = ccdType;
     }
 
 

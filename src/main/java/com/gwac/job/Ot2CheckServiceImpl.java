@@ -96,7 +96,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       if (tcvs != null) {
         OtType ott = ottDao.getOtTypeByTypeName("cvs");
         ot2m.setOtTypeId(ott.getOtTypeId());
-        ot2m.setMatchId(tcvs.getIdnum());
+        ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
         ot2m.setRa(tcvs.getRadeg());
         ot2m.setDec(tcvs.getDedeg());
         ot2m.setMag(tcvs.getMag());
@@ -111,7 +111,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       if (tmo != null) {
         OtType ott = ottDao.getOtTypeByTypeName("merged_other");
         ot2m.setOtTypeId(ott.getOtTypeId());
-        ot2m.setMatchId(tmo.getIdnum());
+        ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
         ot2m.setRa(tmo.getRadeg());
         ot2m.setDec(tmo.getDedeg());
         ot2m.setMag(tmo.getMag());
@@ -126,7 +126,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       if (trc3 != null) {
         OtType ott = ottDao.getOtTypeByTypeName("rc3");
         ot2m.setOtTypeId(ott.getOtTypeId());
-        ot2m.setMatchId(trc3.getIdnum());
+        ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
         ot2m.setRa(trc3.getRadeg());
         ot2m.setDec(trc3.getDedeg());
         ot2m.setMag(trc3.getMvmag());
@@ -141,7 +141,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       if (tmp != null) {
         OtType ott = ottDao.getOtTypeByTypeName("minor_planet");
         ot2m.setOtTypeId(ott.getOtTypeId());
-        ot2m.setMatchId(tmp.getIdnum());
+        ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
         ot2m.setRa(tmp.getLon());
         ot2m.setDec(tmp.getLat());
         ot2mDao.save(ot2m);

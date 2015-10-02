@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2015-5-7 18:38:58 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -20,7 +20,7 @@ import org.hibernate.annotations.Parameter;
 public class ProcessStatus  implements java.io.Serializable {
 
 
-     private Short psId;
+     private short psId;
      private String psName;
      private String psComment;
 
@@ -28,10 +28,10 @@ public class ProcessStatus  implements java.io.Serializable {
     }
 
 	
-    public ProcessStatus(Short psId) {
+    public ProcessStatus(short psId) {
         this.psId = psId;
     }
-    public ProcessStatus(Short psId, String psName, String psComment) {
+    public ProcessStatus(short psId, String psName, String psComment) {
        this.psId = psId;
        this.psName = psName;
        this.psComment = psComment;
@@ -43,16 +43,16 @@ public class ProcessStatus  implements java.io.Serializable {
   @Id
   @GeneratedValue(generator = "generator")
     @Column(name="ps_id", unique=true, nullable=false)
-    public Short getPsId() {
+    public short getPsId() {
         return this.psId;
     }
     
-    public void setPsId(Short psId) {
+    public void setPsId(short psId) {
         this.psId = psId;
     }
 
     
-    @Column(name="ps_name")
+    @Column(name="ps_name", length=32)
     public String getPsName() {
         return this.psName;
     }
@@ -62,7 +62,7 @@ public class ProcessStatus  implements java.io.Serializable {
     }
 
     
-    @Column(name="ps_comment")
+    @Column(name="ps_comment", length=1024)
     public String getPsComment() {
         return this.psComment;
     }

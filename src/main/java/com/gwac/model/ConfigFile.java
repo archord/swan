@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,19 +18,24 @@ import org.hibernate.annotations.Parameter;
 public class ConfigFile implements java.io.Serializable {
 
   private long cfId;
-  private String fileName;
-  private Boolean isStore;
-  private Boolean isSync;
   private String storePath;
+  private String fileName;
+  private Boolean isSync;
+  private Boolean isStore;
 
   public ConfigFile() {
   }
 
-  public ConfigFile(String fileName, Boolean isStore, Boolean isSync, String storePath) {
-    this.fileName = fileName;
-    this.isStore = isStore;
-    this.isSync = isSync;
+  public ConfigFile(long cfId) {
+    this.cfId = cfId;
+  }
+
+  public ConfigFile(long cfId, String storePath, String fileName, Boolean isSync, Boolean isStore) {
+    this.cfId = cfId;
     this.storePath = storePath;
+    this.fileName = fileName;
+    this.isSync = isSync;
+    this.isStore = isStore;
   }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -47,6 +52,15 @@ public class ConfigFile implements java.io.Serializable {
     this.cfId = cfId;
   }
 
+  @Column(name = "store_path")
+  public String getStorePath() {
+    return this.storePath;
+  }
+
+  public void setStorePath(String storePath) {
+    this.storePath = storePath;
+  }
+
   @Column(name = "file_name")
   public String getFileName() {
     return this.fileName;
@@ -54,15 +68,6 @@ public class ConfigFile implements java.io.Serializable {
 
   public void setFileName(String fileName) {
     this.fileName = fileName;
-  }
-
-  @Column(name = "is_store")
-  public Boolean getIsStore() {
-    return this.isStore;
-  }
-
-  public void setIsStore(Boolean isStore) {
-    this.isStore = isStore;
   }
 
   @Column(name = "is_sync")
@@ -74,13 +79,13 @@ public class ConfigFile implements java.io.Serializable {
     this.isSync = isSync;
   }
 
-  @Column(name = "store_path")
-  public String getStorePath() {
-    return this.storePath;
+  @Column(name = "is_store")
+  public Boolean getIsStore() {
+    return this.isStore;
   }
 
-  public void setStorePath(String storePath) {
-    this.storePath = storePath;
+  public void setIsStore(Boolean isStore) {
+    this.isStore = isStore;
   }
 
 }

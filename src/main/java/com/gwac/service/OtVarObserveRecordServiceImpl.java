@@ -32,9 +32,9 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class OtObserveRecordServiceImpl implements OtObserveRecordService {
+public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
 
-  private static final Log log = LogFactory.getLog(OtObserveRecordServiceImpl.class);
+  private static final Log log = LogFactory.getLog(OtVarObserveRecordServiceImpl.class);
 
   private OTCatalogDao otcDao;
   private OtNumberDao otnDao;
@@ -69,7 +69,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
     if (storePath != null && fileName != null) {
 
-      List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
+      List<OTCatalog> otcs = otcDao.getOT1VarCatalog(rootPath + "/" + storePath + "/" + fileName);
       for (OTCatalog otc : otcs) {
 
         String otListPath = storePath;
@@ -97,7 +97,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setDateStr(fileDate);
         otLv2.setAllFileCutted(false);
         otLv2.setSkyId(sky.getSkyId());
-        otLv2.setDataProduceMethod('1');    //星表匹配一级OT
+        otLv2.setDataProduceMethod('6');    //星表匹配变星
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
@@ -126,7 +126,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setRequestCut(false);
         oor.setSuccessCut(false);
         oor.setSkyId(sky.getSkyId());
-        oor.setDataProduceMethod('1');    //星表匹配一级OT
+        oor.setDataProduceMethod('6');    //星表匹配变星
+        oor.setDistance(otc.getDistance());
+        oor.setDeltamag(otc.getDeltamag());
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较
@@ -188,10 +190,10 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setCuttedFfNumber(0);
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
-            tOtLv2.setDataProduceMethod('1');    //星表匹配一级OT
-
+            tOtLv2.setDataProduceMethod('6');    //星表匹配变星
+            
             int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
-
+            
             if (oor1.getFfNumber() - firstRecordNumber <= firstNMarkNumber) {
               tOtLv2.setFirstNMark(true);
             } else {

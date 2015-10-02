@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -21,9 +21,9 @@ public class UserInfo  implements java.io.Serializable {
 
 
      private int uiId;
+     private String name;
      private String address;
      private Date createDate;
-     private String name;
      private String password;
 
     public UserInfo() {
@@ -33,11 +33,11 @@ public class UserInfo  implements java.io.Serializable {
     public UserInfo(int uiId) {
         this.uiId = uiId;
     }
-    public UserInfo(int uiId, String address, Date createDate, String name, String password) {
+    public UserInfo(int uiId, String name, String address, Date createDate, String password) {
        this.uiId = uiId;
+       this.name = name;
        this.address = address;
        this.createDate = createDate;
-       this.name = name;
        this.password = password;
     }
    
@@ -54,6 +54,16 @@ public class UserInfo  implements java.io.Serializable {
     }
 
     
+    @Column(name="name")
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
     @Column(name="address")
     public String getAddress() {
         return this.address;
@@ -63,7 +73,7 @@ public class UserInfo  implements java.io.Serializable {
         this.address = address;
     }
 
-//    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date", length=29)
     public Date getCreateDate() {
         return this.createDate;
@@ -71,16 +81,6 @@ public class UserInfo  implements java.io.Serializable {
     
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    
-    @Column(name="name")
-    public String getName() {
-        return this.name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
     }
 
     

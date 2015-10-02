@@ -30,6 +30,8 @@ public class OTCatalog {
   private Float ellipticity;
   private Float classStar;
   private Boolean otFlag;
+  private Float distance;
+  private Float deltamag;
   
   public String getFileDate(){
     return imageName.substring(6, 12);
@@ -54,7 +56,9 @@ public class OTCatalog {
             + " magerrAper=" + magerrAper
             + " ellipticity=" + ellipticity
             + " classStar=" + classStar
-            + " otFlag=" + otFlag;
+            + " otFlag=" + otFlag
+            + " distance=" + getDistance()
+            + " deltamag=" + getDeltamag();
   }
 
   /**
@@ -307,5 +311,33 @@ public class OTCatalog {
    */
   public void setOtFlag(Boolean otFlag) {
     this.otFlag = otFlag;
+  }
+
+  /**
+   * @return the distance
+   */
+  public Float getDistance() {
+    return distance;
+  }
+
+  /**
+   * @param distance the distance to set
+   */
+  public void setDistance(Float distance) {
+    this.distance = distance;
+  }
+
+  /**
+   * @return the deltamag
+   */
+  public Float getDeltamag() {
+    return deltamag;
+  }
+
+  /**
+   * @param deltamag the deltamag to set
+   */
+  public void setDeltamag(Float deltamag) {
+    this.deltamag = deltamag;
   }
 }

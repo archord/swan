@@ -56,7 +56,9 @@ public class UploadFileUnstoreDaoImpl extends BaseHibernateDaoImpl<UploadFileUns
   @Override
   public List<UploadFileUnstore> getVarStarListFile() {
 
-    String sql = "WITH moved_rows AS ( DELETE FROM upload_file_unstore where file_type='6' and upload_success=true RETURNING * ) SELECT * FROM moved_rows;";
+    String sql = "WITH moved_rows AS "
+            + "( DELETE FROM upload_file_unstore where file_type='6' and upload_success=true RETURNING * ) "
+            + "SELECT * FROM moved_rows order by upload_date;";
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql).addEntity(UploadFileUnstore.class);
     return q.list();

@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2014-9-1 13:05:37 by Hibernate Tools 3.6.0
+// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -18,9 +18,9 @@ public class Gimbal  implements java.io.Serializable {
 
 
      private short gmbId;
-     private Float dec;
      private String name;
      private Float ra;
+     private Float dec;
 
     public Gimbal() {
     }
@@ -29,11 +29,11 @@ public class Gimbal  implements java.io.Serializable {
     public Gimbal(short gmbId) {
         this.gmbId = gmbId;
     }
-    public Gimbal(short gmbId, Float dec, String name, Float ra) {
+    public Gimbal(short gmbId, String name, Float ra, Float dec) {
        this.gmbId = gmbId;
-       this.dec = dec;
        this.name = name;
        this.ra = ra;
+       this.dec = dec;
     }
    
      @Id 
@@ -46,16 +46,6 @@ public class Gimbal  implements java.io.Serializable {
     
     public void setGmbId(short gmbId) {
         this.gmbId = gmbId;
-    }
-
-    
-    @Column(name="dec", precision=8, scale=8)
-    public Float getDec() {
-        return this.dec;
-    }
-    
-    public void setDec(Float dec) {
-        this.dec = dec;
     }
 
     
@@ -76,6 +66,16 @@ public class Gimbal  implements java.io.Serializable {
     
     public void setRa(Float ra) {
         this.ra = ra;
+    }
+
+    
+    @Column(name="dec", precision=8, scale=8)
+    public Float getDec() {
+        return this.dec;
+    }
+    
+    public void setDec(Float dec) {
+        this.dec = dec;
     }
 
 
