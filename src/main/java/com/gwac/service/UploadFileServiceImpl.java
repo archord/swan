@@ -147,7 +147,10 @@ public class UploadFileServiceImpl implements UploadFileService {
 //        log.debug(percent);
 
           DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
-          dpm.setCurProcessNumber(Integer.parseInt(curProcNumber));
+          int tnum = Integer.parseInt(curProcNumber);
+          if (tnum > dpm.getCurProcessNumber()) {
+            dpm.setCurProcessNumber(tnum);
+          }
           dpm.setTotalStorageSize(totalSize);
           dpm.setUsedStorageSize(leftSize);
           if (!otlist.isEmpty()) {
@@ -453,7 +456,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (String tStr : otList) {
           tStr = tStr.trim();
           if (!tStr.isEmpty()) {
-            
+
             log.debug("receive otList " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
@@ -503,10 +506,10 @@ public class UploadFileServiceImpl implements UploadFileService {
               }
               ufrDao.save(obj2);
             }
-            
+
             String dpmName = "M" + tStr.substring(3, 5);
             int curNumber = Integer.parseInt(tStr.substring(22, 26));
-            if(dpmDao.getFirstRecordNumber(dpmName)==0){
+            if (dpmDao.getFirstRecordNumber(dpmName) == 0) {
               dpmDao.updateFirstRecordNumber(dpmName, curNumber);
             }
           }
@@ -582,10 +585,10 @@ public class UploadFileServiceImpl implements UploadFileService {
               }
               ufrDao.save(obj2);
             }
-            
+
             String dpmName = "M" + tStr.substring(3, 5);
             int curNumber = Integer.parseInt(tStr.substring(22, 26));
-            if(dpmDao.getFirstRecordNumber(dpmName)==0){
+            if (dpmDao.getFirstRecordNumber(dpmName) == 0) {
               dpmDao.updateFirstRecordNumber(dpmName, curNumber);
             }
           }

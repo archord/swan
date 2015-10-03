@@ -78,7 +78,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         String dpmName = "M" + orgImg.substring(3, 5);
         int dpmId = Integer.parseInt(orgImg.substring(3, 5));  //应该在数据库中通过dpmName查询
         int number = Integer.parseInt(orgImg.substring(22, 26));
-        String skyName = orgImg.substring(6, 12);
+        String skyName = orgImg.substring(15, 21);
         ObservationSky sky = skyDao.getByName(skyName);
 
         FitsFile ff = new FitsFile();

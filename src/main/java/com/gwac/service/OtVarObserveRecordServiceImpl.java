@@ -205,6 +205,7 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             log.debug("ffcrName=" + ffcrName);
             log.debug("otId=" + tOtLv2.getOtId());
 
+            if(false){
             FitsFileCutRef ffcr = new FitsFileCutRef();
             ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
             ffcr.setFfId(ff.getFfId());
@@ -214,12 +215,14 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             ffcr.setRequestCut(false);
             ffcr.setSuccessCut(false);
             ffcrDao.save(ffcr);
+            }
 
             for (OtObserveRecord tOor : oors) {
               if (tOor.getOtId() != 0) {
                 continue;
               }
               String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
+              if(false){
               FitsFileCut ffc = new FitsFileCut();
               ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
               ffc.setFileName(cutImg);
@@ -233,9 +236,10 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
               ffc.setSuccessCut(false);
               ffc.setIsMissed(false);
               ffcDao.save(ffc);
+              tOor.setFfcId(ffc.getFfcId());
+              }
 
               tOor.setOtId(tOtLv2.getOtId());
-              tOor.setFfcId(ffc.getFfcId());
               otorDao.update(tOor);
             }
           }

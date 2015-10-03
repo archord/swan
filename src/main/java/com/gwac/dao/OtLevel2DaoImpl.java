@@ -62,33 +62,39 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
+  @Override
   public List<OtLevel2> getCurOccurLv2OT() {
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
             + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
-            + "where ol2.first_n_mark=false and ol2.is_match!=2";
+            + "where ol2.first_n_mark=false and ol2.is_match!=2 and ol2.data_produce_method='1'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
 
+  @Override
   public List<OtLevel2> getNCurOccurLv2OT() {
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
             + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number "
-            + "where ol2.first_n_mark=false and ol2.is_match!=2";
+            + "where ol2.first_n_mark=false and ol2.is_match!=2 and ol2.data_produce_method='1'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
 
+  @Override
   public List<OtLevel2> getMatchedLv2OT() {
     Session session = getCurrentSession();
-    String sql = "select ol2.* from ot_level2 ol2 where ol2.is_match=2";
+    String sql = "select ol2.* "
+            + "from ot_level2 ol2 "
+            + "where ol2.first_n_mark=false and ol2.is_match=2 and ol2.data_produce_method='1'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
 
+  @Override
   public List<OtLevel2> getMatchedLv2OTByDate(String dateStr) {
     Session session = getCurrentSession();
     String sql = "select ol2.* from ot_level2_his ol2 where ol2.is_match=2 and ol2.date_str='" + dateStr + "'";
@@ -96,12 +102,13 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
+  @Override
   public List<OtLevel2> getCurOccurLv2OTByDate(String dateStr) {
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2_his ol2 "
             + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
-            + "where ol2.first_n_mark=false and ol2.date_str='" + dateStr + "'";
+            + "where ol2.first_n_mark=false and ol2.data_produce_method='1' and ol2.date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
@@ -225,10 +232,11 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
+  @Override
   public List<OtLevel2> queryOtLevel2(OtLevel2QueryParameter ot2qp) {
 
-    String sqlprefix1 = "select * from ot_level2 where 1=1 ";
-    String sqlprefix2 = "select * from ot_level2_his where 1=1 ";
+    String sqlprefix1 = "select * from ot_level2 where 1=1 and data_produce_method='1' ";
+    String sqlprefix2 = "select * from ot_level2_his where 1=1 and data_produce_method='1' ";
     String sql = "";
 
     double cosd = Math.cos(ot2qp.getDec() * 0.0174532925);
@@ -266,10 +274,11 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
+  @Override
   public int countOtLevel2(OtLevel2QueryParameter ot2qp) {
 
-    String sqlprefix1 = "select count(*) from ot_level2 where 1=1 ";
-    String sqlprefix2 = "select count(*) from ot_level2_his where 1=1 ";
+    String sqlprefix1 = "select count(*) from ot_level2 where 1=1 and data_produce_method='1' ";
+    String sqlprefix2 = "select count(*) from ot_level2_his where 1=1 and data_produce_method='1' ";
     String sql = "";
 
     if (!ot2qp.getStartDate().isEmpty()) {

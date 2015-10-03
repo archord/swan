@@ -160,12 +160,13 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     return rst.toString();
   }
 
+  @Override
   public List<OtObserveRecord> getLatestNLv1OT(int n) {
     Session session = getCurrentSession();
     String sql = "select oor.* "
             + "from ot_observe_record oor "
             + "inner join data_process_machine dpm on oor.dpm_id = dpm.dpm_id and oor.ff_number>dpm.cur_process_number-" + n + " "
-            + "where oor.ot_id=0;";
+            + "where oor.ot_id=0 and oor.data_produce_method='1';";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
