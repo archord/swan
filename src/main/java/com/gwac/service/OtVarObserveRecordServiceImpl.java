@@ -145,6 +145,7 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
           tlv2.setDec(otLv2.getDec());
           otLv2Dao.update(tlv2);
 
+          if(false){
           String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
           FitsFileCut ffc = new FitsFileCut();
           ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
@@ -159,9 +160,10 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
           ffc.setSuccessCut(false);
           ffc.setIsMissed(false);
           ffcDao.save(ffc);
+          oor.setFfcId(ffc.getFfcId());
+          }
 
           oor.setOtId(tlv2.getOtId());
-          oor.setFfcId(ffc.getFfcId());
           otorDao.save(oor);
         } else {
 
@@ -221,8 +223,8 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
               if (tOor.getOtId() != 0) {
                 continue;
               }
-              String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
               if(false){
+              String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
               FitsFileCut ffc = new FitsFileCut();
               ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
               ffc.setFileName(cutImg);

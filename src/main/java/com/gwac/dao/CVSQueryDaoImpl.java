@@ -9,6 +9,7 @@ import com.gwac.model.OtLevel2;
 import com.gwac.model2.Cvs;
 import com.gwac.util.SearchBoxSphere;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -38,7 +39,7 @@ public class CVSQueryDaoImpl extends MysqlHibernateDaoImpl<Cvs> implements CVSQu
       Query q = session.createSQLQuery(sql).addEntity(Cvs.class);
       return q.list();
     }
-    return null;
+    return new ArrayList();
   }
 
 }

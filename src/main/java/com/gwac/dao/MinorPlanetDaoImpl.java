@@ -9,6 +9,7 @@ import com.gwac.model.OtLevel2;
 import com.gwac.model2.MinorPlanet;
 import com.gwac.util.SearchBoxSphere;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -46,7 +47,7 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
       Query q = session.createSQLQuery(sql).addEntity(MinorPlanet.class);
       return q.list();
     }
-    return null;
+    return new ArrayList();
   }
 
   public Double getMaxAbsValue(String tableName, String name) {

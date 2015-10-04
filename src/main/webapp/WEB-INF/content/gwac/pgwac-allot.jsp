@@ -67,9 +67,9 @@
         <td><sj:textfield name="ot2qp.dec" /></td>
       </tr>
       <tr style="height:20px;">
-        <td>图像坐标搜索半径：</td>
+        <td>图像坐标搜索半径(pix)：</td>
         <td><sj:textfield name="ot2qp.planeRadius" /></td>
-        <td>天球坐标搜索半径：</td>
+        <td>天球坐标搜索半径(度)：</td>
         <td><sj:textfield name="ot2qp.sphereRadius" /></td>
       </tr>
       <tr style="height:20px;">

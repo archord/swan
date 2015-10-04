@@ -9,6 +9,7 @@ import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OtLevel2;
 import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,44 +54,51 @@ public class GetOtDetail extends ActionSupport {
   public String execute() throws Exception {
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
-    
-    if(queryHis==null){
+
+    if (queryHis == null) {
       queryHis = false;
     }
 
     ob = obDao.getOtLevel2ByName(otName, queryHis);
-    ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
 
     if (ob != null) {
       setRa(ob.getRa() + "");
       setDec(ob.getDec() + "");
       setStartImgNum(ob.getFirstFfNumber());
+
+      ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
+      totalImage = ffcList.size();
+      for (FitsFileCut ffc : ffcList) {
+        ffc.setFileName(ffc.getFileName() + ".jpg");
+        ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
+      }
+
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
+      if (ffcrs != null && ffcrs.size() > 0) {
+        setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/");
+        setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
+        setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
+      } else {
+        setFfcrStorePath("");
+        setFfcrFileName("");
+        setFfcrGenerateTime("");
+      }
+
+      String tmp[] = otorDao.getOtOpticalVaration(ob, queryHis).split("=");
+      otOpticalVaration = tmp[0];
+      otPositionVaration = tmp[1];
     } else {
       setRa("");
       setDec("");
       setStartImgNum(0);
+      ffcList= new ArrayList();
+      totalImage=0;
+        setFfcrStorePath("");
+        setFfcrFileName("");
+        setFfcrGenerateTime("");
+      otOpticalVaration = "[]";
+      otPositionVaration = "[]";
     }
-
-    totalImage = ffcList.size();
-    for (FitsFileCut ffc : ffcList) {
-      ffc.setFileName(ffc.getFileName() + ".jpg");
-      ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
-    }
-
-    List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
-    if (ffcrs != null && ffcrs.size() > 0) {
-      setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/");
-      setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
-      setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
-    } else {
-      setFfcrStorePath("");
-      setFfcrFileName("");
-      setFfcrGenerateTime("");
-    }
-
-    String tmp[] = otorDao.getOtOpticalVaration(ob, queryHis).split("=");
-    otOpticalVaration = tmp[0];
-    otPositionVaration = tmp[1];
 
     return SUCCESS;
   }

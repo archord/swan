@@ -9,6 +9,7 @@ package com.gwac.dao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model2.MergedOther;
 import com.gwac.util.SearchBoxSphere;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -38,6 +39,6 @@ public class MergedOtherDaoImpl extends MysqlHibernateDaoImpl<MergedOther> imple
       Query q = session.createSQLQuery(sql).addEntity(MergedOther.class);
       return q.list();
     }
-    return null;
+    return new ArrayList();
   }
 }
