@@ -44,6 +44,8 @@ public class GetOtDetail extends ActionSupport {
   private int startImgNum;
   private String ra;
   private String dec;
+  private String pitchAngle; //俯仰角
+  private String siderealTime; //恒星时
   private String ffcrStorePath;
   private String ffcrFileName;
   private String ffcrGenerateTime;
@@ -62,9 +64,11 @@ public class GetOtDetail extends ActionSupport {
     ob = obDao.getOtLevel2ByName(otName, queryHis);
 
     if (ob != null) {
-      setRa(ob.getRa() + "");
-      setDec(ob.getDec() + "");
-      setStartImgNum(ob.getFirstFfNumber());
+      ra = ob.getRa() + "";
+      dec = ob.getDec() + "";
+      pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
+      siderealTime = CommonFunction.degreeToHMS(ob.getRa());
+      startImgNum = ob.getFirstFfNumber();
 
       ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
       totalImage = ffcList.size();
@@ -88,14 +92,14 @@ public class GetOtDetail extends ActionSupport {
       otOpticalVaration = tmp[0];
       otPositionVaration = tmp[1];
     } else {
-      setRa("");
-      setDec("");
-      setStartImgNum(0);
-      ffcList= new ArrayList();
-      totalImage=0;
-        setFfcrStorePath("");
-        setFfcrFileName("");
-        setFfcrGenerateTime("");
+      ra = "";
+      dec = "";
+      startImgNum = 0;
+      ffcList = new ArrayList();
+      totalImage = 0;
+      setFfcrStorePath("");
+      setFfcrFileName("");
+      setFfcrGenerateTime("");
       otOpticalVaration = "[]";
       otPositionVaration = "[]";
     }
@@ -311,6 +315,34 @@ public class GetOtDetail extends ActionSupport {
    */
   public String getOtPositionVaration() {
     return otPositionVaration;
+  }
+
+  /**
+   * @return the pitchAngle
+   */
+  public String getPitchAngle() {
+    return pitchAngle;
+  }
+
+  /**
+   * @param pitchAngle the pitchAngle to set
+   */
+  public void setPitchAngle(String pitchAngle) {
+    this.pitchAngle = pitchAngle;
+  }
+
+  /**
+   * @return the siderealTime
+   */
+  public String getSiderealTime() {
+    return siderealTime;
+  }
+
+  /**
+   * @param siderealTime the siderealTime to set
+   */
+  public void setSiderealTime(String siderealTime) {
+    this.siderealTime = siderealTime;
   }
 
 }

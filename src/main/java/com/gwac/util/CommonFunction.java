@@ -27,21 +27,39 @@ public class CommonFunction {
   public static final float MINFLOAT = (float) 0.000001;
 
   private static final Log log = LogFactory.getLog(CommonFunction.class);
-  
-  public static float hmsToDegree(String str){
+
+  public static String degreeToHMS(float degree) {
+
+    double second = degree * 3600 * 24 / 360;
+    int h = (int) (second / 3600);
+    int m = (int) ((second % 3600) / 60);
+    String s = String.format("%.03f",second % 60);
+    return h + ":" + m + ":" + s;
+  }
+
+  public static String degreeToDMS(float degree) {
+
+    double second = degree * 3600;
+    int d = (int) (degree);
+    int m = (int) ((second % 3600) / 60);
+    String s = String.format("%.03f",second % 60);
+    return d + ":" + m + ":" + s;
+  }
+
+  public static float hmsToDegree(String str) {
     String[] strs = str.split(":");
     float h = Float.parseFloat(strs[0]);
     float m = Float.parseFloat(strs[1]);
     float s = Float.parseFloat(strs[2]);
-    return (h + m/60 + s/60/60)*15;
+    return (h + m / 60 + s / 60 / 60) * 15;
   }
-  
-  public static float dmsToDegree(String str){
+
+  public static float dmsToDegree(String str) {
     String[] strs = str.split(":");
     float d = Float.parseFloat(strs[0]);
     float m = Float.parseFloat(strs[1]);
     float s = Float.parseFloat(strs[2]);
-    return d + m/60 + s/60/60;
+    return d + m / 60 + s / 60 / 60;
   }
 
   public static String getCurTimeString() {

@@ -584,8 +584,8 @@ public class UploadFileServiceImpl implements UploadFileService {
                 obj.setUploadSuccess(Boolean.TRUE);
                 obj2.setUploadSuccess(Boolean.TRUE);
                 ufuDao.save(obj); //所有的文件都应该上传上来，如果有没上传上来的，不处理，只在ufr表中记录。
-                MessageCreator tmc = new OTListMessageCreator(obj);
-                jmsTemplate.send(otlistDest, tmc);
+//                MessageCreator tmc = new OTListMessageCreator(obj);
+//                jmsTemplate.send(otlistDest, tmc);
                 
               } else {
                 obj.setUploadSuccess(Boolean.FALSE);
