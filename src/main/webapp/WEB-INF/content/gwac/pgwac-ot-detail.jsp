@@ -382,8 +382,8 @@
             </div>
         </div>
         <div id="skyCoordinate">
-            <span>恒星时(赤经)：<s:property value="siderealTime"/>&nbsp;(<s:property value="ra"/>)&nbsp;&nbsp;&nbsp;
-            俯仰角(赤纬)：<s:property value="pitchAngle"/>&nbsp;(<s:property value="dec"/>)</span>
+            <span>OT坐标(赤经,赤纬)：(<s:property value="siderealTime"/>,&nbsp;<s:property value="pitchAngle"/>)&nbsp;&nbsp;&nbsp;
+            (<s:property value="ra"/>,&nbsp;<s:property value="dec"/>)</span>
         </div>
         <div id="ot-curves">
             <div id="ot-curve-show">
