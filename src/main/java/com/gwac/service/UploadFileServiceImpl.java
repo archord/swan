@@ -155,10 +155,12 @@ public class UploadFileServiceImpl implements UploadFileService {
           dpm.setUsedStorageSize(leftSize);
           if (!otlist.isEmpty()) {
             String skyName = otlist.substring(15, 21);
+            int curNumber = Integer.parseInt(otlist.substring(22, 26));
             ObservationSky sky = skyDao.getByName(skyName);
             if (dpm.getCurSkyId() != sky.getSkyId()) {
               dpm.setCurSkyId(sky.getSkyId());
               dpm.setFirstRecordNumber(0);
+              dpm.setFirstRecordNumber(curNumber);
             }
           }
           dpmDao.update(dpm);
@@ -479,12 +481,6 @@ public class UploadFileServiceImpl implements UploadFileService {
             obj2.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
             obj2.setUploadDate(new Date());
             
-            String dpmName = "M" + tStr.substring(3, 5);
-            int curNumber = Integer.parseInt(tStr.substring(22, 26));
-            if (dpmDao.getFirstRecordNumber(dpmName) == 0) {
-              dpmDao.updateFirstRecordNumber(dpmName, curNumber);
-            }
-
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
 //            if (tfile2.exists()) {
 //              if (tfile1.exists()) {

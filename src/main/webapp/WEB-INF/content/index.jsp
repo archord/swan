@@ -13,6 +13,7 @@
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="keywords" content=",国家天文台，svom, gwac，望远镜阵列" />
     <meta http-equiv="description" content="GWAC数据展示页面" />
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
 
     <title>GWAC信息展示平台 - <s:text name="showcase.version"/></title>
 

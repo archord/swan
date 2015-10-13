@@ -15,6 +15,7 @@
         <meta http-equiv="expires" content="0" />
         <meta http-equiv="keywords" content=",国家天文台，svom, gwac，望远镜阵列" />
         <meta http-equiv="description" content="GWAC数据展示页面" />
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
 
         <title>OT-<s:property value="otName"/>-详细页面</title>
 
@@ -168,7 +169,26 @@
             searchUrl += <s:property value="ra"/> + "%20" + <s:property value="dec"/>;
             return "<a href='" + searchUrl + "' title='点击在simbad搜寻OT对应坐标' target='_blank'>" + cellvalue + "</a>";
         }
-
+        
+        
+  function openDialog() {
+    openwindow("show-fits-list.action?otName=<s:property value="otName"/>",
+            '_blank', 1050, 600, 1050, 600);
+    return false;
+  }
+  function openwindow(url, name, width, height, iWidth, iHeight)
+  {
+    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;       //获得窗口的垂直位置;
+    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;           //获得窗口的水平位置;
+    window.open(url, name,
+            'height=' + height +
+            ',innerHeight=' + iHeight +
+            ',width=' + width +
+            ',innerWidth=' + iWidth +
+            ',top=' + iTop +
+            ',left=' + iLeft +
+            ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
+  }
     </script>
     <style type="text/css">
 
@@ -383,7 +403,8 @@
         </div>
         <div id="skyCoordinate">
             <span>OT坐标(赤经,赤纬)：(<s:property value="siderealTime"/>,&nbsp;<s:property value="pitchAngle"/>)&nbsp;&nbsp;&nbsp;
-            (<s:property value="ra"/>,&nbsp;<s:property value="dec"/>)</span>
+                (<s:property value="ra"/>,&nbsp;<s:property value="dec"/>)&nbsp;&nbsp;&nbsp;
+                <a href='#' title='点击查看fits切图' onclick="return openDialog();">点击查看fits切图</a></span>
         </div>
         <div id="ot-curves">
             <div id="ot-curve-show">

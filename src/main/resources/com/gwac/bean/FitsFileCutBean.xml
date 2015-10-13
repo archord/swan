@@ -20,6 +20,12 @@
     <property name="ffcrDao" ref="ffcrDao" />
     <property name="otorDao" ref="otORDao" />
   </bean>
+  
+  <bean class="com.gwac.action.ShowFitsList"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="obDao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+  </bean>
 	
   <bean id="ffcDao" class="com.gwac.dao.FitsFileCutDAOImpl" >
     <property name="sessionFactory" ref="sessionFactory" />

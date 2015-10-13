@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" > 
+        <link type="image/x-icon" rel="shortcut icon" href="./favicon.ico">
+        <link type="text/css" rel="stylesheet" href="js9support.css">
+        <link type="text/css" rel="stylesheet" href="js9.css">
+        <script type="text/javascript" src="js9support.min.js"></script>
+        <script type="text/javascript" src="js9.min.js"></script>
+        <script type="text/javascript" src="js9plugins.js"></script>
+        <style>
+            .ImexamContainer .JS9PluginContainer {
+                border: 1px solid grey;
+            }
+        </style>
+    </head>
+    <body>
+        <font size="+1"><b>JS9 Imexam: imexam using JS9 plugins</b></font>
+        <p>
+        <table cellspacing="30">
+            <tr valign="top">
+                <td>
+                    <div class="JS9Menubar" id="JS9Menubar"></div>
+                    <div class="JS9" id="JS9"></div>
+                </td>
+<!--                <td>
+                    <div class="ImexamContainer">
+                        <table>
+                            <tr><td><div class="ImExamRegionStats" data-js9id="JS9"></div></td>
+                                <td><div class="ImExam3dPlot" data-js9id="JS9"></div></td></tr>
+                            <tr><td><div class="ImExamXProj" data-js9id="JS9"></div></td>
+                                <td><div class="ImExamYProj" data-js9id="JS9"></div></td></tr>
+                        </table>
+                    </div>
+                </td>-->
+            </tr>
+        </table>
+        <script type="text/javascript">
+            
+            function setJs9Par() {
+                if (JS9.GetLoadStatus() === "complete") {
+//                    JS9.SetZoom(8);
+//                    JS9.SetColormap('grey', 7.0, 0.3);
+                    re = JS9.AddRegions({shape: 'circle', x: 51, y: 51, radius: 5});
+                } else {
+                    setTimeout(setJs9Par, 100);
+                }
+            }
+            JS9.Load("fits/150828_00023_0138.fit", {zoom: 4, colormap: 'grey', contrast: 7.0, bias: 0.3, scale: "linear"});
+            setJs9Par();
+        </script>
+    </body>
+</html>

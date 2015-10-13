@@ -134,13 +134,15 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         if (tlv2 != null) {
           if (tlv2.getFirstFfNumber() > number) {
             tlv2.setFirstFfNumber(number);
+            tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
+          } else {
+            tlv2.setLastFfNumber(otLv2.getLastFfNumber());
+            tlv2.setXtemp(otLv2.getXtemp());
+            tlv2.setYtemp(otLv2.getYtemp());
+            tlv2.setRa(otLv2.getRa());
+            tlv2.setDec(otLv2.getDec());
           }
           tlv2.setTotal(tlv2.getTotal() + 1);
-          tlv2.setLastFfNumber(otLv2.getLastFfNumber());
-          tlv2.setXtemp(otLv2.getXtemp());
-          tlv2.setYtemp(otLv2.getYtemp());
-          tlv2.setRa(otLv2.getRa());
-          tlv2.setDec(otLv2.getDec());
           otLv2Dao.update(tlv2);
 
           String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
