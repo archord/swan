@@ -28,6 +28,8 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
       OtNumber otn = new OtNumber();
       otn.setDate(date);
       otn.setNumber(number);
+      otn.setVarNumber(0);
+      otn.setSubNumber(0);
       super.save(otn);
     } else {
       Object[] row = (Object[]) rstList.get(0);
@@ -38,6 +40,39 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
         otn.setOtnId(otnId.longValue());
         otn.setDate(date);
         otn.setNumber(number);
+        super.update(otn);
+      } catch (ClassCastException cce) {
+        cce.printStackTrace();
+      }
+    }
+
+    return number;
+  }
+  
+  @Override
+  public int getSubNumberByDate(String date) {
+
+    int number = 1;
+    Session session = getCurrentSession();
+    String sql = "select otn_id, sub_number from ot_number where date='" + date + "'";
+    Query q = session.createSQLQuery(sql);
+    List rstList = q.list();
+    if (rstList.isEmpty()) {
+      OtNumber otn = new OtNumber();
+      otn.setDate(date);
+      otn.setNumber(0);
+      otn.setVarNumber(0);
+      otn.setSubNumber(number);
+      super.save(otn);
+    } else {
+      Object[] row = (Object[]) rstList.get(0);
+      try {
+        BigInteger otnId = (BigInteger) row[0];
+        number = (Integer) row[1] + 1;
+        OtNumber otn = new OtNumber();
+        otn.setOtnId(otnId.longValue());
+        otn.setDate(date);
+        otn.setSubNumber(number);
         super.update(otn);
       } catch (ClassCastException cce) {
         cce.printStackTrace();

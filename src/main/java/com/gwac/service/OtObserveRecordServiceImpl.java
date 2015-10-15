@@ -245,7 +245,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             }
 
             if (!isBeiJingServer) { //!isBeiJingServer
-              String ip = "190.168.1.201"; //190.168.1.32
+              String ip = "190.168.1.150"; //190.168.1.32
               int port = 4004;
               Socket socket = null;
               DataOutputStream out = null;

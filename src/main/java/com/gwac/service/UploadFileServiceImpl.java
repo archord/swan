@@ -85,6 +85,26 @@ public class UploadFileServiceImpl implements UploadFileService {
   public void storeOTList() {
   }
 
+  public int checkAndMoveDataFile(String path) {
+
+    int fileNum = 0;
+    //存储OT列表
+    fileNum += storeOTList(path);
+    //存储星表
+    fileNum += storeStarList(path);
+    //存储原始图像
+    fileNum += storeOrigImage(path);
+    //存储切图文件
+    fileNum += storeCutImage(path);
+    //存储变星列表
+    fileNum += storeVarList(path);
+    //存储图像处理状态
+    fileNum += storeImgStatus(path);
+    //存储图像相减OT
+    fileNum += storeOtListSub(path);
+    return fileNum;
+  }
+
   public int parseConfigFile() {
     InputStream input = null;
     int fNum = 0;
@@ -248,26 +268,6 @@ public class UploadFileServiceImpl implements UploadFileService {
       }
     }
     return fNum;
-  }
-
-  public int checkAndMoveDataFile(String path) {
-
-    int fileNum = 0;
-    //存储OT列表
-    fileNum += storeOTList(path);
-    //存储星表
-    fileNum += storeStarList(path);
-    //存储原始图像
-    fileNum += storeOrigImage(path);
-    //存储切图文件
-    fileNum += storeCutImage(path);
-    //存储变星列表
-    fileNum += storeVarList(path);
-    //存储图像处理状态
-    fileNum += storeImgStatus(path);
-    //存储图像相减OT
-    fileNum += storeOtListSub(path);
-    return fileNum;
   }
 
   public int storeOtListSub(String path) {

@@ -78,6 +78,27 @@
         <property name="firstNMarkNumber" value="${gwac.first.n.mark.number}" />
     </bean>
   
+    <bean id="otCutObserveRecordService" class="com.gwac.service.OtCutObserveRecordServiceImpl" >
+        <property name="otorDao" ref="otORDao" />
+        <property name="otcDao" ref="otcDao" />
+        <property name="otnDao" ref="otnDao" />
+        <property name="otLv2Dao" ref="otbDao" />
+        <property name="ffDao" ref="ffDao" />
+        <property name="ffcDao" ref="ffcDao" />
+        <property name="dpmDao" ref="dpmDao" />	
+        <property name="ffcrDao" ref="ffcrDao" />
+        <property name="skyDao" ref="skyDao" />
+        <property name="ufuDao" ref="ufuDao" />
+        <property name="rootPath" value="${gwac.data.root.directory}" />	
+        <property name="cutIDir" value="${gwac.data.cutimages.directory}" />
+        <property name="errorBox" value="${gwac.errorbox}" />	
+        <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
+        <property name="cutOccurNumber" value="${gwac.occur.cutimage.number}" />
+        <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+        <property name="isTestServer" value="${gwac.server.test}" />
+        <property name="firstNMarkNumber" value="${gwac.first.n.mark.number}" />
+    </bean>
+  
     <bean id="ot2CheckService" class="com.gwac.job.Ot2CheckServiceImpl" >
         <property name="ot2Dao" ref="otbDao" />
         <property name="cvsDao" ref="cvsDao" />

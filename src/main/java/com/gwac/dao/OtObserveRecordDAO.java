@@ -24,6 +24,8 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis);
 
   public Boolean exist(OtObserveRecord obj, float errorBox);
+  
+  public List<OtObserveRecord> existInAll(OtObserveRecord obj, float errorBox);
 
   public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox, int n);
 

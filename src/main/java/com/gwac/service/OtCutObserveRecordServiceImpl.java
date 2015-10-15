@@ -55,7 +55,7 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
   private float errorBox;
   private int successiveImageNumber;
   private int firstNMarkNumber;
-  private int occurNumber;
+  private int cutOccurNumber;
 
   private static boolean running = true;
   private Boolean isBeiJingServer;
@@ -72,7 +72,7 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
 
     if (storePath != null && fileName != null) {
 
-      List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
+      List<OTCatalog> otcs = otcDao.getOT1CutCatalog(rootPath + "/" + storePath + "/" + fileName);
       for (OTCatalog otc : otcs) {
 
         String otListPath = storePath;
@@ -89,19 +89,31 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
         ff.setFileName(orgImg);
         ffDao.save(ff);
 
+        String cutImg = otc.getCutImageName();
+        FitsFileCut ffc = new FitsFileCut();
+        ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
+        ffc.setFileName(cutImg);
+        ffc.setNumber(number);
+        ffc.setFfId(ff.getFfId());
+        ffc.setDpmId((short) dpmId);
+        ffc.setImgX(otc.getX());
+        ffc.setImgY(otc.getY());
+        ffc.setRequestCut(false);
+        ffc.setSuccessCut(false);
+        ffc.setIsMissed(false);
+        ffcDao.save(ffc);
+
         OtLevel2 otLv2 = new OtLevel2();
         otLv2.setRa(otc.getRaD());
         otLv2.setDec(otc.getDecD());
         otLv2.setFoundTimeUtc(otc.getDateUt());
         otLv2.setIdentify(orgImg.substring(0, 21));
-        otLv2.setXtemp(otc.getXTemp());
-        otLv2.setYtemp(otc.getYTemp());
         otLv2.setLastFfNumber(number);
         otLv2.setDpmId(dpmId);
         otLv2.setDateStr(fileDate);
         otLv2.setAllFileCutted(false);
         otLv2.setSkyId(sky.getSkyId());
-        otLv2.setDataProduceMethod('1');    //星表匹配一级OT
+        otLv2.setDataProduceMethod('8');    //星表匹配一级OT
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
@@ -111,26 +123,17 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setDecD(otc.getDecD());
         oor.setX(otc.getX());
         oor.setY(otc.getY());
-        oor.setXTemp(otc.getXTemp());
-        oor.setYTemp(otc.getYTemp());
         oor.setDateUt(otc.getDateUt());
-        oor.setFlux(otc.getFlux());
-        oor.setFlag(otc.getFlag());
-        //oor.setFlagChb(otc.getFlagChb());
-        oor.setBackground(otc.getBackground());
-        oor.setThreshold(otc.getThreshold());
         oor.setMagAper(otc.getMagAper());
         oor.setMagerrAper(otc.getMagerrAper());
-        oor.setEllipticity(otc.getEllipticity());
-        oor.setClassStar(otc.getClassStar());
-        //oor.setOtFlag(otc.getOtFlag());
         oor.setFfNumber(number);
         oor.setDateStr(fileDate);
         oor.setDpmId(dpmId);
         oor.setRequestCut(false);
         oor.setSuccessCut(false);
         oor.setSkyId(sky.getSkyId());
-        oor.setDataProduceMethod('1');    //星表匹配一级OT
+        oor.setDataProduceMethod('8');    //星表匹配一级OT
+        oor.setFfcId(ffc.getFfcId());
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较
@@ -141,41 +144,26 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
             tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
           } else {
             tlv2.setLastFfNumber(otLv2.getLastFfNumber());
-            tlv2.setXtemp(otLv2.getXtemp());
-            tlv2.setYtemp(otLv2.getYtemp());
             tlv2.setRa(otLv2.getRa());
             tlv2.setDec(otLv2.getDec());
           }
           tlv2.setTotal(tlv2.getTotal() + 1);
           otLv2Dao.update(tlv2);
 
-          String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
-          FitsFileCut ffc = new FitsFileCut();
-          ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-          ffc.setFileName(cutImg);
-          ffc.setOtId(tlv2.getOtId());
-          ffc.setNumber(number);
-          ffc.setFfId(ff.getFfId());
-          ffc.setDpmId((short) dpmId);
-          ffc.setImgX(oor.getX());
-          ffc.setImgY(oor.getY());
-          ffc.setRequestCut(false);
-          ffc.setSuccessCut(false);
-          ffc.setIsMissed(false);
-          ffcDao.save(ffc);
-
           oor.setOtId(tlv2.getOtId());
-          oor.setFfcId(ffc.getFfcId());
           otorDao.save(oor);
+
+          ffc.setOtId(tlv2.getOtId());
+          ffcDao.update(ffc);
         } else {
 
           otorDao.save(oor);
-          List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
-          log.debug("match ot1 record size:"+oors.size());
-          if (oors.size() >= occurNumber) {
+          List<OtObserveRecord> oors = otorDao.existInAll(oor, errorBox);
+          log.debug("match ot1 record size:" + oors.size());
+          if (oors.size() >= cutOccurNumber) {
             OtObserveRecord oor1 = oors.get(0);
 
-            int otNumber = otnDao.getNumberByDate(fileDate);
+            int otNumber = otnDao.getSubNumberByDate(fileDate);
             String otName = String.format("%s%s_1%04d", ccdType, fileDate, otNumber);
 
             OtLevel2 tOtLv2 = new OtLevel2();
@@ -184,8 +172,6 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setDec(oor1.getDecD());
             tOtLv2.setFoundTimeUtc(oor1.getDateUt());
             tOtLv2.setIdentify(otLv2.getIdentify());
-            tOtLv2.setXtemp(oor1.getXTemp());
-            tOtLv2.setYtemp(oor1.getYTemp());
             tOtLv2.setLastFfNumber(oors.get(oors.size() - 1).getFfNumber());  //已有序列的最大一个编号（最后一个），数据库中查询时，按照升序排列
             tOtLv2.setTotal(oors.size());
             tOtLv2.setDpmId(oor1.getDpmId());
@@ -195,89 +181,20 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setCuttedFfNumber(0);
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
-            tOtLv2.setDataProduceMethod('1');    //星表匹配一级OT
-
-            int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
-
-            if (oor1.getFfNumber() - firstRecordNumber <= firstNMarkNumber) {
-              tOtLv2.setFirstNMark(true);
-            } else {
-              tOtLv2.setFirstNMark(false);
-            }
+            tOtLv2.setDataProduceMethod('8');    //图像相减一级OT
+            tOtLv2.setFirstNMark(false);
             otLv2Dao.save(tOtLv2);
 
-            String ffcrName = String.format("%s_%04d_ref", otName, tOtLv2.getFirstFfNumber());
-            log.debug("ffcrName=" + ffcrName);
-            log.debug("otId=" + tOtLv2.getOtId());
-
-            FitsFileCutRef ffcr = new FitsFileCutRef();
-            ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
-            ffcr.setFfId(ff.getFfId());
-            ffcr.setFileName(ffcrName);
-            ffcr.setOtId(tOtLv2.getOtId());
-            ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-            ffcr.setRequestCut(false);
-            ffcr.setSuccessCut(false);
-            ffcrDao.save(ffcr);
-
+            ffc.setOtId(tOtLv2.getOtId());
+            ffcDao.update(ffc);
+            
             for (OtObserveRecord tOor : oors) {
               if (tOor.getOtId() != 0) {
                 continue;
               }
-              String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
-              FitsFileCut ffc = new FitsFileCut();
-              ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-              ffc.setFileName(cutImg);
-              ffc.setOtId(tOtLv2.getOtId());
-              ffc.setNumber(tOor.getFfNumber());
-              ffc.setFfId(tOor.getFfId());
-              ffc.setDpmId((short) dpmId);
-              ffc.setImgX(tOor.getX());
-              ffc.setImgY(tOor.getY());
-              ffc.setRequestCut(false);
-              ffc.setSuccessCut(false);
-              ffc.setIsMissed(false);
-              ffcDao.save(ffc);
 
               tOor.setOtId(tOtLv2.getOtId());
-              tOor.setFfcId(ffc.getFfcId());
               otorDao.update(tOor);
-            }
-
-            if (false) { //!isBeiJingServer
-              String ip = "190.168.1.32"; //190.168.1.32
-              int port = 4003;
-              Socket socket = null;
-              DataOutputStream out = null;
-
-              try {
-                socket = new Socket(ip, port);
-                out = new DataOutputStream(socket.getOutputStream());
-
-                String tmsg = getTriggerMsg(tOtLv2);
-                try {
-                  out.write(tmsg.getBytes());
-                  out.flush();
-                  log.debug("send fwhm, dpmId:" + tmsg);
-                } catch (IOException ex) {
-                  log.error("send fwhm, send message error.", ex);
-                }
-
-                try {
-                  Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                  log.error("send fwhm, delay error.", ex);
-                }
-
-                try {
-                  out.close();
-                  socket.close();
-                } catch (IOException ex) {
-                  log.error("send fwhm, close socket error.", ex);
-                }
-              } catch (IOException ex) {
-                log.error("send fwhm, cannot connect to server.", ex);
-              }
             }
           }
         }
@@ -444,13 +361,6 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
   }
 
   /**
-   * @param occurNumber the occurNumber to set
-   */
-  public void setOccurNumber(int occurNumber) {
-    this.occurNumber = occurNumber;
-  }
-
-  /**
    * @return the ffcrDao
    */
   public FitsFileCutRefDAO getFfcrDao() {
@@ -504,5 +414,12 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setUfuDao(UploadFileUnstoreDao ufuDao) {
     this.ufuDao = ufuDao;
+  }
+
+  /**
+   * @param cutOccurNumber the cutOccurNumber to set
+   */
+  public void setCutOccurNumber(int cutOccurNumber) {
+    this.cutOccurNumber = cutOccurNumber;
   }
 }

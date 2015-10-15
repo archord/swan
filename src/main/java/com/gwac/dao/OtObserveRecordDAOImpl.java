@@ -188,6 +188,20 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     }
     return flag;
   }
+  
+  @Override
+  public List<OtObserveRecord> existInAll(OtObserveRecord obj, float errorBox) {
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record "
+            + " where ot_id=0"
+            + " and dpm_id=" + obj.getDpmId()
+            + " and sky_id=" + obj.getSkyId()
+            + " and data_produce_method='" + obj.getDataProduceMethod() + "'"
+            + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " "
+            + " order by ff_number asc";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
 
   @Override
   public List<OtObserveRecord> matchLatestN(OtObserveRecord obj, float errorBox, int n) {

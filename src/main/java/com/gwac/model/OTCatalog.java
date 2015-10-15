@@ -32,6 +32,7 @@ public class OTCatalog {
   private Boolean otFlag;
   private Float distance;
   private Float deltamag;
+  private String cutImageName;
   
   public String getFileDate(){
     return imageName.substring(6, 12);
@@ -57,8 +58,9 @@ public class OTCatalog {
             + " ellipticity=" + ellipticity
             + " classStar=" + classStar
             + " otFlag=" + otFlag
-            + " distance=" + getDistance()
-            + " deltamag=" + getDeltamag();
+            + " distance=" + distance
+            + " deltamag=" + deltamag
+            + " cutImageName=" + cutImageName;
   }
 
   /**
@@ -339,5 +341,19 @@ public class OTCatalog {
    */
   public void setDeltamag(Float deltamag) {
     this.deltamag = deltamag;
+  }
+
+  /**
+   * @return the cutImageName
+   */
+  public String getCutImageName() {
+    return cutImageName;
+  }
+
+  /**
+   * @param cutImageName the cutImageName to set
+   */
+  public void setCutImageName(String cutImageName) {
+    this.cutImageName = cutImageName;
   }
 }

@@ -21,6 +21,8 @@ public class OtNumber implements java.io.Serializable {
   private String date;
   private Integer number;
   private Character otLevel;
+  private Integer varNumber;
+  private Integer subNumber;
 
   public OtNumber() {
   }
@@ -29,11 +31,13 @@ public class OtNumber implements java.io.Serializable {
     this.otnId = otnId;
   }
 
-  public OtNumber(long otnId, String date, Integer number, Character otLevel) {
+  public OtNumber(long otnId, String date, Integer number, Character otLevel, Integer varNumber, Integer subNumber) {
     this.otnId = otnId;
     this.date = date;
     this.number = number;
     this.otLevel = otLevel;
+    this.varNumber = varNumber;
+    this.subNumber = subNumber;
   }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -76,6 +80,34 @@ public class OtNumber implements java.io.Serializable {
 
   public void setOtLevel(Character otLevel) {
     this.otLevel = otLevel;
+  }
+
+  /**
+   * @return the VarNumber
+   */
+  public Integer getVarNumber() {
+    return varNumber;
+  }
+
+  /**
+   * @param varNumber the VarNumber to set
+   */
+  public void setVarNumber(Integer varNumber) {
+    this.varNumber = varNumber;
+  }
+
+  /**
+   * @return the subNumber
+   */
+  public Integer getSubNumber() {
+    return subNumber;
+  }
+
+  /**
+   * @param subNumber the subNumber to set
+   */
+  public void setSubNumber(Integer subNumber) {
+    this.subNumber = subNumber;
   }
 
 }
