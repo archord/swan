@@ -133,7 +133,7 @@
             }
 
             function setJs9Fits(url) {
-                var option = {zoom: 4, colormap: 'grey', contrast: 7.0, bias: 0.03, scale: "linear"};
+                var option = {zoom: 4, colormap: 'grey', contrast: 7.0, bias: 0.4, scale: "log"};
                 JS9.Load(url, option);
 //                JS9.Load(url);
                 setJs9Parameter();

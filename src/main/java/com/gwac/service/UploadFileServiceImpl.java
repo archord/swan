@@ -37,7 +37,7 @@ import org.springframework.jms.core.MessageCreator;
  * @author xy
  */
 public class UploadFileServiceImpl implements UploadFileService {
-  
+
   private static final Log log = LogFactory.getLog(UploadFileServiceImpl.class);
   //单次传输配置文件信息
   private Date sendTime = null;
@@ -70,21 +70,21 @@ public class UploadFileServiceImpl implements UploadFileService {
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
   private ObservationSkyDao skyDao;
-  
+
   private JmsTemplate jmsTemplate;
   private Destination otlistDest;
-  
+
   public UploadFileServiceImpl() {
   }
-  
+
   public UploadFileServiceImpl(String configPath, String cfile) {
     this.configFile = cfile;
     this.configPath = configPath;
   }
-  
+
   public void storeOTList() {
   }
-  
+
   public int parseConfigFile() {
     InputStream input = null;
     int fNum = 0;
@@ -97,130 +97,147 @@ public class UploadFileServiceImpl implements UploadFileService {
       input = new FileInputStream(tfile);
       Properties cfile = new Properties();
       cfile.load(input);
-      
+
       String dateStr = cfile.getProperty("date");
       String dpmName = cfile.getProperty("dpmname");
       String curProcNumber = cfile.getProperty("curprocnumber");
       String dfInfo = cfile.getProperty("dfinfo");
       String otlist = cfile.getProperty("otlist");
       String sendTimeStr = cfile.getProperty("timeSend");
-      
-      if (sendTimeStr != null && !sendTimeStr.isEmpty()) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        sendTime = sdf.parse(sendTimeStr);
+
+      try {
+        if (sendTimeStr != null && !sendTimeStr.isEmpty()) {
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+          sendTime = sdf.parse(sendTimeStr);
+        }
+      } catch (ParseException ex) {
+        sendTime = null;
+        log.error("parse sendTime error", ex);
       }
 
 //      log.debug("dpmName=" + dpmName + ".");
 //      log.debug("curProcNumber=" + curProcNumber + ".");
 //      log.debug("dfInfo=" + dfInfo + ".");
-      if (dpmName != null && curProcNumber != null && dfInfo != null) {
+      if (dpmName != null && curProcNumber != null) {
         dpmName = dpmName.trim();
         curProcNumber = curProcNumber.trim();
-        dfInfo = dfInfo.trim();
-        otlist = otlist.trim();
-        if (!dpmName.isEmpty() && !curProcNumber.isEmpty() && !dfInfo.isEmpty()) {
+        if (!dpmName.isEmpty() && !curProcNumber.isEmpty()) {
+
           dpmName = dpmName.toUpperCase();
-          Pattern p = Pattern.compile("[ ]+");
-          String[] strs = p.split(dfInfo);
-          float totalSize = 0;
-          float leftSize = 0;
-          float percent = 0;
-          if (strs[2].contains("T")) {
-            totalSize = Float.parseFloat(strs[2].replace('T', ' '));
-          } else if (strs[2].contains("G")) {
-            totalSize = Float.parseFloat(strs[2].replace('G', ' ')) / (float) 1024.0;
-          } else if (strs[2].contains("M")) {
-            totalSize = Float.parseFloat(strs[2].replace('M', ' ')) / (float) (1024.0 * 1024.0);
+          DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
+
+          try {
+            int tnum = Integer.parseInt(curProcNumber);
+            if (tnum > dpm.getCurProcessNumber()) {
+              dpm.setCurProcessNumber(tnum);
+            }
+          } catch (NumberFormatException ex) {
+            log.error("parse curProcNumber error", ex);
           }
-          if (strs[3].contains("T")) {
-            leftSize = Float.parseFloat(strs[3].replace('T', ' '));
-          } else if (strs[3].contains("G")) {
-            leftSize = Float.parseFloat(strs[3].replace('G', ' ')) / (float) 1024.0;
-          } else if (strs[3].contains("M")) {
-            leftSize = Float.parseFloat(strs[3].replace('M', ' ')) / (float) (1024.0 * 1024.0);
-          }
-          if (strs[5].contains("%")) {
-            percent = Float.parseFloat(strs[5].replace('%', ' '));
-          }
+
+          if (dfInfo != null && !dfInfo.isEmpty()) {
+            dfInfo = dfInfo.trim();
+            Pattern p = Pattern.compile("[ ]+");
+            String[] strs = p.split(dfInfo);
+            float totalSize = 0;
+            float leftSize = 0;
+            float percent = 0;
+
+            try {
+              if (strs[2].contains("T")) {
+                totalSize = Float.parseFloat(strs[2].replace('T', ' '));
+              } else if (strs[2].contains("G")) {
+                totalSize = Float.parseFloat(strs[2].replace('G', ' ')) / (float) 1024.0;
+              } else if (strs[2].contains("M")) {
+                totalSize = Float.parseFloat(strs[2].replace('M', ' ')) / (float) (1024.0 * 1024.0);
+              }
+              dpm.setTotalStorageSize(totalSize);
+            } catch (NumberFormatException ex) {
+              log.error("parse totalSize error", ex);
+            }
+
+            try {
+              if (strs[3].contains("T")) {
+                leftSize = Float.parseFloat(strs[3].replace('T', ' '));
+              } else if (strs[3].contains("G")) {
+                leftSize = Float.parseFloat(strs[3].replace('G', ' ')) / (float) 1024.0;
+              } else if (strs[3].contains("M")) {
+                leftSize = Float.parseFloat(strs[3].replace('M', ' ')) / (float) (1024.0 * 1024.0);
+              }
+              if (strs[5].contains("%")) {
+                percent = Float.parseFloat(strs[5].replace('%', ' '));
+              }
+              dpm.setUsedStorageSize(leftSize);
+            } catch (NumberFormatException ex) {
+              log.error("parse totalSize error", ex);
+            }
 //        log.debug(totalSize);
 //        log.debug(leftSize);
 //        log.debug(percent);
-
-          DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
-          int tnum = Integer.parseInt(curProcNumber);
-          if (tnum > dpm.getCurProcessNumber()) {
-            dpm.setCurProcessNumber(tnum);
           }
-          dpm.setTotalStorageSize(totalSize);
-          dpm.setUsedStorageSize(leftSize);
-          if (!otlist.isEmpty()) {
-            String skyName = otlist.substring(15, 21);
-            int curNumber = Integer.parseInt(otlist.substring(22, 26));
-            ObservationSky sky = skyDao.getByName(skyName);
-            if (dpm.getCurSkyId() != sky.getSkyId()) {
-              dpm.setCurSkyId(sky.getSkyId());
-              dpm.setFirstRecordNumber(0);
-              dpm.setFirstRecordNumber(curNumber);
+
+          if (otlist != null && !otlist.isEmpty()) {
+            otlist = otlist.trim();
+            try {
+              String skyName = otlist.substring(15, 21);
+              int curNumber = Integer.parseInt(otlist.substring(22, 26));
+              ObservationSky sky = skyDao.getByName(skyName);
+              if (dpm.getCurSkyId() != sky.getSkyId()) {
+                dpm.setCurSkyId(sky.getSkyId());
+                dpm.setFirstRecordNumber(curNumber);
+              }
+            } catch (NumberFormatException ex) {
+              log.error("parse curProcNumber from otlist file name error", ex);
             }
           }
           dpmDao.update(dpm);
         }
       }
-      
+
       String tmpStr = cfile.getProperty("otlist");
       otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (otList != null) {
         fNum += otList.length;
       }
-      
+
       tmpStr = cfile.getProperty("varilist");
       varList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (varList != null) {
         fNum += varList.length;
       }
-      
+
       tmpStr = cfile.getProperty("starlist");
       starList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (starList != null) {
         fNum += starList.length;
       }
-      
+
       tmpStr = cfile.getProperty("origimage");
       origImage = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (origImage != null) {
         fNum += origImage.length;
       }
-      
+
       tmpStr = cfile.getProperty("cutimages");
       cutImages = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (cutImages != null) {
         fNum += cutImages.length;
       }
-      
+
       tmpStr = cfile.getProperty("imgstatus");
       imgStatus = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (imgStatus != null) {
         fNum += imgStatus.length;
       }
-      
+
       tmpStr = cfile.getProperty("otlistsub");
       otListSub = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
       if (otListSub != null) {
         fNum += otListSub.length;
       }
-      
-      tmpStr = cfile.getProperty("cutimagessub");
-      cutImagesSub = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
-      if (cutImagesSub != null) {
-        fNum += cutImagesSub.length;
-      }
-      
+
     } catch (IOException ex) {
       log.error("read property file error", ex);
-    } catch (ParseException ex) {
-      log.error("parse send time error", ex);
-    } catch (NumberFormatException ex) {
-      log.error("parse number error", ex);
     } finally {
       if (input != null) {
         try {
@@ -232,9 +249,9 @@ public class UploadFileServiceImpl implements UploadFileService {
     }
     return fNum;
   }
-  
+
   public int checkAndMoveDataFile(String path) {
-    
+
     int fileNum = 0;
     //存储OT列表
     fileNum += storeOTList(path);
@@ -248,26 +265,24 @@ public class UploadFileServiceImpl implements UploadFileService {
     fileNum += storeVarList(path);
     //存储图像处理状态
     fileNum += storeImgStatus(path);
-    //存储图像处理状态
+    //存储图像相减OT
     fileNum += storeOtListSub(path);
-    //存储图像处理状态
-    fileNum += storeCutImagesSub(path);
     return fileNum;
   }
-  
+
   public int storeOtListSub(String path) {
-    
+
     int fileNum = 0;
     File tfile1 = null;
     File tfile2 = null;
     try {
-      
+
       String tpath = path + otListSubDir;
       File dir = new File(tpath);
       if (!dir.exists()) {
         dir.mkdir();
       }
-      
+
       if (otListSub != null) {
         for (String tStr : otListSub) {
           tStr = tStr.trim();
@@ -275,212 +290,19 @@ public class UploadFileServiceImpl implements UploadFileService {
             log.debug("receive imgStatus " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
-            
+
             UploadFileUnstore obj = new UploadFileUnstore();
             obj.setStorePath(tpath.substring(rootDir.length() + 1));
             obj.setFileName(tStr);
             obj.setFileType('8');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8
             obj.setUploadDate(new Date());
-            
+
             UploadFileRecord obj2 = new UploadFileRecord();
             obj2.setStorePath(tpath.substring(rootDir.length() + 1));
             obj2.setFileName(tStr);
             obj2.setFileType('8');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8
             obj2.setUploadDate(new Date());
 
-            //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-            if (tfile2.exists()) {
-              if (tfile1.exists()) {
-                log.warn(tfile2 + " already exist, delete it.");
-                FileUtils.forceDelete(tfile2);
-                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-              }
-            } else {
-              if (tfile1.exists()) {
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-                obj.setUploadSuccess(Boolean.TRUE);
-                obj2.setUploadSuccess(Boolean.TRUE);
-              } else {
-                obj.setUploadSuccess(Boolean.FALSE);
-                obj2.setUploadSuccess(Boolean.FALSE);
-                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
-              }
-              ufuDao.save(obj);
-              ufrDao.save(obj2);
-            }
-          }
-        }
-      }
-    } catch (IOException ex) {
-      log.info("move file errror:");
-      log.error(ex);
-    }
-    return fileNum;
-  }
-  
-  public int storeCutImagesSub(String path) {
-    
-    int fileNum = 0;
-    File tfile1 = null;
-    File tfile2 = null;
-    try {
-      
-      String tpath = path + cutImagesSubDir;
-      File dir = new File(tpath);
-      if (!dir.exists()) {
-        dir.mkdir();
-      }
-      
-      if (cutImagesSub != null) {
-        for (String tStr : cutImagesSub) {
-          tStr = tStr.trim();
-          if (!tStr.isEmpty()) {
-            log.debug("receive imgStatus " + tStr);
-            tfile1 = new File(path, tStr);
-            tfile2 = new File(tpath + "/", tStr);
-            
-            UploadFileRecord obj2 = new UploadFileRecord();
-            obj2.setStorePath(tpath.substring(rootDir.length() + 1));
-            obj2.setFileName(tStr);
-            obj2.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, cutImagesSub: 9
-            obj2.setUploadDate(new Date());
-
-            //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-            if (tfile2.exists()) {
-              if (tfile1.exists()) {
-                log.warn(tfile2 + " already exist, delete it.");
-                FileUtils.forceDelete(tfile2);
-                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-              }
-            } else {
-              if (tfile1.exists()) {
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-                obj2.setUploadSuccess(Boolean.TRUE);
-              } else {
-                obj2.setUploadSuccess(Boolean.FALSE);
-                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
-              }
-              ufrDao.save(obj2);
-            }
-          }
-        }
-      }
-    } catch (IOException ex) {
-      log.info("move file errror:");
-      log.error(ex);
-    }
-    return fileNum;
-  }
-  
-  public int storeImgStatus(String path) {
-    
-    int fileNum = 0;
-    File tfile1 = null;
-    File tfile2 = null;
-    try {
-      
-      String tpath = path + imgSDir;
-      File dir = new File(tpath);
-      if (!dir.exists()) {
-        dir.mkdir();
-      }
-      
-      if (imgStatus != null) {
-        for (String tStr : imgStatus) {
-          tStr = tStr.trim();
-          if (!tStr.isEmpty()) {
-            log.debug("receive imgStatus " + tStr);
-            tfile1 = new File(path, tStr);
-            tfile2 = new File(tpath + "/", tStr);
-            
-            UploadFileUnstore obj = new UploadFileUnstore();
-            obj.setStorePath(tpath.substring(rootDir.length() + 1));
-            obj.setFileName(tStr);
-            obj.setFileType('7');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7
-            obj.setUploadDate(new Date());
-            
-            UploadFileRecord obj2 = new UploadFileRecord();
-            obj2.setStorePath(tpath.substring(rootDir.length() + 1));
-            obj2.setFileName(tStr);
-            obj2.setFileType('7');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7
-            obj2.setUploadDate(new Date());
-
-            //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-            if (tfile2.exists()) {
-              if (tfile1.exists()) {
-                log.warn(tfile2 + " already exist, delete it.");
-                FileUtils.forceDelete(tfile2);
-                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-              }
-            } else {
-              if (tfile1.exists()) {
-                FileUtils.moveFile(tfile1, tfile2);
-                fileNum++;
-                obj.setUploadSuccess(Boolean.TRUE);
-                obj2.setUploadSuccess(Boolean.TRUE);
-              } else {
-                obj.setUploadSuccess(Boolean.FALSE);
-                obj2.setUploadSuccess(Boolean.FALSE);
-                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
-              }
-              ufuDao.save(obj);
-              ufrDao.save(obj2);
-            }
-          }
-        }
-      }
-    } catch (IOException ex) {
-      log.info("move file errror:");
-      log.error(ex);
-    }
-    return fileNum;
-  }
-  
-  public int storeOTList(String path) {
-    
-    int fileNum = 0;
-    File tfile1 = null;
-    File tfile2 = null;
-    try {
-      
-      String tpath = path + otLDir;
-      File dir = new File(tpath);
-      if (!dir.exists()) {
-        dir.mkdir();
-      }
-      
-      if (otList != null) {
-        for (String tStr : otList) {
-          tStr = tStr.trim();
-          if (!tStr.isEmpty()) {
-            
-            log.debug("receive otList " + tStr);
-            tfile1 = new File(path, tStr);
-            tfile2 = new File(tpath + "/", tStr);
-            
-            UploadFileUnstore obj = new UploadFileUnstore();
-            obj.setStorePath(tpath.substring(rootDir.length() + 1));
-            obj.setFileName(tStr);
-            obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
-            obj.setUploadDate(new Date());
-            if (sendTime != null) {
-              obj.setSendTime(sendTime);
-            }
-            
-            UploadFileRecord obj2 = new UploadFileRecord();
-            obj2.setStorePath(tpath.substring(rootDir.length() + 1));
-            obj2.setFileName(tStr);
-            obj2.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
-            obj2.setUploadDate(new Date());
-            
             //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
 //            if (tfile2.exists()) {
 //              if (tfile1.exists()) {
@@ -503,7 +325,7 @@ public class UploadFileServiceImpl implements UploadFileService {
                 ufuDao.save(obj); //所有的文件都应该上传上来，如果有没上传上来的，不处理，只在ufr表中记录。
                 MessageCreator tmc = new OTListMessageCreator(obj);
                 jmsTemplate.send(otlistDest, tmc);
-                
+
               } else {
                 obj.setUploadSuccess(Boolean.FALSE);
                 obj2.setUploadSuccess(Boolean.FALSE);
@@ -520,20 +342,167 @@ public class UploadFileServiceImpl implements UploadFileService {
     }
     return fileNum;
   }
-  
-  public int storeVarList(String path) {
-    
+
+  public int storeImgStatus(String path) {
+
     int fileNum = 0;
     File tfile1 = null;
     File tfile2 = null;
     try {
-      
+
+      String tpath = path + imgSDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
+      if (imgStatus != null) {
+        for (String tStr : imgStatus) {
+          tStr = tStr.trim();
+          if (!tStr.isEmpty()) {
+            log.debug("receive imgStatus " + tStr);
+            tfile1 = new File(path, tStr);
+            tfile2 = new File(tpath + "/", tStr);
+
+            UploadFileUnstore obj = new UploadFileUnstore();
+            obj.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj.setFileName(tStr);
+            obj.setFileType('7');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7
+            obj.setUploadDate(new Date());
+
+            UploadFileRecord obj2 = new UploadFileRecord();
+            obj2.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj2.setFileName(tStr);
+            obj2.setFileType('7');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7
+            obj2.setUploadDate(new Date());
+
+            //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+//            if (tfile2.exists()) {
+//              if (tfile1.exists()) {
+//                log.warn(tfile2 + " already exist, delete it.");
+//                FileUtils.forceDelete(tfile2);
+//                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+//                FileUtils.moveFile(tfile1, tfile2);
+//                fileNum++;
+//              }
+//            } else 
+            {
+              if (tfile1.exists()) {
+                if (tfile2.exists()) {
+                  FileUtils.forceDelete(tfile2);
+                }
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+                obj2.setUploadSuccess(Boolean.TRUE);
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                obj2.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufuDao.save(obj);
+              ufrDao.save(obj2);
+            }
+          }
+        }
+      }
+    } catch (IOException ex) {
+      log.info("move file errror:");
+      log.error(ex);
+    }
+    return fileNum;
+  }
+
+  public int storeOTList(String path) {
+
+    int fileNum = 0;
+    File tfile1 = null;
+    File tfile2 = null;
+    try {
+
+      String tpath = path + otLDir;
+      File dir = new File(tpath);
+      if (!dir.exists()) {
+        dir.mkdir();
+      }
+
+      if (otList != null) {
+        for (String tStr : otList) {
+          tStr = tStr.trim();
+          if (!tStr.isEmpty()) {
+
+            log.debug("receive otList " + tStr);
+            tfile1 = new File(path, tStr);
+            tfile2 = new File(tpath + "/", tStr);
+
+            UploadFileUnstore obj = new UploadFileUnstore();
+            obj.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj.setFileName(tStr);
+            obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
+            obj.setUploadDate(new Date());
+            if (sendTime != null) {
+              obj.setSendTime(sendTime);
+            }
+
+            UploadFileRecord obj2 = new UploadFileRecord();
+            obj2.setStorePath(tpath.substring(rootDir.length() + 1));
+            obj2.setFileName(tStr);
+            obj2.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
+            obj2.setUploadDate(new Date());
+
+            //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+//            if (tfile2.exists()) {
+//              if (tfile1.exists()) {
+//                log.warn(tfile2 + " already exist, delete it.");
+//                FileUtils.forceDelete(tfile2);
+//                //FileUtils.moveFileToDirectory(tfile1, tfile2, true);
+//                FileUtils.moveFile(tfile1, tfile2);
+//                fileNum++;
+//              }
+//            } else 
+            {
+              if (tfile1.exists()) {
+                if (tfile2.exists()) {
+                  FileUtils.forceDelete(tfile2);
+                }
+                FileUtils.moveFile(tfile1, tfile2);
+                fileNum++;
+                obj.setUploadSuccess(Boolean.TRUE);
+                obj2.setUploadSuccess(Boolean.TRUE);
+                ufuDao.save(obj); //所有的文件都应该上传上来，如果有没上传上来的，不处理，只在ufr表中记录。
+                MessageCreator tmc = new OTListMessageCreator(obj);
+                jmsTemplate.send(otlistDest, tmc);
+
+              } else {
+                obj.setUploadSuccess(Boolean.FALSE);
+                obj2.setUploadSuccess(Boolean.FALSE);
+                log.warn("File " + tfile1.getAbsolutePath() + " does not exist!");
+              }
+              ufrDao.save(obj2);
+            }
+          }
+        }
+      }
+    } catch (IOException ex) {
+      log.info("move file errror:");
+      log.error(ex);
+    }
+    return fileNum;
+  }
+
+  public int storeVarList(String path) {
+
+    int fileNum = 0;
+    File tfile1 = null;
+    File tfile2 = null;
+    try {
+
       String tpath = path + varLDir;
       File dir = new File(tpath);
       if (!dir.exists()) {
         dir.mkdir();
       }
-      
+
       if (varList != null) {
         for (String tStr : varList) {
           tStr = tStr.trim();
@@ -541,19 +510,19 @@ public class UploadFileServiceImpl implements UploadFileService {
             log.debug("receive varlist file " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
-            
+
             UploadFileUnstore obj = new UploadFileUnstore();
             obj.setStorePath(tpath.substring(rootDir.length() + 1));
             obj.setFileName(tStr);
             obj.setFileType('6');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
             obj.setUploadDate(new Date());
-            
+
             UploadFileRecord obj2 = new UploadFileRecord();
             obj2.setStorePath(tpath.substring(rootDir.length() + 1));
             obj2.setFileName(tStr);
             obj2.setFileType('6');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
             obj2.setUploadDate(new Date());
-            
+
             String dpmName = "M" + tStr.substring(3, 5);
             int curNumber = Integer.parseInt(tStr.substring(22, 26));
             if (dpmDao.getFirstRecordNumber(dpmName) == 0) {
@@ -582,7 +551,7 @@ public class UploadFileServiceImpl implements UploadFileService {
                 ufuDao.save(obj); //所有的文件都应该上传上来，如果有没上传上来的，不处理，只在ufr表中记录。
 //                MessageCreator tmc = new OTListMessageCreator(obj);
 //                jmsTemplate.send(otlistDest, tmc);
-                
+
               } else {
                 obj.setUploadSuccess(Boolean.FALSE);
                 obj2.setUploadSuccess(Boolean.FALSE);
@@ -599,20 +568,20 @@ public class UploadFileServiceImpl implements UploadFileService {
     }
     return fileNum;
   }
-  
+
   public int storeStarList(String path) {
-    
+
     int fileNum = 0;
     File tfile1 = null;
     File tfile2 = null;
     try {
-      
+
       String tpath = path + starLDir;
       File dir = new File(tpath);
       if (!dir.exists()) {
         dir.mkdir();
       }
-      
+
       if (starList != null) {
         for (String tStr : starList) {
           tStr = tStr.trim();
@@ -620,19 +589,19 @@ public class UploadFileServiceImpl implements UploadFileService {
             log.debug("receive starList " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
-            
+
             UploadFileUnstore obj = new UploadFileUnstore();
             obj.setStorePath(tpath.substring(rootDir.length() + 1));
             obj.setFileName(tStr);
             obj.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
-            
+
             UploadFileRecord obj2 = new UploadFileRecord();
             obj2.setStorePath(tpath.substring(rootDir.length() + 1));
             obj2.setFileName(tStr);
             obj2.setFileType('2');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj2.setUploadDate(new Date());
-            
+
             if (tfile2.exists()) {
               if (tfile1.exists()) {
                 log.warn(tfile2 + " already exist, delete it.");
@@ -664,20 +633,20 @@ public class UploadFileServiceImpl implements UploadFileService {
     }
     return fileNum;
   }
-  
+
   public int storeOrigImage(String path) {
-    
+
     int fileNum = 0;
     File tfile1 = null;
     File tfile2 = null;
     try {
-      
+
       String tpath = path + orgIDir;
       File dir = new File(tpath);
       if (!dir.exists()) {
         dir.mkdir();
       }
-      
+
       if (origImage != null) {
         for (String tStr : origImage) {
           tStr = tStr.trim();
@@ -685,13 +654,13 @@ public class UploadFileServiceImpl implements UploadFileService {
             log.debug("receive origImage " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
-            
+
             UploadFileRecord obj = new UploadFileRecord();
             obj.setStorePath(tpath.substring(rootDir.length() + 1));
             obj.setFileName(tStr);
             obj.setFileType('3');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
-            
+
             if (tfile2.exists()) {
               if (tfile1.exists()) {
                 log.warn(tfile2 + " already exist, delete it.");
@@ -720,20 +689,20 @@ public class UploadFileServiceImpl implements UploadFileService {
     }
     return fileNum;
   }
-  
+
   public int storeCutImage(String path) {
-    
+
     int fileNum = 0;
     File tfile1 = null;
     File tfile2 = null;
     try {
-      
+
       String tpath = path + cutIDir;
       File dir = new File(tpath);
       if (!dir.exists()) {
         dir.mkdir();
       }
-      
+
       if (cutImages != null) {
         for (String tStr : cutImages) {
           tStr = tStr.trim();
@@ -741,13 +710,13 @@ public class UploadFileServiceImpl implements UploadFileService {
             log.debug("receive cutImages " + tStr);
             tfile1 = new File(path, tStr);
             tfile2 = new File(tpath + "/", tStr);
-            
+
             UploadFileRecord obj = new UploadFileRecord();
             obj.setStorePath(tpath.substring(rootDir.length() + 1));
             obj.setFileName(tStr);
             obj.setFileType('4');   //otlist:1, starlist:2, origimage:3, cutimage:4
             obj.setUploadDate(new Date());
-            
+
             if (tfile2.exists()) {
               if (tfile1.exists()) {
                 log.warn(tfile2 + " already exist, delete it.");
@@ -780,7 +749,7 @@ public class UploadFileServiceImpl implements UploadFileService {
                 if (dateStr != null && dateStr.length() == 15) {
                   SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
                   Date genDate = sdf.parse(dateStr.replace('T', ' '));
-                  
+
                   FitsFileCutRef ffcr = new FitsFileCutRef();
                   ffcr.setFileName(tStr.substring(0, tStr.indexOf(".jpg")));
                   ffcr.setGenerateTime(genDate);
@@ -982,5 +951,5 @@ public class UploadFileServiceImpl implements UploadFileService {
   public void setOtlistDest(Destination otlistDest) {
     this.otlistDest = otlistDest;
   }
-  
+
 }

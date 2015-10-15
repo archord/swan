@@ -15,29 +15,31 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * 数据转移，清空需要频繁查询的表，这些表只存储当天的最新数据，之后将表中数据移动到历史表
+ *
  * @author xy
  */
-public class DataBackupServiceImpl implements DataBackupService{
-  
+public class DataBackupServiceImpl implements DataBackupService {
+
   private static final Log log = LogFactory.getLog(DataBackupServiceImpl.class);
-  
+
   private static boolean running = true;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
-  
+
   private OtLevel2Dao otlv2Dao;
   private FitsFileCutDAO ffcDao;
   private OtObserveRecordDAO oorDao;
   private ConfigFileDao cfDao;
   private ImageStatusParameterDao ispDao;
   private DataProcessMachineDAO dpmDao;
-  
-  public void startJob(){
-    
-    if(isTestServer){
+
+  @Override
+  public void startJob() {
+
+    if (isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -45,21 +47,24 @@ public class DataBackupServiceImpl implements DataBackupService{
       log.warn("job is running, jump this scheduler.");
       return;
     }
-    
-    long startTime=System.nanoTime();
-    otlv2Dao.moveDataToHisTable();
-    ffcDao.moveDataToHisTable();
-    oorDao.moveDataToHisTable();
-    cfDao.moveDataToHisTable();
-    ispDao.moveDataToHisTable();
-    dpmDao.everyDayInit();
-    long endTime=System.nanoTime();
-    
-    if (running == false) {
-      running = true;
-      log.debug("job is done.");
+
+    long startTime = System.nanoTime();
+    try {//JDBCConnectionException or some other exception
+      otlv2Dao.moveDataToHisTable();
+      ffcDao.moveDataToHisTable();
+      oorDao.moveDataToHisTable();
+      cfDao.moveDataToHisTable();
+      ispDao.moveDataToHisTable();
+      dpmDao.everyDayInit();
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
     }
-    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+    long endTime = System.nanoTime();
+    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
   /**
@@ -131,5 +136,5 @@ public class DataBackupServiceImpl implements DataBackupService{
   public void setDpmDao(DataProcessMachineDAO dpmDao) {
     this.dpmDao = dpmDao;
   }
-  
+
 }

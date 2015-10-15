@@ -44,6 +44,7 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
 
+  @Override
   public void startJob() {
 
     if (isBeiJingServer || isTestServer) {
@@ -58,15 +59,18 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
     }
 
     long startTime = System.nanoTime();
-    List<SyncFile> sfs = sfDao.getUnSyncFile();
-    syncSyncFile(sfs);
+    try {//JDBCConnectionException or some other exception
+      List<SyncFile> sfs = sfDao.getUnSyncFile();
+      syncSyncFile(sfs);
 //    addImage();
-    long endTime = System.nanoTime();
-
-    if (running == false) {
-      running = true;
-      log.debug("job is done.");
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
     }
+    long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
@@ -132,7 +136,7 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
   private void addImage() {
 
     for (int i = 1; i < 13; i++) {
-      String tfilename = "M" + String.format("%02d", i) + "_bgbright.jpg";
+      String tfilename = "M" + String.format("%02d", i) + "_bgbright.jpg";  //String ccdType = imageName.substring(0, 1); //"M"
       SyncFile tsf = new SyncFile();
       tsf.setFileName(tfilename);
       tsf.setIsSync(false);

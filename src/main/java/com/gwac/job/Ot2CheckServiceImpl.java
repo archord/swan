@@ -31,39 +31,40 @@ import org.apache.commons.logging.LogFactory;
  * @author xy
  */
 public class Ot2CheckServiceImpl implements Ot2CheckService {
-  
+
   private static final Log log = LogFactory.getLog(Ot2CheckServiceImpl.class);
-  
+
   private float mergedSearchbox;
   private float cvsSearchbox;
   private float rc3Searchbox;
   private float minorPlanetSearchbox;
-  
+
   private float mergedMag;
   private float cvsMag;
   private float rc3MinMag;
   private float rc3MaxMag;
   private float minorPlanetMag;
-  
+
   private OtLevel2Dao ot2Dao;
   private CVSQueryDao cvsDao;
   private MergedOtherDao moDao;
   private MinorPlanetDao mpDao;
   private Rc3Dao rc3Dao;
-  
+
   private OtTypeDao ottDao;
   private OtLevel2MatchDao ot2mDao;
-  
+
   private static boolean running = true;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
-  
+
+  @Override
   public void startJob() {
-    
+
     if (isBeiJingServer || isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -71,26 +72,29 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       log.warn("job is running, jump this scheduler.");
       return;
     }
-    
+
     long startTime = System.nanoTime();
-    searchOT2();
-    long endTime = System.nanoTime();
-    
-    if (running == false) {
-      running = true;
-      log.debug("job is done.");
+    try {//JDBCConnectionException or some other exception
+      searchOT2();
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
     }
+    long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
-  
+
   public void searchOT2() {
-    
+
     List<OtLevel2> ot2s = ot2Dao.getUnMatched();
     for (OtLevel2 ot2 : ot2s) {
-      
+
       OtLevel2Match ot2m = new OtLevel2Match();
       ot2m.setOtId(ot2.getOtId());
-      
+
       Boolean flag = false;
       Cvs tcvs = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
       if (tcvs != null) {
@@ -101,12 +105,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2m.setDec(tcvs.getDedeg());
         ot2m.setMag(tcvs.getMag());
         ot2mDao.save(ot2m);
-        
+
         String cvsInfo = tcvs.getCvsid() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag();
         log.debug("cvsInfo: " + cvsInfo);
         flag = true;
       }
-      
+
       MergedOther tmo = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
       if (tmo != null) {
         OtType ott = ottDao.getOtTypeByTypeName("merged_other");
@@ -116,12 +120,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2m.setDec(tmo.getDedeg());
         ot2m.setMag(tmo.getMag());
         ot2mDao.save(ot2m);
-        
+
         String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
-      
+
       Rc3 trc3 = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
       if (trc3 != null) {
         OtType ott = ottDao.getOtTypeByTypeName("rc3");
@@ -131,12 +135,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2m.setDec(trc3.getDedeg());
         ot2m.setMag(trc3.getMvmag());
         ot2mDao.save(ot2m);
-        
+
         String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
         log.debug("rc3Info: " + moInfo);
         flag = true;
       }
-      
+
       MinorPlanet tmp = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
       if (tmp != null) {
         OtType ott = ottDao.getOtTypeByTypeName("minor_planet");
@@ -145,12 +149,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2m.setRa(tmp.getLon());
         ot2m.setDec(tmp.getLat());
         ot2mDao.save(ot2m);
-        
+
         String moInfo = tmp.getIdnum() + " " + tmp.getMpid() + " " + tmp.getLon() + " " + tmp.getLat();
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
-      
+
       if (flag) {
         ot2.setIsMatch((short) 2);
         ot2Dao.updateIsMatch(ot2);
@@ -167,7 +171,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    * @return
    */
   public Cvs matchOt2InCvs(OtLevel2 ot2, float searchRadius, float mag) {
-    
+
     List<Cvs> cvss = cvsDao.queryByOt2(ot2, searchRadius, mag);
     double minDis = searchRadius;
     Cvs minCvs = null;
@@ -180,9 +184,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
     return minCvs;
   }
-  
+
   public MergedOther matchOt2InMergedOther(OtLevel2 ot2, float searchRadius, float mag) {
-    
+
     List<MergedOther> objs = moDao.queryByOt2(ot2, searchRadius, mag);
     double minDis = searchRadius;
     MergedOther minObj = null;
@@ -195,9 +199,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
     return minObj;
   }
-  
+
   public Rc3 matchOt2InRc3(OtLevel2 ot2, float searchRadius, float minMag, float maxMag) {
-    
+
     List<Rc3> objs = rc3Dao.queryByOt2(ot2, searchRadius, minMag, maxMag);
     double minDis = searchRadius;
     Rc3 minObj = null;
@@ -210,9 +214,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
     return minObj;
   }
-  
+
   public MinorPlanet matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
-    
+
     MinorPlanet minObj = null;
     String tableName = getMinorPlanetTableName();
     if (mpDao.tableExists(tableName)) {
@@ -232,7 +236,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
     return minObj;
   }
-  
+
   public String getMinorPlanetTableName() {
     OtType ott = ottDao.getOtTypeByTypeName("minor_planet");
     return ott.getOtTableName() + CommonFunction.getDateString(CommonFunction.getUTCDate(new Date()));
@@ -475,5 +479,5 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   public void setIsTestServer(Boolean isTestServer) {
     this.isTestServer = isTestServer;
   }
-  
+
 }

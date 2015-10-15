@@ -68,20 +68,22 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
     }
 
     long startTime = System.nanoTime();
-    parseImageStatusParm();
+    try {//JDBCConnectionException or some other exception
+      parseImageStatusParm();
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
+    }
     long endTime = System.nanoTime();
     double time1 = 1.0 * (endTime - startTime) / 1e9;
-
-    if (running == false) {
-      running = true;
-      log.debug("job is done.");
-    }
     log.debug("job consume: parse image status parameter " + time1 + ".");
   }
 
   /**
-   * 解析图像状态参数文件
-   * StringUtils.isNumericSpace("-12") return false
+   * 解析图像状态参数文件 StringUtils.isNumericSpace("-12") return false
    * StringUtils.isNumericSpace("12.2") return false
    */
   public void parseImageStatusParm() {
@@ -125,7 +127,8 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
             }
 
             if (StringUtils.isNotBlank(imageName)) {
-              String dpmName = "M" + imageName.substring(3, 5);  //应该在数据库中通过dpmName查询
+              String ccdType = imageName.substring(0, 1); //"M"
+              String dpmName = ccdType + imageName.substring(3, 5);  //应该在数据库中通过dpmName查询
               String numberStr = imageName.substring(22, 26);
               DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
               if (dpm != null) {
@@ -145,93 +148,93 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               isp.setPrcNum(prcNum);
 
               tStr = cfile.getProperty("Obj_Num");
-              try{
+              try {
                 isp.setObjNum(Integer.parseInt(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setObjNum(-99);
-                log.warn("Obj_Num="+tStr, e);
+                log.warn("Obj_Num=" + tStr, e);
               }
 
               tStr = cfile.getProperty("bgbright");
-              try{
+              try {
                 isp.setBgBright(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setBgBright(new Float(-99));
-                log.warn("bgbright="+tStr, e);
+                log.warn("bgbright=" + tStr, e);
               }
 
               tStr = cfile.getProperty("Fwhm");
-              try{
+              try {
                 isp.setFwhm(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setFwhm(new Float(-99));
-                log.warn("Fwhm="+tStr, e);
+                log.warn("Fwhm=" + tStr, e);
               }
 
               tStr = cfile.getProperty("AverDeltaMag");
-              try{
+              try {
                 isp.setS2n(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setS2n(new Float(-99));
-                log.warn("AverDeltaMag="+tStr, e);
+                log.warn("AverDeltaMag=" + tStr, e);
               }
 
               tStr = cfile.getProperty("AverLimit");
-              try{
+              try {
                 isp.setAvgLimit(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setAvgLimit(new Float(-99));
-                log.warn("AverLimit="+tStr, e);
+                log.warn("AverLimit=" + tStr, e);
               }
 
               tStr = cfile.getProperty("Extinc");
-              try{
+              try {
                 isp.setExtinc(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setExtinc(new Float(-99));
-                log.warn("Extinc="+tStr, e);
+                log.warn("Extinc=" + tStr, e);
               }
               tStr = cfile.getProperty("xshift");
-              try{
+              try {
                 isp.setXshift(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setXshift(new Float(-99));
-                log.warn("xshift="+tStr, e);
+                log.warn("xshift=" + tStr, e);
               }
               tStr = cfile.getProperty("yshift");
-              try{
+              try {
                 isp.setYshift(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setYshift(new Float(-99));
-                log.warn("yshift="+tStr, e);
+                log.warn("yshift=" + tStr, e);
               }
               tStr = cfile.getProperty("xrms");
-              try{
+              try {
                 isp.setXrms(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setXrms(new Float(-99));
-                log.warn("xrms="+tStr, e);
+                log.warn("xrms=" + tStr, e);
               }
               tStr = cfile.getProperty("yrms");
-              try{
+              try {
                 isp.setYrms(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setYrms(new Float(-99));
-                log.warn("yrms="+tStr, e);
+                log.warn("yrms=" + tStr, e);
               }
               tStr = cfile.getProperty("OC1");
-              try{
+              try {
                 isp.setOt1Num(Integer.parseInt(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setOt1Num(-99);
-                log.warn("OC1="+tStr, e);
+                log.warn("OC1=" + tStr, e);
               }
               tStr = cfile.getProperty("VC1");
-              try{
+              try {
                 isp.setVar1Num(Integer.parseInt(tStr));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setVar1Num(-99);
-                log.warn("VC1="+tStr, e);
+                log.warn("VC1=" + tStr, e);
               }
 
               tStr2 = cfile.getProperty("DirData");
@@ -242,19 +245,19 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               isp.setFfId(ff.getFfId());
 
               tStr = cfile.getProperty("ra_mount");
-              try{
+              try {
                 isp.setMountRa(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setMountRa(CommonFunction.dmsToDegree(tStr));
-                log.warn("ra_mount="+tStr, e);
+                log.warn("ra_mount=" + tStr, e);
               }
 
               tStr = cfile.getProperty("dec_mount");
-              try{
+              try {
                 isp.setMountDec(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setMountDec(CommonFunction.dmsToDegree(tStr));
-                log.warn("dec_mount="+tStr, e);
+                log.warn("dec_mount=" + tStr, e);
               }
 
               tStr = cfile.getProperty("State");
@@ -266,59 +269,59 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               }
 
               tStr = cfile.getProperty("TimeProcess");
-              try{
+              try {
                 isp.setProcTime(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setProcTime(new Float(-99));
-                log.warn("TimeProcess="+tStr, e);
+                log.warn("TimeProcess=" + tStr, e);
               }
 
               tStr = cfile.getProperty("ellipticity");
-              try{
+              try {
                 isp.setAvgEllipticity(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setAvgEllipticity(new Float(-99));
-                log.warn("ellipticity="+tStr, e);
+                log.warn("ellipticity=" + tStr, e);
               }
 
               tStr = cfile.getProperty("tempset");
-              try{
+              try {
                 isp.setTemperatureSet(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setTemperatureSet(new Float(-99));
-                log.warn("tempset="+tStr, e);
+                log.warn("tempset=" + tStr, e);
               }
 
               tStr = cfile.getProperty("tempact");
-              try{
+              try {
                 isp.setTemperatureActual(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setTemperatureActual(new Float(-99));
-                log.warn("tempact="+tStr, e);
+                log.warn("tempact=" + tStr, e);
               }
 
               tStr = cfile.getProperty("exptime");
-              try{
+              try {
                 isp.setExposureTime(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setExposureTime(new Float(-99));
-                log.warn("exptime="+tStr, e);
+                log.warn("exptime=" + tStr, e);
               }
 
               tStr = cfile.getProperty("ra_imgCenter");
-              try{
+              try {
                 isp.setImgCenterRa(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setImgCenterRa(new Float(-99));
-                log.warn("ra_imgCenter="+tStr, e);
+                log.warn("ra_imgCenter=" + tStr, e);
               }
 
               tStr = cfile.getProperty("dec_imgCenter");
-              try{
+              try {
                 isp.setImgCenterDec(Float.parseFloat(tStr.trim()));
-              } catch(NumberFormatException e) {
+              } catch (NumberFormatException e) {
                 isp.setImgCenterDec(new Float(-99));
-                log.warn("dec_imgCenter="+tStr, e);
+                log.warn("dec_imgCenter=" + tStr, e);
               }
 
               tStr = cfile.getProperty("TimeProcessEnd");
@@ -394,10 +397,10 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
   }
 
   public Boolean chechStatus(ImageStatusParameter isp) {
-    log.debug("psId="+isp.getProcStageId());
+    log.debug("psId=" + isp.getProcStageId());
     Boolean flag = false;
     ProcessStatus ps = psDao.getByPsId((short) isp.getProcStageId());
-    if (ps!=null && !StringUtils.equalsIgnoreCase(ps.getPsName(), "TempMaking")
+    if (ps != null && !StringUtils.equalsIgnoreCase(ps.getPsName(), "TempMaking")
             && !StringUtils.equalsIgnoreCase(ps.getPsName(), "BadComImage")) {
 
       ImageStatusParameter previoueIsp = ispDao.getPreviousStatus(isp);
@@ -423,7 +426,7 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
                 && isp.getFwhm() < 5 && isp.getFwhm() > 1
                 && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.3
                 && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
-                && isp.getBgBright() < 10000 && isp.getBgBright() > 1000; 
+                && isp.getBgBright() < 10000 && isp.getBgBright() > 1000;
         flag = s1 || s2;
       }
     } else {

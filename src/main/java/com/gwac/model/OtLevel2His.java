@@ -86,7 +86,7 @@ public class OtLevel2His  implements java.io.Serializable {
     }
 
     
-    @Column(name="name", length=12)
+    @Column(name="name", length=13)
     public String getName() {
         return this.name;
     }

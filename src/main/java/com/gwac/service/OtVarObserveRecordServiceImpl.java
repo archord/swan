@@ -74,8 +74,9 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
 
         String otListPath = storePath;
         String orgImg = otc.getImageName(); //M2_03_140630_1_255020_0024.fit
+        String ccdType = orgImg.substring(0, 1); //"M"
         String fileDate = orgImg.substring(6, 12);  //140828
-        String dpmName = "M" + orgImg.substring(3, 5);
+        String dpmName = ccdType + orgImg.substring(3, 5);
         int dpmId = Integer.parseInt(orgImg.substring(3, 5));  //应该在数据库中通过dpmName查询
         int number = Integer.parseInt(orgImg.substring(22, 26));
         String skyName = orgImg.substring(6, 12);
@@ -173,7 +174,7 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             OtObserveRecord oor1 = oors.get(0);
 
             int otNumber = otnDao.getNumberByDate(fileDate);
-            String otName = String.format("%s_%05d", fileDate, otNumber);
+            String otName = String.format("%s%s_2%04d", ccdType, fileDate, otNumber);
 
             OtLevel2 tOtLv2 = new OtLevel2();
             tOtLv2.setName(otName);

@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * 根据OtObserveRecordService产生的有观测记录的切图序列，计算序列中缺失的切图文件。
+ *
  * @author xy
  */
 public class FitsFileCutServiceImpl implements FitsFileCutService {
@@ -35,14 +36,14 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   private DataProcessMachineDAO dpmDao;
   private int successiveImageNumber;
   private int headTailCutNumber;
-  
-  
-  public void startJob(){
-    
-    if(isTestServer){
+
+  @Override
+  public void startJob() {
+
+    if (isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -50,16 +51,19 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       log.warn("job is running, jump this scheduler.");
       return;
     }
-    
-    long startTime=System.nanoTime();
-    addMissedCutImages();
-    long endTime=System.nanoTime();
-    
-    if (running == false) {
-      running = true;
-      log.debug("job is done.");
+
+    long startTime = System.nanoTime();
+    try {//JDBCConnectionException or some other exception
+      addMissedCutImages();
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
     }
-    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+    long endTime = System.nanoTime();
+    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
   public void addMissedCutImages() {

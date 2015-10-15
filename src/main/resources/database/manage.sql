@@ -20,8 +20,10 @@ delete from fits_file_cut;
 delete from ot_observe_record;
 delete from ot_level2;
 delete from upload_file_unstore;
+delete from upload_file_record;
 delete from var_star_record;
 update data_process_machine set cur_process_number=0;
+update data_process_machine set first_record_number=0;
 
 ##归档
 WITH moved_rows AS ( DELETE FROM ot_level2 RETURNING * ) INSERT INTO ot_level2_his SELECT * FROM moved_rows;

@@ -141,10 +141,24 @@
                 }
             ];
 
+            var otPositionVaration=<s:property value="otPositionVaration"/>;
+            var firstPostion = [];
+            var lastPostion = [];
+            firstPostion[0] = otPositionVaration[0];
+            lastPostion[0] = otPositionVaration[otPositionVaration.length-1];
+                
             var positionData = [{
-                    data: <s:property value="otPositionVaration"/>,
+                    data: otPositionVaration,
                     color: '#77b7c5',
                     points: {radius: 1} //fillColor: '#77b7c5'
+                },{
+                    data: firstPostion,
+                    color: '#FF6666',
+                    points: {radius: 3, fill: true, fillColor: "#FF6666"} //fillColor: '#77b7c5'
+                },{
+                    data: lastPostion,
+                    color: '#FF6666',
+                    points: {radius: 3} //fillColor: '#77b7c5'
                 }
             ];
             $.plot("#ot-curve", opticalData, option1);
@@ -172,7 +186,7 @@
         
         
   function openDialog() {
-    openwindow("show-fits-list.action?otName=<s:property value="otName"/>",
+    openwindow("show-fits-list.action?otName=<s:property value="otName"/>&queryHis=<s:property value="queryHis"/>",
             '_blank', 1050, 600, 1050, 600);
     return false;
   }

@@ -27,8 +27,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- * 数据同步
- * 根据传输配置文件，将一级OT列表，切图，模板切图等传输到另一个服务器
+ * 数据同步 根据传输配置文件，将一级OT列表，切图，模板切图等传输到另一个服务器
+ *
  * @author xy
  */
 public class DataSyncServiceImpl implements DataSyncService {
@@ -44,17 +44,18 @@ public class DataSyncServiceImpl implements DataSyncService {
   private String serverUrl;
   private String uploadUrl;
   private int mchNum; //gwac.machine.number
-  
+
   private static boolean running = true;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
-  
-  public void startJob(){
-    
-    if(isBeiJingServer || isTestServer){
+
+  @Override
+  public void startJob() {
+
+    if (isBeiJingServer || isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -62,19 +63,22 @@ public class DataSyncServiceImpl implements DataSyncService {
       log.warn("job is running, jump this scheduler.");
       return;
     }
-    
-    long startTime=System.nanoTime();
-    List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
-    for (ConfigFile cf : cfs) {
-      syncConfigFile(cf);
+
+    long startTime = System.nanoTime();
+    try {//JDBCConnectionException or some other exception
+      List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
+      for (ConfigFile cf : cfs) {
+        syncConfigFile(cf);
+      }
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
     }
-    long endTime=System.nanoTime();
-    
-    if (running == false) {
-      running = true;
-      log.debug("job is done.");
-    }
-    log.debug("job consume "+ 1.0*(endTime-startTime)/1e9+" seconds.");
+    long endTime = System.nanoTime();
+    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
   private void syncConfigFile(ConfigFile cf) {
@@ -102,7 +106,7 @@ public class DataSyncServiceImpl implements DataSyncService {
       if (!tfile.exists()) {
         log.warn(tfile + " not exist.");
         return;
-      }else{
+      } else {
         log.debug("read config file: " + tfile.getAbsolutePath());
       }
       input = new FileInputStream(tfile);
@@ -111,9 +115,9 @@ public class DataSyncServiceImpl implements DataSyncService {
 
       String dateStr = cfile.getProperty("date").trim();
       String dpmName = cfile.getProperty("dpmname").trim();
-      
-      if(dpmName.isEmpty()){
-        dpmName = configFile.substring(0, 1)+configFile.substring(3, 5);
+
+      if (dpmName.isEmpty()) {
+        dpmName = configFile.substring(0, 1) + configFile.substring(3, 5);
       }
 
       String tmpStr = cfile.getProperty("otlist");
@@ -150,49 +154,53 @@ public class DataSyncServiceImpl implements DataSyncService {
       mpEntity.addPart("configFile", new FileBody(tfile));
 
       String rootPath = rootDir + "/" + dateStr + "/" + dpmName + "/";
-      log.debug("rootPath="+rootPath);
-      
-      if(otList!=null)
-      for (String tName : otList) {
-        String tpath = rootPath + otLDir + "/" + tName.trim();
-        File tfile1 = new File(tpath);
-        if(tfile1.exists()){
-          mpEntity.addPart("fileUpload", new FileBody(tfile1));
-        }else{
-          log.warn(tfile1.getAbsolutePath()+" not exist!");
+      log.debug("rootPath=" + rootPath);
+
+      if (otList != null) {
+        for (String tName : otList) {
+          String tpath = rootPath + otLDir + "/" + tName.trim();
+          File tfile1 = new File(tpath);
+          if (tfile1.exists()) {
+            mpEntity.addPart("fileUpload", new FileBody(tfile1));
+          } else {
+            log.warn(tfile1.getAbsolutePath() + " not exist!");
+          }
         }
       }
-      
-      if(starList!=null)
-      for (String tName : starList) {
-        String tpath = rootPath + starLDir + "/" + tName.trim();
-        File tfile1 = new File(tpath);
-        if(tfile1.exists()){
-          mpEntity.addPart("fileUpload", new FileBody(tfile1));
-        }else{
-          log.warn(tfile1.getAbsolutePath()+" not exist!");
+
+      if (starList != null) {
+        for (String tName : starList) {
+          String tpath = rootPath + starLDir + "/" + tName.trim();
+          File tfile1 = new File(tpath);
+          if (tfile1.exists()) {
+            mpEntity.addPart("fileUpload", new FileBody(tfile1));
+          } else {
+            log.warn(tfile1.getAbsolutePath() + " not exist!");
+          }
         }
       }
-      
-      if(origImage!=null)
-      for (String tName : origImage) {
-        String tpath = rootPath + orgIDir + "/" + tName.trim();
-        File tfile1 = new File(tpath);
-        if(tfile1.exists()){
-          mpEntity.addPart("fileUpload", new FileBody(tfile1));
-        }else{
-          log.warn(tfile1.getAbsolutePath()+" not exist!");
+
+      if (origImage != null) {
+        for (String tName : origImage) {
+          String tpath = rootPath + orgIDir + "/" + tName.trim();
+          File tfile1 = new File(tpath);
+          if (tfile1.exists()) {
+            mpEntity.addPart("fileUpload", new FileBody(tfile1));
+          } else {
+            log.warn(tfile1.getAbsolutePath() + " not exist!");
+          }
         }
       }
-      
-      if(cutImages!=null)
-      for (String tName : cutImages) {
-        String tpath = rootPath + cutIDir + "/" + tName.trim();
-        File tfile1 = new File(tpath);
-        if(tfile1.exists()){
-          mpEntity.addPart("fileUpload", new FileBody(tfile1));
-        }else{
-          log.warn(tfile1.getAbsolutePath()+" not exist!");
+
+      if (cutImages != null) {
+        for (String tName : cutImages) {
+          String tpath = rootPath + cutIDir + "/" + tName.trim();
+          File tfile1 = new File(tpath);
+          if (tfile1.exists()) {
+            mpEntity.addPart("fileUpload", new FileBody(tfile1));
+          } else {
+            log.warn(tfile1.getAbsolutePath() + " not exist!");
+          }
         }
       }
 

@@ -67,7 +67,7 @@ public class MultipleFileUploadAction extends ActionSupport {
     String result = SUCCESS;
     echo = "";
 
-    log.debug("dpmName=" + dpmName + ",configFile=" + configFileFileName);
+    log.debug("dpmName=" + dpmName + ",currentDirectory=" + currentDirectory + ",configFile=" + configFileFileName);
 
     //必须设置传输机器名称
     if (null == dpmName) {
@@ -107,7 +107,7 @@ public class MultipleFileUploadAction extends ActionSupport {
       currentDirectory = currentDirectory.trim();
       configFileFileName = configFileFileName.trim();
       if (dpmName.isEmpty() || currentDirectory.isEmpty() || configFileFileName.isEmpty()) {
-        setEcho(echo + "Error, parameter error!\n");
+        setEcho(echo + "Error, parameter error: "+"dpmName=" + dpmName + ",currentDirectory=" + currentDirectory + ",configFile=" + configFileFileName+"\n");
         log.error(echo);
         return ERROR;
       }

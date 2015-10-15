@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class OtObserveRecordServiceImpl implements OtObserveRecordService {
+public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordServiceImpl.class);
 
@@ -171,12 +171,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
           otorDao.save(oor);
           List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
-          log.debug("match ot1 record size:" + oors.size());
+          log.debug("match ot1 record size:"+oors.size());
           if (oors.size() >= occurNumber) {
             OtObserveRecord oor1 = oors.get(0);
 
             int otNumber = otnDao.getNumberByDate(fileDate);
-            String otName = String.format("%s%s_0%04d", ccdType, fileDate, otNumber);
+            String otName = String.format("%s%s_1%04d", ccdType, fileDate, otNumber);
 
             OtLevel2 tOtLv2 = new OtLevel2();
             tOtLv2.setName(otName);
@@ -244,40 +244,39 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               otorDao.update(tOor);
             }
 
-            if (!isBeiJingServer) { //!isBeiJingServer
-              String ip = "190.168.1.201"; //190.168.1.32
-              int port = 4004;
+            if (false) { //!isBeiJingServer
+              String ip = "190.168.1.32"; //190.168.1.32
+              int port = 4003;
               Socket socket = null;
               DataOutputStream out = null;
 
-                String tmsg = getTriggerMsg(tOtLv2);
               try {
                 socket = new Socket(ip, port);
                 out = new DataOutputStream(socket.getOutputStream());
 
+                String tmsg = getTriggerMsg(tOtLv2);
                 try {
                   out.write(tmsg.getBytes());
                   out.flush();
-                  log.debug("send ot2 trigger to " + ip + ":" + port + ", message:" + tmsg);
+                  log.debug("send fwhm, dpmId:" + tmsg);
                 } catch (IOException ex) {
-                  log.error("send ot2 trigger error.", ex);
+                  log.error("send fwhm, send message error.", ex);
                 }
 
-//                try {
-//                  Thread.sleep(100);
-//                } catch (InterruptedException ex) {
-//                  log.error("send ot2 trigger delay error.", ex);
-//                }
+                try {
+                  Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                  log.error("send fwhm, delay error.", ex);
+                }
 
                 try {
                   out.close();
                   socket.close();
                 } catch (IOException ex) {
-                  log.error("send ot2 trigger, close socket error.", ex);
+                  log.error("send fwhm, close socket error.", ex);
                 }
               } catch (IOException ex) {
-                log.debug("send ot2 trigger to " + ip + ":" + port + ", message:" + tmsg);
-                log.error("send ot2 trigger, cannot connect to server.", ex);
+                log.error("send fwhm, cannot connect to server.", ex);
               }
             }
           }
@@ -300,7 +299,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     tsb.append("append_object ");
     tsb.append(ot2.getName());
     tsb.append(" ");
-    tsb.append(ot2.getRa() / 15); //小时
+    tsb.append(ot2.getRa() / 15);
     tsb.append(" ");
     tsb.append(ot2.getDec());
     tsb.append(" ");
