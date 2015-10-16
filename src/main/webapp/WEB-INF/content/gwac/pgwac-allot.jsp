@@ -55,14 +55,14 @@
         <td><sj:datepicker  id="to" name="ot2qp.endDate" displayFormat="yy-mm-dd" label="结束日期" /></td>
       </tr>
       <tr style="height:20px;">
-        <td>模板X坐标：</td>
+        <td>X坐标(模板)：</td>
         <td><sj:textfield name="ot2qp.xtemp" /></td>
-        <td>模板Y坐标：</td>
-        <td><sj:textfield name="ot2qp.ytemp" /></td>
-      </tr>
-      <tr style="height:20px;">
         <td>Ra(度)：</td>
         <td><sj:textfield name="ot2qp.ra" /></td>
+      </tr>
+      <tr style="height:20px;">
+        <td>Y坐标(模板)：</td>
+        <td><sj:textfield name="ot2qp.ytemp" /></td>
         <td>Dec(度)：</td>
         <td><sj:textfield name="ot2qp.dec" /></td>
       </tr>
@@ -71,6 +71,16 @@
         <td><sj:textfield name="ot2qp.planeRadius" /></td>
         <td>天球坐标搜索半径(度)：</td>
         <td><sj:textfield name="ot2qp.sphereRadius" /></td>
+      </tr>
+      <tr style="height:20px;">
+        <td>数据处理方式：</td>
+        <td><select name="ot2qp.processType" >
+            <option value=""></option>
+            <option value="1">星表匹配</option>
+            <option value="8">图像相减</option>
+          </select></td>
+        <td></td>
+        <td></td>
       </tr>
       <tr style="height:20px;">
         <td>CCD：</td>
@@ -136,9 +146,9 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="dec"    index="dec"	  title="DEC" width="80" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="模板X" width="80" 
+  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="X(模板)" width="80" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="模板Y" width="80" 
+  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="Y(模板)" width="80" 
                   sortable="false" align="center"/>
   <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="250" 
                   sortable="false" align="center"/>

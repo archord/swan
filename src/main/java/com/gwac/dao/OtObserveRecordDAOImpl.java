@@ -37,20 +37,31 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
   /**
    * 返回OT的光变和位置变化字符串，中间用=隔开
+   *
    * @param ot2
    * @param queryHis
-   * @return 
+   * @return
    */
   @Override
   public String getOtOpticalVaration(OtLevel2 ot2, Boolean queryHis) {
     Session session = getCurrentSession();
-    String sql1 = "select oor.date_ut, oor.mag_aper, oor.x_temp, oor.y_temp, oor.oor_id "
-            + " from ot_observe_record oor "
-            + " where oor.ot_id=" + ot2.getOtId();
+    String sql1 = "select oor.date_ut, oor.mag_aper ";
+    if (ot2.getDataProduceMethod() == '8') {
+      sql1 += ", oor.x, oor.y, oor.oor_id ";
+    } else {
+      sql1 += ", oor.x_temp, oor.y_temp, oor.oor_id ";
+    }
+    sql1 += " from ot_observe_record oor ";
+    sql1 += " where oor.ot_id=" + ot2.getOtId();
 
-    String sql2 = "select oorh.date_ut, oorh.mag_aper, oorh.x_temp, oorh.y_temp, oorh.oor_id "
-            + " from ot_observe_record_his oorh "
-            + " where oorh.ot_id=" + ot2.getOtId();
+    String sql2 = "select oorh.date_ut, oorh.mag_aper ";
+    if (ot2.getDataProduceMethod() == '8') {
+      sql2 += ", oorh.x, oorh.y, oorh.oor_id ";
+    } else {
+      sql2 += ", oorh.x_temp, oorh.y_temp, oorh.oor_id ";
+    }
+    sql2 += " from ot_observe_record_his oorh ";
+    sql2 += " where oorh.ot_id=" + ot2.getOtId();
 
     String unionSql = "";
     if (queryHis) {
@@ -120,7 +131,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     } else {
       tStr2 = "[" + tStr2 + "]";
     }
-    return tStr+"="+tStr2;
+    return tStr + "=" + tStr2;
   }
 
   /**
@@ -188,7 +199,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     }
     return flag;
   }
-  
+
   @Override
   public List<OtObserveRecord> existInAll(OtObserveRecord obj, float errorBox) {
     Session session = getCurrentSession();
@@ -197,7 +208,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
             + " and dpm_id=" + obj.getDpmId()
             + " and sky_id=" + obj.getSkyId()
             + " and data_produce_method='" + obj.getDataProduceMethod() + "'"
-            + " and sqrt(power(x_temp-" + obj.getXTemp() + ", 2)+power(y_temp-" + obj.getYTemp() + ", 2))<" + errorBox + " "
+            + " and sqrt(power(x-" + obj.getX() + ", 2)+power(y-" + obj.getY() + ", 2))<" + errorBox + " "
             + " order by ff_number asc";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
@@ -250,14 +261,42 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   @Override
   public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis) {
 
-    ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
     Session session = getCurrentSession();
-    String sql1 = "select ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath, oor.*"
+    String sql1 = "select ff.file_name ff_name, ff.store_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
             + "from ot_observe_record oor "
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
             + "where oor.ot_id=(select ob.ot_id from ot_level2 ob where name='" + otName + "') ";
-    String sql2 = "select ff.file_name ffname, ff.store_path ffpath, ffc.file_name ffcname, ffc.store_path ffcpath, oor.*"
+    String sql2 = "select ff.file_name ff_name, ff.store_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
+            + "from ot_observe_record_his oor "
+            + "left join fits_file ff on oor.ff_id=ff.ff_id "
+            + "left join fits_file_cut_his ffc on oor.ffc_id=ffc.ffc_id "
+            + "where oor.ot_id=(select ob.ot_id from ot_level2_his ob where name='" + otName + "') ";
+
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = sql1 + " union " + sql2 + " order by date_ut";
+    } else {
+      unionSql = sql1 + " order by date_ut";
+    }
+
+    Query q = session.createSQLQuery(unionSql).addEntity(OtObserveRecordShow.class);
+    q.setFirstResult(start);
+    q.setMaxResults(resultSize);
+    return q.list();
+  }
+
+//  @Override
+  public List<OtObserveRecordShow> getRecordByOtName1(String otName, int start, int resultSize, Boolean queryHis) {
+
+    ArrayList<OtObserveRecordShow> oorss = new ArrayList<OtObserveRecordShow>();
+    Session session = getCurrentSession();
+    String sql1 = "select ff.file_name ff_name, ff.store_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
+            + "from ot_observe_record oor "
+            + "left join fits_file ff on oor.ff_id=ff.ff_id "
+            + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
+            + "where oor.ot_id=(select ob.ot_id from ot_level2 ob where name='" + otName + "') ";
+    String sql2 = "select ff.file_name ff_name, ff.store_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
             + "from ot_observe_record_his oor "
             + "left join fits_file ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut_his ffc on oor.ffc_id=ffc.ffc_id "
@@ -282,7 +321,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         String ffStorePath = (String) row[1];
         String ffcFileName = (String) row[2];
         String ffcStorePath = (String) row[3];
-        
+
         BigInteger otID = (BigInteger) row[4];
         BigInteger ffId = (BigInteger) row[5];
         BigInteger ffcId = (BigInteger) row[6];
@@ -323,7 +362,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         oors.setFlux(flux);
         oors.setMagAper(magAper);
         oors.setMagerrAper(magerrAper);
-        oors.setOortId(oortId.longValue());
+        oors.setOorId(oortId.longValue());
         oors.setOtFlag(otFlag);
         oors.setOtId(otID.longValue());
         oors.setRaD(raD);
@@ -400,7 +439,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         oors.setFlux(flux);
         oors.setMagAper(magAper);
         oors.setMagerrAper(magerrAper);
-        oors.setOortId(oortId.longValue());
+        oors.setOorId(oortId.longValue());
         oors.setOtFlag(otFlag);
         oors.setOtId(otId);
         oors.setRaD(raD);

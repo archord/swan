@@ -17,6 +17,7 @@ public class OTListListener implements MessageListener {
   private static final Log log = LogFactory.getLog(OTListListener.class);
   private OtObserveRecordService otObserveRecordService;
   private OtObserveRecordService otVarObserveRecordService;
+  private OtObserveRecordService otSubObserveRecordService;
 
   @Override
   public void onMessage(Message message) {
@@ -32,7 +33,7 @@ public class OTListListener implements MessageListener {
       } else if (fileType == '6') {
         otVarObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else if (fileType == '8') {
-
+        otSubObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else {
         log.error("wrong fileType");
       }
@@ -53,6 +54,20 @@ public class OTListListener implements MessageListener {
    */
   public void setOtVarObserveRecordService(OtObserveRecordService otVarObserveRecordService) {
     this.otVarObserveRecordService = otVarObserveRecordService;
+  }
+
+  /**
+   * @return the otSubObserveRecordService
+   */
+  public OtObserveRecordService getOtSubObserveRecordService() {
+    return otSubObserveRecordService;
+  }
+
+  /**
+   * @param otSubObserveRecordService the otSubObserveRecordService to set
+   */
+  public void setOtSubObserveRecordService(OtObserveRecordService otSubObserveRecordService) {
+    this.otSubObserveRecordService = otSubObserveRecordService;
   }
 
 }

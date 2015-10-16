@@ -96,7 +96,7 @@ public class GetCutImageList extends ActionSupport {
             file.createNewFile();
             log.debug("create empty file " + file);
           }
-          log.debug("no cut images found at this time.");
+//          log.debug("no cut images found at this time.");
         }
       } catch (IOException ex) {
         log.error("create or write file error ", ex);

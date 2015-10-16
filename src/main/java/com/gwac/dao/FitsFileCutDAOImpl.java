@@ -42,6 +42,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  @Override
   public String getUnCuttedStarList(int dpmId) {
     Session session = getCurrentSession();
     String sql = "with updated_rows as "

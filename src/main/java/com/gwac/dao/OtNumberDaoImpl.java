@@ -21,8 +21,8 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select otn_id, number from ot_number where date='" + date + "'";
-    Query q = session.createSQLQuery(sql);
+    String sql = "select * from ot_number where date='" + date + "'";
+    Query q = session.createSQLQuery(sql).addEntity(OtNumber.class);
     List rstList = q.list();
     if (rstList.isEmpty()) {
       OtNumber otn = new OtNumber();
@@ -32,13 +32,9 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
       otn.setSubNumber(0);
       super.save(otn);
     } else {
-      Object[] row = (Object[]) rstList.get(0);
+      OtNumber otn = (OtNumber) rstList.get(0);
       try {
-        BigInteger otnId = (BigInteger) row[0];
-        number = (Integer) row[1] + 1;
-        OtNumber otn = new OtNumber();
-        otn.setOtnId(otnId.longValue());
-        otn.setDate(date);
+        number = otn.getNumber()+1;
         otn.setNumber(number);
         super.update(otn);
       } catch (ClassCastException cce) {
@@ -54,8 +50,8 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select otn_id, sub_number from ot_number where date='" + date + "'";
-    Query q = session.createSQLQuery(sql);
+    String sql = "select * from ot_number where date='" + date + "'";
+    Query q = session.createSQLQuery(sql).addEntity(OtNumber.class);
     List rstList = q.list();
     if (rstList.isEmpty()) {
       OtNumber otn = new OtNumber();
@@ -65,13 +61,9 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
       otn.setSubNumber(number);
       super.save(otn);
     } else {
-      Object[] row = (Object[]) rstList.get(0);
+      OtNumber otn = (OtNumber) rstList.get(0);
       try {
-        BigInteger otnId = (BigInteger) row[0];
-        number = (Integer) row[1] + 1;
-        OtNumber otn = new OtNumber();
-        otn.setOtnId(otnId.longValue());
-        otn.setDate(date);
+        number = otn.getSubNumber()+1;
         otn.setSubNumber(number);
         super.update(otn);
       } catch (ClassCastException cce) {

@@ -28,6 +28,7 @@
     <bean id="otListListener" class="com.gwac.activemq.OTListListener">
         <property name="otObserveRecordService" ref="otObserveRecordService" />
         <property name="otVarObserveRecordService" ref="otVarObserveRecordService" />
+        <property name="otSubObserveRecordService" ref="otSubObserveRecordService" />
     </bean>
 
     <bean id="javaConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
@@ -78,7 +79,7 @@
         <property name="firstNMarkNumber" value="${gwac.first.n.mark.number}" />
     </bean>
   
-    <bean id="otCutObserveRecordService" class="com.gwac.service.OtCutObserveRecordServiceImpl" >
+    <bean id="otSubObserveRecordService" class="com.gwac.service.OtSubObserveRecordServiceImpl" >
         <property name="otorDao" ref="otORDao" />
         <property name="otcDao" ref="otcDao" />
         <property name="otnDao" ref="otnDao" />

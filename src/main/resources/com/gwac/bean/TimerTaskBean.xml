@@ -13,11 +13,11 @@
       </property>
   </bean-->
   
-<!--  <bean id="otVarObserveRecordJob" 
+  <bean id="otSubObserveRecordJob" 
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
-    <property name="targetObject" ref="otVarObserveRecordJobService" /> 
-    <property name="targetMethod" value="storeOTCatalog" /> 
-  </bean> -->
+    <property name="targetObject" ref="otSubObserveRecordService" /> 
+    <property name="targetMethod" value="startJob" /> 
+  </bean> 
 
   <bean id="imageStatusParmJob" 
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
@@ -62,12 +62,12 @@
   </bean> 
   
   
-<!--  <bean id="otVarObserveRecordTrigger" 
+  <bean id="otSubObserveRecordTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-    <property name="jobDetail" ref="otVarObserveRecordJob" />
-    <property name="repeatInterval" value="1500000000000" />  
+    <property name="jobDetail" ref="otSubObserveRecordJob" />
+    <property name="repeatInterval" value="15000000000000" />  
     <property name="startDelay" value="5000" />   
-  </bean>-->
+  </bean>
 
   <!-- Simple Trigger, run every 15 seconds -->
   <bean id="imageStatusParmTrigger" 
@@ -129,7 +129,7 @@
         <!--<ref bean="dataSyncJob" />-->
         <ref bean="ot2CheckJob" />
         <ref bean="monitorImageSyncJob" />
-        <!--<ref bean="otVarObserveRecordJob" />-->
+        <!--<ref bean="otSubObserveRecordJob" />-->
       </list>
     </property>
     <property name="triggers">
@@ -141,7 +141,7 @@
 <!--        <ref bean="dataSyncTrigger" />-->
         <ref bean="ot2CheckTrigger" />
         <ref bean="monitorImageSyncTrigger" />
-        <!--<ref bean="otVarObserveRecordTrigger" />-->
+        <!--<ref bean="otSubObserveRecordTrigger" />-->
       </list>
     </property>
   </bean>

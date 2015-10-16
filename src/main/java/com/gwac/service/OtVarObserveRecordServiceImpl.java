@@ -174,7 +174,7 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             OtObserveRecord oor1 = oors.get(0);
 
             int otNumber = otnDao.getNumberByDate(fileDate);
-            String otName = String.format("%s%s_2%04d", ccdType, fileDate, otNumber);
+            String otName = String.format("%s%s_V%05d", ccdType, fileDate, otNumber);
 
             OtLevel2 tOtLv2 = new OtLevel2();
             tOtLv2.setName(otName);

@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
+public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordServiceImpl.class);
 
@@ -61,6 +61,46 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
 
+  private int totalRecord = 0;
+
+  public void startJob() {
+
+//    if (isTestServer) {
+//      return;
+//    }
+    if (running == true) {
+      log.debug("start job...");
+      running = false;
+    } else {
+      log.warn("job is running, jump this scheduler.");
+      return;
+    }
+
+    log.debug("cutOccurNumber=" + cutOccurNumber);
+
+    long startTime = System.nanoTime();
+    try {//JDBCConnectionException or some other exception
+
+      List<UploadFileUnstore> ufus = ufuDao.getSubOTLevel1File();
+      log.debug("size=" + ufus.size());
+      if (!ufus.isEmpty()) {
+        for (UploadFileUnstore ufu : ufus) {
+          parseLevel1Ot(ufu.getUfuId(), ufu.getStorePath(), ufu.getFileName());
+        }
+        log.debug("total cut ot1 number:" + totalRecord);
+      }
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
+    }
+    long endTime = System.nanoTime();
+    double time1 = 1.0 * (endTime - startTime) / 1e9;
+    log.debug("job consume: parse cut ot list " + time1 + ".");
+  }
+
   /**
    * 解析一级OT列表文件，得出二级OT，切图文件名称，二级OT模板切图名称
    *
@@ -71,8 +111,9 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
   public void parseLevel1Ot(long ufuId, String storePath, String fileName) {
 
     if (storePath != null && fileName != null) {
-
+      log.debug("process file "+ rootPath + "/" + storePath + "/" + fileName);
       List<OTCatalog> otcs = otcDao.getOT1CutCatalog(rootPath + "/" + storePath + "/" + fileName);
+      totalRecord += otcs.size();
       for (OTCatalog otc : otcs) {
 
         String otListPath = storePath;
@@ -98,8 +139,8 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
         ffc.setDpmId((short) dpmId);
         ffc.setImgX(otc.getX());
         ffc.setImgY(otc.getY());
-        ffc.setRequestCut(false);
-        ffc.setSuccessCut(false);
+        ffc.setRequestCut(true);
+        ffc.setSuccessCut(true);
         ffc.setIsMissed(false);
         ffcDao.save(ffc);
 
@@ -111,9 +152,11 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setLastFfNumber(number);
         otLv2.setDpmId(dpmId);
         otLv2.setDateStr(fileDate);
-        otLv2.setAllFileCutted(false);
+        otLv2.setAllFileCutted(true);
         otLv2.setSkyId(sky.getSkyId());
         otLv2.setDataProduceMethod('8');    //星表匹配一级OT
+        otLv2.setXtemp(otc.getX());
+        otLv2.setYtemp(otc.getY());
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
@@ -129,8 +172,8 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setFfNumber(number);
         oor.setDateStr(fileDate);
         oor.setDpmId(dpmId);
-        oor.setRequestCut(false);
-        oor.setSuccessCut(false);
+        oor.setRequestCut(true);
+        oor.setSuccessCut(true);
         oor.setSkyId(sky.getSkyId());
         oor.setDataProduceMethod('8');    //星表匹配一级OT
         oor.setFfcId(ffc.getFfcId());
@@ -159,12 +202,11 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
 
           otorDao.save(oor);
           List<OtObserveRecord> oors = otorDao.existInAll(oor, errorBox);
-          log.debug("match ot1 record size:" + oors.size());
           if (oors.size() >= cutOccurNumber) {
             OtObserveRecord oor1 = oors.get(0);
 
             int otNumber = otnDao.getSubNumberByDate(fileDate);
-            String otName = String.format("%s%s_1%04d", ccdType, fileDate, otNumber);
+            String otName = String.format("%s%s_S%05d", ccdType, fileDate, otNumber);
 
             OtLevel2 tOtLv2 = new OtLevel2();
             tOtLv2.setName(otName);
@@ -176,18 +218,20 @@ public class OtCutObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setTotal(oors.size());
             tOtLv2.setDpmId(oor1.getDpmId());
             tOtLv2.setDateStr(fileDate);
-            tOtLv2.setAllFileCutted(false);
+            tOtLv2.setAllFileCutted(true);
             tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
             tOtLv2.setCuttedFfNumber(0);
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
             tOtLv2.setDataProduceMethod('8');    //图像相减一级OT
             tOtLv2.setFirstNMark(false);
+            tOtLv2.setXtemp(otc.getX());
+            tOtLv2.setYtemp(otc.getY());
             otLv2Dao.save(tOtLv2);
 
             ffc.setOtId(tOtLv2.getOtId());
             ffcDao.update(ffc);
-            
+
             for (OtObserveRecord tOor : oors) {
               if (tOor.getOtId() != 0) {
                 continue;

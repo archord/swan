@@ -20,6 +20,7 @@ import org.apache.struts2.convention.annotation.Result;
 @Actions({
   @Action(value = "/get-ot-detail", results = {
     @Result(location = "gwac/pgwac-ot-detail.jsp", name = "success"),
+    @Result(location = "gwac/pgwac-otsub-detail.jsp", name = "success2"),
     @Result(location = "gwac/pgwac-ot-detail.jsp", name = "input")})})
 public class GetOtDetail extends ActionSupport {
 
@@ -54,6 +55,9 @@ public class GetOtDetail extends ActionSupport {
 
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
+    
+    String result = SUCCESS;
+    
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
 
@@ -64,28 +68,49 @@ public class GetOtDetail extends ActionSupport {
     ob = obDao.getOtLevel2ByName(otName, queryHis);
 
     if (ob != null) {
-      ra = ob.getRa() + "";
-      dec = ob.getDec() + "";
-      pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
-      siderealTime = CommonFunction.degreeToHMS(ob.getRa());
-      startImgNum = ob.getFirstFfNumber();
+      if (ob.getDataProduceMethod() == '1') {
+        ra = ob.getRa() + "";
+        dec = ob.getDec() + "";
+        pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
+        siderealTime = CommonFunction.degreeToHMS(ob.getRa());
+        startImgNum = ob.getFirstFfNumber();
 
-      ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
-      totalImage = ffcList.size();
-      for (FitsFileCut ffc : ffcList) {
-        ffc.setFileName(ffc.getFileName() + ".jpg");
-        ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
-      }
+        ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
+        totalImage = ffcList.size();
+        for (FitsFileCut ffc : ffcList) {
+          ffc.setFileName(ffc.getFileName() + ".jpg");
+          ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
+        }
 
-      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
-      if (ffcrs != null && ffcrs.size() > 0) {
-        setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/");
-        setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
-        setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
-      } else {
-        setFfcrStorePath("");
-        setFfcrFileName("");
-        setFfcrGenerateTime("");
+        List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
+        if (ffcrs != null && ffcrs.size() > 0) {
+          setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/");
+          setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
+          setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
+        } else {
+          setFfcrStorePath("");
+          setFfcrFileName("");
+          setFfcrGenerateTime("");
+        }
+        result ="success";
+      } else if (ob.getDataProduceMethod() == '8') {
+        if (ob.getRa() + 999 > CommonFunction.MINFLOAT) {
+          ra = ob.getRa() + "";
+          siderealTime = CommonFunction.degreeToHMS(ob.getRa());
+        }
+        if (ob.getDec() + 999 > CommonFunction.MINFLOAT) {
+          dec = ob.getDec() + "";
+          pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
+        }
+
+        startImgNum = ob.getFirstFfNumber();
+
+        ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
+        totalImage = ffcList.size();
+        for (FitsFileCut ffc : ffcList) {
+          ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
+        }
+        result ="success2";
       }
 
       String tmp[] = otorDao.getOtOpticalVaration(ob, queryHis).split("=");
@@ -94,17 +119,19 @@ public class GetOtDetail extends ActionSupport {
     } else {
       ra = "";
       dec = "";
+      siderealTime = "";
+      pitchAngle = "";
       startImgNum = 0;
       ffcList = new ArrayList();
       totalImage = 0;
+      otOpticalVaration = "[]";
+      otPositionVaration = "[]";
       setFfcrStorePath("");
       setFfcrFileName("");
       setFfcrGenerateTime("");
-      otOpticalVaration = "[]";
-      otPositionVaration = "[]";
     }
 
-    return SUCCESS;
+    return result;
   }
 
   /**

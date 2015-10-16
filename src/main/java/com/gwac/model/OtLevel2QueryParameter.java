@@ -23,6 +23,7 @@ public class OtLevel2QueryParameter {
   private float sphereRadius;
   private String telscope;
   private Boolean queryHis;
+  private String processType;
   /**查询结果集的大小，从start开始，查询size条记录*/
   private int start;
   private int size;
@@ -31,7 +32,7 @@ public class OtLevel2QueryParameter {
       return "startDate=" + startDate + ", endDate=" + endDate + ", xtemp=" + xtemp + 
               ", ytemp=" + ytemp + ", planeRadius=" + planeRadius + ", ra=" + ra + 
               ", dec=" + dec + ", sphereRadius=" + sphereRadius + ", telscope=" + 
-              telscope + ", queryHis=" + queryHis;
+              telscope + ", queryHis=" + queryHis + ", processType=" + processType;
   }
   
   public Boolean isEmpty(){
@@ -211,5 +212,19 @@ public class OtLevel2QueryParameter {
    */
   public void setQueryHis(Boolean queryHis) {
     this.queryHis = queryHis;
+  }
+
+  /**
+   * @return the processType
+   */
+  public String getProcessType() {
+    return processType;
+  }
+
+  /**
+   * @param processType the processType to set
+   */
+  public void setProcessType(String processType) {
+    this.processType = processType;
   }
 }

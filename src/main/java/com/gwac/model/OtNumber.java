@@ -85,6 +85,7 @@ public class OtNumber implements java.io.Serializable {
   /**
    * @return the VarNumber
    */
+  @Column(name = "var_Number")
   public Integer getVarNumber() {
     return varNumber;
   }
@@ -99,6 +100,7 @@ public class OtNumber implements java.io.Serializable {
   /**
    * @return the subNumber
    */
+  @Column(name = "sub_number")
   public Integer getSubNumber() {
     return subNumber;
   }
