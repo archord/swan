@@ -14,6 +14,9 @@ select dpm_id, count(ot_id) from fits_file_cut_ref where length(file_name)=21 an
 ##按照日期统计当天的一级OT数量
 select date_str, count(oor_id) from ot_observe_record_his group by date_str order by count desc;
 
+##按照出现次数统计出现该次数的OT的个数
+select total, count(*) from ot_level2 where data_produce_method='8' group by total order by total asc;
+
 ##删除有历史备份表的当前表的数据
 delete from config_file;
 delete from fits_file_cut;

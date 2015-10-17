@@ -28,12 +28,24 @@ public class CommonFunction {
 
   private static final Log log = LogFactory.getLog(CommonFunction.class);
 
+  /**
+   *
+   * @param orgImgName M3_05_151017_1_329020_0618.fit
+   * @return
+   */
+  public static String getStorePath(String orgImgName) {
+    String dateStr = orgImgName.substring(6, 12);
+    String ccdType = orgImgName.substring(0, 1);
+    String dpmName = ccdType + orgImgName.substring(3, 5);
+    return dateStr + "/" + dpmName;
+  }
+
   public static String degreeToHMS(float degree) {
 
     double second = degree * 3600 * 24 / 360;
     int h = (int) (second / 3600);
     int m = (int) ((second % 3600) / 60);
-    String s = String.format("%.03f",second % 60);
+    String s = String.format("%.03f", second % 60);
     return h + ":" + m + ":" + s;
   }
 
@@ -42,7 +54,7 @@ public class CommonFunction {
     double second = degree * 3600;
     int d = (int) (degree);
     int m = (int) ((second % 3600) / 60);
-    String s = String.format("%.03f",second % 60);
+    String s = String.format("%.03f", second % 60);
     return d + ":" + m + ":" + s;
   }
 
