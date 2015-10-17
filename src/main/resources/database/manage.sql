@@ -33,3 +33,8 @@ WITH moved_rows AS ( DELETE FROM config_file RETURNING * ) INSERT INTO config_fi
 WITH moved_rows AS ( DELETE FROM image_status_parameter RETURNING * ) INSERT INTO image_status_parameter_his SELECT * FROM moved_rows;
 update data_process_machine set first_record_number=0, cur_process_number=0;
 
+##多表条件更新
+update fits_file_cut
+set ot_id=ot_observe_record.ot_id
+from ot_observe_record
+where ot_observe_record.ffc_id=fits_file_cut.ffc_id and ot_observe_record.ot_id=79737;

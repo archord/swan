@@ -229,9 +229,6 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setYtemp(otc.getY());
             otLv2Dao.save(tOtLv2);
 
-            ffc.setOtId(tOtLv2.getOtId());
-            ffcDao.update(ffc);
-
             for (OtObserveRecord tOor : oors) {
               if (tOor.getOtId() != 0) {
                 continue;
@@ -239,6 +236,10 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
 
               tOor.setOtId(tOtLv2.getOtId());
               otorDao.update(tOor);
+              
+              FitsFileCut tffc = ffcDao.getById(tOor.getFfcId());
+              tffc.setOtId(tOtLv2.getOtId());
+              ffcDao.update(tffc);
             }
           }
         }

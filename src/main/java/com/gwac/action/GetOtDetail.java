@@ -97,10 +97,16 @@ public class GetOtDetail extends ActionSupport {
         if (ob.getRa() + 999 > CommonFunction.MINFLOAT) {
           ra = ob.getRa() + "";
           siderealTime = CommonFunction.degreeToHMS(ob.getRa());
+        }else{
+          ra = "''";
+          siderealTime = "''";
         }
         if (ob.getDec() + 999 > CommonFunction.MINFLOAT) {
           dec = ob.getDec() + "";
           pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
+        }else{
+          dec = "''";
+          pitchAngle = "''";
         }
 
         startImgNum = ob.getFirstFfNumber();
