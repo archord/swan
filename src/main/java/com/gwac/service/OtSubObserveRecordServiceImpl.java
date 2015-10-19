@@ -227,6 +227,7 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setFirstNMark(false);
             tOtLv2.setXtemp(otc.getX());
             tOtLv2.setYtemp(otc.getY());
+            tOtLv2.setFoCount((short)0);
             otLv2Dao.save(tOtLv2);
 
             for (OtObserveRecord tOor : oors) {

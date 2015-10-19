@@ -203,6 +203,17 @@
                     ',left=' + iLeft +
                     ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
         }
+        $.subscribe('otFollow', function(event, data) {
+            if (window.confirm('确定发送后随信息？')) {
+                var formData = $("#otFollowUp").serialize();
+                console.log(formData);
+                $.post("otFollowUp.action", formData,
+                        function(data) {
+                            console.log(data);
+                            alert(data.result);
+                        }, "json");
+            }
+        });
     </script>
     <style type="text/css">
 
@@ -434,18 +445,18 @@
                 <a href='#' title='点击查看fits切图' onclick="return openDialog();">点击查看fits切图</a></span>
         </div>
         <div id="followForm">
-            <s:form id="otFollowUp"  action="query-ot-level2" theme="simple" cssClass="yform" namespace="/">
+            <s:form id="otFollowUp"  action="otFollowUp" theme="simple" cssClass="yform" namespace="/">
                 <table style="margin:auto; width:90%;">
                     <tr style="height:20px;">
                         <th>观测者</th><th>后随名称</th><th>RA(度)</th><th>DEC(度)</th><th>曝光时间(S)</th><th>曝光帧数</th><th>滤光片</th><th></th>
                     </tr>
                     <tr style="height:20px;">
-                        <td><sj:textfield name="ot2fp.userName" readonly="true" value="mini-GWAC" required="true"/></td>
-                        <td><sj:textfield name="ot2fp.otName" readonly="true" id="otName" value="%{otName}" required="true"/></td>
-                        <td><sj:textfield name="ot2fp.ra" value="%{ra}" required="true"/></td>
-                        <td><sj:textfield name="ot2fp.dec" value="%{dec}" required="true"/></td>
-                        <td><sj:textfield name="ot2fp.expTime" id="expTime" value="2" required="true"/></td>
-                        <td><sj:textfield name="ot2fp.frameCount" id="frameCount" value="10" required="true"/></td>
+                        <td><sj:textfield name="ot2fp.userName" readonly="true" value="mini-GWAC"/></td>
+                        <td><sj:textfield name="ot2fp.otName" readonly="true" id="otName" value="%{otName}"/></td>
+                        <td><sj:textfield name="ot2fp.ra" value="%{ra}" /></td>
+                        <td><sj:textfield name="ot2fp.dec" value="%{dec}"/></td>
+                        <td><sj:textfield name="ot2fp.expTime" id="expTime" value="2"/></td>
+                        <td><sj:textfield name="ot2fp.frameCount" id="frameCount" value="10"/></td>
                         <td><select name="ot2fp.filter" >
                                 <option value="Lum">Lum</option>
                                 <option value="Green">Green</option>
@@ -459,8 +470,8 @@
                                 <option value="null">null</option>
                             </select></td>
                         <td colspan="4" style="text-align: center;">
-                            <sj:a button="true" onClickTopics="reloadOtGrid" indicator="indicator" style="height:28px;width:80px;" >后随</sj:a>
-                            <img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>
+                            <sj:a button="true" onClickTopics="otFollow" indicator="indicator" style="height:28px;width:80px;" >后随</sj:a>
+                                <img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>
                             </td>
                         </tr>
                     </table>

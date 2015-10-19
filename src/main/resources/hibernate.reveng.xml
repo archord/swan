@@ -2,39 +2,7 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="gwac"/>
-  <table-filter match-name="star_know"/>
-  <table-filter match-name="ot_observe_record"/>
-  <table-filter match-name="ot_level3"/>
-  <table-filter match-name="environment"/>
-  <table-filter match-name="image_status_parameter"/>
-  <table-filter match-name="fits_file"/>
-  <table-filter match-name="user_info"/>
-  <table-filter match-name="upload_file_record"/>
-  <table-filter match-name="config_file_his"/>
-  <table-filter match-name="variation_type"/>
-  <table-filter match-name="process_status"/>
-  <table-filter match-name="fits_file_cut"/>
-  <table-filter match-name="observation_sky"/>
-  <table-filter match-name="telescope"/>
-  <table-filter match-name="system_status"/>
-  <table-filter match-name="ot_type"/>
-  <table-filter match-name="ot_observe_record_his"/>
-  <table-filter match-name="gimbal"/>
-  <table-filter match-name="ot_level2_match"/>
-  <table-filter match-name="var_star_record"/>
-  <table-filter match-name="var_star_record_his"/>
-  <table-filter match-name="star_know_observe_record"/>
-  <table-filter match-name="upload_file_unstore"/>
-  <table-filter match-name="grb"/>
-  <table-filter match-name="fits_file_cut_his"/>
-  <table-filter match-name="ot_level2"/>
-  <table-filter match-name="config_file"/>
-  <table-filter match-name="star_list_file"/>
-  <table-filter match-name="image_status_parameter_his"/>
-  <table-filter match-name="ot_level2_his"/>
-  <table-filter match-name="sync_file"/>
-  <table-filter match-name="data_process_machine"/>
-  <table-filter match-name="ot_observe_record_tmp"/>
-  <table-filter match-name="fits_file_cut_ref"/>
-  <table-filter match-name="ot_number"/>
+  <table-filter match-name="follow_up_fitsfile"/>
+  <table-filter match-name="follow_up_record"/>
+  <table-filter match-name="follow_up_observation"/>
 </hibernate-reverse-engineering>

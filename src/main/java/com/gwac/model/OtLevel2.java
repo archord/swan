@@ -45,6 +45,7 @@ public class OtLevel2  implements java.io.Serializable {
      private Boolean firstNMark;
      private Short skyId;
      private Character dataProduceMethod;
+     private Short foCount;
 
     public OtLevel2() {
     }
@@ -302,6 +303,21 @@ public class OtLevel2  implements java.io.Serializable {
     public void setDataProduceMethod(Character dataProduceMethod) {
         this.dataProduceMethod = dataProduceMethod;
     }
+
+  /**
+   * @return the foCount
+   */
+    @Column(name="fo_count")
+  public Short getFoCount() {
+    return foCount;
+  }
+
+  /**
+   * @param foCount the foCount to set
+   */
+  public void setFoCount(Short foCount) {
+    this.foCount = foCount;
+  }
 
 
 

@@ -57,4 +57,32 @@ public class OTFollowListener implements MessageListener {
     }
   }
 
+  /**
+   * @param isBeiJingServer the isBeiJingServer to set
+   */
+  public void setIsBeiJingServer(Boolean isBeiJingServer) {
+    this.isBeiJingServer = isBeiJingServer;
+  }
+
+  /**
+   * @param isTestServer the isTestServer to set
+   */
+  public void setIsTestServer(Boolean isTestServer) {
+    this.isTestServer = isTestServer;
+  }
+
+  /**
+   * @param serverIP the serverIP to set
+   */
+  public void setServerIP(String serverIP) {
+    this.serverIP = serverIP;
+  }
+
+  /**
+   * @param serverPort the serverPort to set
+   */
+  public void setServerPort(int serverPort) {
+    this.serverPort = serverPort;
+  }
+
 }

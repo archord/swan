@@ -12,12 +12,9 @@ package com.gwac.model;
 public class OtLevel2FollowParameter {
 
   private String userName;
-  private String triggerType;
   private String otName;
   private float ra;
   private float dec;
-  private String epoch;
-  private String imageType;
   private int expTime;
   private int frameCount;
   private String filter;
@@ -25,6 +22,9 @@ public class OtLevel2FollowParameter {
   private String begineTime;
   private String endTime;
   private String followName;
+  private String triggerType;
+  private String epoch;
+  private String imageType;
   
   public OtLevel2FollowParameter(){
     this.triggerType="2";
@@ -62,7 +62,7 @@ public class OtLevel2FollowParameter {
     sb.append(" "); 
     sb.append(filter);
     sb.append(" ");
-    sb.append(priority);
+    sb.append(getPriority());
     sb.append(" ");
     sb.append(begineTime);
     sb.append(" ");
@@ -279,6 +279,20 @@ public class OtLevel2FollowParameter {
    */
   public void setFollowName(String followName) {
     this.followName = followName;
+  }
+
+  /**
+   * @return the priority
+   */
+  public int getPriority() {
+    return priority;
+  }
+
+  /**
+   * @param priority the priority to set
+   */
+  public void setPriority(int priority) {
+    this.priority = priority;
   }
 
 }

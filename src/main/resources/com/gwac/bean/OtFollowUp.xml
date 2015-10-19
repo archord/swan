@@ -6,7 +6,18 @@
   
   
   <bean class="com.gwac.action.OTFollowUp" scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />	
+    <property name="foDao" ref="foDao" />	
+    <property name="userDao" ref="userDAO" />	
+    <property name="jmsTemplate" ref="jmsTemplate" />
+    <property name="otFollowDest" ref="otFollowDest" />
   </bean>
 
+  <bean id="foDao" class="com.gwac.dao.FollowUpObservationDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FollowUpObservation</value>
+    </property>
+  </bean>
 	
 </beans>

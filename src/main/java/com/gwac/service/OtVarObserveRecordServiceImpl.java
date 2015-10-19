@@ -194,6 +194,7 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
             tOtLv2.setDataProduceMethod('6');    //星表匹配变星
+            tOtLv2.setFoCount((short)0);
             
             int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
             
