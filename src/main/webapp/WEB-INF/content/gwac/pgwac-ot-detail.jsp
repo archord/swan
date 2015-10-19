@@ -15,7 +15,7 @@
         <meta http-equiv="expires" content="0" />
         <meta http-equiv="keywords" content=",国家天文台，svom, gwac，望远镜阵列" />
         <meta http-equiv="description" content="GWAC数据展示页面" />
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
+        <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
 
         <title>OT-<s:property value="otName"/>-详细页面</title>
 
@@ -141,21 +141,21 @@
                 }
             ];
 
-            var otPositionVaration=<s:property value="otPositionVaration"/>;
+            var otPositionVaration =<s:property value="otPositionVaration"/>;
             var firstPostion = [];
             var lastPostion = [];
             firstPostion[0] = otPositionVaration[0];
-            lastPostion[0] = otPositionVaration[otPositionVaration.length-1];
-                
+            lastPostion[0] = otPositionVaration[otPositionVaration.length - 1];
+
             var positionData = [{
                     data: otPositionVaration,
                     color: '#77b7c5',
                     points: {radius: 1} //fillColor: '#77b7c5'
-                },{
+                }, {
                     data: firstPostion,
                     color: '#FF6666',
                     points: {radius: 3, fill: true, fillColor: "#FF6666"} //fillColor: '#77b7c5'
-                },{
+                }, {
                     data: lastPostion,
                     color: '#FF6666',
                     points: {radius: 3} //fillColor: '#77b7c5'
@@ -183,26 +183,26 @@
             searchUrl += <s:property value="ra"/> + "%20" + <s:property value="dec"/>;
             return "<a href='" + searchUrl + "' title='点击在simbad搜寻OT对应坐标' target='_blank'>" + cellvalue + "</a>";
         }
-        
-        
-  function openDialog() {
-    openwindow("show-fits-list.action?otName=<s:property value="otName"/>&queryHis=<s:property value="queryHis"/>",
-            '_blank', 1050, 600, 1050, 600);
-    return false;
-  }
-  function openwindow(url, name, width, height, iWidth, iHeight)
-  {
-    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;       //获得窗口的垂直位置;
-    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;           //获得窗口的水平位置;
-    window.open(url, name,
-            'height=' + height +
-            ',innerHeight=' + iHeight +
-            ',width=' + width +
-            ',innerWidth=' + iWidth +
-            ',top=' + iTop +
-            ',left=' + iLeft +
-            ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
-  }
+
+
+        function openDialog() {
+            openwindow("show-fits-list.action?otName=<s:property value="otName"/>&queryHis=<s:property value="queryHis"/>",
+                    '_blank', 1050, 600, 1050, 600);
+            return false;
+        }
+        function openwindow(url, name, width, height, iWidth, iHeight)
+        {
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;       //获得窗口的垂直位置;
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;           //获得窗口的水平位置;
+            window.open(url, name,
+                    'height=' + height +
+                    ',innerHeight=' + iHeight +
+                    ',width=' + width +
+                    ',innerWidth=' + iWidth +
+                    ',top=' + iTop +
+                    ',left=' + iLeft +
+                    ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
+        }
     </script>
     <style type="text/css">
 
@@ -373,6 +373,19 @@
             background: url(${pageContext.request.contextPath}/gwac_images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
             left: 220px;
         }
+        #followForm{
+            margin:0px 0px 10px 0px;
+        }
+        #followForm input{
+            width:100px;
+            text-align: center;
+        }
+        #followForm input#otName{
+            width:140px;
+        }
+        #followForm input#frameCount,input#expTime{
+            width:70px;
+        }
 
     </style>
 </head>
@@ -419,6 +432,39 @@
             <span>OT坐标(赤经,赤纬)：(<s:property value="siderealTime"/>,&nbsp;<s:property value="pitchAngle"/>)&nbsp;&nbsp;&nbsp;
                 (<s:property value="ra"/>,&nbsp;<s:property value="dec"/>)&nbsp;&nbsp;&nbsp;
                 <a href='#' title='点击查看fits切图' onclick="return openDialog();">点击查看fits切图</a></span>
+        </div>
+        <div id="followForm">
+            <s:form id="otFollowUp"  action="query-ot-level2" theme="simple" cssClass="yform" namespace="/">
+                <table style="margin:auto; width:90%;">
+                    <tr style="height:20px;">
+                        <th>观测者</th><th>后随名称</th><th>RA(度)</th><th>DEC(度)</th><th>曝光时间(S)</th><th>曝光帧数</th><th>滤光片</th><th></th>
+                    </tr>
+                    <tr style="height:20px;">
+                        <td><sj:textfield name="ot2fp.userName" readonly="true" value="mini-GWAC" required="true"/></td>
+                        <td><sj:textfield name="ot2fp.otName" readonly="true" id="otName" value="%{otName}" required="true"/></td>
+                        <td><sj:textfield name="ot2fp.ra" value="%{ra}" required="true"/></td>
+                        <td><sj:textfield name="ot2fp.dec" value="%{dec}" required="true"/></td>
+                        <td><sj:textfield name="ot2fp.expTime" id="expTime" value="2" required="true"/></td>
+                        <td><sj:textfield name="ot2fp.frameCount" id="frameCount" value="10" required="true"/></td>
+                        <td><select name="ot2fp.filter" >
+                                <option value="Lum">Lum</option>
+                                <option value="Green">Green</option>
+                                <option value="R">R</option>
+                                <option value="Blue">Blue</option>
+                                <option value="V">V</option>
+                                <option value="I">I</option>
+                                <option value="B">B</option>
+                                <option value="Red">Red</option>
+                                <option value="U">U</option>
+                                <option value="null">null</option>
+                            </select></td>
+                        <td colspan="4" style="text-align: center;">
+                            <sj:a button="true" onClickTopics="reloadOtGrid" indicator="indicator" style="height:28px;width:80px;" >后随</sj:a>
+                            <img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>
+                            </td>
+                        </tr>
+                    </table>
+            </s:form>
         </div>
         <div id="ot-curves">
             <div id="ot-curve-show">

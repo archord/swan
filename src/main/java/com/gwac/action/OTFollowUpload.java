@@ -8,15 +8,12 @@ package com.gwac.action;
  *
  * @author xy
  */
-import com.gwac.dao.ConfigFileDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
-import com.gwac.model.ConfigFile;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
-import com.gwac.service.UploadFileServiceImpl;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -24,16 +21,8 @@ import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,6 +50,7 @@ public class OTFollowUpload extends ActionSupport {
 
   private String tspname;
   private String ot2name;
+  private String followname;
   private File objlist;
   private File fitsname;
   private String objlistFileName;
@@ -85,52 +75,64 @@ public class OTFollowUpload extends ActionSupport {
     String result = SUCCESS;
     echo = "";
 
+    log.debug("tspname=" + tspname + ", ot2name=" + ot2name + ", followname=" + followname);
+
     //必须设置望远镜名称
-    if (null == getTspname()) {
+    if (null == tspname || tspname.isEmpty()) {
       setEcho(echo + "Error, must set tspname.\n");
       flag = false;
     }
 
     //必须设置后随OT的名称
-    if (null == getOt2name()) {
+    if (null == ot2name || ot2name.isEmpty()) {
       setEcho(echo + "Error, must set ot2name.\n");
+      flag = false;
+    }
+
+    //必须设置后随名称
+    if (null == followname || followname.isEmpty()) {
+      setEcho(echo + "Error, must set followname.\n");
       flag = false;
     }
 
     //必须传输数据文件
     //Error, must transform data file
-    if (null == getObjlist()) {
+    if (null == objlist) {
       setEcho(echo + "Error, must upload Object file(objlist).\n");
       flag = false;
     }
 
-    if (null == getObjlistFileName() || getObjlistFileName().trim().isEmpty()) {
+    if (null == objlistFileName || objlistFileName.trim().isEmpty()) {
       setEcho(echo + "objlistFileName is empty!\n");
       flag = false;
     }
 
     if (flag) {
       OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(getOt2name(), false);
-      String idStr = ot2.getIdentify();
+      if (null != ot2) {
+        String idStr = ot2.getIdentify();
 
-      rootPath = getText("gwac.data.root.directory");
-      destPath = rootPath;
-      if (destPath.charAt(destPath.length() - 1) != '/') {
-        destPath += "/" + CommonFunction.getStorePath(idStr) + "/";
+        rootPath = getText("gwac.data.root.directory");
+        destPath = rootPath;
+        if (destPath.charAt(destPath.length() - 1) != '/') {
+          destPath += "/" + CommonFunction.getStorePath(idStr) + "/";
+        } else {
+          destPath += CommonFunction.getStorePath(idStr) + "/";
+        }
+
+        File destDir = new File(destPath);
+        if (!destDir.exists()) {
+          destDir.mkdirs();
+          log.debug("create dir " + destDir);
+        }
+
+        receiveFollowObjectList();
+        receiveOTFollowImg();
+
+        setEcho(echo + "Success!\n");
       } else {
-        destPath += CommonFunction.getStorePath(idStr) + "/";
+        setEcho(echo + "Error, ot2 name not exist, or ot2 is a history ot!\n");
       }
-
-      File destDir = new File(destPath);
-      if (!destDir.exists()) {
-        destDir.mkdirs();
-        log.debug("create dir " + destDir);
-      }
-
-      receiveFollowObjectList();
-      receiveOTFollowImg();
-
-      setEcho(echo + "Success!\n");
     } else {
       result = ERROR;
     }
@@ -336,5 +338,19 @@ public class OTFollowUpload extends ActionSupport {
    */
   public void setUfuDao(UploadFileUnstoreDao ufuDao) {
     this.ufuDao = ufuDao;
+  }
+
+  /**
+   * @return the followname
+   */
+  public String getFollowname() {
+    return followname;
+  }
+
+  /**
+   * @param followname the followname to set
+   */
+  public void setFollowname(String followname) {
+    this.followname = followname;
   }
 }

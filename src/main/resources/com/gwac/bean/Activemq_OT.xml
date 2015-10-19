@@ -4,9 +4,9 @@
 
     <bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL">
-            <value>tcp://127.0.0.1:61616</value>
+            <value>failover:(tcp://127.0.0.1:61616)</value>
         </property>
-    </bean>
+    </bean> 
 
     <bean id="pooledJmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
         <property name="connectionFactory">
@@ -14,16 +14,20 @@
         </property>
     </bean>
     
-    <bean id="otlistDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
-        <constructor-arg value="OT_LIST" />
-    </bean>
-    
     <!-- Spring JMS Template -->
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <property name="connectionFactory">
             <ref local="pooledJmsFactory"/>
         </property>
-    </bean>   
+    </bean>  
+    
+    <bean id="otlistDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+        <constructor-arg value="OT_LIST" />
+    </bean>
+    
+    <bean id="otFollowDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+        <constructor-arg value="OT_FOLLOW_LIST" />
+    </bean>
 
     <bean id="otListListener" class="com.gwac.activemq.OTListListener">
         <property name="otObserveRecordService" ref="otObserveRecordService" />
@@ -31,10 +35,23 @@
         <property name="otSubObserveRecordService" ref="otSubObserveRecordService" />
     </bean>
 
-    <bean id="javaConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <bean id="otFollowListener" class="com.gwac.activemq.OTFollowListener">
+        <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+        <property name="isTestServer" value="${gwac.server.test}" />
+        <property name="serverIP" value="${gwac.follow.server.ip}" />
+        <property name="serverPort" value="${gwac.follow.server.port}" />
+    </bean>
+
+    <bean id="otListConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="jmsFactory"/>
         <property name="destination" ref="otlistDest" />
         <property name="messageListener" ref="otListListener" />
+    </bean>
+
+    <bean id="otFollowConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="jmsFactory"/>
+        <property name="destination" ref="otFollowDest" />
+        <property name="messageListener" ref="otFollowListener" />
     </bean>
     
     <bean id="otObserveRecordService" class="com.gwac.service.OtObserveRecordServiceImpl" >

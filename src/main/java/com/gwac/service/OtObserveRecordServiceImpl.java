@@ -21,11 +21,6 @@ import com.gwac.model.OTCatalog;
 import com.gwac.model.ObservationSky;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
-import com.gwac.model.UploadFileUnstore;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.Date;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -242,43 +237,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOor.setOtId(tOtLv2.getOtId());
               tOor.setFfcId(ffc.getFfcId());
               otorDao.update(tOor);
-            }
-
-            if (!isBeiJingServer) { //!isBeiJingServer
-              String ip = "190.168.1.150"; //190.168.1.32
-              int port = 4004;
-              Socket socket = null;
-              DataOutputStream out = null;
-
-                String tmsg = getTriggerMsg(tOtLv2);
-              try {
-                socket = new Socket(ip, port);
-                out = new DataOutputStream(socket.getOutputStream());
-
-                try {
-                  out.write(tmsg.getBytes());
-                  out.flush();
-                  log.debug("send ot2 trigger to " + ip + ":" + port + ", message:" + tmsg);
-                } catch (IOException ex) {
-                  log.error("send ot2 trigger error.", ex);
-                }
-
-//                try {
-//                  Thread.sleep(100);
-//                } catch (InterruptedException ex) {
-//                  log.error("send ot2 trigger delay error.", ex);
-//                }
-
-                try {
-                  out.close();
-                  socket.close();
-                } catch (IOException ex) {
-                  log.error("send ot2 trigger, close socket error.", ex);
-                }
-              } catch (IOException ex) {
-                log.debug("send ot2 trigger to " + ip + ":" + port + ", message:" + tmsg);
-                log.error("send ot2 trigger, cannot connect to server.", ex);
-              }
             }
           }
         }

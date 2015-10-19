@@ -75,7 +75,7 @@
       <tr style="height:20px;">
         <td>数据处理方式：</td>
         <td><select name="ot2qp.processType" >
-            <option value=""></option>
+            <option value="">All</option>
             <option value="1">星表匹配</option>
             <option value="8">图像相减</option>
           </select></td>
