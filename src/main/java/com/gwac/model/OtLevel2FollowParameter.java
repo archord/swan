@@ -40,7 +40,7 @@ public class OtLevel2FollowParameter {
   //"append_object M151013_C00001 12.1 13.1 2000 LIGHT 2 10 R 10 -1 -1 M151013_C00001_001
   public String getTriggerMsg(){
     StringBuilder sb = new StringBuilder();
-    sb.append("append_plan ");
+    sb.append("update_plan "); //append_plan
     sb.append(userName);
     sb.append(" ");
     sb.append(triggerType);
