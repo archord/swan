@@ -154,6 +154,14 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="total"    index="total"	  title="记录总数" width="70" 
                   sortable="false" align="center"/>
+  <sjg:gridColumn name="isMatch"    index="isMatch"	  title="是否匹配" width="70" 
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="firstNMark"    index="firstNMark"	  title="是否前N分钟" width="70" 
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="foCount"    index="foCount"	  title="后随次数" width="70" 
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="isRecognize"    index="isRecognize"	  title="识别分类" width="70" 
+                  sortable="false" align="center"/>
 </sjg:grid>
 
 <!--sjg:gridColumn name="foundTimeUtc" index="foundTimeUtc" title="发现时间(UTC)" formatter="date" width="150"  

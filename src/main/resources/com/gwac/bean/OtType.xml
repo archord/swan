@@ -5,10 +5,10 @@
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	
-  <bean id="ottDao" class="com.gwac.dao.OtTypeDaoImpl" >
+  <bean id="mtDao" class="com.gwac.dao.MatchTableDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">
-      <value>com.gwac.model.OtType</value>
+      <value>com.gwac.model.MatchTable</value>
     </property>
   </bean>
  

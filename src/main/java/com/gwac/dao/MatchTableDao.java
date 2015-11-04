@@ -6,14 +6,14 @@
 
 package com.gwac.dao;
 
-import com.gwac.model.OtType;
+import com.gwac.model.MatchTable;
 import java.util.List;
 
 /**
  *
  * @author xy
  */
-public interface OtTypeDao extends BaseHibernateDao<OtType> {
+public interface MatchTableDao extends BaseHibernateDao<MatchTable> {
   
-  public OtType getOtTypeByTypeName(String typeName);
+  public MatchTable getMatchTableByTypeName(String typeName);
 }

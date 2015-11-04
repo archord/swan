@@ -10,11 +10,11 @@ import com.gwac.dao.MergedOtherDao;
 import com.gwac.dao.MinorPlanetDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtLevel2MatchDao;
-import com.gwac.dao.OtTypeDao;
+import com.gwac.dao.MatchTableDao;
 import com.gwac.dao.Rc3Dao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2Match;
-import com.gwac.model.OtType;
+import com.gwac.model.MatchTable;
 import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
 import com.gwac.model2.MinorPlanet;
@@ -51,7 +51,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private MinorPlanetDao mpDao;
   private Rc3Dao rc3Dao;
 
-  private OtTypeDao ottDao;
+  private MatchTableDao mtDao;
   private OtLevel2MatchDao ot2mDao;
 
   private static boolean running = true;
@@ -98,8 +98,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       Boolean flag = false;
       Cvs tcvs = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
       if (tcvs != null) {
-        OtType ott = ottDao.getOtTypeByTypeName("cvs");
-        ot2m.setOtTypeId(ott.getOtTypeId());
+        MatchTable ott = getMtDao().getMatchTableByTypeName("cvs");
+        ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
         ot2m.setRa(tcvs.getRadeg());
         ot2m.setDec(tcvs.getDedeg());
@@ -113,8 +113,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
       MergedOther tmo = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
       if (tmo != null) {
-        OtType ott = ottDao.getOtTypeByTypeName("merged_other");
-        ot2m.setOtTypeId(ott.getOtTypeId());
+        MatchTable ott = getMtDao().getMatchTableByTypeName("merged_other");
+        ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
         ot2m.setRa(tmo.getRadeg());
         ot2m.setDec(tmo.getDedeg());
@@ -128,8 +128,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
       Rc3 trc3 = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
       if (trc3 != null) {
-        OtType ott = ottDao.getOtTypeByTypeName("rc3");
-        ot2m.setOtTypeId(ott.getOtTypeId());
+        MatchTable ott = getMtDao().getMatchTableByTypeName("rc3");
+        ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
         ot2m.setRa(trc3.getRadeg());
         ot2m.setDec(trc3.getDedeg());
@@ -143,8 +143,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
       MinorPlanet tmp = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
       if (tmp != null) {
-        OtType ott = ottDao.getOtTypeByTypeName("minor_planet");
-        ot2m.setOtTypeId(ott.getOtTypeId());
+        MatchTable ott = getMtDao().getMatchTableByTypeName("minor_planet");
+        ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
         ot2m.setRa(tmp.getLon());
         ot2m.setDec(tmp.getLat());
@@ -238,8 +238,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   }
 
   public String getMinorPlanetTableName() {
-    OtType ott = ottDao.getOtTypeByTypeName("minor_planet");
-    return ott.getOtTableName() + CommonFunction.getDateString(CommonFunction.getUTCDate(new Date()));
+    MatchTable ott = getMtDao().getMatchTableByTypeName("minor_planet");
+    return ott.getMatchTableName() + CommonFunction.getDateString(CommonFunction.getUTCDate(new Date()));
   }
 
   /**
@@ -439,20 +439,6 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   }
 
   /**
-   * @return the ottDao
-   */
-  public OtTypeDao getOttDao() {
-    return ottDao;
-  }
-
-  /**
-   * @param ottDao the ottDao to set
-   */
-  public void setOttDao(OtTypeDao ottDao) {
-    this.ottDao = ottDao;
-  }
-
-  /**
    * @return the ot2mDao
    */
   public OtLevel2MatchDao getOt2mDao() {
@@ -478,6 +464,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    */
   public void setIsTestServer(Boolean isTestServer) {
     this.isTestServer = isTestServer;
+  }
+
+  /**
+   * @return the mtDao
+   */
+  public MatchTableDao getMtDao() {
+    return mtDao;
+  }
+
+  /**
+   * @param mtDao the mtDao to set
+   */
+  public void setMtDao(MatchTableDao mtDao) {
+    this.mtDao = mtDao;
   }
 
 }

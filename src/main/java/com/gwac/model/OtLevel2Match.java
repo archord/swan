@@ -22,7 +22,7 @@ public class OtLevel2Match  implements java.io.Serializable {
 
      private long olmId;
      private Long otId;
-     private Short otTypeId;
+     private Short mtId;
      private Long matchId;
      private String comments;
      private Float ra;
@@ -36,10 +36,10 @@ public class OtLevel2Match  implements java.io.Serializable {
     public OtLevel2Match(long olmId) {
         this.olmId = olmId;
     }
-    public OtLevel2Match(long olmId, Long otId, Short otTypeId, Long matchId, String comments, Float ra, Float dec, Float mag) {
+    public OtLevel2Match(long olmId, Long otId, Short mtId, Long matchId, String comments, Float ra, Float dec, Float mag) {
        this.olmId = olmId;
        this.otId = otId;
-       this.otTypeId = otTypeId;
+       this.mtId = mtId;
        this.matchId = matchId;
        this.comments = comments;
        this.ra = ra;
@@ -72,13 +72,13 @@ public class OtLevel2Match  implements java.io.Serializable {
     }
 
     
-    @Column(name="ot_type_id")
-    public Short getOtTypeId() {
-        return this.otTypeId;
+    @Column(name="mt_id")
+    public Short getMtId() {
+        return this.mtId;
     }
     
-    public void setOtTypeId(Short otTypeId) {
-        this.otTypeId = otTypeId;
+    public void setMtId(Short mtId) {
+        this.mtId = mtId;
     }
 
     

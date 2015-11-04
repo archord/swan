@@ -72,6 +72,8 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
     fo.setPriority((short) ot2fp.getPriority());
     fo.setRa(ot2fp.getRa());
     fo.setUserId(user.getUiId());
+    fo.setTriggerTime(new Date());
+    fo.setTriggerType("MANUAL"); //MANUAL AUTO
 
     foDao.save(fo);
 
