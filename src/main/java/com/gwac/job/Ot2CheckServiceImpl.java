@@ -21,7 +21,10 @@ import com.gwac.model2.MinorPlanet;
 import com.gwac.model2.Rc3;
 import com.gwac.util.CommonFunction;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -96,14 +99,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2m.setOtId(ot2.getOtId());
 
       Boolean flag = false;
-      Cvs tcvs = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
-      if (tcvs != null) {
+      Map tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
+      if (!tcvsm.isEmpty()) {
+        Iterator it = tcvsm.entrySet().iterator(); 
+        Map.Entry entry = (Map.Entry) it.next(); 
+        Cvs tcvs = (Cvs)entry.getKey();
+        Double distance = (Double)entry.getValue();
+        
         MatchTable ott = getMtDao().getMatchTableByTypeName("cvs");
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
         ot2m.setRa(tcvs.getRadeg());
         ot2m.setDec(tcvs.getDedeg());
         ot2m.setMag(tcvs.getMag());
+        ot2m.setDistance(distance.floatValue());
         ot2mDao.save(ot2m);
 
         String cvsInfo = tcvs.getCvsid() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag();
@@ -111,14 +120,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         flag = true;
       }
 
-      MergedOther tmo = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
-      if (tmo != null) {
+      Map tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
+      if (!tmom.isEmpty()) {
+        Iterator it = tcvsm.entrySet().iterator(); 
+        Map.Entry entry = (Map.Entry) it.next(); 
+        MergedOther tmo = (MergedOther)entry.getKey();
+        Double distance = (Double)entry.getValue();
+        
         MatchTable ott = getMtDao().getMatchTableByTypeName("merged_other");
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
         ot2m.setRa(tmo.getRadeg());
         ot2m.setDec(tmo.getDedeg());
         ot2m.setMag(tmo.getMag());
+        ot2m.setDistance(distance.floatValue());
         ot2mDao.save(ot2m);
 
         String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
@@ -126,14 +141,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         flag = true;
       }
 
-      Rc3 trc3 = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
-      if (trc3 != null) {
+      Map trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
+      if (!trc3m.isEmpty()) {
+        Iterator it = tcvsm.entrySet().iterator(); 
+        Map.Entry entry = (Map.Entry) it.next(); 
+        Rc3 trc3 = (Rc3)entry.getKey();
+        Double distance = (Double)entry.getValue();
+        
         MatchTable ott = getMtDao().getMatchTableByTypeName("rc3");
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
         ot2m.setRa(trc3.getRadeg());
         ot2m.setDec(trc3.getDedeg());
         ot2m.setMag(trc3.getMvmag());
+        ot2m.setDistance(distance.floatValue());
         ot2mDao.save(ot2m);
 
         String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
@@ -141,13 +162,19 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         flag = true;
       }
 
-      MinorPlanet tmp = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
-      if (tmp != null) {
+      Map tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
+      if (!tmpm.isEmpty()) {
+        Iterator it = tcvsm.entrySet().iterator(); 
+        Map.Entry entry = (Map.Entry) it.next(); 
+        MinorPlanet tmp = (MinorPlanet)entry.getKey();
+        Double distance = (Double)entry.getValue();
+        
         MatchTable ott = getMtDao().getMatchTableByTypeName("minor_planet");
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
         ot2m.setRa(tmp.getLon());
         ot2m.setDec(tmp.getLat());
+        ot2m.setDistance(distance.floatValue());
         ot2mDao.save(ot2m);
 
         String moInfo = tmp.getIdnum() + " " + tmp.getMpid() + " " + tmp.getLon() + " " + tmp.getLat();
@@ -170,11 +197,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    * @param mag 搜索的最大星等
    * @return
    */
-  public Cvs matchOt2InCvs(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<Cvs, Double> matchOt2InCvs(OtLevel2 ot2, float searchRadius, float mag) {
 
     List<Cvs> cvss = cvsDao.queryByOt2(ot2, searchRadius, mag);
     double minDis = searchRadius;
     Cvs minCvs = null;
+    Map rst = new HashMap();
     for (Cvs cvs : cvss) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), cvs.getRadeg(), cvs.getDedeg());
       if (tDis < minDis) {
@@ -182,14 +210,16 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         minCvs = cvs;
       }
     }
-    return minCvs;
+    rst.put(minCvs, minDis);
+    return rst;
   }
 
-  public MergedOther matchOt2InMergedOther(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<MergedOther, Double> matchOt2InMergedOther(OtLevel2 ot2, float searchRadius, float mag) {
 
     List<MergedOther> objs = moDao.queryByOt2(ot2, searchRadius, mag);
     double minDis = searchRadius;
     MergedOther minObj = null;
+    Map rst = new HashMap();
     for (MergedOther obj : objs) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRadeg(), obj.getDedeg());
       if (tDis < minDis) {
@@ -197,14 +227,16 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         minObj = obj;
       }
     }
-    return minObj;
+    rst.put(minObj, minDis);
+    return rst;
   }
 
-  public Rc3 matchOt2InRc3(OtLevel2 ot2, float searchRadius, float minMag, float maxMag) {
+  public Map<Rc3, Double> matchOt2InRc3(OtLevel2 ot2, float searchRadius, float minMag, float maxMag) {
 
     List<Rc3> objs = rc3Dao.queryByOt2(ot2, searchRadius, minMag, maxMag);
     double minDis = searchRadius;
     Rc3 minObj = null;
+    Map rst = new HashMap();
     for (Rc3 obj : objs) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRadeg(), obj.getDedeg());
       if (tDis < minDis) {
@@ -212,15 +244,17 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         minObj = obj;
       }
     }
-    return minObj;
+    rst.put(minObj, minDis);
+    return rst;
   }
 
-  public MinorPlanet matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<MinorPlanet, Double> matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
 
-    MinorPlanet minObj = null;
     String tableName = getMinorPlanetTableName();
+    Map rst = new HashMap();
     if (mpDao.tableExists(tableName)) {
       List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, tableName);
+      MinorPlanet minObj = null;
       double minDis = searchRadius;
       float day = (float) CommonFunction.dateToJulian(CommonFunction.getUTCDate(new Date()));
       for (MinorPlanet obj : objs) {
@@ -231,10 +265,11 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
           minObj = obj;
         }
       }
+      rst.put(minObj, minDis);
     } else {
       log.warn("table " + tableName + " not exists!");
     }
-    return minObj;
+    return rst;
   }
 
   public String getMinorPlanetTableName() {

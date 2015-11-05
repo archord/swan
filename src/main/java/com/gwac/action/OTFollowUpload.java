@@ -157,32 +157,38 @@ public class OTFollowUpload extends ActionSupport {
       log.debug("create dir " + otFollowListDir);
     }
 
-    try {
-      File otFollowListFile = new File(otFollowListPath, getObjlistFileName());
-      log.debug("receive otfollowlist file " + otFollowListFile);
-      if (otFollowListFile.exists()) {
-        log.warn(otFollowListFile + " already exist, delete it.");
-        return;
-//        FileUtils.forceDelete(otFollowListFile);
-      }
-      FileUtils.moveFile(getObjlist(), otFollowListFile);
-    } catch (IOException ex) {
-      log.error("receive otfollowlist " + getObjlistFileName() + " error!", ex);
-    }
-
     UploadFileUnstore obj = new UploadFileUnstore();
     obj.setStorePath(otFollowListPath.substring(rootPath.length() + 1));
     obj.setFileName(getObjlistFileName());
     obj.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj.setUploadDate(new Date());
-    ufuDao.save(obj);
 
     UploadFileRecord obj2 = new UploadFileRecord();
     obj2.setStorePath(otFollowListPath.substring(rootPath.length() + 1));
     obj2.setFileName(getObjlistFileName());
     obj2.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj2.setUploadDate(new Date());
-    ufrDao.save(obj2);
+
+    try {
+      if (objlist.exists()) {
+        File otFollowListFile = new File(otFollowListPath, getObjlistFileName());
+        log.debug("receive otfollowlist file " + otFollowListFile);
+        if (otFollowListFile.exists()) {
+          log.warn(otFollowListFile + " already exist, delete it.");
+          FileUtils.forceDelete(otFollowListFile);
+        }
+        FileUtils.moveFile(getObjlist(), otFollowListFile);
+        obj.setUploadSuccess(Boolean.TRUE);
+        obj2.setUploadSuccess(Boolean.TRUE);
+      } else {
+        obj.setUploadSuccess(Boolean.FALSE);
+        obj2.setUploadSuccess(Boolean.FALSE);
+      }
+      ufuDao.save(obj);
+      ufrDao.save(obj2);
+    } catch (IOException ex) {
+      log.error("receive otfollowlist " + getObjlistFileName() + " error!", ex);
+    }
   }
 
   public void receiveOTFollowImg() {
@@ -195,21 +201,25 @@ public class OTFollowUpload extends ActionSupport {
         log.debug("create dir " + fitsNameDir);
       }
 
-      try {
-        File fitsNameFile = new File(fitsNamePath, fitsnameFileName);
-        log.debug("receive otfollowimg file " + fitsNameFile);
-        if (fitsNameFile.exists()) {
-          log.warn(fitsNameFile + " already exist, delete it.");
-          return;
-//          FileUtils.forceDelete(fitsNameFile);
-        }
-        FileUtils.moveFile(getFitsname(), fitsNameFile);
+      UploadFileRecord obj2 = new UploadFileRecord();
+      obj2.setStorePath(fitsNamePath.substring(rootPath.length() + 1));
+      obj2.setFileName(fitsnameFileName);
+      obj2.setFileType('A');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
+      obj2.setUploadDate(new Date());
 
-        UploadFileRecord obj2 = new UploadFileRecord();
-        obj2.setStorePath(fitsNamePath.substring(rootPath.length() + 1));
-        obj2.setFileName(fitsnameFileName);
-        obj2.setFileType('A');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
-        obj2.setUploadDate(new Date());
+      try {
+        if (fitsname.exists()) {
+          File fitsNameFile = new File(fitsNamePath, fitsnameFileName);
+          log.debug("receive otfollowimg file " + fitsNameFile);
+          if (fitsNameFile.exists()) {
+            log.warn(fitsNameFile + " already exist, delete it.");
+            FileUtils.forceDelete(fitsNameFile);
+          }
+          FileUtils.moveFile(getFitsname(), fitsNameFile);
+          obj2.setUploadSuccess(true);
+        } else {
+          obj2.setUploadSuccess(false);
+        }
         ufrDao.save(obj2);
       } catch (IOException ex) {
         log.error("receive otfollowimg " + fitsnameFileName + " error!", ex);

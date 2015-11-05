@@ -28,6 +28,7 @@ public class OtLevel2Match  implements java.io.Serializable {
      private Float ra;
      private Float dec;
      private Float mag;
+     private Float distance;
 
     public OtLevel2Match() {
     }
@@ -36,7 +37,7 @@ public class OtLevel2Match  implements java.io.Serializable {
     public OtLevel2Match(long olmId) {
         this.olmId = olmId;
     }
-    public OtLevel2Match(long olmId, Long otId, Short mtId, Long matchId, String comments, Float ra, Float dec, Float mag) {
+    public OtLevel2Match(long olmId, Long otId, Short mtId, Long matchId, String comments, Float ra, Float dec, Float mag, Float distance) {
        this.olmId = olmId;
        this.otId = otId;
        this.mtId = mtId;
@@ -45,6 +46,7 @@ public class OtLevel2Match  implements java.io.Serializable {
        this.ra = ra;
        this.dec = dec;
        this.mag = mag;
+       this.distance = distance;
     }
    
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -130,6 +132,21 @@ public class OtLevel2Match  implements java.io.Serializable {
     public void setMag(Float mag) {
         this.mag = mag;
     }
+
+  /**
+   * @return the distance
+   */
+    @Column(name="distance", precision=8, scale=8)
+  public Float getDistance() {
+    return distance;
+  }
+
+  /**
+   * @param distance the distance to set
+   */
+  public void setDistance(Float distance) {
+    this.distance = distance;
+  }
 
 
 
