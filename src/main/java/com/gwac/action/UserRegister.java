@@ -50,7 +50,7 @@ public class UserRegister extends ActionSupport {
     ui.setName(getLoginname());
     ui.setPassword(getLoginpassword());
     ui.setAddress(getAddress());
-    ui.setCreateDate(new Date());
+    ui.setRegisterDate(new Date());
     userService.addUser(ui);
 
     echo = getLoginname() + "注册成功！";

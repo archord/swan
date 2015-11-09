@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
+// Generated 2015-11-5 20:06:22 by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -26,8 +26,14 @@ public class UserInfo  implements java.io.Serializable {
      private int uiId;
      private String name;
      private String address;
-     private Date createDate;
+     private Date registerDate;
      private String password;
+     private String loginName;
+     private String position;
+     private String comments;
+     private Boolean registerPass;
+     private String email;
+     private String mobilPhone;
 
     public UserInfo() {
     }
@@ -36,18 +42,24 @@ public class UserInfo  implements java.io.Serializable {
     public UserInfo(int uiId) {
         this.uiId = uiId;
     }
-    public UserInfo(int uiId, String name, String address, Date createDate, String password) {
+    public UserInfo(int uiId, String name, String address, Date registerDate, String password, String loginName, String position, String comments, Boolean registerPass, String email, String mobilPhone) {
        this.uiId = uiId;
        this.name = name;
        this.address = address;
-       this.createDate = createDate;
+       this.registerDate = registerDate;
        this.password = password;
+       this.loginName = loginName;
+       this.position = position;
+       this.comments = comments;
+       this.registerPass = registerPass;
+       this.email = email;
+       this.mobilPhone = mobilPhone;
     }
-
+   
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
     @Parameter(name = "max_lo", value = "49"),
     @Parameter(name = "sequence", value = "ui_id_seq")})
-     @Id 
+  @Id
   @GeneratedValue(generator = "generator")
     @Column(name="ui_id", unique=true, nullable=false)
     public int getUiId() {
@@ -79,13 +91,13 @@ public class UserInfo  implements java.io.Serializable {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date", length=29)
-    public Date getCreateDate() {
-        return this.createDate;
+    @Column(name="register_date", length=29)
+    public Date getRegisterDate() {
+        return this.registerDate;
     }
     
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setRegisterDate(Date registerDate) {
+        this.registerDate = registerDate;
     }
 
     
@@ -96,6 +108,66 @@ public class UserInfo  implements java.io.Serializable {
     
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    
+    @Column(name="login_name")
+    public String getLoginName() {
+        return this.loginName;
+    }
+    
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    
+    @Column(name="position")
+    public String getPosition() {
+        return this.position;
+    }
+    
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    
+    @Column(name="comments", length=1024)
+    public String getComments() {
+        return this.comments;
+    }
+    
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    
+    @Column(name="register_pass")
+    public Boolean getRegisterPass() {
+        return this.registerPass;
+    }
+    
+    public void setRegisterPass(Boolean registerPass) {
+        this.registerPass = registerPass;
+    }
+
+    
+    @Column(name="email", length=32)
+    public String getEmail() {
+        return this.email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
+    @Column(name="mobil_phone", length=32)
+    public String getMobilPhone() {
+        return this.mobilPhone;
+    }
+    
+    public void setMobilPhone(String mobilPhone) {
+        this.mobilPhone = mobilPhone;
     }
 
 

@@ -33,7 +33,7 @@ public class UserInfoAction implements ModelDriven {
 
   //save user
   public String addUser() throws Exception {
-    user.setCreateDate(new Date());
+    user.setRegisterDate(new Date());
     userService.addUser(user);
     userList = null;
 //    userList = userService.listUser();

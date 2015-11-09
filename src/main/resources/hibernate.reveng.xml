@@ -2,7 +2,9 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="gwac"/>
-  <table-filter match-name="follow_up_fitsfile"/>
-  <table-filter match-name="follow_up_record"/>
-  <table-filter match-name="follow_up_observation"/>
+  <table-filter match-name="ot_type"/>
+  <table-filter match-name="ot_comment"/>
+  <table-filter match-name="user_action"/>
+  <table-filter match-name="user_action_log"/>
+  <table-filter match-name="user_info"/>
 </hibernate-reverse-engineering>
