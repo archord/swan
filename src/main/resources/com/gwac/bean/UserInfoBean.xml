@@ -4,6 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
  
+  <bean class="com.gwac.action.Login"  scope="prototype">
+    <property name="userDao" ref="userDAO" />
+  </bean>
+  
   <bean id="userRegister" class="com.gwac.action.UserRegister">
     <property name="userService" ref="userService" />	
   </bean>

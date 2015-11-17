@@ -17,9 +17,10 @@ public class LoginInterceptor extends AbstractInterceptor {
 
   @Override
   public String intercept(ActionInvocation invocation) throws Exception {
-
+    
     // 取得请求的Action名
     String name = invocation.getInvocationContext().getName();
+    System.out.println(name);
     // 如果用户想登录，则使之通过
     if (!name.equals("pgwacOtDetail")) {
       System.out.println("action name: "+ name);

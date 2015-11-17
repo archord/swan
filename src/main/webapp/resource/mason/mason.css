@@ -65,3 +65,6 @@ div#grid-fixed div a p{
 div#grid-fixed div.xl{
   background-color: hsl( 36, 100%, 50%);
 }
+div#grid-fixed div.x2{
+  background-color: #666699;
+}

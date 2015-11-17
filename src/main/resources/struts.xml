@@ -16,18 +16,19 @@
   <!-- Settings for CKEditor Image Upload -->
   <constant name="struts.ckeditor.allowUploads" value="true" /> <!-- default is false -->
   <constant name="struts.ckeditor.allowedFileExtensions" value="jpg,jpeg,png" />
-  <constant name="sstruts.ckeditor.uploadFolder" value="E:\tmp" />
+  <constant name="struts.ckeditor.uploadFolder" value="/tmp" />
     
   <!-- include file="showcase.xml" / -->
+  <!--<include file="struts-default.xml" />--> 
  	
-  <package name="default" namespace="/" extends="struts-default">
+  <package name="default" namespace="/" extends="json-default,struts-default">
     
     <!-- 自定义拦截器 -->
     <interceptors>
-     <interceptor name="login" class="com.gwac.action.LoginInterceptor"/>
+     <interceptor name="userAuthority" class="com.gwac.action.LoginInterceptor"/>
      <!-- 自定义拦截器堆栈 -->
      <interceptor-stack name="gwacStack">
-      <interceptor-ref name="login"/>
+      <interceptor-ref name="userAuthority"/>
       <!-- 引用默认的拦截器堆栈 -->
       <interceptor-ref name="defaultStack"/>
      </interceptor-stack>
@@ -38,6 +39,7 @@
 
     <global-results>
      <result name="login" type="redirectAction">user/login.jsp</result>
+     <result name="error" type="redirectAction">error.jsp</result>
     </global-results>
     
 <!--    <action name="resultActionabc" class="com.gwac.action.FileUploadAction">

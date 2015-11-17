@@ -1,10 +1,11 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Flat UI - Free Bootstrap Framework and Theme</title>
+    <title>GWAC信息展示平台 - 登录页面</title>
     <meta name="description" content="Flat UI Kit Free is a Twitter Bootstrap Framework design and Theme, this responsive framework includes a PSD and HTML version."/>
 
     <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
@@ -35,18 +36,21 @@
           </div>
 
           <div class="login-form">
+            <div style="color:red"><s:fielderror/></div>
+            <form action="login.action" id="loginAction" method="post">
             <div class="form-group">
-              <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name" />
+              <input type="text" class="form-control login-field" value="" placeholder="请输入用户名" id="loginName" name="loginName" />
               <label class="login-field-icon fui-user" for="login-name"></label>
             </div>
 
             <div class="form-group">
-              <input type="password" class="form-control login-field" value="" placeholder="Password" id="login-pass" />
+              <input type="password" class="form-control login-field" value="" placeholder="密码" id="loginPass" name="loginPass" />
               <label class="login-field-icon fui-lock" for="login-pass"></label>
             </div>
 
-            <a class="btn btn-primary btn-lg btn-block" href="#">Log in</a>
-            <a class="login-link" href="#">Lost your password?</a>
+              <button type="submit" class="btn btn-primary btn-lg btn-block" >登录</button>
+            <a class="login-link" href="#">忘记密码？</a>
+            </form>
           </div>
         </div>
       </div>
