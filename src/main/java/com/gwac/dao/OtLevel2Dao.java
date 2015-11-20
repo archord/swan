@@ -15,6 +15,8 @@ import java.util.List;
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
 
   public void moveDataToHisTable();
+  
+  public List<OtLevel2> searchOT2His(OtLevel2 ot2, float searchRadius, float mag);
 
   public Boolean exist(OtLevel2 obj, float errorBox);
   

@@ -5,6 +5,20 @@
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
   
+  <bean class="com.gwac.action.GetOtDetail"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="obDao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="otorDao" ref="otORDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtDetailJson"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="obDao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="otorDao" ref="otORDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetOtLevel2List"  scope="prototype">
     <property name="obDao" ref="otbDao" />
   </bean>

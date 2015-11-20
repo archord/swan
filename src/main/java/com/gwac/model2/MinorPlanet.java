@@ -23,17 +23,19 @@ public class MinorPlanet implements java.io.Serializable {
   private Float lat;
   private Float dlon;
   private Float dlat;
+  private Float vmag;
 
   public MinorPlanet() {
   }
 
-  public MinorPlanet(String mpid, Float mjd, Float lon, Float lat, Float dlon, Float dlat) {
+  public MinorPlanet(String mpid, Float mjd, Float lon, Float lat, Float dlon, Float dlat, Float vmag) {
     this.mpid = mpid;
     this.mjd = mjd;
     this.lon = lon;
     this.lat = lat;
     this.dlon = dlon;
     this.dlat = dlat;
+    this.vmag = vmag;
   }
 
   @Id
@@ -100,6 +102,21 @@ public class MinorPlanet implements java.io.Serializable {
 
   public void setDlat(Float dlat) {
     this.dlat = dlat;
+  }
+
+  /**
+   * @return the vmag
+   */
+  @Column(name = "VMAG", precision = 10, scale = 6)
+  public Float getVmag() {
+    return vmag;
+  }
+
+  /**
+   * @param vmag the vmag to set
+   */
+  public void setVmag(Float vmag) {
+    this.vmag = vmag;
   }
 
 }

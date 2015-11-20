@@ -46,6 +46,7 @@ public class OtLevel2  implements java.io.Serializable {
      private Short skyId;
      private Character dataProduceMethod;
      private Short foCount;
+     private Float mag;
 
     public OtLevel2() {
     }
@@ -54,7 +55,7 @@ public class OtLevel2  implements java.io.Serializable {
     public OtLevel2(long otId) {
         this.otId = otId;
     }
-    public OtLevel2(long otId, String name, Float ra, Float dec, Date foundTimeUtc, String identify, Float xtemp, Float ytemp, Integer lastFfNumber, Integer total, Boolean isRecognize, Short otType, String comments, Integer dpmId, String dateStr, Boolean allFileCutted, Integer firstFfNumber, Integer cuttedFfNumber, Short isMatch, Boolean firstNMark, Short skyId, Character dataProduceMethod) {
+    public OtLevel2(long otId, String name, Float ra, Float dec, Date foundTimeUtc, String identify, Float xtemp, Float ytemp, Integer lastFfNumber, Integer total, Boolean isRecognize, Short otType, String comments, Integer dpmId, String dateStr, Boolean allFileCutted, Integer firstFfNumber, Integer cuttedFfNumber, Short isMatch, Boolean firstNMark, Short skyId, Character dataProduceMethod, Float mag) {
        this.otId = otId;
        this.name = name;
        this.ra = ra;
@@ -77,6 +78,7 @@ public class OtLevel2  implements java.io.Serializable {
        this.firstNMark = firstNMark;
        this.skyId = skyId;
        this.dataProduceMethod = dataProduceMethod;
+       this.mag = mag;
     }
    
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -317,6 +319,21 @@ public class OtLevel2  implements java.io.Serializable {
    */
   public void setFoCount(Short foCount) {
     this.foCount = foCount;
+  }
+
+  /**
+   * @return the mag
+   */
+    @Column(name="mag")
+  public Float getMag() {
+    return mag;
+  }
+
+  /**
+   * @param mag the mag to set
+   */
+  public void setMag(Float mag) {
+    this.mag = mag;
   }
 
 

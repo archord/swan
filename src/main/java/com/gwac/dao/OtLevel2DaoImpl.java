@@ -7,7 +7,9 @@ package com.gwac.dao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2QueryParameter;
 import com.gwac.util.CommonFunction;
+import com.gwac.util.SearchBoxSphere;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -22,6 +24,28 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
+  
+  @Override
+  public List<OtLevel2> searchOT2His(OtLevel2 ot2, float searchRadius, float mag){
+    
+    SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
+    int tflag = sbs.calSearchBox();
+    if (tflag != 0) {
+      Session session = getCurrentSession();
+      String sql = "select * from ot_level2_his where ot_id!=" + ot2.getOtId()+" and ";
+      if (tflag == 1) {
+        sql += "ra between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
+        sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+      } else {
+        sql += "(ra > " + sbs.getMinRa() + " or ra <" + sbs.getMaxRa() + ") and ";
+        sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+      }
+
+      Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+      return q.list();
+    }
+    return new ArrayList();
+  }
 
   public void updateIsMatch(OtLevel2 ot2) {
 

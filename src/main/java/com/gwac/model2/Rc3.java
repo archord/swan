@@ -30,11 +30,13 @@ public class Rc3  implements java.io.Serializable {
      private Float mbmag;
      private Float mvmag;
      private Float redshift;
+     private Float d25;
+     private Float d25err;
 
     public Rc3() {
     }
 
-    public Rc3(String pgcid, Float radeg, Float dedeg, Float gallongdeg, Float gallatitdeg, Float hubs, Float mumag, Float mbmag, Float mvmag, Float redshift) {
+    public Rc3(String pgcid, Float radeg, Float dedeg, Float gallongdeg, Float gallatitdeg, Float hubs, Float mumag, Float mbmag, Float mvmag, Float redshift, Float d25, Float d25err) {
        this.pgcid = pgcid;
        this.radeg = radeg;
        this.dedeg = dedeg;
@@ -45,6 +47,8 @@ public class Rc3  implements java.io.Serializable {
        this.mbmag = mbmag;
        this.mvmag = mvmag;
        this.redshift = redshift;
+       this.d25 = d25;
+       this.d25err = d25err;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -158,6 +162,34 @@ public class Rc3  implements java.io.Serializable {
     public void setRedshift(Float redshift) {
         this.redshift = redshift;
     }
+
+  /**
+   * @return the d25
+   */
+  public Float getD25() {
+    return d25;
+  }
+
+  /**
+   * @param d25 the d25 to set
+   */
+  public void setD25(Float d25) {
+    this.d25 = d25;
+  }
+
+  /**
+   * @return the d25err
+   */
+  public Float getD25err() {
+    return d25err;
+  }
+
+  /**
+   * @param d25err the d25err to set
+   */
+  public void setD25err(Float d25err) {
+    this.d25err = d25err;
+  }
 
 
 

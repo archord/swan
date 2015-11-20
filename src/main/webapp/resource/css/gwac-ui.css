@@ -1,0 +1,320 @@
+.container-fluid{
+  min-width: 800px;
+}
+.ot-detail-top, .ot-detail-body{
+  /*background-color: #1bc5a3;*/
+  font-size: 14px;
+  margin: 5px 0 5px 0;
+  padding-top: 3px;
+}
+.ot-detail-top{
+  padding-bottom: 3px;
+  border-bottom: 2px dashed #1abc9c;
+}
+.ot-detail-left{
+  /*background-color: #1bc5a3;*/
+  min-width: 480px;
+}
+.ot-detail-right{
+  /*background-color:#0099CC;*/
+}
+
+#ot-followup th, td{
+  text-align: center;
+}
+
+#user-welcome {
+  padding-top: 23px;
+  float: left;
+  width: 270px;
+  min-height: 50px;
+  margin-right: 10px;
+  /*border: 2px dashed #00f*/
+}
+#ot-followup{
+  overflow: hidden;
+  min-height: 50px;
+  /*border: 2px dashed #f0f;*/
+  min-width: 780px;
+}
+#user-welcome input{
+  display: inline;
+}
+#ot-followup input{
+  display: inline;
+}
+
+.ot-detail-top input[type="text"],
+.ot-detail-top input[type="password"], 
+.ot-detail-top select{
+  width: 100px;
+  height: 28px;
+  margin: 0;
+  padding: 3px 0;
+}
+
+#ot-followup .select{
+  width: 100px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+}
+
+#ot-followup a{
+  padding: 3px 39px 3px 15px;
+}
+
+.ot-detail-top input[type="button"]{
+  width: 60px;
+  height: 26px;
+  margin: 0 0;
+  padding: 2px 0;
+}
+
+/*ot cut image show*/
+#cut-image-show{
+  /*border: 1px solid #ccc;*/
+  margin: 10px auto;
+  background-color: #fff;
+  width: 406px;
+  height: 240px;
+  /*box-shadow: 0 5px 10px #ccc;*/
+}
+
+#ref-image{
+  width: 204px;
+  height: 200px;
+  padding: 0px;
+  margin: 0px;
+  float: left;
+  /*overflow: hidden;*/
+}
+
+#obj-image {
+  width: 200px;
+  height: 240px;
+  padding: 0px;
+  margin: 0px;
+  float: right;
+  /*position: absolute;*/
+  /*left: 50%;*/
+  /*top: 230px;*/
+  /*box-shadow: 0 5px 10px #ccc;*/
+}
+
+#carousel-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  text-align: center;
+}
+#carousel{
+  position: relative;
+  /*width: 400px;*/
+  /*left: 100px;*/
+}
+
+#navi {
+  background-color: #333;
+  background-color: rgba(30, 30, 30, 0.8);
+  border-top: 1px solid #000;
+  width: 200px;
+  height: 35px;
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  z-index: 10;
+}
+#timer {
+  background-color: #222;
+  background-color: rgba(20, 20, 20, 0.8);
+  width: 0;
+  height: 35px;
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+}
+#navi2 {
+  width: 200px;
+  height: 30px;
+  padding: 0px;
+  bottom: 0px;
+  left: 0;
+  position: relative;
+  z-index: 200;
+  vertical-align: bottom;
+}
+#title2 {
+  padding-top: 3px;
+  text-align: center;
+  width:200px;
+  float: left;
+}
+#pagenumber, #title, #title2, #pager, #start, #end {
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+#pagenumber,#start,#end {
+  height: 20px;
+}
+#pagenumber{
+  float: left;
+}
+#start,#end {
+  padding-top: 3px;
+  float: right;
+  margin-right:2px;
+}
+#title {
+  text-align: left;
+  width:200px;
+  float: left;
+}
+
+#carousel img {
+  display: block;
+  float: left;
+}
+
+#prev, #next, #play {
+  display: block;
+  position: absolute;
+  z-index: 30;
+  background-size:27px 27px;
+}
+#prev, #next {
+  width: 27px;
+  height: 27px;
+  top: 5px;
+}
+#play {
+  width: 33px;
+  height: 33px;
+  top: 5px;
+  background: url(../../gwac_images/imageGallery/ui/pause.png) 0 0 no-repeat transparent;
+  left: 110px;
+  margin-left: -27px;
+}
+#play.paused {
+  background: url(../../gwac_images/imageGallery/ui/play.png) 0 0 no-repeat transparent;
+}
+#prev {
+  background: url(../../gwac_images/imageGallery/ui/prev.png) 0 0 no-repeat transparent;
+  right: 140px;
+}
+#next {
+  background: url(../../gwac_images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
+  left: 140px;
+}
+#prev, #next, #play, #play.paused {
+  background-size:27px 27px;
+}
+
+/*显示坐标信息*/
+#skyCoordinate{width: 100%; text-align:center; font-size:14px;margin-bottom:5px;}
+/*显示光变和位置变化*/
+#ot-curves{
+  /*margin: 10px 10px 10px 10px;*/
+  width: 100%;
+}
+
+#ot-curve-show, #ot-position-show{
+  width: 100%;
+  height: 200px;
+}
+
+#ot-curve,#ot-position-curve{width: 100%; height: 180px;}
+#ot-curve-title,#ot-position-show-title{width: 100%;  height: 20px; text-align:center;}
+
+/*flot曲线用*/
+#tooltip{ 
+  position: absolute;
+  display: none;
+  border: 1px solid #fdd;
+  padding: 2px;
+  background-color: #fee;
+  opacity: 0.80
+}
+
+/*OT record*/
+#ot2-record{
+  font-size: 12px;
+}
+#ot2-record .dataTables_scroll, .ot2-record-table-bottom, .ot2-record-table-top, .ot2-record-table-bottom{
+  /*display: none;*/
+}
+.ot2-record-table-top label{
+  display: inline;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: right;
+}
+.ot2-record-table-top input{
+  height:22px;
+  width: 80px;
+  border-color: rgb(189, 195, 199);
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 2px;
+}
+.ot2-record-table-bottom{
+
+}
+#ot2-record-table td, table.dataTable thead th{ 
+ line-height: 18px;
+ padding-top: 2px;
+ padding-bottom: 2px;
+ white-space: nowrap;
+}
+.ot2-load-button{
+  float:left;
+  background-color: rgb(26, 188, 156);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+  height: 22px;
+  line-height: 18px;
+  margin: 0 10px 0 0;
+  padding: 2px 0;
+  vertical-align: middle;
+  text-align: center;
+  width: 140px;
+}
+.ot2-load-button span{
+  color: rgb(255, 255, 255);
+}
+
+/*OT match*/
+#ot2-match{
+  font-size: 12px;
+}
+#ot2-match .dataTables_scroll, .ot2-match-table-bottom, .ot2-match-table-top, .ot2-match-table-bottom{
+  /*display: none;*/
+}
+.ot2-match-table-top label{
+  display: inline;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: right;
+}
+.ot2-match-table-top input{
+  height:22px;
+  width: 80px;
+  border-color: rgb(189, 195, 199);
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 2px;
+}
+.ot2-match-table-bottom{
+
+}
+#ot2-match-table td, table.dataTable thead th{ 
+ line-height: 18px;
+ padding-top: 2px;
+ padding-bottom: 2px;
+ white-space: nowrap;
+}

@@ -5,7 +5,6 @@ WITH moved_rows AS ( DELETE FROM config_file RETURNING * ) INSERT INTO config_fi
 INSERT INTO config_file SELECT * FROM config_file_his where substring(store_path, 1,6)='150129';
 INSERT INTO ot_level2 SELECT * FROM ot_level2_his where date_str='150310';
 INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='150310';
-INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='150310';
 INSERT INTO fits_file_cut SELECT * FROM fits_file_cut_his where substring(store_path, 1,6)='150312';
 
 ##统计模板切图表中，某天切图未返回的数量
@@ -16,6 +15,12 @@ select date_str, count(oor_id) from ot_observe_record_his group by date_str orde
 
 ##按照出现次数统计出现该次数的OT的个数
 select total, count(*) from ot_level2 where data_produce_method='8' group by total order by total asc;
+
+##统计每天OT的个数
+select date_str, count(*) total from ot_level2_his where data_produce_method='8' group by date_str order by total desc;
+
+##统计OT的匹配个数
+select ot_id, count(*) total from ot_level2_match group by ot_id order by total desc;
 
 ##删除有历史备份表的当前表的数据
 delete from config_file;
@@ -41,3 +46,8 @@ update fits_file_cut
 set ot_id=ot_observe_record.ot_id
 from ot_observe_record
 where ot_observe_record.ffc_id=fits_file_cut.ffc_id and ot_observe_record.ot_id=79737;
+
+update ot_level2
+set mag=ot_observe_record.mag_aper
+from ot_observe_record
+where ot_observe_record.ot_id=ot_level2.ot_id and ot_observe_record.ff_number=ot_level2.last_ff_number;

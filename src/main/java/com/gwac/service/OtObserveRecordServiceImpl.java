@@ -97,6 +97,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setAllFileCutted(false);
         otLv2.setSkyId(sky.getSkyId());
         otLv2.setDataProduceMethod('1');    //星表匹配一级OT
+        otLv2.setMag(otc.getMagAper());
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
@@ -140,6 +141,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tlv2.setYtemp(otLv2.getYtemp());
             tlv2.setRa(otLv2.getRa());
             tlv2.setDec(otLv2.getDec());
+            tlv2.setMag(otLv2.getMag());
           }
           tlv2.setTotal(tlv2.getTotal() + 1);
           otLv2Dao.update(tlv2);
@@ -191,7 +193,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
             tOtLv2.setDataProduceMethod('1');    //星表匹配一级OT
-            tOtLv2.setFoCount((short)0);
+            tOtLv2.setFoCount((short) 0);
+            tOtLv2.setMag(oor1.getMagAper());
 
             int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
 

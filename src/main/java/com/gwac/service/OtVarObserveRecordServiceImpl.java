@@ -99,6 +99,7 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setAllFileCutted(false);
         otLv2.setSkyId(sky.getSkyId());
         otLv2.setDataProduceMethod('6');    //星表匹配变星
+        otLv2.setMag(otc.getMagAper());
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
@@ -144,24 +145,25 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
           tlv2.setYtemp(otLv2.getYtemp());
           tlv2.setRa(otLv2.getRa());
           tlv2.setDec(otLv2.getDec());
+          tlv2.setMag(otLv2.getMag());
           otLv2Dao.update(tlv2);
 
-          if(false){
-          String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
-          FitsFileCut ffc = new FitsFileCut();
-          ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-          ffc.setFileName(cutImg);
-          ffc.setOtId(tlv2.getOtId());
-          ffc.setNumber(number);
-          ffc.setFfId(ff.getFfId());
-          ffc.setDpmId((short) dpmId);
-          ffc.setImgX(oor.getX());
-          ffc.setImgY(oor.getY());
-          ffc.setRequestCut(false);
-          ffc.setSuccessCut(false);
-          ffc.setIsMissed(false);
-          ffcDao.save(ffc);
-          oor.setFfcId(ffc.getFfcId());
+          if (false) {
+            String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
+            FitsFileCut ffc = new FitsFileCut();
+            ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
+            ffc.setFileName(cutImg);
+            ffc.setOtId(tlv2.getOtId());
+            ffc.setNumber(number);
+            ffc.setFfId(ff.getFfId());
+            ffc.setDpmId((short) dpmId);
+            ffc.setImgX(oor.getX());
+            ffc.setImgY(oor.getY());
+            ffc.setRequestCut(false);
+            ffc.setSuccessCut(false);
+            ffc.setIsMissed(false);
+            ffcDao.save(ffc);
+            oor.setFfcId(ffc.getFfcId());
           }
 
           oor.setOtId(tlv2.getOtId());
@@ -194,10 +196,11 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
             tOtLv2.setDataProduceMethod('6');    //星表匹配变星
-            tOtLv2.setFoCount((short)0);
-            
+            tOtLv2.setFoCount((short) 0);
+            tOtLv2.setMag(oor1.getMagAper());
+
             int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
-            
+
             if (oor1.getFfNumber() - firstRecordNumber <= firstNMarkNumber) {
               tOtLv2.setFirstNMark(true);
             } else {
@@ -209,38 +212,38 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             log.debug("ffcrName=" + ffcrName);
             log.debug("otId=" + tOtLv2.getOtId());
 
-            if(false){
-            FitsFileCutRef ffcr = new FitsFileCutRef();
-            ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
-            ffcr.setFfId(ff.getFfId());
-            ffcr.setFileName(ffcrName);
-            ffcr.setOtId(tOtLv2.getOtId());
-            ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-            ffcr.setRequestCut(false);
-            ffcr.setSuccessCut(false);
-            ffcrDao.save(ffcr);
+            if (false) {
+              FitsFileCutRef ffcr = new FitsFileCutRef();
+              ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
+              ffcr.setFfId(ff.getFfId());
+              ffcr.setFileName(ffcrName);
+              ffcr.setOtId(tOtLv2.getOtId());
+              ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
+              ffcr.setRequestCut(false);
+              ffcr.setSuccessCut(false);
+              ffcrDao.save(ffcr);
             }
 
             for (OtObserveRecord tOor : oors) {
               if (tOor.getOtId() != 0) {
                 continue;
               }
-              if(false){
-              String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
-              FitsFileCut ffc = new FitsFileCut();
-              ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-              ffc.setFileName(cutImg);
-              ffc.setOtId(tOtLv2.getOtId());
-              ffc.setNumber(tOor.getFfNumber());
-              ffc.setFfId(tOor.getFfId());
-              ffc.setDpmId((short) dpmId);
-              ffc.setImgX(tOor.getX());
-              ffc.setImgY(tOor.getY());
-              ffc.setRequestCut(false);
-              ffc.setSuccessCut(false);
-              ffc.setIsMissed(false);
-              ffcDao.save(ffc);
-              tOor.setFfcId(ffc.getFfcId());
+              if (false) {
+                String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
+                FitsFileCut ffc = new FitsFileCut();
+                ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
+                ffc.setFileName(cutImg);
+                ffc.setOtId(tOtLv2.getOtId());
+                ffc.setNumber(tOor.getFfNumber());
+                ffc.setFfId(tOor.getFfId());
+                ffc.setDpmId((short) dpmId);
+                ffc.setImgX(tOor.getX());
+                ffc.setImgY(tOor.getY());
+                ffc.setRequestCut(false);
+                ffc.setSuccessCut(false);
+                ffc.setIsMissed(false);
+                ffcDao.save(ffc);
+                tOor.setFfcId(ffc.getFfcId());
               }
 
               tOor.setOtId(tOtLv2.getOtId());

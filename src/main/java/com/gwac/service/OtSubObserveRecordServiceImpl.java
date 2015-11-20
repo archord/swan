@@ -157,6 +157,7 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setDataProduceMethod('8');    //星表匹配一级OT
         otLv2.setXtemp(otc.getX());
         otLv2.setYtemp(otc.getY());
+        otLv2.setMag(otc.getMagAper());
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
@@ -189,6 +190,7 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
             tlv2.setLastFfNumber(otLv2.getLastFfNumber());
             tlv2.setRa(otLv2.getRa());
             tlv2.setDec(otLv2.getDec());
+            tlv2.setMag(otLv2.getMag());
           }
           tlv2.setTotal(tlv2.getTotal() + 1);
           otLv2Dao.update(tlv2);
@@ -228,6 +230,7 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setXtemp(otc.getX());
             tOtLv2.setYtemp(otc.getY());
             tOtLv2.setFoCount((short)0);
+            tOtLv2.setMag(oor1.getMagAper());
             otLv2Dao.save(tOtLv2);
 
             for (OtObserveRecord tOor : oors) {

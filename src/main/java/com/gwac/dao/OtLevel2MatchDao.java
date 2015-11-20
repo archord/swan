@@ -7,6 +7,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.OtLevel2Match;
+import com.gwac.model.OtLevel2MatchShow;
+import java.util.List;
 
 /**
  *
@@ -14,4 +16,5 @@ import com.gwac.model.OtLevel2Match;
  */
 public interface OtLevel2MatchDao extends BaseHibernateDao<OtLevel2Match> {
   public OtLevel2Match getByOt2Id(long ot2Id);
+  public List<OtLevel2MatchShow> getByOt2Name(String otName);
 }

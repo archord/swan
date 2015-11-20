@@ -15,17 +15,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
+import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.Result;
 
-@Actions({
-  @Action(value = "/get-ot-detail", results = {
-    @Result(location = "gwac/pgwac-ot-detail2.jsp", name = "success"),
-    @Result(location = "gwac/pgwac-otsub-detail.jsp", name = "success2"),
-    @Result(location = "gwac/pgwac-ot-detail.jsp", name = "input")})})
-public class GetOtDetail extends ActionSupport {
+@Result(name = "error", location = "/error.jsp")
+@ExceptionMapping(exception = "java.lang.Exception", result = "error")
+public class GetOtDetailJson extends ActionSupport {
 
   private static final long serialVersionUID = -3454448234588641394L;
-  private static final Log log = LogFactory.getLog(GetOtDetail.class);
+  private static final Log log = LogFactory.getLog(GetOtDetailJson.class);
 
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
@@ -53,11 +51,15 @@ public class GetOtDetail extends ActionSupport {
   private String otOpticalVaration;
   private String otPositionVaration;
 
+  @Actions({
+    @Action(value = "/get-ot-detail-json", results = {
+      @Result(name = "json", type = "json")})
+  })
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
-    
+
     String result = SUCCESS;
-    
+
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
 
@@ -65,7 +67,7 @@ public class GetOtDetail extends ActionSupport {
       queryHis = false;
     }
 
-    ob = obDao.getOtLevel2ByName(otName, queryHis);
+    ob = obDao.getOtLevel2ByName(getOtName(), queryHis);
 
     if (ob != null) {
       if (ob.getDataProduceMethod() == '1') {
@@ -84,27 +86,27 @@ public class GetOtDetail extends ActionSupport {
 
         List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
         if (ffcrs != null && ffcrs.size() > 0) {
-          setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/");
-          setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
-          setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
+          ffcrStorePath = dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/";
+          ffcrFileName = ffcrs.get(0).getFileName() + ".jpg";
+          ffcrGenerateTime = CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)";
         } else {
-          setFfcrStorePath("");
-          setFfcrFileName("");
-          setFfcrGenerateTime("");
+          ffcrStorePath = "";
+          ffcrFileName = "";
+          ffcrGenerateTime = "";
         }
-        result ="success";
+        result = "success";
       } else if (ob.getDataProduceMethod() == '8') {
         if (ob.getRa() + 999 > CommonFunction.MINFLOAT) {
           ra = ob.getRa() + "";
           siderealTime = CommonFunction.degreeToHMS(ob.getRa());
-        }else{
+        } else {
           ra = "''";
           siderealTime = "''";
         }
         if (ob.getDec() + 999 > CommonFunction.MINFLOAT) {
           dec = ob.getDec() + "";
           pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
-        }else{
+        } else {
           dec = "''";
           pitchAngle = "''";
         }
@@ -116,7 +118,7 @@ public class GetOtDetail extends ActionSupport {
         for (FitsFileCut ffc : ffcList) {
           ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
         }
-        result ="success2";
+        result = "success2";
       }
 
       String tmp[] = otorDao.getOtOpticalVaration(ob, queryHis).split("=");
@@ -132,12 +134,12 @@ public class GetOtDetail extends ActionSupport {
       totalImage = 0;
       otOpticalVaration = "[]";
       otPositionVaration = "[]";
-      setFfcrStorePath("");
-      setFfcrFileName("");
-      setFfcrGenerateTime("");
+      ffcrStorePath = "";
+      ffcrFileName = "";
+      ffcrGenerateTime = "";
     }
 
-    return result;
+    return "json";
   }
 
   /**
@@ -145,13 +147,6 @@ public class GetOtDetail extends ActionSupport {
    */
   public List<FitsFileCut> getFfcList() {
     return ffcList;
-  }
-
-  /**
-   * @param ffcList the ffcList to set
-   */
-  public void setFfcList(List<FitsFileCut> ffcList) {
-    this.ffcList = ffcList;
   }
 
   /**
@@ -169,24 +164,10 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param otName the otName to set
-   */
-  public void setOtName(String otName) {
-    this.otName = otName;
-  }
-
-  /**
    * @return the totalImage
    */
   public int getTotalImage() {
     return totalImage;
-  }
-
-  /**
-   * @param totalImage the totalImage to set
-   */
-  public void setTotalImage(int totalImage) {
-    this.totalImage = totalImage;
   }
 
   /**
@@ -204,13 +185,6 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param startImgNum the startImgNum to set
-   */
-  public void setStartImgNum(int startImgNum) {
-    this.startImgNum = startImgNum;
-  }
-
-  /**
    * @return the ra
    */
   public String getRa() {
@@ -218,31 +192,10 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param ra the ra to set
-   */
-  public void setRa(String ra) {
-    this.ra = ra;
-  }
-
-  /**
    * @return the dec
    */
   public String getDec() {
     return dec;
-  }
-
-  /**
-   * @param dec the dec to set
-   */
-  public void setDec(String dec) {
-    this.dec = dec;
-  }
-
-  /**
-   * @return the ffcrDao
-   */
-  public FitsFileCutRefDAO getFfcrDao() {
-    return ffcrDao;
   }
 
   /**
@@ -260,24 +213,10 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param ffcrStorePath the ffcrStorePath to set
-   */
-  public void setFfcrStorePath(String ffcrStorePath) {
-    this.ffcrStorePath = ffcrStorePath;
-  }
-
-  /**
    * @return the ffcrFileName
    */
   public String getFfcrFileName() {
     return ffcrFileName;
-  }
-
-  /**
-   * @param ffcrFileName the ffcrFileName to set
-   */
-  public void setFfcrFileName(String ffcrFileName) {
-    this.ffcrFileName = ffcrFileName;
   }
 
   /**
@@ -288,24 +227,10 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param ffcrGenerateTime the ffcrGenerateTime to set
-   */
-  public void setFfcrGenerateTime(String ffcrGenerateTime) {
-    this.ffcrGenerateTime = ffcrGenerateTime;
-  }
-
-  /**
    * @return the otOpticalVaration
    */
   public String getOtOpticalVaration() {
     return otOpticalVaration;
-  }
-
-  /**
-   * @param otOpticalVaration the otOpticalVaration to set
-   */
-  public void setOtOpticalVaration(String otOpticalVaration) {
-    this.otOpticalVaration = otOpticalVaration;
   }
 
   /**
@@ -337,13 +262,6 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param ob the ob to set
-   */
-  public void setOb(OtLevel2 ob) {
-    this.ob = ob;
-  }
-
-  /**
    * @return the otPositionVaration
    */
   public String getOtPositionVaration() {
@@ -358,13 +276,6 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param pitchAngle the pitchAngle to set
-   */
-  public void setPitchAngle(String pitchAngle) {
-    this.pitchAngle = pitchAngle;
-  }
-
-  /**
    * @return the siderealTime
    */
   public String getSiderealTime() {
@@ -372,10 +283,10 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @param siderealTime the siderealTime to set
+   * @param otName the otName to set
    */
-  public void setSiderealTime(String siderealTime) {
-    this.siderealTime = siderealTime;
+  public void setOtName(String otName) {
+    this.otName = otName;
   }
 
 }

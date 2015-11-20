@@ -17,12 +17,14 @@ import org.hibernate.annotations.Parameter;
 @Table(name="ot_level2_match"
     ,schema="public"
 )
-public class OtLevel2Match  implements java.io.Serializable {
+public class OtLevel2MatchShow  implements java.io.Serializable {
 
 
      private long olmId;
      private Long otId;
+     private String ot2Name;
      private Short mtId;
+     private String matchTableName;
      private Long matchId;
      private String comments;
      private Float ra;
@@ -31,16 +33,17 @@ public class OtLevel2Match  implements java.io.Serializable {
      private Float distance;
      private Float d25;
 
-    public OtLevel2Match() {
+    public OtLevel2MatchShow() {
     }
 
 	
-    public OtLevel2Match(long olmId) {
+    public OtLevel2MatchShow(long olmId) {
         this.olmId = olmId;
     }
-    public OtLevel2Match(long olmId, Long otId, Short mtId, Long matchId, String comments, Float ra, Float dec, Float mag, Float distance, Float d25) {
+    public OtLevel2MatchShow(long olmId, Long otId, String ot2Name, Short mtId, Long matchId, String comments, Float ra, Float dec, Float mag, Float distance, Float d25) {
        this.olmId = olmId;
        this.otId = otId;
+       this.ot2Name = ot2Name;
        this.mtId = mtId;
        this.matchId = matchId;
        this.comments = comments;
@@ -165,8 +168,35 @@ public class OtLevel2Match  implements java.io.Serializable {
     this.d25 = d25;
   }
 
+  /**
+   * @return the matchTableName
+   */
+    @Column(name="match_table_name")
+  public String getMatchTableName() {
+    return matchTableName;
+  }
 
+  /**
+   * @param matchTableName the matchTableName to set
+   */
+  public void setMatchTableName(String matchTableName) {
+    this.matchTableName = matchTableName;
+  }
 
+  /**
+   * @return the ot2Name
+   */
+    @Column(name="ot2_name")
+  public String getOt2Name() {
+    return ot2Name;
+  }
+
+  /**
+   * @param ot2Name the ot2Name to set
+   */
+  public void setOt2Name(String ot2Name) {
+    this.ot2Name = ot2Name;
+  }
 
 }
 
