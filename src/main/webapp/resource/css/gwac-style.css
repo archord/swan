@@ -31,7 +31,10 @@ form#getOtListForm table td input{
 }
 
 .ot-query-form{
-  width:800px;
+  width:1100px;
   text-align: left;
   /*margin: auto;*/
+}
+.ot-query-form input{
+  width:100px;
 }

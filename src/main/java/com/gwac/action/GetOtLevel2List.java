@@ -57,6 +57,7 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
     int from = to - rows;
     ot2qp.setStart(from);
     ot2qp.setSize(rows);
+    checkIsHistory(ot2qp);
     log.debug(ot2qp.toString());
 
     gridModel = obDao.queryOtLevel2(ot2qp);
@@ -75,6 +76,18 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
     total = (int) Math.ceil((double) records / (double) rows);
 
     return SUCCESS;
+  }
+  
+  public void checkIsHistory(OtLevel2QueryParameter ot2qp){
+    String curUtc = CommonFunction.getCurUTCDateString();
+    System.out.println(curUtc);
+    if(ot2qp.getStartDate().isEmpty()&&ot2qp.getEndDate().isEmpty()){
+      ot2qp.setQueryHis(false);
+    }else if(ot2qp.getStartDate().equals(curUtc)&&ot2qp.getEndDate().equals(curUtc)){
+      ot2qp.setQueryHis(false);
+    }else{
+      ot2qp.setQueryHis(true);
+    }
   }
 
   /**

@@ -27,12 +27,15 @@ public class OtLevel2QueryParameter {
   /**查询结果集的大小，从start开始，查询size条记录*/
   private int start;
   private int size;
-  
+  private Short isMatch;
+  private String otName;
+    
   public String toString(){
       return "startDate=" + startDate + ", endDate=" + endDate + ", xtemp=" + xtemp + 
               ", ytemp=" + ytemp + ", planeRadius=" + planeRadius + ", ra=" + ra + 
               ", dec=" + dec + ", sphereRadius=" + sphereRadius + ", telscope=" + 
-              telscope + ", queryHis=" + queryHis + ", processType=" + processType;
+              telscope + ", queryHis=" + queryHis + ", processType=" + processType+
+              ", isMatch=" + getIsMatch() + ", otName=" + getOtName();
   }
   
   public Boolean isEmpty(){
@@ -226,5 +229,33 @@ public class OtLevel2QueryParameter {
    */
   public void setProcessType(String processType) {
     this.processType = processType;
+  }
+
+  /**
+   * @return the isMatch
+   */
+  public Short getIsMatch() {
+    return isMatch;
+  }
+
+  /**
+   * @param isMatch the isMatch to set
+   */
+  public void setIsMatch(Short isMatch) {
+    this.isMatch = isMatch;
+  }
+
+  /**
+   * @return the otName
+   */
+  public String getOtName() {
+    return otName;
+  }
+
+  /**
+   * @param otName the otName to set
+   */
+  public void setOtName(String otName) {
+    this.otName = otName;
   }
 }

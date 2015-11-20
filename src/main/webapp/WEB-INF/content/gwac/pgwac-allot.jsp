@@ -21,9 +21,38 @@
     return "<a href='#' title='点击查看OT详细' onClick='return openDialog(\"<s:property value="otDetail"/>" + "\", \"" + cellvalue + "\");'>" + cellvalue + "</a>";
   }
 
-  function openDialog(url,otName) {
+  function formatLink1(cellvalue, options, rowObject) {
+    var showVal = "";
+    if (cellvalue === false) {
+      showVal = "否";
+    } else if (cellvalue === true) {
+      showVal = "是";
+    }
+    return showVal;
+  }
+
+  function floatFormate4(cellvalue, options, rowObject) {
+    return cellvalue.toFixed(4);
+  }
+
+  function floatFormate2(cellvalue, options, rowObject) {
+    return cellvalue.toFixed(2);
+  }
+
+  function formatLinkn(cellvalue, options, rowObject) {
+    var showVal = "";
+    if (cellvalue === 0) {
+      showVal = "未匹配";
+    } else if (cellvalue === 1) {
+      showVal = "不成功";
+    } else if (cellvalue === 2) {
+      showVal = "成功";
+    }
+    return showVal;
+  }
+  function openDialog(url, otName) {
     var queryHis = $("#queryHis").val();
-    openwindow(url+"?otName=" + otName + "&queryHis=" + queryHis,
+    openwindow(url + "?otName=" + otName + "&queryHis=" + queryHis,
             '_blank', 1050, 600, 1050, 600);
     return false;
   }
@@ -48,28 +77,32 @@
   <s:form id="getOtListForm"  action="query-ot-level2" theme="simple" cssClass="yform" namespace="/">
     <table style="margin:auto; width:90%;">
       <tr style="height:20px;">
+        <td>OT名称：</td>
+        <td><sj:textfield name="ot2qp.otName" /></td>
         <td>开始日期(UTC)：</td>
         <!--value="yesterday" value="today" -->
         <td><sj:datepicker id="from" name="ot2qp.startDate" displayFormat="yy-mm-dd" label="开始日期" /></td>
         <td>结束日期(UTC)：</td>
-        <td><sj:datepicker  id="to" name="ot2qp.endDate" displayFormat="yy-mm-dd" label="结束日期" /></td>
+        <td><sj:datepicker  id="to" name="ot2qp.endDate" displayFormat="yy-mm-dd" label="结束日期" />
+          <select name="ot2qp.queryHis" id="queryHis" hidden="">
+            <option value="false">否</option>
+            <option value="true">是</option>
+          </select></td>
       </tr>
       <tr style="height:20px;">
         <td>X坐标(模板)：</td>
         <td><sj:textfield name="ot2qp.xtemp" /></td>
-        <td>Ra(度)：</td>
-        <td><sj:textfield name="ot2qp.ra" /></td>
-      </tr>
-      <tr style="height:20px;">
         <td>Y坐标(模板)：</td>
         <td><sj:textfield name="ot2qp.ytemp" /></td>
-        <td>Dec(度)：</td>
-        <td><sj:textfield name="ot2qp.dec" /></td>
+        <td>搜索半径(pix)：</td>
+        <td><sj:textfield name="ot2qp.planeRadius" /></td>
       </tr>
       <tr style="height:20px;">
-        <td>图像坐标搜索半径(pix)：</td>
-        <td><sj:textfield name="ot2qp.planeRadius" /></td>
-        <td>天球坐标搜索半径(度)：</td>
+        <td>Ra(度)：</td>
+        <td><sj:textfield name="ot2qp.ra" /></td>
+        <td>Dec(度)：</td>
+        <td><sj:textfield name="ot2qp.dec" /></td>
+        <td>搜索半径(度)：</td>
         <td><sj:textfield name="ot2qp.sphereRadius" /></td>
       </tr>
       <tr style="height:20px;">
@@ -79,10 +112,13 @@
             <option value="1">星表匹配</option>
             <option value="8">图像相减</option>
           </select></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr style="height:20px;">
+        <td>匹配成功：</td>
+        <td><select name="ot2qp.isMatch" >
+            <option value="">All</option>
+            <option value="1">不成功</option>
+            <option value="0">未匹配</option>
+            <option value="2">成功</option>
+          </select></td>
         <td>CCD：</td>
         <td><select name="ot2qp.telscope" >
             <option value="all">All</option>
@@ -100,13 +136,8 @@
             <option value="12">M12</option>
           </select>
         </td>
-        <td>是否查询历史表：</td>
-        <td><select name="ot2qp.queryHis" id="queryHis">
-            <option value="false">否</option>
-            <option value="true">是</option>
-          </select></td>
       </tr>
-      <tr style="height:20px;"><td colspan="4" style="text-align: center;">
+      <tr style="height:20px;"><td colspan="6" style="text-align: center;">
           <sj:a
             button="true"
             onClickTopics="reloadOtGrid"
@@ -136,27 +167,35 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   rowList="10,15,20" 
   rowNum="15" 
   rownumbers="true"
-  width="800"
+  width="1100"
   viewrecords="true"
   reloadTopics="reloadOtGrid"
   formIds="getOtListForm">
-  <sjg:gridColumn name="name"   index="name"	  title="OT名" width="140"  formatter="formatLink"
+  <sjg:gridColumn name="name"   index="name"	  title="OT名" width="150"  formatter="formatLink"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="ra"    index="ra"	  title="RA" width="80" 
+  <sjg:gridColumn name="ra"    index="ra"	  title="RA" width="80" formatter="floatFormate4"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="dec"    index="dec"	  title="DEC" width="80" 
+  <sjg:gridColumn name="dec"    index="dec"	  title="DEC" width="80" formatter="floatFormate4"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="X(模板)" width="80" 
+  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="X(模板)" width="80" formatter="floatFormate2"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="Y(模板)" width="80" 
+  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="Y(模板)" width="80" formatter="floatFormate2"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="250" 
+  <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="230" 
                   sortable="false" align="center"/>
   <sjg:gridColumn name="total"    index="total"	  title="记录总数" width="70" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="isMatch"    index="isMatch"	  title="是否匹配" width="70" 
+  <sjg:gridColumn name="rc3Match"    index="rc3Match"	  title="RC3" width="50"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="firstNMark"    index="firstNMark"	  title="是否前N分钟" width="70" 
+  <sjg:gridColumn name="minorPlanetMatch"    index="minorPlanetMatch"	  title="小行星" width="70"
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="cvsMatch"    index="cvsMatch"	  title="CVS" width="50"
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="otherMatch"    index="otherMatch"	  title="Other" width="70"
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="ot2HisMatch"    index="ot2HisMatch"	  title="OT2" width="50"
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="firstNMark"    index="firstNMark"	  title="前N分钟" width="70" formatter="formatLink1"
                   sortable="false" align="center"/>
   <sjg:gridColumn name="foCount"    index="foCount"	  title="后随次数" width="70" 
                   sortable="false" align="center"/>

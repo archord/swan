@@ -237,7 +237,10 @@
   border: 1px solid #fdd;
   padding: 2px;
   background-color: #fee;
-  opacity: 0.80
+  opacity: 0.80;
+  font-size: 14px;
+  height: 30px;
+  color: #000;
 }
 
 /*OT record*/

@@ -94,6 +94,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   public void searchOT2() {
 
     List<OtLevel2> ot2s = ot2Dao.getUnMatched();
+    log.debug("ot2 size: "+ ot2s.size());
     for (OtLevel2 ot2 : ot2s) {
 
       Boolean flag = false;
@@ -117,6 +118,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("cvsInfo: " + cvsInfo);
         flag = true;
       }
+      if(tcvsm.size()>0){
+        ot2.setCvsMatch((short)tcvsm.size());
+        ot2Dao.updateCvsMatch(ot2);
+      }
 
       Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
       for (Map.Entry<MergedOther, Double> entry : tmom.entrySet()) {
@@ -138,6 +143,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
         log.debug("moInfo: " + moInfo);
         flag = true;
+      }
+      if(tmom.size()>0){
+        ot2.setOtherMatch((short)tmom.size());
+        ot2Dao.updateOtherMatch(ot2);
       }
 
       Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
@@ -161,6 +170,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("rc3Info: " + moInfo);
         flag = true;
       }
+      if(trc3m.size()>0){
+        ot2.setRc3Match((short)trc3m.size());
+        ot2Dao.updateRc3Match(ot2);
+      }
 
       Map<MinorPlanet, Double> tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
       for (Map.Entry<MinorPlanet, Double> entry : tmpm.entrySet()) {
@@ -183,6 +196,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
+      if(tmpm.size()>0){
+        ot2.setMinorPlanetMatch((short)tmpm.size());
+        ot2Dao.updateMinorPlanetMatch(ot2);
+      }
 
       Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
       for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
@@ -200,6 +217,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2m.setDistance(distance.floatValue());
         ot2mDao.save(ot2m);
         flag = true;
+      }
+      if(tOT2Hism.size()>0){
+        ot2.setOt2HisMatch((short)tOT2Hism.size());
+        ot2Dao.updateOt2HisMatch(ot2);
       }
 
       if (flag) {

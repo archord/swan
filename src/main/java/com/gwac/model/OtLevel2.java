@@ -47,6 +47,11 @@ public class OtLevel2  implements java.io.Serializable {
      private Character dataProduceMethod;
      private Short foCount;
      private Float mag;
+     private Short cvsMatch;
+     private Short rc3Match;
+     private Short minorPlanetMatch;
+     private Short ot2HisMatch;
+     private Short otherMatch;
 
     public OtLevel2() {
     }
@@ -336,8 +341,80 @@ public class OtLevel2  implements java.io.Serializable {
     this.mag = mag;
   }
 
+  /**
+   * @return the cvsMatch
+   */
+    @Column(name="cvs_match")
+  public Short getCvsMatch() {
+    return cvsMatch;
+  }
 
+  /**
+   * @param cvsMatch the cvsMatch to set
+   */
+  public void setCvsMatch(Short cvsMatch) {
+    this.cvsMatch = cvsMatch;
+  }
 
+  /**
+   * @return the rc3Match
+   */
+    @Column(name="rc3_match")
+  public Short getRc3Match() {
+    return rc3Match;
+  }
+
+  /**
+   * @param rc3Match the rc3Match to set
+   */
+  public void setRc3Match(Short rc3Match) {
+    this.rc3Match = rc3Match;
+  }
+
+  /**
+   * @return the minorPlanetMatch
+   */
+    @Column(name="minor_planet_match")
+  public Short getMinorPlanetMatch() {
+    return minorPlanetMatch;
+  }
+
+  /**
+   * @param minorPlanetMatch the minorPlanetMatch to set
+   */
+  public void setMinorPlanetMatch(Short minorPlanetMatch) {
+    this.minorPlanetMatch = minorPlanetMatch;
+  }
+
+  /**
+   * @return the ot2HisMatch
+   */
+    @Column(name="ot2_his_match")
+  public Short getOt2HisMatch() {
+    return ot2HisMatch;
+  }
+
+  /**
+   * @param ot2HisMatch the ot2HisMatch to set
+   */
+  public void setOt2HisMatch(Short ot2HisMatch) {
+    this.ot2HisMatch = ot2HisMatch;
+  }
+
+  /**
+   * @return the otherMatch
+   */
+    @Column(name="other_match")
+  public Short getOtherMatch() {
+    return otherMatch;
+  }
+
+  /**
+   * @param otherMatch the otherMatch to set
+   */
+  public void setOtherMatch(Short otherMatch) {
+    this.otherMatch = otherMatch;
+  }
 
 }
 

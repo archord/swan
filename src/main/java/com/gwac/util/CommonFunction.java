@@ -87,8 +87,17 @@ public class CommonFunction {
     return getDateString(new Date());
   }
 
+  public static String getCurUTCDateString() {
+    return getDateString2(getUTCDate(new Date()));
+  }
+
   public static String getDateString(Date date) {
     SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+    return formatter.format(date);
+  }
+
+  public static String getDateString2(Date date) {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     return formatter.format(date);
   }
 

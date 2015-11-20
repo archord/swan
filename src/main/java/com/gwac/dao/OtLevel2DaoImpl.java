@@ -284,6 +284,12 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       sql += " and abs(ra-" + ot2qp.getRa() + ")/" + cosd + "<" + ot2qp.getSphereRadius();
       sql += " and abs(dec-" + ot2qp.getDec() + ")<" + ot2qp.getSphereRadius();
     }
+    if (null!=ot2qp.getIsMatch()) {
+      sql += " and is_match=" + ot2qp.getIsMatch() + " ";
+    }
+    if (!ot2qp.getOtName().isEmpty()) {
+      sql += " and ot_name'" + ot2qp.getOtName() + "' ";
+    }
 
     sqlprefix1 += sql;
     sqlprefix2 += sql;
@@ -360,5 +366,40 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     } else {
       return null;
     }
+  }
+
+  @Override
+  public void updateCvsMatch(OtLevel2 ot2) {
+    String sql = "update ot_level2 set cvs_match=" + ot2.getCvsMatch()+ " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateRc3Match(OtLevel2 ot2) {
+    String sql = "update ot_level2 set rc3_match=" + ot2.getRc3Match()+ " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateMinorPlanetMatch(OtLevel2 ot2) {
+    String sql = "update ot_level2 set minor_planet_match=" + ot2.getMinorPlanetMatch()+ " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateOt2HisMatch(OtLevel2 ot2) {
+    String sql = "update ot_level2 set ot2_his_match=" + ot2.getOt2HisMatch()+ " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateOtherMatch(OtLevel2 ot2) {
+    String sql = "update ot_level2 set other_match=" + ot2.getOtherMatch()+ " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
   }
 }
