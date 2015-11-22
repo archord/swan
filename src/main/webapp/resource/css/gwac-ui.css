@@ -268,10 +268,10 @@
 
 }
 #ot2-record-table td, table.dataTable thead th{ 
- line-height: 18px;
- padding-top: 2px;
- padding-bottom: 2px;
- white-space: nowrap;
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  white-space: nowrap;
 }
 .ot2-load-button{
   float:left;
@@ -316,8 +316,88 @@
 
 }
 #ot2-match-table td, table.dataTable thead th{ 
- line-height: 18px;
- padding-top: 2px;
- padding-bottom: 2px;
- white-space: nowrap;
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  white-space: nowrap;
+}
+
+/*#pgwac-allot2*/
+#ot-list{
+  font-size: 14px;
+}
+.ot-list-top, .ot-list-body{
+  /*background-color: #1bc5a3;*/
+  font-size: 14px;
+  margin: 5px 15px;
+  padding-top: 3px;
+  text-align: center;
+}
+
+.ot-list-top{
+  padding-bottom: 3px;
+  border-bottom: 2px dashed #1abc9c;
+}
+
+.ot-list-top h4{
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.ot-list-top input[type="button"]{
+  width: 100px;
+  height: 26px;
+  margin: 0 0;
+  padding: 2px 0;
+}
+
+#ot-list-table td{ 
+  line-height: 24px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  white-space: nowrap;
+}
+
+.ot-list-table label{
+  display: inline;
+  font-size: 14px;
+  line-height: 24px;
+  text-align: right;
+}
+.ot-list-table input{
+  height:22px;
+  width: 80px;
+}
+#ot-list-table_filter input{
+  height:30px;
+  width: 150px;
+  border-color: rgb(189, 195, 199);
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 2px;
+}
+
+#ot-list-query th, td{
+  text-align: center;
+}
+#ot-list-query{
+  /*overflow: hidden;*/
+  min-height: 50px;
+  /*border: 2px dashed #f0f;*/
+  min-width: 780px;
+}
+#ot-list-query input{
+  display: inline;
+}
+
+#ot-list-query .select{
+  width: 120px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+}
+
+#ot-list-query a{
+  padding: 3px 39px 3px 15px;
 }

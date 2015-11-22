@@ -6,6 +6,7 @@
 package com.gwac.model;
 
 import com.gwac.util.CommonFunction;
+import java.util.List;
 
 /**
  *
@@ -21,26 +22,29 @@ public class OtLevel2QueryParameter {
   private float ra;
   private float dec;
   private float sphereRadius;
-  private String telscope;
+  private List<String> telscope;
   private Boolean queryHis;
-  private String processType;
+  private List<String> processType;
   /**查询结果集的大小，从start开始，查询size条记录*/
   private int start;
   private int size;
-  private Short isMatch;
+  private List<String> isMatch;
   private String otName;
+  private List<String> matchType;
+  private List<String> otType;
     
   public String toString(){
       return "startDate=" + startDate + ", endDate=" + endDate + ", xtemp=" + xtemp + 
               ", ytemp=" + ytemp + ", planeRadius=" + planeRadius + ", ra=" + ra + 
               ", dec=" + dec + ", sphereRadius=" + sphereRadius + ", telscope=" + 
               telscope + ", queryHis=" + queryHis + ", processType=" + processType+
-              ", isMatch=" + getIsMatch() + ", otName=" + getOtName();
+              ", isMatch=" + isMatch + ", otName=" + isMatch +
+              ", matchType=" + matchType + ", otType=" + otType;
   }
   
   public Boolean isEmpty(){
     
-    if (startDate.isEmpty() && endDate.isEmpty() && telscope.equalsIgnoreCase("all")
+    if (startDate.isEmpty() && endDate.isEmpty() && telscope.isEmpty()
             && Math.abs(planeRadius) < CommonFunction.MINFLOAT
             && Math.abs(sphereRadius) < CommonFunction.MINFLOAT) {
       return true;
@@ -164,14 +168,14 @@ public class OtLevel2QueryParameter {
   /**
    * @return the telscope
    */
-  public String getTelscope() {
+  public List<String> getTelscope() {
     return telscope;
   }
 
   /**
    * @param telscope the telscope to set
    */
-  public void setTelscope(String telscope) {
+  public void setTelscope(List<String> telscope) {
     this.telscope = telscope;
   }
 
@@ -220,28 +224,28 @@ public class OtLevel2QueryParameter {
   /**
    * @return the processType
    */
-  public String getProcessType() {
+  public List<String> getProcessType() {
     return processType;
   }
 
   /**
    * @param processType the processType to set
    */
-  public void setProcessType(String processType) {
+  public void setProcessType(List<String> processType) {
     this.processType = processType;
   }
 
   /**
    * @return the isMatch
    */
-  public Short getIsMatch() {
+  public List<String> getIsMatch() {
     return isMatch;
   }
 
   /**
    * @param isMatch the isMatch to set
    */
-  public void setIsMatch(Short isMatch) {
+  public void setIsMatch(List<String> isMatch) {
     this.isMatch = isMatch;
   }
 
@@ -257,5 +261,33 @@ public class OtLevel2QueryParameter {
    */
   public void setOtName(String otName) {
     this.otName = otName;
+  }
+
+  /**
+   * @return the matchType
+   */
+  public List<String> getMatchType() {
+    return matchType;
+  }
+
+  /**
+   * @param matchType the matchType to set
+   */
+  public void setMatchType(List<String> matchType) {
+    this.matchType = matchType;
+  }
+
+  /**
+   * @return the otType
+   */
+  public List<String> getOtType() {
+    return otType;
+  }
+
+  /**
+   * @param otType the otType to set
+   */
+  public void setOtType(List<String> otType) {
+    this.otType = otType;
   }
 }

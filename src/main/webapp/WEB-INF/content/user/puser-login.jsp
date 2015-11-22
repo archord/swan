@@ -42,18 +42,18 @@
           <div class="login-form">
             <div style="color:red"><s:fielderror/></div>
             <form action="login.action" id="loginAction" method="post">
-            <div class="form-group">
-              <input type="text" class="form-control login-field" value="" placeholder="请输入用户名" id="loginName" name="loginName" />
-              <label class="login-field-icon fui-user" for="login-name"></label>
-            </div>
+              <div class="form-group">
+                <input type="text" class="form-control login-field" value="" placeholder="请输入用户名" id="loginName" name="loginName" />
+                <label class="login-field-icon fui-user" for="login-name"></label>
+              </div>
 
-            <div class="form-group">
-              <input type="password" class="form-control login-field" value="" placeholder="密码" id="loginPass" name="loginPass" />
-              <label class="login-field-icon fui-lock" for="login-pass"></label>
-            </div>
+              <div class="form-group">
+                <input type="password" class="form-control login-field" value="" placeholder="密码" id="loginPass" name="loginPass" />
+                <label class="login-field-icon fui-lock" for="login-pass"></label>
+              </div>
 
               <button type="submit" class="btn btn-primary btn-lg btn-block" >登录</button>
-            <a class="login-link" href="#">忘记密码？</a>
+              <a class="login-link" href="#">忘记密码？</a>
             </form>
           </div>
         </div>

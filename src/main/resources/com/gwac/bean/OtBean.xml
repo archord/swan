@@ -19,6 +19,10 @@
     <property name="otorDao" ref="otORDao" />
   </bean>
   
+  <bean class="com.gwac.action.GetOtLevel2List2"  scope="prototype">
+    <property name="obDao" ref="otbDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetOtLevel2List"  scope="prototype">
     <property name="obDao" ref="otbDao" />
   </bean>

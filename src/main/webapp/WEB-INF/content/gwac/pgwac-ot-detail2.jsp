@@ -6,7 +6,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex">
-    <title>GWAC信息展示平台 - 登录页面</title>
+    <title>OT-<s:property value="otName"/>详细页面</title>
     <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="pragma" content="no-cache" />
@@ -21,7 +21,7 @@
     <link href="${pageContext.request.contextPath}/resource/flatui/css/flat-ui.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/flatui/css/demo.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resource/css/jquery.dataTables.min.css" rel="stylesheet">
+    <!--<link href="${pageContext.request.contextPath}/resource/css/jquery.dataTables.min.css" rel="stylesheet">-->
     <!--<link href="${pageContext.request.contextPath}/resource/css/datatables.css" rel="stylesheet">-->
     <link href="${pageContext.request.contextPath}/resource/css/gwac-ui.css" rel="stylesheet">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->

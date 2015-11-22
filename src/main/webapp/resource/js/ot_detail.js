@@ -71,7 +71,15 @@ $(function() {
                 '<option value="50">50</option>' +
                 '<option value="100">100</option>' +
                 '<option value="-1">All</option>' +
-                '</select> 条'
+                '</select> 条',
+        "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条",
+        "search": "模糊查询:",
+        "paginate": {
+          "first": "首页",
+          "last": "尾页",
+          "next": "下一页",
+          "previous": "上一页"
+        }
       }
       ,
       dom: '<"ot2-load-button"B><"ot2-record-table-top"lf>tr<"ot2-record-table-bottom"ip>',
@@ -134,7 +142,15 @@ $(function() {
                 '<option value="50">50</option>' +
                 '<option value="100">100</option>' +
                 '<option value="-1">All</option>' +
-                '</select> 条'
+                '</select> 条',
+        "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条",
+        "search": "模糊查询:",
+        "paginate": {
+          "first": "首页",
+          "last": "尾页",
+          "next": "下一页",
+          "previous": "上一页"
+        }
       }
       ,
       dom: '<"ot2-load-button"B><"ot2-record-table-top"lf>tr<"ot2-record-table-bottom"ip>',

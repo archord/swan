@@ -112,16 +112,29 @@
             <option value="1">星表匹配</option>
             <option value="8">图像相减</option>
           </select></td>
-        <td>匹配成功：</td>
+        <td>匹配状态：</td>
         <td><select name="ot2qp.isMatch" >
             <option value="">All</option>
             <option value="1">不成功</option>
             <option value="0">未匹配</option>
             <option value="2">成功</option>
           </select></td>
+        <td>匹配类别：</td>
+        <td>
+          <select name="ot2qp.matchType">
+            <option value="">All</option>
+            <option value="cvs_match">CVS</option>
+            <option value="rc3_match">RC3</option>
+            <option value="minor_planet_match">小行星</option>
+            <option value="ot2_his_match">OT2历史</option>
+            <option value="other_match">其他类型</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
         <td>CCD：</td>
         <td><select name="ot2qp.telscope" >
-            <option value="all">All</option>
+            <option value="">All</option>
             <option value="1">M01</option>
             <option value="2">M02</option>
             <option value="3">M03</option>
@@ -136,6 +149,23 @@
             <option value="12">M12</option>
           </select>
         </td>
+        <td>分类标识：</td>
+        <td>
+          <select name="ot2qp.otType">
+            <option value="">All</option>
+            <option value="1">假OT</option>
+            <option value="2">小行星</option>
+            <option value="3">移动目标</option>
+            <option value="4">鬼像</option>
+            <option value="5">坏像素</option>
+            <option value="6">坏像列</option>
+            <option value="7">热像素</option>
+            <option value="8">OT候选体</option>
+            <option value="9">超新星</option>
+            <option value="10">GRB</option>
+            <option value="11">耀发候选体</option>
+          </select></td>
+          <td></td><td></td>
       </tr>
       <tr style="height:20px;"><td colspan="6" style="text-align: center;">
           <sj:a
@@ -177,9 +207,9 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="dec"    index="dec"	  title="DEC" width="80" formatter="floatFormate4"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="X(模板)" width="80" formatter="floatFormate2"
+  <sjg:gridColumn name="xtemp"    index="xtemp"	  title="模板X" width="80" formatter="floatFormate2"
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="Y(模板)" width="80" formatter="floatFormate2"
+  <sjg:gridColumn name="ytemp"    index="ytemp"	  title="模板Y" width="80" formatter="floatFormate2"
                   sortable="false" align="center"/>
   <sjg:gridColumn name="identify"    index="identify"	  title="首帧标识字符串" width="230" 
                   sortable="false" align="center"/>
@@ -199,7 +229,7 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="foCount"    index="foCount"	  title="后随次数" width="70" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="isRecognize"    index="isRecognize"	  title="识别分类" width="70" 
+  <sjg:gridColumn name="isRecognize"    index="isRecognize"	  title="分类标识" width="70" 
                   sortable="false" align="center"/>
 </sjg:grid>
 
