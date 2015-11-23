@@ -4,7 +4,7 @@
 
     <bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL">
-            <value>failover:(tcp://190.168.1.25:61616)</value>
+            <value>failover:(tcp://190.168.1.27:61616)</value>
         </property>
     </bean> 
 

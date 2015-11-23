@@ -26,6 +26,14 @@ $(function() {
               }, "json");
     }
   });
+  $("#showOt2Fits").click(function() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var otName = $("#otName").val();
+    var queryHis = $("#queryHis").val();
+    var url = gwacRootURL + "/show-fits-list.action?otName=" + otName + "&queryHis=" + queryHis;
+    openwindow(url, '_blank', 1050, 600, 1050, 600);
+    return false;
+  });
 
   $(window).resize(function() {
     cutImgShow();
@@ -34,9 +42,10 @@ $(function() {
   });
 
   function loadOT2Match() {
+    var gwacRootURL = $("#gwacRootURL").val();
     var otName = $("#otName").val();
     var queryHis = $("#queryHis").val();
-    var queryUrl = "/gwac/get-ot-match-list.action?otName=" + otName + "&queryHis=" + queryHis;
+    var queryUrl = gwacRootURL + "/get-ot-match-list.action?otName=" + otName + "&queryHis=" + queryHis;
     $('#ot2-match-table').DataTable({
       "deferRender": true,
       "processing": true,
@@ -93,9 +102,10 @@ $(function() {
   }
 
   function loadOT2Record() {
+    var gwacRootURL = $("#gwacRootURL").val();
     var otName = $("#otName").val();
     var queryHis = $("#queryHis").val();
-    var queryUrl = "/gwac/ot-observe-record.action?otName=" + otName + "&queryHis=" + queryHis;
+    var queryUrl = gwacRootURL+"/ot-observe-record.action?otName=" + otName + "&queryHis=" + queryHis;
 //    var queryUrl = "/gwac/gwac/data/jquery-datatable-test.txt";
     $('#ot2-record-table').DataTable({
       "deferRender": true,
@@ -300,12 +310,6 @@ $(function() {
     return "<a href='" + searchUrl + "' title='点击在simbad搜寻OT对应坐标' target='_blank'>" + cellvalue + "</a>";
   }
 
-
-  function openDialog() {
-    openwindow("show-fits-list.action?otName=&queryHis=",
-            '_blank', 1050, 600, 1050, 600);
-    return false;
-  }
   function openwindow(url, name, width, height, iWidth, iHeight)
   {
     var iTop = (window.screen.availHeight - 30 - iHeight) / 2; //获得窗口的垂直位置;

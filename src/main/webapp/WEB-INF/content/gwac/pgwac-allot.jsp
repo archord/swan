@@ -17,8 +17,12 @@
 <s:url var="otDetail" action="get-ot-detail" namespace="/"/>
 
 <script type="text/javascript">
+
   function formatLink(cellvalue, options, rowObject) {
-    return "<a href='#' title='点击查看OT详细' onClick='return openDialog(\"<s:property value="otDetail"/>" + "\", \"" + cellvalue + "\");'>" + cellvalue + "</a>";
+    var queryHis = $("#queryHis").val();
+    var baseUrl =  "<s:property value="otDetail"/>?queryHis=" + queryHis;
+    var url = baseUrl + "&otName=" + cellvalue;
+    return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + cellvalue + "</a>";
   }
 
   function formatLink1(cellvalue, options, rowObject) {
@@ -165,7 +169,7 @@
             <option value="10">GRB</option>
             <option value="11">耀发候选体</option>
           </select></td>
-          <td></td><td></td>
+        <td></td><td></td>
       </tr>
       <tr style="height:20px;"><td colspan="6" style="text-align: center;">
           <sj:a

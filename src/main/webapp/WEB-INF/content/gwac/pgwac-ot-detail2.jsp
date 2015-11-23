@@ -128,7 +128,7 @@
           <div id="skyCoordinate">
             <span>OT坐标(赤经,赤纬)：(<s:property value="siderealTime"/>,&nbsp;<s:property value="pitchAngle"/>)&nbsp;&nbsp;&nbsp;
               (<s:property value="ra"/>,&nbsp;<s:property value="dec"/>)&nbsp;&nbsp;&nbsp;</span>
-            <span style="display:inline-block"><a href='#' title='点击查看fits切图' onclick="return openDialog();">点击查看fits切图</a></span>
+            <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图'>点击查看fits切图</a></span>
           </div>
           <div id="ot-curves">
             <div id="ot-curve-show">

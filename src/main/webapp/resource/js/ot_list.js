@@ -1,5 +1,7 @@
 
 $(function() {
+  var gwacRootURL = $("#gwacRootURL").val();
+  var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
   loadQueryParmeter();
   var ot2ListTable = loadOT2List();
   var ot2QueryInterval;
@@ -131,7 +133,8 @@ $(function() {
   }
 
   function formateOtName(data, type, full, meta) {
-    return "<a href='#' title='点击查看OT详细' onClick='return openDialog(\"" + data + "\");'>" + data + "</a>";
+    var url = baseUrl + data;
+    return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + data + "</a>";
   }
 });
 

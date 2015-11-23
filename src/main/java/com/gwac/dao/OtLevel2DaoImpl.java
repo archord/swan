@@ -350,8 +350,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   public int countOtLevel2(OtLevel2QueryParameter ot2qp) {
 
     double cosd = Math.cos(ot2qp.getDec() * 0.0174532925);
-    String sqlprefix1 = "select * from ot_level2 where 1=1 ";
-    String sqlprefix2 = "select * from ot_level2_his where 1=1 ";
+    String sqlprefix1 = "select count(*) from ot_level2 where 1=1 ";
+    String sqlprefix2 = "select count(*) from ot_level2_his where 1=1 ";
     StringBuilder sql = new StringBuilder("");
 
     ot2qp.removeEmpty();
