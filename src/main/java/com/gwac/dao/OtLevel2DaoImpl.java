@@ -24,15 +24,15 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
-  
+
   @Override
-  public List<OtLevel2> searchOT2His(OtLevel2 ot2, float searchRadius, float mag){
-    
+  public List<OtLevel2> searchOT2His(OtLevel2 ot2, float searchRadius, float mag) {
+
     SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();
-      String sql = "select * from ot_level2_his where ot_id!=" + ot2.getOtId()+" and ";
+      String sql = "select * from ot_level2_his where ot_id!=" + ot2.getOtId() + " and ";
       if (tflag == 1) {
         sql += "ra between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
         sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
@@ -259,45 +259,76 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   @Override
   public List<OtLevel2> queryOtLevel2(OtLevel2QueryParameter ot2qp) {
 
+    double cosd = Math.cos(ot2qp.getDec() * 0.0174532925);
     String sqlprefix1 = "select * from ot_level2 where 1=1 ";
     String sqlprefix2 = "select * from ot_level2_his where 1=1 ";
-    String sql = "";
+    StringBuilder sql = new StringBuilder("");
 
-    double cosd = Math.cos(ot2qp.getDec() * 0.0174532925);
+    ot2qp.removeEmpty();
+    log.debug(ot2qp.toString());
 
-    if (ot2qp.getProcessType()!=null&&!ot2qp.getProcessType().get(0).isEmpty()) {
-      sql += " and data_produce_method='" + ot2qp.getProcessType().get(0) + "' ";
+    if (ot2qp.getOtName() != null && !ot2qp.getOtName().isEmpty()) {
+      sql.append(" and ot_name='").append(ot2qp.getOtName()).append("' ");
     }
-    if (ot2qp.getStartDate()!=null&&!ot2qp.getStartDate().isEmpty()) {
-      sql += " and found_time_utc>'" + ot2qp.getStartDate() + " 00:00:00' ";
+    if (ot2qp.getStartDate() != null && !ot2qp.getStartDate().isEmpty()) {
+      sql.append(" and found_time_utc>'").append(ot2qp.getStartDate()).append(" 00:00:00' ");
     }
-    if (ot2qp.getEndDate()!=null&&!ot2qp.getEndDate().isEmpty()) {
-      sql += " and found_time_utc<'" + ot2qp.getEndDate() + " 23:59:59' ";
-    }
-    if (ot2qp.getTelscope()!=null&&!ot2qp.getTelscope().get(0).isEmpty()) {
-      sql += " and dpm_id=" + ot2qp.getTelscope().get(0) + " ";
+    if (ot2qp.getEndDate() != null && !ot2qp.getEndDate().isEmpty()) {
+      sql.append(" and found_time_utc<'").append(ot2qp.getEndDate()).append(" 23:59:59' ");
     }
     if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
-      sql += " and abs(xtemp-" + ot2qp.getXtemp() + ")<" + ot2qp.getPlaneRadius();
-      sql += " and abs(ytemp-" + ot2qp.getYtemp() + ")<" + ot2qp.getPlaneRadius();
+      sql.append(" and abs(xtemp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(ytemp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
-      sql += " and abs(ra-" + ot2qp.getRa() + ")/" + cosd + "<" + ot2qp.getSphereRadius();
-      sql += " and abs(dec-" + ot2qp.getDec() + ")<" + ot2qp.getSphereRadius();
+      sql.append(" and abs(ra-").append(ot2qp.getRa()).append(")/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
+      sql.append(" and abs(dec-").append(ot2qp.getDec()).append(")<").append(ot2qp.getSphereRadius()).append(" ");
     }
-    if (ot2qp.getIsMatch()!=null&&!ot2qp.getIsMatch().get(0).isEmpty()) {
-      sql += " and is_match=" + ot2qp.getIsMatch().get(0) + " ";
+
+    if (ot2qp.getProcessType() != null && !ot2qp.getProcessType().isEmpty()) {
+      sql.append(" and data_produce_method in (");
+      for (String tstr : ot2qp.getProcessType()) {
+        sql.append("'");
+        sql.append(tstr);
+        sql.append("',");
+      }
+      sql.append(") ");
     }
-    if (ot2qp.getOtName()!=null&&!ot2qp.getOtName().isEmpty()) {
-      sql += " and ot_name='" + ot2qp.getOtName() + "' ";
+    if (ot2qp.getTelscope() != null && !ot2qp.getTelscope().isEmpty()) {
+      sql.append(" and dpm_id in (");
+      for (String tstr : ot2qp.getTelscope()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
     }
-    if (ot2qp.getOtType()!=null&&!ot2qp.getOtType().get(0).isEmpty()) {
-      sql += " and ot_type=" + ot2qp.getOtType().get(0) + " ";
+    if (ot2qp.getIsMatch() != null && !ot2qp.getIsMatch().isEmpty()) {
+      sql.append(" and is_match in (");
+      for (String tstr : ot2qp.getIsMatch()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
     }
-    if (ot2qp.getMatchType()!=null&&!ot2qp.getMatchType().get(0).isEmpty()) {
-      sql += " and " + ot2qp.getMatchType().get(0) + ">0 ";
+    if (ot2qp.getOtType() != null && !ot2qp.getOtType().isEmpty()) {
+      sql.append(" and ot_type in (");
+      for (String tstr : ot2qp.getOtType()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
     }
-    sqlprefix1 += sql;
-    sqlprefix2 += sql;
+    if (ot2qp.getMatchType() != null && !ot2qp.getMatchType().isEmpty()) {
+      sql.append(" and (");
+      for (String tstr : ot2qp.getMatchType()) {
+        sql.append(tstr);
+        sql.append(">0 or ");
+      }
+      sql.append(") ");
+    }
+    String tstr = sql.toString().replace(",)", ")");
+    tstr = tstr.replace("or )", ")");
+    sqlprefix1 += tstr;
+    sqlprefix2 += tstr;
 
     String unionSql = "";
     if (ot2qp.getQueryHis()) {
@@ -305,56 +336,90 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     } else {
       unionSql = sqlprefix1 + " order by found_time_utc desc";
     }
+    log.debug(unionSql);
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
-    q.setFirstResult(ot2qp.getStart());
-    q.setMaxResults(ot2qp.getSize());
+    if (ot2qp.getSize() != 0) {
+      q.setFirstResult(ot2qp.getStart());
+      q.setMaxResults(ot2qp.getSize());
+    }
     return q.list();
   }
 
   @Override
   public int countOtLevel2(OtLevel2QueryParameter ot2qp) {
 
-    String sqlprefix1 = "select count(*) from ot_level2 where 1=1 ";
-    String sqlprefix2 = "select count(*) from ot_level2_his where 1=1 ";
-    String sql = "";
-
     double cosd = Math.cos(ot2qp.getDec() * 0.0174532925);
+    String sqlprefix1 = "select * from ot_level2 where 1=1 ";
+    String sqlprefix2 = "select * from ot_level2_his where 1=1 ";
+    StringBuilder sql = new StringBuilder("");
 
-    if (ot2qp.getProcessType()!=null&&!ot2qp.getProcessType().get(0).isEmpty()) {
-      sql += " and data_produce_method='" + ot2qp.getProcessType().get(0) + "' ";
+    ot2qp.removeEmpty();
+    log.debug(ot2qp.toString());
+
+    if (ot2qp.getOtName() != null && !ot2qp.getOtName().isEmpty()) {
+      sql.append(" and ot_name='").append(ot2qp.getOtName()).append("' ");
     }
-    if (!ot2qp.getStartDate().isEmpty()) {
-      sql += " and found_time_utc>'" + ot2qp.getStartDate() + " 00:00:00' ";
+    if (ot2qp.getStartDate() != null && !ot2qp.getStartDate().isEmpty()) {
+      sql.append(" and found_time_utc>'").append(ot2qp.getStartDate()).append(" 00:00:00' ");
     }
-    if (!ot2qp.getEndDate().isEmpty()) {
-      sql += " and found_time_utc<'" + ot2qp.getEndDate() + " 23:59:59' ";
-    }
-    if (ot2qp.getTelscope()!=null&&!ot2qp.getTelscope().get(0).isEmpty()) {
-      sql += " and dpm_id=" + ot2qp.getTelscope().get(0) + " ";
+    if (ot2qp.getEndDate() != null && !ot2qp.getEndDate().isEmpty()) {
+      sql.append(" and found_time_utc<'").append(ot2qp.getEndDate()).append(" 23:59:59' ");
     }
     if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
-      sql += " and abs(xtemp-" + ot2qp.getXtemp() + ")<" + ot2qp.getPlaneRadius();
-      sql += " and abs(ytemp-" + ot2qp.getYtemp() + ")<" + ot2qp.getPlaneRadius();
+      sql.append(" and abs(xtemp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(ytemp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
-      sql += " and abs(ra-" + ot2qp.getRa() + ")/" + cosd + "<" + ot2qp.getSphereRadius();
-      sql += " and abs(dec-" + ot2qp.getDec() + ")<" + ot2qp.getSphereRadius();
-    }
-    if (ot2qp.getIsMatch()!=null&&!ot2qp.getIsMatch().get(0).isEmpty()) {
-      sql += " and is_match=" + ot2qp.getIsMatch().get(0) + " ";
-    }
-    if (!ot2qp.getOtName().isEmpty()) {
-      sql += " and ot_name='" + ot2qp.getOtName() + "' ";
-    }
-    if (ot2qp.getOtType()!=null&&!ot2qp.getOtType().get(0).isEmpty()) {
-      sql += " and ot_type=" + ot2qp.getOtType().get(0) + " ";
-    }
-    if (ot2qp.getMatchType()!=null&&!ot2qp.getMatchType().get(0).isEmpty()) {
-      sql += " and " + ot2qp.getMatchType().get(0) + ">0 ";
+      sql.append(" and abs(ra-").append(ot2qp.getRa()).append(")/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
+      sql.append(" and abs(dec-").append(ot2qp.getDec()).append(")<").append(ot2qp.getSphereRadius()).append(" ");
     }
 
-    sqlprefix1 += sql;
-    sqlprefix2 += sql;
+    if (ot2qp.getProcessType() != null && !ot2qp.getProcessType().isEmpty()) {
+      sql.append(" and data_produce_method in (");
+      for (String tstr : ot2qp.getProcessType()) {
+        sql.append("'");
+        sql.append(tstr);
+        sql.append("',");
+      }
+      sql.append(") ");
+    }
+    if (ot2qp.getTelscope() != null && !ot2qp.getTelscope().isEmpty()) {
+      sql.append(" and dpm_id in (");
+      for (String tstr : ot2qp.getTelscope()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
+    }
+    if (ot2qp.getIsMatch() != null && !ot2qp.getIsMatch().isEmpty()) {
+      sql.append(" and is_match in (");
+      for (String tstr : ot2qp.getIsMatch()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
+    }
+    if (ot2qp.getOtType() != null && !ot2qp.getOtType().isEmpty()) {
+      sql.append(" and ot_type in (");
+      for (String tstr : ot2qp.getOtType()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
+    }
+    if (ot2qp.getMatchType() != null && !ot2qp.getMatchType().isEmpty()) {
+      sql.append(" and (");
+      for (String tstr : ot2qp.getMatchType()) {
+        sql.append(tstr);
+        sql.append(">0 or ");
+      }
+      sql.append(") ");
+    }
+    String tstr = sql.toString().replace(",)", ")");
+    tstr = tstr.replace("or )", ")");
+    sqlprefix1 += tstr;
+    sqlprefix2 += tstr;
+    
     String unionSql = "";
     if (ot2qp.getQueryHis()) {
       unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";
@@ -387,35 +452,35 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   @Override
   public void updateCvsMatch(OtLevel2 ot2) {
-    String sql = "update ot_level2 set cvs_match=" + ot2.getCvsMatch()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set cvs_match=" + ot2.getCvsMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
 
   @Override
   public void updateRc3Match(OtLevel2 ot2) {
-    String sql = "update ot_level2 set rc3_match=" + ot2.getRc3Match()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set rc3_match=" + ot2.getRc3Match() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
 
   @Override
   public void updateMinorPlanetMatch(OtLevel2 ot2) {
-    String sql = "update ot_level2 set minor_planet_match=" + ot2.getMinorPlanetMatch()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set minor_planet_match=" + ot2.getMinorPlanetMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
 
   @Override
   public void updateOt2HisMatch(OtLevel2 ot2) {
-    String sql = "update ot_level2 set ot2_his_match=" + ot2.getOt2HisMatch()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set ot2_his_match=" + ot2.getOt2HisMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
 
   @Override
   public void updateOtherMatch(OtLevel2 ot2) {
-    String sql = "update ot_level2 set other_match=" + ot2.getOtherMatch()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set other_match=" + ot2.getOtherMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }

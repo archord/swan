@@ -30,14 +30,14 @@
         <form action="${pageContext.request.contextPath}/get-ot-level2-list2.action" id="ot2QueryAction" method="post">
           <div class="col-xs-4 col-sm-4 col-md-2 ">
             <h4>数据处理方式</h4>
-            <select name="processType" id="ot2ProcessType" multiple="multiple">
+            <select name="ot2qp.processType" id="ot2ProcessType" multiple="multiple">
               <option value="1">星表匹配</option>
               <option value="8">图像相减</option>
             </select>
           </div>
           <div class="col-xs-4 col-sm-4 col-md-2 ">
             <h4>匹配状态</h4>
-            <select name="isMatch" id="ot2IsMatch" multiple="multiple">
+            <select name="ot2qp.isMatch" id="ot2IsMatch" multiple="multiple">
               <option value="0">未匹配</option>
               <option value="1">匹配不成功</option>
               <option value="2">匹配成功</option>
@@ -45,17 +45,17 @@
           </div>
           <div class="col-xs-4 col-sm-4 col-md-2 ">
             <h4>匹配类别</h4>
-            <select name="matchType" id="ot2MatchType" multiple="multiple">
-              <option value="2">CVS</option>
-              <option value="4">RC3</option>
-              <option value="5">小行星</option>
-              <option value="6">OT2历史</option>
-              <option value="3">其他类型</option>
+            <select name="ot2qp.matchType" id="ot2MatchType" multiple="multiple">
+              <option value="cvs_match">CVS</option>
+              <option value="rc3_match">RC3</option>
+              <option value="minor_planet_match">小行星</option>
+              <option value="ot2_his_match">OT2历史</option>
+              <option value="other_match">其他类型</option>
             </select>
           </div>
           <div class="col-xs-4 col-sm-4 col-md-2 ">
             <h4>分类标识</h4>
-            <select name="otType" id="ot2Type" multiple="multiple">
+            <select name="ot2qp.otType" id="ot2Type" multiple="multiple">
               <option value="1">假OT</option>
               <option value="2">小行星</option>
               <option value="3">移动目标</option>
@@ -71,7 +71,7 @@
           </div>
           <div class="col-xs-4 col-sm-4 col-md-2 ">
             <h4>CDD</h4>
-            <select name="ccd" id="ot2Ccd" multiple="multiple">
+            <select name="ot2qp.telscope" id="ot2Ccd" multiple="multiple">
               <option value="1">M01</option>
               <option value="2">M02</option>
               <option value="3">M03</option>
@@ -88,10 +88,10 @@
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>自动刷新</h4>
-            <input name="autoRefresh" type="checkbox" checked="true"/>
+            <input name="autoRefresh" id="ot2ListTableAutoRefresh" type="checkbox" checked="true"/>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
-            <h4>数据处理方式</h4>
+            <h4>&nbsp;</h4>
             <input type="button" value="查询" class="btn btn-primary" id="ot2QueryBtn"/>
           </div>
         </form>

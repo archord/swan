@@ -346,29 +346,35 @@
 }
 
 .ot-list-top input[type="button"]{
-  width: 100px;
+  width: 80px;
   height: 26px;
   margin: 0 0;
   padding: 2px 0;
 }
 
-#ot-list-table td{ 
+#ot-list th{
+  text-align: center;
+}
+
+/*#ot-list-table td{ 
   line-height: 24px;
   padding-top: 2px;
   padding-bottom: 2px;
   white-space: nowrap;
+  text-align: center;
 }
 
-.ot-list-table label{
+#ot-list-table label{
   display: inline;
   font-size: 14px;
   line-height: 24px;
   text-align: right;
 }
-.ot-list-table input{
+#ot-list-table input{
   height:22px;
   width: 80px;
-}
+}*/
+
 #ot-list-table_filter input{
   height:30px;
   width: 150px;

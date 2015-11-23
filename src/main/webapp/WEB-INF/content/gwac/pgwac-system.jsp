@@ -4,6 +4,13 @@
 <%@ taglib prefix="sjg" uri="/struts-jquery-grid-tags" %>
 
 <div id='grid-fixed'>
+  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表分类监控页面</p></a>     </div>
+  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-ccd-image-realtime.action" target="_blank" ><p>CCD图像预览</p></a>     </div>
+  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay.action" target="_blank" ><p>OT分布-XY</p></a>          </div>
+  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank" ><p>OT分布-RaDec</p></a></div>
+  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere-d3.action" target="_blank" ><p>OT分布3D</p></a></div>
+  <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>Mini-GWAC观测策略</p></a></div>
+  <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
   <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-fwhm.action" target="_blank" ><p>半高全宽</p></a>                  </div>
   <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-objnum.action" target="_blank" ><p>星的数目</p></a>                       </div>
   <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-bgbright.action" target="_blank" ><p>背景亮度</p></a>                     </div>
@@ -12,12 +19,6 @@
   <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-track.action" target="_blank" ><p>图像偏移量</p></a>                      </div>
   <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-xyrms.action" target="_blank" ><p>图像对齐精度</p></a>                    </div>
   <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-timeneed.action" target="_blank" ><p>数据处理消耗时间</p></a>             </div>
-  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-ccd-image-realtime.action" target="_blank" ><p>CCD图像预览</p></a>        </div>
-  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay.action" target="_blank" ><p>OT分布-XY</p></a>          </div>
-  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank" ><p>OT分布-RaDec</p></a></div>
-  <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere-d3.action" target="_blank" ><p>OT分布3D</p></a></div>
-  <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>Mini-GWAC观测策略</p></a></div>
-  <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
 </div>
 
 <div id='mason-fillers'>

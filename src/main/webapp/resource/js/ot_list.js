@@ -1,7 +1,8 @@
 
 $(function() {
   loadQueryParmeter();
-  loadOT2List();
+  var ot2ListTable = loadOT2List();
+  var ot2QueryInterval;
 
   function loadQueryParmeter() {
     var option = {
@@ -17,22 +18,31 @@ $(function() {
     $('#ot2Type').multiselect(option);
     $('#ot2Ccd').multiselect(option);
     $("#ot2QueryBtn").click(ot2QueryBtnClick);
+    $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
+    setAutoRefresh();
+  }
+
+  function setAutoRefresh() {
+    if ($('#ot2ListTableAutoRefresh').is(':checked')) {
+      ot2QueryInterval = setInterval(ot2QueryBtnClick, 15000);
+    } else {
+      clearInterval(ot2QueryInterval);
+    }
   }
 
   function ot2QueryBtnClick() {
     var formData = $("#ot2QueryAction").serialize();
-    console.log(formData);
-    $.post($("#ot2QueryAction").attr('action'), formData,
-            function(data) {
-              console.log(data);
-              alert(data.result);
-            }, "json");
+    if (formData === 'autoRefresh=on') {
+      formData = "ot2qp.otName=";
+    }
+    var queryUrl = $("#ot2QueryAction").attr('action') + "?timestamp=" + new Date().getTime() + "&" + formData;
+    ot2ListTable.ajax.url(queryUrl).load();
   }
 
   function loadOT2List() {
     var gwacRootURL = $("#gwacRootURL").val();
     var queryUrl = gwacRootURL + "/get-ot-level2-list2.action?ot2qp.otName=";
-    $('#ot-list-table').DataTable({
+    var ot2ListTable = $('#ot-list-table').DataTable({
       "deferRender": true,
       "processing": true,
       "searching": true,
@@ -62,6 +72,10 @@ $(function() {
         {"data": "isRecognize"}
       ],
       "columnDefs": [{
+          "targets": 1,
+          "data": "OtName?",
+          "render": formateOtName
+        }, {
           "targets": 0,
           "data": "ID?",
           "render": formateRowNumber
@@ -69,6 +83,14 @@ $(function() {
           "targets": 13,
           "data": "dont know",
           "render": formateFirstNMark
+        }, {
+          "targets": [2, 3],
+          "data": "dont know",
+          "render": floatFormate3
+        }, {
+          "targets": [4, 5],
+          "data": "dont know",
+          "render": floatFormate2
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -89,6 +111,15 @@ $(function() {
       },
       dom: 'lftrip'
     });
+    return ot2ListTable;
+  }
+
+  function floatFormate3(data, type, full, meta) {
+    return data.toFixed(3);
+  }
+
+  function floatFormate2(data, type, full, meta) {
+    return data.toFixed(2);
   }
 
   function formateFirstNMark(data, type, full, meta) {
@@ -99,22 +130,28 @@ $(function() {
     return meta.row + 1;
   }
 
-  function openDialog() {
-    openwindow("show-fits-list.action?otName=&queryHis=",
-            '_blank', 1050, 600, 1050, 600);
-    return false;
-  }
-  function openwindow(url, name, width, height, iWidth, iHeight)
-  {
-    var iTop = (window.screen.availHeight - 30 - iHeight) / 2; //获得窗口的垂直位置;
-    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2; //获得窗口的水平位置;
-    window.open(url, name,
-            'height=' + height +
-            ',innerHeight=' + iHeight +
-            ',width=' + width +
-            ',innerWidth=' + iWidth +
-            ',top=' + iTop +
-            ',left=' + iLeft +
-            ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
+  function formateOtName(data, type, full, meta) {
+    return "<a href='#' title='点击查看OT详细' onClick='return openDialog(\"" + data + "\");'>" + data + "</a>";
   }
 });
+
+
+function openDialog(otName) {
+  var gwacRootURL = $("#gwacRootURL").val();
+  var queryUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=" + otName;
+  openwindow(queryUrl, '_blank', 1050, 600, 1050, 600);
+  return false;
+}
+function openwindow(url, name, width, height, iWidth, iHeight)
+{
+  var iTop = (window.screen.availHeight - 30 - iHeight) / 2; //获得窗口的垂直位置;
+  var iLeft = (window.screen.availWidth - 10 - iWidth) / 2; //获得窗口的水平位置;
+  window.open(url, name,
+          'height=' + height +
+          ',innerHeight=' + iHeight +
+          ',width=' + width +
+          ',innerWidth=' + iWidth +
+          ',top=' + iTop +
+          ',left=' + iLeft +
+          ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
+}

@@ -6,6 +6,7 @@
 package com.gwac.model;
 
 import com.gwac.util.CommonFunction;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,33 +23,56 @@ public class OtLevel2QueryParameter {
   private float ra;
   private float dec;
   private float sphereRadius;
-  private List<String> telscope;
   private Boolean queryHis;
-  private List<String> processType;
-  /**查询结果集的大小，从start开始，查询size条记录*/
+  /**
+   * 查询结果集的大小，从start开始，查询size条记录
+   */
   private int start;
   private int size;
-  private List<String> isMatch;
   private String otName;
+  private List<String> processType;
+  private List<String> telscope;
+  private List<String> isMatch;
   private List<String> matchType;
   private List<String> otType;
-    
-  public String toString(){
-      return "startDate=" + startDate + ", endDate=" + endDate + ", xtemp=" + xtemp + 
-              ", ytemp=" + ytemp + ", planeRadius=" + planeRadius + ", ra=" + ra + 
-              ", dec=" + dec + ", sphereRadius=" + sphereRadius + ", telscope=" + 
-              telscope + ", queryHis=" + queryHis + ", processType=" + processType+
-              ", isMatch=" + isMatch + ", otName=" + isMatch +
-              ", matchType=" + matchType + ", otType=" + otType;
+
+  @Override
+  public String toString() {
+    return "startDate=" + startDate + ", endDate=" + endDate + ", xtemp=" + xtemp
+            + ", ytemp=" + ytemp + ", planeRadius=" + planeRadius + ", ra=" + ra
+            + ", dec=" + dec + ", sphereRadius=" + sphereRadius + ", telscope="
+            + telscope + ", queryHis=" + queryHis + ", processType=" + processType
+            + ", isMatch=" + isMatch + ", otName=" + otName
+            + ", matchType=" + matchType + ", otType=" + otType
+            + ", start=" + start + ", size=" + size;
   }
-  
-  public Boolean isEmpty(){
-    
+
+  public void removeEmpty() {
+    List<String> emptyStr = Arrays.asList("", null);
+    if (processType != null) {
+      processType.removeAll(emptyStr);
+    }
+    if (telscope != null) {
+      telscope.removeAll(emptyStr);
+    }
+    if (isMatch != null) {
+      isMatch.removeAll(emptyStr);
+    }
+    if (matchType != null) {
+      matchType.removeAll(emptyStr);
+    }
+    if (otType != null) {
+      otType.removeAll(emptyStr);
+    }
+  }
+
+  public Boolean isEmpty() {
+
     if (startDate.isEmpty() && endDate.isEmpty() && telscope.isEmpty()
             && Math.abs(planeRadius) < CommonFunction.MINFLOAT
             && Math.abs(sphereRadius) < CommonFunction.MINFLOAT) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
