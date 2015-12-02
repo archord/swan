@@ -39,7 +39,7 @@ public class GetOtDetail extends ActionSupport {
   /**
    * 返回结果
    */
-  private OtLevel2 ob;
+  private OtLevel2 ot2;
   private List<FitsFileCut> ffcList;
   private int totalImage;
   private int startImgNum;
@@ -61,65 +61,36 @@ public class GetOtDetail extends ActionSupport {
     String dataRoot = getText("gwac.data.root.directory");
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
 
-    if (queryHis == null) {
-      queryHis = false;
-    }
+    
+    List<Integer> tlist = obDao.hisOrCurExist(otName);
+    if (!tlist.isEmpty()) {
+      Integer his = tlist.get(0);
+      queryHis = his == 1;
+      setOt2(obDao.getOtLevel2ByName(getOtName(), queryHis));
+      ra = getOt2().getRa() + "";
+      dec = getOt2().getDec() + "";
+      pitchAngle = CommonFunction.degreeToDMS(getOt2().getDec());
+      siderealTime = CommonFunction.degreeToHMS(getOt2().getRa());
+      startImgNum = getOt2().getFirstFfNumber();
 
-    ob = obDao.getOtLevel2ByName(otName, queryHis);
-
-    if (ob != null) {
-      if (ob.getDataProduceMethod() == '1') {
-        ra = ob.getRa() + "";
-        dec = ob.getDec() + "";
-        pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
-        siderealTime = CommonFunction.degreeToHMS(ob.getRa());
-        startImgNum = ob.getFirstFfNumber();
-
-        ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
-        totalImage = ffcList.size();
-        for (FitsFileCut ffc : ffcList) {
-          ffc.setFileName(ffc.getFileName() + ".jpg");
-          ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
-        }
-
-        List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
-        if (ffcrs != null && ffcrs.size() > 0) {
-          setFfcrStorePath(dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/");
-          setFfcrFileName(ffcrs.get(0).getFileName() + ".jpg");
-          setFfcrGenerateTime(CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)");
-        } else {
-          setFfcrStorePath("");
-          setFfcrFileName("");
-          setFfcrGenerateTime("");
-        }
-        result ="success";
-      } else if (ob.getDataProduceMethod() == '8') {
-        if (ob.getRa() + 999 > CommonFunction.MINFLOAT) {
-          ra = ob.getRa() + "";
-          siderealTime = CommonFunction.degreeToHMS(ob.getRa());
-        }else{
-          ra = "''";
-          siderealTime = "''";
-        }
-        if (ob.getDec() + 999 > CommonFunction.MINFLOAT) {
-          dec = ob.getDec() + "";
-          pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
-        }else{
-          dec = "''";
-          pitchAngle = "''";
-        }
-
-        startImgNum = ob.getFirstFfNumber();
-
-        ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
-        totalImage = ffcList.size();
-        for (FitsFileCut ffc : ffcList) {
-          ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
-        }
-        result ="success2";
+      ffcList = ffcDao.getCutImageByOtId(getOt2().getOtId(), queryHis);
+      totalImage = ffcList.size();
+      for (FitsFileCut ffc : ffcList) {
+        ffc.setFileName(ffc.getFileName() + ".jpg");
+        ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
       }
 
-      String tmp[] = otorDao.getOtOpticalVaration(ob, queryHis).split("=");
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2().getOtId());
+      if (ffcrs != null && ffcrs.size() > 0) {
+        ffcrStorePath = dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/";
+        ffcrFileName = ffcrs.get(0).getFileName() + ".jpg";
+        ffcrGenerateTime = CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)";
+      } else {
+        ffcrStorePath = "";
+        ffcrFileName = "";
+        ffcrGenerateTime = "";
+      }
+      String tmp[] = otorDao.getOtOpticalVaration(ot2, queryHis).split("=");
       otOpticalVaration = tmp[0];
       otPositionVaration = tmp[1];
     } else {
@@ -132,9 +103,9 @@ public class GetOtDetail extends ActionSupport {
       totalImage = 0;
       otOpticalVaration = "[]";
       otPositionVaration = "[]";
-      setFfcrStorePath("");
-      setFfcrFileName("");
-      setFfcrGenerateTime("");
+      ffcrStorePath = "";
+      ffcrFileName = "";
+      ffcrGenerateTime = "";
     }
 
     return result;
@@ -330,20 +301,6 @@ public class GetOtDetail extends ActionSupport {
   }
 
   /**
-   * @return the ob
-   */
-  public OtLevel2 getOb() {
-    return ob;
-  }
-
-  /**
-   * @param ob the ob to set
-   */
-  public void setOb(OtLevel2 ob) {
-    this.ob = ob;
-  }
-
-  /**
    * @return the otPositionVaration
    */
   public String getOtPositionVaration() {
@@ -376,6 +333,20 @@ public class GetOtDetail extends ActionSupport {
    */
   public void setSiderealTime(String siderealTime) {
     this.siderealTime = siderealTime;
+  }
+
+  /**
+   * @return the ot2
+   */
+  public OtLevel2 getOt2() {
+    return ot2;
+  }
+
+  /**
+   * @param ot2 the ot2 to set
+   */
+  public void setOt2(OtLevel2 ot2) {
+    this.ot2 = ot2;
   }
 
 }

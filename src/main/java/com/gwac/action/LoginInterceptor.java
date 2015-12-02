@@ -3,6 +3,7 @@
  */
 package com.gwac.action;
 
+import com.gwac.model.UserInfo;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -34,8 +35,8 @@ public class LoginInterceptor extends AbstractInterceptor {
         // 如果Session为空，则让用户登陆。
         return "login";
       } else {
-        String username = (String) session.get("username");
-        if (username == null) {
+        UserInfo userInfo = (UserInfo) session.get("userInfo");
+        if (userInfo == null) {
           // Session不为空，但Session中没有用户信息，
           // 则让用户登陆
           return "login";

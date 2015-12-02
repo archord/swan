@@ -33,21 +33,12 @@
   <body>
     <div style="display: none;">
       <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
-      <input type="hidden" id="otCurveData" value="<s:property value="otOpticalVaration"/>"/>
-      <input type="hidden" id="otPositionData" value="<s:property value="otPositionVaration"/>"/>
-      <input type="hidden" id="otName" value="<s:property value="otName"/>"/>
-      <input type="hidden" id="queryHis" value="<s:property value="queryHis"/>"/>
-      <input type="hidden" id="ra" value="<s:property value="ra"/>"/>
-      <input type="hidden" id="dec" value="<s:property value="dec"/>"/>
     </div>
     <div class="container-fluid"> <!--container container-fluid -->
       <div class="row ot-detail-top">
         <div id="user-welcome">
-          <div class="form-group1">
-            <input type="text" value="" placeholder="请输入用户名" id="loginName" name="loginName" class="form-control"/>
-            <input type="password" value="" placeholder="密码" id="loginPass" name="loginPass" class="form-control"/>
-            <input type="button" value="登录" class="btn btn-primary" id="loginBtn"/>
-          </div>
+          <div id="user-login-div">您好！<a href="#" id="user-login" title="点击登录">请登录</a></div>
+          <div id="user-logout-div" style='display:none;'>欢迎您，<span id="user-welcome-username"></span>！<a href='#' id='user-logout' title="点击注销">注销</a></div>
         </div>
         <div id="ot-followup">
           <s:form id="otFollowUp"  action="otFollowUp" theme="simple" cssClass="yform" namespace="/">
@@ -56,10 +47,10 @@
                 <th width="100px">观测者</th><th>后随名称</th><th>RA(度)</th><th>DEC(度)</th><th>曝光时间(S)</th><th>曝光帧数</th><th>滤光片</th><th></th>
               </tr>
               <tr>
-                <td><input type="text" style="border-color: #bdc3c7;color: #34495e;" name="ot2fp.userName" readonly="true" value="mini-GWAC" class="form-control"/></td>
-                <td><input type="text" style="width: 150px; border-color: #bdc3c7;color: #34495e;" name="ot2fp.otName" readonly="true" id="otName" value="<s:property value="otName"/>" class="form-control"/></td>
-                <td><input type="text" style="width: 80px; " name="ot2fp.ra" value="<s:property value="ra"/>"  class="form-control"/></td>
-                <td><input type="text" style="width: 80px; " name="ot2fp.dec" value="<s:property value="dec"/>" class="form-control"/></td>
+                <td><input type="text" style="border-color: #bdc3c7;color: #34495e;" name="ot2fp.userName" readonly="true" id="userName" value="mini-GWAC" class="form-control"/></td>
+                <td><input type="text" style="width: 150px; border-color: #bdc3c7;color: #34495e;" name="ot2fp.otName" readonly="true" id="otName" value="" class="form-control"/></td>
+                <td><input type="text" style="width: 80px; " name="ot2fp.ra" id="fuRa" value=""  class="form-control"/></td>
+                <td><input type="text" style="width: 80px; " name="ot2fp.dec" id="fuDec" value="" class="form-control"/></td>
                 <td><input type="text" style="width: 80px; " name="ot2fp.expTime" id="expTime" value="2" class="form-control"/></td>
                 <td><input type="text" style="width: 80px; " name="ot2fp.frameCount" id="frameCount" value="10" class="form-control"/></td>
                 <td>
@@ -85,50 +76,12 @@
         </div>
       </div>
       <div class="row ot-detail-body">
-        <div class="col-md-12 col-lg-5 ot-detail-left">
+        <div class="col-md-12 col-lg-6 ot-detail-left">
           <div id="cut-image-show">
-            <div id="ref-image">
-              <div id="ref-image-show">
-                <img src="<s:property value="ffcrStorePath"/><s:property value="ffcrFileName"/>" 
-                     alt="<s:property value="ffcrFileName"/>" 
-                     title="<s:property value="ffcrFileName"/>" 
-                     width="200" height="200" border="0" />
-              </div>
-              <div id="navi2">
-                <p id="title2">模板时间：<s:property value="ffcrGenerateTime"/></p>
-              </div>
-            </div>
-            <div id="obj-image">
-              <div id="carousel-wrapper">
-                <div id="carousel">
-                  <s:iterator value="ffcList">
-                    <img src="<s:property value="storePath"/>/<s:property value="fileName"/>" 
-                         alt="<s:property value="fileName"/>" 
-                         title="<s:property value="fileName"/>" 
-                         width="200" height="200" border="0" />
-                  </s:iterator>
-                </div>
-                <div id="navi">
-                  <div id="timer"></div>
-                  <a id="prev" href="#"></a>
-                  <a id="play" href="#"></a>
-                  <a id="next" href="#"></a>
-                </div>
-              </div>
-              <div id="navi1">
-                <div style="width: 100%;height:20px;">
-                  <p id="pagenumber">第<span style="font-weight:bold;font-size: 14px;"></span>帧，共<s:property value="totalImage"/>帧</p>
-                  <p id="end"><a href="#">结束帧</a><input type="hidden" id="totalImg" value="<s:property value="totalImage"/>"/></p>
-                  <p id="start"><a href="#">起始帧</a><input type="hidden" id="startImgNum" value="<s:property value="startImgNum"/>"/></p>
-                </div>
-                <p id="title">切图名：<span></span></p>
-              </div>
-            </div>
           </div>
           <div id="skyCoordinate">
-            <span>OT坐标(赤经,赤纬)：(<s:property value="siderealTime"/>,&nbsp;<s:property value="pitchAngle"/>)&nbsp;&nbsp;&nbsp;
-              (<s:property value="ra"/>,&nbsp;<s:property value="dec"/>)&nbsp;&nbsp;&nbsp;</span>
-            <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图'>点击查看fits切图</a></span>
+            <span id="skyCordDetail"></span>
+            <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图' style="display: none;">点击查看fits切图</a></span>
           </div>
           <div id="ot-curves">
             <div id="ot-curve-show">
@@ -145,17 +98,17 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12 col-lg-7 ot-detail-right">
-          <div id="ot2-record">
+        <div class="col-md-12 col-lg-6 ot-detail-right">
+          <div id="ot2-match" class="ot2-table-show">
+            <table id="ot2-match-table" class="display" cellspacing="0" width="100%">
+              <thead><tr><th>ID</th><th>匹配星表</th><th>匹配ID</th><th>OT2名称</th><th>RA</th><th>DEC</th><th>匹配距离</th><th>星等</th><th>D25</th></tr></thead>
+            </table>
+          </div>
+          <div id="ot2-record" class="ot2-table-show">
             <table id="ot2-record-table" class="display" cellspacing="0" width="100%">
               <thead><tr><th>ID</th><th>原FITS图</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>X</th><th>Y</th>
                   <th>流量</th><th>背景</th><th>半高全宽</th><th>星等</th><th>星等误差</th><th>椭率</th><th>分类星</th></tr></thead>
               <!--<tfoot><tr><th>Name</th><th>Position</th><th>Office</th><th>Extn.</th><th>Start date</th><th>Salary</th></tr></tfoot>-->
-            </table>
-          </div>
-          <div id="ot2-match">
-            <table id="ot2-match-table" class="display" cellspacing="0" width="100%">
-              <thead><tr><th>ID</th><th>匹配星表</th><th>匹配ID</th><th>OT2名称</th><th>RA</th><th>DEC</th><th>匹配距离</th><th>星等</th><th>D25</th></tr></thead>
             </table>
           </div>
         </div>
@@ -172,13 +125,16 @@
     <script src="${pageContext.request.contextPath}/js/jquery.carouFredSel-6.2.1-packed.js"></script>
     <script src="<%=request.getContextPath()%>/js/plot/jquery.flot.js"></script>
     <script src="<%=request.getContextPath()%>/js/plot/jquery.flot.categories.js"></script>
+    <script src="<%=request.getContextPath()%>/js/plot/jquery.flot.resize.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/dataTables.buttons.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/bootbox.min.js"></script>
     <!--<script src="${pageContext.request.contextPath}/resource/js/datatables.js"></script>-->
     <script src="${pageContext.request.contextPath}/resource/js/ot_detail.js"></script>
 
     <script>
-              videojs.options.flash.swf = "${pageContext.request.contextPath}/resource/flatui/js/vendors/video-js.swf";
+      videojs.options.flash.swf = "${pageContext.request.contextPath}/resource/flatui/js/vendors/video-js.swf";
     </script>
   </body>
 </html>

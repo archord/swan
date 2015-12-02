@@ -10,8 +10,10 @@ import com.gwac.util.CommonFunction;
 import com.gwac.util.SearchBoxSphere;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
@@ -197,6 +199,30 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return flag;
   }
 
+  /**
+   * 查询OT是在历史表还是当前表
+   * @param otName
+   * @return his=0 OT存在ot_level2表，his=1 OT存在ot_level2_his表
+   */
+  @Override
+  public List<Integer> hisOrCurExist(String otName) {
+
+    List result = new ArrayList<>();
+    
+    String sql = "select 0 his from ot_level2 where name='" + otName
+            + "' union select 1 his from ot_level2_his where name='" + otName + "';";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    if (iter.hasNext()) {
+      Integer his = (Integer) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
+
   @Override
   public OtLevel2 existInAll(OtLevel2 obj, float errorBox) {
     Boolean flag = false;
@@ -268,7 +294,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     log.debug(ot2qp.toString());
 
     if (ot2qp.getOtName() != null && !ot2qp.getOtName().isEmpty()) {
-      sql.append(" and ot_name='").append(ot2qp.getOtName()).append("' ");
+      sql.append(" and name='").append(ot2qp.getOtName()).append("' ");
     }
     if (ot2qp.getStartDate() != null && !ot2qp.getStartDate().isEmpty()) {
       sql.append(" and found_time_utc>'").append(ot2qp.getStartDate()).append(" 00:00:00' ");
@@ -358,7 +384,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     log.debug(ot2qp.toString());
 
     if (ot2qp.getOtName() != null && !ot2qp.getOtName().isEmpty()) {
-      sql.append(" and ot_name='").append(ot2qp.getOtName()).append("' ");
+      sql.append(" and name='").append(ot2qp.getOtName()).append("' ");
     }
     if (ot2qp.getStartDate() != null && !ot2qp.getStartDate().isEmpty()) {
       sql.append(" and found_time_utc>'").append(ot2qp.getStartDate()).append(" 00:00:00' ");
@@ -419,7 +445,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     tstr = tstr.replace("or )", ")");
     sqlprefix1 += tstr;
     sqlprefix2 += tstr;
-    
+
     String unionSql = "";
     if (ot2qp.getQueryHis()) {
       unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";

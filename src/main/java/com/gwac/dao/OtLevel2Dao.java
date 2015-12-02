@@ -7,6 +7,7 @@ package com.gwac.dao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2QueryParameter;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,12 +20,16 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public List<OtLevel2> searchOT2His(OtLevel2 ot2, float searchRadius, float mag);
 
   public Boolean exist(OtLevel2 obj, float errorBox);
+  
+  public List<Integer> hisOrCurExist(String otName);
 
   public OtLevel2 existInAll(OtLevel2 obj, float errorBox);
 
   public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox, int n);
 
   public OtLevel2 getOtLevel2ByName(String otName, Boolean queryHis);
+
+  public OtLevel2 getOtLevel2ByNameFromHis(String otName);
 
   public List<OtLevel2> getOtLevel2ByDpmName(String dpmName);
 
@@ -47,8 +52,6 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public List<OtLevel2> getMissedFFCLv2OT();
 
   public void updateAllFileCuttedById(long id);
-
-  public OtLevel2 getOtLevel2ByNameFromHis(String otName);
 
   public void updateIsMatch(OtLevel2 ot2);
 

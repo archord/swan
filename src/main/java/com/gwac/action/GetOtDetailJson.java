@@ -7,23 +7,28 @@ import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.UserInfo;
 import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "error", location = "/error.jsp")
 @ExceptionMapping(exception = "java.lang.Exception", result = "error")
-public class GetOtDetailJson extends ActionSupport {
+public class GetOtDetailJson extends ActionSupport implements SessionAware {
 
   private static final long serialVersionUID = -3454448234588641394L;
   private static final Log log = LogFactory.getLog(GetOtDetailJson.class);
+
+  private Map<String, Object> session;
 
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
@@ -37,19 +42,13 @@ public class GetOtDetailJson extends ActionSupport {
   /**
    * 返回结果
    */
-  private OtLevel2 ob;
+  private OtLevel2 ot2;
   private List<FitsFileCut> ffcList;
-  private int totalImage;
-  private int startImgNum;
-  private String ra;
-  private String dec;
-  private String pitchAngle; //俯仰角
-  private String siderealTime; //恒星时
-  private String ffcrStorePath;
-  private String ffcrFileName;
-  private String ffcrGenerateTime;
+  private FitsFileCutRef ffcRef;
   private String otOpticalVaration;
   private String otPositionVaration;
+  private String dataRootWebMap;
+  private UserInfo userInfo;
 
   @Actions({
     @Action(value = "/get-ot-detail-json", results = {
@@ -58,85 +57,30 @@ public class GetOtDetailJson extends ActionSupport {
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
 
-    String result = SUCCESS;
-
-    String dataRoot = getText("gwac.data.root.directory");
-    String dataRootWebMap = getText("gwac.data.root.directory.webmap");
-
-    if (queryHis == null) {
-      queryHis = false;
+    dataRootWebMap = getText("gwac.data.root.directory.webmap");
+        
+    if(session.containsKey("userInfo")){
+      userInfo = (UserInfo)session.get("userInfo");
     }
 
-    ob = obDao.getOtLevel2ByName(getOtName(), queryHis);
+    List<Integer> tlist = obDao.hisOrCurExist(otName);
+    if (!tlist.isEmpty()) {
+      Integer his = tlist.get(0);
+      queryHis = his == 1;
+      ot2 = obDao.getOtLevel2ByName(getOtName(), queryHis);
+      ffcList = ffcDao.getCutImageByOtId(getOt2().getOtId(), queryHis);
 
-    if (ob != null) {
-      if (ob.getDataProduceMethod() == '1') {
-        ra = ob.getRa() + "";
-        dec = ob.getDec() + "";
-        pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
-        siderealTime = CommonFunction.degreeToHMS(ob.getRa());
-        startImgNum = ob.getFirstFfNumber();
-
-        ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
-        totalImage = ffcList.size();
-        for (FitsFileCut ffc : ffcList) {
-          ffc.setFileName(ffc.getFileName() + ".jpg");
-          ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
-        }
-
-        List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
-        if (ffcrs != null && ffcrs.size() > 0) {
-          ffcrStorePath = dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/";
-          ffcrFileName = ffcrs.get(0).getFileName() + ".jpg";
-          ffcrGenerateTime = CommonFunction.getDateTimeString(ffcrs.get(0).getGenerateTime(), "yyyy-MM-dd HH:mm:ss") + "(U)";
-        } else {
-          ffcrStorePath = "";
-          ffcrFileName = "";
-          ffcrGenerateTime = "";
-        }
-        result = "success";
-      } else if (ob.getDataProduceMethod() == '8') {
-        if (ob.getRa() + 999 > CommonFunction.MINFLOAT) {
-          ra = ob.getRa() + "";
-          siderealTime = CommonFunction.degreeToHMS(ob.getRa());
-        } else {
-          ra = "''";
-          siderealTime = "''";
-        }
-        if (ob.getDec() + 999 > CommonFunction.MINFLOAT) {
-          dec = ob.getDec() + "";
-          pitchAngle = CommonFunction.degreeToDMS(ob.getDec());
-        } else {
-          dec = "''";
-          pitchAngle = "''";
-        }
-
-        startImgNum = ob.getFirstFfNumber();
-
-        ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
-        totalImage = ffcList.size();
-        for (FitsFileCut ffc : ffcList) {
-          ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
-        }
-        result = "success2";
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2().getOtId());
+      if (ffcrs != null && ffcrs.size() > 0) {
+        ffcRef = ffcrs.get(0);
       }
-
-      String tmp[] = otorDao.getOtOpticalVaration(ob, queryHis).split("=");
+      String tmp[] = otorDao.getOtOpticalVaration(ot2, queryHis).split("=");
       otOpticalVaration = tmp[0];
       otPositionVaration = tmp[1];
     } else {
-      ra = "";
-      dec = "";
-      siderealTime = "";
-      pitchAngle = "";
-      startImgNum = 0;
       ffcList = new ArrayList();
-      totalImage = 0;
       otOpticalVaration = "[]";
       otPositionVaration = "[]";
-      ffcrStorePath = "";
-      ffcrFileName = "";
-      ffcrGenerateTime = "";
     }
 
     return "json";
@@ -164,13 +108,6 @@ public class GetOtDetailJson extends ActionSupport {
   }
 
   /**
-   * @return the totalImage
-   */
-  public int getTotalImage() {
-    return totalImage;
-  }
-
-  /**
    * @param obDao the obDao to set
    */
   public void setObDao(OtLevel2Dao obDao) {
@@ -178,52 +115,10 @@ public class GetOtDetailJson extends ActionSupport {
   }
 
   /**
-   * @return the startImgNum
-   */
-  public int getStartImgNum() {
-    return startImgNum;
-  }
-
-  /**
-   * @return the ra
-   */
-  public String getRa() {
-    return ra;
-  }
-
-  /**
-   * @return the dec
-   */
-  public String getDec() {
-    return dec;
-  }
-
-  /**
    * @param ffcrDao the ffcrDao to set
    */
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
-  }
-
-  /**
-   * @return the ffcrStorePath
-   */
-  public String getFfcrStorePath() {
-    return ffcrStorePath;
-  }
-
-  /**
-   * @return the ffcrFileName
-   */
-  public String getFfcrFileName() {
-    return ffcrFileName;
-  }
-
-  /**
-   * @return the ffcrGenerateTime
-   */
-  public String getFfcrGenerateTime() {
-    return ffcrGenerateTime;
   }
 
   /**
@@ -255,13 +150,6 @@ public class GetOtDetailJson extends ActionSupport {
   }
 
   /**
-   * @return the ob
-   */
-  public OtLevel2 getOb() {
-    return ob;
-  }
-
-  /**
    * @return the otPositionVaration
    */
   public String getOtPositionVaration() {
@@ -269,24 +157,43 @@ public class GetOtDetailJson extends ActionSupport {
   }
 
   /**
-   * @return the pitchAngle
-   */
-  public String getPitchAngle() {
-    return pitchAngle;
-  }
-
-  /**
-   * @return the siderealTime
-   */
-  public String getSiderealTime() {
-    return siderealTime;
-  }
-
-  /**
    * @param otName the otName to set
    */
   public void setOtName(String otName) {
     this.otName = otName;
+  }
+
+  /**
+   * @return the ot2
+   */
+  public OtLevel2 getOt2() {
+    return ot2;
+  }
+
+  /**
+   * @return the ffcRef
+   */
+  public FitsFileCutRef getFfcRef() {
+    return ffcRef;
+  }
+
+  /**
+   * @return the dataRootWebMap
+   */
+  public String getDataRootWebMap() {
+    return dataRootWebMap;
+  }
+
+  @Override
+  public void setSession(Map<String, Object> map) {
+    this.session = map;
+  }
+
+  /**
+   * @return the userInfo
+   */
+  public UserInfo getUserInfo() {
+    return userInfo;
   }
 
 }

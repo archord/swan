@@ -18,6 +18,7 @@
  */
 package com.gwac.action;
 
+import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.model.OtObserveRecordShow;
 import com.opensymphony.xwork2.ActionSupport;
@@ -59,17 +60,25 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   private boolean loadonce = false;
   private Map<String, Object> session;
   private OtObserveRecordDAO otorDao;
+  private OtLevel2Dao obDao;
   private String otName;
   private Boolean queryHis;
 
   @SuppressWarnings("unchecked")
   public String execute() {
-    
+
     int to = (rows * page);
     int from = to - rows;
-    
-    gridModel = otorDao.getRecordByOtName(otName, from, rows, queryHis);
-    records = otorDao.countRecordByOtName(otName, queryHis);
+
+    List<Integer> tlist = obDao.hisOrCurExist(otName);
+    if (!tlist.isEmpty()) {
+      Integer his = tlist.get(0);
+      queryHis = his == 1;
+      gridModel = otorDao.getRecordByOtName(otName, from, rows, queryHis);
+      records = otorDao.countRecordByOtName(otName, queryHis);
+    } else {
+      gridModel = new ArrayList();
+    }
 
     if (totalrows != null) {
       records = totalrows;
@@ -250,6 +259,13 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
    */
   public void setQueryHis(Boolean queryHis) {
     this.queryHis = queryHis;
+  }
+
+  /**
+   * @param obDao the obDao to set
+   */
+  public void setObDao(OtLevel2Dao obDao) {
+    this.obDao = obDao;
   }
 
 }

@@ -7,6 +7,7 @@
   
   <bean class="com.gwac.action.OtObserveRecordAction" scope="prototype">
     <property name="otorDao" ref="otORDao" />
+    <property name="obDao" ref="otbDao" />
   </bean>
 	
   <bean id="skyDao" class="com.gwac.dao.ObservationSkyDaoImpl" >

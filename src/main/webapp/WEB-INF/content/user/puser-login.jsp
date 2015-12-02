@@ -41,7 +41,7 @@
 
           <div class="login-form">
             <div style="color:red"><s:fielderror/></div>
-            <form action="login.action" id="loginAction" method="post">
+            <form action="user-login.action" id="loginAction" method="post">
               <div class="form-group">
                 <input type="text" class="form-control login-field" value="" placeholder="请输入用户名" id="loginName" name="loginName" />
                 <label class="login-field-icon fui-user" for="login-name"></label>

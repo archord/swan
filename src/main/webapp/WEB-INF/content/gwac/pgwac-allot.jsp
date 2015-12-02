@@ -19,12 +19,10 @@
 <script type="text/javascript">
 
   function formatLink(cellvalue, options, rowObject) {
-    var queryHis = $("#queryHis").val();
-    var baseUrl =  "<s:property value="otDetail"/>?queryHis=" + queryHis;
-    var url = baseUrl + "&otName=" + cellvalue;
+    var url = "<s:property value="otDetail"/>?otName=" + cellvalue;
     return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + cellvalue + "</a>";
   }
-
+  
   function formatLink1(cellvalue, options, rowObject) {
     var showVal = "";
     if (cellvalue === false) {
@@ -88,10 +86,7 @@
         <td><sj:datepicker id="from" name="ot2qp.startDate" displayFormat="yy-mm-dd" label="开始日期" /></td>
         <td>结束日期(UTC)：</td>
         <td><sj:datepicker  id="to" name="ot2qp.endDate" displayFormat="yy-mm-dd" label="结束日期" />
-          <select name="ot2qp.queryHis" id="queryHis" hidden="">
-            <option value="false">否</option>
-            <option value="true">是</option>
-          </select></td>
+          <input type="hidden" id="queryHis" value="<s:property value="total"/>"/></td>
       </tr>
       <tr style="height:20px;">
         <td>X坐标(模板)：</td>

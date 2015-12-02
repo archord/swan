@@ -54,7 +54,11 @@
       }
       .style6 {font-size: 22px;font-weight: bold;}
       .style7 {font-size: 12px}
-      .imgStyle{width:450px;height:250px;}
+      .imgStyle{
+        width:450px;
+        height:250px;
+        border-radius: 6px; 
+      }
       -->
     </style></head>
 
@@ -73,7 +77,7 @@
 
       <tr>
         <td>
-          <table width="616" border="1">
+          <table width="616" border="0">
             <tr>
               <td width="454"><div align="center" class="style6"><span id="span1">M01</span> </div></td>
               <td width="454"><div align="center" class="style6"><span id="span2">M02</span> </div></td>

@@ -26,7 +26,7 @@
 #user-welcome {
   padding-top: 23px;
   float: left;
-  width: 270px;
+  width: 140px;
   min-height: 50px;
   margin-right: 10px;
   /*border: 2px dashed #00f*/
@@ -102,9 +102,21 @@
   /*box-shadow: 0 5px 10px #ccc;*/
 }
 
+#obj-image-cut {
+  width: 620px;
+  height: 240px;
+  padding: 0px;
+  margin: 0px;
+  float: right;
+  /*position: absolute;*/
+  /*left: 50%;*/
+  /*top: 230px;*/
+  /*box-shadow: 0 5px 10px #ccc;*/
+}
+
 #carousel-wrapper {
   position: relative;
-  width: 200px;
+  width: 100%;
   height: 200px;
   overflow: hidden;
   text-align: center;
@@ -115,16 +127,22 @@
   /*left: 100px;*/
 }
 
+#carousel img {
+  display: block;
+  float: left;
+}
+
 #navi {
   background-color: #333;
   background-color: rgba(30, 30, 30, 0.8);
   border-top: 1px solid #000;
-  width: 200px;
+  width: 100%;
   height: 35px;
   position: absolute;
   bottom: -30px;
   left: 0;
   z-index: 10;
+  margin: auto;
 }
 #timer {
   background-color: #222;
@@ -137,7 +155,7 @@
   left: 0;
 }
 #navi2 {
-  width: 200px;
+  width: 100%;
   height: 30px;
   padding: 0px;
   bottom: 0px;
@@ -149,7 +167,7 @@
 #title2 {
   padding-top: 3px;
   text-align: center;
-  width:200px;
+  width:100%;
   float: left;
 }
 #pagenumber, #title, #title2, #pager, #start, #end {
@@ -158,11 +176,12 @@
   padding: 0;
 }
 
-#pagenumber,#start,#end {
+#pagenumber,#start,#end,#title {
   height: 20px;
 }
 #pagenumber{
   float: left;
+  margin-right:5px;
 }
 #start,#end {
   padding-top: 3px;
@@ -170,13 +189,9 @@
   margin-right:2px;
 }
 #title {
+  padding-top: 3px;
   text-align: left;
-  width:200px;
-  float: left;
-}
-
-#carousel img {
-  display: block;
+  /*width:100%;*/
   float: left;
 }
 
@@ -196,7 +211,7 @@
   height: 33px;
   top: 5px;
   background: url(../../gwac_images/imageGallery/ui/pause.png) 0 0 no-repeat transparent;
-  left: 110px;
+  left: 55%;
   margin-left: -27px;
 }
 #play.paused {
@@ -204,11 +219,11 @@
 }
 #prev {
   background: url(../../gwac_images/imageGallery/ui/prev.png) 0 0 no-repeat transparent;
-  right: 140px;
+  left: 20px;
 }
 #next {
   background: url(../../gwac_images/imageGallery/ui/next.png) 0 0 no-repeat transparent;
-  left: 140px;
+  right: 20px;
 }
 #prev, #next, #play, #play.paused {
   background-size:27px 27px;
@@ -406,4 +421,15 @@
 
 #ot-list-query a{
   padding: 3px 39px 3px 15px;
+}
+
+.ot2-table-show{
+  margin-top: 5px;
+}
+
+.login-field-dialog{
+}
+
+label.error{
+  color: red;
 }

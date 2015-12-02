@@ -8,6 +8,9 @@
     <property name="userDao" ref="userDAO" />
   </bean>
   
+  <bean class="com.gwac.action.Logout"  scope="prototype">
+  </bean>
+  
   <bean id="userRegister" class="com.gwac.action.UserRegister">
     <property name="userService" ref="userService" />	
   </bean>

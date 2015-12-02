@@ -88,7 +88,7 @@
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>自动刷新</h4>
-            <input name="autoRefresh" id="ot2ListTableAutoRefresh" type="checkbox" checked="true"/>
+            <input name="autoRefresh" id="ot2ListTableAutoRefresh" type="checkbox"/>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>&nbsp;</h4>
