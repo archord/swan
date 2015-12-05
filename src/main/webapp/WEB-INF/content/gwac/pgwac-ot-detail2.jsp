@@ -55,7 +55,7 @@
                 <td><input type="text" style="width: 80px; " name="ot2fp.frameCount" id="frameCount" value="10" class="form-control"/></td>
                 <td>
                   <select name="ot2fp.filter" class="form-control select select-primary" data-toggle="select">
-                    <option value="Lum">Lum</option>
+                    <option value="Lum" selected>Lum</option>
                     <option value="Green">Green</option>
                     <option value="R">R</option>
                     <option value="Blue">Blue</option>
@@ -64,7 +64,7 @@
                     <option value="B">B</option>
                     <option value="Red">Red</option>
                     <option value="U">U</option>
-                    <option value="null" selected>null</option>
+                    <option value="null">null</option>
                   </select>
                 </td>
                 <td>
@@ -106,8 +106,8 @@
           </div>
           <div id="ot2-record" class="ot2-table-show">
             <table id="ot2-record-table" class="display" cellspacing="0" width="100%">
-              <thead><tr><th>ID</th><th>原FITS图</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>X</th><th>Y</th>
-                  <th>流量</th><th>背景</th><th>半高全宽</th><th>星等</th><th>星等误差</th><th>椭率</th><th>分类星</th></tr></thead>
+              <thead><tr><th>ID</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>星等</th><th>星等误差</th><th>原FITS图</th><th>X</th><th>Y</th>
+                  <th>流量</th><th>背景</th><th>半高全宽</th><th>椭率</th><th>分类星</th></tr></thead>
               <!--<tfoot><tr><th>Name</th><th>Position</th><th>Office</th><th>Extn.</th><th>Start date</th><th>Salary</th></tr></tfoot>-->
             </table>
           </div>

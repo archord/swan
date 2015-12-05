@@ -34,7 +34,7 @@ $(function() {
 
   function ot2QueryBtnClick() {
     var formData = $("#ot2QueryAction").serialize();
-    if (formData === 'autoRefresh=on') {
+    if (formData === 'autoRefresh=on' || formData ==='') {
       formData = "ot2qp.otName=";
     }
     var queryUrl = $("#ot2QueryAction").attr('action') + "?timestamp=" + new Date().getTime() + "&" + formData;
@@ -141,7 +141,7 @@ $(function() {
 
 function openDialog(otName) {
   var gwacRootURL = $("#gwacRootURL").val();
-  var queryUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=" + otName;
+  var queryUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=" + otName;
   openwindow(queryUrl, '_blank', 1050, 600, 1050, 600);
   return false;
 }

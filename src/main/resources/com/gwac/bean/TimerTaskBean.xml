@@ -101,7 +101,7 @@
   <bean id="monitorImageSyncTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="monitorImageSyncJob" />
-    <property name="repeatInterval" value="300000" /> <!-- 20000  -->
+    <property name="repeatInterval" value="600000" /> <!-- 20000  -->
     <property name="startDelay" value="21000" /> <!-- 25000  -->
   </bean>
   

@@ -27,8 +27,8 @@ public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> im
     Session session = getCurrentSession();
     String sql = "select mt.match_table_name, ot2h.name ot2_name, olm.* "
             + "from ot_level2_match olm "
-            + "inner join match_table mt on mt.mt_id=olm.mt_id and mt.match_table_name='ot_level2_his'"
-            + "inner join ot_level2_his ot2h on ot2h.ot_id=olm.match_id "
+            + "inner join match_table mt on mt.mt_id=olm.mt_id "  // and mt.match_table_name='ot_level2_his'
+            + "left join ot_level2_his ot2h on ot2h.ot_id=olm.match_id and mt.match_table_name='ot_level2_his'"
             + "inner join ot_level2 ot2 on ot2.ot_id=olm.ot_id and ot2.name='" + otName + "';";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2MatchShow.class);
     return q.list();

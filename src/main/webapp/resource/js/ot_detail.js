@@ -1,5 +1,7 @@
 
 $(function() {
+  var gwacRootURL = $("#gwacRootURL").val();
+  var baseUrl = gwacRootURL + "/get-ot-detail.action?otName=";
   var option1 = {
     legend: {show: false},
     series: {shadowSize: 0},
@@ -74,15 +76,15 @@ $(function() {
                             $('#user-logout-div').show();
                             $('#user-welcome-username').html(user.name);
                           }
-//                          bootbox.hideAll();
+                          bootbox.hideAll();
                         } else {
                           $("#login-error-info").show();
                         }
                       }, "json");
             }
-            return true;
-          } else {
             return false;
+          } else {
+            return true;
           }
         }});
       $("#loginForm").validate();
@@ -105,7 +107,7 @@ $(function() {
                         $('#user-login-div').show();
                         $('#user-logout-div').hide();
                         bootbox.hideAll();
-                        alert('注销成功！');
+//                        alert('注销成功！');
                       } else {
                         alert('注销失败！');
                       }
@@ -399,6 +401,10 @@ $(function() {
           "targets": 0,
           "data": "dont know",
           "render": formateRowNumber
+        }, {
+          "targets": 3,
+          "data": "OtName?",
+          "render": formateOtName
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -445,16 +451,16 @@ $(function() {
       },
       "columns": [
         {"data": "oorId"},
-        {"data": "ffName"},
         {"data": "dateUt"},
         {"data": "raD"},
         {"data": "decD"},
-        {"data": "x"},
-        {"data": "y"},
-        {"data": "magAper"},
-        {"data": "magerrAper"},
         {"data": "XTemp"},
         {"data": "YTemp"},
+        {"data": "magAper"},
+        {"data": "magerrAper"},
+        {"data": "ffName"},
+        {"data": "x"},
+        {"data": "y"},
         {"data": "flux"},
         {"data": "background"},
         {"data": "threshold"},
@@ -466,7 +472,7 @@ $(function() {
           "data": "dont know",
           "render": formateRowNumber
         }, {
-          "targets": [3, 4],
+          "targets": [2, 3],
           "data": "dont know",
           "render": formateRaDec
         }],
@@ -503,8 +509,8 @@ $(function() {
   }
 
   function formateRaDec(data, type, full, meta) {
-    var ra = $('#ra').val();
-    var dec = $('#dec').val();
+    var ra = $('#fuRa').val();
+    var dec = $('#fuDec').val();
     var searchUrl = "http://simbad.u-strasbg.fr/simbad/sim-coo?CooFrame=FK5&CooEpoch=2000&CooEqui=2000&CooDefinedFrames=none&Radius=2&Radius.unit=arcmin&submit=submit%20query&Coord=";
     searchUrl += ra + "%20" + dec;
     return "<a href='" + searchUrl + "' title='点击在simbad搜寻OT对应坐标' target='_blank'>" + data + "</a>";
@@ -512,6 +518,15 @@ $(function() {
 
   function formateRowNumber(data, type, full, meta) {
     return meta.row + 1;
+  }
+
+  function formateOtName(data, type, full, meta) {
+    var result = "";
+    if (!(data === "" || data === 'null' || data === undefined || data === null)) {
+      var url = baseUrl + data;
+      result = "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + data + "</a>";
+    }
+    return result;
   }
 
   function setNavi($c, $i) {

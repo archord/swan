@@ -20,6 +20,7 @@ import com.gwac.model2.MergedOther;
 import com.gwac.model2.MinorPlanet;
 import com.gwac.model2.Rc3;
 import com.gwac.util.CommonFunction;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -68,7 +69,6 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (isBeiJingServer || isTestServer) {
       return;
     }
-
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -94,7 +94,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   public void searchOT2() {
 
     List<OtLevel2> ot2s = ot2Dao.getUnMatched();
-    log.debug("ot2 size: "+ ot2s.size());
+//    log.debug("ot2 size: " + ot2s.size());
     for (OtLevel2 ot2 : ot2s) {
 
       Boolean flag = false;
@@ -118,8 +118,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("cvsInfo: " + cvsInfo);
         flag = true;
       }
-      if(tcvsm.size()>0){
-        ot2.setCvsMatch((short)tcvsm.size());
+      if (tcvsm.size() > 0) {
+        ot2.setCvsMatch((short) tcvsm.size());
         ot2Dao.updateCvsMatch(ot2);
       }
 
@@ -144,8 +144,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
-      if(tmom.size()>0){
-        ot2.setOtherMatch((short)tmom.size());
+      if (tmom.size() > 0) {
+        ot2.setOtherMatch((short) tmom.size());
         ot2Dao.updateOtherMatch(ot2);
       }
 
@@ -170,8 +170,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("rc3Info: " + moInfo);
         flag = true;
       }
-      if(trc3m.size()>0){
-        ot2.setRc3Match((short)trc3m.size());
+      if (trc3m.size() > 0) {
+        ot2.setRc3Match((short) trc3m.size());
         ot2Dao.updateRc3Match(ot2);
       }
 
@@ -196,31 +196,33 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug("moInfo: " + moInfo);
         flag = true;
       }
-      if(tmpm.size()>0){
-        ot2.setMinorPlanetMatch((short)tmpm.size());
+      if (tmpm.size() > 0) {
+        ot2.setMinorPlanetMatch((short) tmpm.size());
         ot2Dao.updateMinorPlanetMatch(ot2);
       }
 
-      Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
-      for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
-        OtLevel2 tot2 = (OtLevel2) entry.getKey();
-        Double distance = (Double) entry.getValue();
+      if (ot2.getRa() >= 0 && ot2.getRa() <= 360 && ot2.getDec() >= -90 && ot2.getDec() <= 90) {
+        Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
+        for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
+          OtLevel2 tot2 = (OtLevel2) entry.getKey();
+          Double distance = (Double) entry.getValue();
 
-        MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
-        ot2m.setRa(tot2.getRa());
-        ot2m.setDec(tot2.getDec());
-        ot2m.setMag(tot2.getMag());
-        ot2m.setDistance(distance.floatValue());
-        ot2mDao.save(ot2m);
-        flag = true;
-      }
-      if(tOT2Hism.size()>0){
-        ot2.setOt2HisMatch((short)tOT2Hism.size());
-        ot2Dao.updateOt2HisMatch(ot2);
+          MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
+          OtLevel2Match ot2m = new OtLevel2Match();
+          ot2m.setOtId(ot2.getOtId());
+          ot2m.setMtId(ott.getMtId());
+          ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
+          ot2m.setRa(tot2.getRa());
+          ot2m.setDec(tot2.getDec());
+          ot2m.setMag(tot2.getMag());
+          ot2m.setDistance(distance.floatValue());
+          ot2mDao.save(ot2m);
+          flag = true;
+        }
+        if (tOT2Hism.size() > 0) {
+          ot2.setOt2HisMatch((short) tOT2Hism.size());
+          ot2Dao.updateOt2HisMatch(ot2);
+        }
       }
 
       if (flag) {
@@ -305,9 +307,15 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, tableName);
       MinorPlanet minObj = null;
       double minDis = searchRadius;
-      float day = (float) CommonFunction.dateToJulian(CommonFunction.getUTCDate(new Date()));
+
+      Calendar cal = Calendar.getInstance();
       for (MinorPlanet obj : objs) {
-        float subDay = day - obj.getMjd();
+        /**
+         * 天 86400000.0 小时 3600000.0 分钟 60000.0
+         */
+        cal.setTime(CommonFunction.getUTCDate(new Date()));
+        double tday = cal.getTimeInMillis() / 86400000.0;
+        double subDay = tday - (int) tday;
         double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon() + obj.getDlon() * subDay, obj.getLat() + obj.getDlat() * subDay);
         if (tDis < minDis) {
           rst.put(obj, tDis);

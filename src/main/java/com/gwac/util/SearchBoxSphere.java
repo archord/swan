@@ -29,6 +29,10 @@ public class SearchBoxSphere {
     searchRadius = 0;
   }
 
+  public String toString() {
+    return "ra=" + ra + ",dec=" + dec + ",minRa=" + minRa + ",maxRa=" + maxRa + ",minDec=" + minDec + ",maxDec=" + maxDec + ",searchRadius=" + searchRadius + "\n";
+  }
+
   public SearchBoxSphere(double ra, double dec, double searchRadius) {
     this.ra = ra;
     this.dec = dec;
@@ -40,13 +44,13 @@ public class SearchBoxSphere {
   }
 
   /**
-   *根据搜索半径searchRadius计算星(ra,dec)的搜索半径。
+   * 根据搜索半径searchRadius计算星(ra,dec)的搜索半径。
+   *
    * @param ra 赤经，单位度
    * @param dec 赤纬，单位度
    * @param searchRadius 搜寻半径， 单位度
-   * @return 0,1,2. 
-   * 0，输入参数不合法，输入坐标ra，dec，查找半径searchRadius，超过允许范围。
-   * 1，计算正确，赤经范围没有跨越0（360），搜寻半径为[minRa, maxRa] 
+   * @return 0,1,2. 0，输入参数不合法，输入坐标ra，dec，查找半径searchRadius，超过允许范围。
+   * 1，计算正确，赤经范围没有跨越0（360），搜寻半径为[minRa, maxRa]
    * 2，计算正确，赤经范围跨越0（360），搜寻半径为[minRa,360]和[0, maxRa]
    */
   public int calSearchBox(double ra, double dec, double searchRadius) {
@@ -72,7 +76,9 @@ public class SearchBoxSphere {
         minRa = 0;
       }
       if (getMinRa() > getMaxRa()) {
-        /**赤经范围跨越0（360）*/
+        /**
+         * 赤经范围跨越0（360）
+         */
         flag = 2;
       } else {
         flag = 1;
