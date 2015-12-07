@@ -40,6 +40,8 @@
         <property name="isTestServer" value="${gwac.server.test}" />
         <property name="serverIP" value="${gwac.follow.server.ip}" />
         <property name="serverPort" value="${gwac.follow.server.port}" />
+        <property name="server30IP" value="${gwac.follow30.server.ip}" />
+        <property name="server30Port" value="${gwac.follow30.server.port}" />
     </bean>
 
     <bean id="otListConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">

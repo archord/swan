@@ -54,7 +54,7 @@
 }
 
 #ot-followup .select{
-  width: 100px;
+  width: 120px;
   height: 28px;
   margin: 0;
   padding: 0;
@@ -341,6 +341,23 @@
 #ot-list{
   font-size: 14px;
 }
+#ot-list a:visited{
+  color: #CCCCCC;
+}
+#ot-list a.importantOT2{
+  color: #FF0000;
+  font-weight: bold;
+}
+#ot-list a.importantOT2:visited{
+  color: #FF9797;
+}
+#ot-list a.importantRC3{
+  color: #D9006C;
+  font-weight: bold;
+}
+#ot-list a.importantRC3:visited{
+  color: #ffaad5;
+}
 .ot-list-top, .ot-list-body{
   /*background-color: #1bc5a3;*/
   font-size: 14px;
@@ -432,4 +449,8 @@
 
 label.error{
   color: red;
+}
+
+#ot-classify{
+  margin-right: 5px;
 }

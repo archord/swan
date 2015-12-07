@@ -58,7 +58,7 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
     ot2qp.setStart(from);
     ot2qp.setSize(rows);
     checkIsHistory(ot2qp);
-    log.debug(ot2qp.toString());
+//    log.debug(ot2qp.toString());
 
     gridModel = obDao.queryOtLevel2(ot2qp);
     records = obDao.countOtLevel2(ot2qp);

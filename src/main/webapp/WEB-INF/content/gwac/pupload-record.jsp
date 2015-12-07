@@ -5,6 +5,15 @@
 
 <s:property value="echo" escape="%{escape}"/>
 
+<script type="text/javascript">
+
+  function formatFileName2(cellvalue, options, rowObject) {
+    var url = "${pageContext.request.contextPath}/images/" + rowObject.storePath + rowObject.fileName;
+    return "<a href='" + url + "' target='_blank' title='点击打开文件'>" + cellvalue + "</a>";
+  }
+
+</script>
+
 <!--strong>已注册用户列表:</strong-->
 <s:url var="remoteurl" action="get-upload-file-record-list" namespace="/"/>
 <!--width="700" resizable="true" 
@@ -21,7 +30,7 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   rownumbers="true"
   width="650"
   viewrecords="true">
-  <sjg:gridColumn name="fileName"   index="fileName"	  title="文件名" width="410"  
+  <sjg:gridColumn name="fileName"   index="fileName"	  title="文件名" width="410"   formatter="formatFileName2"
 		  sortable="false" align="left"/>
   <sjg:gridColumn name="uploadSuccess"    index="uploadSuccess"	  title="是否上传成功" width="80" 
 		  sortable="false" align="center"/>

@@ -50,12 +50,12 @@ public class GetOtLevel2List2 extends ActionSupport implements SessionAware {
 //  @Transactional(readOnly=true)
   public String execute() {
 
-    log.debug("get ot level2 list");
+//    log.debug("get ot level2 list");
     ot2qp.setQueryHis(false);
-    log.debug(ot2qp.toString());
+//    log.debug(ot2qp.toString());
 
     gridModel = obDao.queryOtLevel2(ot2qp);
-    log.debug(gridModel.size());
+//    log.debug(gridModel.size());
 
     return SUCCESS;
   }

@@ -19,7 +19,7 @@ public class OtTypeDaoImpl extends BaseHibernateDaoImpl<OtType> implements OtTyp
   @Override
   public OtType getOtTypeByTypeName(String typeName) {
 
-    String sql = "select * from match_table where match_type_name='" + typeName + "'";
+    String sql = "select * from ot_type where ott_name='" + typeName + "'";
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql).addEntity(OtType.class);
     List<OtType> otts = q.list();

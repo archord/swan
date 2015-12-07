@@ -33,6 +33,12 @@ delete from var_star_record;
 update data_process_machine set cur_process_number=0;
 update data_process_machine set first_record_number=0;
 
+##删除历史表中某一条的记录
+delete from config_file_his where substring(store_path, 1,6)='141224';
+delete from ot_level2_his where date_str='141224';
+delete from ot_observe_record_his where date_str='141224';
+delete from fits_file_cut_his where substring(store_path, 1,6)='141224';
+
 ##归档
 WITH moved_rows AS ( DELETE FROM ot_level2 RETURNING * ) INSERT INTO ot_level2_his SELECT * FROM moved_rows;
 WITH moved_rows AS ( DELETE FROM fits_file_cut RETURNING * ) INSERT INTO fits_file_cut_his SELECT * FROM moved_rows;

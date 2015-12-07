@@ -64,6 +64,8 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public void updateOt2HisMatch(OtLevel2 ot2);
 
   public void updateOtherMatch(OtLevel2 ot2);
+  
+  public void updateOtType(int otId, int otTypeId);
 
   public List<OtLevel2> getUnMatched();
 }

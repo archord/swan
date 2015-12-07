@@ -17,6 +17,7 @@
     <property name="obDao" ref="otbDao" />
     <property name="ffcrDao" ref="ffcrDao" />
     <property name="otorDao" ref="otORDao" />
+    <property name="ottDao" ref="ottDao" />
   </bean>
   
   <bean class="com.gwac.action.GetOtLevel2List2"  scope="prototype">

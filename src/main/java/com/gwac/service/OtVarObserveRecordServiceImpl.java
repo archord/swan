@@ -198,6 +198,11 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setDataProduceMethod('6');    //星表匹配变星
             tOtLv2.setFoCount((short) 0);
             tOtLv2.setMag(oor1.getMagAper());
+            tOtLv2.setCvsMatch((short) 0);
+            tOtLv2.setRc3Match((short) 0);
+            tOtLv2.setMinorPlanetMatch((short) 0);
+            tOtLv2.setOt2HisMatch((short) 0);
+            tOtLv2.setOtherMatch((short) 0);
 
             int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
 

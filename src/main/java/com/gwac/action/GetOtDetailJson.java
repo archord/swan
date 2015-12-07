@@ -4,9 +4,11 @@ import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.dao.OtTypeDao;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtType;
 import com.gwac.model.UserInfo;
 import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
@@ -34,6 +36,7 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
   private FitsFileCutRefDAO ffcrDao;
   private OtLevel2Dao obDao;
   private OtObserveRecordDAO otorDao;
+  private OtTypeDao ottDao;
   /**
    * 查询条件
    */
@@ -49,6 +52,7 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
   private String otPositionVaration;
   private String dataRootWebMap;
   private UserInfo userInfo;
+  private List<OtType> otTypes;
 
   @Actions({
     @Action(value = "/get-ot-detail-json", results = {
@@ -63,6 +67,7 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
       userInfo = (UserInfo)session.get("userInfo");
     }
 
+    otTypes=ottDao.findAll();
     List<Integer> tlist = obDao.hisOrCurExist(otName);
     if (!tlist.isEmpty()) {
       Integer his = tlist.get(0);
@@ -194,6 +199,20 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
    */
   public UserInfo getUserInfo() {
     return userInfo;
+  }
+
+  /**
+   * @param ottDao the ottDao to set
+   */
+  public void setOttDao(OtTypeDao ottDao) {
+    this.ottDao = ottDao;
+  }
+
+  /**
+   * @return the otTypes
+   */
+  public List<OtType> getOtTypes() {
+    return otTypes;
   }
 
 }

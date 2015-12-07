@@ -201,6 +201,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   /**
    * 查询OT是在历史表还是当前表
+   *
    * @param otName
    * @return his=0 OT存在ot_level2表，his=1 OT存在ot_level2_his表
    */
@@ -208,7 +209,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   public List<Integer> hisOrCurExist(String otName) {
 
     List result = new ArrayList<>();
-    
+
     String sql = "select 0 his from ot_level2 where name='" + otName
             + "' union select 1 his from ot_level2_his where name='" + otName + "';";
 
@@ -291,7 +292,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     StringBuilder sql = new StringBuilder("");
 
     ot2qp.removeEmpty();
-    log.debug(ot2qp.toString());
+//    log.debug(ot2qp.toString());
 
     if (ot2qp.getOtName() != null && !ot2qp.getOtName().isEmpty()) {
       sql.append(" and name='").append(ot2qp.getOtName()).append("' ");
@@ -362,7 +363,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     } else {
       unionSql = sqlprefix1 + " order by found_time_utc desc";
     }
-    log.debug(unionSql);
+//    log.debug(unionSql);
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
     if (ot2qp.getSize() != 0) {
@@ -507,6 +508,13 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   @Override
   public void updateOtherMatch(OtLevel2 ot2) {
     String sql = "update ot_level2 set other_match=" + ot2.getOtherMatch() + " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateOtType(int otId, int otTypeId) {
+    String sql = "update ot_level2 set ot_type=" + otTypeId + " where ot_id=" + otId;
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }

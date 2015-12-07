@@ -4,6 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  <bean class="com.gwac.action.OTClassify"  scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />
+  </bean>
+	
+  <bean id="ottDao" class="com.gwac.dao.OtTypeDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.OtType</value>
+    </property>
+  </bean>
 	
   <bean id="mtDao" class="com.gwac.dao.MatchTableDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />

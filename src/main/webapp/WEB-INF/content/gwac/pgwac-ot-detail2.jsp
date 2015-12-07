@@ -33,6 +33,7 @@
   <body>
     <div style="display: none;">
       <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
+      <input type="hidden" id="otId" value=""/>
     </div>
     <div class="container-fluid"> <!--container container-fluid -->
       <div class="row ot-detail-top">
@@ -44,7 +45,7 @@
           <s:form id="otFollowUp"  action="otFollowUp" theme="simple" cssClass="yform" namespace="/">
             <table style="width:100%;">
               <tr>
-                <th width="100px">观测者</th><th>后随名称</th><th>RA(度)</th><th>DEC(度)</th><th>曝光时间(S)</th><th>曝光帧数</th><th>滤光片</th><th></th>
+                <th width="100px">观测者</th><th>后随名称</th><th>RA(度)</th><th>DEC(度)</th><th>曝光时间(S)</th><th>曝光帧数</th><th>后随望远镜</th><th>滤光片</th><th></th>
               </tr>
               <tr>
                 <td><input type="text" style="border-color: #bdc3c7;color: #34495e;" name="ot2fp.userName" readonly="true" id="userName" value="mini-GWAC" class="form-control"/></td>
@@ -53,6 +54,12 @@
                 <td><input type="text" style="width: 80px; " name="ot2fp.dec" id="fuDec" value="" class="form-control"/></td>
                 <td><input type="text" style="width: 80px; " name="ot2fp.expTime" id="expTime" value="2" class="form-control"/></td>
                 <td><input type="text" style="width: 80px; " name="ot2fp.frameCount" id="frameCount" value="10" class="form-control"/></td>
+                <td>
+                  <select name="ot2fp.telescope" class="form-control select select-primary" data-toggle="select">
+                    <option value="1" selected>60公分</option>
+                    <option value="2">30公分</option>
+                  </select>
+                </td>
                 <td>
                   <select name="ot2fp.filter" class="form-control select select-primary" data-toggle="select">
                     <option value="Lum" selected>Lum</option>
@@ -80,8 +87,13 @@
           <div id="cut-image-show">
           </div>
           <div id="skyCoordinate">
+            <span id="ot-classify">OT分类&nbsp;<select name="ot2Classify" id="ot2Classify" title="选择即可分类"></select>
+              <a id="ot2ClassifyBtn" href='#' title='点击对OT2进行分类' style="display:none">OT分类</a></span>
             <span id="skyCordDetail"></span>
             <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图' style="display: none;">点击查看fits切图</a></span>
+          </div>
+          <div id="ot-comment">
+            
           </div>
           <div id="ot-curves">
             <div id="ot-curve-show">

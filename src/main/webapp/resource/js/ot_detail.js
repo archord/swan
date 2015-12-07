@@ -32,6 +32,7 @@ $(function() {
   function ot2Show(data) {
     initLoginInfo(data);
     initFollowUpInfo(data);
+    otClassify(data);
     cutImgShow(data);
     otSkyCoordinateShow(data);
     otCurveShow(data);
@@ -121,6 +122,7 @@ $(function() {
 
   function initFollowUpInfo(data) {
     var ot2 = data.ot2;
+    $("#otId").val(ot2.otId);
     $("#otName").val(ot2.name);
     $("#fuRa").val(ot2.ra);
     $("#fuDec").val(ot2.dec);
@@ -132,27 +134,72 @@ $(function() {
         message: "确定发送后随信息？",
         callback: function(result) {
           if (result) {
+            var gwacRootURL = $("#gwacRootURL").val();
+            var fuUrl = gwacRootURL + "/otFollowUp.action";
             var formData = $("#otFollowUp").serialize();
-            console.log(formData);
-            $.post("otFollowUp.action", formData,
+//            console.log(formData);
+            $.post(fuUrl, formData,
                     function(data) {
                       console.log(data);
-                      alert(data.result);
+//                      alert(data.result);
                     }, "json");
           }
         }
       });
     });
-//    $("#followBtn").click(function() {
-//      if (window.confirm('确定发送后随信息？')) {
-//        var formData = $("#otFollowUp").serialize();
-//        console.log(formData);
-//        $.post("otFollowUp.action", formData,
-//                function(data) {
-//                  console.log(data);
-//                  alert(data.result);
-//                }, "json");
-//      }
+  }
+
+  function otClassify(data) {
+    var otTypes = data.otTypes;
+    var ot2 = data.ot2;
+    $.each(otTypes, function(i, item) {
+      $('#ot2Classify').append($('<option>', {
+        value: item.ottId,
+        text: item.ottName
+      }));
+    });
+
+    if (ot2.otType === 'null' || ot2.otType === null) {
+      $("#ot2Classify").val(0);
+    } else {
+      $("#ot2Classify").val(ot2.otType);
+    }
+
+    $("#ot2Classify").change(function() {
+      var gwacRootURL = $("#gwacRootURL").val();
+      var otTypeId = $("#ot2Classify").val();
+      var otId = $("#otId").val();
+      var url = gwacRootURL + "/ot-classify.action";
+      var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
+//      console.log(formData);
+//      console.log(url);
+      $.post(url, formData,
+              function(data) {
+                console.log(data);
+//                if (data.flag === '1') {
+//                  alert("分类成功!");
+//                } else {
+//                  alert("分类失败!");
+//                }
+              }, "json");
+    });
+
+//    $("#ot2ClassifyBtn").click(function() {
+//      var gwacRootURL = $("#gwacRootURL").val();
+//      var otTypeId = $("#ot2Classify").val();
+//      var otId = $("#otId").val();
+//      var url = gwacRootURL + "/ot-classify.action";
+//      var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
+////      console.log(formData);
+//      $.post(url, formData,
+//              function(data) {
+//                console.log(data);
+//                if (data.flag === '1') {
+//                  alert("分类成功!");
+//                } else {
+//                  alert("分类失败!");
+//                }
+//              }, "json");
 //    });
   }
 

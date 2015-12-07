@@ -25,6 +25,7 @@ public class OtLevel2FollowParameter {
   private String triggerType;
   private String epoch;
   private String imageType;
+  private Short telescope;
   
   public OtLevel2FollowParameter(){
     this.triggerType="2";
@@ -87,7 +88,8 @@ public class OtLevel2FollowParameter {
               + "\n filter=" + filter
               + "\n begineTime=" + begineTime
               + "\n endTime=" + endTime
-              + "\n followName=" + followName;
+              + "\n followName=" + followName
+              + "\n telescope=" + getTelescope();
   }
   
   public Boolean isEmpty(){
@@ -293,6 +295,20 @@ public class OtLevel2FollowParameter {
    */
   public void setPriority(int priority) {
     this.priority = priority;
+  }
+
+  /**
+   * @return the telescope
+   */
+  public Short getTelescope() {
+    return telescope;
+  }
+
+  /**
+   * @param telescope the telescope to set
+   */
+  public void setTelescope(Short telescope) {
+    this.telescope = telescope;
   }
 
 }

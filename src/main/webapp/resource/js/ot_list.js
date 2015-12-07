@@ -82,6 +82,14 @@ $(function() {
           "data": "ID?",
           "render": formateRowNumber
         }, {
+          "targets": 8,
+          "data": "dont know",
+          "render": formateRC3
+        }, {
+          "targets": 12,
+          "data": "dont know",
+          "render": formateOT2His
+        }, {
           "targets": 13,
           "data": "dont know",
           "render": formateFirstNMark
@@ -124,6 +132,14 @@ $(function() {
     return data.toFixed(2);
   }
 
+  function formateRC3(data, type, full, meta) {
+    return data ? "<span style='color:#D9006C;font-weight: bold;'>" + data + "</span>" : data;
+  }
+
+  function formateOT2His(data, type, full, meta) {
+    return data ? data : "<span style='color:#FF0000;font-weight: bold;'>" + data + "</span>";
+  }
+
   function formateFirstNMark(data, type, full, meta) {
     return data ? '是' : '否';
   }
@@ -132,9 +148,16 @@ $(function() {
     return meta.row + 1;
   }
 
+  /*full: json对象；meta：表格元素*/
   function formateOtName(data, type, full, meta) {
     var url = baseUrl + data;
-    return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + data + "</a>";
+    if(full.ot2HisMatch===0&&full.rc3Match===0){
+      return "<a href='" + url + "' target='_blank' class='importantOT2' title='点击查看OT详细'>" + data + "</a>";
+    }else if(full.rc3Match>0){
+      return "<a href='" + url + "' target='_blank' class='importantRC3' title='点击查看OT详细'>" + data + "</a>";
+    }else{
+      return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + data + "</a>";
+    }
   }
 });
 
