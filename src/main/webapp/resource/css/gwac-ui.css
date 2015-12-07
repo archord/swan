@@ -337,6 +337,38 @@
   white-space: nowrap;
 }
 
+
+/*OT match*/
+#ot2-followup{
+  font-size: 12px;
+}
+#ot2-followup .dataTables_scroll, .ot2-followup-table-bottom, .ot2-followup-table-top, .ot2-followup-table-bottom{
+  /*display: none;*/
+}
+.ot2-followup-table-top label{
+  display: inline;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: right;
+}
+.ot2-followup-table-top input{
+  height:22px;
+  width: 80px;
+  border-color: rgb(189, 195, 199);
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 2px;
+}
+.ot2-followup-table-bottom{
+
+}
+#ot2-followup-table td, table.dataTable thead th{ 
+  line-height: 18px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  white-space: nowrap;
+}
+
 /*#pgwac-allot2*/
 #ot-list{
   font-size: 14px;
@@ -453,4 +485,31 @@ label.error{
 
 #ot-classify{
   margin-right: 5px;
+}
+
+#ot-description{
+  text-align: center;
+  margin-bottom: 3px;
+}
+
+#ot-description-content, #ot-comment-content{
+  width: 100%;
+  resize: none;
+}
+
+#ot-description-button, #ot-comment-button{
+  width: 100px;
+  height: 26px;
+  padding: 2px 0;
+  margin-top: 2px;
+}
+
+#ot-comment{
+  text-align: center;
+  margin-bottom: 3px;
+  font-size: 12px;
+}
+
+#ot-comment-list{
+  text-align: left;
 }

@@ -127,15 +127,18 @@
         <property name="rc3Dao" ref="rc3Dao" />
         <property name="mtDao" ref="mtDao" />
         <property name="ot2mDao" ref="ot2mDao" />
+        <property name="usnoDao" ref="usnoDao" />
         <property name="mergedSearchbox" value="${mingwac.merged.searchbox}" />	
         <property name="cvsSearchbox" value="${mingwac.cvs.searchbox}" />	
         <property name="rc3Searchbox" value="${mingwac.rc3.searchbox}" />	
         <property name="minorPlanetSearchbox" value="${mingwac.minorplanet.searchbox}" />
-        <property name="ot2Searchbox" value="${mingwac.ot2his.searchbox}" />		
+        <property name="ot2Searchbox" value="${mingwac.ot2his.searchbox}" />
+        <property name="usnoSearchbox" value="${mingwac.usno.searchbox}" />
         <property name="mergedMag" value="${mingwac.merged.mag}" />	
         <property name="cvsMag" value="${mingwac.cvs.mag}" />	
         <property name="rc3MinMag" value="${mingwac.rc3.minmag}" />	
         <property name="rc3MaxMag" value="${mingwac.rc3.maxmag}" />	
+        <property name="usnoMag" value="${mingwac.usno.mag}" />	
         <property name="minorPlanetMag" value="${mingwac.minorplanet.mag}" />	
         <property name="isBeiJingServer" value="${gwac.server.beijing}" />
         <property name="isTestServer" value="${gwac.server.test}" />

@@ -52,6 +52,7 @@ public class OtLevel2  implements java.io.Serializable {
      private Short minorPlanetMatch;
      private Short ot2HisMatch;
      private Short otherMatch;
+     private Short usnoMatch;
 
     public OtLevel2() {
     }
@@ -410,10 +411,25 @@ public class OtLevel2  implements java.io.Serializable {
   }
 
   /**
-   * @param otherMatch the otherMatch to set
+   * @param otherMatch the otherMatch to set 
    */
   public void setOtherMatch(Short otherMatch) {
     this.otherMatch = otherMatch;
+  }
+
+  /**
+   * @return the usnoMatch
+   */
+    @Column(name="usno_match")
+  public Short getUsnoMatch() {
+    return usnoMatch;
+  }
+
+  /**
+   * @param usnoMatch the usnoMatch to set
+   */
+  public void setUsnoMatch(Short usnoMatch) {
+    this.usnoMatch = usnoMatch;
   }
 
 }

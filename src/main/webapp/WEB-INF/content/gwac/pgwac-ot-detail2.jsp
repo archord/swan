@@ -92,8 +92,9 @@
             <span id="skyCordDetail"></span>
             <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图' style="display: none;">点击查看fits切图</a></span>
           </div>
-          <div id="ot-comment">
-            
+          <div id="ot-description">
+            <div><textarea id="ot-description-content" name="ot-description-content" class="form-control" placeholder="添加OT2的说明，官方对该OT的定性描述。"></textarea></div>
+            <div><input type="button" value="提交说明" class="btn btn-primary"  id="ot-description-button"/></div>
           </div>
           <div id="ot-curves">
             <div id="ot-curve-show">
@@ -123,6 +124,29 @@
               <!--<tfoot><tr><th>Name</th><th>Position</th><th>Office</th><th>Extn.</th><th>Start date</th><th>Salary</th></tr></tfoot>-->
             </table>
           </div>
+          <div id="ot2-followup" class="ot2-table-show">
+            <table id="ot2-followup-table" class="display" cellspacing="0" width="100%">
+              <thead><tr><th>ID</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>星等</th><th>星等误差</th><th>原FITS图</th><th>X</th><th>Y</th>
+                  <th>流量</th><th>背景</th><th>半高全宽</th><th>椭率</th><th>分类星</th></tr></thead>
+              <!--<tfoot><tr><th>Name</th><th>Position</th><th>Office</th><th>Extn.</th><th>Start date</th><th>Salary</th></tr></tfoot>-->
+            </table>
+          </div>
+          <!--div id="ot-comment">
+            <div id="ot-comment-list">
+              <div id="ot-comment-list-title">
+                <span style="font-weight: bold;font-size: 14px;">OT评论</span>&nbsp;&nbsp;
+                共<span id="comment-number">0</span>条评论&nbsp;&nbsp;
+                <a href="#" id="add-comment">添加评论</a></div>
+              <div id="ot-comment-list-content">
+                <div id="ot-comment-list-content-each">
+                  <div id="ot-comment-list-content-each-title">1楼 徐洋 2015年12月7日14点25分</div>
+                  <div id="ot-comment-list-content-each-content">小说讲述了人族孤儿千夜自困苦中崛起成为主宰之王的玄幻传奇。人族孤儿千夜，被帝国元帅林熙棠收为义子，加入黄泉训练营，后进入红蝎特种部队，一次执行任务时，作战情报被出卖，导致整个小队被灭，千夜也被血族所伤，变成血奴，却还有自己的神智。后千夜回归永夜大陆，当上一名雇佣兵，开始了自己的探索真相，走向巅峰之旅。</div>
+                </div>
+              </div>
+            </div>
+            <div><textarea id="ot-comment-content" name="ot-comment-content" class="form-control" placeholder="对该OT发表个人意见。"></textarea></div>
+            <div><input type="button" value="提交评论" class="btn btn-primary"  id="ot-comment-button"/></div>
+          </div-->
         </div>
       </div>
 

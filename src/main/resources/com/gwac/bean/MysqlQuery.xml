@@ -4,6 +4,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  <bean id="usnoDao" class="com.gwac.dao.UsnoCatalogDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactoryMysqlUson" />
+    <property name="clazz">
+      <value>com.gwac.model3.UsnoCatalog</value>
+    </property>
+  </bean>
+
   <bean id="cvsDao" class="com.gwac.dao.CVSQueryDaoImpl" >
     <property name="sessionFactory" ref="sessionFactoryMysql" />
     <property name="clazz">

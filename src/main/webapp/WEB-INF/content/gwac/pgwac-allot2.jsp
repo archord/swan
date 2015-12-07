@@ -100,9 +100,9 @@
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
             <thead><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
-                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>前N分钟</th><th>后随次数</th><th>分类标识</th></tr></thead>
+                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>前N分钟</th><th>后随次数</th><th>分类标识</th></tr></thead>
             <tfoot><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
-                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>前N分钟</th><th>后随次数</th><th>分类标识</th></tr></tfoot>
+                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>前N分钟</th><th>后随次数</th><th>分类标识</th></tr></tfoot>
           </table>
         </div>                                   
       </div>

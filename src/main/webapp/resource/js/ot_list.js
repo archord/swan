@@ -69,6 +69,7 @@ $(function() {
         {"data": "cvsMatch"},
         {"data": "otherMatch"},
         {"data": "ot2HisMatch"},
+        {"data": "usnoMatch"},
         {"data": "firstNMark"},
         {"data": "foCount"},
         {"data": "isRecognize"}
@@ -90,7 +91,7 @@ $(function() {
           "data": "dont know",
           "render": formateOT2His
         }, {
-          "targets": 13,
+          "targets": 14,
           "data": "dont know",
           "render": formateFirstNMark
         }, {
@@ -151,7 +152,7 @@ $(function() {
   /*full: json对象；meta：表格元素*/
   function formateOtName(data, type, full, meta) {
     var url = baseUrl + data;
-    if(full.ot2HisMatch===0&&full.rc3Match===0){
+    if(full.ot2HisMatch===0&&full.rc3Match===0&&full.minorPlanetMatch===0&&full.usnoMatch===0){
       return "<a href='" + url + "' target='_blank' class='importantOT2' title='点击查看OT详细'>" + data + "</a>";
     }else if(full.rc3Match>0){
       return "<a href='" + url + "' target='_blank' class='importantRC3' title='点击查看OT详细'>" + data + "</a>";

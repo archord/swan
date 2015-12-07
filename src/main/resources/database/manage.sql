@@ -57,3 +57,9 @@ update ot_level2
 set mag=ot_observe_record.mag_aper
 from ot_observe_record
 where ot_observe_record.ot_id=ot_level2.ot_id and ot_observe_record.ff_number=ot_level2.last_ff_number;
+
+##计算ot2与匹配上usno的星等差
+select ot.name, ot.mag, olm.mag, ot.mag-olm.mag
+from ot_level2 ot
+inner join ot_level2_match olm on olm.ot_id=ot.ot_id
+where ot.usno_match=1 and olm.mag!=0 and abs(ot.mag-olm.mag)>1;

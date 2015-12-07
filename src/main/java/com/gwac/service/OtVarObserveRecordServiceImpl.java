@@ -203,6 +203,7 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setMinorPlanetMatch((short) 0);
             tOtLv2.setOt2HisMatch((short) 0);
             tOtLv2.setOtherMatch((short) 0);
+            tOtLv2.setUsnoMatch((short) 0);
 
             int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
 

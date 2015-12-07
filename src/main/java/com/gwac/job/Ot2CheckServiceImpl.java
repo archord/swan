@@ -12,6 +12,7 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtLevel2MatchDao;
 import com.gwac.dao.MatchTableDao;
 import com.gwac.dao.Rc3Dao;
+import com.gwac.dao.UsnoCatalogDao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2Match;
 import com.gwac.model.MatchTable;
@@ -19,7 +20,9 @@ import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
 import com.gwac.model2.MinorPlanet;
 import com.gwac.model2.Rc3;
+import com.gwac.model3.UsnoCatalog;
 import com.gwac.util.CommonFunction;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,18 +46,21 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private float rc3Searchbox;
   private float minorPlanetSearchbox;
   private float ot2Searchbox;
+  private float usnoSearchbox;
 
   private float mergedMag;
   private float cvsMag;
   private float rc3MinMag;
   private float rc3MaxMag;
   private float minorPlanetMag;
+  private float usnoMag;
 
   private OtLevel2Dao ot2Dao;
   private CVSQueryDao cvsDao;
   private MergedOtherDao moDao;
   private MinorPlanetDao mpDao;
   private Rc3Dao rc3Dao;
+  private UsnoCatalogDao usnoDao;
 
   private MatchTableDao mtDao;
   private OtLevel2MatchDao ot2mDao;
@@ -97,6 +103,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 //    log.debug("ot2 size: " + ot2s.size());
     for (OtLevel2 ot2 : ot2s) {
 
+      if (ot2.getRa() < 0 || ot2.getRa() > 360 || ot2.getDec() < -90 || ot2.getDec() > 90) {
+        continue;
+      }
       Boolean flag = false;
       Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
       for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
@@ -201,28 +210,60 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2Dao.updateMinorPlanetMatch(ot2);
       }
 
-      if (ot2.getRa() >= 0 && ot2.getRa() <= 360 && ot2.getDec() >= -90 && ot2.getDec() <= 90) {
-        Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
-        for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
-          OtLevel2 tot2 = (OtLevel2) entry.getKey();
+      long startTime = System.nanoTime();
+      Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
+      for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
+        OtLevel2 tot2 = (OtLevel2) entry.getKey();
+        Double distance = (Double) entry.getValue();
+
+        MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
+        OtLevel2Match ot2m = new OtLevel2Match();
+        ot2m.setOtId(ot2.getOtId());
+        ot2m.setMtId(ott.getMtId());
+        ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
+        ot2m.setRa(tot2.getRa());
+        ot2m.setDec(tot2.getDec());
+        ot2m.setMag(tot2.getMag());
+        ot2m.setDistance(distance.floatValue());
+        ot2mDao.save(ot2m);
+        flag = true;
+      }
+      if (tOT2Hism.size() > 0) {
+        ot2.setOt2HisMatch((short) tOT2Hism.size());
+        ot2Dao.updateOt2HisMatch(ot2);
+      }
+      long endTime = System.nanoTime();
+      log.debug("search ot2 history consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+
+      if (ot2.getDataProduceMethod() == '8') {
+        startTime = System.nanoTime();
+        Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog(ot2, usnoSearchbox, usnoMag);//minorPlanetSearchbox
+//        log.debug("usnoSearchbox: " + usnoSearchbox);
+//        log.debug("usnoMag: " + usnoMag);
+//        log.debug("usno match size: " + tusno.size());
+        for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
+          UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
           Double distance = (Double) entry.getValue();
 
-          MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
+          MatchTable ott = getMtDao().getMatchTableByTypeName("usno");
           OtLevel2Match ot2m = new OtLevel2Match();
           ot2m.setOtId(ot2.getOtId());
           ot2m.setMtId(ott.getMtId());
-          ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
-          ot2m.setRa(tot2.getRa());
-          ot2m.setDec(tot2.getDec());
-          ot2m.setMag(tot2.getMag());
+          ot2m.setMatchId(Long.valueOf(tmp.getRcdid()));
+          ot2m.setRa(tmp.getrAdeg());
+          ot2m.setDec(tmp.getdEdeg());
+          ot2m.setMag(tmp.getRmag());
           ot2m.setDistance(distance.floatValue());
+          ot2m.setD25(new Float(0));
           ot2mDao.save(ot2m);
           flag = true;
         }
-        if (tOT2Hism.size() > 0) {
-          ot2.setOt2HisMatch((short) tOT2Hism.size());
-          ot2Dao.updateOt2HisMatch(ot2);
+        if (tusno.size() > 0) {
+          ot2.setUsnoMatch((short) tusno.size());
+          ot2Dao.updateUsnoMatch(ot2);
         }
+        endTime = System.nanoTime();
+        log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
       }
 
       if (flag) {
@@ -323,6 +364,42 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       }
     } else {
       log.warn("table " + tableName + " not exists!");
+    }
+    return rst;
+  }
+
+  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog(OtLevel2 ot2, float searchRadius, float mag) {
+
+    List<String> tableNames = getUsnoTableNames(ot2);
+    Map rst = new HashMap();
+    for (String tName : tableNames) {
+      if (usnoDao.tableExists(tName)) {
+        List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, searchRadius, mag, tName);
+        double minDis = searchRadius;
+        for (UsnoCatalog obj : objs) {
+          double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+          if (tDis < minDis) {
+            rst.put(obj, tDis);
+          }
+        }
+      } else {
+        log.warn("table " + tName + " not exists!");
+      }
+    }
+    return rst;
+  }
+
+  public List<String> getUsnoTableNames(OtLevel2 ot2) {
+
+    List<String> rst = new ArrayList();
+    if (ot2.getDec() + 90 > 0 && ot2.getDec() - 90 < 0) {
+      MatchTable ott = getMtDao().getMatchTableByTypeName("usno");
+      int maxIdx = (int) ((90 + ot2.getDec() + usnoSearchbox) * 10);
+      int minIdx = (int) ((90 + ot2.getDec() - usnoSearchbox) * 10);
+      for (int i = minIdx; i <= maxIdx; i++) {
+        String tableName = String.format("%4d%s", i, ott.getMatchTableName());
+        rst.add(tableName);
+      }
     }
     return rst;
   }
@@ -575,6 +652,27 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    */
   public void setOt2Searchbox(float ot2Searchbox) {
     this.ot2Searchbox = ot2Searchbox;
+  }
+
+  /**
+   * @param usnoSearchbox the usnoSearchbox to set
+   */
+  public void setUsnoSearchbox(float usnoSearchbox) {
+    this.usnoSearchbox = usnoSearchbox;
+  }
+
+  /**
+   * @param usnoMag the usnoMag to set
+   */
+  public void setUsnoMag(float usnoMag) {
+    this.usnoMag = usnoMag;
+  }
+
+  /**
+   * @param usnoDao the usnoDao to set
+   */
+  public void setUsnoDao(UsnoCatalogDao usnoDao) {
+    this.usnoDao = usnoDao;
   }
 
 }
