@@ -25,7 +25,7 @@ public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> im
   @Override
   public List<OtLevel2MatchShow> getByOt2Name(String otName) {
     Session session = getCurrentSession();
-    String sql = "select mt.match_table_name, ot2h.name ot2_name, olm.* "
+    String sql = "select mt.comments match_table_name, ot2h.name ot2_name, olm.* " //显示match_table_name不便于理解，偷懒，直接显示注释中文名
             + "from ot_level2_match olm "
             + "inner join match_table mt on mt.mt_id=olm.mt_id "  // and mt.match_table_name='ot_level2_his'
             + "left join ot_level2_his ot2h on ot2h.ot_id=olm.match_id and mt.match_table_name='ot_level2_his'"

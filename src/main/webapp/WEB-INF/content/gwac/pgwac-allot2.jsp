@@ -51,6 +51,7 @@
               <option value="minor_planet_match">小行星</option>
               <option value="ot2_his_match">OT2历史</option>
               <option value="other_match">其他类型</option>
+              <option value="usno_match">USNO</option>
             </select>
           </div>
           <div class="col-xs-4 col-sm-4 col-md-2 ">

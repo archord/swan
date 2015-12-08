@@ -2,6 +2,8 @@
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
   var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
+  var ot2arr;
+  loadOT2Type();
   loadQueryParmeter();
   var ot2ListTable = loadOT2List();
   var ot2QueryInterval;
@@ -34,11 +36,26 @@ $(function() {
 
   function ot2QueryBtnClick() {
     var formData = $("#ot2QueryAction").serialize();
-    if (formData === 'autoRefresh=on' || formData ==='') {
+    if (formData === 'autoRefresh=on' || formData === '') {
       formData = "ot2qp.otName=";
     }
     var queryUrl = $("#ot2QueryAction").attr('action') + "?timestamp=" + new Date().getTime() + "&" + formData;
     ot2ListTable.ajax.url(queryUrl).load();
+  }
+
+  function loadOT2Type() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var queryUrl = gwacRootURL + "/get-ot-type-json.action";
+    $.ajax({
+      type: "get",
+      url: queryUrl,
+      data: '{}',
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+        ot2arr = data.otTypes;
+      }
+    });
   }
 
   function loadOT2List() {
@@ -72,16 +89,24 @@ $(function() {
         {"data": "usnoMatch"},
         {"data": "firstNMark"},
         {"data": "foCount"},
-        {"data": "isRecognize"}
+        {"data": "otType"}
       ],
       "columnDefs": [{
+          "targets": 0,
+          "data": "ID?",
+          "render": formateRowNumber
+        }, {
           "targets": 1,
           "data": "OtName?",
           "render": formateOtName
         }, {
-          "targets": 0,
-          "data": "ID?",
-          "render": formateRowNumber
+          "targets": [2, 3],
+          "data": "dont know",
+          "render": floatFormate3
+        }, {
+          "targets": [4, 5],
+          "data": "dont know",
+          "render": floatFormate2
         }, {
           "targets": 8,
           "data": "dont know",
@@ -95,13 +120,9 @@ $(function() {
           "data": "dont know",
           "render": formateFirstNMark
         }, {
-          "targets": [2, 3],
+          "targets": 16,
           "data": "dont know",
-          "render": floatFormate3
-        }, {
-          "targets": [4, 5],
-          "data": "dont know",
-          "render": floatFormate2
+          "render": formateOtType
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -123,6 +144,17 @@ $(function() {
       dom: 'lftrip'
     });
     return ot2ListTable;
+  }
+
+
+  function formateOtType(data, type, full, meta) {
+    var rst;
+    if (data >= 0) {
+      rst = ot2arr[data].ottName;
+    } else {
+      rst = "未分类";
+    }
+    return rst;
   }
 
   function floatFormate3(data, type, full, meta) {
@@ -152,11 +184,11 @@ $(function() {
   /*full: json对象；meta：表格元素*/
   function formateOtName(data, type, full, meta) {
     var url = baseUrl + data;
-    if(full.ot2HisMatch===0&&full.rc3Match===0&&full.minorPlanetMatch===0&&full.usnoMatch===0){
+    if (full.ot2HisMatch === 0 && full.rc3Match === 0 && full.minorPlanetMatch === 0 && full.usnoMatch === 0) {
       return "<a href='" + url + "' target='_blank' class='importantOT2' title='点击查看OT详细'>" + data + "</a>";
-    }else if(full.rc3Match>0){
+    } else if (full.rc3Match > 0) {
       return "<a href='" + url + "' target='_blank' class='importantRC3' title='点击查看OT详细'>" + data + "</a>";
-    }else{
+    } else {
       return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + data + "</a>";
     }
   }
