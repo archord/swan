@@ -17,6 +17,8 @@
   <constant name="struts.ckeditor.allowUploads" value="true" /> <!-- default is false -->
   <constant name="struts.ckeditor.allowedFileExtensions" value="jpg,jpeg,png" />
   <constant name="struts.ckeditor.uploadFolder" value="/tmp" />
+  
+  <constant name="struts.action.extension" value="action" />
     
   <!-- include file="showcase.xml" / -->
   <!--<include file="struts-default.xml" />--> 
@@ -25,22 +27,36 @@
     
     <!-- 自定义拦截器 -->
     <interceptors>
-     <interceptor name="userAuthority" class="com.gwac.action.LoginInterceptor"/>
-     <!-- 自定义拦截器堆栈 -->
-     <interceptor-stack name="gwacStack">
-      <interceptor-ref name="userAuthority"/>
-      <!-- 引用默认的拦截器堆栈 -->
-      <interceptor-ref name="defaultStack"/>
-     </interceptor-stack>
+      <interceptor name="userAuthority" class="com.gwac.action.LoginInterceptor"/>
+      <!-- 自定义拦截器堆栈 -->
+      <interceptor-stack name="gwacStack">
+        <interceptor-ref name="userAuthority"/>
+        <!-- 引用默认的拦截器堆栈 -->
+        <interceptor-ref name="defaultStack"/>
+      </interceptor-stack>
     </interceptors>
 
     <!-- 重定义默认拦截器堆栈 -->
     <default-interceptor-ref name="gwacStack"/>
 
     <global-results>
-     <result name="login" type="redirectAction">user/login.jsp</result>
-     <result name="error" type="redirectAction">error.jsp</result>
+      <result name="login" type="redirectAction">user/login.jsp</result>
+      <result name="error" type="redirectAction">error.jsp</result>
     </global-results>
+    
+    <action name="downloadot2" class="com.gwac.action.OT2InfoDownload">
+      <result name="success" type="stream">
+        <param name="contentType">${contentType}</param>
+        <param name="inputName">inputStream</param>
+        <param name="contentDisposition">attachment;filename="${fileName}"</param>
+        <param name="bufferSize">1024</param>
+      </result> 
+    </action>
+
+  </package>
+	
+</struts>
+
     
 <!--    <action name="resultActionabc" class="com.gwac.action.FileUploadAction">
       <interceptor-ref name="exception"/>
@@ -63,9 +79,4 @@
       <result name="input">manage/fileupload.jsp</result>
       <result name="error">manage/result.jsp</result>
  
-        </action>-->
-
-		
-    </package>
-	
-</struts>
+</action>-->

@@ -17,6 +17,9 @@
 <s:url var="otDetail" action="get-ot-detail" namespace="/"/>
 
 <script type="text/javascript">
+  
+  var ot2arr;
+  loadOT2Type();
 
   function formatLink(cellvalue, options, rowObject) {
     var url = "<s:property value="otDetail"/>?otName=" + cellvalue;
@@ -52,6 +55,18 @@
     }
     return showVal;
   }
+  
+  function formateOtType(cellvalue, options, rowObject)  {
+    var rst;
+    console.log(cellvalue);
+    if (cellvalue >= 0) {
+      rst = ot2arr[cellvalue].ottName;
+    } else {
+      rst = "未分类";
+    }
+    return rst;
+  }
+  
   function openDialog(url, otName) {
     var queryHis = $("#queryHis").val();
     openwindow(url + "?otName=" + otName + "&queryHis=" + queryHis,
@@ -70,6 +85,21 @@
             ',top=' + iTop +
             ',left=' + iLeft +
             ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
+  }
+  
+  function loadOT2Type() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var queryUrl = gwacRootURL + "/get-ot-type-json.action";
+    $.ajax({
+      type: "get",
+      url: queryUrl,
+      data: '{}',
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+        ot2arr = data.otTypes;
+      }
+    });
   }
 </script>
 
@@ -228,7 +258,7 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
                   sortable="false" align="center"/>
   <sjg:gridColumn name="foCount"    index="foCount"	  title="后随次数" width="70" 
                   sortable="false" align="center"/>
-  <sjg:gridColumn name="isRecognize"    index="isRecognize"	  title="分类标识" width="70" 
+  <sjg:gridColumn name="otType"    index="otType"	  title="分类标识" width="70" formatter="formateOtType"
                   sortable="false" align="center"/>
 </sjg:grid>
 

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app id="gwac" version="2.4" 
-         xmlns="http://java.sun.com/xml/ns/j2ee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-  
-  <display-name>gwac</display-name>
-  
-<!--  <filter>
+<web-app id="gwac" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <display-name>gwac</display-name>
+    <!--  <filter>
     <filter-name>hibernateFilter</filter-name>
     <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
     <init-param>
@@ -20,18 +15,15 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>-->
-  
-  <filter>
-    <filter-name>struts2</filter-name>
-    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
-  </filter>
-  
-  <filter-mapping>
-    <filter-name>struts2</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  
-<!--  <filter>
+    <filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--  <filter>
     <filter-name>struts-cleanup</filter-name>
     <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
   </filter>
@@ -40,22 +32,25 @@
     <filter-name>struts-cleanup</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>-->
- 
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/classes/applicationContext.xml</param-value>
-  </context-param>
-  
-  <listener> 
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  
-  <session-config>
-    <session-timeout>30</session-timeout>
-  </session-config>
-  
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
-  
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/classes/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>OT2InfoDownlaod</servlet-name>
+        <servlet-class>com.gwac.servlet.OT2InfoDownlaod</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OT2InfoDownlaod</servlet-name>
+        <url-pattern>/downloadot2</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

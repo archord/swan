@@ -63,3 +63,6 @@ select ot.name, ot.mag, olm.mag, ot.mag-olm.mag
 from ot_level2 ot
 inner join ot_level2_match olm on olm.ot_id=ot.ot_id
 where ot.usno_match=1 and olm.mag!=0 and abs(ot.mag-olm.mag)>1;
+
+##upload_file_unstore去掉存储路径后面的/
+update upload_file_unstore set store_path=substring(store_path, 0, 24) where file_type='9';

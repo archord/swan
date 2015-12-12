@@ -150,7 +150,7 @@ public class OTFollowUpload extends ActionSupport {
 
   public void receiveFollowObjectList() {
 
-    String otFollowListPath = destPath + getText("gwac.data.otfollowlist.directory") + "/";
+    String otFollowListPath = destPath + getText("gwac.data.otfollowlist.directory");
     File otFollowListDir = new File(otFollowListPath);
     if (!otFollowListDir.exists()) {
       otFollowListDir.mkdir();
@@ -171,7 +171,7 @@ public class OTFollowUpload extends ActionSupport {
 
     try {
       if (objlist.exists()) {
-        File otFollowListFile = new File(otFollowListPath, getObjlistFileName());
+        File otFollowListFile = new File(otFollowListPath + "/", getObjlistFileName());
         log.debug("receive otfollowlist file " + otFollowListFile);
         if (otFollowListFile.exists()) {
           log.warn(otFollowListFile + " already exist, delete it.");
@@ -194,7 +194,7 @@ public class OTFollowUpload extends ActionSupport {
   public void receiveOTFollowImg() {
 
     if (null != getFitsname() && null != getFitsnameFileName() && !fitsnameFileName.trim().isEmpty()) {
-      String fitsNamePath = destPath + getText("gwac.data.otfollowimg.directory") + "/";
+      String fitsNamePath = destPath + getText("gwac.data.otfollowimg.directory");
       File fitsNameDir = new File(fitsNamePath);
       if (!fitsNameDir.exists()) {
         fitsNameDir.mkdir();
@@ -209,7 +209,7 @@ public class OTFollowUpload extends ActionSupport {
 
       try {
         if (fitsname.exists()) {
-          File fitsNameFile = new File(fitsNamePath, fitsnameFileName);
+          File fitsNameFile = new File(fitsNamePath + "/", fitsnameFileName);
           log.debug("receive otfollowimg file " + fitsNameFile);
           if (fitsNameFile.exists()) {
             log.warn(fitsNameFile + " already exist, delete it.");
