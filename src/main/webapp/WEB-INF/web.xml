@@ -45,7 +45,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>OT2InfoDownlaod</servlet-name>
-        <url-pattern>/downloadot2</url-pattern>
+        <url-pattern>/downloadot2aaa</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

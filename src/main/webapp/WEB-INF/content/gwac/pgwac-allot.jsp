@@ -17,7 +17,7 @@
 <s:url var="otDetail" action="get-ot-detail" namespace="/"/>
 
 <script type="text/javascript">
-  
+
   var ot2arr;
   loadOT2Type();
 
@@ -25,7 +25,7 @@
     var url = "<s:property value="otDetail"/>?otName=" + cellvalue;
     return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + cellvalue + "</a>";
   }
-  
+
   function formatLink1(cellvalue, options, rowObject) {
     var showVal = "";
     if (cellvalue === false) {
@@ -55,8 +55,8 @@
     }
     return showVal;
   }
-  
-  function formateOtType(cellvalue, options, rowObject)  {
+
+  function formateOtType(cellvalue, options, rowObject) {
     var rst;
     console.log(cellvalue);
     if (cellvalue >= 0) {
@@ -66,7 +66,19 @@
     }
     return rst;
   }
-  
+
+  function ot2InfoDownload(otName, options, rowObject) {
+    var gwacRootURL = "${pageContext.request.contextPath}";
+    var downloadUrl = gwacRootURL + "/downloadot2.action?otName=" + otName;
+    var resultStr;
+    if (otName.charAt(8) === 'C') {
+      resultStr = "<a href='" + downloadUrl + "' target='_blank' title='点击下载OT详细信息'>下载</a>";
+    } else {
+      resultStr = "<a href='#' target='_blank' onclick='return false;' title='图像相减OT暂时没有下载内容'>下载</a>";
+    }
+    return resultStr;
+  }
+
   function openDialog(url, otName) {
     var queryHis = $("#queryHis").val();
     openwindow(url + "?otName=" + otName + "&queryHis=" + queryHis,
@@ -86,9 +98,10 @@
             ',left=' + iLeft +
             ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
   }
-  
+
   function loadOT2Type() {
-    var gwacRootURL = $("#gwacRootURL").val();
+    var gwacRootURL = "${pageContext.request.contextPath}";
+    console.log(gwacRootURL);
     var queryUrl = gwacRootURL + "/get-ot-type-json.action";
     $.ajax({
       type: "get",
@@ -223,10 +236,10 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   href="%{remoteurl}" 
   pager="true" 
   gridModel="gridModel"
-  rowList="10,15,20" 
+  rowList="10,15,30" 
   rowNum="15" 
   rownumbers="true"
-  width="1100"
+  width="1170"
   viewrecords="true"
   reloadTopics="reloadOtGrid"
   formIds="getOtListForm">
@@ -259,6 +272,8 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   <sjg:gridColumn name="foCount"    index="foCount"	  title="后随次数" width="70" 
                   sortable="false" align="center"/>
   <sjg:gridColumn name="otType"    index="otType"	  title="分类标识" width="70" formatter="formateOtType"
+                  sortable="false" align="center"/>
+  <sjg:gridColumn name="name"    index="ot2Download"	  title="下载" width="70" formatter="ot2InfoDownload"
                   sortable="false" align="center"/>
 </sjg:grid>
 

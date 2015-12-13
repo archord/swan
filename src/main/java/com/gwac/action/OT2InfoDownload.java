@@ -9,6 +9,12 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
+import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.model.FitsFileCut;
+import com.gwac.model.FitsFileCutRef;
+import com.gwac.model.OtLevel2;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -37,7 +43,7 @@ import org.apache.struts2.convention.annotation.Result;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* wget command example: */
-/* wget http://190.168.1.25/getCutImageList.action?dpmName=M01 -O aa.list*/
+/* wget http://localhost:8080/gwac/downloadot2.action?otName=M151207_C00163*/
 /**
  * @author xy
  */
@@ -52,51 +58,73 @@ public class OT2InfoDownload extends ActionSupport {
 
   private String otName;
   private FitsFileCutDAO ffcDao;
-  private String rootWebDir;
+  private FitsFileCutRefDAO ffcrDao;
+  private OtLevel2Dao ot2Dao;
+  private OtObserveRecordDAO otorDao;
+
   private String echo;
 
   @Override
   public String execute() {
 
     contentType = "application/octet-stream";
-    fileName = "myZip.zip";
+    fileName = "empty.zip";
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     //必须OT名称
-//    if (null != otName && !otName.isEmpty() && otName.length() == 14) {
-    if (true) {
+    if (null != otName && !otName.isEmpty() && otName.length() == 14) {
+      String dataRootDir = getText("gwac.data.root.directory");
+      fileName = otName + ".zip";
 
-      List<File> files = new ArrayList();
-      files.add(new File("e:/aa.png"));
-      files.add(new File("e:/bb.png"));
-      files.add(new File("e:/bgregin.png"));
+      List<Integer> tlist = ot2Dao.hisOrCurExist(otName);
+      if (!tlist.isEmpty()) {
+        Integer his = tlist.get(0);
+        Boolean queryHis = his == 1;
+        OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(otName, queryHis);
+        List<FitsFileCut> ffcList = ffcDao.getCutImageByOtId(ot2.getOtId(), queryHis);
+        List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2.getOtId());
 
-      try {
-        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
-          for (File file : files) {
-
-            System.out.println("Adding " + file.getName());
-            zos.putNextEntry(new ZipEntry(file.getName()));
-            try (FileInputStream fis = new FileInputStream(file)) {
-              int data;
-              BufferedInputStream fif = new BufferedInputStream(fis);
-              while ((data = fif.read()) != -1) {
-                zos.write(data);
-              }
-              fif.close();
-              zos.closeEntry();
-            } catch (FileNotFoundException e) {
-              zos.write(("error: not find file " + file.getName()).getBytes());
-              zos.closeEntry();
-              log.error("cannot find file " + file.getAbsolutePath(), e);
-            }
-          }
-
-          zos.flush();
-          zos.close();
+        List<File> tfiles = new ArrayList();
+        String tpath = "";
+        if (ffcrs != null && ffcrs.size() > 0) {
+          FitsFileCutRef ffcr = ffcrs.get(0);
+          tpath = dataRootDir + "/" + ffcr.getStorePath() + "/";
+          tfiles.add(new File(tpath, ffcr.getFileName() + ".fit"));
         }
-      } catch (IOException e) {
-        log.error(e);
+        for (FitsFileCut tffc : ffcList) {
+          if (tpath.isEmpty()) {
+            tpath = dataRootDir + "/" + tffc.getStorePath() + "/";
+          }
+          tfiles.add(new File(tpath, tffc.getFileName() + ".fit"));
+        }
+
+        try {
+          try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            for (File file : tfiles) {
+//              System.out.println("Adding " + file.getName());
+//            zos.putNextEntry(new ZipEntry("xml/"));
+              zos.putNextEntry(new ZipEntry(file.getName()));
+              try (FileInputStream fis = new FileInputStream(file)) {
+                int data;
+                BufferedInputStream fif = new BufferedInputStream(fis);
+                while ((data = fif.read()) != -1) {
+                  zos.write(data);
+                }
+                fif.close();
+                zos.closeEntry();
+              } catch (FileNotFoundException e) {
+                zos.write(("error: not find file " + file.getName()).getBytes());
+                zos.closeEntry();
+                log.error("cannot find file " + file.getAbsolutePath(), e);
+              }
+            }
+
+            zos.flush();
+            zos.close();
+          }
+        } catch (IOException e) {
+          log.error("ZIP ot2=" + otName + " info error.", e);
+        }
       }
     }
     inputStream = new ByteArrayInputStream(baos.toByteArray());
@@ -113,13 +141,6 @@ public class OT2InfoDownload extends ActionSupport {
    */
   public void setFfcDao(FitsFileCutDAO ffcDao) {
     this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @param rootWebDir the rootWebDir to set
-   */
-  public void setRootWebDir(String rootWebDir) {
-    this.rootWebDir = rootWebDir;
   }
 
   /**
@@ -148,6 +169,27 @@ public class OT2InfoDownload extends ActionSupport {
    */
   public String getContentType() {
     return contentType;
+  }
+
+  /**
+   * @param ffcrDao the ffcrDao to set
+   */
+  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
+    this.ffcrDao = ffcrDao;
+  }
+
+  /**
+   * @param otorDao the otorDao to set
+   */
+  public void setOtorDao(OtObserveRecordDAO otorDao) {
+    this.otorDao = otorDao;
+  }
+
+  /**
+   * @param ot2Dao the ot2Dao to set
+   */
+  public void setOt2Dao(OtLevel2Dao ot2Dao) {
+    this.ot2Dao = ot2Dao;
   }
 
 }

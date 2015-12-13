@@ -66,3 +66,6 @@ where ot.usno_match=1 and olm.mag!=0 and abs(ot.mag-olm.mag)>1;
 
 ##upload_file_unstore去掉存储路径后面的/
 update upload_file_unstore set store_path=substring(store_path, 0, 24) where file_type='9';
+
+##按望远镜、图像编号统计一级OT的个数
+select dpm_id, ff_number, count(ff_number) number from ot_observe_record group by dpm_id, ff_number order by number desc limit 20;

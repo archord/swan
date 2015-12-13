@@ -277,6 +277,11 @@ $(function() {
 
       $("#ref-image-show").append(refImg);
       $("#title2").append("模板时间：" + ffcRef.generateTime + "(U)");
+
+      //添加OT2信息下载链接
+      var downloadUrl = gwacRootURL + "/downloadot2.action?otName=" + ot2.name;
+      var downloadOT2Info = "<div id='download-ot2-info'><a href='" + downloadUrl + "' target='_blank' title='点击下载OT详细信息'>下载详细</a></div>";
+      $("#cut-image-show").append(downloadOT2Info);
     }
 
     $.each(ffcList, function(i, item) {
