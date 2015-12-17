@@ -157,27 +157,28 @@ public class OTFollowUpload extends ActionSupport {
       log.debug("create dir " + otFollowListDir);
     }
 
+    String finalName = objlistFileName.replaceFirst(ot2name, followname);
     UploadFileUnstore obj = new UploadFileUnstore();
     obj.setStorePath(otFollowListPath.substring(rootPath.length() + 1));
-    obj.setFileName(getObjlistFileName());
+    obj.setFileName(finalName);
     obj.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj.setUploadDate(new Date());
 
     UploadFileRecord obj2 = new UploadFileRecord();
     obj2.setStorePath(otFollowListPath.substring(rootPath.length() + 1));
-    obj2.setFileName(getObjlistFileName());
+    obj2.setFileName(finalName);
     obj2.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj2.setUploadDate(new Date());
 
     try {
       if (objlist.exists()) {
-        File otFollowListFile = new File(otFollowListPath + "/", getObjlistFileName());
+        File otFollowListFile = new File(otFollowListPath + "/", finalName);
         log.debug("receive otfollowlist file " + otFollowListFile);
         if (otFollowListFile.exists()) {
           log.warn(otFollowListFile + " already exist, delete it.");
           FileUtils.forceDelete(otFollowListFile);
         }
-        FileUtils.moveFile(getObjlist(), otFollowListFile);
+        FileUtils.moveFile(objlist, otFollowListFile);
         obj.setUploadSuccess(Boolean.TRUE);
         obj2.setUploadSuccess(Boolean.TRUE);
       } else {
@@ -187,7 +188,7 @@ public class OTFollowUpload extends ActionSupport {
       ufuDao.save(obj);
       ufrDao.save(obj2);
     } catch (IOException ex) {
-      log.error("receive otfollowlist " + getObjlistFileName() + " error!", ex);
+      log.error("receive otfollowlist " + objlistFileName + " error!", ex);
     }
   }
 
@@ -201,15 +202,16 @@ public class OTFollowUpload extends ActionSupport {
         log.debug("create dir " + fitsNameDir);
       }
 
+      String finalName = fitsnameFileName.replaceFirst(ot2name, followname);
       UploadFileRecord obj2 = new UploadFileRecord();
       obj2.setStorePath(fitsNamePath.substring(rootPath.length() + 1));
-      obj2.setFileName(fitsnameFileName);
+      obj2.setFileName(finalName);
       obj2.setFileType('A');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
       obj2.setUploadDate(new Date());
 
       try {
         if (fitsname.exists()) {
-          File fitsNameFile = new File(fitsNamePath + "/", fitsnameFileName);
+          File fitsNameFile = new File(fitsNamePath + "/", finalName);
           log.debug("receive otfollowimg file " + fitsNameFile);
           if (fitsNameFile.exists()) {
             log.warn(fitsNameFile + " already exist, delete it.");

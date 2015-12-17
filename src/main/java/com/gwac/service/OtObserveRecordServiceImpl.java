@@ -59,6 +59,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   /**
    * 解析一级OT列表文件，得出二级OT，切图文件名称，二级OT模板切图名称
    *
+   * @param ufuId
    * @param storePath
    * @param fileName
    */

@@ -23,7 +23,7 @@ public class FollowUpFitsfile  implements java.io.Serializable {
      private long fufId;
      private String ffName;
      private String ffPath;
-     private Integer frId;
+     private Long foId;
      private Boolean isUpload;
 
     public FollowUpFitsfile() {
@@ -33,11 +33,11 @@ public class FollowUpFitsfile  implements java.io.Serializable {
     public FollowUpFitsfile(long fufId) {
         this.fufId = fufId;
     }
-    public FollowUpFitsfile(long fufId, String ffName, String ffPath, Integer frId, Boolean isUpload) {
+    public FollowUpFitsfile(long fufId, String ffName, String ffPath, Long foId, Boolean isUpload) {
        this.fufId = fufId;
        this.ffName = ffName;
        this.ffPath = ffPath;
-       this.frId = frId;
+       this.foId = foId;
        this.isUpload = isUpload;
     }
    
@@ -76,13 +76,13 @@ public class FollowUpFitsfile  implements java.io.Serializable {
     }
 
     
-    @Column(name="fr_id")
-    public Integer getFrId() {
-        return this.frId;
+    @Column(name="fo_id")
+    public Long getFoId() {
+        return this.foId;
     }
     
-    public void setFrId(Integer frId) {
-        this.frId = frId;
+    public void setFoId(Long foId) {
+        this.foId = foId;
     }
 
     

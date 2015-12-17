@@ -19,5 +19,19 @@
       <value>com.gwac.model.FollowUpObservation</value>
     </property>
   </bean>
+
+  <bean id="fufDao" class="com.gwac.dao.FollowUpFitsfileDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FollowUpFitsfile</value>
+    </property>
+  </bean>
+
+  <bean id="frDao" class="com.gwac.dao.FollowUpRecordDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FollowUpRecord</value>
+    </property>
+  </bean>
 	
 </beans>

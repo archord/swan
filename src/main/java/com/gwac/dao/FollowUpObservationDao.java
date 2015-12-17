@@ -11,7 +11,7 @@ import com.gwac.model.Telescope;
  *
  * @author xy
  */
-public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObservation>{
-  
-//	public void save(FollowUpObservation user);
+public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObservation> {
+
+  public FollowUpObservation getByName(String name);
 }

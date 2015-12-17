@@ -4,6 +4,7 @@
  */
 package com.gwac.dao;
 
+import com.gwac.model.FollowUpCatalog;
 import com.gwac.model.OTCatalog;
 import com.gwac.util.CommonFunction;
 import java.io.BufferedReader;
@@ -26,6 +27,68 @@ import org.apache.commons.logging.LogFactory;
 public class OTCatalogDaoImpl implements OTCatalogDao {
 
   private static final Log log = LogFactory.getLog(OTCatalogDaoImpl.class);
+
+  @Override
+  public List<FollowUpCatalog> getFollowUpCatalog(String path) {
+    BufferedReader br = null;
+    String line;
+    String splitBy = " +";  //正则表达式一到多个空格
+    List<FollowUpCatalog> objs = new ArrayList<>();
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    try {
+      File tfile = new File(path);
+      if (tfile.exists()) {
+        br = new BufferedReader(new FileReader(tfile));
+        while ((line = br.readLine()) != null) {
+          if (line.charAt(0) == '#') {
+            continue;
+          }
+          String[] strs = line.split(splitBy);
+          FollowUpCatalog obj = new FollowUpCatalog();
+          obj.setJd(Float.parseFloat(strs[0]));
+          obj.setDateUt(df.parse(strs[1].replace('T', ' ')));
+          obj.setFilter(strs[2]);
+          obj.setRa(Float.parseFloat(strs[3]));
+          obj.setDec(Float.parseFloat(strs[4]));
+          obj.setX(Float.parseFloat(strs[5]));
+          obj.setY(Float.parseFloat(strs[6]));
+          obj.setMagClbtUsno(Float.parseFloat(strs[7]));
+          obj.setMagErr(Float.parseFloat(strs[8]));
+          obj.setEllipticity(Float.parseFloat(strs[9]));
+          obj.setClassStar(Float.parseFloat(strs[10]));
+          obj.setFwhm(Float.parseFloat(strs[11]));
+          obj.setFlag(Short.parseShort(strs[12]));
+          obj.setB2(Float.parseFloat(strs[13]));
+          obj.setR2(Float.parseFloat(strs[14]));
+          obj.setI(Float.parseFloat(strs[15]));
+          obj.setOtType(strs[16]);
+          obj.setFfName(strs[17]);
+          obj.setObjLabel(Short.parseShort(strs[18]));
+          objs.add(obj);
+        }
+      } else {
+        log.error("file not exist " + tfile);
+      }
+    } catch (FileNotFoundException e) {
+      log.error(e);
+    } catch (IOException e) {
+      log.error(e);
+    } catch (ParseException e) {
+      log.error(e);
+    } catch (Exception e) {
+      log.error(e);
+    } finally {
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException e) {
+          log.error(e);
+        }
+      }
+    }
+    return objs;
+  }
 
   @Override
   public List<OTCatalog> getOT1Catalog(String path) {
@@ -193,14 +256,14 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         ot.setMagerrAper(Float.parseFloat(strs[4]));
         if (strs[5].contains(":")) {
           ot.setRaD(CommonFunction.hmsToDegree(strs[5]));
-        }else{
+        } else {
           ot.setRaD(Float.parseFloat(strs[5]));
         }
         if (strs[6].contains(":")) {
           ot.setDecD(CommonFunction.dmsToDegree(strs[6]));
-        }else{
+        } else {
           ot.setDecD(Float.parseFloat(strs[6]));
-        }  
+        }
         ot.setImageName(strs[8]); //7=tag
         ot.setDateUt(df.parse(strs[9].replace('T', ' ')));
         if (strs.length == 11) {

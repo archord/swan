@@ -53,6 +53,8 @@ public class OtLevel2  implements java.io.Serializable {
      private Short ot2HisMatch;
      private Short otherMatch;
      private Short usnoMatch;
+     private Short lookBackResult;
+     private Short followUpResult;
 
     public OtLevel2() {
     }
@@ -430,6 +432,36 @@ public class OtLevel2  implements java.io.Serializable {
    */
   public void setUsnoMatch(Short usnoMatch) {
     this.usnoMatch = usnoMatch;
+  }
+
+  /**
+   * @return the lookBackResult 
+   */
+    @Column(name="look_back_result")
+  public Short getLookBackResult() {
+    return lookBackResult;
+  }
+
+  /**
+   * @param lookBackResult the lookBackResult to set
+   */
+  public void setLookBackResult(Short lookBackResult) {
+    this.lookBackResult = lookBackResult;
+  }
+
+  /**
+   * @return the followUpResult follow_up_result
+   */
+    @Column(name="follow_up_result")
+  public Short getFollowUpResult() {
+    return followUpResult;
+  }
+
+  /**
+   * @param followUpResult the followUpResult to set
+   */
+  public void setFollowUpResult(Short followUpResult) {
+    this.followUpResult = followUpResult;
   }
 
 }

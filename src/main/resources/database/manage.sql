@@ -69,3 +69,17 @@ update upload_file_unstore set store_path=substring(store_path, 0, 24) where fil
 
 ##按望远镜、图像编号统计一级OT的个数
 select dpm_id, ff_number, count(ff_number) number from ot_observe_record group by dpm_id, ff_number order by number desc limit 20;
+
+##对OT后随记录中多个目标用同一个fr_obj_id的数量进行统计排序
+select fo_id, fu_serial_number, fr_obj_id, count(fr_id) count from follow_up_record group by fo_id, fu_serial_number, fr_obj_id order by count desc limit 20;
+select fo_id, fu_serial_number, fr_obj_id, count(fr_id) count from follow_up_record where ot_type='MINIOT' group by fo_id, fu_serial_number, fr_obj_id order by count desc limit 20;
+select f1.fu_serial_number, f1.fr_obj_id, count(f1.fr_id) num 
+from follow_up_record f1
+inner join follow_up_record f2 USING(fr_id)
+where f1.fo_id=331 
+group by f1.fu_serial_number, f1.fr_obj_id 
+order by f1.fu_serial_number, f1.fr_obj_id , num desc
+HAVING count(f2.fr_id)=1
+limit 20;
+
+select DISTINCT ot_type from follow_up_record;

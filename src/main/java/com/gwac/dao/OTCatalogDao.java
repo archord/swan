@@ -4,6 +4,7 @@
  */
 package com.gwac.dao;
 
+import com.gwac.model.FollowUpCatalog;
 import com.gwac.model.OTCatalog;
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface OTCatalogDao {
   public List<OTCatalog> getOT1CutCatalog(String path);
 
   public List<OTCatalog> getOT1VarCatalog(String path);
+  
+  public List<FollowUpCatalog> getFollowUpCatalog(String path);
 }

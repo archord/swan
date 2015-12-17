@@ -15,16 +15,17 @@ import org.hibernate.Session;
  */
 public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObservation> implements FollowUpObservationDao {
 
-//  public void save(FollowUpObservation fo) {
-//
-//    Session session = getCurrentSession();
-//    String sql = "select * from follow_up_observation where fo_name='" + fo.getFoName() + "' ";
-//    Query q = session.createSQLQuery(sql).addEntity(FollowUpObservation.class);
-//    if (!q.list().isEmpty()) {
-//      FollowUpObservation tfo = (FollowUpObservation) q.list().get(0);
-//      fo.setFoId(tfo.getFoId());
-//    } else {
-//      super.save(fo);
-//    }
-//  }
+
+  @Override
+  public FollowUpObservation getByName(String name) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from follow_up_observation where fo_name='" + name + "'";
+    Query q = session.createSQLQuery(sql).addEntity(FollowUpObservation.class);
+    if (!q.list().isEmpty()) {
+      return (FollowUpObservation) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
 }

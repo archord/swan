@@ -9,6 +9,18 @@
     <property name="otVarObserveRecordService" ref="otVarObserveRecordService" />
   </bean>-->
   
+  <bean id="foService" class="com.gwac.job.FollowUpObservationServiceImpl">
+    <property name="ufuDao" ref="ufuDao" />
+    <property name="foDao" ref="foDao" />
+    <property name="fufDao" ref="fufDao" />
+    <property name="frDao" ref="frDao" />
+    <property name="otcDao" ref="otcDao" />
+    <property name="ot2Dao" ref="otbDao" />
+    <property name="rootPath" value="${gwac.data.root.directory}" />
+    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+    <property name="isTestServer" value="${gwac.server.test}" />
+  </bean>
+  
   <bean id="ffcService" class="com.gwac.job.FitsFileCutServiceImpl">
     <property name="ffDao" ref="ffDao" />
     <property name="ffcDao" ref="ffcDao" />

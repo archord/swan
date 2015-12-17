@@ -17,5 +17,7 @@ public interface UploadFileUnstoreDao extends BaseHibernateDao<UploadFileUnstore
   public List<UploadFileUnstore> getImgStatusFile();
   public List<UploadFileUnstore> getVarStarListFile();
   public List<UploadFileUnstore> getSubOTLevel1File();
+  public List<UploadFileUnstore> getFollowUpFile();
   public void updateProcessDoneTime(long ufuId);
+  public void removeAll();
 }

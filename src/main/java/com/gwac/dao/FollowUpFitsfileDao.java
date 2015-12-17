@@ -11,6 +11,7 @@ import com.gwac.model.Telescope;
  *
  * @author xy
  */
-public interface FollowUpFitsfileDao extends BaseHibernateDao<FollowUpFitsfile>{
-  
+public interface FollowUpFitsfileDao extends BaseHibernateDao<FollowUpFitsfile> {
+
+  public FollowUpFitsfile getByName(String ffName);
 }

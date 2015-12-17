@@ -80,4 +80,25 @@ public class UploadFileUnstoreDaoImpl extends BaseHibernateDaoImpl<UploadFileUns
     String sql = "update upload_file_unstore set process_done_time=current_timestamp where ufu_id=" + ufuId;
     session.createSQLQuery(sql).executeUpdate();
   }
+
+  @Override
+  public List<UploadFileUnstore> getFollowUpFile() {
+
+//    String sql = "WITH moved_rows AS "
+//            + "( DELETE FROM upload_file_unstore where file_type='9' and upload_success=true RETURNING * ) "
+//            + "SELECT * FROM moved_rows order by upload_date;";
+    String sql = "WITH moved_rows AS "
+            + "( update upload_file_unstore set upload_success=true where file_type='9' and upload_success=false RETURNING * ) "
+            + "SELECT * FROM moved_rows order by upload_date;";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(UploadFileUnstore.class);
+    return q.list();
+  }
+
+  @Override
+  public void removeAll() {
+    Session session = getCurrentSession();
+    String sql = "delete from upload_file_unstore";
+    session.createSQLQuery(sql).executeUpdate();
+  }
 }
