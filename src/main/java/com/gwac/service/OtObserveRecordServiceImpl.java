@@ -203,6 +203,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setOtherMatch((short) 0);
             tOtLv2.setUsnoMatch((short) 0);
             tOtLv2.setOtType((short) 0);
+            tOtLv2.setLookBackResult((short) 0);
+            tOtLv2.setFollowUpResult((short) 0);
 
             int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
 

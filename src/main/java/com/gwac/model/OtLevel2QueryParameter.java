@@ -35,6 +35,8 @@ public class OtLevel2QueryParameter {
   private List<String> isMatch;
   private List<String> matchType;
   private List<String> otType;
+  private List<String> lookBackResult;
+  private List<String> followUpResult;
 
   @Override
   public String toString() {
@@ -43,7 +45,8 @@ public class OtLevel2QueryParameter {
             + ", dec=" + dec + ", sphereRadius=" + sphereRadius + ", telscope="
             + telscope + ", queryHis=" + queryHis + ", processType=" + processType
             + ", isMatch=" + isMatch + ", otName=" + otName
-            + ", matchType=" + matchType + ", otType=" + otType
+            + ", matchType=" + matchType + ", otType=" + otType 
+            + ", lookBackResult=" + lookBackResult + ", followUpResult=" + getFollowUpResult()
             + ", start=" + start + ", size=" + size;
   }
 
@@ -63,6 +66,12 @@ public class OtLevel2QueryParameter {
     }
     if (otType != null) {
       otType.removeAll(emptyStr);
+    }
+    if (lookBackResult != null) {
+      lookBackResult.removeAll(emptyStr);
+    }
+    if (getFollowUpResult() != null) {
+      getFollowUpResult().removeAll(emptyStr);
     }
   }
 
@@ -313,5 +322,33 @@ public class OtLevel2QueryParameter {
    */
   public void setOtType(List<String> otType) {
     this.otType = otType;
+  }
+
+  /**
+   * @return the lookBackResult
+   */
+  public List<String> getLookBackResult() {
+    return lookBackResult;
+  }
+
+  /**
+   * @param lookBackResult the lookBackResult to set
+   */
+  public void setLookBackResult(List<String> lookBackResult) {
+    this.lookBackResult = lookBackResult;
+  }
+
+  /**
+   * @return the followUpResult
+   */
+  public List<String> getFollowUpResult() {
+    return followUpResult;
+  }
+
+  /**
+   * @param followUpResult the followUpResult to set
+   */
+  public void setFollowUpResult(List<String> followUpResult) {
+    this.followUpResult = followUpResult;
   }
 }

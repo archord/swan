@@ -352,6 +352,14 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       }
       sql.append(") ");
     }
+    if (ot2qp.getLookBackResult()!= null && !ot2qp.getLookBackResult().isEmpty()) {
+      sql.append(" and look_back_result in (");
+      for (String tstr : ot2qp.getLookBackResult()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
+    }
     String tstr = sql.toString().replace(",)", ")");
     tstr = tstr.replace("or )", ")");
     sqlprefix1 += tstr;
@@ -521,7 +529,21 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   @Override
   public void updateUsnoMatch(OtLevel2 ot2) {
-    String sql = "update ot_level2 set usno_match=" + ot2.getUsnoMatch()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set usno_match=" + ot2.getUsnoMatch() + " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateLookBackResult(OtLevel2 ot2) {
+    String sql = "update ot_level2 set look_back_result=" + ot2.getLookBackResult() + " where name='" + ot2.getName() + "'";
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateFollowUpResult(OtLevel2 ot2) {
+    String sql = "update ot_level2 set follow_up_result=" + ot2.getFollowUpResult() + " where name='" + ot2.getName() + "'";
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }

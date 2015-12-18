@@ -207,7 +207,14 @@
             <option value="10">GRB</option>
             <option value="11">耀发候选体</option>
           </select></td>
-        <td></td><td></td>
+        <td>回看：</td>
+        <td>
+          <select name="ot2qp.lookBackResult" id="lookBackResult">
+            <option value="">All</option>
+            <option value="0">未处理</option>
+            <option value="1">OT</option>
+            <option value="2">FOT</option>
+          </select></td>
       </tr>
       <tr style="height:20px;"><td colspan="6" style="text-align: center;">
           <sj:a

@@ -264,19 +264,25 @@ $(function() {
               "</div>";
     }
     $("#cut-image-show").append(cutImageShow);
-
+    var refImg = "";
     if (ot2.dataProduceMethod === '1') {
-      var refImg = $('<img/>', {
-        src: dataRootWebMap + "/" + ffcRef.storePath + "/" + ffcRef.fileName + ".jpg",
-        alt: ffcRef.fileName + ".jpg",
-        title: ffcRef.fileName + ".jpg",
-        width: "100%",
-        height: "200px",
-        border: 0
-      });
+      if (ffcRef === null) {
+        refImg = $('<img/>');
+      } else {
+        refImg = $('<img/>', {
+          src: dataRootWebMap + "/" + ffcRef.storePath + "/" + ffcRef.fileName + ".jpg",
+          alt: ffcRef.fileName + ".jpg",
+          title: ffcRef.fileName + ".jpg",
+          width: "100%",
+          height: "200px",
+          border: 0
+        });
+      }
 
       $("#ref-image-show").append(refImg);
-      $("#title2").append("模板时间：" + ffcRef.generateTime + "(U)");
+      if (ffcRef !== null) {
+        $("#title2").append("模板时间：" + ffcRef.generateTime + "(U)");
+      }
 
       //添加OT2信息下载链接
       var downloadUrl = gwacRootURL + "/downloadot2.action?otName=" + ot2.name;

@@ -327,12 +327,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
   public Map<Rc3, Double> matchOt2InRc3(OtLevel2 ot2, float searchRadius, float minMag, float maxMag) {
 
-    List<Rc3> objs = rc3Dao.queryByOt2(ot2, searchRadius, minMag, maxMag);
-    double minDis = searchRadius;
+    float searchBoundary = 1; //1度，认为最大的星系半径为1度
+    List<Rc3> objs = rc3Dao.queryByOt2(ot2, searchBoundary, minMag, maxMag);
     Rc3 minObj = null;
+    double minDis = searchRadius;
     Map rst = new HashMap();
     for (Rc3 obj : objs) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRadeg(), obj.getDedeg());
+      if (obj.getD25() > CommonFunction.MINFLOAT) {
+        minDis = obj.getD25() * 2 / 60; //d25单位为角分
+      } else if (obj.getAngularSize() > CommonFunction.MINFLOAT) {
+        minDis = obj.getAngularSize() / 60; //AngularSize单位为角分
+      } else {
+        minDis = searchRadius;
+      }
       if (tDis < minDis) {
         rst.put(obj, tDis);
       }

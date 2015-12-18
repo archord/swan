@@ -70,7 +70,7 @@
               <option value="11">耀发候选体</option>
             </select>
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-2 ">
+          <div class="col-xs-4 col-sm-4 col-md-1 ">
             <h4>CDD</h4>
             <select name="ot2qp.telscope" id="ot2Ccd" multiple="multiple">
               <option value="1">M01</option>
@@ -87,11 +87,19 @@
               <option value="12">M12</option>
             </select>
           </div>
-          <div class="col-xs-2 col-sm-2 col-md-1 ">
+          <div class="col-xs-4 col-sm-4 col-md-1 ">
+            <h4>回看</h4>
+            <select name="ot2qp.lookBackResult" id="lookBackResult" multiple="multiple">
+              <option value="0">未处理</option>
+              <option value="1">OT</option>
+              <option value="2">FOT</option>
+            </select>
+          </div>
+          <div class="col-xs-4 col-sm-4 col-md-1 ">
             <h4>自动刷新</h4>
             <input name="autoRefresh" id="ot2ListTableAutoRefresh" type="checkbox"/>
           </div>
-          <div class="col-xs-2 col-sm-2 col-md-1 ">
+          <div class="col-xs-4 col-sm-4 col-md-1 ">
             <h4>&nbsp;</h4>
             <input type="button" value="查询" class="btn btn-primary" id="ot2QueryBtn"/>
           </div>
@@ -101,9 +109,9 @@
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
             <thead><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
-                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>前N分钟</th><th>后随次数</th><th>分类标识</th></tr></thead>
+                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>回看</th><th>前N分钟</th><th>后随次数</th><th>后随结果</th><th>分类标识</th></tr></thead>
             <tfoot><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
-                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>前N分钟</th><th>后随次数</th><th>分类标识</th></tr></tfoot>
+                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>回看</th><th>前N分钟</th><th>后随次数</th><th>后随结果</th><th>分类标识</th></tr></tfoot>
           </table>
         </div>                                   
       </div>

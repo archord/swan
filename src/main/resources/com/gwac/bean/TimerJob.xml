@@ -16,6 +16,7 @@
     <property name="frDao" ref="frDao" />
     <property name="otcDao" ref="otcDao" />
     <property name="ot2Dao" ref="otbDao" />
+    <property name="fuotDao" ref="fuotDao" />
     <property name="rootPath" value="${gwac.data.root.directory}" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />

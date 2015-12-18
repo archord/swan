@@ -4,6 +4,7 @@
 package com.gwac.job;
 
 import com.gwac.dao.FollowUpFitsfileDao;
+import com.gwac.dao.FollowUpObjectTypeDao;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.FollowUpRecordDao;
 import com.gwac.dao.OTCatalogDao;
@@ -11,6 +12,7 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FollowUpCatalog;
 import com.gwac.model.FollowUpFitsfile;
+import com.gwac.model.FollowUpObjectType;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.FollowUpRecord;
 import com.gwac.model.OtLevel2;
@@ -34,6 +36,7 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
   private FollowUpRecordDao frDao;
   private OTCatalogDao otcDao;
   private OtLevel2Dao ot2Dao;
+  private FollowUpObjectTypeDao fuotDao;
 
   private String rootPath;
   private Boolean isBeiJingServer;
@@ -125,7 +128,13 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
       fur.setB2(obj.getB2());
       fur.setR2(obj.getR2());
       fur.setI(obj.getI());
-      fur.setOtType(obj.getOtType().toUpperCase());
+
+      FollowUpObjectType fuot = fuotDao.getOtTypeByTypeName(obj.getOtType().trim().toUpperCase());
+      if (fuot != null) {
+        fur.setFuoTypeId(fuot.getFuoTypeId());
+      }else{
+        log.error("cannot find follow up object type: "+ obj.getOtType());
+      }
       fur.setFrObjId(obj.getObjLabel());
       fur.setFuSerialNumber(obj.getFuSerialNumber());
       fur.setFufId(fuf.getFufId());
@@ -194,6 +203,13 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
    */
   public void setOt2Dao(OtLevel2Dao ot2Dao) {
     this.ot2Dao = ot2Dao;
+  }
+
+  /**
+   * @param fuotDao the fuotDao to set
+   */
+  public void setFuotDao(FollowUpObjectTypeDao fuotDao) {
+    this.fuotDao = fuotDao;
   }
 
 }

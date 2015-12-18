@@ -32,6 +32,7 @@ public class Rc3  implements java.io.Serializable {
      private Float redshift;
      private Float d25;
      private Float d25err;
+     private Float angularSize;
 
     public Rc3() {
     }
@@ -166,6 +167,7 @@ public class Rc3  implements java.io.Serializable {
   /**
    * @return the d25
    */
+    @Column(name="d25", precision=9, scale=6)
   public Float getD25() {
     return d25;
   }
@@ -180,6 +182,7 @@ public class Rc3  implements java.io.Serializable {
   /**
    * @return the d25err
    */
+    @Column(name="d25err", precision=9, scale=6)
   public Float getD25err() {
     return d25err;
   }
@@ -189,6 +192,21 @@ public class Rc3  implements java.io.Serializable {
    */
   public void setD25err(Float d25err) {
     this.d25err = d25err;
+  }
+
+  /**
+   * @return the angularSize 
+   */
+    @Column(name="angular_size", precision=9, scale=6)
+  public Float getAngularSize() {
+    return angularSize;
+  }
+
+  /**
+   * @param angularSize the angularSize to set
+   */
+  public void setAngularSize(Float angularSize) {
+    this.angularSize = angularSize;
   }
 
 

@@ -755,6 +755,8 @@ public class UploadFileServiceImpl implements UploadFileService {
                   ffcr.setGenerateTime(genDate);
                   ffcr.setSuccessCut(Boolean.TRUE);
                   ffcrDao.updateByName(ffcr);
+                } else {
+                  log.error("ot2 ref cut file date error, date=" + dateStr);
                 }
               } catch (ParseException ex) {
                 log.error("parse ref cut image date error.");

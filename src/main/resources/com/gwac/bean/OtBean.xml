@@ -4,6 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
+  <bean class="com.gwac.action.OTLookBack"  scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />
+  </bean>
+  
   <bean class="com.gwac.action.OT2InfoDownload"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
     <property name="ot2Dao" ref="otbDao" />

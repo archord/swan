@@ -27,7 +27,7 @@ public class UsnoCatalogDaoImpl extends MysqlUsnoHibernateDaoImpl<UsnoCatalog> i
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();
-      String sql = "select * from " + tableName + " where Rmag < " + mag + " and ";
+      String sql = "select * from " + tableName + " where abs(Rmag)>0.00001 and Rmag < " + mag + " and ";
       if (tflag == 1) {
         sql += "RAdeg between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
         sql += "DEdeg between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";

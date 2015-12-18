@@ -63,10 +63,11 @@ public class SearchBoxSphere {
         maxDec = 90;
       }
       if (getMinDec() < -90.0) {
-        minDec = 90;
+        minDec = -90;
       }
 
-      double tDec = Math.abs(getMaxDec()) > Math.abs(getMinDec()) ? Math.abs(getMaxDec()) : Math.abs(getMinDec());
+      double tDec = Math.abs(maxDec) > Math.abs(minDec) ? Math.abs(maxDec) : Math.abs(minDec);
+      //π/180
       double cosd = Math.cos(tDec * 0.0174532925);
       if (cosd > searchRadius / 180.0) {
         maxRa = (ra + searchRadius / cosd + 360.0) % 360.0;

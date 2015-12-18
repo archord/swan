@@ -37,7 +37,7 @@ public class FollowUpRecord implements java.io.Serializable {
   private Float b2;
   private Float r2;
   private Float i;
-  private String otType;
+  private Short fuoTypeId;
   private Long fufId;
   private String filter;
   private Integer fuSerialNumber;
@@ -49,7 +49,7 @@ public class FollowUpRecord implements java.io.Serializable {
     this.frId = frId;
   }
 
-  public FollowUpRecord(long frId, Long foId, Short frObjId, Date dateUtc, Float ra, Float dec, Float x, Float y, Float magCalUsno, Float magErr, Float ellipticity, Float classStar, Float fwhm, Short flag, Float b2, Float r2, Float i, String otType, Long fufId, String filter) {
+  public FollowUpRecord(long frId, Long foId, Short frObjId, Date dateUtc, Float ra, Float dec, Float x, Float y, Float magCalUsno, Float magErr, Float ellipticity, Float classStar, Float fwhm, Short flag, Float b2, Float r2, Float i, Short fuoTypeId, Long fufId, String filter) {
     this.frId = frId;
     this.foId = foId;
     this.frObjId = frObjId;
@@ -67,7 +67,7 @@ public class FollowUpRecord implements java.io.Serializable {
     this.b2 = b2;
     this.r2 = r2;
     this.i = i;
-    this.otType = otType;
+    this.fuoTypeId = fuoTypeId;
     this.fufId = fufId;
     this.filter = filter;
   }
@@ -221,15 +221,6 @@ public class FollowUpRecord implements java.io.Serializable {
     this.i = i;
   }
 
-  @Column(name = "ot_type", length = 20)
-  public String getOtType() {
-    return this.otType;
-  }
-
-  public void setOtType(String otType) {
-    this.otType = otType;
-  }
-
   @Column(name = "filter")
   public String getFilter() {
     return this.filter;
@@ -282,6 +273,21 @@ public class FollowUpRecord implements java.io.Serializable {
    */
   public void setFuSerialNumber(Integer fuSerialNumber) {
     this.fuSerialNumber = fuSerialNumber;
+  }
+
+  /**
+   * @return the fuoTypeId
+   */
+  @Column(name = "fuo_type_id")
+  public Short getFuoTypeId() {
+    return fuoTypeId;
+  }
+
+  /**
+   * @param fuoTypeId the fuoTypeId to set
+   */
+  public void setFuoTypeId(Short fuoTypeId) {
+    this.fuoTypeId = fuoTypeId;
   }
 
 }

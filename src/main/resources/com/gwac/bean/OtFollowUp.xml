@@ -33,5 +33,12 @@
       <value>com.gwac.model.FollowUpRecord</value>
     </property>
   </bean>
+
+  <bean id="fuotDao" class="com.gwac.dao.FollowUpObjectTypeDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FollowUpObjectType</value>
+    </property>
+  </bean>
 	
 </beans>

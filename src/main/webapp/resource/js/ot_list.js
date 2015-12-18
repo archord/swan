@@ -21,6 +21,7 @@ $(function() {
     $('#ot2MatchType').multiselect(option);
     $('#ot2Type').multiselect(option);
     $('#ot2Ccd').multiselect(option);
+    $('#lookBackResult').multiselect(option);
     $("#ot2QueryBtn").click(ot2QueryBtnClick);
     $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
     setAutoRefresh();
@@ -87,8 +88,10 @@ $(function() {
         {"data": "otherMatch"},
         {"data": "ot2HisMatch"},
         {"data": "usnoMatch"},
+        {"data": "lookBackResult"},
         {"data": "firstNMark"},
         {"data": "foCount"},
+        {"data": "followUpResult"},
         {"data": "otType"}
       ],
       "columnDefs": [{
@@ -118,15 +121,19 @@ $(function() {
         }, {
           "targets": 14,
           "data": "dont know",
+          "render": formateLookBack
+        }, {
+          "targets": 15,
+          "data": "dont know",
           "render": formateFirstNMark
         }, {
-          "targets": 16,
+          "targets": 18,
           "data": "dont know",
           "render": formateOtType
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
-                '<option value="5">5</option>' +
+                '<option value="10">10</option>' +
                 '<option value="20">20</option>' +
                 '<option value="50">50</option>' +
                 '<option value="100">100</option>' +
@@ -173,6 +180,16 @@ $(function() {
     return data ? data : "<span style='color:#FF0000;font-weight: bold;'>" + data + "</span>";
   }
 
+  function formateLookBack(data, type, full, meta) {
+    var result = data;
+    if (data === 1) {
+      result = 'OT';
+    } else if (data === 2) {
+      result = 'FOT';
+    }
+    return result;
+  }
+
   function formateFirstNMark(data, type, full, meta) {
     return data ? '是' : '否';
   }
@@ -184,7 +201,8 @@ $(function() {
   /*full: json对象；meta：表格元素*/
   function formateOtName(data, type, full, meta) {
     var url = baseUrl + data;
-    if (full.ot2HisMatch === 0 && full.rc3Match === 0 && full.minorPlanetMatch === 0 && full.usnoMatch === 0) {
+    if (full.ot2HisMatch === 0 && full.rc3Match === 0 && full.minorPlanetMatch === 0 && full.usnoMatch === 0
+            && (full.lookBackResult === 0 || full.lookBackResult === 1)) {
       return "<a href='" + url + "' target='_blank' class='importantOT2' title='点击查看OT详细'>" + data + "</a>";
     } else if (full.rc3Match > 0) {
       return "<a href='" + url + "' target='_blank' class='importantRC3' title='点击查看OT详细'>" + data + "</a>";
