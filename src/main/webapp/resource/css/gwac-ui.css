@@ -237,13 +237,28 @@
   width: 100%;
 }
 
-#ot-curve-show, #ot-position-show{
+#ot-curve-show, #ot-position-show， #ot-followup-mag-show{
   width: 100%;
   height: 200px;
 }
 
-#ot-curve,#ot-position-curve{width: 100%; height: 180px;}
-#ot-curve-title,#ot-position-show-title{width: 100%;  height: 20px; text-align:center;}
+#ot-curve{
+  width: 100%; 
+  height: 180px;
+}
+#ot-position-curve{
+  width: 100%; 
+  height: 180px;
+}
+#ot-followup-mag-curve{
+  width: 100%; 
+  height: 180px;
+}
+#ot-curve-title, #ot-position-show-title, #ot-followup-mag-title{
+  width: 100%;  
+  height: 20px; 
+  text-align:center;
+}
 
 /*flot曲线用*/
 #tooltip{ 
@@ -339,19 +354,19 @@
 
 
 /*OT match*/
-#ot2-followup{
+#ot2-followup-object{
   font-size: 12px;
 }
-#ot2-followup .dataTables_scroll, .ot2-followup-table-bottom, .ot2-followup-table-top, .ot2-followup-table-bottom{
+#ot2-followup-object .dataTables_scroll, .ot2-followup-object-table-bottom, .ot2-followup-object-table-top, .ot2-followup-object-table-bottom{
   /*display: none;*/
 }
-.ot2-followup-table-top label{
+.ot2-followup-object-table-top label{
   display: inline;
   font-size: 12px;
   line-height: 22px;
   text-align: right;
 }
-.ot2-followup-table-top input{
+.ot2-followup-object-table-top input{
   height:22px;
   width: 80px;
   border-color: rgb(189, 195, 199);
@@ -359,10 +374,10 @@
   border-style: solid;
   border-width: 2px;
 }
-.ot2-followup-table-bottom{
+.ot2-followup-object-table-bottom{
 
 }
-#ot2-followup-table td, table.dataTable thead th{ 
+#ot2-followup-object-table td, table.dataTable thead th{ 
   line-height: 18px;
   padding-top: 2px;
   padding-bottom: 2px;

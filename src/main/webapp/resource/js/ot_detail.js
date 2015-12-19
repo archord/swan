@@ -15,6 +15,8 @@ $(function() {
   getOt2Detail();
   loadOT2Record();
   loadOT2Match();
+  loadOT2FollowupObjects();
+  getOt2FollowupDetail();
 
 
 //  $(window).resize(function() {
@@ -27,6 +29,17 @@ $(function() {
     var otName = getUrlParameter("otName");
     var url = gwacRootURL + "/get-ot-detail-json.action?otName=" + otName;
     $.get(url, ot2Show, "json");
+  }
+
+  function getOt2FollowupDetail() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var otName = getUrlParameter("otName");
+    var url = gwacRootURL + "/get-ot-followup-object-magpos.action?otName=" + otName;
+    $.get(url, ot2ShowFollowup, "json");
+  }
+
+  function ot2ShowFollowup(data) {
+    ot2FollowupMag(data);
   }
 
   function ot2Show(data) {
@@ -399,6 +412,40 @@ $(function() {
     });
   }
 
+  function ot2FollowupMag(data) {
+    var fuMags = eval(data.mags);
+    console.log(fuMags);
+    if (typeof (fuMags) === "undefined")
+    {
+      return;
+    }
+    var fuMagsShow = [];
+    $.each(fuMags, function(i, item) {
+      fuMagsShow[i] = {
+        label: fuMags[i].objName,
+        data: eval(fuMags[i].objMag),
+        points: {radius: 2}
+      };
+    });
+    console.log(fuMagsShow);
+    option1.lines.show = true;
+    option1.legend.show = true;
+    option1.yaxis.transform = formate2;
+    option1.yaxis.inverseTransform = formate2;
+    
+    otFollowupMagCurve = $.plot("#ot-followup-mag-curve", fuMagsShow, option1);
+
+    $("#ot-followup-mag-curve").bind("plothover", function(event, pos, item) {
+      if (item) {
+        var x = item.datapoint[0].toFixed(4);
+        var y = item.datapoint[1].toFixed(2);
+        $("#tooltip").html(x + ", " + y).css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
+      } else {
+        $("#tooltip").hide();
+      }
+    });
+  }
+
   function otPositionShow(data) {
     var otPositionVaration = eval(data.otPositionVaration);
     if (typeof (otPositionVaration) === "undefined")
@@ -427,6 +474,63 @@ $(function() {
     option1.yaxis.transform = formate3;
     option1.yaxis.inverseTransform = formate3;
     otPosition = $.plot("#ot-position-curve", positionData, option1);
+  }
+
+  function loadOT2FollowupObjects() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var otName = getUrlParameter("otName");
+    var queryUrl = gwacRootURL + "/get-ot-followup-object-list.action?otName=" + otName;
+    $('#ot2-followup-object-table').DataTable({
+      "deferRender": true,
+      "processing": true,
+      "searching": true,
+      "lengthChange": true,
+      "pageLength": 5,
+      "scrollX": true,
+      "ajax": {
+        url: queryUrl,
+        dataSrc: 'objs'
+      },
+      "columns": [
+        {"data": "fuoId"},
+        {"data": "fuoName"},
+        {"data": "startTimeUtc"},
+        {"data": "lastRa"},
+        {"data": "lastDec"},
+        {"data": "lastX"},
+        {"data": "lastY"}
+      ],
+      "columnDefs": [{
+          "targets": 0,
+          "data": "dont know",
+          "render": formateRowNumber
+        }],
+      "language": {
+        "lengthMenu": '显示 <select>' +
+                '<option value="5">5</option>' +
+                '<option value="10">10</option>' +
+                '<option value="50">50</option>' +
+                '<option value="100">100</option>' +
+                '<option value="-1">All</option>' +
+                '</select> 条',
+        "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条",
+        "search": "模糊查询:",
+        "paginate": {
+          "first": "首页",
+          "last": "尾页",
+          "next": "下一页",
+          "previous": "上一页"
+        }
+      }
+      ,
+      dom: '<"ot2-load-button"B><"ot2-record-table-top"lf>tr<"ot2-record-table-bottom"ip>',
+      buttons: [
+        {
+          text: 'OT2后随结果目标列表',
+          action: ot2LoadButtonClick
+        }
+      ]
+    });
   }
 
   function loadOT2Match() {

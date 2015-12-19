@@ -78,7 +78,7 @@
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="otSubObserveRecordJob" />
     <property name="repeatInterval" value="15000000000000" />  
-    <property name="startDelay" value="5000" />   
+    <property name="startDelay" value="15000000000000" />   
   </bean>
 
   <!-- Simple Trigger, run every 15 seconds -->

@@ -352,7 +352,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       }
       sql.append(") ");
     }
-    if (ot2qp.getLookBackResult()!= null && !ot2qp.getLookBackResult().isEmpty()) {
+    if (ot2qp.getLookBackResult() != null && !ot2qp.getLookBackResult().isEmpty()) {
       sql.append(" and look_back_result in (");
       for (String tstr : ot2qp.getLookBackResult()) {
         sql.append(tstr);
@@ -538,7 +538,9 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   public void updateLookBackResult(OtLevel2 ot2) {
     String sql = "update ot_level2 set look_back_result=" + ot2.getLookBackResult() + " where name='" + ot2.getName() + "'";
     Session session = getCurrentSession();
-    session.createSQLQuery(sql).executeUpdate();
+    int result = session.createSQLQuery(sql).executeUpdate();
+    log.debug("sql:" + sql);
+    log.debug("result:" + result);
   }
 
   @Override

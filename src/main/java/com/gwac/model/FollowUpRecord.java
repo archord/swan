@@ -41,6 +41,7 @@ public class FollowUpRecord implements java.io.Serializable {
   private Long fufId;
   private String filter;
   private Integer fuSerialNumber;
+  private Long fuoId;
 
   public FollowUpRecord() {
   }
@@ -288,6 +289,21 @@ public class FollowUpRecord implements java.io.Serializable {
    */
   public void setFuoTypeId(Short fuoTypeId) {
     this.fuoTypeId = fuoTypeId;
+  }
+
+  /**
+   * @return the fuoId
+   */
+  @Column(name = "fuo_id")
+  public Long getFuoId() {
+    return fuoId;
+  }
+
+  /**
+   * @param fuoId the fuoId to set
+   */
+  public void setFuoId(Long fuoId) {
+    this.fuoId = fuoId;
   }
 
 }

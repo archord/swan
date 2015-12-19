@@ -103,6 +103,12 @@
               </div>
               <div id="ot-curve"></div>
             </div>
+            <div id="ot-followup-mag-show">
+              <div id="ot-followup-mag-title">
+                <span>OT后随光变曲线（X轴为时间，单位/分钟，开始于<s:date name="ob.foundTimeUtc" format="yyyy-MM-dd HH:mm:ss" />U，Y轴为星等值）</span>
+              </div>
+              <div id="ot-followup-mag-curve"></div>
+            </div>
             <div id="ot-position-show">
               <div id="ot-position-show-title">
                 <span>OT坐标变化（与首帧差值，单位/像素，xy轴分别为模板XY坐标）</span>
@@ -121,14 +127,11 @@
             <table id="ot2-record-table" class="display" cellspacing="0" width="100%">
               <thead><tr><th>ID</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>星等</th><th>星等误差</th><th>原FITS图</th><th>X</th><th>Y</th>
                   <th>流量</th><th>背景</th><th>半高全宽</th><th>椭率</th><th>分类星</th></tr></thead>
-              <!--<tfoot><tr><th>Name</th><th>Position</th><th>Office</th><th>Extn.</th><th>Start date</th><th>Salary</th></tr></tfoot>-->
             </table>
           </div>
-          <div id="ot2-followup" class="ot2-table-show">
-            <table id="ot2-followup-table" class="display" cellspacing="0" width="100%">
-              <thead><tr><th>ID</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>星等</th><th>星等误差</th><th>原FITS图</th><th>X</th><th>Y</th>
-                  <th>流量</th><th>背景</th><th>半高全宽</th><th>椭率</th><th>分类星</th></tr></thead>
-              <!--<tfoot><tr><th>Name</th><th>Position</th><th>Office</th><th>Extn.</th><th>Start date</th><th>Salary</th></tr></tfoot>-->
+          <div id="ot2-followup-object" class="ot2-table-show">
+            <table id="ot2-followup-object-table" class="display" cellspacing="0" width="100%">
+              <thead><tr><th>ID</th><th>目标名</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>X</th><th>Y</th></tr></thead>
             </table>
           </div>
           <!--div id="ot-comment">

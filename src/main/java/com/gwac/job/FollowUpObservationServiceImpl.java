@@ -4,6 +4,7 @@
 package com.gwac.job;
 
 import com.gwac.dao.FollowUpFitsfileDao;
+import com.gwac.dao.FollowUpObjectDao;
 import com.gwac.dao.FollowUpObjectTypeDao;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.FollowUpRecordDao;
@@ -12,12 +13,14 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FollowUpCatalog;
 import com.gwac.model.FollowUpFitsfile;
+import com.gwac.model.FollowUpObject;
 import com.gwac.model.FollowUpObjectType;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.FollowUpRecord;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.UploadFileUnstore;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,7 +40,9 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
   private OTCatalogDao otcDao;
   private OtLevel2Dao ot2Dao;
   private FollowUpObjectTypeDao fuotDao;
+  private FollowUpObjectDao fuoDao;
 
+  private float followupErrorbox;
   private String rootPath;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
@@ -47,9 +52,10 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
   @Override
   public void startJob() {
 
-//    if (isTestServer) {
-//      return;
-//    }
+    if (isTestServer) {
+      return;
+    }
+    
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -87,15 +93,24 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
 
   public void parseFollowUpInfo(long ufuId, String storePath, String fileName) {
 
-//    String foName = fileName.substring(0, 18);
-    String foName = fileName.substring(0, 14) + "_001";
+    String ot2Name = fileName.substring(0, 14);
+    String foName = fileName.substring(0, 18);
+//    String foName = fileName.substring(0, 14) + "_001";
+
+    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name, false);
+    if (ot2 == null) {
+      log.error("can not find OtLevel2:" + ot2Name);
+      return;
+    }
     FollowUpObservation fo = foDao.getByName(foName);
     if (fo == null) {
+      log.error("can not find FollowUpObservation:" + foName);
       return;
     }
     List<FollowUpCatalog> objs = otcDao.getFollowUpCatalog(rootPath + "/" + storePath + "/" + fileName);
+
     FollowUpFitsfile fuf = new FollowUpFitsfile();
-    if (objs.size() > 0) {
+    if (objs.size() > 0) { //解析并存储FollUpFits文件
       FollowUpCatalog tfr = objs.get(0);
       String ffName = tfr.getFfName();
       String ffPath = storePath.replace("otfollowlist", "otfollowimg");
@@ -109,37 +124,116 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
         fuf.setIsUpload(false);
       }
       fufDao.save(fuf);
-    }
-    for (FollowUpCatalog obj : objs) {
-      FollowUpRecord fur = new FollowUpRecord();
-      fur.setFoId(fo.getFoId());
-      fur.setDateUtc(obj.getDateUt());
-      fur.setFilter(obj.getFilter());
-      fur.setRa(obj.getRa());
-      fur.setDec(obj.getDec());
-      fur.setX(obj.getX());
-      fur.setY(obj.getY());
-      fur.setMagCalUsno(obj.getMagClbtUsno());
-      fur.setMagErr(obj.getMagErr());
-      fur.setEllipticity(obj.getEllipticity());
-      fur.setClassStar(obj.getClassStar());
-      fur.setFwhm(obj.getFwhm());
-      fur.setFlag(obj.getFlag());
-      fur.setB2(obj.getB2());
-      fur.setR2(obj.getR2());
-      fur.setI(obj.getI());
 
-      FollowUpObjectType fuot = fuotDao.getOtTypeByTypeName(obj.getOtType().trim().toUpperCase());
-      if (fuot != null) {
-        fur.setFuoTypeId(fuot.getFuoTypeId());
-      }else{
-        log.error("cannot find follow up object type: "+ obj.getOtType());
+      short checkId = 0;
+      short miniotId = 0;
+      short catasId = 0;
+      short newotId = 0;
+      FollowUpObjectType tfuot = fuotDao.getOtTypeByTypeName("CHECK");
+      if (tfuot != null) {
+        checkId = tfuot.getFuoTypeId();
       }
-      fur.setFrObjId(obj.getObjLabel());
-      fur.setFuSerialNumber(obj.getFuSerialNumber());
-      fur.setFufId(fuf.getFufId());
-      frDao.save(fur);
+      tfuot = fuotDao.getOtTypeByTypeName("MINIOT");
+      if (tfuot != null) {
+        miniotId = tfuot.getFuoTypeId();
+      }
+      tfuot = fuotDao.getOtTypeByTypeName("CATAS");
+      if (tfuot != null) {
+        catasId = tfuot.getFuoTypeId();
+      }
+      tfuot = fuotDao.getOtTypeByTypeName("NEWOT");
+      if (tfuot != null) {
+        newotId = tfuot.getFuoTypeId();
+      }
+
+      List<FollowUpCatalog> checkObjs = new ArrayList<>();
+      List<FollowUpCatalog> miniotObjs = new ArrayList<>();
+      List<FollowUpCatalog> catasObjs = new ArrayList<>();
+      List<FollowUpCatalog> newotObjs = new ArrayList<>();
+      for (FollowUpCatalog obj : objs) {
+        if (obj.getOtType().trim().equalsIgnoreCase("CHECK")) {
+          checkObjs.add(obj);
+        } else if (obj.getOtType().trim().equalsIgnoreCase("MINIOT")) {
+          miniotObjs.add(obj);
+        } else if (obj.getOtType().trim().equalsIgnoreCase("CATAS")) {
+          catasObjs.add(obj);
+        } else if (obj.getOtType().trim().equalsIgnoreCase("NEWOT")) {
+          newotObjs.add(obj);
+        }
+      }
+
+      for (FollowUpCatalog obj : checkObjs) {
+        saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), checkId);
+      }
+
+      if (miniotObjs.size() > 0) {
+        for (FollowUpCatalog obj : miniotObjs) {
+          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), miniotId);
+        }
+      } else if (catasObjs.size() > 0) {
+        for (FollowUpCatalog obj : catasObjs) {
+          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), catasId);
+        }
+      } else if (newotObjs.size() > 0) {
+        for (FollowUpCatalog obj : newotObjs) {
+          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+        }
+      }
     }
+  }
+
+  public void saveFollowUpCatalog(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
+
+    FollowUpObject fuo = new FollowUpObject();
+    fuo.setOtId(ot2Id);
+    fuo.setFoId(foId);
+    fuo.setFuoTypeId(fuotId);
+    fuo.setStartTimeUtc(obj.getDateUt());
+    fuo.setLastRa(obj.getRa());
+    fuo.setLastDec(obj.getDec());
+    fuo.setLastX(obj.getX());
+    fuo.setLastY(obj.getY());
+    fuo.setFoundNumber(obj.getFuSerialNumber());
+
+    List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
+    if (fuos.size() > 0) {
+      FollowUpObject tfuo = fuos.get(0);
+      tfuo.setLastRa(fuo.getLastRa());
+      tfuo.setLastDec(fuo.getLastDec());
+      tfuo.setLastX(fuo.getLastX());
+      tfuo.setLastY(fuo.getLastY());
+      fuo.setFuoId(tfuo.getFuoId());
+      fuoDao.update(tfuo);
+    } else {
+      int fuoNum = fuoDao.countTypeNumber(fuo);
+      String fuoName = String.format("%s%02d", obj.getOtType(), fuoNum + 1);
+      fuo.setFuoName(fuoName);
+      fuoDao.save(fuo);
+    }
+
+    FollowUpRecord fur = new FollowUpRecord();
+    fur.setFuoId(fuo.getFuoId());
+    fur.setFoId(foId);
+    fur.setDateUtc(obj.getDateUt());
+    fur.setFilter(obj.getFilter());
+    fur.setRa(obj.getRa());
+    fur.setDec(obj.getDec());
+    fur.setX(obj.getX());
+    fur.setY(obj.getY());
+    fur.setMagCalUsno(obj.getMagClbtUsno());
+    fur.setMagErr(obj.getMagErr());
+    fur.setEllipticity(obj.getEllipticity());
+    fur.setClassStar(obj.getClassStar());
+    fur.setFwhm(obj.getFwhm());
+    fur.setFlag(obj.getFlag());
+    fur.setB2(obj.getB2());
+    fur.setR2(obj.getR2());
+    fur.setI(obj.getI());
+    fur.setFuoTypeId(fuotId);
+    fur.setFrObjId(obj.getObjLabel());
+    fur.setFuSerialNumber(obj.getFuSerialNumber());
+    fur.setFufId(fufId);
+    frDao.save(fur);
   }
 
   /**
@@ -210,6 +304,20 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
    */
   public void setFuotDao(FollowUpObjectTypeDao fuotDao) {
     this.fuotDao = fuotDao;
+  }
+
+  /**
+   * @param followupErrorbox the followupErrorbox to set
+   */
+  public void setFollowupErrorbox(float followupErrorbox) {
+    this.followupErrorbox = followupErrorbox;
+  }
+
+  /**
+   * @param fuoDao the fuoDao to set
+   */
+  public void setFuoDao(FollowUpObjectDao fuoDao) {
+    this.fuoDao = fuoDao;
   }
 
 }

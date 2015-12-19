@@ -10,6 +10,7 @@ import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.dao.UploadFileUnstoreDao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -32,6 +33,7 @@ public class DataBackupServiceImpl implements DataBackupService {
   private ConfigFileDao cfDao;
   private ImageStatusParameterDao ispDao;
   private DataProcessMachineDAO dpmDao;
+  private UploadFileUnstoreDao ufuDao;
 
   @Override
   public void startJob() {
@@ -56,6 +58,7 @@ public class DataBackupServiceImpl implements DataBackupService {
       cfDao.moveDataToHisTable();
       ispDao.moveDataToHisTable();
       dpmDao.everyDayInit();
+      ufuDao.removeAll();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -135,6 +138,13 @@ public class DataBackupServiceImpl implements DataBackupService {
    */
   public void setDpmDao(DataProcessMachineDAO dpmDao) {
     this.dpmDao = dpmDao;
+  }
+
+  /**
+   * @param ufuDao the ufuDao to set
+   */
+  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
+    this.ufuDao = ufuDao;
   }
 
 }

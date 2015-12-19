@@ -27,11 +27,12 @@ delete from config_file;
 delete from fits_file_cut;
 delete from ot_observe_record;
 delete from ot_level2;
+delete from var_star_record;
+delete from image_status_parameter;
+update data_process_machine set first_record_number=0, cur_process_number=0;
+##删除时注意
 delete from upload_file_unstore;
 delete from upload_file_record;
-delete from var_star_record;
-update data_process_machine set cur_process_number=0;
-update data_process_machine set first_record_number=0;
 
 ##删除历史表中某一条的记录
 delete from config_file_his where substring(store_path, 1,6)='141224';
@@ -46,6 +47,7 @@ WITH moved_rows AS ( DELETE FROM ot_observe_record RETURNING * ) INSERT INTO ot_
 WITH moved_rows AS ( DELETE FROM config_file RETURNING * ) INSERT INTO config_file_his SELECT * FROM moved_rows;
 WITH moved_rows AS ( DELETE FROM image_status_parameter RETURNING * ) INSERT INTO image_status_parameter_his SELECT * FROM moved_rows;
 update data_process_machine set first_record_number=0, cur_process_number=0;
+delete from upload_file_unstore;
 
 ##多表条件更新
 update fits_file_cut
