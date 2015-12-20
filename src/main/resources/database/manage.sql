@@ -3,9 +3,9 @@ WITH moved_rows AS ( DELETE FROM config_file RETURNING * ) INSERT INTO config_fi
 
 ##将某天的记录由历史库插入到当前库
 INSERT INTO config_file SELECT * FROM config_file_his where substring(store_path, 1,6)='150129';
-INSERT INTO ot_level2 SELECT * FROM ot_level2_his where date_str='150310';
-INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='150310';
-INSERT INTO fits_file_cut SELECT * FROM fits_file_cut_his where substring(store_path, 1,6)='150312';
+INSERT INTO ot_level2 SELECT * FROM ot_level2_his where date_str='151218';
+INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='151218';
+INSERT INTO fits_file_cut SELECT * FROM fits_file_cut_his where substring(store_path, 1,6)='151218';
 
 ##统计模板切图表中，某天切图未返回的数量
 select dpm_id, count(ot_id) from fits_file_cut_ref where length(file_name)=21 and substring(store_path, 1, 6)='150129' group by dpm_id order by dpm_id;
@@ -84,4 +84,30 @@ order by f1.fu_serial_number, f1.fr_obj_id , num desc
 HAVING count(f2.fr_id)=1
 limit 20;
 
+##miniGWAC中OT2与USNO库在不同匹配半径时不同星等的匹配成功与失败数量曲线
 select DISTINCT ot_type from follow_up_record;
+
+(select 71 mag, count(*) from ot_level2_120 where mag>6.8 and mag<8 and usno_match=0)
+union
+(select 72 mag, count(*) from ot_level2_120 where mag>6.8 and mag<8 and usno_match>0)
+union
+(select 81 mag, count(*) from ot_level2_120 where mag>=8 and mag<9 and usno_match=0)
+union
+(select 82 mag, count(*) from ot_level2_120 where mag>=8 and mag<9 and usno_match>0)
+union
+(select 91 mag, count(*) from ot_level2_120 where mag>=9 and mag<10 and usno_match=0)
+union
+(select 92 mag, count(*) from ot_level2_120 where mag>=9 and mag<10 and usno_match>0)
+union
+(select 101 mag, count(*) from ot_level2_120 where mag>=10 and mag<11 and usno_match=0)
+union
+(select 102 mag, count(*) from ot_level2_120 where mag>=10 and mag<11 and usno_match>0)
+union
+(select 111 mag, count(*) from ot_level2_120 where mag>=11 and mag<12 and usno_match=0)
+union
+(select 112 mag, count(*) from ot_level2_120 where mag>=11 and mag<12 and usno_match>0)
+union
+(select 121 mag, count(*) from ot_level2_120 where mag>=12 and mag<12.5 and usno_match=0)
+union
+(select 122 mag, count(*) from ot_level2_120 where mag>=12 and mag<12.5 and usno_match>0)
+order by mag;

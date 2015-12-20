@@ -4,11 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
-  <bean class="com.gwac.action.OTFollowUpload"  scope="prototype">
-    <property name="ot2Dao" ref="otbDao" />	
-    <property name="ufuDao" ref="ufuDao" />	
-    <property name="ufrDao" ref="ufrDao" />
-  </bean>
   
   <bean class="com.gwac.action.MultipleFileUploadAction"  scope="prototype">
     <property name="ufService" ref="ufService" />	

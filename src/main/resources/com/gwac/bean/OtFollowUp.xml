@@ -15,6 +15,13 @@
     <property name="fuoDao" ref="fuoDao" />
   </bean>
   
+  <bean class="com.gwac.action.OTFollowUpload"  scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />	
+    <property name="ufuDao" ref="ufuDao" />	
+    <property name="ufrDao" ref="ufrDao" />
+    <property name="fufDao" ref="fufDao" />
+  </bean>
+  
   <bean class="com.gwac.action.OTFollowUp" scope="prototype">
     <property name="ot2Dao" ref="otbDao" />	
     <property name="foDao" ref="foDao" />	

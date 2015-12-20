@@ -157,7 +157,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2.setOtherMatch((short) tmom.size());
         ot2Dao.updateOtherMatch(ot2);
       }
-
+      
       Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
       for (Map.Entry<Rc3, Double> entry : trc3m.entrySet()) {
         Rc3 trc3 = (Rc3) entry.getKey();
@@ -265,7 +265,6 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         endTime = System.nanoTime();
         log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
       }
-
       if (flag) {
         ot2.setIsMatch((short) 2);
         ot2Dao.updateIsMatch(ot2);
@@ -335,7 +334,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     for (Rc3 obj : objs) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRadeg(), obj.getDedeg());
       if (obj.getD25() > CommonFunction.MINFLOAT) {
-        minDis = obj.getD25() * 2 / 60; //d25单位为角分
+        minDis = obj.getD25() / 60; //d25单位为角分
       } else if (obj.getAngularSize() > CommonFunction.MINFLOAT) {
         minDis = obj.getAngularSize() / 60; //AngularSize单位为角分
       } else {
@@ -405,7 +404,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       int maxIdx = (int) ((90 + ot2.getDec() + usnoSearchbox) * 10);
       int minIdx = (int) ((90 + ot2.getDec() - usnoSearchbox) * 10);
       for (int i = minIdx; i <= maxIdx; i++) {
-        String tableName = String.format("%4d%s", i, ott.getMatchTableName());
+        String tableName = String.format("%04d%s", i, ott.getMatchTableName());
         rst.add(tableName);
       }
     }

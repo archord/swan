@@ -8,6 +8,7 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.FollowUpFitsfileDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
@@ -62,6 +63,7 @@ public class OTFollowUpload extends ActionSupport {
   private OtLevel2Dao ot2Dao;
   private UploadFileRecordDao ufrDao;
   private UploadFileUnstoreDao ufuDao;
+  private FollowUpFitsfileDao fufDao;
 
   private String echo = "";
 
@@ -219,6 +221,7 @@ public class OTFollowUpload extends ActionSupport {
           }
           FileUtils.moveFile(getFitsname(), fitsNameFile);
           obj2.setUploadSuccess(true);
+          fufDao.updateIsUpload(finalName);
         } else {
           obj2.setUploadSuccess(false);
         }
@@ -364,5 +367,12 @@ public class OTFollowUpload extends ActionSupport {
    */
   public void setFollowname(String followname) {
     this.followname = followname;
+  }
+
+  /**
+   * @param fufDao the fufDao to set
+   */
+  public void setFufDao(FollowUpFitsfileDao fufDao) {
+    this.fufDao = fufDao;
   }
 }

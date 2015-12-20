@@ -14,4 +14,6 @@ import com.gwac.model.Telescope;
 public interface FollowUpFitsfileDao extends BaseHibernateDao<FollowUpFitsfile> {
 
   public FollowUpFitsfile getByName(String ffName);
+  
+  public void updateIsUpload(String ffName);
 }

@@ -37,7 +37,7 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
   private FollowUpRecordDao furDao;
 
   private OtLevel2 ot2;
-
+  private FollowUpObject fuCheckObj;
   private List<Map<String, String>> mags;
   private List<Map<String, String>> poss;
 
@@ -60,46 +60,83 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
 
       Calendar cal = Calendar.getInstance();
 
+      int maxObjs = 6;
+      int i = 1;
       List<FollowUpObject> objs = fuoDao.getByOtId(ot2.getOtId(), queryHis);
+      //对有多个目标时，大部分情况是数据处理流程出错，值显示前6个目标
       for (FollowUpObject obj : objs) {
+        if (i++ > maxObjs) {
+          break;
+        }
+        if (obj.getFuoName().contains("CHECK")) {
+          fuCheckObj = obj;
+        }
+//        if(obj.getRecordTotal()<2){
+//          continue;
+//        }
+
         Date baseDate = obj.getStartTimeUtc();
         cal.setTime(baseDate);
         double baseDay = cal.getTimeInMillis() / 60000.0;
 
+        List<FollowUpRecord> furs = furDao.getByFuoId(obj.getFuoId(), queryHis);
         Map<String, String> tmags = new HashMap();
-        Map<String, String> tposs = new HashMap();
         String fuoName = obj.getFuoName();
         StringBuilder magSb = new StringBuilder();
-        StringBuilder posSb = new StringBuilder();
         magSb.append("[");
-        posSb.append("[");
-        List<FollowUpRecord> furs = furDao.getByFuoId(obj.getFuoId(), queryHis);
         for (FollowUpRecord fur : furs) {
           cal.setTime(fur.getDateUtc());
           double now = cal.getTimeInMillis() / 60000.0;
-
           magSb.append("[");
-//          magSb.append(fur.getFuSerialNumber());
           magSb.append(now - baseDay);
           magSb.append(",");
           magSb.append(fur.getMagCalUsno());
           magSb.append("],");
-
-          posSb.append("[");
-          posSb.append(fur.getX());
-          posSb.append(",");
-          posSb.append(fur.getY());
-          posSb.append("],");
         }
         magSb.append("]");
-        posSb.append("]");
-
         tmags.put("objName", fuoName);
         tmags.put("objMag", magSb.toString());
-        tposs.put("objName", fuoName);
-        tposs.put("objPos", posSb.toString());
         getMags().add(tmags);
-        getPoss().add(tposs);
+      }
+
+      //统计目标中非参考星CHECK的个数
+      int targetObjNum = 0;
+      for (FollowUpObject obj : objs) {
+        if (!obj.getFuoName().contains("CHECK")) {
+          if (++targetObjNum > 1) {
+            break;
+          }
+        }
+      }
+      //如果非参考星个数为1，则计算该目标的位置变化，并最终在页面上显示
+      if (targetObjNum == 1) {
+        for (FollowUpObject obj : objs) {
+          if (obj.getFuoName().contains("CHECK")) {
+            continue;
+          }
+          List<FollowUpRecord> furs = furDao.getByFuoId(obj.getFuoId(), queryHis);
+          String fuoName = obj.getFuoName();
+          int j = 0;
+          float x0 = 0, y0 = 0;
+          Map<String, String> tposs = new HashMap();
+          StringBuilder posSb = new StringBuilder();
+          posSb.append("[");
+          for (FollowUpRecord fur : furs) {
+            if (j++ == 0) {
+              x0 = fur.getX();
+              y0 = fur.getY();
+            }
+            posSb.append("[");
+            posSb.append(fur.getX() - x0);
+            posSb.append(",");
+            posSb.append(fur.getY() - y0);
+            posSb.append("],");
+          }
+          posSb.append("]");
+          tposs.put("objName", fuoName);
+          tposs.put("objPos", posSb.toString());
+          getPoss().add(tposs);
+        }
       }
     } else {
       mags = new ArrayList();
@@ -163,6 +200,13 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
    */
   public List<Map<String, String>> getPoss() {
     return poss;
+  }
+
+  /**
+   * @return the fuCheckObj
+   */
+  public FollowUpObject getFuCheckObj() {
+    return fuCheckObj;
   }
 
 }

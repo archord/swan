@@ -99,15 +99,9 @@
           <div id="ot-curves">
             <div id="ot-curve-show">
               <div id="ot-curve-title">
-                <span>OT光变曲线（X轴为时间，单位/分钟，开始于<s:date name="ob.foundTimeUtc" format="yyyy-MM-dd HH:mm:ss" />U，Y轴为星等值）</span>
+                <span>OT光变曲线（X轴为时间，单位/分钟，开始于<span id="otFoundTimeUtc"></span>U，Y轴为星等值）</span>
               </div>
               <div id="ot-curve"></div>
-            </div>
-            <div id="ot-followup-mag-show">
-              <div id="ot-followup-mag-title">
-                <span>OT后随光变曲线（X轴为时间，单位/分钟，开始于<s:date name="ob.foundTimeUtc" format="yyyy-MM-dd HH:mm:ss" />U，Y轴为星等值）</span>
-              </div>
-              <div id="ot-followup-mag-curve"></div>
             </div>
             <div id="ot-position-show">
               <div id="ot-position-show-title">
@@ -115,12 +109,18 @@
               </div>
               <div id="ot-position-curve"></div>
             </div>
+            <div id="ot-followup-mag-show">
+              <div id="ot-followup-mag-title">
+                <span>OT后随光变曲线（X轴为时间，单位/分钟，开始于<span id="otFollowupStartTimeUtc"></span>U，Y轴为星等值）</span>
+              </div>
+              <div id="ot-followup-mag-curve"></div>
+            </div>
           </div>
         </div>
         <div class="col-md-12 col-lg-6 ot-detail-right">
           <div id="ot2-match" class="ot2-table-show">
             <table id="ot2-match-table" class="display" cellspacing="0" width="100%">
-              <thead><tr><th>ID</th><th>匹配星表</th><th>匹配ID</th><th>OT2名称</th><th>RA</th><th>DEC</th><th>匹配距离</th><th>星等</th><th>D25</th></tr></thead>
+              <thead><tr><th>ID</th><th>匹配星表</th><th>匹配ID</th><th>OT2名称</th><th>RA</th><th>DEC</th><th>匹配距离(角分)</th><th>星等</th><th>D25</th></tr></thead>
             </table>
           </div>
           <div id="ot2-record" class="ot2-table-show">

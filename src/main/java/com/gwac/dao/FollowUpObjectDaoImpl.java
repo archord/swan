@@ -34,6 +34,12 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
     return q.list();
   }
 
+  /**
+   * 需要按照后随结果类型fuo_type_id排序，将CHECK类型的排在前面
+   * @param otId
+   * @param queryHis
+   * @return 
+   */
   @Override
   public List<FollowUpObject> getByOtId(long otId, Boolean queryHis) {
 
@@ -43,9 +49,9 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
 
     String unionSql;
     if (queryHis) {
-      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by fuo_type_id";
+      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by fuo_type_id, fuo_name";
     } else {
-      unionSql = sql1 + " order by fuo_type_id";
+      unionSql = sql1 + " order by fuo_type_id, fuo_name";
     }
 
     Session session = getCurrentSession();

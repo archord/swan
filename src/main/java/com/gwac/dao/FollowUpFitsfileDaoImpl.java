@@ -19,6 +19,14 @@ import org.hibernate.Session;
 public class FollowUpFitsfileDaoImpl extends BaseHibernateDaoImpl<FollowUpFitsfile> implements FollowUpFitsfileDao {
 
   private static final Log log = LogFactory.getLog(FollowUpFitsfileDaoImpl.class);
+  
+  @Override
+  public void updateIsUpload(String ffName){
+    
+    Session session = getCurrentSession();
+    String sql = "update follow_up_fitsfile set is_upload=true where ff_name='" + ffName.trim() + "'";
+    session.createSQLQuery(sql).executeUpdate();
+  }
 
   /**
    *

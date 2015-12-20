@@ -385,6 +385,11 @@ $(function() {
   }
 
   function otCurveShow(data) {
+    var ot2 = data.ot2;
+    if (typeof (ot2) !== "undefined")
+    {
+      $("#otFoundTimeUtc").html(ot2.foundTimeUtc);
+    }
     var otCurveData = eval(data.otOpticalVaration);
     if (typeof (otCurveData) === "undefined")
     {
@@ -413,8 +418,12 @@ $(function() {
   }
 
   function ot2FollowupMag(data) {
+    var fuCheckObj = data.fuCheckObj;
+    if (fuCheckObj !== null && typeof (fuCheckObj) !== "undefined")
+    {
+      $("#otFollowupStartTimeUtc").html(fuCheckObj.startTimeUtc);
+    }
     var fuMags = eval(data.mags);
-    console.log(fuMags);
     if (typeof (fuMags) === "undefined")
     {
       return;
@@ -427,12 +436,11 @@ $(function() {
         points: {radius: 2}
       };
     });
-    console.log(fuMagsShow);
     option1.lines.show = true;
     option1.legend.show = true;
     option1.yaxis.transform = formate2;
     option1.yaxis.inverseTransform = formate2;
-    
+
     otFollowupMagCurve = $.plot("#ot-followup-mag-curve", fuMagsShow, option1);
 
     $("#ot-followup-mag-curve").bind("plothover", function(event, pos, item) {
@@ -567,6 +575,10 @@ $(function() {
           "targets": 3,
           "data": "OtName?",
           "render": formateOtName
+        }, {
+          "targets": 6,
+          "data": "OtName?",
+          "render": formateMatchDistance
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -680,6 +692,10 @@ $(function() {
 
   function formateRowNumber(data, type, full, meta) {
     return meta.row + 1;
+  }
+
+  function formateMatchDistance(data, type, full, meta) {
+    return data * 60;
   }
 
   function formateOtName(data, type, full, meta) {

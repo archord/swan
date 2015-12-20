@@ -31,9 +31,10 @@ public class FollowUpObject  implements java.io.Serializable {
      private Float lastDec;
      private Float lastX;
      private Float lastY;
-     private Integer foundNumber;
+     private Integer foundSerialNumber;
      private Long foId;
      private Long otId;
+     private Integer recordTotal;
 
     public FollowUpObject() {
     }
@@ -42,7 +43,7 @@ public class FollowUpObject  implements java.io.Serializable {
     public FollowUpObject(long fuoId) {
         this.fuoId = fuoId;
     }
-    public FollowUpObject(long fuoId, String fuoName, Short fuoTypeId, Date startTimeUtc, Float lastRa, Float lastDec, Float lastX, Float lastY, Integer foundNumber, Long foId, Long otId) {
+    public FollowUpObject(long fuoId, String fuoName, Short fuoTypeId, Date startTimeUtc, Float lastRa, Float lastDec, Float lastX, Float lastY, Integer foundSerialNumber, Long foId, Long otId, Integer recordTotal) {
        this.fuoId = fuoId;
        this.fuoName = fuoName;
        this.fuoTypeId = fuoTypeId;
@@ -51,9 +52,10 @@ public class FollowUpObject  implements java.io.Serializable {
        this.lastDec = lastDec;
        this.lastX = lastX;
        this.lastY = lastY;
-       this.foundNumber = foundNumber;
+       this.foundSerialNumber = foundSerialNumber;
        this.foId = foId;
        this.otId = otId;
+       this.recordTotal = recordTotal;
     }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -141,13 +143,13 @@ public class FollowUpObject  implements java.io.Serializable {
     }
 
     
-    @Column(name="found_number")
-    public Integer getFoundNumber() {
-        return this.foundNumber;
+    @Column(name="found_serial_number")
+    public Integer getFoundSerialNumber() {
+        return this.foundSerialNumber;
     }
     
-    public void setFoundNumber(Integer foundNumber) {
-        this.foundNumber = foundNumber;
+    public void setFoundSerialNumber(Integer foundSerialNumber) {
+        this.foundSerialNumber = foundSerialNumber;
     }
 
     
@@ -169,6 +171,21 @@ public class FollowUpObject  implements java.io.Serializable {
     public void setOtId(Long otId) {
         this.otId = otId;
     }
+
+  /**
+   * @return the recordTotal
+   */
+    @Column(name="record_total")
+  public Integer getRecordTotal() {
+    return recordTotal;
+  }
+
+  /**
+   * @param recordTotal the recordTotal to set
+   */
+  public void setRecordTotal(Integer recordTotal) {
+    this.recordTotal = recordTotal;
+  }
 
 
 

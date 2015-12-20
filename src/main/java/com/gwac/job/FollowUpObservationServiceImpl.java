@@ -193,7 +193,8 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
     fuo.setLastDec(obj.getDec());
     fuo.setLastX(obj.getX());
     fuo.setLastY(obj.getY());
-    fuo.setFoundNumber(obj.getFuSerialNumber());
+    fuo.setFoundSerialNumber(obj.getFuSerialNumber());
+    fuo.setRecordTotal(0);
 
     List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
     if (fuos.size() > 0) {
@@ -203,6 +204,7 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
       tfuo.setLastX(fuo.getLastX());
       tfuo.setLastY(fuo.getLastY());
       fuo.setFuoId(tfuo.getFuoId());
+      fuo.setRecordTotal(tfuo.getRecordTotal()+1);
       fuoDao.update(tfuo);
     } else {
       int fuoNum = fuoDao.countTypeNumber(fuo);
