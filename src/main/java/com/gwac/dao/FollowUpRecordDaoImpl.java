@@ -26,9 +26,9 @@ public class FollowUpRecordDaoImpl extends BaseHibernateDaoImpl<FollowUpRecord> 
             + " inner join follow_up_observation fo on fo.fo_id=fur.fo_id and fo.ot_id=" + otId;
     String unionSql;
     if (queryHis) {
-      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by number";
+      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by date_utc";
     } else {
-      unionSql = sql1 + " order by fuo_type_id";
+      unionSql = sql1 + " order by date_utc";
     }
 
     Session session = getCurrentSession();
@@ -44,9 +44,9 @@ public class FollowUpRecordDaoImpl extends BaseHibernateDaoImpl<FollowUpRecord> 
 
     String unionSql;
     if (queryHis) {
-      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by fr_id";
+      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by date_utc";
     } else {
-      unionSql = sql1 + " order by fr_id";
+      unionSql = sql1 + " order by date_utc";
     }
 
     Session session = getCurrentSession();

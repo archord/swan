@@ -55,6 +55,13 @@ $(function() {
       dataType: 'json',
       success: function(data) {
         ot2arr = data.otTypes;
+        $.each(ot2arr, function(i, item) {
+          if (item.ottName !== "未分类")
+            $('#ot2Type').append($('<option>', {
+              value: item.ottId,
+              text: item.ottName
+            }));
+        });
       }
     });
   }

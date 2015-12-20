@@ -76,7 +76,7 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
     }
     long endTime = System.nanoTime();
     double time1 = 1.0 * (endTime - startTime) / 1e9;
-    log.debug("job consume: parse image status parameter " + time1 + ".");
+    log.debug("job consume: FollowUpObservation " + time1 + ".");
   }
 
   public void parseAllDBInfo() {

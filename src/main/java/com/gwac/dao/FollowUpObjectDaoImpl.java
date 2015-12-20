@@ -27,7 +27,7 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
   public List<FollowUpObject> exist(FollowUpObject obj, float errorBox) {
 
     Session session = getCurrentSession();
-    String sql = "select fuo_id from follow_up_object "
+    String sql = "select * from follow_up_object "
             + " where ot_id=" + obj.getOtId() + " and fuo_type_id=" + obj.getFuoTypeId()
             + " and sqrt(power(last_x-" + obj.getLastX() + ", 2)+power(last_y-" + obj.getLastY() + ", 2))<" + errorBox;
     Query q = session.createSQLQuery(sql).addEntity(FollowUpObject.class);
@@ -59,6 +59,7 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
     return q.list();
   }
 
+  @Override
   public List<FollowUpObject> getByOtIdTypeId(long otId, short fuoTypeId, Boolean queryHis) {
 
     String sql1 = "select * from follow_up_object where ot_id=" + otId + "and fuo_type_id=" + fuoTypeId;

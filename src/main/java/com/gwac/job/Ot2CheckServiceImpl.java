@@ -47,6 +47,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private float minorPlanetSearchbox;
   private float ot2Searchbox;
   private float usnoSearchbox;
+  private float usnoSearchbox2;
 
   private float mergedMag;
   private float cvsMag;
@@ -54,6 +55,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private float rc3MaxMag;
   private float minorPlanetMag;
   private float usnoMag;
+  private float usnoMag2;
 
   private OtLevel2Dao ot2Dao;
   private CVSQueryDao cvsDao;
@@ -157,7 +159,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2.setOtherMatch((short) tmom.size());
         ot2Dao.updateOtherMatch(ot2);
       }
-      
+
       Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
       for (Map.Entry<Rc3, Double> entry : trc3m.entrySet()) {
         Rc3 trc3 = (Rc3) entry.getKey();
@@ -237,7 +239,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
       if (ot2.getDataProduceMethod() == '8') {
         startTime = System.nanoTime();
-        Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog(ot2, usnoSearchbox, usnoMag);//minorPlanetSearchbox
+        Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog(ot2);//minorPlanetSearchbox
 //        log.debug("usnoSearchbox: " + usnoSearchbox);
 //        log.debug("usnoMag: " + usnoMag);
 //        log.debug("usno match size: " + tusno.size());
@@ -375,14 +377,14 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
-  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog(OtLevel2 ot2) {
 
-    List<String> tableNames = getUsnoTableNames(ot2);
     Map rst = new HashMap();
+    List<String> tableNames = getUsnoTableNames(ot2, usnoSearchbox);
     for (String tName : tableNames) {
       if (usnoDao.tableExists(tName)) {
-        List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, searchRadius, mag, tName);
-        double minDis = searchRadius;
+        List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, usnoSearchbox, usnoMag, tName);
+        double minDis = usnoSearchbox;
         for (UsnoCatalog obj : objs) {
           double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
           if (tDis < minDis) {
@@ -393,16 +395,33 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.warn("table " + tName + " not exists!");
       }
     }
+    if (rst.isEmpty()) {
+      tableNames = getUsnoTableNames(ot2, usnoSearchbox2);
+      for (String tName : tableNames) {
+        if (usnoDao.tableExists(tName)) {
+          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, usnoSearchbox2, usnoMag2, tName);
+          double minDis = usnoSearchbox2;
+          for (UsnoCatalog obj : objs) {
+            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+            if (tDis < minDis) {
+              rst.put(obj, tDis);
+            }
+          }
+        } else {
+          log.warn("table " + tName + " not exists!");
+        }
+      }
+    }
     return rst;
   }
 
-  public List<String> getUsnoTableNames(OtLevel2 ot2) {
+  public List<String> getUsnoTableNames(OtLevel2 ot2, float searchBox) {
 
     List<String> rst = new ArrayList();
     if (ot2.getDec() + 90 > 0 && ot2.getDec() - 90 < 0) {
       MatchTable ott = getMtDao().getMatchTableByTypeName("usno");
-      int maxIdx = (int) ((90 + ot2.getDec() + usnoSearchbox) * 10);
-      int minIdx = (int) ((90 + ot2.getDec() - usnoSearchbox) * 10);
+      int maxIdx = (int) ((90 + ot2.getDec() + searchBox) * 10);
+      int minIdx = (int) ((90 + ot2.getDec() - searchBox) * 10);
       for (int i = minIdx; i <= maxIdx; i++) {
         String tableName = String.format("%04d%s", i, ott.getMatchTableName());
         rst.add(tableName);
@@ -680,6 +699,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    */
   public void setUsnoDao(UsnoCatalogDao usnoDao) {
     this.usnoDao = usnoDao;
+  }
+
+  /**
+   * @param usnoSearchbox2 the usnoSearchbox2 to set
+   */
+  public void setUsnoSearchbox2(float usnoSearchbox2) {
+    this.usnoSearchbox2 = usnoSearchbox2;
+  }
+
+  /**
+   * @param usnoMag2 the usnoMag2 to set
+   */
+  public void setUsnoMag2(float usnoMag2) {
+    this.usnoMag2 = usnoMag2;
   }
 
 }

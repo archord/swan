@@ -111,3 +111,14 @@ union
 union
 (select 122 mag, count(*) from ot_level2_120 where mag>=12 and mag<12.5 and usno_match>0)
 order by mag;
+
+SELECT
+	ot2. NAME,
+	ot2.mag,
+	ot2m.mag,
+	ot2m.distance
+FROM
+	ot_level2 ot2
+INNER JOIN ot_level2_match ot2m ON ot2m.ot_id = ot2.ot_id AND ot2m.mag<12
+WHERE
+	ot2.is_match = 2;

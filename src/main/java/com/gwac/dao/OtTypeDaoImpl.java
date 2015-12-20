@@ -30,6 +30,7 @@ public class OtTypeDaoImpl extends BaseHibernateDaoImpl<OtType> implements OtTyp
     return tobj;
   }
 
+  @Override
   public List<OtType> getOtTypes() {
     String sql = "select * from ot_type order by ott_id asc";
     Session session = getCurrentSession();
