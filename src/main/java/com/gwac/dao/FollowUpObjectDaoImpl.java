@@ -14,9 +14,18 @@ import org.hibernate.Session;
  * @author xy
  */
 public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> implements FollowUpObjectDao {
+  
+  @Override
+  public int countTypeNumberByFoId(FollowUpObject obj) {
+    Session session = getCurrentSession();
+    String sql = "select count(*) from follow_up_object where fo_id=" + obj.getFoId() + " and fuo_type_id=" + obj.getFuoTypeId();
+    Query q = session.createSQLQuery(sql);
+    return ((BigInteger) q.list().get(0)).intValue();
+  }
+
 
   @Override
-  public int countTypeNumber(FollowUpObject obj) {
+  public int countTypeNumberByOtId(FollowUpObject obj) {
     Session session = getCurrentSession();
     String sql = "select count(*) from follow_up_object where ot_id=" + obj.getOtId() + " and fuo_type_id=" + obj.getFuoTypeId();
     Query q = session.createSQLQuery(sql);

@@ -8,7 +8,7 @@
 <script type="text/javascript">
 
   function formatFileName2(cellvalue, options, rowObject) {
-    var url = "${pageContext.request.contextPath}/images/" + rowObject.storePath + rowObject.fileName;
+    var url = "/images/" + rowObject.storePath + "/"+rowObject.fileName;
     return "<a href='" + url + "' target='_blank' title='点击打开文件'>" + cellvalue + "</a>";
   }
 

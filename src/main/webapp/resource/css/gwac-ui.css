@@ -237,14 +237,22 @@
   width: 100%;
 }
 
-#ot-curve-show, #ot-position-show， #ot-followup-mag-show{
+#ot-curve-show{
+  width: 100%;
+  height: 320px;
+}
+#ot-position-show{
   width: 100%;
   height: 200px;
+}
+#ot-followup-mag-show{
+  width: 100%;
+  height: 420px;
 }
 
 #ot-curve{
   width: 100%; 
-  height: 180px;
+  height: 300px;
 }
 #ot-position-curve{
   width: 100%; 

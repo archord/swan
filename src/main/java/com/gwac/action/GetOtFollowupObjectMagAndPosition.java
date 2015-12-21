@@ -59,25 +59,32 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
       poss = new ArrayList();
 
       Calendar cal = Calendar.getInstance();
+      Date baseDate = null;
+      List<FollowUpObject> objs = fuoDao.getByOtId(ot2.getOtId(), queryHis);
+      if (objs.size() > 0) {
+        baseDate = objs.get(0).getStartTimeUtc();
+        for (FollowUpObject obj : objs) {
+          if (baseDate.before(obj.getStartTimeUtc())) {
+            baseDate = obj.getStartTimeUtc();
+          }
+        }
+        cal.setTime(baseDate);
+      }
+      double baseDay = cal.getTimeInMillis() / 60000.0;
 
       int maxObjs = 6;
       int i = 1;
-      List<FollowUpObject> objs = fuoDao.getByOtId(ot2.getOtId(), queryHis);
       //对有多个目标时，大部分情况是数据处理流程出错，值显示前6个目标
       for (FollowUpObject obj : objs) {
-        if (i++ > maxObjs) {
-          break;
-        }
+//        if (i++ > maxObjs) {
+//          break;
+//        }
         if (obj.getFuoName().contains("CHECK")) {
           fuCheckObj = obj;
         }
 //        if(obj.getRecordTotal()<2){
 //          continue;
 //        }
-
-        Date baseDate = obj.getStartTimeUtc();
-        cal.setTime(baseDate);
-        double baseDay = cal.getTimeInMillis() / 60000.0;
 
         List<FollowUpRecord> furs = furDao.getByFuoId(obj.getFuoId(), queryHis);
         Map<String, String> tmags = new HashMap();

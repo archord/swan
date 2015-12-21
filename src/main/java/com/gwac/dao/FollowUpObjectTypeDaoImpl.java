@@ -28,6 +28,19 @@ public class FollowUpObjectTypeDaoImpl extends BaseHibernateDaoImpl<FollowUpObje
     }
     return tobj;
   }
+  
+  public FollowUpObjectType getByTypeId(Short typeId) {
+
+    String sql = "select * from follow_up_object_type where fuo_type_id=" + typeId + "";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(FollowUpObjectType.class);
+    List<FollowUpObjectType> otts = q.list();
+    FollowUpObjectType tobj = null;
+    if (otts.size() > 0) {
+      tobj = otts.get(0);
+    }
+    return tobj;
+  }
 
   @Override
   public List<FollowUpObjectType> getOtTypes() {

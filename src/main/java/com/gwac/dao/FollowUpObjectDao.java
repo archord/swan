@@ -13,7 +13,9 @@ import java.util.List;
  */
 public interface FollowUpObjectDao extends BaseHibernateDao<FollowUpObject>{
   
-  public int countTypeNumber(FollowUpObject obj);
+  public int countTypeNumberByOtId(FollowUpObject obj);
+  
+  public int countTypeNumberByFoId(FollowUpObject obj);
   
   public List<FollowUpObject> exist(FollowUpObject obj, float errorBox);
   

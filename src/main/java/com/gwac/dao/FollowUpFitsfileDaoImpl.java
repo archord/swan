@@ -7,6 +7,7 @@ package com.gwac.dao;
 import com.gwac.model.FollowUpFitsfile;
 import com.gwac.model.Telescope;
 import java.math.BigInteger;
+import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
@@ -19,13 +20,26 @@ import org.hibernate.Session;
 public class FollowUpFitsfileDaoImpl extends BaseHibernateDaoImpl<FollowUpFitsfile> implements FollowUpFitsfileDao {
 
   private static final Log log = LogFactory.getLog(FollowUpFitsfileDaoImpl.class);
-  
+
   @Override
-  public void updateIsUpload(String ffName){
-    
+  public void updateIsUpload(String ffName) {
+
     Session session = getCurrentSession();
     String sql = "update follow_up_fitsfile set is_upload=true where ff_name='" + ffName.trim() + "'";
     session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public List<FollowUpFitsfile> getByOtId(long otId) {
+
+    Session session = getCurrentSession();
+    String sql = "select fuf.* "
+            + " from follow_up_fitsfile fuf "
+            + " inner join follow_up_observation fuo on fuo.fo_id=fuf.fo_id and fuo.ot_id=" + otId + " "
+            + " where fuf.is_upload=true;";
+    Query q = session.createSQLQuery(sql).addEntity(FollowUpFitsfile.class);
+
+    return q.list();
   }
 
   /**
@@ -58,6 +72,7 @@ public class FollowUpFitsfileDaoImpl extends BaseHibernateDaoImpl<FollowUpFitsfi
     } else {
       BigInteger ffId = (BigInteger) q.list().get(0);
       obj.setFufId(ffId.longValue());
+      super.update(obj);
     }
   }
 }

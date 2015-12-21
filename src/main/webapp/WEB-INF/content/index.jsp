@@ -56,16 +56,18 @@
     <!-- Navigation -->
     <nav id="slide-menu">
       <ul>
-        <li class="events"><s:url var="url1" action="gwac/pgwac-system"/>
+        <li><s:url var="url1" action="gwac/pgwac-system"/>
           <sj:a id="gwacsystemlink" href="%{url1}" targets="main_content">系统监测信息导航</sj:a></li>
-        <li class="timeline"><s:url var="url6" action="gwac/pgwac-allot"/>
+        <li><s:url var="url6" action="gwac/pgwac-allot"/>
           <sj:a id="gwacallotlink" href="%{url6}" targets="main_content">二级OT查询</sj:a></li>
 <!--        <li class="calendar"><s:url var="url8" action="manage/pfile-upload"/>
           <sj:a id="gwacuploadfilelink" href="%{url8}" targets="main_content">上传文件</sj:a></li>-->
-        <li class="sep settings"><s:url var="url11" action="gwac/pupload-unstore"/>
+        <li><s:url var="url11" action="gwac/pupload-unstore"/>
           <sj:a id="puploadunstorelink" href="%{url11}" targets="main_content">未入库文件列表</sj:a></li>
-        <li class="logout"><s:url var="url12" action="gwac/pupload-record"/>
+        <li><s:url var="url12" action="gwac/pupload-record"/>
           <sj:a id="puploadrecordlink" href="%{url12}" targets="main_content">上传文件历史记录</sj:a></li>
+        <li><s:url var="url13" action="gwac/pupload-configfile"/>
+          <sj:a id="urlcfglistlink" href="%{url13}" targets="main_content">上传配置文件历史记录</sj:a></li>
         </ul>
       </nav>
       <!-- Content panel -->

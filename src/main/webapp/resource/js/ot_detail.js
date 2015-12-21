@@ -424,7 +424,7 @@ $(function() {
       $("#otFollowupStartTimeUtc").html(fuCheckObj.startTimeUtc);
     }
     var fuMags = eval(data.mags);
-    if (typeof (fuMags) === "undefined")
+    if (typeof (fuMags) === "undefined" || fuMags.length===0)
     {
       return;
     }
@@ -451,6 +451,16 @@ $(function() {
       } else {
         $("#tooltip").hide();
       }
+    });
+    
+    
+    //点击查看后随fits原图
+    $("#showOt2FollowupFits").click(function() {
+      var gwacRootURL = $("#gwacRootURL").val();
+      var otName = $("#otName").val();
+      var url = gwacRootURL + "/gwac/pgwac-ot-followup-fits.action?otName=" + otName;
+      openwindow(url, '_blank', 1050, 600, 1050, 600);
+      return false;
     });
   }
 

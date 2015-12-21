@@ -8,14 +8,14 @@
 <script type="text/javascript">
 
   function formatFileName(cellvalue, options, rowObject) {
-    var url = "${pageContext.request.contextPath}/images/" + rowObject.storePath + "/" + rowObject.fileName;
+    var url = "/images/" + rowObject.storePath + rowObject.fileName;
     return "<a href='" + url + "' target='_blank' title='点击打开文件'>" + cellvalue + "</a>";
   }
 
 </script>
 
 <!--strong>已注册用户列表:</strong-->
-<s:url var="remoteurl" action="get-upload-file-unstore-list" namespace="/"/>
+<s:url var="remoteurl" action="get-config-file-list" namespace="/"/>
 <!--width="700" resizable="true" 
 shrinkToFit="true" 自动调节到表格的宽度 -->
 <sjg:grid 
@@ -32,11 +32,6 @@ shrinkToFit="true" 自动调节到表格的宽度 -->
   viewrecords="true">
   <sjg:gridColumn name="fileName"   index="fileName"	  title="文件名" width="410"  formatter="formatFileName"
                   sortable="false" align="left"/>
-  <sjg:gridColumn name="uploadSuccess"    index="uploadSuccess"	  title="是否上传成功" width="80" 
-                  sortable="false" align="center"/>
-  <sjg:gridColumn name="uploadDate" index="uploadDate" title="上传时间" formatter="date" width="160"  
-                  formatoptions="{newformat : 'Y-m-d H:i:s', srcformat : 'Y-m-d H:i:s'}" 
-                  sortable="false" align="center"/>
 </sjg:grid>
 
 <!--sjg:gridColumn name="fileType"    index="fileType"	  title="类型" width="30" 

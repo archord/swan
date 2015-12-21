@@ -55,7 +55,7 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
     if (isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -112,7 +112,7 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
     FollowUpFitsfile fuf = new FollowUpFitsfile();
     if (objs.size() > 0) { //解析并存储FollUpFits文件
       FollowUpCatalog tfr = objs.get(0);
-      String ffName = tfr.getFfName();
+      String ffName = tfr.getFfName().replaceFirst(ot2Name, foName);
       String ffPath = storePath.replace("otfollowlist", "otfollowimg");
       fuf.setFfName(ffName);
       fuf.setFfPath(ffPath);
@@ -178,8 +178,112 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
         for (FollowUpCatalog obj : newotObjs) {
           saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
         }
+        /*//只有一个NewOT时，才存储
+         if (newotObjs.size() == 1) {
+         for (FollowUpCatalog obj : newotObjs) {
+         saveFollowUpCatalogNewOt(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+         }
+         } else {
+         for (FollowUpCatalog obj : newotObjs) {
+         saveNewOtRecord(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+         }
+         }*/
       }
     }
+  }
+
+  public void saveFollowUpCatalogNewOt(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
+
+    FollowUpObject fuo = new FollowUpObject();
+    fuo.setOtId(ot2Id);
+    fuo.setFoId(foId);
+    fuo.setFuoTypeId(fuotId);
+    fuo.setStartTimeUtc(obj.getDateUt());
+    fuo.setLastRa(obj.getRa());
+    fuo.setLastDec(obj.getDec());
+    fuo.setLastX(obj.getX());
+    fuo.setLastY(obj.getY());
+    fuo.setFoundSerialNumber(obj.getFuSerialNumber());
+    fuo.setRecordTotal(1);
+
+    int newOtNum = fuoDao.countTypeNumberByFoId(fuo);
+
+    if (newOtNum == 1) {
+      List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
+      if (fuos.size() > 0) {
+        FollowUpObject tfuo = fuos.get(0);
+        fuo.setFuoId(tfuo.getFuoId());
+
+        tfuo.setLastRa(fuo.getLastRa());
+        tfuo.setLastDec(fuo.getLastDec());
+        tfuo.setLastX(fuo.getLastX());
+        tfuo.setLastY(fuo.getLastY());
+        tfuo.setRecordTotal(tfuo.getRecordTotal() + 1);
+        if (fuo.getFoundSerialNumber() < tfuo.getFoundSerialNumber()) {
+          tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
+          tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());
+        }
+        fuoDao.update(tfuo);
+      } else {
+        int fuoNum = fuoDao.countTypeNumberByOtId(fuo);
+        String fuoName = String.format("%s%02d", obj.getOtType(), fuoNum + 1);
+        fuo.setFuoName(fuoName);
+        fuoDao.save(fuo);
+      }
+    }
+
+    FollowUpRecord fur = new FollowUpRecord();
+    if (newOtNum == 1) {
+      fur.setFuoId(fuo.getFuoId());
+    }
+    fur.setFoId(foId);
+    fur.setDateUtc(obj.getDateUt());
+    fur.setFilter(obj.getFilter());
+    fur.setRa(obj.getRa());
+    fur.setDec(obj.getDec());
+    fur.setX(obj.getX());
+    fur.setY(obj.getY());
+    fur.setMagCalUsno(obj.getMagClbtUsno());
+    fur.setMagErr(obj.getMagErr());
+    fur.setEllipticity(obj.getEllipticity());
+    fur.setClassStar(obj.getClassStar());
+    fur.setFwhm(obj.getFwhm());
+    fur.setFlag(obj.getFlag());
+    fur.setB2(obj.getB2());
+    fur.setR2(obj.getR2());
+    fur.setI(obj.getI());
+    fur.setFuoTypeId(fuotId);
+    fur.setFrObjId(obj.getObjLabel());
+    fur.setFuSerialNumber(obj.getFuSerialNumber());
+    fur.setFufId(fufId);
+    frDao.save(fur);
+  }
+
+  public void saveNewOtRecord(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
+
+    FollowUpRecord fur = new FollowUpRecord();
+//    fur.setFuoId(fuo.getFuoId());
+    fur.setFoId(foId);
+    fur.setDateUtc(obj.getDateUt());
+    fur.setFilter(obj.getFilter());
+    fur.setRa(obj.getRa());
+    fur.setDec(obj.getDec());
+    fur.setX(obj.getX());
+    fur.setY(obj.getY());
+    fur.setMagCalUsno(obj.getMagClbtUsno());
+    fur.setMagErr(obj.getMagErr());
+    fur.setEllipticity(obj.getEllipticity());
+    fur.setClassStar(obj.getClassStar());
+    fur.setFwhm(obj.getFwhm());
+    fur.setFlag(obj.getFlag());
+    fur.setB2(obj.getB2());
+    fur.setR2(obj.getR2());
+    fur.setI(obj.getI());
+    fur.setFuoTypeId(fuotId);
+    fur.setFrObjId(obj.getObjLabel());
+    fur.setFuSerialNumber(obj.getFuSerialNumber());
+    fur.setFufId(fufId);
+    frDao.save(fur);
   }
 
   public void saveFollowUpCatalog(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
@@ -194,20 +298,25 @@ public class FollowUpObservationServiceImpl implements ImageStatusParmService {
     fuo.setLastX(obj.getX());
     fuo.setLastY(obj.getY());
     fuo.setFoundSerialNumber(obj.getFuSerialNumber());
-    fuo.setRecordTotal(0);
+    fuo.setRecordTotal(1);
 
     List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
     if (fuos.size() > 0) {
       FollowUpObject tfuo = fuos.get(0);
+      fuo.setFuoId(tfuo.getFuoId());
+
       tfuo.setLastRa(fuo.getLastRa());
       tfuo.setLastDec(fuo.getLastDec());
       tfuo.setLastX(fuo.getLastX());
       tfuo.setLastY(fuo.getLastY());
-      fuo.setFuoId(tfuo.getFuoId());
-      fuo.setRecordTotal(tfuo.getRecordTotal()+1);
+      tfuo.setRecordTotal(tfuo.getRecordTotal() + 1);
+      if (fuo.getFoundSerialNumber() < tfuo.getFoundSerialNumber()) {
+        tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
+        tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());
+      }
       fuoDao.update(tfuo);
     } else {
-      int fuoNum = fuoDao.countTypeNumber(fuo);
+      int fuoNum = fuoDao.countTypeNumberByOtId(fuo);
       String fuoName = String.format("%s%02d", obj.getOtType(), fuoNum + 1);
       fuo.setFuoName(fuoName);
       fuoDao.save(fuo);

@@ -90,7 +90,7 @@
             <span id="ot-classify">OT分类&nbsp;<select name="ot2Classify" id="ot2Classify" title="选择即可分类"></select>
               <a id="ot2ClassifyBtn" href='#' title='点击对OT2进行分类' style="display:none">OT分类</a></span>
             <span id="skyCordDetail"></span>
-            <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图' style="display: none;">点击查看fits切图</a></span>
+            <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图' style="display: none;">查看fits切图</a></span>
           </div>
           <div id="ot-description">
             <div><textarea id="ot-description-content" name="ot-description-content" class="form-control" placeholder="添加OT2的说明，官方对该OT的定性描述。"></textarea></div>
@@ -108,12 +108,6 @@
                 <span>OT坐标变化（与首帧差值，单位/像素，xy轴分别为模板XY坐标）</span>
               </div>
               <div id="ot-position-curve"></div>
-            </div>
-            <div id="ot-followup-mag-show">
-              <div id="ot-followup-mag-title">
-                <span>OT后随光变曲线（X轴为时间，单位/分钟，开始于<span id="otFollowupStartTimeUtc"></span>U，Y轴为星等值）</span>
-              </div>
-              <div id="ot-followup-mag-curve"></div>
             </div>
           </div>
         </div>
@@ -133,6 +127,13 @@
             <table id="ot2-followup-object-table" class="display" cellspacing="0" width="100%">
               <thead><tr><th>ID</th><th>目标名</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>X</th><th>Y</th></tr></thead>
             </table>
+          </div>
+          <div id="ot-followup-mag-show">
+            <div id="ot-followup-mag-title">
+              <span>OT后随光变曲线（X轴为时间，单位/分钟，开始于<span id="otFollowupStartTimeUtc"></span>U，Y轴为星等值）</span>
+              <span style="display:inline-block"><a id="showOt2FollowupFits" href='javascript:void(0)' title='点击查看后随fits切图'>查看后随fits切图</a></span>
+            </div>
+            <div id="ot-followup-mag-curve"></div>
           </div>
           <!--div id="ot-comment">
             <div id="ot-comment-list">

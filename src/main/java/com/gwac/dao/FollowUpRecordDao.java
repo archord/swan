@@ -17,4 +17,6 @@ public interface FollowUpRecordDao extends BaseHibernateDao<FollowUpRecord> {
   public List<FollowUpRecord> getByOtId(long otId, Boolean queryHis);
 
   public List<FollowUpRecord> getByFuoId(long fuoId, Boolean queryHis);
+  
+  public List<FollowUpRecord> getByFufId(long fufId, Boolean queryHis);
 }

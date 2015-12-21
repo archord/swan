@@ -15,7 +15,7 @@
         <meta http-equiv="description" content="GWAC数据展示页面" />
         <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
 
-        <title>OT-<s:property value="otName"/>-详细页面</title>
+        <title>OT-<s:property value="otName"/>-FITS切图</title>
 
         <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/js/js9/js9support.css">
         <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/js/js9/js9.css">

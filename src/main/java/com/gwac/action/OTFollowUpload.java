@@ -176,18 +176,20 @@ public class OTFollowUpload extends ActionSupport {
       if (objlist.exists()) {
         File otFollowListFile = new File(otFollowListPath + "/", finalName);
         log.debug("receive otfollowlist file " + otFollowListFile);
+        obj.setUploadSuccess(Boolean.TRUE);
+        obj2.setUploadSuccess(Boolean.TRUE);
         if (otFollowListFile.exists()) {
           log.warn(otFollowListFile + " already exist, delete it.");
           FileUtils.forceDelete(otFollowListFile);
+          FileUtils.moveFile(objlist, otFollowListFile);
+        } else {
+          FileUtils.moveFile(objlist, otFollowListFile);
+          ufuDao.save(obj);
         }
-        FileUtils.moveFile(objlist, otFollowListFile);
-        obj.setUploadSuccess(Boolean.TRUE);
-        obj2.setUploadSuccess(Boolean.TRUE);
       } else {
         obj.setUploadSuccess(Boolean.FALSE);
         obj2.setUploadSuccess(Boolean.FALSE);
       }
-      ufuDao.save(obj);
       ufrDao.save(obj2);
     } catch (IOException ex) {
       log.error("receive otfollowlist " + objlistFileName + " error!", ex);

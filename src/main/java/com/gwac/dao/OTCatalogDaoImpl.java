@@ -71,13 +71,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         log.error("file not exist " + tfile);
       }
     } catch (FileNotFoundException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (IOException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (ParseException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (Exception e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } finally {
       if (br != null) {
         try {
@@ -138,13 +138,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
       }
 
     } catch (FileNotFoundException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (IOException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (ParseException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (Exception e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } finally {
       if (br != null) {
         try {
@@ -205,13 +205,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
       }
 
     } catch (FileNotFoundException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (IOException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (ParseException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (Exception e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } finally {
       if (br != null) {
         try {
@@ -274,13 +274,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
       }
 
     } catch (FileNotFoundException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (IOException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (ParseException e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } catch (Exception e) {
-      log.error(e);
+      log.error("parse file error:"+path, e);
     } finally {
       if (br != null) {
         try {

@@ -16,4 +16,6 @@ public interface FollowUpObjectTypeDao extends BaseHibernateDao<FollowUpObjectTy
   public FollowUpObjectType getOtTypeByTypeName(String typeName);
   
   public List<FollowUpObjectType> getOtTypes();
+  
+  public FollowUpObjectType getByTypeId(Short typeId);
 }

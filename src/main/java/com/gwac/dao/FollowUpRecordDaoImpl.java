@@ -53,4 +53,22 @@ public class FollowUpRecordDaoImpl extends BaseHibernateDaoImpl<FollowUpRecord> 
     Query q = session.createSQLQuery(unionSql).addEntity(FollowUpRecord.class);
     return q.list();
   }
+  
+  @Override
+  public List<FollowUpRecord> getByFufId(long fufId, Boolean queryHis) {
+
+    String sql1 = "select * from follow_up_record where fuf_id=" + fufId;
+    String sql2 = "select * from follow_up_record_his where fuf_id=" + fufId;
+
+    String unionSql;
+    if (queryHis) {
+      unionSql = "(" + sql1 + ") union (" + sql2 + ")";
+    } else {
+      unionSql = sql1;
+    }
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql).addEntity(FollowUpRecord.class);
+    return q.list();
+  }
 }
