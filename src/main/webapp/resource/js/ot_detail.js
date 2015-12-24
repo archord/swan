@@ -377,8 +377,7 @@ $(function() {
     $("#showOt2Fits").click(function() {
       var gwacRootURL = $("#gwacRootURL").val();
       var otName = $("#otName").val();
-      var queryHis = $("#queryHis").val();
-      var url = gwacRootURL + "/show-fits-list.action?otName=" + otName + "&queryHis=" + queryHis;
+      var url = gwacRootURL + "/show-fits-list.action?otName=" + otName;
       openwindow(url, '_blank', 1050, 600, 1050, 600);
       return false;
     });

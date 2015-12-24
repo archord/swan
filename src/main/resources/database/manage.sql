@@ -122,3 +122,9 @@ FROM
 INNER JOIN ot_level2_match ot2m ON ot2m.ot_id = ot2.ot_id AND ot2m.mag<12
 WHERE
 	ot2.is_match = 2;
+
+#找出所有为空场的ot2的切图文件名
+SELECT ot2.name ot_name, ffc.file_name
+FROM fits_file_cut ffc
+INNER JOIN ot_level2 ot2 ON ot2.ot_id=ffc.ot_id AND ot2.ot_type=17
+ORDER BY ot2.name, ffc.file_name;

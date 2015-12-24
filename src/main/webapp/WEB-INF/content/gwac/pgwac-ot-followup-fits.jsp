@@ -101,7 +101,7 @@
         }
 
         function showFits(command) {
-          if (endNum === 0) {
+          if (endNum === 0 || fitsList.length===0) {
             return false;
           }
           var url = '';
@@ -145,6 +145,9 @@
             var totalx = 0.0, totaly = 0.0;
             var size = records.length;
             $.each(records, function(i, item) {
+              if(i>5){
+                return;
+              }
               var circlex = item.x;
               var circley = item.y;
               var textx = item.x + drawRadius + 5;
@@ -152,9 +155,9 @@
               var fuoTypeName = "ERROR";
               totalx += circlex;
               totaly += circley;
-              $.each(fuots, function(i, item) {
-                if (item.fuoTypeId === item.fuoTypeId) {
-                  fuoTypeName = item.fuoTypeName;
+              $.each(fuots, function(i, tfuot) {
+                if (item.fuoTypeId === tfuot.fuoTypeId) {
+                  fuoTypeName = tfuot.fuoTypeName;
                 }
               });
               JS9.AddRegions({shape: 'circle', x: circlex, y: circley, radius: drawRadius});

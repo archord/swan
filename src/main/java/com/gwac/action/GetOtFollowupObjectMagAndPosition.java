@@ -76,9 +76,9 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
       int i = 1;
       //对有多个目标时，大部分情况是数据处理流程出错，值显示前6个目标
       for (FollowUpObject obj : objs) {
-//        if (i++ > maxObjs) {
-//          break;
-//        }
+        if (i++ > maxObjs) {
+          break;
+        }
         if (obj.getFuoName().contains("CHECK")) {
           fuCheckObj = obj;
         }

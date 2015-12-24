@@ -131,7 +131,7 @@
           <div id="ot-followup-mag-show">
             <div id="ot-followup-mag-title">
               <span>OT后随光变曲线（X轴为时间，单位/分钟，开始于<span id="otFollowupStartTimeUtc"></span>U，Y轴为星等值）</span>
-              <span style="display:inline-block"><a id="showOt2FollowupFits" href='javascript:void(0)' title='点击查看后随fits切图'>查看后随fits切图</a></span>
+              <span style="display:inline-block"><a id="showOt2FollowupFits" href='#' title='点击查看后随fits切图'>查看后随fits切图</a></span>
             </div>
             <div id="ot-followup-mag-curve"></div>
           </div>

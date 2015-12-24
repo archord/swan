@@ -51,25 +51,24 @@ public class ShowFitsList extends ActionSupport {
 
     String dataRootWebMap = getText("gwac.data.root.directory.webmap");
 
-    if (queryHis == null) {
-      queryHis = false;
-    }
+    List<Integer> tlist = obDao.hisOrCurExist(otName);
+    if (!tlist.isEmpty()) {
+      Integer his = tlist.get(0);
+      queryHis = his == 1;
 
-    ob = obDao.getOtLevel2ByName(otName, queryHis);
-
-    if (ob != null) {
+      ob = obDao.getOtLevel2ByName(otName, queryHis);
       startImgNum = ob.getFirstFfNumber();
 
       ffcList = ffcDao.getCutImageByOtId(ob.getOtId(), queryHis);
       totalImage = ffcList.size();
-      
+
       if (totalImage > 0) {
         FitsFileCut tffc = ffcList.get(0);
         ffcPath = dataRootWebMap + "/" + tffc.getStorePath() + "/";
-      }else{
+      } else {
         ffcPath = "";
       }
-      
+
       StringBuilder tsb = new StringBuilder("");
       for (FitsFileCut ffc : ffcList) {
 //        tsb.append(dataRootWebMap);

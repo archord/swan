@@ -14,7 +14,7 @@
   width="800"
   height="500"
   />
-<s:url var="otDetail" action="get-ot-detail" namespace="/"/>
+<s:url var="otDetail" action="gwac/pgwac-ot-detail2" namespace="/"/>
 
 <script type="text/javascript">
 

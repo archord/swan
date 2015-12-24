@@ -1,7 +1,8 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
+//  var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
+  var baseUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=";
   var ot2arr;
   loadOT2Type();
   loadQueryParmeter();
