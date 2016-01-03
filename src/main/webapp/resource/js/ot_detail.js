@@ -423,7 +423,7 @@ $(function() {
       $("#otFollowupStartTimeUtc").html(fuCheckObj.startTimeUtc);
     }
     var fuMags = eval(data.mags);
-    if (typeof (fuMags) === "undefined" || fuMags.length===0)
+    if (typeof (fuMags) === "undefined" || fuMags.length === 0)
     {
       return;
     }
@@ -451,8 +451,8 @@ $(function() {
         $("#tooltip").hide();
       }
     });
-    
-    
+
+
     //点击查看后随fits原图
     $("#showOt2FollowupFits").click(function() {
       var gwacRootURL = $("#gwacRootURL").val();
@@ -692,10 +692,8 @@ $(function() {
   }
 
   function formateRaDec(data, type, full, meta) {
-    var ra = $('#fuRa').val();
-    var dec = $('#fuDec').val();
     var searchUrl = "http://simbad.u-strasbg.fr/simbad/sim-coo?CooFrame=FK5&CooEpoch=2000&CooEqui=2000&CooDefinedFrames=none&Radius=2&Radius.unit=arcmin&submit=submit%20query&Coord=";
-    searchUrl += ra + "%20" + dec;
+    searchUrl += full.raD + "%20" + full.decD;
     return "<a href='" + searchUrl + "' title='点击在simbad搜寻OT对应坐标' target='_blank'>" + data + "</a>";
   }
 
@@ -776,7 +774,20 @@ $(function() {
     var d = Math.floor(degree);
     var m = Math.floor((second % 3600) / 60);
     var s = (second % 60).toFixed(3);
-    return d + ":" + m + ":" + s;
+    var result = "";
+    if (d < 10) {
+      result = result + "0";
+    }
+    result = result + d + ":";
+    if (m < 10) {
+      result = result + "0";
+    }
+    result = result + m + ":";
+    if (s < 10) {
+      result = result + "0";
+    }
+    result = result + s;
+    return result;
   }
 
   function degreeToHMS(degree) {
@@ -784,7 +795,20 @@ $(function() {
     var h = Math.floor(second / 3600);
     var m = Math.floor((second % 3600) / 60);
     var s = (second % 60).toFixed(3);
-    return h + ":" + m + ":" + s;
+    var result = "";
+    if (h < 10) {
+      result = result + "0";
+    }
+    result = result + h + ":";
+    if (m < 10) {
+      result = result + "0";
+    }
+    result = result + m + ":";
+    if (s < 10) {
+      result = result + "0";
+    }
+    result = result + s;
+    return result;
   }
 
 });

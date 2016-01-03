@@ -104,173 +104,183 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     List<OtLevel2> ot2s = ot2Dao.getUnMatched();
 //    log.debug("ot2 size: " + ot2s.size());
     for (OtLevel2 ot2 : ot2s) {
+      searchOT2(ot2);
+    }
+  }
 
-      if (ot2.getRa() < 0 || ot2.getRa() > 360 || ot2.getDec() < -90 || ot2.getDec() > 90) {
-        continue;
-      }
-      Boolean flag = false;
-      Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
-      for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
-        Cvs tcvs = (Cvs) entry.getKey();
-        Double distance = (Double) entry.getValue();
-        MatchTable ott = mtDao.getMatchTableByTypeName("cvs");
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
-        ot2m.setRa(tcvs.getRadeg());
-        ot2m.setDec(tcvs.getDedeg());
-        ot2m.setMag(tcvs.getMag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(new Float(0));
-        ot2mDao.save(ot2m);
+  public void searchOT2(String otName) {
 
-        String cvsInfo = tcvs.getCvsid() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag();
-        log.debug("cvsInfo: " + cvsInfo);
-        flag = true;
-      }
-      if (tcvsm.size() > 0) {
-        ot2.setCvsMatch((short) tcvsm.size());
-        ot2Dao.updateCvsMatch(ot2);
-      }
+    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(otName, false);
+    searchOT2(ot2);
+  }
 
-      Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
-      for (Map.Entry<MergedOther, Double> entry : tmom.entrySet()) {
-        MergedOther tmo = (MergedOther) entry.getKey();
-        Double distance = (Double) entry.getValue();
+  void searchOT2(OtLevel2 ot2) {
 
-        MatchTable ott = getMtDao().getMatchTableByTypeName("merged_other");
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
-        ot2m.setRa(tmo.getRadeg());
-        ot2m.setDec(tmo.getDedeg());
-        ot2m.setMag(tmo.getMag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(new Float(0));
-        ot2mDao.save(ot2m);
+    if (ot2.getRa() < 0 || ot2.getRa() > 360 || ot2.getDec() < -90 || ot2.getDec() > 90) {
+      return;
+    }
+    Boolean flag = false;
+    Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
+    for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
+      Cvs tcvs = (Cvs) entry.getKey();
+      Double distance = (Double) entry.getValue();
+      MatchTable ott = mtDao.getMatchTableByTypeName("cvs");
+      OtLevel2Match ot2m = new OtLevel2Match();
+      ot2m.setOtId(ot2.getOtId());
+      ot2m.setMtId(ott.getMtId());
+      ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
+      ot2m.setRa(tcvs.getRadeg());
+      ot2m.setDec(tcvs.getDedeg());
+      ot2m.setMag(tcvs.getMag());
+      ot2m.setDistance(distance.floatValue());
+      ot2m.setD25(new Float(0));
+      ot2mDao.save(ot2m);
 
-        String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
-        log.debug("moInfo: " + moInfo);
-        flag = true;
-      }
-      if (tmom.size() > 0) {
-        ot2.setOtherMatch((short) tmom.size());
-        ot2Dao.updateOtherMatch(ot2);
-      }
+      String cvsInfo = tcvs.getCvsid() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag();
+      log.debug("cvsInfo: " + cvsInfo);
+      flag = true;
+    }
+    if (tcvsm.size() > 0) {
+      ot2.setCvsMatch((short) tcvsm.size());
+      ot2Dao.updateCvsMatch(ot2);
+    }
 
-      Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
-      for (Map.Entry<Rc3, Double> entry : trc3m.entrySet()) {
-        Rc3 trc3 = (Rc3) entry.getKey();
-        Double distance = (Double) entry.getValue();
+    Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
+    for (Map.Entry<MergedOther, Double> entry : tmom.entrySet()) {
+      MergedOther tmo = (MergedOther) entry.getKey();
+      Double distance = (Double) entry.getValue();
 
-        MatchTable ott = getMtDao().getMatchTableByTypeName("rc3");
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
-        ot2m.setRa(trc3.getRadeg());
-        ot2m.setDec(trc3.getDedeg());
-        ot2m.setMag(trc3.getMvmag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(trc3.getD25());
-        ot2mDao.save(ot2m);
+      MatchTable ott = getMtDao().getMatchTableByTypeName("merged_other");
+      OtLevel2Match ot2m = new OtLevel2Match();
+      ot2m.setOtId(ot2.getOtId());
+      ot2m.setMtId(ott.getMtId());
+      ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
+      ot2m.setRa(tmo.getRadeg());
+      ot2m.setDec(tmo.getDedeg());
+      ot2m.setMag(tmo.getMag());
+      ot2m.setDistance(distance.floatValue());
+      ot2m.setD25(new Float(0));
+      ot2mDao.save(ot2m);
 
-        String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
-        log.debug("rc3Info: " + moInfo);
-        flag = true;
-      }
-      if (trc3m.size() > 0) {
-        ot2.setRc3Match((short) trc3m.size());
-        ot2Dao.updateRc3Match(ot2);
-      }
+      String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
+      log.debug("moInfo: " + moInfo);
+      flag = true;
+    }
+    if (tmom.size() > 0) {
+      ot2.setOtherMatch((short) tmom.size());
+      ot2Dao.updateOtherMatch(ot2);
+    }
 
-      Map<MinorPlanet, Double> tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
-      for (Map.Entry<MinorPlanet, Double> entry : tmpm.entrySet()) {
-        MinorPlanet tmp = (MinorPlanet) entry.getKey();
-        Double distance = (Double) entry.getValue();
+    Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
+    for (Map.Entry<Rc3, Double> entry : trc3m.entrySet()) {
+      Rc3 trc3 = (Rc3) entry.getKey();
+      Double distance = (Double) entry.getValue();
 
-        MatchTable ott = getMtDao().getMatchTableByTypeName("minor_planet");
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
-        ot2m.setRa(tmp.getLon());
-        ot2m.setDec(tmp.getLat());
-        ot2m.setMag(tmp.getVmag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(new Float(0));
-        ot2mDao.save(ot2m);
+      MatchTable ott = getMtDao().getMatchTableByTypeName("rc3");
+      OtLevel2Match ot2m = new OtLevel2Match();
+      ot2m.setOtId(ot2.getOtId());
+      ot2m.setMtId(ott.getMtId());
+      ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
+      ot2m.setRa(trc3.getRadeg());
+      ot2m.setDec(trc3.getDedeg());
+      ot2m.setMag(trc3.getMvmag());
+      ot2m.setDistance(distance.floatValue());
+      ot2m.setD25(trc3.getD25());
+      ot2mDao.save(ot2m);
 
-        String moInfo = tmp.getIdnum() + " " + tmp.getMpid() + " " + tmp.getLon() + " " + tmp.getLat();
-        log.debug("moInfo: " + moInfo);
-        flag = true;
-      }
-      if (tmpm.size() > 0) {
-        ot2.setMinorPlanetMatch((short) tmpm.size());
-        ot2Dao.updateMinorPlanetMatch(ot2);
-      }
+      String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
+      log.debug("rc3Info: " + moInfo);
+      flag = true;
+    }
+    if (trc3m.size() > 0) {
+      ot2.setRc3Match((short) trc3m.size());
+      ot2Dao.updateRc3Match(ot2);
+    }
 
-      long startTime = System.nanoTime();
-      Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
-      for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
-        OtLevel2 tot2 = (OtLevel2) entry.getKey();
-        Double distance = (Double) entry.getValue();
+    Map<MinorPlanet, Double> tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
+    for (Map.Entry<MinorPlanet, Double> entry : tmpm.entrySet()) {
+      MinorPlanet tmp = (MinorPlanet) entry.getKey();
+      Double distance = (Double) entry.getValue();
 
-        MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
-        ot2m.setRa(tot2.getRa());
-        ot2m.setDec(tot2.getDec());
-        ot2m.setMag(tot2.getMag());
-        ot2m.setDistance(distance.floatValue());
-        ot2mDao.save(ot2m);
-        flag = true;
-      }
-      if (tOT2Hism.size() > 0) {
-        ot2.setOt2HisMatch((short) tOT2Hism.size());
-        ot2Dao.updateOt2HisMatch(ot2);
-      }
-      long endTime = System.nanoTime();
-      log.debug("search ot2 history consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+      MatchTable ott = getMtDao().getMatchTableByTypeName("minor_planet");
+      OtLevel2Match ot2m = new OtLevel2Match();
+      ot2m.setOtId(ot2.getOtId());
+      ot2m.setMtId(ott.getMtId());
+      ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
+      ot2m.setRa(tmp.getLon());
+      ot2m.setDec(tmp.getLat());
+      ot2m.setMag(tmp.getVmag());
+      ot2m.setDistance(distance.floatValue());
+      ot2m.setD25(new Float(0));
+      ot2mDao.save(ot2m);
 
-      if (ot2.getDataProduceMethod() == '8') {
-        startTime = System.nanoTime();
-        Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog(ot2);//minorPlanetSearchbox
-//        log.debug("usnoSearchbox: " + usnoSearchbox);
+      String moInfo = tmp.getIdnum() + " " + tmp.getMpid() + " " + tmp.getLon() + " " + tmp.getLat();
+      log.debug("moInfo: " + moInfo);
+      flag = true;
+    }
+    if (tmpm.size() > 0) {
+      ot2.setMinorPlanetMatch((short) tmpm.size());
+      ot2Dao.updateMinorPlanetMatch(ot2);
+    }
+
+    long startTime = System.nanoTime();
+    Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
+    for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
+      OtLevel2 tot2 = (OtLevel2) entry.getKey();
+      Double distance = (Double) entry.getValue();
+
+      MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
+      OtLevel2Match ot2m = new OtLevel2Match();
+      ot2m.setOtId(ot2.getOtId());
+      ot2m.setMtId(ott.getMtId());
+      ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
+      ot2m.setRa(tot2.getRa());
+      ot2m.setDec(tot2.getDec());
+      ot2m.setMag(tot2.getMag());
+      ot2m.setDistance(distance.floatValue());
+      ot2mDao.save(ot2m);
+      flag = true;
+    }
+    if (tOT2Hism.size() > 0) {
+      ot2.setOt2HisMatch((short) tOT2Hism.size());
+      ot2Dao.updateOt2HisMatch(ot2);
+    }
+    long endTime = System.nanoTime();
+    log.debug("search ot2 history consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+
+    if (ot2.getDataProduceMethod() == '8') {
+      startTime = System.nanoTime();
+      Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog(ot2);//minorPlanetSearchbox
+      log.debug("ot2: " + ot2.getName());
 //        log.debug("usnoMag: " + usnoMag);
-//        log.debug("usno match size: " + tusno.size());
-        for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
-          UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
-          Double distance = (Double) entry.getValue();
+      log.debug("usno match size: " + tusno.size());
+      for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
+        UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
+        Double distance = (Double) entry.getValue();
 
-          MatchTable ott = getMtDao().getMatchTableByTypeName("usno");
-          OtLevel2Match ot2m = new OtLevel2Match();
-          ot2m.setOtId(ot2.getOtId());
-          ot2m.setMtId(ott.getMtId());
-          ot2m.setMatchId(Long.valueOf(tmp.getRcdid()));
-          ot2m.setRa(tmp.getrAdeg());
-          ot2m.setDec(tmp.getdEdeg());
-          ot2m.setMag(tmp.getRmag());
-          ot2m.setDistance(distance.floatValue());
-          ot2m.setD25(new Float(0));
-          ot2mDao.save(ot2m);
-          flag = true;
-        }
-        if (tusno.size() > 0) {
-          ot2.setUsnoMatch((short) tusno.size());
-          ot2Dao.updateUsnoMatch(ot2);
-        }
-        endTime = System.nanoTime();
-        log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+        MatchTable ott = getMtDao().getMatchTableByTypeName("usno");
+        OtLevel2Match ot2m = new OtLevel2Match();
+        ot2m.setOtId(ot2.getOtId());
+        ot2m.setMtId(ott.getMtId());
+        ot2m.setMatchId(Long.valueOf(tmp.getRcdid()));
+        ot2m.setRa(tmp.getrAdeg());
+        ot2m.setDec(tmp.getdEdeg());
+        ot2m.setMag(tmp.getRmag());
+        ot2m.setDistance(distance.floatValue());
+        ot2m.setD25(new Float(0));
+        ot2mDao.save(ot2m);
+        flag = true;
       }
-      if (flag) {
-        ot2.setIsMatch((short) 2);
-        ot2Dao.updateIsMatch(ot2);
+      if (tusno.size() > 0) {
+        ot2.setUsnoMatch((short) tusno.size());
+        ot2Dao.updateUsnoMatch(ot2);
       }
+      endTime = System.nanoTime();
+      log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+    }
+    if (flag) {
+      ot2.setIsMatch((short) 2);
+      ot2Dao.updateIsMatch(ot2);
     }
   }
 
@@ -373,6 +383,155 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       }
     } else {
       log.warn("table " + tableName + " not exists!");
+    }
+    return rst;
+  }
+
+  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog2(OtLevel2 ot2) {
+
+    float tmag2 = 9;
+    float tmag3 = 8;
+    float tmag4 = 7;
+    float tmag5 = 6;
+    float tmag6 = 5;
+
+    float tdis2 = (float) 0.025;
+    float tdis3 = (float) 0.043333;
+    float tdis4 = (float) 0.07166666;
+    float tdis5 = (float) 0.125;
+    float tdis6 = (float) 0.23;
+
+    Map rst = new HashMap();
+    double minDis = usnoSearchbox;
+    UsnoCatalog tobj = null;
+    List<String> tableNames = getUsnoTableNames(ot2, usnoSearchbox);
+    for (String tName : tableNames) {
+      if (usnoDao.tableExists(tName)) {
+        List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, usnoSearchbox, usnoMag, tName);
+        for (UsnoCatalog obj : objs) {
+          double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+          if (tDis < minDis) {
+            minDis = tDis;
+            tobj = obj;
+          }
+        }
+      } else {
+        log.warn("table " + tName + " not exists!");
+      }
+    }
+    if (tobj != null) {
+      rst.put(tobj, minDis);
+    }
+    minDis = tdis2;
+    tobj = null;
+    if (rst.isEmpty()) {
+      tableNames = getUsnoTableNames(ot2, tdis2);
+      for (String tName : tableNames) {
+        if (usnoDao.tableExists(tName)) {
+          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, tdis2, tmag2, tName);
+          for (UsnoCatalog obj : objs) {
+            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+            if (tDis < minDis) {
+              minDis = tDis;
+              tobj = obj;
+            }
+          }
+        } else {
+          log.warn("table " + tName + " not exists!");
+        }
+      }
+    }
+    if (tobj != null) {
+      rst.put(tobj, minDis);
+    }
+
+    minDis = tdis3;
+    tobj = null;
+    if (rst.isEmpty()) {
+      tableNames = getUsnoTableNames(ot2, tdis3);
+      for (String tName : tableNames) {
+        if (usnoDao.tableExists(tName)) {
+          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, tdis3, tmag3, tName);
+          for (UsnoCatalog obj : objs) {
+            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+            if (tDis < minDis) {
+              minDis = tDis;
+              tobj = obj;
+            }
+          }
+        } else {
+          log.warn("table " + tName + " not exists!");
+        }
+      }
+    }
+    if (tobj != null) {
+      rst.put(tobj, minDis);
+    }
+    minDis = tdis4;
+    tobj = null;
+    if (rst.isEmpty()) {
+      tableNames = getUsnoTableNames(ot2, tdis4);
+      for (String tName : tableNames) {
+        if (usnoDao.tableExists(tName)) {
+          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, tdis4, tmag4, tName);
+          for (UsnoCatalog obj : objs) {
+            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+            if (tDis < minDis) {
+              minDis = tDis;
+              tobj = obj;
+            }
+          }
+        } else {
+          log.warn("table " + tName + " not exists!");
+        }
+      }
+    }
+    if (tobj != null) {
+      rst.put(tobj, minDis);
+    }
+    minDis = tdis5;
+    tobj = null;
+    if (rst.isEmpty()) {
+      tableNames = getUsnoTableNames(ot2, tdis5);
+      for (String tName : tableNames) {
+        if (usnoDao.tableExists(tName)) {
+          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, tdis5, tmag5, tName);
+          for (UsnoCatalog obj : objs) {
+            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+            if (tDis < minDis) {
+              minDis = tDis;
+              tobj = obj;
+            }
+          }
+        } else {
+          log.warn("table " + tName + " not exists!");
+        }
+      }
+    }
+    if (tobj != null) {
+      rst.put(tobj, minDis);
+    }
+    minDis = tdis6;
+    tobj = null;
+    if (rst.isEmpty()) {
+      tableNames = getUsnoTableNames(ot2, tdis6);
+      for (String tName : tableNames) {
+        if (usnoDao.tableExists(tName)) {
+          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2, tdis6, tmag6, tName);
+          for (UsnoCatalog obj : objs) {
+            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+            if (tDis < minDis) {
+              minDis = tDis;
+              tobj = obj;
+            }
+          }
+        } else {
+          log.warn("table " + tName + " not exists!");
+        }
+      }
+    }
+    if (tobj != null) {
+      rst.put(tobj, minDis);
     }
     return rst;
   }

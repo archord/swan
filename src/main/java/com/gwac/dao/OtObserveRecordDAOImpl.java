@@ -181,6 +181,16 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
+  
+  @Override
+  public List<OtObserveRecord> getAllOrderByDate() {
+    Session session = getCurrentSession();
+    String sql = "select oor.* "
+            + "from ot_observe_record oor "
+            + "where  oor.data_produce_method='1' order by date_ut asc;"; //date_ut ff_number  oor.ot_id=0 and
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
 
   @Override
   public Boolean exist(OtObserveRecord obj, float errorBox) {

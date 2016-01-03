@@ -535,12 +535,13 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   }
 
   @Override
-  public void updateLookBackResult(OtLevel2 ot2) {
+  public int updateLookBackResult(OtLevel2 ot2) {
     String sql = "update ot_level2 set look_back_result=" + ot2.getLookBackResult() + " where name='" + ot2.getName() + "'";
     Session session = getCurrentSession();
+    //return The number of entities updated or deleted.
     int result = session.createSQLQuery(sql).executeUpdate();
-    log.debug("sql:" + sql);
-    log.debug("result:" + result);
+    session.flush();
+    return result;
   }
 
   @Override

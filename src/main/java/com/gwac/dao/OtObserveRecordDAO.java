@@ -34,4 +34,6 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   public String getUnCuttedStarList(int dpmId);
   
   public String getOtOpticalVaration(OtLevel2 ot2, Boolean queryHis);
+  
+  public List<OtObserveRecord> getAllOrderByDate();
 }

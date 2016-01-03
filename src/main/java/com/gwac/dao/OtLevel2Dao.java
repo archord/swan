@@ -69,7 +69,7 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   
   public void updateOtType(int otId, int otTypeId);
   
-  public void updateLookBackResult(OtLevel2 ot2);
+  public int updateLookBackResult(OtLevel2 ot2);
   
   public void updateFollowUpResult(OtLevel2 ot2);
 

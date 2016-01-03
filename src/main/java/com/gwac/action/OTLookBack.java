@@ -50,8 +50,6 @@ public class OTLookBack extends ActionSupport {
     String result = SUCCESS;
     setEcho("");
 
-    log.debug("ot2name=" + ot2name + ", flag=" + flag);
-
     //必须设置望远镜名称
     if (null == ot2name || ot2name.isEmpty()) {
       setEcho(getEcho() + "Error, must set tspname.\n");
@@ -59,7 +57,8 @@ public class OTLookBack extends ActionSupport {
       OtLevel2 ot2 = new OtLevel2();
       ot2.setName(ot2name.trim());
       ot2.setLookBackResult(flag);
-      ot2Dao.updateLookBackResult(ot2);
+      int trst = ot2Dao.updateLookBackResult(ot2);
+      log.debug("ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
       echo = "success.\n";
     }
 

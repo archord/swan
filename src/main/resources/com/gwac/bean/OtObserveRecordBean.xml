@@ -5,6 +5,10 @@
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
   
+  <bean class="com.gwac.action.GetOt1TimeSequence" scope="prototype">
+    <property name="oorDao" ref="otORDao" />
+  </bean>
+  
   <bean class="com.gwac.action.OtObserveRecordAction" scope="prototype">
     <property name="otorDao" ref="otORDao" />
     <property name="obDao" ref="otbDao" />
