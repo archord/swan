@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.job;
+package com.gwac.service;
 
 import com.gwac.dao.CVSQueryDao;
 import com.gwac.dao.MergedOtherDao;
@@ -108,9 +108,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
   }
 
-  public void searchOT2(String otName) {
+  @Override
+  public void searchOT2(Long otId) {
 
-    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(otName, false);
+    OtLevel2 ot2 = ot2Dao.getById(otId);
     searchOT2(ot2);
   }
 

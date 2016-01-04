@@ -4,6 +4,7 @@
  */
 package com.gwac.service;
 
+import com.gwac.activemq.OTCheckMessageCreator;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
@@ -27,8 +28,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Date;
 import java.util.List;
+import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
 /**
  * 解析一级OT列表文件，计算二级OT，切图，模板切图。
@@ -62,6 +66,9 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
   private Boolean isTestServer;
 
   private int totalRecord = 0;
+
+  private JmsTemplate jmsTemplate;
+  private Destination otCheckDest;
 
   public void startJob() {
 
@@ -249,6 +256,9 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setFirstNMark(false);
             }
             otLv2Dao.save(tOtLv2);
+            
+            MessageCreator tmc = new OTCheckMessageCreator(tOtLv2);
+            jmsTemplate.send(otCheckDest, tmc);
 
             for (OtObserveRecord tOor : oors) {
               if (tOor.getOtId() != 0) {
@@ -487,5 +497,19 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setCutOccurNumber(int cutOccurNumber) {
     this.cutOccurNumber = cutOccurNumber;
+  }
+
+  /**
+   * @param jmsTemplate the jmsTemplate to set
+   */
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+
+  /**
+   * @param otCheckDest the otCheckDest to set
+   */
+  public void setOtCheckDest(Destination otCheckDest) {
+    this.otCheckDest = otCheckDest;
   }
 }

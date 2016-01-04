@@ -4,6 +4,7 @@
  */
 package com.gwac.service;
 
+import com.gwac.activemq.OTCheckMessageCreator;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
@@ -24,8 +25,11 @@ import com.gwac.model.OtObserveRecord;
 import com.gwac.model.UploadFileUnstore;
 import java.util.Date;
 import java.util.List;
+import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
 /**
  * 解析一级OT列表文件，计算二级OT，切图，模板切图。
@@ -57,6 +61,9 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
   private static boolean running = true;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
+
+  private JmsTemplate jmsTemplate;
+  private Destination otCheckDest;
 
   /**
    * 解析一级OT列表文件，得出二级OT，切图文件名称，二级OT模板切图名称
@@ -216,6 +223,9 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setFirstNMark(false);
             }
             otLv2Dao.save(tOtLv2);
+            
+            MessageCreator tmc = new OTCheckMessageCreator(tOtLv2);
+            jmsTemplate.send(otCheckDest, tmc);
 
             String ffcrName = String.format("%s_%04d_ref", otName, tOtLv2.getFirstFfNumber());
             log.debug("ffcrName=" + ffcrName);
@@ -452,5 +462,19 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setUfuDao(UploadFileUnstoreDao ufuDao) {
     this.ufuDao = ufuDao;
+  }
+
+  /**
+   * @param jmsTemplate the jmsTemplate to set
+   */
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+
+  /**
+   * @param otCheckDest the otCheckDest to set
+   */
+  public void setOtCheckDest(Destination otCheckDest) {
+    this.otCheckDest = otCheckDest;
   }
 }

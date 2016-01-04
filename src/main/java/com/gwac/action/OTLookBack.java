@@ -58,7 +58,22 @@ public class OTLookBack extends ActionSupport {
       ot2.setName(ot2name.trim());
       ot2.setLookBackResult(flag);
       int trst = ot2Dao.updateLookBackResult(ot2);
-      log.debug("ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
+      log.debug("1 update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
+      for (int i = 0; i < 5; i++) {
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          log.error("sleep error", e);
+        }
+        OtLevel2 tot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+        if (tot2.getLookBackResult() == 0) {
+          trst = ot2Dao.updateLookBackResult(ot2);
+          log.debug((i + 2) + " update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
+        } else {
+          log.debug((i + 2) + " update sucess, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
+          break;
+        }
+      }
       echo = "success.\n";
     }
 

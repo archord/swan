@@ -139,7 +139,7 @@
         <ref bean="moveDataToHisJob" />
         <!--<ref bean="fileTransferJob" />-->
         <!--<ref bean="dataSyncJob" />-->
-        <ref bean="ot2CheckJob" />
+        <!--<ref bean="ot2CheckJob" />-->
         <ref bean="monitorImageSyncJob" />
         <!--<ref bean="otSubObserveRecordJob" />-->
         <ref bean="foJob" />
@@ -152,7 +152,7 @@
         <ref bean="moveDataToHisTrigger" />
         <!--<ref bean="fileTransferTrigger" />-->
 <!--        <ref bean="dataSyncTrigger" />-->
-        <ref bean="ot2CheckTrigger" />
+        <!--<ref bean="ot2CheckTrigger" />-->
         <ref bean="monitorImageSyncTrigger" />
         <!--<ref bean="otSubObserveRecordTrigger" />-->
         <ref bean="foTrigger" />

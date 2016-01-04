@@ -147,7 +147,7 @@ $(function() {
                 '<option value="100">100</option>' +
                 '<option value="-1">All</option>' +
                 '</select> 条',
-        "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条",
+        "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条。<span style='color:red'>注：为提升体验，在默认(没有查询条件)情况下，该页面最多只显示最新的100条记录。</span>",
         "search": "模糊查询:",
         "paginate": {
           "first": "首页",

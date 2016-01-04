@@ -294,21 +294,27 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     ot2qp.removeEmpty();
 //    log.debug(ot2qp.toString());
 
+    Boolean isQueryParameterEmpty = true;
     if (ot2qp.getOtName() != null && !ot2qp.getOtName().isEmpty()) {
       sql.append(" and name='").append(ot2qp.getOtName()).append("' ");
+      isQueryParameterEmpty = false;
     }
     if (ot2qp.getStartDate() != null && !ot2qp.getStartDate().isEmpty()) {
       sql.append(" and found_time_utc>'").append(ot2qp.getStartDate()).append(" 00:00:00' ");
+      isQueryParameterEmpty = false;
     }
     if (ot2qp.getEndDate() != null && !ot2qp.getEndDate().isEmpty()) {
       sql.append(" and found_time_utc<'").append(ot2qp.getEndDate()).append(" 23:59:59' ");
+      isQueryParameterEmpty = false;
     }
     if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
       sql.append(" and abs(xtemp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
       sql.append(" and abs(ytemp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      isQueryParameterEmpty = false;
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
       sql.append(" and abs(ra-").append(ot2qp.getRa()).append(")/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
       sql.append(" and abs(dec-").append(ot2qp.getDec()).append(")<").append(ot2qp.getSphereRadius()).append(" ");
+      isQueryParameterEmpty = false;
     }
 
     if (ot2qp.getProcessType() != null && !ot2qp.getProcessType().isEmpty()) {
@@ -319,6 +325,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql.append("',");
       }
       sql.append(") ");
+      isQueryParameterEmpty = false;
     }
     if (ot2qp.getTelscope() != null && !ot2qp.getTelscope().isEmpty()) {
       sql.append(" and dpm_id in (");
@@ -327,6 +334,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql.append(",");
       }
       sql.append(") ");
+      isQueryParameterEmpty = false;
     }
     if (ot2qp.getIsMatch() != null && !ot2qp.getIsMatch().isEmpty()) {
       sql.append(" and is_match in (");
@@ -335,6 +343,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql.append(",");
       }
       sql.append(") ");
+      isQueryParameterEmpty = false;
     }
     if (ot2qp.getOtType() != null && !ot2qp.getOtType().isEmpty()) {
       sql.append(" and ot_type in (");
@@ -343,6 +352,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql.append(",");
       }
       sql.append(") ");
+      isQueryParameterEmpty = false;
     }
     if (ot2qp.getMatchType() != null && !ot2qp.getMatchType().isEmpty()) {
       sql.append(" and (");
@@ -351,6 +361,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql.append(">0 or ");
       }
       sql.append(") ");
+      isQueryParameterEmpty = false;
     }
     if (ot2qp.getLookBackResult() != null && !ot2qp.getLookBackResult().isEmpty()) {
       sql.append(" and look_back_result in (");
@@ -359,7 +370,14 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql.append(",");
       }
       sql.append(") ");
+      isQueryParameterEmpty = false;
     }
+
+    if (isQueryParameterEmpty && ot2qp.getSize() == 0) {
+      ot2qp.setStart(0);
+      ot2qp.setSize(100);
+    }
+
     String tstr = sql.toString().replace(",)", ")");
     tstr = tstr.replace("or )", ")");
     sqlprefix1 += tstr;
