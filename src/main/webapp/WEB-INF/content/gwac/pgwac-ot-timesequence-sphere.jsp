@@ -25,28 +25,28 @@
         d3.json(gwac.url, function(errors, reqData) {
           gwac.parseData(reqData);
           gwac.draw();
+          gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
         });
 
         $('#dynamicDrawOt1').change(function() {
           if ($(this).is(":checked")) {
-            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, 400);
-//            console.log(":checked");
+            gwac.reParseData();
+            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
           } else {
             clearInterval(gwac.ot1DrawInterval);
-//            console.log(":unchecked");
           }
         });
 
         function dynamicDrawOt1() {
-          gwac.curSerialNum = (gwac.curSerialNum + 1)%gwac.maxNumber;
-          if (gwac.curSerialNum > 0) {
+          gwac.currentFrame = (gwac.currentFrame + 1) % gwac.totalFrame;
+          if (gwac.currentFrame > 0) {
             gwac.svg.selectAll(".ot1").remove();
           }
-          gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.curSerialNum];
+          gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
           gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
-          console.log(gwac.curSerialNum);
+          $('#currentFrame').val(gwac.currentFrame);
         }
-        
+
         $(window).resize(function() {
           var winWidth = $(window).width();
           var winHeight = $(window).height();
@@ -69,9 +69,11 @@
       #tooltip{position:absolute;z-index:10;visibility:hidden;color:white;}
       #header{width: 100%;height: 40px;font-size: 28px;text-align: center; color: white;padding-top: 5px;}
       #sphereDisplay{margin: auto;width:100%;height: 90%;}
-      #toolbar {position: absolute;bottom: auto;right: 10px;top: 45px;left: auto;width: 120px;z-index: 10;text-align: left;color: white;font-size: 14px;}
+      #toolbar {position: absolute;bottom: auto;right: 10px;top: 45px;left: auto;width: 150px;z-index: 10;text-align: left;color: white;font-size: 14px;}
       #toolbar label{display: block; margin: 3px 0; padding-left: 15px; text-indent: -15px; cursor: pointer;}
-      #toolbar input{width: 14px;height: 14px;padding: 0;margin:0 5px 0 0;vertical-align: bottom;position: relative;top: -1px;*overflow: hidden; cursor: pointer;}
+      #toolbar input[type='checkbox']{width: 14px;height: 14px;padding: 0;margin:0 5px 0 0;vertical-align: bottom;position: relative;top: -1px;*overflow: hidden; cursor: pointer;}
+      .ot1-input{width: 50px;height: 20px; padding:0;margin:0 0 0 10px;border:none;background-color: transparent;outline: none;color:#fff;}
+
 
       /*.graticule {fill: none;stroke: #636B62;stroke-width: .5px;stroke-dasharray: 2,2;}*/
       .graticule{stroke: #a9a9a9;stroke-width: 0.5px;}
@@ -83,6 +85,7 @@
       .ot2{stroke: #993399;stroke-width: 3px;fill: #993399;}
       .ot2mch{stroke: #FFFF99;stroke-width: 3px;fill: #FFFF99;}
       .ot2cur{stroke: #FF33CC;stroke-width: 5px;fill: #FF33CC;}
+
     </style>
 
   </head>
@@ -91,8 +94,13 @@
       <div id="header">OT分布实时概览图-天球坐标</div>
       <div id="sphereDisplay"></div>
       <div id="toolbar">
-        <label for="dynamicDrawOt1"><input type="checkbox" id="dynamicDrawOt1">Start</label>
-        <label for="ot1"><input type="checkbox" checked="" id="ot1">OT1</label>
+        <label for="dynamicDrawOt1"><input type="checkbox" checked="" id="dynamicDrawOt1">播放</label>
+        <label for="playSpeed">播放速度:<input type="text" id="playSpeed" class="ot1-input" value="400"/></label>
+        <label for="playInterval">每次间隔:<input type="text" id="playInterval" class="ot1-input" value="5"/></label>
+        <!--label for="startTime">开始时间:<input type="text" id="startTime" class="ot1-input"value=""/></label-->
+        <label for="startFrame">开始帧数:<input type="text" id="startFrame" class="ot1-input" value="1"/></label>
+        <label for="currentFrame">当前帧数:<input type="text" id="currentFrame" class="ot1-input" value="1"/></label>
+        <label for="totalFrame">总帧数:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="totalFrame" class="ot1-input" value="1"/></label>
       </div>
     </div>
     <div id="tooltip">a simple tooltip</div>

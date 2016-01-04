@@ -14,8 +14,12 @@
 
   Gwac.prototype = {
     reqNum: 1,
-    curSerialNum: 0,
-    maxNumber: 0,
+    maxNumber: 1,
+    playSpeed: 400,
+    playInterval: 1,
+    startFrame: 1,
+    currentFrame: 1,
+    totalFrame: 1,
     firstOor: {},
     graticule: {data: d3.geo.graticule()(), class: "graticule"}, //球面网格，经度纬度方向上以10度为间隔
     labelPoint: {data: {type: "MultiPoint", coordinates: []}, class: "origin", radius: 1},
@@ -37,18 +41,28 @@
     ot2new: [],
     varstar: [],
     curnode: "",
-    ot1DrawInterval: 1,
     parseData: function(reqData) {
       gwac = this;
+      gwac.reqData = reqData;
       gwac.ot2TimeSequence = reqData.ot2TimeSequence;
       gwac.firstOor = reqData.firstOor;
       gwac.maxNumber = reqData.maxNumber;
+      gwac.reParseData();
+    },
+    reParseData: function() {
+      gwac = this;
+      gwac.playSpeed = parseInt($("#playSpeed").val());
+      gwac.playInterval = parseInt($("#playInterval").val());
+      gwac.startFrame = parseInt($("#startFrame").val());   
+      gwac.currentFrame = parseInt($("#currentFrame").val());
+      gwac.totalFrame = Math.ceil(gwac.maxNumber/gwac.playInterval);
+      $("#totalFrame").val(gwac.totalFrame);
 
-      for (var i = 0; i <= this.maxNumber; i++) {
+      for (var i = 0; i <= this.totalFrame; i++) {
         gwac.ot1[i] = [];
       }
-      $.each(this.ot2TimeSequence, function(i, item) {
-        gwac.ot1[item.number].push([item.ra, item.dec]);
+      $.each(gwac.ot2TimeSequence, function(i, item) {
+        gwac.ot1[Math.floor(item.number/gwac.playInterval)].push([item.ra, item.dec]);
       });
       this.genLabelPoint();
     },
@@ -106,7 +120,7 @@
     },
     drawOt1: function() {
       var gwac = this;
-      gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.curSerialNum];
+      gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
       gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
     },
     getBounds: function() {
@@ -147,6 +161,20 @@
           tpoints.push([i, j]);
         }
       }
+    },
+    getPlayData: function(){
+      gwac = this;
+      gwac.playSpeed = $("#playSpeed").val();
+      gwac.playInterval = $("#playInterval").val();
+      gwac.startFrame = $("#startFrame").val();      
+    },
+    printInfo: function() {
+      gwac = this;
+      console.log("playSpeed:"+gwac.playSpeed);
+      console.log("playInterval:"+gwac.playInterval);
+      console.log("startFrame:"+gwac.startFrame);
+      console.log("currentFrame:"+gwac.currentFrame);
+      console.log("totalFrame:"+gwac.totalFrame);
     }
   };
 
