@@ -55,14 +55,14 @@
                 <td><input type="text" style="width: 80px; " name="ot2fp.expTime" id="expTime" value="2" class="form-control"/></td>
                 <td><input type="text" style="width: 80px; " name="ot2fp.frameCount" id="frameCount" value="10" class="form-control"/></td>
                 <td>
-                  <select name="ot2fp.telescope" class="form-control select select-primary" data-toggle="select">
+                  <select name="ot2fp.telescope" id="telescope" class="form-control select select-primary" data-toggle="select">
                     <option value="1" selected>60公分</option>
                     <option value="2">30公分</option>
                   </select>
                 </td>
                 <td>
-                  <select name="ot2fp.filter" class="form-control select select-primary" data-toggle="select">
-                    <option value="Lum" selected>Lum</option>
+                  <select name="ot2fp.filter" id="filter" class="form-control select select-primary" data-toggle="select">
+                    <!--option value="Lum" selected>Lum</option>
                     <option value="Green">Green</option>
                     <option value="R">R</option>
                     <option value="Blue">Blue</option>
@@ -71,7 +71,7 @@
                     <option value="B">B</option>
                     <option value="Red">Red</option>
                     <option value="U">U</option>
-                    <option value="null">null</option>
+                    <option value="null">null</option-->
                   </select>
                 </td>
                 <td>

@@ -12,6 +12,8 @@ $(function() {
     xaxis: {show: true, tickColor: 'transparent'},
     yaxis: {show: true, tickDecimals: 2, tickFormatter: formate1, transform: formate2, inverseTransform: formate2}
   };
+  var filter60 = ["Lum", "Green", "R", "Blue", "V", "I", "B", "Red", "U", "null"];
+  var filter30 = ["null", "R", "B", "I", "U", "V", "null"];
   getOt2Detail();
   loadOT2Record();
   loadOT2Match();
@@ -140,6 +142,15 @@ $(function() {
     $("#fuRa").val(ot2.ra);
     $("#fuDec").val(ot2.dec);
 
+    setFilter60();
+    $("#telescope").change(function(){
+      if($("#telescope").val()==='2'){
+        setFilter30();
+      }else{
+        setFilter60();
+      }
+    });
+    
     bootbox.setLocale("zh_CN");
     $("#followBtn").click(function() {
       bootbox.confirm({
@@ -160,6 +171,32 @@ $(function() {
         }
       });
     });
+  }
+  
+  function setFilter60() {
+    var filter60 = ["Lum", "Green", "R", "Blue", "V", "I", "B", "Red", "U", "null"];
+    $('#filter').find('option').remove();
+    $.each(filter60, function(i, item) {
+      $('#filter').append($('<option>', {
+        value: item,
+        text: item
+      }));
+    });
+    $("#filter").val('Lum');
+    $("#filter").change();
+  }
+  
+  function setFilter30() {
+    var filter30 = ["null", "R", "B", "I", "U", "V"];
+    $('#filter').find('option').remove();
+    $.each(filter30, function(i, item) {
+      $('#filter').append($('<option>', {
+        value: item,
+        text: item
+      }));
+    });
+    $("#filter").val('null');
+    $("#filter").change();
   }
 
   function otClassify(data) {
