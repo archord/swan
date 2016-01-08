@@ -120,6 +120,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (ot2.getRa() < 0 || ot2.getRa() > 360 || ot2.getDec() < -90 || ot2.getDec() > 90) {
       return;
     }
+    log.debug("search ot2: " + ot2.getName());
     Boolean flag = false;
     Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
     for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
@@ -144,6 +145,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (tcvsm.size() > 0) {
       ot2.setCvsMatch((short) tcvsm.size());
       ot2Dao.updateCvsMatch(ot2);
+      log.debug(ot2.getName() + " cvs :" + tcvsm.size());
     }
 
     Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
@@ -170,6 +172,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (tmom.size() > 0) {
       ot2.setOtherMatch((short) tmom.size());
       ot2Dao.updateOtherMatch(ot2);
+      log.debug(ot2.getName() + " other :" + tmom.size());
     }
 
     Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
@@ -196,6 +199,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (trc3m.size() > 0) {
       ot2.setRc3Match((short) trc3m.size());
       ot2Dao.updateRc3Match(ot2);
+      log.debug(ot2.getName() + " rc3 :" + trc3m.size());
     }
 
     Map<MinorPlanet, Double> tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
@@ -222,6 +226,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (tmpm.size() > 0) {
       ot2.setMinorPlanetMatch((short) tmpm.size());
       ot2Dao.updateMinorPlanetMatch(ot2);
+      log.debug(ot2.getName() + " minor planet :" + tmpm.size());
     }
 
     long startTime = System.nanoTime();
@@ -245,6 +250,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (tOT2Hism.size() > 0) {
       ot2.setOt2HisMatch((short) tOT2Hism.size());
       ot2Dao.updateOt2HisMatch(ot2);
+      log.debug(ot2.getName() + " ot2his :" + tOT2Hism.size());
     }
     long endTime = System.nanoTime();
     log.debug("search ot2 history consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
@@ -252,9 +258,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (ot2.getDataProduceMethod() == '8') {
       startTime = System.nanoTime();
       Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog(ot2);//minorPlanetSearchbox
-      log.debug("ot2: " + ot2.getName());
+//      log.debug("ot2: " + ot2.getName());
 //        log.debug("usnoMag: " + usnoMag);
-      log.debug("usno match size: " + tusno.size());
+//      log.debug("usno match size: " + tusno.size());
       for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
         UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
         Double distance = (Double) entry.getValue();
@@ -275,6 +281,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       if (tusno.size() > 0) {
         ot2.setUsnoMatch((short) tusno.size());
         ot2Dao.updateUsnoMatch(ot2);
+        log.debug(ot2.getName() + " usno :" + tusno.size());
       }
       endTime = System.nanoTime();
       log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
@@ -282,7 +289,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (flag) {
       ot2.setIsMatch((short) 2);
       ot2Dao.updateIsMatch(ot2);
-    }else{//由定时查询改为消息队列查询后，这里需要主动更新
+    } else {//由定时查询改为消息队列查询后，这里需要主动更新
       ot2.setIsMatch((short) 1);
       ot2Dao.updateIsMatch(ot2);
     }

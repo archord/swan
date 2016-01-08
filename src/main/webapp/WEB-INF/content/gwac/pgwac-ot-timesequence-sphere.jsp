@@ -25,7 +25,9 @@
         d3.json(gwac.url, function(errors, reqData) {
           gwac.parseData(reqData);
           gwac.draw();
-          gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
+          setTimeout(function() {
+            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
+          }, gwac.startAnimationDuration);
         });
 
         $('#dynamicDrawOt1').change(function() {
@@ -39,12 +41,12 @@
 
         function dynamicDrawOt1() {
           gwac.currentFrame = (gwac.currentFrame + 1) % gwac.totalFrame;
+          $('#currentFrame').val(gwac.currentFrame);
           if (gwac.currentFrame > 0) {
             gwac.svg.selectAll(".ot1").remove();
           }
           gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
           gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
-          $('#currentFrame').val(gwac.currentFrame);
         }
 
         $(window).resize(function() {
@@ -61,7 +63,7 @@
 
     </script>
     <style>
-      @import url(/gwac/js/d3/maps.css);
+      @import url(<%=request.getContextPath()%>/js/d3/maps.css);
 
       body{background-color: black;}
       path {fill: none;stroke-linejoin: round;}

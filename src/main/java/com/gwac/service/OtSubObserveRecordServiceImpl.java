@@ -195,12 +195,15 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
             tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
           } else {
             tlv2.setLastFfNumber(otLv2.getLastFfNumber());
+            tlv2.setXtemp(otLv2.getXtemp());
+            tlv2.setYtemp(otLv2.getYtemp());
             tlv2.setRa(otLv2.getRa());
             tlv2.setDec(otLv2.getDec());
             tlv2.setMag(otLv2.getMag());
           }
           tlv2.setTotal(tlv2.getTotal() + 1);
-          otLv2Dao.update(tlv2);
+//          otLv2Dao.update(tlv2);
+          otLv2Dao.updateSomeRealTimeInfo(tlv2);
 
           oor.setOtId(tlv2.getOtId());
           otorDao.save(oor);

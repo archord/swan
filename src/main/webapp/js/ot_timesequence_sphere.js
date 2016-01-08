@@ -20,6 +20,7 @@
     startFrame: 1,
     currentFrame: 1,
     totalFrame: 1,
+    startAnimationDuration: 2000,
     firstOor: {},
     graticule: {data: d3.geo.graticule()(), class: "graticule"}, //球面网格，经度纬度方向上以10度为间隔
     labelPoint: {data: {type: "MultiPoint", coordinates: []}, class: "origin", radius: 1},
@@ -53,16 +54,16 @@
       gwac = this;
       gwac.playSpeed = parseInt($("#playSpeed").val());
       gwac.playInterval = parseInt($("#playInterval").val());
-      gwac.startFrame = parseInt($("#startFrame").val());   
+      gwac.startFrame = parseInt($("#startFrame").val());
       gwac.currentFrame = parseInt($("#currentFrame").val());
-      gwac.totalFrame = Math.ceil(gwac.maxNumber/gwac.playInterval);
+      gwac.totalFrame = Math.ceil(gwac.maxNumber / gwac.playInterval);
       $("#totalFrame").val(gwac.totalFrame);
 
       for (var i = 0; i <= this.totalFrame; i++) {
         gwac.ot1[i] = [];
       }
       $.each(gwac.ot2TimeSequence, function(i, item) {
-        gwac.ot1[Math.floor(item.number/gwac.playInterval)].push([item.ra, item.dec]);
+        gwac.ot1[Math.floor(item.number / gwac.playInterval)].push([item.ra, item.dec]);
       });
       this.genLabelPoint();
     },
@@ -115,12 +116,17 @@
 
       svg.call(zoom).call(zoom.event);
       gwac.zoomBounds(projection, zoom, path, gwac.ot1Data2.data);
-      svg.transition().ease("quad-in-out").duration(2000).call(zoom.projection(projection).event);
+      svg.transition().ease("quad-in-out").duration(gwac.startAnimationDuration).call(zoom.projection(projection).event);
 
     },
     drawOt1: function() {
       var gwac = this;
       gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
+      while (gwac.ot1Data2.data.coordinates.length === 0) {
+        gwac.currentFrame = (gwac.currentFrame + 1) % gwac.totalFrame;
+        $('#currentFrame').val(gwac.currentFrame);
+        gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
+      }
       gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
     },
     getBounds: function() {
@@ -141,8 +147,8 @@
               .scale(1)
               .translate([0, 0]);
 
-      var b = path.bounds(o),
-              k = Math.min(1000, .45 / Math.max(Math.max(Math.abs(b[1][0]), Math.abs(b[0][0])) / width, Math.max(Math.abs(b[1][1]), Math.abs(b[0][1])) / height));
+      var b = path.bounds(o);
+      var k = Math.min(1000, .45 / Math.max(Math.max(Math.abs(b[1][0]), Math.abs(b[0][0])) / width, Math.max(Math.abs(b[1][1]), Math.abs(b[0][1])) / height));
 
       projection.clipExtent(clip)
               .scale(k)
@@ -162,19 +168,19 @@
         }
       }
     },
-    getPlayData: function(){
+    getPlayData: function() {
       gwac = this;
       gwac.playSpeed = $("#playSpeed").val();
       gwac.playInterval = $("#playInterval").val();
-      gwac.startFrame = $("#startFrame").val();      
+      gwac.startFrame = $("#startFrame").val();
     },
     printInfo: function() {
       gwac = this;
-      console.log("playSpeed:"+gwac.playSpeed);
-      console.log("playInterval:"+gwac.playInterval);
-      console.log("startFrame:"+gwac.startFrame);
-      console.log("currentFrame:"+gwac.currentFrame);
-      console.log("totalFrame:"+gwac.totalFrame);
+      console.log("playSpeed:" + gwac.playSpeed);
+      console.log("playInterval:" + gwac.playInterval);
+      console.log("startFrame:" + gwac.startFrame);
+      console.log("currentFrame:" + gwac.currentFrame);
+      console.log("totalFrame:" + gwac.totalFrame);
     }
   };
 

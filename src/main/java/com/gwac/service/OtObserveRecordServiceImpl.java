@@ -152,7 +152,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tlv2.setMag(otLv2.getMag());
           }
           tlv2.setTotal(tlv2.getTotal() + 1);
-          otLv2Dao.update(tlv2);
+//          otLv2Dao.update(tlv2);
+          otLv2Dao.updateSomeRealTimeInfo(tlv2);
 
           String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
           FitsFileCut ffc = new FitsFileCut();

@@ -153,7 +153,8 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
           tlv2.setRa(otLv2.getRa());
           tlv2.setDec(otLv2.getDec());
           tlv2.setMag(otLv2.getMag());
-          otLv2Dao.update(tlv2);
+//          otLv2Dao.update(tlv2);
+          otLv2Dao.updateSomeRealTimeInfo(tlv2);
 
           if (false) {
             String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());

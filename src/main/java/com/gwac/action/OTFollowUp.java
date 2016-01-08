@@ -56,7 +56,8 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
 
       OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName(), false);
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
-      ot2Dao.update(ot2);
+//      ot2Dao.update(ot2);
+      ot2Dao.updateFoCount(ot2);
       ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
 
       FollowUpObservation fo = new FollowUpObservation();

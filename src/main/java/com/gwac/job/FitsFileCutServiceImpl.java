@@ -79,7 +79,8 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         continue;
       }
       otlv2.setCuttedFfNumber(ffcs.get(ffcs.size() - 1).getNumber());
-      otlv2Dao.update(otlv2);
+//      otlv2Dao.update(otlv2);
+      otlv2Dao.updateCuttedFfNumber(otlv2);
 
       //add head missed image
       FitsFileCut headFFC = ffcs.get(0);

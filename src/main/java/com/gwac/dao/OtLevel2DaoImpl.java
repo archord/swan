@@ -17,6 +17,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 /**
@@ -565,6 +566,39 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   @Override
   public void updateFollowUpResult(OtLevel2 ot2) {
     String sql = "update ot_level2 set follow_up_result=" + ot2.getFollowUpResult() + " where name='" + ot2.getName() + "'";
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateCuttedFfNumber(OtLevel2 ot2) {
+    String sql = "update ot_level2 set cutted_ff_number=" + ot2.getCuttedFfNumber() + " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public void updateSomeRealTimeInfo(OtLevel2 ot2) {
+    String sql = "update ot_level2 set first_ff_number=?, found_time_utc=?, last_ff_number=?, xtemp=?, ytemp=?, "
+            + "ra=?, dec=?, mag=?, total=? where ot_id=?";
+    Session session = getCurrentSession();
+    SQLQuery query = session.createSQLQuery(sql);
+    query.setParameter(0, ot2.getFirstFfNumber());
+    query.setParameter(1, ot2.getFoundTimeUtc());
+    query.setParameter(2, ot2.getLastFfNumber());
+    query.setParameter(3, ot2.getXtemp());
+    query.setParameter(4, ot2.getYtemp());
+    query.setParameter(5, ot2.getRa());
+    query.setParameter(6, ot2.getDec());
+    query.setParameter(7, ot2.getMag());
+    query.setParameter(8, ot2.getTotal());
+    query.setParameter(9, ot2.getOtId());
+    query.executeUpdate();
+  }
+  
+  @Override
+  public void updateFoCount(OtLevel2 ot2) {
+    String sql = "update ot_level2 set fo_count=" + ot2.getFoCount() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }

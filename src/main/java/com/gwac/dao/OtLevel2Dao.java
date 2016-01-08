@@ -72,6 +72,12 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public int updateLookBackResult(OtLevel2 ot2);
   
   public void updateFollowUpResult(OtLevel2 ot2);
+  
+  public void updateCuttedFfNumber(OtLevel2 ot2);
+  
+  public void updateSomeRealTimeInfo(OtLevel2 ot2);
+  
+  public void updateFoCount(OtLevel2 ot2);
 
   public List<OtLevel2> getUnMatched();
 }
