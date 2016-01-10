@@ -70,7 +70,7 @@
     <script type="text/javascript">
 
       $(function() {
-        var drawRadius = 10;
+        var drawRadius = 20;
         var count = 1;
         var curNum = 1;
         var startNum = 1;
@@ -79,6 +79,7 @@
         var fuots;
         var fitsList;
         var curFits;
+        var fuoList;
         getFollowupFitsList();
         $("#showStart").click(showFits('start'));
         $("#showEnd").click(showFits('end'));
@@ -96,12 +97,13 @@
         function showFitsList(data) {
           fuots = data.fuots;
           fitsList = data.fitsList;
+          fuoList = data.fuos;
           endNum = fitsList.length;
           showFits('start');
         }
 
         function showFits(command) {
-          if (endNum === 0 || fitsList.length===0) {
+          if (endNum === 0 || fitsList.length === 0) {
             return false;
           }
           var url = '';
@@ -133,7 +135,7 @@
         }
 
         function setJs9Fits(url) {
-          var option = {zoom: 'toFit', colormap: 'grey', contrast: 7.0, bias: 0.62109375, scale: "log"};
+          var option = {zoom: 'toFit', colormap: 'grey', contrast: 4.0, bias: 0.4, scale: "log"};
           JS9.Load(url, option);
 //                JS9.Load(url);
           setJs9Parameter();
@@ -145,7 +147,7 @@
             var totalx = 0.0, totaly = 0.0;
             var size = records.length;
             $.each(records, function(i, item) {
-              if(i>5){
+              if (i > 5) {
                 return;
               }
               var circlex = item.x;
@@ -153,18 +155,30 @@
               var textx = item.x + drawRadius + 5;
               var texty = item.y + drawRadius + 5;
               var fuoTypeName = "ERROR";
-              totalx += circlex;
-              totaly += circley;
+
               $.each(fuots, function(i, tfuot) {
                 if (item.fuoTypeId === tfuot.fuoTypeId) {
                   fuoTypeName = tfuot.fuoTypeName;
                 }
               });
+              if (fuoTypeName !== 'CHECK') {
+                totalx += circlex;
+                totaly += circley;
+              }else{
+                size = size - 1;
+              }
+
+              var fuoName = fuoTypeName;
+              $.each(fuoList, function(i, tfuo) {
+                if (item.fuoId === tfuo.fuoId) {
+                  fuoName = tfuo.fuoName;
+                }
+              });
               JS9.AddRegions({shape: 'circle', x: circlex, y: circley, radius: drawRadius});
-              JS9.AddRegions({shape: 'text', x: textx, y: texty, text: fuoTypeName});
-              console.log("circlex=" + circlex + ",circley" + circley);
+              JS9.AddRegions({shape: 'text', x: textx, y: texty, text: fuoName});
             });
             JS9.SetPan(totalx / size, totaly / size);
+            console.log("circlex=" + totalx / size + ",circley=" + totaly / size);
           } else {
             setTimeout(setJs9Parameter, 100);
           }

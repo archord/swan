@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -257,7 +258,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
     if (ot2.getDataProduceMethod() == '8') {
       startTime = System.nanoTime();
-      Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog(ot2);//minorPlanetSearchbox
+      Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);//minorPlanetSearchbox
 //      log.debug("ot2: " + ot2.getName());
 //        log.debug("usnoMag: " + usnoMag);
 //      log.debug("usno match size: " + tusno.size());
@@ -376,18 +377,38 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     Map rst = new HashMap();
     if (mpDao.tableExists(tableName)) {
       List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, tableName);
+      log.debug(objs.size());
       MinorPlanet minObj = null;
       double minDis = searchRadius;
 
+      /**
+       * 天 86400000.0 小时 3600000.0 分钟 60000.0
+       */
+      /**
+       * Calendar内部存储的是UTC时间 Calendar的setTime和getTime都是本地时间
+       * setTimeZone改变的是cal.get(Calendar.HOUR_OF_DAY)的值，默认是本地时区
+       * cal.get(Calendar.HOUR_OF_DAY)，默认是本地时间，即和setTime的值相同
+       * getTimeInMillis是相对于UTC（1970.1.1）
+       */
       Calendar cal = Calendar.getInstance();
+      cal.setTime(ot2.getFoundTimeUtc());
+      double subDay = cal.get(Calendar.HOUR_OF_DAY) / 24.0 + cal.get(Calendar.MINUTE) / 24.0 / 60.0
+              + cal.get(Calendar.SECOND) / 24.0 / 60.0 / 60;
       for (MinorPlanet obj : objs) {
-        /**
-         * 天 86400000.0 小时 3600000.0 分钟 60000.0
-         */
-        cal.setTime(CommonFunction.getUTCDate(new Date()));
-        double tday = cal.getTimeInMillis() / 86400000.0;
-        double subDay = tday - (int) tday;
         double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon() + obj.getDlon() * subDay, obj.getLat() + obj.getDlat() * subDay);
+        if (obj.getIdnum() == 30 || obj.getIdnum() == 115 || obj.getIdnum() == 654) {
+          log.debug("start*******************************");
+          log.debug("FoundTimeUtc=" + ot2.getFoundTimeUtc());
+          log.debug("subDay=" + subDay);
+          log.debug("tableName=" + tableName);
+          log.debug("ot2checkotname=" + ot2.getName());
+          log.debug("Idnum=" + obj.getIdnum() + "Mpid=" + obj.getMpid() + "lat=" + obj.getLat() + "lon=" + obj.getLon() + "vmag=" + obj.getVmag());
+          log.debug("dis=" + tDis);
+          if (tDis < minDis) {
+            log.debug("ot2checkotname=" + ot2.getName() + " success #######################");
+          }
+          log.debug("end*******************************");
+        }
         if (tDis < minDis) {
           rst.put(obj, tDis);
         }

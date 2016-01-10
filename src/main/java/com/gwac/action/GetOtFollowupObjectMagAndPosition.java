@@ -103,7 +103,7 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
         magSb.append("]");
         tmags.put("objName", fuoName);
         tmags.put("objMag", magSb.toString());
-        getMags().add(tmags);
+        mags.add(tmags);
       }
 
       //统计目标中非参考星CHECK的个数
@@ -142,7 +142,7 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
           posSb.append("]");
           tposs.put("objName", fuoName);
           tposs.put("objPos", posSb.toString());
-          getPoss().add(tposs);
+          poss.add(tposs);
         }
       }
     } else {

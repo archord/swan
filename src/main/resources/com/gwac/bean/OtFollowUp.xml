@@ -9,6 +9,7 @@
     <property name="fufDao" ref="fufDao" />
     <property name="furDao" ref="frDao" />
     <property name="fuotDao" ref="fuotDao" />
+    <property name="fuoDao" ref="fuoDao" />
   </bean>
 
   <bean class="com.gwac.action.GetOtFollowupObjectMagAndPosition" scope="prototype">

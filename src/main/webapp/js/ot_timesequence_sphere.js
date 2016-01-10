@@ -19,6 +19,7 @@
     playInterval: 1,
     startFrame: 1,
     currentFrame: 1,
+    endFrame: 1,
     totalFrame: 1,
     startAnimationDuration: 2000,
     firstOor: {},
@@ -56,7 +57,19 @@
       gwac.playInterval = parseInt($("#playInterval").val());
       gwac.startFrame = parseInt($("#startFrame").val());
       gwac.currentFrame = parseInt($("#currentFrame").val());
+      gwac.endFrame = parseInt($("#endFrame").val());
       gwac.totalFrame = Math.ceil(gwac.maxNumber / gwac.playInterval);
+      if (gwac.startFrame > gwac.totalFrame) {
+        gwac.startFrame = 1;
+        $("#startFrame").val(gwac.startFrame);
+      }
+      if (gwac.endFrame > gwac.totalFrame || gwac.endFrame === 1) {
+        gwac.endFrame = gwac.totalFrame;
+        $("#endFrame").val(gwac.endFrame);
+      }
+      if (gwac.currentFrame > gwac.totalFrame || gwac.currentFrame < gwac.startFrame) {
+        gwac.currentFrame = gwac.startFrame;
+      }
       $("#totalFrame").val(gwac.totalFrame);
 
       for (var i = 0; i <= this.totalFrame; i++) {
@@ -94,6 +107,8 @@
       var tooltip = d3.select("#tooltip");
       var path = d3.geo.path().projection(projection);
       var svg = d3.select(gwac.placeholder).append("svg").attr("width", width).attr("height", height);
+
+      gwac.projection = projection;
       gwac.path = path;
       gwac.svg = svg;
 
@@ -115,42 +130,50 @@
               });
 
       svg.call(zoom).call(zoom.event);
-      gwac.zoomBounds(projection, zoom, path, gwac.ot1Data2.data);
+      gwac.zoomBounds(gwac.ot1Data2.data);
       svg.transition().ease("quad-in-out").duration(gwac.startAnimationDuration).call(zoom.projection(projection).event);
 
+      gwac.zoom = zoom;
     },
     drawOt1: function() {
       var gwac = this;
-      gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
+      gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame - 1];
       while (gwac.ot1Data2.data.coordinates.length === 0) {
-        gwac.currentFrame = (gwac.currentFrame + 1) % gwac.totalFrame;
+        gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + 1) % (gwac.endFrame - gwac.startFrame + 1);
         $('#currentFrame').val(gwac.currentFrame);
-        gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
+        gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame - 1];
       }
       gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
+    },
+    changeView: function(gwac) {
+      var tdata = {type: "MultiPoint", coordinates: []};
+      tdata.coordinates.push(eval("[" + $('#leftTopBound').val() + "]"));
+      tdata.coordinates.push(eval("[" + $('#rightBottomBound').val() + "]"));
+      gwac.zoomBounds(tdata);
+      gwac.svg.transition().ease("quad-in-out").duration(100).call(gwac.zoom.projection(gwac.projection).event);
     },
     getBounds: function() {
       var gwac = this;
       var bounds = {type: "Feature", geometry: {type: "Polygon", coordinates: [[[30, 30], [0, 10], [10, 0], [0, -10], [-10, 0]]]}};
       return bounds;
     },
-    zoomBounds: function(projection, zoom, path, o) {
+    zoomBounds: function(data) {
 
       var gwac = this;
       var width = $(gwac.placeholder).width();
       var height = $(gwac.placeholder).height();
-      var centroid = d3.geo.centroid(o),
-              clip = projection.clipExtent();
+      var centroid = d3.geo.centroid(data);
+      var clip = gwac.projection.clipExtent();
 
-      projection.rotate(true ? [-centroid[0], -centroid[1]] : zoom.rotateTo(centroid))
+      gwac.projection.rotate(true ? [-centroid[0], -centroid[1]] : gwac.zoom.rotateTo(centroid))
               .clipExtent(null)
               .scale(1)
               .translate([0, 0]);
 
-      var b = path.bounds(o);
+      var b = gwac.path.bounds(data);
       var k = Math.min(1000, .45 / Math.max(Math.max(Math.abs(b[1][0]), Math.abs(b[0][0])) / width, Math.max(Math.abs(b[1][1]), Math.abs(b[0][1])) / height));
-
-      projection.clipExtent(clip)
+      console.log(b);
+      gwac.projection.clipExtent(clip)
               .scale(k)
               .translate([width / 2, height / 2]);
     },

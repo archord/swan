@@ -38,9 +38,11 @@
             clearInterval(gwac.ot1DrawInterval);
           }
         });
+        
+        $('#changeView').click(function(){gwac.changeView(gwac);});
 
         function dynamicDrawOt1() {
-          gwac.currentFrame = (gwac.currentFrame + 1) % gwac.totalFrame;
+          gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + 1) % (gwac.endFrame - gwac.startFrame + 1);
           $('#currentFrame').val(gwac.currentFrame);
           if (gwac.currentFrame > 0) {
             gwac.svg.selectAll(".ot1").remove();
@@ -96,13 +98,18 @@
       <div id="header">OT分布实时概览图-天球坐标</div>
       <div id="sphereDisplay"></div>
       <div id="toolbar">
-        <label for="dynamicDrawOt1"><input type="checkbox" checked="" id="dynamicDrawOt1">播放</label>
-        <label for="playSpeed">播放速度:<input type="text" id="playSpeed" class="ot1-input" value="400"/></label>
-        <label for="playInterval">每次间隔:<input type="text" id="playInterval" class="ot1-input" value="5"/></label>
-        <!--label for="startTime">开始时间:<input type="text" id="startTime" class="ot1-input"value=""/></label-->
-        <label for="startFrame">开始帧数:<input type="text" id="startFrame" class="ot1-input" value="1"/></label>
-        <label for="currentFrame">当前帧数:<input type="text" id="currentFrame" class="ot1-input" value="1"/></label>
-        <label for="totalFrame">总帧数:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="totalFrame" class="ot1-input" value="1"/></label>
+        <table style="border:0">
+          <tr><td colspan="2"><input type="checkbox" checked="" id="dynamicDrawOt1"><span id="playot2">播放</span></td></tr>
+          <tr><td>播放速度:</td><td><input type="text" id="playSpeed" class="ot1-input" value="400"/></td></tr>
+          <tr><td>每次间隔:</td><td><input type="text" id="playInterval" class="ot1-input" value="5"/></td></tr>
+          <tr><td>开始帧数:</td><td><input type="text" id="startFrame" class="ot1-input" value="1"/></td></tr>
+          <tr><td>当前帧数:</td><td><input type="text" id="currentFrame" class="ot1-input" value="1"/></td></tr>
+          <tr><td>结束帧数:</td><td><input type="text" id="endFrame" class="ot1-input" value="1"/></td></tr>
+          <tr><td>总帧数:</td><td><input type="text" id="totalFrame" class="ot1-input" value="1"/></td></tr>
+          <tr><td>边界左上:</td><td><input type="text" id="leftTopBound" class="ot1-input" value="60,60"/></td></tr>
+          <tr><td>边界右下:</td><td><input type="text" id="rightBottomBound" class="ot1-input" value="70,70"/></td></tr>
+          <tr><td colspan="2"><a href="javascript:void(0);" id="changeView" style="text-decoration:none;color:#fff;">切换视角</a></td></tr>
+        </table>
       </div>
     </div>
     <div id="tooltip">a simple tooltip</div>

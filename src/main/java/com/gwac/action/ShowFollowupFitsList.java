@@ -1,10 +1,12 @@
 package com.gwac.action;
 
 import com.gwac.dao.FollowUpFitsfileDao;
+import com.gwac.dao.FollowUpObjectDao;
 import com.gwac.dao.FollowUpObjectTypeDao;
 import com.gwac.dao.FollowUpRecordDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.FollowUpFitsfile;
+import com.gwac.model.FollowUpObject;
 import com.gwac.model.FollowUpObjectType;
 import com.gwac.model.FollowUpRecord;
 import com.gwac.model.OtLevel2;
@@ -31,10 +33,12 @@ public class ShowFollowupFitsList extends ActionSupport {
   private FollowUpFitsfileDao fufDao;
   private FollowUpRecordDao furDao;
   private FollowUpObjectTypeDao fuotDao;
+  private FollowUpObjectDao fuoDao;
 
   private String otName;
   private List<Map<String, Object>> fitsList;
   private List<FollowUpObjectType> fuots;
+  private List<FollowUpObject> fuos;
 
   @Actions({
     @Action(value = "/get-followup-fits-list", results = {
@@ -53,6 +57,7 @@ public class ShowFollowupFitsList extends ActionSupport {
       Boolean queryHis = his == 1;
       OtLevel2 ot2 = obDao.getOtLevel2ByName(otName, queryHis);
       List<FollowUpFitsfile> fufs = fufDao.getByOtId(ot2.getOtId());
+      fuos = fuoDao.getByOtId(ot2.getOtId(), queryHis);
       for (FollowUpFitsfile tfuf : fufs) {
         Map<String, Object> fufMap = new HashMap<>();
         fufMap.put("path", dataRootWebMap + "/" + tfuf.getFfPath() + "/");
@@ -61,6 +66,8 @@ public class ShowFollowupFitsList extends ActionSupport {
         fufMap.put("records", furs);
         fitsList.add(fufMap);
       }
+    }else{
+      fuos = new ArrayList();
     }
 
     return "json";
@@ -113,6 +120,20 @@ public class ShowFollowupFitsList extends ActionSupport {
    */
   public List<FollowUpObjectType> getFuots() {
     return fuots;
+  }
+
+  /**
+   * @param fuoDao the fuoDao to set
+   */
+  public void setFuoDao(FollowUpObjectDao fuoDao) {
+    this.fuoDao = fuoDao;
+  }
+
+  /**
+   * @return the fuos
+   */
+  public List<FollowUpObject> getFuos() {
+    return fuos;
   }
 
 }
