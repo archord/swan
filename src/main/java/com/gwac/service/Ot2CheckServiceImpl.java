@@ -75,9 +75,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   @Override
   public void startJob() {
 
-    if (isBeiJingServer || isTestServer) {
-      return;
-    }
+//    if (isBeiJingServer || isTestServer) {
+//      return;
+//    }
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -374,6 +374,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   public Map<MinorPlanet, Double> matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
 
     String tableName = getMinorPlanetTableName();
+    log.debug("tableName=" + tableName);
     Map rst = new HashMap();
     if (mpDao.tableExists(tableName)) {
       List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, tableName);
@@ -398,10 +399,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon() + obj.getDlon() * subDay, obj.getLat() + obj.getDlat() * subDay);
         if (obj.getIdnum() == 30 || obj.getIdnum() == 115 || obj.getIdnum() == 654) {
           log.debug("start*******************************");
+          log.debug("ot2checkotname=" + ot2.getName());
           log.debug("FoundTimeUtc=" + ot2.getFoundTimeUtc());
           log.debug("subDay=" + subDay);
-          log.debug("tableName=" + tableName);
-          log.debug("ot2checkotname=" + ot2.getName());
           log.debug("Idnum=" + obj.getIdnum() + "Mpid=" + obj.getMpid() + "lat=" + obj.getLat() + "lon=" + obj.getLon() + "vmag=" + obj.getVmag());
           log.debug("dis=" + tDis);
           if (tDis < minDis) {

@@ -92,7 +92,7 @@
   <bean id="ot2CheckTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="ot2CheckJob" />
-    <property name="repeatInterval" value="15000" /> <!-- 20000  -->
+    <property name="repeatInterval" value="15000" /> <!-- 15000  -->
     <property name="startDelay" value="13000" /> <!-- 25000  -->
   </bean>
   

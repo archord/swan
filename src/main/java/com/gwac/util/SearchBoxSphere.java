@@ -5,11 +5,16 @@
  */
 package com.gwac.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  * @author xy
  */
 public class SearchBoxSphere {
+  
+  private static final Log log = LogFactory.getLog(SearchBoxSphere.class);
 
   private double ra;
   private double dec;
@@ -29,6 +34,7 @@ public class SearchBoxSphere {
     searchRadius = 0;
   }
 
+  @Override
   public String toString() {
     return "ra=" + ra + ",dec=" + dec + ",minRa=" + minRa + ",maxRa=" + maxRa + ",minDec=" + minDec + ",maxDec=" + maxDec + ",searchRadius=" + searchRadius + "\n";
   }
@@ -84,6 +90,8 @@ public class SearchBoxSphere {
       } else {
         flag = 1;
       }
+    }else{
+      log.error("search box exceed max value");
     }
     return flag;
   }

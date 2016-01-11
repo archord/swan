@@ -27,8 +27,16 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
   @Override
   public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName) {
 
-    double maxRaSpeed = getMaxAbsValue(tableName, "DLON");
-    double maxDecSpeed = getMaxAbsValue(tableName, "DLAT");
+    double maxRaSpeed = getMaxAbsValue(tableName, "DLON", mag);
+    double maxDecSpeed = getMaxAbsValue(tableName, "DLAT", mag);
+    if (maxRaSpeed > 20) {
+      log.error("maxRaSpeed is " + maxRaSpeed + ",force set to 19.9");
+      maxRaSpeed = 19.9;
+    }
+    if (maxDecSpeed > 20) {
+      log.error("maxDecSpeed is " + maxDecSpeed + ",force set to 19.9");
+      maxDecSpeed = 19.9;
+    }
 
     SearchBoxSphere sbs1 = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), maxRaSpeed + searchRadius);
     SearchBoxSphere sbs2 = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), maxDecSpeed + searchRadius);
@@ -54,10 +62,10 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
     return new ArrayList();
   }
 
-  public Double getMaxAbsValue(String tableName, String name) {
+  public Double getMaxAbsValue(String tableName, String name, float maxMag) {
 
     Session session = getCurrentSession();
-    String sql = "select max(abs(" + name + ")) from " + tableName + " where abs(" + name + ")<20;";
+    String sql = "select max(abs(" + name + ")) from " + tableName + " where VMAG<" + maxMag + " and abs(" + name + ")<20;";
     Query q = session.createSQLQuery(sql);
     return (Double) q.list().get(0);
   }
