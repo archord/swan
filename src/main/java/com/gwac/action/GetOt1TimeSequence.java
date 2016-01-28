@@ -53,6 +53,8 @@ public class GetOt1TimeSequence extends ActionSupport implements SessionAware {
         tmap.put("ra", oor.getRaD());
         tmap.put("dec", oor.getDecD());
         tmap.put("number", number);
+        tmap.put("dpmid", oor.getDpmId());
+        tmap.put("ffnumber", oor.getFfNumber());
         ot2TimeSequence.add(tmap);
         if (number > getMaxNumber()) {
           maxNumber = number;

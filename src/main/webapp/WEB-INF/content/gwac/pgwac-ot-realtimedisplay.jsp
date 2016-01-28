@@ -77,10 +77,14 @@
         </div>
       </div>
       <div id="sysinfo">
-        <div id="sysinfo-title">
-          <span>系统磁盘容量监测</span>
+        <div class="sys-disk-usage-title">
+          <span>系统磁盘(/data)容量监测</span>
         </div>
         <div id="sys-disk-usage"></div>
+        <div class="sys-disk-usage-title">
+          <span>系统磁盘(/data2)容量监测</span>
+        </div>
+        <div id="sys-disk-usage2"></div>
       </div>
     </div>
     <div id="tooltip" style="position: absolute; display: none; border: 1px solid rgb(255, 221, 221); padding: 2px; opacity: 0.8; background-color: rgb(255, 238, 238);"></div>

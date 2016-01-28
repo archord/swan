@@ -122,6 +122,7 @@ public class UploadFileServiceImpl implements UploadFileService {
       String dpmName = cfile.getProperty("dpmname");
       String curProcNumber = cfile.getProperty("curprocnumber");
       String dfInfo = cfile.getProperty("dfinfo");
+      String df2Info = cfile.getProperty("df2info");
       String otlist = cfile.getProperty("otlist");
       String sendTimeStr = cfile.getProperty("timeSend");
 
@@ -155,46 +156,8 @@ public class UploadFileServiceImpl implements UploadFileService {
             log.error("parse curProcNumber error", ex);
           }
 
-          if (dfInfo != null && !dfInfo.isEmpty()) {
-            dfInfo = dfInfo.trim();
-            Pattern p = Pattern.compile("[ ]+");
-            String[] strs = p.split(dfInfo);
-            float totalSize = 0;
-            float leftSize = 0;
-            float percent = 0;
-
-            try {
-              if (strs[2].contains("T")) {
-                totalSize = Float.parseFloat(strs[2].replace('T', ' '));
-              } else if (strs[2].contains("G")) {
-                totalSize = Float.parseFloat(strs[2].replace('G', ' ')) / (float) 1024.0;
-              } else if (strs[2].contains("M")) {
-                totalSize = Float.parseFloat(strs[2].replace('M', ' ')) / (float) (1024.0 * 1024.0);
-              }
-              dpm.setTotalStorageSize(totalSize);
-            } catch (NumberFormatException ex) {
-              log.error("parse totalSize error", ex);
-            }
-
-            try {
-              if (strs[3].contains("T")) {
-                leftSize = Float.parseFloat(strs[3].replace('T', ' '));
-              } else if (strs[3].contains("G")) {
-                leftSize = Float.parseFloat(strs[3].replace('G', ' ')) / (float) 1024.0;
-              } else if (strs[3].contains("M")) {
-                leftSize = Float.parseFloat(strs[3].replace('M', ' ')) / (float) (1024.0 * 1024.0);
-              }
-              if (strs[5].contains("%")) {
-                percent = Float.parseFloat(strs[5].replace('%', ' '));
-              }
-              dpm.setUsedStorageSize(leftSize);
-            } catch (NumberFormatException ex) {
-              log.error("parse totalSize error", ex);
-            }
-//        log.debug(totalSize);
-//        log.debug(leftSize);
-//        log.debug(percent);
-          }
+          dpm.setUsedStorageSize(getCapacityFromDfInfo(dfInfo)); //主存储盘使用比例 /data
+          dpm.setTotalStorageSize(getCapacityFromDfInfo(df2Info)); //负存储盘使用比例 /data2
 
           if (otlist != null && !otlist.isEmpty()) {
             otlist = otlist.trim();
@@ -268,6 +231,47 @@ public class UploadFileServiceImpl implements UploadFileService {
       }
     }
     return fNum;
+  }
+
+  public float getCapacityFromDfInfo(String dfInfo) {
+
+    float usedRatio = (float) 0.0;
+    if (dfInfo != null && !dfInfo.isEmpty()) {
+      dfInfo = dfInfo.trim();
+      Pattern p = Pattern.compile("[ ]+");
+      String[] strs = p.split(dfInfo);
+      float totalSize = 0;
+      float leftSize = 0;
+      float percent = 0;
+
+      try {
+        if (strs[2].contains("T")) {
+          totalSize = Float.parseFloat(strs[2].replace('T', ' '));
+        } else if (strs[2].contains("G")) {
+          totalSize = Float.parseFloat(strs[2].replace('G', ' ')) / (float) 1024.0;
+        } else if (strs[2].contains("M")) {
+          totalSize = Float.parseFloat(strs[2].replace('M', ' ')) / (float) (1024.0 * 1024.0);
+        }
+      } catch (NumberFormatException ex) {
+        log.error("parse totalSize error", ex);
+      }
+
+      try {
+        if (strs[3].contains("T")) {
+          leftSize = Float.parseFloat(strs[3].replace('T', ' '));
+        } else if (strs[3].contains("G")) {
+          leftSize = Float.parseFloat(strs[3].replace('G', ' ')) / (float) 1024.0;
+        } else if (strs[3].contains("M")) {
+          leftSize = Float.parseFloat(strs[3].replace('M', ' ')) / (float) (1024.0 * 1024.0);
+        }
+        if (strs[5].contains("%")) {
+          usedRatio = Float.parseFloat(strs[5].replace('%', ' '))/100;
+        }
+      } catch (NumberFormatException ex) {
+        log.error("parse totalSize error", ex);
+      }
+    }
+    return usedRatio;
   }
 
   public int storeOtListSub(String path) {

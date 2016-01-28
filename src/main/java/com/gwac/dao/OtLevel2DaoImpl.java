@@ -35,7 +35,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();
-      String sql = "select * from ot_level2_his where ot_id!=" + ot2.getOtId() + " and ";
+      String sql = "select * from ot_level2_his where ot_id!=" + ot2.getOtId()
+              + " and data_produce_method='" + ot2.getDataProduceMethod() + "' and ";
       if (tflag == 1) {
         sql += "ra between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
         sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
@@ -595,7 +596,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     query.setParameter(9, ot2.getOtId());
     query.executeUpdate();
   }
-  
+
   @Override
   public void updateFoCount(OtLevel2 ot2) {
     String sql = "update ot_level2 set fo_count=" + ot2.getFoCount() + " where ot_id=" + ot2.getOtId();

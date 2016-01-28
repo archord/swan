@@ -20,7 +20,8 @@ Date.prototype.Format = function(fmt) { //author: meizz
 
 var reqNum = 1;
 var plot = [];
-var diskUsage = [];
+var diskUsage = []; //data
+var diskUsage2 = []; //data2
 var ot1 = [];
 var ot2 = [];
 var ot2cur = [];
@@ -176,11 +177,30 @@ function onDataReceived(result) {
   var dpms = result.dpms;
   diskUsage[0] = ["M", result.masterUsage];
   for (var m = 0; m < dpms.length; m++) {
-    diskUsage[m + 1] = [m + 1, dpms[m].usedStorageSize / dpms[m].totalStorageSize];
+    diskUsage[m + 1] = [m + 1, dpms[m].usedStorageSize];
 //            console.log(dpms[m].usedStorageSize+" "+dpms[m].totalStorageSize+" "+diskUsage[m+1]);
+  }
+  for (var m = 0; m < dpms.length; m++) {
+    diskUsage2[m] = [m, dpms[m].totalStorageSize]; 
   }
 
   $.plot("#sys-disk-usage", [diskUsage], {
+    series: {
+      color: "#77b7c5", //E8E800 77b7c5 AB5800
+      bars: {
+        show: true,
+        barWidth: 0.3,
+        align: "center",
+        fillColor: {colors: [{opacity: 0.5}, {opacity: 1}]}
+      }
+    },
+    xaxis: {
+      mode: "categories"
+    },
+    yaxis: {show: true, min: 0, max: 0.99, tickFormatter: formate2}
+  });
+
+  $.plot("#sys-disk-usage2", [diskUsage2], {
     series: {
       color: "#77b7c5", //E8E800 77b7c5 AB5800
       bars: {
