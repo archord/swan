@@ -62,12 +62,18 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
     return new ArrayList();
   }
 
-  public Double getMaxAbsValue(String tableName, String name, float maxMag) {
+  public double getMaxAbsValue(String tableName, String name, float maxMag) {
 
+    double val = 19.9;
     Session session = getCurrentSession();
     String sql = "select max(abs(" + name + ")) from " + tableName + " where VMAG<" + maxMag + " and abs(" + name + ")<20;";
     Query q = session.createSQLQuery(sql);
-    return (Double) q.list().get(0);
+    if (q.list().size() > 0) {
+      val = (double) q.list().get(0);
+    } else {
+      log.error("MinorPlanet table " + tableName + " is empty!");
+    }
+    return val;
   }
 
   @Override

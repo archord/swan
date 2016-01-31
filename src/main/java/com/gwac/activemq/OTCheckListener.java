@@ -21,7 +21,7 @@ public class OTCheckListener implements MessageListener {
       long ot2Id = map.getLong("ot2Id");
       log.debug("receive check message, ot2Id=" + ot2Id );
       ot2CheckService.searchOT2(ot2Id);
-    } catch (JMSException e) {
+    } catch (Exception e) {
       log.error(e);
     }
   }

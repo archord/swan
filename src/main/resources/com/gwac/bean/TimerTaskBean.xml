@@ -92,8 +92,8 @@
   <bean id="ot2CheckTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="ot2CheckJob" />
-    <property name="repeatInterval" value="15000" /> <!-- 15000  -->
-    <property name="startDelay" value="13000" /> <!-- 25000  -->
+    <property name="repeatInterval" value="360000000000" /> <!-- 15000  -->
+    <property name="startDelay" value="60000" /> <!-- 25000  -->
   </bean>
   
   <bean id="addMissedCutImageTrigger" 
@@ -139,7 +139,7 @@
         <ref bean="moveDataToHisJob" />
         <!--<ref bean="fileTransferJob" />-->
         <!--<ref bean="dataSyncJob" />-->
-        <!--<ref bean="ot2CheckJob" />-->
+        <ref bean="ot2CheckJob" />
         <ref bean="monitorImageSyncJob" />
         <!--<ref bean="otSubObserveRecordJob" />-->
         <ref bean="foJob" />
@@ -152,7 +152,7 @@
         <ref bean="moveDataToHisTrigger" />
         <!--<ref bean="fileTransferTrigger" />-->
 <!--        <ref bean="dataSyncTrigger" />-->
-        <!--<ref bean="ot2CheckTrigger" />-->
+        <ref bean="ot2CheckTrigger" />
         <ref bean="monitorImageSyncTrigger" />
         <!--<ref bean="otSubObserveRecordTrigger" />-->
         <ref bean="foTrigger" />
