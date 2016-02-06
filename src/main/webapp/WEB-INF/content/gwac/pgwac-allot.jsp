@@ -206,6 +206,13 @@
             <option value="9">超新星</option>
             <option value="10">GRB</option>
             <option value="11">耀发候选体</option>
+            <option value="12">灰尘</option>
+            <option value="13">彗星</option>
+            <option value="14">近地天体</option>
+            <option value="15">变星</option>
+            <option value="16">空场</option>
+            <option value="17">凹槽</option>
+            <option value="18">跟踪不好</option>
           </select></td>
         <td>回看：</td>
         <td>
