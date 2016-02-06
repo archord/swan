@@ -35,6 +35,7 @@ public class FitsFileCut  implements java.io.Serializable {
      private Float imgX;
      private Float imgY;
      private Boolean isMissed;
+     private Short priority;
 
     public FitsFileCut() {
     }
@@ -43,7 +44,7 @@ public class FitsFileCut  implements java.io.Serializable {
     public FitsFileCut(long ffcId) {
         this.ffcId = ffcId;
     }
-    public FitsFileCut(long ffcId, Long starId, Short dpmId, String storePath, String fileName, Long ffId, Long templateFfcId, Boolean isTemplateCut, Long otId, Integer number, Boolean requestCut, Boolean successCut, Float imgX, Float imgY, Boolean isMissed) {
+    public FitsFileCut(long ffcId, Long starId, Short dpmId, String storePath, String fileName, Long ffId, Long templateFfcId, Boolean isTemplateCut, Long otId, Integer number, Boolean requestCut, Boolean successCut, Float imgX, Float imgY, Boolean isMissed, Short priority) {
        this.ffcId = ffcId;
        this.starId = starId;
        this.dpmId = dpmId;
@@ -59,6 +60,7 @@ public class FitsFileCut  implements java.io.Serializable {
        this.imgX = imgX;
        this.imgY = imgY;
        this.isMissed = isMissed;
+       this.priority = priority;
     }
    
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -215,6 +217,20 @@ public class FitsFileCut  implements java.io.Serializable {
     public void setIsMissed(Boolean isMissed) {
         this.isMissed = isMissed;
     }
+
+  /**
+   * @return the priority
+   */
+  public Short getPriority() {
+    return priority;
+  }
+
+  /**
+   * @param priority the priority to set
+   */
+  public void setPriority(Short priority) {
+    this.priority = priority;
+  }
 
 
 

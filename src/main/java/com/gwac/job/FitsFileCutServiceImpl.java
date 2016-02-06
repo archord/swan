@@ -110,6 +110,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setRequestCut(false);
           ffc.setSuccessCut(false);
           ffc.setIsMissed(true);
+          ffc.setPriority(Short.MAX_VALUE);
           ffcDao.save(ffc);
         }
       }
@@ -142,6 +143,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setRequestCut(false);
           ffc.setSuccessCut(false);
           ffc.setIsMissed(true);
+          ffc.setPriority((short) (j - otlv2.getFirstFfNumber()));
           ffcDao.save(ffc);
         }
       }
@@ -178,6 +180,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           ffc.setRequestCut(false);
           ffc.setSuccessCut(false);
           ffc.setIsMissed(true);
+          ffc.setPriority(Short.MAX_VALUE);
           ffcDao.save(ffc);
         }
         otlv2Dao.updateAllFileCuttedById(otlv2.getOtId());

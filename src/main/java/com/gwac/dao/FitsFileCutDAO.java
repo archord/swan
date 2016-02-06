@@ -17,7 +17,7 @@ public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
 
   public void uploadSuccessCutByName(String fileName);
 
-  public String getUnCuttedStarList(int dpmId);
+  public String getUnCuttedStarList(int dpmId, int size, int maxPriority);
   
   public List<FitsFileCut> getCutImageByOtId(long otId, Boolean queryHis);
 

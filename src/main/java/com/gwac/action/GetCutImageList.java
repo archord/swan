@@ -76,7 +76,7 @@ public class GetCutImageList extends ActionSupport {
 
       dpmName = dpmName.trim();
       int dpmId = Integer.parseInt(dpmName.substring(1));
-      String content = ffcDao.getUnCuttedStarList(dpmId);
+      String content = ffcDao.getUnCuttedStarList(dpmId, 6, 10);
       try {
         if (!content.isEmpty()) {
           fileName = dpmName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
@@ -147,7 +147,7 @@ public class GetCutImageList extends ActionSupport {
         file.createNewFile();
       }
       int dpmId = Integer.parseInt(dpmName.substring(1));
-      String content = ffcDao.getUnCuttedStarList(dpmId);
+      String content = ffcDao.getUnCuttedStarList(dpmId, 6, 10);
       FileWriter fw = new FileWriter(file.getAbsoluteFile());
       BufferedWriter bw = new BufferedWriter(fw);
       bw.write(content);

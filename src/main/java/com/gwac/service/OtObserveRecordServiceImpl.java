@@ -168,6 +168,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           ffc.setRequestCut(false);
           ffc.setSuccessCut(false);
           ffc.setIsMissed(false);
+          ffc.setPriority((short) (number - tlv2.getFirstFfNumber()));
           ffcDao.save(ffc);
 
           oor.setOtId(tlv2.getOtId());
@@ -222,7 +223,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setFirstNMark(false);
             }
             otLv2Dao.save(tOtLv2);
-            
+
             MessageCreator tmc = new OTCheckMessageCreator(tOtLv2);
             jmsTemplate.send(otCheckDest, tmc);
 
@@ -257,6 +258,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               ffc.setRequestCut(false);
               ffc.setSuccessCut(false);
               ffc.setIsMissed(false);
+              ffc.setPriority((short) (tOor.getFfNumber() - tOtLv2.getFirstFfNumber()));
               ffcDao.save(ffc);
 
               tOor.setOtId(tOtLv2.getOtId());

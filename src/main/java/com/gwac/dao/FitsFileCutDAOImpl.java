@@ -42,11 +42,28 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  /**
+   * 按priority升序排序，每次只获取size个未切图的OT2切图文件列表
+   *
+   * @param dpmId 数据处理机（CCD）的id
+   * @param size 获取的图像的个数
+   * @param maxPriority 仅仅选择优先级小于maxPriority的图片
+   * @return
+   */
   @Override
-  public String getUnCuttedStarList(int dpmId) {
+  public String getUnCuttedStarList(int dpmId, int size, int maxPriority) {
     Session session = getCurrentSession();
+//    String sql = "with updated_rows as "
+//            + "(update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId + " returning *) "
+//            + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
+//            + "from updated_rows ffc "
+//            + "inner join fits_file ff on ffc.ff_id=ff.ff_id;";
+
     String sql = "with updated_rows as "
-            + "(update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId + " returning *) "
+            + "(update fits_file_cut ffc1 "
+            + "set request_cut=true "
+            + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " and priority<" + dpmId + " order by priority asc limit " + size + ") ffc2 "
+            + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
             + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
             + "from updated_rows ffc "
             + "inner join fits_file ff on ffc.ff_id=ff.ff_id;";
@@ -71,13 +88,13 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     }
     return rst.toString();
   }
-  
+
   public List<FitsFileCut> getCutImageByOtId(long otId, Boolean queryHis) {
-    
+
     String sql1 = "select * "
             + "from fits_file_cut ffc "
             + "where ffc.success_cut=true and ffc.ot_id=" + otId;
-    
+
     String sql2 = "select * "
             + "from fits_file_cut_his ffc "
             + "where ffc.success_cut=true and ffc.ot_id=" + otId;
@@ -88,7 +105,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     } else {
       unionSql = sql1 + " order by number";
     }
-    
+
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(FitsFileCut.class);
     return q.list();
@@ -110,7 +127,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     return q.list();
   }
-  
+
   public List<FitsFileCut> getCutImageByOtNameFromHis(String otName) {
 
     Session session = getCurrentSession();
