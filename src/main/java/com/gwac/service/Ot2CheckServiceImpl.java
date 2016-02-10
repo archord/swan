@@ -251,7 +251,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2mDao.save(ot2m);
       flag = true;
 
-      if (!hisType && ((tot2.getOtType() >= 8 && tot2.getOtType() <= 11) || tot2.getOtType() == 15)) {
+      if (!hisType && tot2.getOtType() != null && ((tot2.getOtType() >= 8 && tot2.getOtType() <= 11) || tot2.getOtType() == 15)) {
         ot2.setOtType(tot2.getOtType());
         ot2Dao.updateOTType(ot2);
         hisType = true;
@@ -298,7 +298,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
 
     try {
-      flag = filtOT2InCcdPixel(ot2);
+      boolean tflag = filtOT2InCcdPixel(ot2);
+      if (tflag) {
+        flag = tflag;
+      }
     } catch (Exception e) {
       log.error("filt ot2 " + ot2.getName() + " in ccd pixel error!", e);
     }
@@ -394,7 +397,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     Map rst = new HashMap();
     if (mpDao.tableExists(tableName)) {
       List<MinorPlanet> objs = mpDao.queryByOt2(ot2, searchRadius, mag, tableName);
-      log.debug(objs.size());
+      log.debug("minor planet number: " + objs.size());
       MinorPlanet minObj = null;
       double minDis = searchRadius;
 

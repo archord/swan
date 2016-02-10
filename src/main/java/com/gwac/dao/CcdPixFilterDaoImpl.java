@@ -34,7 +34,7 @@ public class CcdPixFilterDaoImpl extends BaseHibernateDaoImpl<CcdPixFilter> impl
 
     Session session = getCurrentSession();
     String sql = "select cpf.ot_type_id from ccd_pix_filter cpf "
-            + "inner join ot_level2 ot2 on ot2.ot_id=" + ot2.getOtId() + " "
+            + "inner join ot_level2 ot2 on ot2.ot_id=" + ot2.getOtId() + " and ot2.dpm_id=cpf.dpm_id "
             + "inner join ot_observe_record oor on oor.ot_id=ot2.ot_id and oor.ff_number=ot2.first_ff_number "
             + "where oor.x>=cpf.min_x and oor.x<=cpf.max_x and oor.y>=min_y and oor.y<=max_y;";
 

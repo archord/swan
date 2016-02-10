@@ -214,7 +214,8 @@ $(function() {
 //            && (full.otType===0 || full.otType===8 || full.otType===9 || full.otType===10 || full.otType===11)) {
     if (full.rc3Match > 0) {
       return "<a href='" + url + "' target='_blank' class='importantRC3' title='点击查看OT详细'>" + data + "</a>";
-    } else if ((full.isMatch === 1 && full.lookBackResult === 1 && (full.otType === 0 || full.otType === 8 || full.otType === 9 || full.otType === 10 || full.otType === 11))
+    } else if ((full.isMatch === 1 && (full.lookBackResult === 0 || full.lookBackResult === 1)
+            && (full.otType === 0 || full.otType === 8 || full.otType === 9 || full.otType === 10 || full.otType === 11))
             || (full.ot2HisMatch > 0 && (full.otType === 8 || full.otType === 9 || full.otType === 10 || full.otType === 11))) {
       return "<a href='" + url + "' target='_blank' class='importantOT2' title='点击查看OT详细'>" + data + "</a>";
     } else {
