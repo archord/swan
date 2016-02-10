@@ -92,8 +92,8 @@
   <bean id="ot2CheckTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="ot2CheckJob" />
-    <property name="repeatInterval" value="360000000000" /> <!-- 15000  -->
-    <property name="startDelay" value="60000" /> <!-- 25000  -->
+    <property name="repeatInterval" value="15000" /> <!-- 15000  -->
+    <property name="startDelay" value="30000" /> <!-- 25000  -->
   </bean>
   
   <bean id="addMissedCutImageTrigger" 

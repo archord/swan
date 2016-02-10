@@ -6,6 +6,7 @@
 package com.gwac.service;
 
 import com.gwac.dao.CVSQueryDao;
+import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.MergedOtherDao;
 import com.gwac.dao.MinorPlanetDao;
 import com.gwac.dao.OtLevel2Dao;
@@ -64,6 +65,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private MinorPlanetDao mpDao;
   private Rc3Dao rc3Dao;
   private UsnoCatalogDao usnoDao;
+  private CcdPixFilterDao cpfDao;
 
   private MatchTableDao mtDao;
   private OtLevel2MatchDao ot2mDao;
@@ -294,6 +296,13 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       endTime = System.nanoTime();
       log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
     }
+
+    try {
+      flag = filtOT2InCcdPixel(ot2);
+    } catch (Exception e) {
+      log.error("filt ot2 " + ot2.getName() + " in ccd pixel error!", e);
+    }
+
     if (flag) {
       ot2.setIsMatch((short) 2);
       ot2Dao.updateIsMatch(ot2);
@@ -404,18 +413,18 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
               + cal.get(Calendar.SECOND) / 24.0 / 60.0 / 60;
       for (MinorPlanet obj : objs) {
         double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon() + obj.getDlon() * subDay, obj.getLat() + obj.getDlat() * subDay);
-        if (obj.getIdnum() == 30 || obj.getIdnum() == 115 || obj.getIdnum() == 654) {
-          log.debug("start*******************************");
-          log.debug("ot2checkotname=" + ot2.getName());
-          log.debug("FoundTimeUtc=" + ot2.getFoundTimeUtc());
-          log.debug("subDay=" + subDay);
-          log.debug("Idnum=" + obj.getIdnum() + "Mpid=" + obj.getMpid() + "lat=" + obj.getLat() + "lon=" + obj.getLon() + "vmag=" + obj.getVmag());
-          log.debug("dis=" + tDis);
-          if (tDis < minDis) {
-            log.debug("ot2checkotname=" + ot2.getName() + " success #######################");
-          }
-          log.debug("end*******************************");
-        }
+//        if (obj.getIdnum() == 30 || obj.getIdnum() == 115 || obj.getIdnum() == 654) {
+//          log.debug("start*******************************");
+//          log.debug("ot2checkotname=" + ot2.getName());
+//          log.debug("FoundTimeUtc=" + ot2.getFoundTimeUtc());
+//          log.debug("subDay=" + subDay);
+//          log.debug("Idnum=" + obj.getIdnum() + "Mpid=" + obj.getMpid() + "lat=" + obj.getLat() + "lon=" + obj.getLon() + "vmag=" + obj.getVmag());
+//          log.debug("dis=" + tDis);
+//          if (tDis < minDis) {
+//            log.debug("ot2checkotname=" + ot2.getName() + " success #######################");
+//          }
+//          log.debug("end*******************************");
+//        }
         if (tDis < minDis) {
           rst.put(obj, tDis);
         }
@@ -611,6 +620,18 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       }
     }
     return rst;
+  }
+
+  public boolean filtOT2InCcdPixel(OtLevel2 ot2) {
+
+    boolean flag = false;
+    short otTypeId = cpfDao.filterOT2(ot2);
+    if (otTypeId != 0) {
+      ot2.setOtType(otTypeId);
+      ot2Dao.updateOTType(ot2);
+      flag = true;
+    }
+    return flag;
   }
 
   public List<String> getUsnoTableNames(OtLevel2 ot2, float searchBox) {
@@ -911,6 +932,13 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    */
   public void setUsnoMag2(float usnoMag2) {
     this.usnoMag2 = usnoMag2;
+  }
+
+  /**
+   * @param cpfDao the cpfDao to set
+   */
+  public void setCpfDao(CcdPixFilterDao cpfDao) {
+    this.cpfDao = cpfDao;
   }
 
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  
+  
+  <bean class="com.gwac.action.CcdPixelFilterDelete" scope="prototype">
+    <property name="cpfDao" ref="cpfDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.CcdPixelFilterList" scope="prototype">
+    <property name="cpfDao" ref="cpfDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.CcdPixelFilterAdd" scope="prototype">
+    <property name="cpfDao" ref="cpfDao" />
+  </bean>
+
+  <bean id="cpfDao" class="com.gwac.dao.CcdPixFilterDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.CcdPixFilter</value>
+    </property>
+  </bean>
+ 
+</beans>

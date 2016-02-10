@@ -25,6 +25,7 @@
   <import resource="com/gwac/bean/ImageStatusParameter.xml"/>
   <import resource="com/gwac/bean/Activemq_OT.xml"/>
   <import resource="com/gwac/bean/OtFollowUp.xml"/>
+  <import resource="com/gwac/bean/OtFilter.xml"/>
   
  
 </beans>

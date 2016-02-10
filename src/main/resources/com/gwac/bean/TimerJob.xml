@@ -68,6 +68,7 @@
     <property name="ispDao" ref="ispDao" />
     <property name="dpmDao" ref="dpmDao" />
     <property name="ufuDao" ref="ufuDao" />
+    <property name="cpfDao" ref="cpfDao" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />
   </bean>

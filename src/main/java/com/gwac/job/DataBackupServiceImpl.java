@@ -4,6 +4,7 @@
  */
 package com.gwac.job;
 
+import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.ConfigFileDao;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
@@ -34,6 +35,7 @@ public class DataBackupServiceImpl implements DataBackupService {
   private ImageStatusParameterDao ispDao;
   private DataProcessMachineDAO dpmDao;
   private UploadFileUnstoreDao ufuDao;
+  private CcdPixFilterDao cpfDao;
 
   @Override
   public void startJob() {
@@ -59,6 +61,7 @@ public class DataBackupServiceImpl implements DataBackupService {
       ispDao.moveDataToHisTable();
       dpmDao.everyDayInit();
       ufuDao.removeAll();
+      cpfDao.removeAll();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -145,6 +148,13 @@ public class DataBackupServiceImpl implements DataBackupService {
    */
   public void setUfuDao(UploadFileUnstoreDao ufuDao) {
     this.ufuDao = ufuDao;
+  }
+
+  /**
+   * @param cpfDao the cpfDao to set
+   */
+  public void setCpfDao(CcdPixFilterDao cpfDao) {
+    this.cpfDao = cpfDao;
   }
 
 }
