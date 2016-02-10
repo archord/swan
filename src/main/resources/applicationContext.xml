@@ -18,14 +18,14 @@
   <import resource="com/gwac/bean/OtType.xml"/>
   <import resource="com/gwac/bean/SyncFile.xml"/>
   <import resource="com/gwac/bean/Telescope.xml"/>
-  <import resource="com/gwac/bean/TimerJob.xml"/>
-  <import resource="com/gwac/bean/TimerTaskBean.xml"/>
   <import resource="com/gwac/bean/UploadFile.xml"/>
   <import resource="com/gwac/bean/UserInfoBean.xml"/>
   <import resource="com/gwac/bean/ImageStatusParameter.xml"/>
-  <import resource="com/gwac/bean/Activemq_OT.xml"/>
   <import resource="com/gwac/bean/OtFollowUp.xml"/>
   <import resource="com/gwac/bean/OtFilter.xml"/>
+<!--  <import resource="com/gwac/bean/TimerJob.xml"/>
+  <import resource="com/gwac/bean/TimerTaskBean.xml"/>
+  <import resource="com/gwac/bean/Activemq_OT.xml"/>-->
   
  
 </beans>
