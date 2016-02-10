@@ -34,7 +34,8 @@ public class FollowUpCatalog {
 
   //OT第N次的后随编号
   public int getFuSerialNumber() {
-    return Integer.parseInt(ffName.substring(26,31));
+    int index = ffName.indexOf(".fit");
+    return Integer.parseInt(ffName.substring(index-5, index));
   }
 
   @Override

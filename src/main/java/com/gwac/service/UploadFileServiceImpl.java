@@ -734,7 +734,7 @@ public class UploadFileServiceImpl implements UploadFileService {
                 FileUtils.moveFile(tfile1, tfile2);
                 fileNum++;
                 obj.setUploadSuccess(Boolean.TRUE);
-                if (tStr.indexOf(".jpg") > 0) {
+                if (tStr.indexOf(".jpg") > 0 || tStr.indexOf(".png") > 0) {
                   ffcDao.uploadSuccessCutByName(tStr.substring(0, tStr.indexOf('.')));
                 }
               } else {

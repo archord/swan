@@ -527,6 +527,13 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   }
 
   @Override
+  public void updateOTType(OtLevel2 ot2) {
+    String sql = "update ot_level2 set ot_type=" + ot2.getOtType()+ " where ot_id=" + ot2.getOtId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
   public void updateOt2HisMatch(OtLevel2 ot2) {
     String sql = "update ot_level2 set ot2_his_match=" + ot2.getOt2HisMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();

@@ -127,12 +127,13 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
 //          log.info("add number " + j);
           String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), j);
           FitsFile tff = ffDao.getByName(ffName);
-          if (tff == null) {
-            log.warn("add missed cut fits file, can't find orig fits file " + ffName);
-            continue;
-          }
           FitsFileCut ffc = new FitsFileCut();
-          ffc.setFfId(tff.getFfId());
+          if (tff == null) {
+            log.warn("can't find orig fits file " + ffName);
+            ffc.setFfId((long)0);
+          } else {
+            ffc.setFfId(tff.getFfId());
+          }
           ffc.setStorePath(curFFC.getStorePath());
           ffc.setFileName(String.format("%s_%04d", otlv2.getName(), j));
           ffc.setOtId(otlv2.getOtId());

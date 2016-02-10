@@ -62,6 +62,8 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public void updateMinorPlanetMatch(OtLevel2 ot2);
 
   public void updateOt2HisMatch(OtLevel2 ot2);
+  
+  public void updateOTType(OtLevel2 ot2);
 
   public void updateOtherMatch(OtLevel2 ot2);
 

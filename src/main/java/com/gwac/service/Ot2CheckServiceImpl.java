@@ -232,6 +232,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
     long startTime = System.nanoTime();
     Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
+    Boolean hisType = false;
     for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
       OtLevel2 tot2 = (OtLevel2) entry.getKey();
       Double distance = (Double) entry.getValue();
@@ -247,6 +248,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2m.setDistance(distance.floatValue());
       ot2mDao.save(ot2m);
       flag = true;
+
+      if (!hisType && ((tot2.getOtType() >= 8 && tot2.getOtType() <= 11) || tot2.getOtType() == 15)) {
+        ot2.setOtType(tot2.getOtType());
+        ot2Dao.updateOTType(ot2);
+        hisType = true;
+      }
     }
     if (tOT2Hism.size() > 0) {
       ot2.setOt2HisMatch((short) tOT2Hism.size());
