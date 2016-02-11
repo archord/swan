@@ -2,29 +2,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-    <property name="brokerURL">
-      <value>failover:(tcp://127.0.0.1:61616)</value>
-    </property>
-  </bean> 
 
-  <bean id="pooledJmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
-    <property name="connectionFactory">
-      <ref local="jmsFactory"/>
-    </property>
-  </bean>
-    
-  <!-- Spring JMS Template -->
-  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-    <property name="connectionFactory">
-      <ref local="pooledJmsFactory"/>
-    </property>
-  </bean>  
    
   <!--ot check dest, listener, consumer--> 
-  <bean id="otCheckDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
-    <constructor-arg value="OT_CHECK_LIST" />
-  </bean>
   <bean id="otCheckListener" class="com.gwac.activemq.OTCheckListener">
     <property name="ot2CheckService" ref="ot2CheckService" />
   </bean>
@@ -36,9 +16,6 @@
   <!--ot check dest, listener, consumer--> 
     
   <!--ot list dest, listener, consumer--> 
-  <bean id="otlistDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
-    <constructor-arg value="OT_LIST" />
-  </bean>
   <bean id="otListListener" class="com.gwac.activemq.OTListListener">
     <property name="otObserveRecordService" ref="otObserveRecordService" />
     <property name="otVarObserveRecordService" ref="otVarObserveRecordService" />
@@ -52,9 +29,6 @@
   <!--ot list dest, listener, consumer--> 
 
   <!--ot follow dest, listener, consumer--> 
-  <bean id="otFollowDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
-    <constructor-arg value="OT_FOLLOW_LIST" />
-  </bean>
   <bean id="otFollowListener" class="com.gwac.activemq.OTFollowListener">
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />

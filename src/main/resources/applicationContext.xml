@@ -8,24 +8,16 @@
   <!---->
   <import resource="DataSource.xml"/>
   <import resource="HibernateSessionFactory.xml"/>
-  <import resource="com/gwac/bean/ConfigFile.xml"/>
-  <import resource="com/gwac/bean/DataProcessMachineBean.xml"/>
-  <import resource="com/gwac/bean/FitsFileCutBean.xml"/>
-  <import resource="com/gwac/bean/MysqlQuery.xml"/>
-  <import resource="com/gwac/bean/OtBean.xml"/>
-  <import resource="com/gwac/bean/OtLevel2Match.xml"/>
-  <import resource="com/gwac/bean/OtObserveRecordBean.xml"/>
-  <import resource="com/gwac/bean/OtType.xml"/>
-  <import resource="com/gwac/bean/SyncFile.xml"/>
-  <import resource="com/gwac/bean/Telescope.xml"/>
-  <import resource="com/gwac/bean/UploadFile.xml"/>
-  <import resource="com/gwac/bean/UserInfoBean.xml"/>
-  <import resource="com/gwac/bean/ImageStatusParameter.xml"/>
-  <import resource="com/gwac/bean/OtFollowUp.xml"/>
-  <import resource="com/gwac/bean/OtFilter.xml"/>
-<!--  <import resource="com/gwac/bean/TimerJob.xml"/>
-  <import resource="com/gwac/bean/TimerTaskBean.xml"/>
-  <import resource="com/gwac/bean/Activemq_OT.xml"/>-->
   
- 
+  <import resource="com/gwac/bean/MysqlQuery.xml"/>
+  
+  <import resource="com/gwac/bean/GwacDao.xml"/>
+  <import resource="com/gwac/bean/GwacService.xml"/>
+  <import resource="com/gwac/bean/GwacAction.xml"/>
+  
+  <import resource="com/gwac/bean/ActivemqDestination.xml"/>
+  <import resource="com/gwac/bean/ActivemqConsumer.xml"/>
+  <import resource="com/gwac/bean/TimerJob.xml"/>
+  <import resource="com/gwac/bean/TimerTaskBean.xml"/>
+  
 </beans>

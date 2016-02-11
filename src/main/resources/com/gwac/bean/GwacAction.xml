@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean class="com.gwac.action.DpmIsAlive" scope="prototype">
+    <property name="dpmDao" ref="dpmDao" />	
+  </bean>
+
+  <bean class="com.gwac.action.GetDpmMonitorImageTime" scope="prototype">
+    <property name="dpmDao" ref="dpmDao" />	
+  </bean>
+  
+  <bean class="com.gwac.action.GetCutImageRefList"  scope="prototype">
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetCutImageList"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
+  </bean>
+  
+  <bean class="com.gwac.action.ShowFitsList"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="obDao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+  </bean>
+  
+  
+  <bean class="com.gwac.action.OTLookBack"  scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.OT2InfoDownload"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="ot2Dao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="otorDao" ref="otORDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtDetail"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="obDao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="otorDao" ref="otORDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtDetailJson"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="obDao" ref="otbDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="otorDao" ref="otORDao" />
+    <property name="ottDao" ref="ottDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtLevel2List2"  scope="prototype">
+    <property name="obDao" ref="otbDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtLevel2List"  scope="prototype">
+    <property name="obDao" ref="otbDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtXYList"  scope="prototype">
+    <property name="otDao" ref="otbDao" />
+    <property name="oorDao" ref="otORDao" />
+    <property name="dpmDao" ref="dpmDao" />	
+    <property name="dataDisk" value="${gwac.data.disk}" />	
+  </bean>
+  
+  <bean class="com.gwac.action.CcdPixelFilterDelete" scope="prototype">
+    <property name="cpfDao" ref="cpfDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.CcdPixelFilterList" scope="prototype">
+    <property name="cpfDao" ref="cpfDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.CcdPixelFilterAdd" scope="prototype">
+    <property name="cpfDao" ref="cpfDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.ShowFollowupFitsList" scope="prototype">
+    <property name="obDao" ref="otbDao" />	
+    <property name="fufDao" ref="fufDao" />
+    <property name="furDao" ref="frDao" />
+    <property name="fuotDao" ref="fuotDao" />
+    <property name="fuoDao" ref="fuoDao" />
+  </bean>
+
+  <bean class="com.gwac.action.GetOtFollowupObjectMagAndPosition" scope="prototype">
+    <property name="obDao" ref="otbDao" />	
+    <property name="fuoDao" ref="fuoDao" />
+    <property name="furDao" ref="frDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtFollowupObjectList" scope="prototype">
+    <property name="obDao" ref="otbDao" />	
+    <property name="fuoDao" ref="fuoDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.OTFollowUpload"  scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />	
+    <property name="ufuDao" ref="ufuDao" />	
+    <property name="ufrDao" ref="ufrDao" />
+    <property name="fufDao" ref="fufDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.OTFollowUp" scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />	
+    <property name="foDao" ref="foDao" />	
+    <property name="userDao" ref="userDAO" />	
+    <property name="jmsTemplate" ref="jmsTemplate" />
+    <property name="otFollowDest" ref="otFollowDest" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtMatchList"  scope="prototype">
+    <property name="otmDao" ref="ot2mDao" />
+  </bean>
+    
+  <bean class="com.gwac.action.GetOt1TimeSequence" scope="prototype">
+    <property name="oorDao" ref="otORDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.OtObserveRecordAction" scope="prototype">
+    <property name="otorDao" ref="otORDao" />
+    <property name="obDao" ref="otbDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetOtTypeJson"  scope="prototype">
+    <property name="ottDao" ref="ottDao" />
+  </bean>
+
+  <bean class="com.gwac.action.OTClassify"  scope="prototype">
+    <property name="ot2Dao" ref="otbDao" />
+  </bean>
+  
+   
+  <bean class="com.gwac.action.MultipleFileUploadAction"  scope="prototype">
+    <property name="ufService" ref="ufService" />	
+    <property name="cfDao" ref="cfDao" />	
+  </bean>
+
+  <bean class="com.gwac.action.GwacFileReceive" scope="prototype">
+    <property name="dpmDao" ref="dpmDao" />	
+    <property name="sfDao" ref="sfDao" />	
+  </bean>
+  
+  <bean class="com.gwac.action.GetUploadFileUnstoreList"  scope="prototype">
+    <property name="ufuDao" ref="ufuDao" />	
+  </bean>
+  
+  <bean class="com.gwac.action.GetUploadFileRecordList"  scope="prototype">
+    <property name="ufrDao" ref="ufrDao" />	
+  </bean>
+  
+  <bean class="com.gwac.action.Login"  scope="prototype">
+    <property name="userDao" ref="userDAO" />
+  </bean>
+  
+  <bean class="com.gwac.action.Logout"  scope="prototype">
+  </bean>
+  
+  <bean id="userRegister" class="com.gwac.action.UserRegister" scope="prototype">
+    <property name="userService" ref="userService" />	
+  </bean>
+  
+  <bean id="userList" class="com.gwac.action.UserList" scope="prototype">
+    <property name="userService" ref="userService" />	
+  </bean>
+  
+</beans>
