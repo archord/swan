@@ -9,7 +9,9 @@
   <import resource="DataSource.xml"/>
   <import resource="HibernateSessionFactory.xml"/>
   
-  <import resource="com/gwac/bean/MysqlQuery.xml"/>
+<!--  <import resource="DataSource-mysql.xml"/>
+  <import resource="HibernateSessionFactory-mysql.xml"/>
+  <import resource="com/gwac/bean/MysqlQuery.xml"/>-->
   
   <import resource="com/gwac/bean/GwacDao.xml"/>
   <import resource="com/gwac/bean/GwacService.xml"/>

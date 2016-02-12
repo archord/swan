@@ -22,18 +22,4 @@
     <property name="password" value="${jdbc.password}" />
   </bean>
  
-  <bean id="dataSourceMsql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="${msyql.jdbc.driverClassName}" />
-    <property name="url" value="${msyql.jdbc.url}" />
-    <property name="username" value="${msyql.jdbc.username}" />
-    <property name="password" value="${msyql.jdbc.password}" />
-  </bean>
- 
-  <bean id="dataSourceMsqlUsno" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="${msyql.jdbc.driverClassName}" />
-    <property name="url" value="${msyql.jdbc.url.usno}" />
-    <property name="username" value="${msyql.jdbc.username}" />
-    <property name="password" value="${msyql.jdbc.password}" />
-  </bean>
- 
 </beans>

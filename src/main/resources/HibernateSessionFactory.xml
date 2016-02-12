@@ -28,43 +28,7 @@
       </props>
     </property>
   </bean>
-  
-  <bean id="sessionFactoryMysql" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSourceMsql"/>
-    <property name="packagesToScan">
-      <list>
-        <value>com.gwac.model2</value>
-      </list>
-    </property>
-    <!--property name="namingStrategy" ref="namingStrategy"/-->
-    <property name="hibernateProperties">
-      <props>
-        <prop key="hibernate.dialect">${hibernate.msyql.dialect}</prop>
-        <!--create-drop update-->
-        <!--prop key="hibernate.hbm2ddl.auto">update</prop-->
-        <prop key="hibernate.show_sql">false</prop>
-      </props>
-    </property>
-  </bean>
-  
-  <bean id="sessionFactoryMysqlUson" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSourceMsqlUsno"/>
-    <property name="packagesToScan">
-      <list>
-        <value>com.gwac.model3</value>
-      </list>
-    </property>
-    <!--property name="namingStrategy" ref="namingStrategy"/-->
-    <property name="hibernateProperties">
-      <props>
-        <prop key="hibernate.dialect">${hibernate.msyql.dialect}</prop>
-        <!--create-drop update-->
-        <!--prop key="hibernate.hbm2ddl.auto">update</prop-->
-        <prop key="hibernate.show_sql">false</prop>
-      </props>
-    </property>
-  </bean>
-  
+    
   <!--bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy"/-->
   
   <!-- Declare a transaction manager-->
@@ -73,17 +37,5 @@
   </bean>
   
   <tx:annotation-driven transaction-manager="transactionManager" />
-  
-  <bean id="transactionManager2" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-    <property name="sessionFactory" ref="sessionFactoryMysql" />
-  </bean>
-  
-  <tx:annotation-driven transaction-manager="transactionManager2" />
-  
-  <bean id="transactionManager3" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-    <property name="sessionFactory" ref="sessionFactoryMysqlUson" />
-  </bean>
-  
-  <tx:annotation-driven transaction-manager="transactionManager3" />
-  
+   
 </beans>
