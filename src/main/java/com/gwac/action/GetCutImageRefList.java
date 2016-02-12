@@ -59,9 +59,10 @@ public class GetCutImageRefList extends ActionSupport {
     echo = "";
 
     //必须设置传输机器名称
-    if (null == dpmName) {
+    if (null == dpmName || dpmName.isEmpty()) {
       echo = echo + "Must set machine name(dpmName).\n";
       flag = false;
+      log.warn("dpm name is empty!");
     }
 
     if (flag) {
@@ -110,7 +111,7 @@ public class GetCutImageRefList extends ActionSupport {
     }
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
-    ctx.getSession().put("fileName", rootWebDir+"/tmp/" + fileName);
+    ctx.getSession().put("fileName", rootWebDir + "/tmp/" + fileName);
     return result;
   }
 

@@ -33,20 +33,6 @@
     </property>
   </bean>
   
-  <bean id="psDao" class="com.gwac.dao.ProcessStatusDaoImpl" >
-    <property name="sessionFactory" ref="sessionFactory" />
-    <property name="clazz">
-      <value>com.gwac.model.ProcessStatus</value>
-    </property>
-  </bean>
-	
-  <bean id="ispDao" class="com.gwac.dao.ImageStatusParameterDaoImpl" >
-    <property name="sessionFactory" ref="sessionFactory" />
-    <property name="clazz">
-      <value>com.gwac.model.ImageStatusParameter</value>
-    </property>
-  </bean>
-  
   <bean id="otbDao" class="com.gwac.dao.OtLevel2DaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">
