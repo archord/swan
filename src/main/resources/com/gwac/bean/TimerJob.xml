@@ -9,6 +9,17 @@
     <property name="otVarObserveRecordService" ref="otVarObserveRecordService" />
   </bean>-->
   
+  <bean id="imageStatusParmService" class="com.gwac.job.ImageStatusParmServiceImpl" >
+    <property name="ufuDao" ref="ufuDao" />
+    <property name="ffDao" ref="ffDao" />
+    <property name="psDao" ref="psDao" />
+    <property name="ispDao" ref="ispDao" />
+    <property name="dpmDao" ref="dpmDao" />
+    <property name="rootPath" value="${gwac.data.root.directory}" />	
+    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+    <property name="isTestServer" value="${gwac.server.test}" />
+  </bean>
+  
   <bean id="foService" class="com.gwac.job.FollowUpObservationServiceImpl">
     <property name="ufuDao" ref="ufuDao" />
     <property name="foDao" ref="foDao" />

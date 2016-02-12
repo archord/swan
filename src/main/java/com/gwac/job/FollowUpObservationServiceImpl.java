@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class FollowUpObservationServiceImpl implements ImageStatusParmService {
+public class FollowUpObservationServiceImpl implements FollowUpObservationService {
 
   private static final Log log = LogFactory.getLog(FollowUpObservationServiceImpl.class);
 

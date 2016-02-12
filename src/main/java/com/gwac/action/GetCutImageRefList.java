@@ -62,7 +62,6 @@ public class GetCutImageRefList extends ActionSupport {
     if (null == dpmName || dpmName.isEmpty()) {
       echo = echo + "Must set machine name(dpmName).\n";
       flag = false;
-      log.warn("dpm name is empty!");
     }
 
     if (flag) {
