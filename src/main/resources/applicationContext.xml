@@ -16,8 +16,8 @@
   <import resource="com/gwac/bean/GwacAction.xml"/>
   
   <import resource="com/gwac/bean/ActivemqDestination.xml"/>
-  <import resource="com/gwac/bean/ActivemqConsumer.xml"/>
+<!--  <import resource="com/gwac/bean/ActivemqConsumer.xml"/>
   <import resource="com/gwac/bean/TimerJob.xml"/>
-  <import resource="com/gwac/bean/TimerTaskBean.xml"/>
+  <import resource="com/gwac/bean/TimerTaskBean.xml"/>-->
   
 </beans>
