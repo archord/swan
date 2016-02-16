@@ -528,11 +528,11 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   @Override
   public void updateOTType(OtLevel2 ot2) {
-    String sql = "update ot_level2 set ot_type=" + ot2.getOtType()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set ot_type=" + ot2.getOtType() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
-  
+
   @Override
   public void updateOt2HisMatch(OtLevel2 ot2) {
     String sql = "update ot_level2 set ot2_his_match=" + ot2.getOt2HisMatch() + " where ot_id=" + ot2.getOtId();
@@ -609,5 +609,16 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "update ot_level2 set fo_count=" + ot2.getFoCount() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
+  }
+
+  public List<Long> getAllMinorPlanetId() {
+    Session session = getCurrentSession();
+    String sql = "select distinct ot2m.match_id "
+            + "from ot_level2 ot2 "
+            + "inner join ot_level2_match  ot2m on ot2m.ot_id=ot2.ot_id and mt_id=5 "
+            + "where ot2.minor_planet_match=1 and ot2.data_produce_method='1' "
+            + "order by ot2m.match_id asc;";
+    Query q = session.createSQLQuery(sql);
+    return q.list();
   }
 }
