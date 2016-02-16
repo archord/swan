@@ -128,3 +128,9 @@ SELECT ot2.name ot_name, ffc.file_name
 FROM fits_file_cut ffc
 INNER JOIN ot_level2 ot2 ON ot2.ot_id=ffc.ot_id AND ot2.ot_type=17
 ORDER BY ot2.name, ffc.file_name;
+
+#找出某一天的所有星表匹配生成的ot1
+SELECT dpm_id, date_ut, x, y, x_temp, y_temp, ra_d, dec_d, mag_aper
+from ot_observe_record_his
+where ot_id=0 and date_str='160206' and data_produce_method=‘1’
+ORDER BY dpm_id, sky_id, date_ut;
