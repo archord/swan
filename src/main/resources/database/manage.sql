@@ -28,8 +28,8 @@ delete from fits_file_cut;
 delete from ot_observe_record;
 delete from ot_level2;
 delete from var_star_record;
-delete from image_status_parameter;
 update data_process_machine set first_record_number=0, cur_process_number=0;
+delete from image_status_parameter;
 ##删除时注意
 delete from upload_file_unstore;
 delete from upload_file_record;
