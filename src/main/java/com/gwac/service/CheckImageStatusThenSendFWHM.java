@@ -28,9 +28,9 @@ public class CheckImageStatusThenSendFWHM {
 
     public void chechStatus() {
         Boolean s1 = isp.getXrms() < 0.13 && isp.getYrms() < 0.13 && isp.getAvgEllipticity() > 0
-                && isp.getAvgEllipticity() < 026 && isp.getObjNum() > 5000 && isp.getBgBright() < 10000
-                && isp.getS2n() < 0.5 && isp.getAvgLimit() > 12;
-        Boolean s2 = (isp.getXshift() + 99) < 0.00001 && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 026
+                && isp.getAvgEllipticity() < 0.26 && isp.getObjNum() > 5000 && isp.getBgBright() < 10000
+                && isp.getS2n() < 0.5 && isp.getAvgLimit() > 11;
+        Boolean s2 = (isp.getXshift() + 99) < 0.00001 && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
                 && isp.getObjNum() > 5000 && isp.getBgBright() < 10000;
         if (s1 || s2) {
             int dpmId = isp.getDpmId();
