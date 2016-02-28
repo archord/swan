@@ -134,3 +134,13 @@ SELECT dpm_id, date_ut, x, y, x_temp, y_temp, ra_d, dec_d, mag_aper
 from ot_observe_record_his
 where ot_id=0 and date_str='160206' and data_produce_method=‘1’
 ORDER BY dpm_id, sky_id, date_ut;
+
+#将OT2中所有星表匹配的OT2未匹配成功的设置成未匹配，让程序重新匹配。
+update ot_level2 set is_match=0 where is_match=1 and data_produce_method='1';
+
+#按日期统计图像相减RC3的个数
+select date_str, count(*) number
+from ot_level2_his
+where date_str>'160101' and data_produce_method='8' and rc3_match>0
+group by date_str
+order by number desc;

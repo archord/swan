@@ -123,6 +123,8 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (ParseException ex) {
                 log.error("parse image status file: " + ufu.getFileName()
                         + ", error imageTime: " + dateObsUT.trim() + " " + timeObsUT.trim(), ex);
+              } catch (Exception e) {
+                log.error("unknow error: ", e);
               }
             }
 
@@ -153,6 +155,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setObjNum(-99);
                 log.warn("Obj_Num=" + tStr, e);
+              } catch (Exception e) {
+                isp.setObjNum(-99);
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("bgbright");
@@ -161,6 +166,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setBgBright(new Float(-99));
                 log.warn("bgbright=" + tStr, e);
+              } catch (Exception e) {
+                isp.setBgBright(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("Fwhm");
@@ -169,6 +177,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setFwhm(new Float(-99));
                 log.warn("Fwhm=" + tStr, e);
+              } catch (Exception e) {
+                isp.setFwhm(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("AverDeltaMag");
@@ -177,6 +188,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setS2n(new Float(-99));
                 log.warn("AverDeltaMag=" + tStr, e);
+              } catch (Exception e) {
+                isp.setS2n(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("AverLimit");
@@ -185,6 +199,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setAvgLimit(new Float(-99));
                 log.warn("AverLimit=" + tStr, e);
+              } catch (Exception e) {
+                isp.setAvgLimit(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("Extinc");
@@ -193,48 +210,75 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setExtinc(new Float(-99));
                 log.warn("Extinc=" + tStr, e);
+              } catch (Exception e) {
+                isp.setExtinc(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
+
               tStr = cfile.getProperty("xshift");
               try {
                 isp.setXshift(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setXshift(new Float(-99));
                 log.warn("xshift=" + tStr, e);
+              } catch (Exception e) {
+                isp.setXshift(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
+
               tStr = cfile.getProperty("yshift");
               try {
                 isp.setYshift(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setYshift(new Float(-99));
                 log.warn("yshift=" + tStr, e);
+              } catch (Exception e) {
+                isp.setYshift(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
+
               tStr = cfile.getProperty("xrms");
               try {
                 isp.setXrms(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setXrms(new Float(-99));
                 log.warn("xrms=" + tStr, e);
+              } catch (Exception e) {
+                isp.setXrms(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
+
               tStr = cfile.getProperty("yrms");
               try {
                 isp.setYrms(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setYrms(new Float(-99));
                 log.warn("yrms=" + tStr, e);
+              } catch (Exception e) {
+                isp.setYrms(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
+
               tStr = cfile.getProperty("OC1");
               try {
                 isp.setOt1Num(Integer.parseInt(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setOt1Num(-99);
                 log.warn("OC1=" + tStr, e);
+              } catch (Exception e) {
+                isp.setOt1Num(-99);
+                log.error("unknow error: " + tStr, e);
               }
+
               tStr = cfile.getProperty("VC1");
               try {
                 isp.setVar1Num(Integer.parseInt(tStr));
               } catch (NumberFormatException e) {
                 isp.setVar1Num(-99);
                 log.warn("VC1=" + tStr, e);
+              } catch (Exception e) {
+                isp.setVar1Num(-99);
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr2 = cfile.getProperty("DirData");
@@ -250,6 +294,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setMountRa(CommonFunction.dmsToDegree(tStr));
                 log.warn("ra_mount=" + tStr, e);
+              } catch (Exception e) {
+                isp.setMountRa(CommonFunction.dmsToDegree(tStr));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("dec_mount");
@@ -258,6 +305,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setMountDec(CommonFunction.dmsToDegree(tStr));
                 log.warn("dec_mount=" + tStr, e);
+              } catch (Exception e) {
+                isp.setMountDec(CommonFunction.dmsToDegree(tStr));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("State");
@@ -274,6 +324,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setProcTime(new Float(-99));
                 log.warn("TimeProcess=" + tStr, e);
+              } catch (Exception e) {
+                isp.setProcTime(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("ellipticity");
@@ -282,6 +335,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setAvgEllipticity(new Float(-99));
                 log.warn("ellipticity=" + tStr, e);
+              } catch (Exception e) {
+                isp.setAvgEllipticity(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("tempset");
@@ -290,6 +346,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setTemperatureSet(new Float(-99));
                 log.warn("tempset=" + tStr, e);
+              } catch (Exception e) {
+                isp.setTemperatureSet(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("tempact");
@@ -298,6 +357,9 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setTemperatureActual(new Float(-99));
                 log.warn("tempact=" + tStr, e);
+              } catch (Exception e) {
+                isp.setTemperatureActual(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("exptime");
@@ -306,22 +368,31 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               } catch (NumberFormatException e) {
                 isp.setExposureTime(new Float(-99));
                 log.warn("exptime=" + tStr, e);
+              } catch (Exception e) {
+                isp.setExposureTime(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
-              tStr = cfile.getProperty("ra_imgCenter");
+              tStr = cfile.getProperty("CC_RA");
               try {
                 isp.setImgCenterRa(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setImgCenterRa(new Float(-99));
                 log.warn("ra_imgCenter=" + tStr, e);
+              } catch (Exception e) {
+                isp.setImgCenterRa(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
-              tStr = cfile.getProperty("dec_imgCenter");
+              tStr = cfile.getProperty("CC_DEC");
               try {
                 isp.setImgCenterDec(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setImgCenterDec(new Float(-99));
                 log.warn("dec_imgCenter=" + tStr, e);
+              } catch (Exception e) {
+                isp.setImgCenterDec(new Float(-99));
+                log.error("unknow error: " + tStr, e);
               }
 
               tStr = cfile.getProperty("TimeProcessEnd");
@@ -330,6 +401,8 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
                   isp.setProcEndTime(df2.parse(tStr));
                 } catch (ParseException ex) {
                   log.error("parse image status file: " + ufu.getFileName() + ", error procEndTiime: " + tStr, ex);
+                } catch (Exception e) {
+                  log.error("unknow error: " + tStr, e);
                 }
               }
               isp.setSendSuccess(false);
