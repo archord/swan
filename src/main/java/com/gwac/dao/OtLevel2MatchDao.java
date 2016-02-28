@@ -16,5 +16,5 @@ import java.util.List;
  */
 public interface OtLevel2MatchDao extends BaseHibernateDao<OtLevel2Match> {
   public OtLevel2Match getByOt2Id(long ot2Id);
-  public List<OtLevel2MatchShow> getByOt2Name(String otName);
+  public List<OtLevel2MatchShow> getByOt2Name(String otName, Boolean queryHis);
 }
