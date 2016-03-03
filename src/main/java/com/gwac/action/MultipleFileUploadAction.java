@@ -63,6 +63,9 @@ public class MultipleFileUploadAction extends ActionSupport {
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() {
 
+    long startTime = System.nanoTime();
+    long startTime2 = 0, endTime2 = 0;
+
     boolean flag = true;
     String result = SUCCESS;
     echo = "";
@@ -107,7 +110,7 @@ public class MultipleFileUploadAction extends ActionSupport {
       currentDirectory = currentDirectory.trim();
       configFileFileName = configFileFileName.trim();
       if (dpmName.isEmpty() || currentDirectory.isEmpty() || configFileFileName.isEmpty()) {
-        setEcho(echo + "Error, parameter error: "+"dpmName=" + dpmName + ",currentDirectory=" + currentDirectory + ",configFile=" + configFileFileName+"\n");
+        setEcho(echo + "Error, parameter error: " + "dpmName=" + dpmName + ",currentDirectory=" + currentDirectory + ",configFile=" + configFileFileName + "\n");
         log.error(echo);
         return ERROR;
       }
@@ -197,6 +200,7 @@ public class MultipleFileUploadAction extends ActionSupport {
           FileUtils.moveFile(file, destFile);
         }
 
+        startTime2 = System.nanoTime();
         ufService.setConfigPath(confPath);
         ufService.setConfigFile(configFileFileName);
 //        ufService.setRootDir(rootPath);
@@ -209,6 +213,7 @@ public class MultipleFileUploadAction extends ActionSupport {
 
         int shouldFNum = ufService.parseConfigFile();
         int validFNum = ufService.checkAndMoveDataFile(destPath);
+        endTime2 = System.nanoTime();
         if (validFNum != i || validFNum != shouldFNum) {
           setEcho(echo + "Warn: should upload " + shouldFNum + " files, actual upload " + i
                   + " files, " + validFNum + " valid files.\n");
@@ -230,6 +235,13 @@ public class MultipleFileUploadAction extends ActionSupport {
      */
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
+
+    long endTime = System.nanoTime();
+    double time1 = 1.0 * (endTime - startTime) / 1e9;
+    double time2 = 1.0 * (endTime2 - startTime2) / 1e9;
+    log.debug("dpmName=" + dpmName + ",currentDirectory=" + currentDirectory + ",configFile=" + configFileFileName
+            + ", total time: " + time1 + "s, "
+            + ", upload time: " + time2 + "s.");
 
     return result;
   }
