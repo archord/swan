@@ -28,6 +28,8 @@ public class OTListListener implements MessageListener {
       String storePath = map.getString("storePath");
       String fileName = map.getString("fileName");
       log.debug("receive message, fileType=" + fileType + ",  file=otlist " + storePath + "/" + fileName);
+      
+      long startTime = System.nanoTime();
       if (fileType == '1') {
         otObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else if (fileType == '6') {
@@ -37,6 +39,10 @@ public class OTListListener implements MessageListener {
       } else {
         log.error("wrong fileType");
       }
+      
+      long endTime = System.nanoTime();
+      log.debug("process file "+fileName+" consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+      
     } catch (JMSException e) {
       log.error(e);
     }
