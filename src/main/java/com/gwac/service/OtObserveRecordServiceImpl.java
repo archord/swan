@@ -184,6 +184,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
             int otNumber = otnDao.getNumberByDate(fileDate);
             String otName = String.format("%s%s_C%05d", ccdType, fileDate, otNumber);
+            log.debug("generate new ot :" + otName + ", from file: " + fileName);
 
             OtLevel2 tOtLv2 = new OtLevel2();
             tOtLv2.setName(otName);
