@@ -44,6 +44,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql += "(ra > " + sbs.getMinRa() + " or ra <" + sbs.getMaxRa() + ") and ";
         sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
       }
+      
+      sql += " order by ot_id asc";
 
       Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
       return q.list();

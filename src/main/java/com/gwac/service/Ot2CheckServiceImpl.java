@@ -256,6 +256,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2Dao.updateOTType(ot2);
         hisType = true;
       }
+      break; //临时解决方案，只插入最老的一条记录
     }
     if (tOT2Hism.size() > 0) {
       ot2.setOt2HisMatch((short) tOT2Hism.size());

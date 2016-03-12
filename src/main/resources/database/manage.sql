@@ -144,3 +144,9 @@ from ot_level2_his
 where date_str>'160101' and data_produce_method='8' and rc3_match>0
 group by date_str
 order by number desc;
+
+#统计ot1文件处理的时间
+select upload_date, process_done_time-send_time cm 
+from upload_file_unstore 
+where file_type='1' and process_done_time is not null and send_time is not null 
+order by cm desc limit 10;
