@@ -150,3 +150,7 @@ select upload_date, process_done_time-send_time cm
 from upload_file_unstore 
 where file_type='1' and process_done_time is not null and send_time is not null 
 order by cm desc limit 10;
+
+select avg(process_done_time-send_time) 
+from upload_file_unstore 
+where file_type='1' and process_done_time is not null and send_time is not null;
