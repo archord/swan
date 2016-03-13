@@ -8,7 +8,7 @@
     <property name="ignoreUnresolvablePlaceholders" value="true"/>
     <property name="locations">
       <list>
-        <value>classpath:database-postgres-master.properties</value>
+        <value>classpath:database-postgres-test.properties</value>
         <value>classpath:database-mysql-ot2search.properties</value>
         <value>classpath:systemconfig.properties</value>
       </list>
