@@ -182,7 +182,7 @@ $(function() {
         text: item
       }));
     });
-    $("#filter").val('Lum');
+    $("#filter").val('R');
     $("#filter").change();
   }
   
@@ -195,7 +195,7 @@ $(function() {
         text: item
       }));
     });
-    $("#filter").val('null');
+    $("#filter").val('R');
     $("#filter").change();
   }
 
