@@ -476,28 +476,28 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
     if (ps != null && !StringUtils.equalsIgnoreCase(ps.getPsName(), "TempMaking")
             && !StringUtils.equalsIgnoreCase(ps.getPsName(), "BadComImage")) {
 
-      ImageStatusParameter previoueIsp = ispDao.getPreviousStatus(isp);
-      if (previoueIsp != null && previoueIsp.getXshift() != null && previoueIsp.getYshift() != null
-              && isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
+//      ImageStatusParameter previoueIsp = ispDao.getPreviousStatus(isp);
+//      previoueIsp != null && previoueIsp.getXshift() != null && previoueIsp.getYshift() != null
+      if (isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
               && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
               && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
 
-        float tXshift = previoueIsp.getXshift() - isp.getXshift();
-        float tYshift = previoueIsp.getYshift() - isp.getYshift();
+//        float tXshift = previoueIsp.getXshift() - isp.getXshift();
+//        float tYshift = previoueIsp.getYshift() - isp.getYshift();
+//        && (tXshift * tXshift + tYshift * tYshift) < 0.5
 
         Boolean s1 = Math.abs(isp.getXshift() + 99) > 0.00001
-                && isp.getFwhm() < 5 && isp.getFwhm() > 1
+                && isp.getFwhm() < 10 && isp.getFwhm() > 1
                 && isp.getXrms() > 0 && isp.getXrms() < 0.13
                 && isp.getYrms() > 0 && isp.getYrms() < 0.13
-                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.3
+                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
                 && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
                 && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
                 && isp.getS2n() < 0.5
-                && isp.getAvgLimit() > 12
-                && (tXshift * tXshift + tYshift * tYshift) < 0.5;
+                && isp.getAvgLimit() > 11;
         Boolean s2 = (isp.getXshift() + 99) < 0.00001
-                && isp.getFwhm() < 5 && isp.getFwhm() > 1
-                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.3
+                && isp.getFwhm() < 10 && isp.getFwhm() > 1
+                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
                 && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
                 && isp.getBgBright() < 10000 && isp.getBgBright() > 1000;
         flag = s1 || s2;

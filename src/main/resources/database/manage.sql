@@ -154,3 +154,7 @@ order by consume_time desc limit 10;
 select avg(process_done_time-upload_date) 
 from upload_file_unstore 
 where file_type='1' and process_done_time is not null and send_time is not null;
+
+select count(*)
+from upload_file_unstore 
+where file_type='1' and process_done_time is not null and send_time is not null  and (process_done_time-upload_date)>'00:00:01';
