@@ -36,5 +36,9 @@
   <bean id="userService" class="com.gwac.service.UserInfoServiceImpl" >
     <property name="userDAO" ref="userDAO" />
   </bean>
+  
+  <bean id="publicService" class="com.gwac.service.PublicServiceImpl" >
+    <property name="mrDao" ref="mrDao" />
+  </bean>
  
 </beans>

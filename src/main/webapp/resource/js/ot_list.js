@@ -4,10 +4,63 @@ $(function() {
 //  var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
   var baseUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=";
   var ot2arr;
-  loadOT2Type();
-  loadQueryParmeter();
-  var ot2ListTable = loadOT2List();
+  var ot2ListTable;
   var ot2QueryInterval;
+  var alarmPlayer;
+
+  var lastTotalOT2 = 0;
+  var curTotalOT2 = 0;
+
+  loadOT2Type();
+  loadOT2Alarm();
+  initAlarmPlayer();
+  loadQueryParmeter();
+  loadOT2List();
+
+  ot2ListTable.on('xhr', function() {
+    lastTotalOT2 = curTotalOT2;
+    curTotalOT2 = 0;
+    var ot2List = ot2ListTable.ajax.json().gridModel;
+//    console.log(ot2List);
+    $.each(ot2List, function(i, item) {
+      if ((item.dataProduceMethod === '1' && item.isMatch === 1 && item.lookBackResult === 1)
+              || (item.dataProduceMethod === '8' && item.isMatch === 1)) {
+        curTotalOT2 = curTotalOT2 + 1;
+      }
+    });
+    if ($('#autoRing').is(':checked') && lastTotalOT2 !== 0 && curTotalOT2 > lastTotalOT2) {
+      playAlarm();
+    }
+//    console.log("lastTotalOT2:"+lastTotalOT2);
+//    console.log("curTotalOT2:"+curTotalOT2);
+  });
+
+
+  function initAlarmPlayer() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    alarmPlayer = $("#alarm-player");
+    alarmPlayer.jPlayer({
+      ready: function() {
+        alarmPlayer.jPlayer("setMedia", {
+          mp3: gwacRootURL + "/" + $('#newOTAlarm').val()
+        });
+      },
+      loop: false
+    });
+
+    $("#newOTAlarm").change(function() {
+      playAlarm();
+    });
+  }
+
+  function playAlarm() {
+    var optionSelected = $("#newOTAlarm").find("option:selected");
+    var valueSelected = optionSelected.val();
+    alarmPlayer.jPlayer("setMedia", {
+      mp3: gwacRootURL + "/" + valueSelected
+    });
+    alarmPlayer.jPlayer("play");
+  }
 
   function loadQueryParmeter() {
     var option = {
@@ -25,6 +78,11 @@ $(function() {
     $('#lookBackResult').multiselect(option);
     $("#ot2QueryBtn").click(ot2QueryBtnClick);
     $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
+
+    $(".ot2QueryParameter").change(function() {
+      lastTotalOT2 = 0;
+      curTotalOT2 = 0;
+    });
     setAutoRefresh();
   }
 
@@ -51,7 +109,7 @@ $(function() {
     $.ajax({
       type: "get",
       url: queryUrl,
-      data: '{}',
+      data: 'p1=1',
       async: false,
       dataType: 'json',
       success: function(data) {
@@ -67,10 +125,41 @@ $(function() {
     });
   }
 
+  function loadOT2Alarm() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var queryUrl = gwacRootURL + "/get-ot-alarm.action";
+    $.ajax({
+      type: "get",
+      url: queryUrl,
+      data: 'p1=1',
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+        $('#newOTAlarm').append($('<option>', {
+          value: "",
+          text: "请选择"
+        }));
+        var mrs = data.multimediaResources;
+        $.each(mrs, function(i, item) {
+          if (item.type === '1')
+            $('#newOTAlarm').append($('<option>', {
+              value: item.path,
+              text: item.enName
+            }));
+        });
+
+        var defaultText = 'Beep';
+        $('#newOTAlarm option').filter(function() {
+          return $(this).text() === defaultText;
+        }).prop('selected', true);
+      }
+    });
+  }
+
   function loadOT2List() {
     var gwacRootURL = $("#gwacRootURL").val();
     var queryUrl = gwacRootURL + "/get-ot-level2-list2.action?ot2qp.otName=";
-    var ot2ListTable = $('#ot-list-table').DataTable({
+    ot2ListTable = $('#ot-list-table').DataTable({
       "deferRender": true,
       "processing": true,
       "searching": true,
@@ -158,7 +247,6 @@ $(function() {
       },
       dom: 'lftrip'
     });
-    return ot2ListTable;
   }
 
 

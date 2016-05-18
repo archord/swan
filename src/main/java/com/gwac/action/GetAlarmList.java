@@ -1,7 +1,7 @@
 package com.gwac.action;
 
-import com.gwac.dao.OtTypeDao;
-import com.gwac.model.OtType;
+import com.gwac.dao.MultimediaResourceDao;
+import com.gwac.model.MultimediaResource;
 import com.gwac.model.UserInfo;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
@@ -16,22 +16,22 @@ import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "error", location = "/error.jsp")
 @ExceptionMapping(exception = "java.lang.Exception", result = "error")
-public class GetOtTypeJson extends ActionSupport implements SessionAware {
+public class GetAlarmList extends ActionSupport implements SessionAware {
 
   private static final long serialVersionUID = -3454448234588641394L;
-  private static final Log log = LogFactory.getLog(GetOtTypeJson.class);
+  private static final Log log = LogFactory.getLog(GetAlarmList.class);
 
   private Map<String, Object> session;
 
-  private OtTypeDao ottDao;
+  private MultimediaResourceDao mrDao;
   /**
    * 返回结果
    */
   private UserInfo userInfo;
-  private List<OtType> otTypes;
+  private List<MultimediaResource> multimediaResources;
 
   @Actions({
-    @Action(value = "/get-ot-type-json", results = {
+    @Action(value = "/get-ot-alarm", results = {
       @Result(name = "json", type = "json")})
   })
   @SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class GetOtTypeJson extends ActionSupport implements SessionAware {
     if(session.containsKey("userInfo")){
       userInfo = (UserInfo)session.get("userInfo");
     }
-    otTypes=ottDao.getOtTypes();
+    multimediaResources = mrDao.findAll();
     return "json";
   }
 
@@ -57,17 +57,17 @@ public class GetOtTypeJson extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @param ottDao the ottDao to set
+   * @param mrDao the mrDao to set
    */
-  public void setOttDao(OtTypeDao ottDao) {
-    this.ottDao = ottDao;
+  public void setMrDao(MultimediaResourceDao mrDao) {
+    this.mrDao = mrDao;
   }
 
   /**
-   * @return the otTypes
+   * @return the multimediaResources
    */
-  public List<OtType> getOtTypes() {
-    return otTypes;
+  public List<MultimediaResource> getMultimediaResources() {
+    return multimediaResources;
   }
 
 }

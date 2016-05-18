@@ -28,24 +28,24 @@
       </div>      
       <div class="row ot-list-top">
         <form action="${pageContext.request.contextPath}/get-ot-level2-list2.action" id="ot2QueryAction" method="post">
-          <div class="col-xs-4 col-sm-4 col-md-2 ">
-            <h4>数据处理方式</h4>
-            <select name="ot2qp.processType" id="ot2ProcessType" multiple="multiple">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
+            <h4>处理方式</h4>
+            <select name="ot2qp.processType" id="ot2ProcessType" multiple="multiple" class="ot2QueryParameter">
               <option value="1">星表匹配</option>
               <option value="8">图像相减</option>
             </select>
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-2 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>匹配状态</h4>
-            <select name="ot2qp.isMatch" id="ot2IsMatch" multiple="multiple">
+            <select name="ot2qp.isMatch" id="ot2IsMatch" multiple="multiple" class="ot2QueryParameter">
               <option value="0">未匹配</option>
               <option value="1">匹配不成功</option>
               <option value="2">匹配成功</option>
             </select>
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-2 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>匹配类别</h4>
-            <select name="ot2qp.matchType" id="ot2MatchType" multiple="multiple">
+            <select name="ot2qp.matchType" id="ot2MatchType" multiple="multiple" class="ot2QueryParameter">
               <option value="cvs_match">CVS</option>
               <option value="rc3_match">RC3</option>
               <option value="minor_planet_match">小行星</option>
@@ -54,32 +54,32 @@
               <option value="usno_match">USNO</option>
             </select>
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-2 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>分类标识</h4>
-            <select name="ot2qp.otType" id="ot2Type" multiple="multiple"></select>
-<!--            <select name="ot2qp.otType" id="ot2Type" multiple="multiple">
-              <option value="1">假OT</option>
-              <option value="2">小行星</option>
-              <option value="3">移动目标</option>
-              <option value="4">鬼像</option>
-              <option value="5">坏像素</option>
-              <option value="6">坏像列</option>
-              <option value="7">热像素</option>
-              <option value="8">OT候选体</option>
-              <option value="9">超新星</option>
-              <option value="10">GRB</option>
-              <option value="11">耀发候选体</option>
-              <option value="12">灰尘</option>
-              <option value="13">彗星</option>
-              <option value="14">近地天体</option>
-              <option value="15">变星</option>
-              <option value="16">空场</option>
-              <option value="17">凹槽</option>
-            </select>-->
+            <select name="ot2qp.otType" id="ot2Type" multiple="multiple" class="ot2QueryParameter"></select>
+            <!--            <select name="ot2qp.otType" id="ot2Type" multiple="multiple">
+                          <option value="1">假OT</option>
+                          <option value="2">小行星</option>
+                          <option value="3">移动目标</option>
+                          <option value="4">鬼像</option>
+                          <option value="5">坏像素</option>
+                          <option value="6">坏像列</option>
+                          <option value="7">热像素</option>
+                          <option value="8">OT候选体</option>
+                          <option value="9">超新星</option>
+                          <option value="10">GRB</option>
+                          <option value="11">耀发候选体</option>
+                          <option value="12">灰尘</option>
+                          <option value="13">彗星</option>
+                          <option value="14">近地天体</option>
+                          <option value="15">变星</option>
+                          <option value="16">空场</option>
+                          <option value="17">凹槽</option>
+                        </select>-->
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-1 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>CDD</h4>
-            <select name="ot2qp.telscope" id="ot2Ccd" multiple="multiple">
+            <select name="ot2qp.telscope" id="ot2Ccd" multiple="multiple" class="ot2QueryParameter">
               <option value="1">M01</option>
               <option value="2">M02</option>
               <option value="3">M03</option>
@@ -94,19 +94,27 @@
               <option value="12">M12</option>
             </select>
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-1 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>回看</h4>
-            <select name="ot2qp.lookBackResult" id="lookBackResult" multiple="multiple">
+            <select name="ot2qp.lookBackResult" id="lookBackResult" multiple="multiple" class="ot2QueryParameter">
               <option value="0">未处理</option>
               <option value="1">OT</option>
               <option value="2">FOT</option>
             </select>
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-1 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
+            <h4>提示音</h4>
+            <select name="newOTAlarm" id="newOTAlarm" class="form-control"></select>
+          </div>
+          <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
+            <h4>声音提醒</h4>
+            <input name="autoRing" id="autoRing" type="checkbox" />
+          </div>
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>自动刷新</h4>
             <input name="autoRefresh" id="ot2ListTableAutoRefresh" type="checkbox"/>
           </div>
-          <div class="col-xs-4 col-sm-4 col-md-1 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>&nbsp;</h4>
             <input type="button" value="查询" class="btn btn-primary" id="ot2QueryBtn"/>
           </div>
@@ -122,13 +130,14 @@
           </table>
         </div>                                   
       </div>
-
+      <div id="alarm-player"></div>
     </div>
 
     <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/jquery.jplayer.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/ot_list.js"></script>
 
   </body>
