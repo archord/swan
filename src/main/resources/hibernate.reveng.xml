@@ -2,6 +2,5 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="gwac"/>
-  <table-filter match-name="follow_up_object_type"/>
-  <table-filter match-name="follow_up_object"/>
+  <table-filter match-name="ot-tmpl-wrong"/>
 </hibernate-reverse-engineering>

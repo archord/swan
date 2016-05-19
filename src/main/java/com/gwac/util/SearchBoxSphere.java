@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
  * @author xy
  */
 public class SearchBoxSphere {
-  
+
   private static final Log log = LogFactory.getLog(SearchBoxSphere.class);
 
   private double ra;
@@ -90,8 +90,8 @@ public class SearchBoxSphere {
       } else {
         flag = 1;
       }
-    }else{
-      log.error("search box exceed max value");
+    } else {
+      log.error("search box exceed max value, ra=" + ra + ",dec=" + dec + ",searchRadius=" + searchRadius);
     }
     return flag;
   }

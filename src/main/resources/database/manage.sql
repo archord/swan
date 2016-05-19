@@ -158,3 +158,10 @@ where file_type='1' and process_done_time is not null and send_time is not null;
 select count(*)
 from upload_file_unstore 
 where file_type='1' and process_done_time is not null and send_time is not null  and (process_done_time-upload_date)>'00:00:01';
+
+#对OT2历史模板，按历史匹配次数进行统计排序
+SELECT matched_total, count(*) 
+FROM ot_tmpl_wrong
+where ot_class='4' and data_produce_method='1' and last_found_time_utc>'2016-04-18 00:00:00'
+GROUP BY matched_total
+ORDER BY matched_total DESC;

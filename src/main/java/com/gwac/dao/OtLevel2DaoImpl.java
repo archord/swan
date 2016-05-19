@@ -27,6 +27,42 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
+  
+  /**
+   * ot_class的取值有5种： 0，未分类 1，真OT 2，动OT 3，错OT 4，假OT。
+   * 考虑到大部分假的都未分类，为能建立完善的OT2历史模板，现在将“未分类”的值设置为4
+   * @param dateStr
+   * @param otClass
+   * @return 
+   */
+  @Override
+  public List<OtLevel2> getLv2OTByDateAndOTClass(String dateStr, char otClass) {
+    
+    Session session = getCurrentSession();
+    String sql = "select ol2.* "
+            + " from ot_level2_his ol2 "
+            + " inner join ot_type ott on ott.ott_id=ol2.ot_type and ott.ot_class='" + otClass +"'"
+            + " where ol2.date_str='" + dateStr + "'";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+  
+  @Override
+  public List<String> getAllDateStr() {
+
+    List<String> result = new ArrayList<>();
+    String sql = "select distinct date_str from ot_level2_his where ot_type is not null order by date_str;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      String his = (String) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
 
   @Override
   public List<OtLevel2> searchOT2His(OtLevel2 ot2, float searchRadius, float mag) {

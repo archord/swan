@@ -13,6 +13,12 @@
       </property>
   </bean-->
   
+  <bean id="otTmplJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="otTmplService" /> 
+    <property name="targetMethod" value="startJob" /> 
+  </bean> 
+  
   <bean id="foJob" 
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
     <property name="targetObject" ref="foService" /> 
@@ -66,6 +72,13 @@
     <property name="targetObject" ref="monitorImageSyncService" /> 
     <property name="targetMethod" value="startJob" /> 
   </bean> 
+  
+  <bean id="otTmplTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="otTmplJob" />
+    <property name="repeatInterval" value="15000000000000" />  
+    <property name="startDelay" value="5000" />   
+  </bean>
   
   <bean id="foTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -143,6 +156,7 @@
         <ref bean="monitorImageSyncJob" />
         <!--<ref bean="otSubObserveRecordJob" />-->
         <ref bean="foJob" />
+        <ref bean="otTmplJob" />
       </list>
     </property>
     <property name="triggers">
@@ -156,6 +170,7 @@
         <ref bean="monitorImageSyncTrigger" />
         <!--<ref bean="otSubObserveRecordTrigger" />-->
         <ref bean="foTrigger" />
+        <ref bean="otTmplTrigger" />
       </list>
     </property>
   </bean>

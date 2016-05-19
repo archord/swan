@@ -14,6 +14,10 @@ import java.util.Map;
  * @author xy
  */
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
+  
+  public List<String> getAllDateStr();
+  
+  public List<OtLevel2> getLv2OTByDateAndOTClass(String dateStr, char otClass);
 
   public void moveDataToHisTable();
 

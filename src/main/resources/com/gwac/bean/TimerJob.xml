@@ -9,6 +9,14 @@
     <property name="otVarObserveRecordService" ref="otVarObserveRecordService" />
   </bean>-->
   
+  <bean id="otTmplService" class="com.gwac.job.OtTmplServiceImpl" >
+    <property name="ot2Searchbox" value="${mingwac.ot2his.searchbox}" />
+    <property name="ottwDao" ref="ottwDao" />
+    <property name="ot2Dao" ref="otbDao" />
+    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+    <property name="isTestServer" value="${gwac.server.test}" />
+  </bean>
+  
   <bean id="imageStatusParmService" class="com.gwac.job.ImageStatusParmServiceImpl" >
     <property name="ufuDao" ref="ufuDao" />
     <property name="ffDao" ref="ffDao" />
