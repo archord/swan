@@ -135,10 +135,10 @@ $(function() {
       async: false,
       dataType: 'json',
       success: function(data) {
-        $('#newOTAlarm').append($('<option>', {
-          value: "",
-          text: "请选择"
-        }));
+//        $('#newOTAlarm').append($('<option>', {
+//          value: "",
+//          text: "请选择"
+//        }));
         var mrs = data.multimediaResources;
         $.each(mrs, function(i, item) {
           if (item.type === '1')
