@@ -104,15 +104,15 @@
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
             <h4>提示音</h4>
-            <select name="newOTAlarm" id="newOTAlarm" class="form-control"></select>
+            <select id="newOTAlarm" class="form-control"></select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
             <h4>声音提醒</h4>
-            <input name="autoRing" id="autoRing" type="checkbox" />
+            <input id="autoRing" type="checkbox" />
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>自动刷新</h4>
-            <input name="autoRefresh" id="ot2ListTableAutoRefresh" type="checkbox"/>
+            <input id="ot2ListTableAutoRefresh" type="checkbox"/>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>&nbsp;</h4>
