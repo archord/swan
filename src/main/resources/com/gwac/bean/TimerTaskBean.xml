@@ -153,10 +153,10 @@
         <!--<ref bean="fileTransferJob" />-->
         <!--<ref bean="dataSyncJob" />-->
         <ref bean="ot2CheckJob" />
-        <ref bean="monitorImageSyncJob" />
+        <!--<ref bean="monitorImageSyncJob" />-->
         <!--<ref bean="otSubObserveRecordJob" />-->
         <ref bean="foJob" />
-        <ref bean="otTmplJob" />
+        <!--<ref bean="otTmplJob" />-->
       </list>
     </property>
     <property name="triggers">
@@ -167,10 +167,10 @@
         <!--<ref bean="fileTransferTrigger" />-->
 <!--        <ref bean="dataSyncTrigger" />-->
         <ref bean="ot2CheckTrigger" />
-        <ref bean="monitorImageSyncTrigger" />
+        <!--<ref bean="monitorImageSyncTrigger" />-->
         <!--<ref bean="otSubObserveRecordTrigger" />-->
         <ref bean="foTrigger" />
-        <ref bean="otTmplTrigger" />
+        <!--<ref bean="otTmplTrigger" />-->
       </list>
     </property>
   </bean>

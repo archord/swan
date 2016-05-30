@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gwac</groupId>
-    <artifactId>gwac</artifactId>
+    <artifactId>gwac-back-end</artifactId>
     <packaging>war</packaging>
     <version>v-1.0</version>
-    <name>gwac</name>
+    <name>gwac-back-end</name>
     <url>http://maven.apache.org</url>
   
     <build>
@@ -20,7 +20,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>gwac</finalName>
+        <finalName>${artifactId}</finalName>
     </build>
   
     <dependencies>
