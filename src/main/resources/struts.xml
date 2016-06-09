@@ -25,6 +25,7 @@
  	
   <package name="default" namespace="/" extends="json-default,struts-default">
     
+
     <!-- 自定义拦截器 -->
     <interceptors>
       <interceptor name="userAuthority" class="com.gwac.action.LoginInterceptor"/>
@@ -38,11 +39,22 @@
 
     <!-- 重定义默认拦截器堆栈 -->
     <default-interceptor-ref name="gwacStack"/>
+    
+    <!--<default-action-ref name="UnderConstruction"/>-->
 
     <global-results>
       <result name="login" type="redirectAction">user/login.jsp</result>
       <result name="error" type="redirectAction">error.jsp</result>
     </global-results>
+    
+    <global-exception-mappings>
+      <exception-mapping exception="org.apache.struts.register.exceptions.SecurityBreachException" result="securityerror" />
+      <exception-mapping exception="java.lang.Exception" result="error" />
+    </global-exception-mappings>
+ 
+    <action name="UnderConstruction">
+      <result>error1.jsp</result>
+    </action>
     
     <action name="downloadot2" class="com.gwac.action.OT2InfoDownload">
       <result name="success" type="stream">
@@ -56,27 +68,3 @@
   </package>
 	
 </struts>
-
-    
-<!--    <action name="resultActionabc" class="com.gwac.action.FileUploadAction">
-      <interceptor-ref name="exception"/>
-      <interceptor-ref name="i18n"/>
-      <interceptor-ref name="fileUpload">
-        <param name="allowedTypes">text/plain,image/jpeg,image/gif,application/x-gzip,application/zip</param>
-        <param name="maximumSize">1024000</param>
-      </interceptor-ref> 
-      <interceptor-ref name="params">
-        <param name="excludeParams">dojo\..*,^struts\..*</param>
-      </interceptor-ref>
-      <interceptor-ref name="validation">
-        <param name="excludeMethods">input,back,cancel,browse</param>
-      </interceptor-ref>
-      <interceptor-ref name="workflow">
-        <param name="excludeMethods">input,back,cancel,browse</param>
-      </interceptor-ref>
- 
-      <result name="success">manage/result.jsp</result>
-      <result name="input">manage/fileupload.jsp</result>
-      <result name="error">manage/result.jsp</result>
- 
-</action>-->
