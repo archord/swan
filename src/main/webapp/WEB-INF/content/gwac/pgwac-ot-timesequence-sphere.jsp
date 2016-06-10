@@ -6,12 +6,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>OT分布实时概览图-天球坐标</title>
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/topojson.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.geo.zoom.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/ot_timesequence_sphere.js"></script>
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/topojson.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.geo.zoom.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/ot_timesequence_sphere.js"></script>
+    <link href="<%=request.getContextPath()%>/resource/js/d3/maps.css" rel="stylesheet" type="text/css">
     <script>
 
       $(function() {
@@ -65,7 +66,7 @@
 
     </script>
     <style>
-      @import url(<%=request.getContextPath()%>/js/d3/maps.css);
+      /*@import url(<%=request.getContextPath()%>/resource/js/d3/maps.css);*/
 
       body{background-color: black;}
       path {fill: none;stroke-linejoin: round;}

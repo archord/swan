@@ -7,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>OT分布实时概览图-XY</title>
-    <link href="<%=request.getContextPath()%>/styles/examples.css" rel="stylesheet" type="text/css">
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
-    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/excanvas.compiled.js"></script><![endif]-->
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.categories.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/plot/jquery.flot.resize.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/ot_layout_xy.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/My97DatePicker/WdatePicker.js"></script>
+    <link href="<%=request.getContextPath()%>/resource/styles/examples.css" rel="stylesheet" type="text/css">
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/excanvas.compiled.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.categories.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.resize.min.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/ot_layout_xy.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript">
 
       var requestTime = 15000;
