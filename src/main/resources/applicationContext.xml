@@ -12,8 +12,6 @@
   <import resource="com/gwac/bean/MysqlQuery.xml"/>
   
   <import resource="com/gwac/bean/GwacDao.xml"/>
-<!--  <import resource="com/gwac/bean/GwacService.xml"/>
-  <import resource="com/gwac/bean/GwacAction.xml"/>-->
   
   <import resource="com/gwac/bean/ActivemqDestination.xml"/>
   <import resource="com/gwac/bean/ActivemqConsumer.xml"/>
