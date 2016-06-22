@@ -13,15 +13,15 @@
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="keywords" content=",国家天文台，svom, gwac，望远镜阵列" />
     <meta http-equiv="description" content="GWAC数据展示页面" />
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
 
     <title>OT-<s:property value="otName"/>-后随FITS图</title>
 
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/js/js9/js9support.css">
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/js/js9/js9.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/js9/js9support.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/js9/js9.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/js9/js9plugins.js"></script>
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resource/js/js9/js9support.css">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resource/js/js9/js9.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9support.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9plugins.js"></script>
 
     <style type="text/css">
 

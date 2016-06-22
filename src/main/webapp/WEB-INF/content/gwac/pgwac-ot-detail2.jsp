@@ -14,7 +14,7 @@
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="keywords" content="国家天文台，svom, gwac，望远镜阵列" />
     <meta http-equiv="description" content="GWAC数据展示页面" />
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
     <!-- Loading Bootstrap 说明文档http://v3.bootcss.com/css/ -->
     <link href="${pageContext.request.contextPath}/resource/flatui/css/vendor/bootstrap.min.css" rel="stylesheet">
     <!-- Loading Flat UI -->
@@ -162,15 +162,14 @@
     <script src="${pageContext.request.contextPath}/resource/flatui/js/vendor/video.js"></script>
     <script src="${pageContext.request.contextPath}/resource/flatui/js/flat-ui.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/flatui/js/application.js"></script>
-    <script src="${pageContext.request.contextPath}/js/jquery.carouFredSel-6.2.1-packed.js"></script>
-    <script src="<%=request.getContextPath()%>/js/plot/jquery.flot.js"></script>
-    <script src="<%=request.getContextPath()%>/js/plot/jquery.flot.categories.js"></script>
-    <script src="<%=request.getContextPath()%>/js/plot/jquery.flot.resize.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/jquery.carouFredSel-6.2.1-packed.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.categories.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.resize.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/dataTables.buttons.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/bootbox.min.js"></script>
-    <!--<script src="${pageContext.request.contextPath}/resource/js/datatables.js"></script>-->
     <script src="${pageContext.request.contextPath}/resource/js/ot_detail.js"></script>
 
     <script>
