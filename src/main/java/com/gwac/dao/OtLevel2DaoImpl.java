@@ -28,11 +28,27 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
   
+  public List<OtLevel2> getTodayAll() {
+    
+    Session session = getCurrentSession();
+    String sql = "select * from ot_level2";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+  
+  @Override
+  public List<OtLevel2> getOt2ByDate(String dateStr) {
+    Session session = getCurrentSession();
+    String sql = "select ol2.* from ot_level2_his ol2 where ol2.date_str='" + dateStr + "'";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+  
   /**
-   * ot_class的取值有5种： 0，未分类 1，真OT 2，动OT 3，错OT 4，假OT。
-   * 考虑到大部分假的都未分类，为能建立完善的OT2历史模板，现在将“未分类”的值设置为4
+   * 
    * @param dateStr
-   * @param otClass
+   * @param otClass ot_class的取值有5种： 0，未分类 1，真OT 2，动OT 3，错OT 4，假OT。
+   * 考虑到大部分假的都未分类，为能建立完善的OT2历史模板，现在将“未分类”的值设置为4
    * @return 
    */
   @Override

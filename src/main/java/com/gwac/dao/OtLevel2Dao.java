@@ -15,6 +15,10 @@ import java.util.Map;
  */
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   
+  public List<OtLevel2> getTodayAll();
+  
+  public List<OtLevel2> getOt2ByDate(String dateStr);
+  
   public List<String> getAllDateStr();
   
   public List<OtLevel2> getLv2OTByDateAndOTClass(String dateStr, char otClass);

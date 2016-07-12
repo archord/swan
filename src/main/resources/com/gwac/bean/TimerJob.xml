@@ -13,6 +13,8 @@
     <property name="ot2Searchbox" value="${mingwac.ot2his.searchbox}" />
     <property name="ottwDao" ref="ottwDao" />
     <property name="ot2Dao" ref="otbDao" />
+    <property name="mtDao" ref="mtDao" />
+    <property name="ot2mDao" ref="ot2mDao" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />
   </bean>

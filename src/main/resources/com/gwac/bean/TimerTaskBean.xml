@@ -156,7 +156,7 @@
         <!--<ref bean="monitorImageSyncJob" />-->
         <!--<ref bean="otSubObserveRecordJob" />-->
         <ref bean="foJob" />
-        <!--<ref bean="otTmplJob" />-->
+        <ref bean="otTmplJob" />
       </list>
     </property>
     <property name="triggers">
@@ -170,7 +170,7 @@
         <!--<ref bean="monitorImageSyncTrigger" />-->
         <!--<ref bean="otSubObserveRecordTrigger" />-->
         <ref bean="foTrigger" />
-        <!--<ref bean="otTmplTrigger" />-->
+        <ref bean="otTmplTrigger" />
       </list>
     </property>
   </bean>

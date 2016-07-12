@@ -33,6 +33,7 @@ update data_process_machine set first_record_number=0, cur_process_number=0;
 ##删除时注意
 delete from upload_file_unstore;
 delete from upload_file_record;
+update ot_number set number=0, var_number=0, sub_number=0 where date='151218';
 
 ##删除历史表中某一条的记录
 delete from config_file_his where substring(store_path, 1,6)='141224';

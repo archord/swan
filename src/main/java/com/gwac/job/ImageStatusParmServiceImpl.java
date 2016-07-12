@@ -150,6 +150,7 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
               isp.setPrcNum(prcNum);
 
               tStr = cfile.getProperty("Obj_Num");
+//              if(tStr!=null&&!tStr.isEmpty())
               try {
                 isp.setObjNum(Integer.parseInt(tStr.trim()));
               } catch (NumberFormatException e) {

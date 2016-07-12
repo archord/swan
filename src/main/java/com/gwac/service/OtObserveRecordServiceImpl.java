@@ -76,6 +76,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     if (storePath != null && fileName != null) {
 
       List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
+      log.debug(fileName + ", otlv1 size:" + otcs.size());
       for (OTCatalog otc : otcs) {
 
         String otListPath = storePath;
@@ -140,6 +141,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         //existInLatestN与最近5幅比较
         OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
         if (tlv2 != null) {
+          log.debug("match ot2:" + tlv2.getOtId());
           if (tlv2.getFirstFfNumber() > number) {
             tlv2.setFirstFfNumber(number);
             tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
@@ -178,7 +180,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
           otorDao.save(oor);
           List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
-          log.debug("match ot1 record size:" + oors.size());
+          log.debug("match ot1(" + oor.getOorId() + ") record size:" + oors.size());
           if (oors.size() >= occurNumber) {
             OtObserveRecord oor1 = oors.get(0);
 
