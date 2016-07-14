@@ -166,3 +166,25 @@ FROM ot_tmpl_wrong
 where ot_class='4' and data_produce_method='1' and last_found_time_utc>'2016-04-18 00:00:00'
 GROUP BY matched_total
 ORDER BY matched_total DESC;
+
+#PL/pgsql 按天查找同一个天区不同转台的同时出现的ot1
+DO
+$$
+DECLARE
+  quantity INTEGER := 30 ;
+  dateStr RECORD;
+  tot1record RECORD;
+BEGIN
+	FOR dateStr IN 
+		select distinct date_str from ot_observe_record_his WHERE date_str<'141027' order by date_str
+	LOOP 
+		RAISE NOTICE 'calculate %',  dateStr.date_str; 
+
+		insert into oor_tmp 
+		select oor1.oor_id, oor1.ra_d,  oor1.dec_d, oor1.mag_aper, oor2.oor_id, oor2.ra_d,  oor2.dec_d, oor2.mag_aper
+			from (select * from ot_observe_record_his where ot_id=0 and data_produce_method='1' and date_str=dateStr.date_str) as oor1
+			inner join (select * from ot_observe_record_his where ot_id=0 and data_produce_method='1' and date_str=dateStr.date_str) as oor2 
+			on oor1.dpm_id!=oor2.dpm_id and oor1.sky_id=oor2.sky_id
+			and earth_distance(ll_to_earth(oor1.ra_d,oor1.dec_d), ll_to_earth(oor2.ra_d,oor2.dec_d))*0.0323391930483951 <30;
+	END LOOP;
+END$$; 

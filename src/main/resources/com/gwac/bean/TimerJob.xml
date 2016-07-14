@@ -15,6 +15,8 @@
     <property name="ot2Dao" ref="otbDao" />
     <property name="mtDao" ref="mtDao" />
     <property name="ot2mDao" ref="ot2mDao" />
+    <property name="oorDao" ref="otORDao" />
+    <property name="oorTmpDao" ref="oorTmpDao" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />
     <property name="isTestServer" value="${gwac.server.test}" />
   </bean>

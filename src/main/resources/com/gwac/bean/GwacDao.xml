@@ -4,6 +4,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  <bean id="oorTmpDao" class="com.gwac.dao.OorTmpDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.OorTmp</value>
+    </property>
+  </bean>
+
   <bean id="ottwDao" class="com.gwac.dao.OtTmplWrongDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">

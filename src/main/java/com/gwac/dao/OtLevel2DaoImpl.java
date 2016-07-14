@@ -28,6 +28,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
   
+  @Override
   public List<OtLevel2> getTodayAll() {
     
     Session session = getCurrentSession();

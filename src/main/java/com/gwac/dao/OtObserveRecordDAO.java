@@ -14,6 +14,12 @@ import java.util.List;
  * @author xy
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
+  
+  public List<OtObserveRecord> searchOT2TmplWrong(OtObserveRecord obj, float searchRadius, float mag);
+  
+  public List<OtObserveRecord> getOt1ByDate(String dateStr);
+  
+  public List<String> getAllDateStr();
 
   public void moveDataToHisTable();
 

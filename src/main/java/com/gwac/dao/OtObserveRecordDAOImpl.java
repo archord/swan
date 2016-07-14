@@ -8,6 +8,7 @@ import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtObserveRecordShow;
 import com.gwac.util.CommonFunction;
+import com.gwac.util.SearchBoxSphere;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +27,57 @@ import org.hibernate.Session;
 public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
+  
+  @Override
+  public List<OtObserveRecord> searchOT2TmplWrong(OtObserveRecord obj, float searchRadius, float mag) {
 
+    SearchBoxSphere sbs = new SearchBoxSphere(obj.getRaD(), obj.getDecD(), searchRadius);
+    int tflag = sbs.calSearchBox();
+    if (tflag != 0) {
+      Session session = getCurrentSession();
+      String sql = "select * from ot_observe_record_his where ot_id=0 and data_produce_method='" + obj.getDataProduceMethod() 
+              + "' and date_str='" + obj.getDateStr() + "' and sky_id="+ obj.getSkyId() + " and dpm_id!="+obj.getDpmId() + " and ";
+      if (tflag == 1) {
+        sql += "ra_d between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
+        sql += "dec_d between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+      } else {
+        sql += "(ra_d > " + sbs.getMinRa() + " or ra_d <" + sbs.getMaxRa() + ") and ";
+        sql += "dec_d between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+      }
+      
+      Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+      return q.list();
+    }
+    return new ArrayList();
+  }
+  
+  @Override
+  public List<OtObserveRecord> getOt1ByDate(String dateStr) {
+    
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record_his where ot_id=0 and date_str='" + dateStr + "'";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
+
+  @Override
+  public List<String> getAllDateStr() {
+
+    List<String> result = new ArrayList<>();
+    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null order by date_str;";
+//    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null and date_str<'141027' order by date_str;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      String his = (String) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
+  
   @Override
   public void moveDataToHisTable() {
 

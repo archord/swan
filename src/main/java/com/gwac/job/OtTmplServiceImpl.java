@@ -4,12 +4,16 @@
 package com.gwac.job;
 
 import com.gwac.dao.MatchTableDao;
+import com.gwac.dao.OorTmpDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtLevel2MatchDao;
+import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.OtTmplWrongDao;
 import com.gwac.model.MatchTable;
+import com.gwac.model.OorTmp;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2Match;
+import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtTmplWrong;
 import com.gwac.util.CommonFunction;
 import java.util.ArrayList;
@@ -33,6 +37,8 @@ public class OtTmplServiceImpl implements OtTmplService {
   private OtTmplWrongDao ottwDao;
   private MatchTableDao mtDao;
   private OtLevel2MatchDao ot2mDao;
+  private OtObserveRecordDAO oorDao;
+  private OorTmpDao oorTmpDao;
 
   @Override
   public void startJob() {
@@ -53,7 +59,8 @@ public class OtTmplServiceImpl implements OtTmplService {
 //      generateOtTmpl('4'); //未匹配，假OT
 //      generateOtTmpl('1'); //真OT
 //      rematchAllOt2();
-      generateOtTmpl2('4');
+//      generateOtTmpl2('4');
+      findOT1();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -63,6 +70,58 @@ public class OtTmplServiceImpl implements OtTmplService {
     }
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+  }
+
+  public void findOT1() {
+
+    List<String> dateStrs = oorDao.getAllDateStr();
+    log.debug("total days: " + dateStrs.size());
+
+    for (String dateStr : dateStrs) {
+      List<OtObserveRecord> oors = oorDao.getOt1ByDate(dateStr);
+      log.debug("date: " + dateStr + ", ot1 number: " + oors.size());
+
+      int matchNum = 0;
+      int removeNum = 0;
+      while (oors.size() > 0) {
+        OtObserveRecord tot1 = oors.get(0);
+        double searchbox = ot2Searchbox;
+        List<OtObserveRecord> mot2s = oorDao.searchOT2TmplWrong(tot1, (float) (searchbox), 0);
+
+        List<OtObserveRecord> matchedObjs = new ArrayList();
+        for (OtObserveRecord obj : mot2s) {
+          double tDis = CommonFunction.getGreatCircleDistance(tot1.getRaD(), tot1.getDecD(), obj.getRaD(), obj.getDecD());
+          if (tDis < searchbox) {
+            matchedObjs.add(obj);
+          }
+        }
+        int tsize = matchedObjs.size();
+        if (tsize > 0) {
+          log.debug("ot1id:" + tot1.getOorId() + ", match " + tsize);
+        }
+        for (OtObserveRecord toot2 : matchedObjs) {
+          OorTmp oorTmp = new OorTmp();
+          oorTmp.setOor1Id(tot1.getOorId());
+          oorTmp.setOor1Ra(tot1.getRaD());
+          oorTmp.setOor1Dec(tot1.getDecD());
+          oorTmp.setOor1Mag(tot1.getMagAper());
+          oorTmp.setOor2Id(toot2.getOorId());
+          oorTmp.setOor2Ra(toot2.getRaD());
+          oorTmp.setOor2Dec(toot2.getDecD());
+          oorTmp.setOor2Mag(toot2.getMagAper());
+          oorTmp.setOor1DpmId(tot1.getDpmId());
+          oorTmp.setOor1DateUt(tot1.getDateUt());
+          oorTmp.setOor2DpmId(toot2.getDpmId());
+          oorTmp.setOor2DateUt(toot2.getDateUt());
+          oorTmpDao.save(oorTmp);
+        }
+        matchNum++;
+        removeNum += tsize;
+        oors.remove(tot1);
+        oors.removeAll(matchedObjs);
+      }
+      log.debug("date: " + dateStr + ",matchNum:" + matchNum + ", removeNum:" + removeNum + ", total:" + (matchNum + removeNum));
+    }
   }
 
   public void generateOtTmpl2(char otClass) {
@@ -427,6 +486,20 @@ public class OtTmplServiceImpl implements OtTmplService {
    */
   public void setOt2mDao(OtLevel2MatchDao ot2mDao) {
     this.ot2mDao = ot2mDao;
+  }
+
+  /**
+   * @param oorDao the oorDao to set
+   */
+  public void setOorDao(OtObserveRecordDAO oorDao) {
+    this.oorDao = oorDao;
+  }
+
+  /**
+   * @param oorTmpDao the oorTmpDao to set
+   */
+  public void setOorTmpDao(OorTmpDao oorTmpDao) {
+    this.oorTmpDao = oorTmpDao;
   }
 
 }
