@@ -4,6 +4,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  <bean class="com.gwac.action.GetCoorlList" scope="prototype">
+    <property name="csDao" ref="coorShowDao" />	
+  </bean>
 
   <bean class="com.gwac.action.PublicAction" scope="prototype">
     <property name="publicService" ref="publicService" />	

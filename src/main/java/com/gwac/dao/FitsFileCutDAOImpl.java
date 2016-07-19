@@ -20,6 +20,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
 
   private static final Log log = LogFactory.getLog(FitsFileCutDAOImpl.class);
 
+  @Override
   public void moveDataToHisTable() {
 
     Session session = getCurrentSession();
@@ -27,6 +28,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  @Override
   public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId) {
 
     Session session = getCurrentSession();
@@ -35,6 +37,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     return q.list();
   }
 
+  @Override
   public void uploadSuccessCutByName(String fileName) {
 
     Session session = getCurrentSession();
@@ -89,6 +92,18 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     return rst.toString();
   }
 
+  public List<FitsFileCut> getTmplCutImageByOtId(long otId, Boolean queryHis) {
+
+    String sql = "select * from fits_file_cut_his "
+            + "where ot_id in (select ot_id from ot_level2_match where mt_id=6 and match_id=" + otId + ") "
+            + "order by ot_id, number limit 10;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
+
+  @Override
   public List<FitsFileCut> getCutImageByOtId(long otId, Boolean queryHis) {
 
     String sql1 = "select * "

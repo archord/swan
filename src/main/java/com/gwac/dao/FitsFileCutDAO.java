@@ -12,6 +12,8 @@ import java.util.List;
  * @author xy
  */
 public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
+  
+  public List<FitsFileCut> getTmplCutImageByOtId(long otId, Boolean queryHis);
 
   public void moveDataToHisTable();
 
