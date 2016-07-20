@@ -29,10 +29,12 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
   
   @Override
-  public List<OtLevel2> getTodayAll() {
+  public List<OtLevel2> getTodayOt2(char otClass) {
     
     Session session = getCurrentSession();
-    String sql = "select * from ot_level2";
+    String sql = "select ol2.* "
+            + " from ot_level2 ol2 "
+            + " inner join ot_type ott on ott.ott_id=ol2.ot_type and ott.ot_class='" + otClass +"'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }

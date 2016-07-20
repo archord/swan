@@ -43,9 +43,9 @@ public class OtTmplServiceImpl implements OtTmplService {
   @Override
   public void startJob() {
 
-//    if (isBeiJingServer || isTestServer) {
-//      return;
-//    }
+    if (isBeiJingServer || isTestServer) {
+      return;
+    }
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -60,7 +60,9 @@ public class OtTmplServiceImpl implements OtTmplService {
 //      generateOtTmpl('1'); //真OT
 //      rematchAllOt2();
 //      generateOtTmpl2('4');
-      findOT1();
+//      findOT1();
+      otTmplDailyUpdate('4');
+      otTmplDailyUpdate('1');
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -72,223 +74,111 @@ public class OtTmplServiceImpl implements OtTmplService {
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
-  public void findOT1() {
-
-    List<String> dateStrs = oorDao.getAllDateStr();
-    log.debug("total days: " + dateStrs.size());
-
-    for (String dateStr : dateStrs) {
-      List<OtObserveRecord> oors = oorDao.getOt1ByDate(dateStr);
-      log.debug("date: " + dateStr + ", ot1 number: " + oors.size());
-
-      int matchNum = 0;
-      int removeNum = 0;
-      while (oors.size() > 0) {
-        OtObserveRecord tot1 = oors.get(0);
-        double searchbox = ot2Searchbox;
-        List<OtObserveRecord> mot2s = oorDao.searchOT2TmplWrong(tot1, (float) (searchbox), 0);
-
-        List<OtObserveRecord> matchedObjs = new ArrayList();
-        for (OtObserveRecord obj : mot2s) {
-          double tDis = CommonFunction.getGreatCircleDistance(tot1.getRaD(), tot1.getDecD(), obj.getRaD(), obj.getDecD());
-          if (tDis < searchbox) {
-            matchedObjs.add(obj);
-          }
-        }
-        int tsize = matchedObjs.size();
-        if (tsize > 0) {
-          log.debug("ot1id:" + tot1.getOorId() + ", match " + tsize);
-        }
-        for (OtObserveRecord toot2 : matchedObjs) {
-          OorTmp oorTmp = new OorTmp();
-          oorTmp.setOor1Id(tot1.getOorId());
-          oorTmp.setOor1Ra(tot1.getRaD());
-          oorTmp.setOor1Dec(tot1.getDecD());
-          oorTmp.setOor1Mag(tot1.getMagAper());
-          oorTmp.setOor2Id(toot2.getOorId());
-          oorTmp.setOor2Ra(toot2.getRaD());
-          oorTmp.setOor2Dec(toot2.getDecD());
-          oorTmp.setOor2Mag(toot2.getMagAper());
-          oorTmp.setOor1DpmId(tot1.getDpmId());
-          oorTmp.setOor1DateUt(tot1.getDateUt());
-          oorTmp.setOor2DpmId(toot2.getDpmId());
-          oorTmp.setOor2DateUt(toot2.getDateUt());
-          oorTmpDao.save(oorTmp);
-        }
-        matchNum++;
-        removeNum += tsize;
-        oors.remove(tot1);
-        oors.removeAll(matchedObjs);
-      }
-      log.debug("date: " + dateStr + ",matchNum:" + matchNum + ", removeNum:" + removeNum + ", total:" + (matchNum + removeNum));
-    }
-  }
-
-  public void generateOtTmpl2(char otClass) {
-
-    List<String> dateStrs = ot2Dao.getAllDateStr();
-    log.debug("total days: " + dateStrs.size());
-    for (String dateStr : dateStrs) {
-      List<OtLevel2> ot2s = ot2Dao.getLv2OTByDateAndOTClass(dateStr, otClass);
-      log.debug("date: " + dateStr + ", ot2 number: " + ot2s.size());
-
-      for (OtLevel2 tot2 : ot2s) {
-        log.debug("processing " + tot2.getName());
-        if (tot2.getRa() + 999 < CommonFunction.MINFLOAT || tot2.getDec() + 999 < CommonFunction.MINFLOAT) {
-          log.error("name=" + tot2.getName() + ", ra and dec -999 error!");
-          continue;
-        }
-
-        OtTmplWrong otw = new OtTmplWrong();
-        otw.setOtId(tot2.getOtId());
-        otw.setName(tot2.getName());
-        otw.setRa(tot2.getRa());
-        otw.setDec(tot2.getDec());
-        otw.setMag(tot2.getMag());
-        otw.setIndexId((long) 0);
-        otw.setDataProduceMethod(tot2.getDataProduceMethod());
-        otw.setFirstFoundTimeUtc(tot2.getFoundTimeUtc());
-        otw.setLastFoundTimeUtc(tot2.getFoundTimeUtc());
-        otw.setMatchedTotal(1);
-        otw.setIsValid(Boolean.TRUE);
-        otw.setOttId(tot2.getOtType());
-        otw.setOtClass(otClass);
-        otw.setRadius((float) 0);
-
-        double searchbox = ot2Searchbox;
-        List<OtTmplWrong> matchedOttws = new ArrayList();
-        int times = 0;
-
-        int tMchNum = 0;
-        while (true) {
-          if (times++ > 20) {
-            log.error("match too many times 21");
-          }
-          List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong2(tot2, (float) (searchbox), 0);
-          int matchNum = mot2s.size();
-          if (matchNum > tMchNum) {
-            tMchNum = matchNum;
-            matchedOttws.clear();
-            for (OtTmplWrong obj : mot2s) {
-              double tDis = CommonFunction.getGreatCircleDistance(tot2.getRa(), tot2.getDec(), obj.getRa(), obj.getDec());
-              if (tDis < searchbox) {
-                matchedOttws.add(obj);
-              }
-            }
-
-            if (matchedOttws.size() > 0) {
-              matchedOttws.add(otw);
-              OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
-              tot2.setRa(avgOttw.getRa());
-              tot2.setDec(avgOttw.getDec());
-              float maxDist = getMaxDist(matchedOttws, avgOttw);
-              searchbox = maxDist + ot2Searchbox;
-            } else {
-              ottwDao.save(otw);
-              break;
-            }
-          } else {
-            ottwDao.save(otw);
-            break;
-          }
-        }
-        log.debug("match " + times + " times, final match number " + tMchNum);
-
-        if (matchedOttws.size() > 1) {
-          OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
-          float maxDist = getMaxDist(matchedOttws, avgOttw);
-
-          int totalMchNum = 0;
-          OtTmplWrong firstOttw = null, tottw2 = null;
-          boolean flag = true;
-          for (OtTmplWrong obj : matchedOttws) {
-            totalMchNum += obj.getMatchedTotal();
-            if (obj.getOtId() == 0) {
-              matchedOttws.remove(obj);
-              continue;
-            }
-            if (flag) {
-              firstOttw = obj;
-              tottw2 = obj;
-              flag = false;
-              continue;
-            }
-            if (obj.getFirstFoundTimeUtc().before(firstOttw.getFirstFoundTimeUtc())) {
-              firstOttw = obj;
-            }
-            if (obj.getLastFoundTimeUtc().after(tottw2.getLastFoundTimeUtc())) {
-              tottw2 = obj;
-            }
-          }
-          firstOttw.setLastFoundTimeUtc(tottw2.getLastFoundTimeUtc());
-          firstOttw.setMatchedTotal(totalMchNum);
-          firstOttw.setRa(avgOttw.getRa());
-          firstOttw.setDec(avgOttw.getDec());
-          firstOttw.setRadius(maxDist);
-          matchedOttws.remove(firstOttw);
-          ottwDao.update(firstOttw);
-          log.debug("finally match " + firstOttw.getName() + ", remove obj number: " + matchedOttws.size());
-          for (OtTmplWrong obj : matchedOttws) {
-            ottwDao.delete(obj);
-          }
-        }
-      }
-    }
-
-  }
-
   public void otTmplDailyUpdate(char otClass) {
 
-    List<OtLevel2> ot2s = ot2Dao.getTodayAll();
+    List<OtLevel2> ot2s = ot2Dao.getTodayOt2(otClass);
+
     for (OtLevel2 tot2 : ot2s) {
+      log.debug("processing " + tot2.getName());
       if (tot2.getRa() + 999 < CommonFunction.MINFLOAT || tot2.getDec() + 999 < CommonFunction.MINFLOAT) {
         log.error("name=" + tot2.getName() + ", ra and dec -999 error!");
         continue;
       }
 
-      List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong(tot2, ot2Searchbox, 0);
-      int matchNum = mot2s.size();
-      if (matchNum > 1) {
-        log.warn("name=" + tot2.getName() + ",match multi template star: " + matchNum + "searchbox=" + ot2Searchbox);
-      }
+      OtTmplWrong otw = new OtTmplWrong();
+      otw.setOtId(tot2.getOtId());
+      otw.setName(tot2.getName());
+      otw.setRa(tot2.getRa());
+      otw.setDec(tot2.getDec());
+      otw.setMag(tot2.getMag());
+      otw.setIndexId((long) 0);
+      otw.setDataProduceMethod(tot2.getDataProduceMethod());
+      otw.setFirstFoundTimeUtc(tot2.getFoundTimeUtc());
+      otw.setLastFoundTimeUtc(tot2.getFoundTimeUtc());
+      otw.setMatchedTotal(1);
+      otw.setIsValid(Boolean.TRUE);
+      otw.setOttId(tot2.getOtType());
+      otw.setOtClass(otClass);
+      otw.setRadius((float) 0);
 
-      double minDis = ot2Searchbox;
-      OtTmplWrong matchedOT2 = null;
+      double searchbox = ot2Searchbox;
+      List<OtTmplWrong> matchedOttws = new ArrayList();
+      int times = 0;
 
-      for (OtTmplWrong obj : mot2s) {
-        double tDis = CommonFunction.getGreatCircleDistance(tot2.getRa(), tot2.getDec(), obj.getRa(), obj.getDec());
-        if (matchNum > 1) {
-          log.warn("name=" + obj.getName() + ", distance=" + tDis);
+      int tMchNum = 0;
+      while (true) {
+        if (times++ > 20) {
+          log.error("match too many times 21");
         }
-        if (tDis < minDis) {
-          minDis = tDis;
-          matchedOT2 = obj;
+        List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong2(tot2, (float) (searchbox), 0);
+        int matchNum = mot2s.size();
+        if (matchNum > tMchNum) {
+          tMchNum = matchNum;
+          matchedOttws.clear();
+          for (OtTmplWrong obj : mot2s) {
+            double tDis = CommonFunction.getGreatCircleDistance(tot2.getRa(), tot2.getDec(), obj.getRa(), obj.getDec());
+            if (tDis < searchbox) {
+              matchedOttws.add(obj);
+            }
+          }
+
+          if (matchedOttws.size() > 0) {
+            matchedOttws.add(otw);
+            OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
+            tot2.setRa(avgOttw.getRa());
+            tot2.setDec(avgOttw.getDec());
+            float maxDist = getMaxDist(matchedOttws, avgOttw);
+            searchbox = maxDist + ot2Searchbox;
+          } else {
+            ottwDao.save(otw);
+            break;
+          }
+        } else {
+          ottwDao.save(otw);
+          break;
         }
       }
-      if (matchedOT2 == null) {
-        OtTmplWrong otw = new OtTmplWrong();
-        otw.setOtId(tot2.getOtId());
-        otw.setName(tot2.getName());
-        otw.setRa(tot2.getRa());
-        otw.setDec(tot2.getDec());
-        otw.setMag(tot2.getMag());
-        otw.setIndexId((long) 0);
-        otw.setDataProduceMethod(tot2.getDataProduceMethod());
-        otw.setFirstFoundTimeUtc(tot2.getFoundTimeUtc());
-        otw.setLastFoundTimeUtc(tot2.getFoundTimeUtc());
-        otw.setMatchedTotal(1);
-        otw.setIsValid(Boolean.TRUE);
-        otw.setOttId(tot2.getOtType());
-        otw.setOtClass(otClass);
-        otw.setRadius((float) 0);
-        ottwDao.save(otw);
-      } else {
-        matchedOT2.setLastFoundTimeUtc(tot2.getFoundTimeUtc());
-        matchedOT2.setMatchedTotal(matchedOT2.getMatchedTotal() + 1);
-        ottwDao.update(matchedOT2);
+      log.debug("match " + times + " times, final match number " + tMchNum);
+
+      if (matchedOttws.size() > 1) {
+        OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
+        float maxDist = getMaxDist(matchedOttws, avgOttw);
+
+        int totalMchNum = 0;
+        OtTmplWrong firstOttw = null, tottw2 = null;
+        boolean flag = true;
+        for (OtTmplWrong obj : matchedOttws) {
+          totalMchNum += obj.getMatchedTotal();
+          if (obj.getOtId() == tot2.getOtId()) {
+            matchedOttws.remove(obj);
+          }
+          if (flag) {
+            firstOttw = obj;
+            tottw2 = obj;
+            flag = false;
+            continue;
+          }
+          if (obj.getFirstFoundTimeUtc().before(firstOttw.getFirstFoundTimeUtc())) {
+            firstOttw = obj;
+          }
+          if (obj.getLastFoundTimeUtc().after(tottw2.getLastFoundTimeUtc())) {
+            tottw2 = obj;
+          }
+        }
+        firstOttw.setLastFoundTimeUtc(tottw2.getLastFoundTimeUtc());
+        firstOttw.setMatchedTotal(totalMchNum);
+        firstOttw.setRa(avgOttw.getRa());
+        firstOttw.setDec(avgOttw.getDec());
+        firstOttw.setRadius(maxDist);
+        matchedOttws.remove(firstOttw);
+        ottwDao.update(firstOttw);
+        log.debug("finally match " + firstOttw.getName() + ", remove obj number: " + matchedOttws.size());
+        for (OtTmplWrong obj : matchedOttws) {
+          ot2mDao.updateOt2HisMatchId(tot2.getOtId(), obj.getOtId(), firstOttw.getOtId());
+          ottwDao.delete(obj);
+        }
       }
     }
-
   }
 
   public void rematchAllOt2() {
@@ -404,6 +294,181 @@ public class OtTmplServiceImpl implements OtTmplService {
           matchedOT2.setLastFoundTimeUtc(tot2.getFoundTimeUtc());
           matchedOT2.setMatchedTotal(matchedOT2.getMatchedTotal() + 1);
           ottwDao.update(matchedOT2);
+        }
+      }
+    }
+
+  }
+
+  /**
+   * 对不同CCD同一天区的OT1进行匹配，目的是找出同一时刻出现的OT
+   */
+  public void findOT1() {
+
+    List<String> dateStrs = oorDao.getAllDateStr();
+    log.debug("total days: " + dateStrs.size());
+
+    for (String dateStr : dateStrs) {
+      List<OtObserveRecord> oors = oorDao.getOt1ByDate(dateStr);
+      log.debug("date: " + dateStr + ", ot1 number: " + oors.size());
+
+      int matchNum = 0;
+      int removeNum = 0;
+      while (oors.size() > 0) {
+        OtObserveRecord tot1 = oors.get(0);
+        double searchbox = ot2Searchbox;
+        List<OtObserveRecord> mot2s = oorDao.searchOT2TmplWrong(tot1, (float) (searchbox), 0);
+
+        List<OtObserveRecord> matchedObjs = new ArrayList();
+        for (OtObserveRecord obj : mot2s) {
+          double tDis = CommonFunction.getGreatCircleDistance(tot1.getRaD(), tot1.getDecD(), obj.getRaD(), obj.getDecD());
+          if (tDis < searchbox) {
+            matchedObjs.add(obj);
+          }
+        }
+        int tsize = matchedObjs.size();
+        if (tsize > 0) {
+          log.debug("ot1id:" + tot1.getOorId() + ", match " + tsize);
+        }
+        for (OtObserveRecord toot2 : matchedObjs) {
+          OorTmp oorTmp = new OorTmp();
+          oorTmp.setOor1Id(tot1.getOorId());
+          oorTmp.setOor1Ra(tot1.getRaD());
+          oorTmp.setOor1Dec(tot1.getDecD());
+          oorTmp.setOor1Mag(tot1.getMagAper());
+          oorTmp.setOor2Id(toot2.getOorId());
+          oorTmp.setOor2Ra(toot2.getRaD());
+          oorTmp.setOor2Dec(toot2.getDecD());
+          oorTmp.setOor2Mag(toot2.getMagAper());
+          oorTmp.setOor1DpmId(tot1.getDpmId());
+          oorTmp.setOor1DateUt(tot1.getDateUt());
+          oorTmp.setOor2DpmId(toot2.getDpmId());
+          oorTmp.setOor2DateUt(toot2.getDateUt());
+          oorTmpDao.save(oorTmp);
+        }
+        matchNum++;
+        removeNum += tsize;
+        oors.remove(tot1);
+        oors.removeAll(matchedObjs);
+      }
+      log.debug("date: " + dateStr + ",matchNum:" + matchNum + ", removeNum:" + removeNum + ", total:" + (matchNum + removeNum));
+    }
+  }
+
+  /**
+   * generateOtTmpl：匹配半径内有多个目标，取最近的一个为匹配对象。 generateOtTmpl2：
+   * 1，匹配半径内的多个目标，都认为是同一个目标； 2，对这些目标进行合并，删除晚出现的目标；
+   * 3，将所有目标位置的平均值作为该目标的值，所有目标与均值坐标最大距离作为目标半径 4，以均值坐标和匹配半径+目标半径，再次进行匹配
+   * 5，直到匹配个数不增加或匹配总次数超过20次，完成当前目标的匹配，开始下一个目标的匹配
+   *
+   * @param otClass
+   */
+  public void generateOtTmpl2(char otClass) {
+
+    List<String> dateStrs = ot2Dao.getAllDateStr();
+    log.debug("total days: " + dateStrs.size());
+    for (String dateStr : dateStrs) {
+      List<OtLevel2> ot2s = ot2Dao.getLv2OTByDateAndOTClass(dateStr, otClass);
+      log.debug("date: " + dateStr + ", ot2 number: " + ot2s.size());
+
+      for (OtLevel2 tot2 : ot2s) {
+        log.debug("processing " + tot2.getName());
+        if (tot2.getRa() + 999 < CommonFunction.MINFLOAT || tot2.getDec() + 999 < CommonFunction.MINFLOAT) {
+          log.error("name=" + tot2.getName() + ", ra and dec -999 error!");
+          continue;
+        }
+
+        OtTmplWrong otw = new OtTmplWrong();
+        otw.setOtId(tot2.getOtId());
+        otw.setName(tot2.getName());
+        otw.setRa(tot2.getRa());
+        otw.setDec(tot2.getDec());
+        otw.setMag(tot2.getMag());
+        otw.setIndexId((long) 0);
+        otw.setDataProduceMethod(tot2.getDataProduceMethod());
+        otw.setFirstFoundTimeUtc(tot2.getFoundTimeUtc());
+        otw.setLastFoundTimeUtc(tot2.getFoundTimeUtc());
+        otw.setMatchedTotal(1);
+        otw.setIsValid(Boolean.TRUE);
+        otw.setOttId(tot2.getOtType());
+        otw.setOtClass(otClass);
+        otw.setRadius((float) 0);
+
+        double searchbox = ot2Searchbox;
+        List<OtTmplWrong> matchedOttws = new ArrayList();
+        int times = 0;
+
+        int tMchNum = 0;
+        while (true) {
+          if (times++ > 20) {
+            log.error("match too many times 21");
+          }
+          List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong2(tot2, (float) (searchbox), 0);
+          int matchNum = mot2s.size();
+          if (matchNum > tMchNum) {
+            tMchNum = matchNum;
+            matchedOttws.clear();
+            for (OtTmplWrong obj : mot2s) {
+              double tDis = CommonFunction.getGreatCircleDistance(tot2.getRa(), tot2.getDec(), obj.getRa(), obj.getDec());
+              if (tDis < searchbox) {
+                matchedOttws.add(obj);
+              }
+            }
+
+            if (matchedOttws.size() > 0) {
+              matchedOttws.add(otw);
+              OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
+              tot2.setRa(avgOttw.getRa());
+              tot2.setDec(avgOttw.getDec());
+              float maxDist = getMaxDist(matchedOttws, avgOttw);
+              searchbox = maxDist + ot2Searchbox;
+            } else {
+              ottwDao.save(otw);
+              break;
+            }
+          } else {
+            ottwDao.save(otw);
+            break;
+          }
+        }
+        log.debug("match " + times + " times, final match number " + tMchNum);
+
+        if (matchedOttws.size() > 1) {
+          OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
+          float maxDist = getMaxDist(matchedOttws, avgOttw);
+
+          int totalMchNum = 0;
+          OtTmplWrong firstOttw = null, tottw2 = null;
+          boolean flag = true;
+          for (OtTmplWrong obj : matchedOttws) {
+            totalMchNum += obj.getMatchedTotal();
+            if (obj.getOtId() == 0) {
+              matchedOttws.remove(obj);
+            }
+            if (flag) {
+              firstOttw = obj;
+              tottw2 = obj;
+              flag = false;
+              continue;
+            }
+            if (obj.getFirstFoundTimeUtc().before(firstOttw.getFirstFoundTimeUtc())) {
+              firstOttw = obj;
+            }
+            if (obj.getLastFoundTimeUtc().after(tottw2.getLastFoundTimeUtc())) {
+              tottw2 = obj;
+            }
+          }
+          firstOttw.setLastFoundTimeUtc(tottw2.getLastFoundTimeUtc());
+          firstOttw.setMatchedTotal(totalMchNum);
+          firstOttw.setRa(avgOttw.getRa());
+          firstOttw.setDec(avgOttw.getDec());
+          firstOttw.setRadius(maxDist);
+          matchedOttws.remove(firstOttw);
+          ottwDao.update(firstOttw);
+          log.debug("finally match " + firstOttw.getName() + ", remove obj number: " + matchedOttws.size());
+          for (OtTmplWrong obj : matchedOttws) {
+            ottwDao.delete(obj);
+          }
         }
       }
     }

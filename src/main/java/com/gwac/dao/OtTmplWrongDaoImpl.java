@@ -42,6 +42,13 @@ public class OtTmplWrongDaoImpl extends BaseHibernateDaoImpl<OtTmplWrong> implem
     return new ArrayList();
   }
   
+  /**
+   * 测试用，查找ot_tmpl_wrong2表
+   * @param ot2
+   * @param searchRadius
+   * @param mag
+   * @return 
+   */
   @Override
   public List<OtTmplWrong> searchOT2TmplWrong2(OtLevel2 ot2, float searchRadius, float mag) {
 

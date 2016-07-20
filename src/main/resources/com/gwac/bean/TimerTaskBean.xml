@@ -73,13 +73,6 @@
     <property name="targetMethod" value="startJob" /> 
   </bean> 
   
-  <bean id="otTmplTrigger" 
-        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-    <property name="jobDetail" ref="otTmplJob" />
-    <property name="repeatInterval" value="15000000000000" />  
-    <property name="startDelay" value="5000" />   
-  </bean>
-  
   <bean id="foTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="foJob" />
@@ -143,34 +136,45 @@
     <property name="jobDetail" ref="moveDataToHisJob" />
     <property name="cronExpression" value="0 50 16 * * ?"/> <!-- 50 16 -->
   </bean>
+  
+  <bean id="otTmplTrigger2" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="otTmplJob" />
+    <property name="repeatInterval" value="15000000000000" />  
+    <property name="startDelay" value="5000" />   
+  </bean>
+  
+  <bean id="otTmplTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="otTmplJob" />
+    <property name="cronExpression" value="0 00 15 * * ?"/>
+  </bean>
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="jobDetails">
       <list>
         <ref bean="imageStatusParmJob" />
         <ref bean="addMissedCutImageJob" />
-        <ref bean="moveDataToHisJob" />
+        <!--<ref bean="moveDataToHisJob" />-->
         <!--<ref bean="fileTransferJob" />-->
         <!--<ref bean="dataSyncJob" />-->
         <ref bean="ot2CheckJob" />
         <!--<ref bean="monitorImageSyncJob" />-->
         <!--<ref bean="otSubObserveRecordJob" />-->
         <ref bean="foJob" />
-        <ref bean="otTmplJob" />
+        <!--<ref bean="otTmplJob" />-->
       </list>
     </property>
     <property name="triggers">
       <list>
         <ref bean="imageStatusParmTrigger" />
         <ref bean="addMissedCutImageTrigger" />
-        <ref bean="moveDataToHisTrigger" />
+        <!--<ref bean="moveDataToHisTrigger" />-->
         <!--<ref bean="fileTransferTrigger" />-->
 <!--        <ref bean="dataSyncTrigger" />-->
         <ref bean="ot2CheckTrigger" />
         <!--<ref bean="monitorImageSyncTrigger" />-->
         <!--<ref bean="otSubObserveRecordTrigger" />-->
         <ref bean="foTrigger" />
-        <ref bean="otTmplTrigger" />
+        <!--<ref bean="otTmplTrigger" />-->
       </list>
     </property>
   </bean>

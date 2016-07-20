@@ -12,11 +12,13 @@ import com.gwac.dao.MinorPlanetDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtLevel2MatchDao;
 import com.gwac.dao.MatchTableDao;
+import com.gwac.dao.OtTmplWrongDao;
 import com.gwac.dao.Rc3Dao;
 import com.gwac.dao.UsnoCatalogDao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2Match;
 import com.gwac.model.MatchTable;
+import com.gwac.model.OtTmplWrong;
 import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
 import com.gwac.model2.MinorPlanet;
@@ -69,6 +71,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
   private MatchTableDao mtDao;
   private OtLevel2MatchDao ot2mDao;
+  private OtTmplWrongDao ottwdao;
 
   private static boolean running = true;
   private Boolean isBeiJingServer;
@@ -233,10 +236,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
 
     long startTime = System.nanoTime();
-    Map<OtLevel2, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
+    Map<OtTmplWrong, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
     Boolean hisType = false;
-    for (Map.Entry<OtLevel2, Double> entry : tOT2Hism.entrySet()) {
-      OtLevel2 tot2 = (OtLevel2) entry.getKey();
+    for (Map.Entry<OtTmplWrong, Double> entry : tOT2Hism.entrySet()) {
+      OtTmplWrong tot2 = (OtTmplWrong) entry.getKey();
       Double distance = (Double) entry.getValue();
 
       MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
@@ -251,12 +254,11 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2mDao.save(ot2m);
       flag = true;
 
-      if (!hisType && tot2.getOtType() != null && ((tot2.getOtType() >= 8 && tot2.getOtType() <= 11) || tot2.getOtType() == 15)) {
-        ot2.setOtType(tot2.getOtType());
+      if (!hisType && tot2.getOtClass()=='1') {
+        ot2.setOtType(tot2.getOttId());
         ot2Dao.updateOTType(ot2);
         hisType = true;
       }
-      break; //临时解决方案，只插入最老的一条记录
     }
     if (tOT2Hism.size() > 0) {
       ot2.setOt2HisMatch((short) tOT2Hism.size());
@@ -316,12 +318,13 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
   }
 
-  public Map<OtLevel2, Double> matchOt2His(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<OtTmplWrong, Double> matchOt2His(OtLevel2 ot2, float searchRadius, float mag) {
 
-    List<OtLevel2> objs = ot2Dao.searchOT2His(ot2, searchRadius, mag);
+//    List<OtLevel2> objs = ot2Dao.searchOT2His(ot2, searchRadius, mag);
+    List<OtTmplWrong> objs = ottwdao.searchOT2TmplWrong(ot2, searchRadius, mag);
     double minDis = searchRadius;
     Map rst = new HashMap();
-    for (OtLevel2 obj : objs) {
+    for (OtTmplWrong obj : objs) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRa(), obj.getDec());
       if (tDis < minDis) {
         rst.put(obj, tDis);
@@ -943,6 +946,20 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    */
   public void setCpfDao(CcdPixFilterDao cpfDao) {
     this.cpfDao = cpfDao;
+  }
+
+  /**
+   * @return the ottwdao
+   */
+  public OtTmplWrongDao getOttwdao() {
+    return ottwdao;
+  }
+
+  /**
+   * @param ottwdao the ottwdao to set
+   */
+  public void setOttwdao(OtTmplWrongDao ottwdao) {
+    this.ottwdao = ottwdao;
   }
 
 }
