@@ -2,16 +2,6 @@
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
   var baseUrl = gwacRootURL + "/get-ot-history-detail-json.action?otName=";
-  var option1 = {
-    legend: {show: false},
-    series: {shadowSize: 0},
-    points: {show: true},
-    lines: {show: true, fill: false},
-    grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
-    selection: {mode: "xy"},
-    xaxis: {show: true, tickColor: 'transparent'},
-    yaxis: {show: true, tickDecimals: 2, tickFormatter: formate1, transform: formate2, inverseTransform: formate2}
-  };
 
   getOt2Detail();
 
@@ -32,12 +22,42 @@ $(function() {
     cutImgShow(data);
     otSkyCoordinateShow(data);
     otCurveShow(data);
-    otPositionShow(data);
+    otClassify(data);
+  }
+
+  function otClassify(data) {
+    var otTypes = data.otTypes;
+    var ot2 = data.ot2Tmpl;
+    $.each(otTypes, function(i, item) {
+      $('#ot2Classify').append($('<option>', {
+        value: item.ottId,
+        text: item.ottName
+      }));
+    });
+
+    if (ot2.ottId === 'null' || ot2.ottId === null) {
+      $("#ot2Classify").val(0);
+    } else {
+      $("#ot2Classify").val(ot2.ottId);
+    }
+
+    $("#ot2Classify").change(function() {
+      var gwacRootURL = $("#gwacRootURL").val();
+      var otTypeId = $("#ot2Classify").val();
+      var otId = $("#otId").val();
+      var url = gwacRootURL + "/ot-classify.action";
+      var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
+
+      $.post(url, formData,
+              function(data) {
+                console.log(data);
+              }, "json");
+    });
   }
 
   function cutImgShow(data) {
     var dataRootWebMap = data.dataRootWebMap;
-    var ot2 = data.ot2;
+    var ot2 = data.ot2Tmpl;
     var ffcRef = data.ffcRef;
     var ffcList = data.ffcList;
 
@@ -185,7 +205,7 @@ $(function() {
   }
 
   function otSkyCoordinateShow(data) {
-    var ot2 = data.ot2;
+    var ot2 = data.ot2Tmpl;
     var ra = ot2.ra;
     var dec = ot2.dec;
     var siderealTime = degreeToHMS(ra);
@@ -195,7 +215,7 @@ $(function() {
     //点击查看fits原图
     $("#showOt2Fits").click(function() {
       var gwacRootURL = $("#gwacRootURL").val();
-      var otName = $("#otName").val();
+      var otName = getUrlParameter("otName");
       var url = gwacRootURL + "/show-fits-list.action?otName=" + otName;
       openwindow(url, '_blank', 1050, 600, 1050, 600);
       return false;
@@ -203,25 +223,52 @@ $(function() {
   }
 
   function otCurveShow(data) {
-    var ot2 = data.ot2;
+    var ot2 = data.ot2Tmpl;
     if (typeof (ot2) !== "undefined")
     {
-      $("#otFoundTimeUtc").html(ot2.foundTimeUtc);
+      $("#otFoundTimeUtc").html(ot2.firstFoundTimeUtc);
     }
-    var otCurveData = eval(data.otOpticalVaration);
-    if (typeof (otCurveData) === "undefined")
+    var ot2s = eval(data.otOpticalVaration);
+    if (typeof (ot2s) === "undefined")
     {
       return;
     }
-    var otCurveShow = [{
-        data: otCurveData,
-        color: '#71c73e',
-        points: {radius: 2} //fillColor: '#77b7c5'
-      }
-    ];
-    option1.lines.show = true;
+    var otCurveShow = [];
+
+    $.each(ot2s, function(i, item) {
+      var otName = item.otName;
+      var mag = item.mag;
+      var dateUt = item.dateUt;
+      var coorShow = [];
+      $.each(mag, function(j, item) {
+        coorShow[j] = [dateUt[j] / 86400, mag[j]];
+      });
+      otCurveShow[i] = {
+        label: otName,
+        data: coorShow,
+        points: {radius: 2}
+      };
+    });
+
+    var option1 = {
+      legend: {show: false},
+      series: {shadowSize: 0},
+      points: {show: true},
+      lines: {show: false, fill: false},
+      grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
+      selection: {mode: "xy"},
+      xaxis: {show: true, tickColor: 'transparent'},
+      yaxis: {show: true, tickDecimals: 2, tickFormatter: formate1, transform: formate2, inverseTransform: formate2},
+      zoom: {interactive: true},
+      pan: {interactive: true},
+      crosshair: {mode: "xy"}
+    };
+
+    option1.yaxis.zoomRange = false;
+    option1.yaxis.panRange = false;
     option1.yaxis.transform = formate2;
     option1.yaxis.inverseTransform = formate2;
+
     otCurve = $.plot("#ot-curve", otCurveShow, option1);
 
     $("#ot-curve").bind("plothover", function(event, pos, item) {
@@ -233,36 +280,6 @@ $(function() {
         $("#tooltip").hide();
       }
     });
-  }
-
-  function otPositionShow(data) {
-    var otPositionVaration = eval(data.otPositionVaration);
-    if (typeof (otPositionVaration) === "undefined")
-    {
-      return;
-    }
-    var firstPostion = [];
-    var lastPostion = [];
-    firstPostion[0] = otPositionVaration[0];
-    lastPostion[0] = otPositionVaration[otPositionVaration.length - 1];
-    var positionData = [{
-        data: otPositionVaration,
-        color: '#0099CC',
-        points: {radius: 1} //fillColor: '#77b7c5'
-      }, {
-        data: firstPostion,
-        color: '#FF6666',
-        points: {radius: 3, fill: true, fillColor: "#FF6666"} //fillColor: '#77b7c5'
-      }, {
-        data: lastPostion,
-        color: '#FF6666',
-        points: {radius: 3} //fillColor: '#77b7c5'
-      }
-    ];
-    option1.lines.show = true;
-    option1.yaxis.transform = formate3;
-    option1.yaxis.inverseTransform = formate3;
-    otPosition = $.plot("#ot-position-curve", positionData, option1);
   }
 
   function setNavi($c, $i) {

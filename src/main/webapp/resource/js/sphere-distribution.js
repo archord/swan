@@ -145,7 +145,7 @@
 
 function openDialog(otName) {
   var gwacRootURL = $("#gwacRootURL").val();
-  var queryUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=" + otName;
+  var queryUrl = gwacRootURL + "/gwac/pgwac-ot-history-detail.action?otName=" + otName;
   window.open(queryUrl, '_blank');
   return false;
 }

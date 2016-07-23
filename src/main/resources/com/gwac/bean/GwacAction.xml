@@ -4,6 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  
+  <bean class="com.gwac.action.GetOtHistoryDetailJson"  scope="prototype">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="ot2tmplDao" ref="ottwDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="otorDao" ref="otORDao" />
+    <property name="ottDao" ref="ottDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetCoorlList" scope="prototype">
     <property name="csDao" ref="coorShowDao" />	
   </bean>

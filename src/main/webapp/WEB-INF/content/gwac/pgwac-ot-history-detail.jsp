@@ -53,23 +53,13 @@
 
       <div class="row ot-detail-body">
 
-        <div class="col-md-6 col-lg-6 ot-detail-left">
+        <div class="col-md-12 col-lg-12 ot-detail-left">
           <div id="ot-curves">
             <div id="ot-curve-show">
               <div id="ot-curve-title">
-                <span>OT光变曲线（X轴为时间，单位/分钟，开始于<span id="otFoundTimeUtc"></span>U，Y轴为星等值）</span>
+                <span>OT光变曲线（X轴为时间，单位/天，开始于<span id="otFoundTimeUtc"></span>U，Y轴为星等值）</span>
               </div>
               <div id="ot-curve"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-6 ot-detail-left">
-          <div id="ot-curves">
-            <div id="ot-position-show">
-              <div id="ot-position-show-title">
-                <span>OT坐标变化（与首帧差值，单位/像素，xy轴分别为模板XY坐标）</span>
-              </div>
-              <div id="ot-position-curve"></div>
             </div>
           </div>
         </div>
@@ -86,6 +76,9 @@
     <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.categories.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.resize.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.errorbars.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.navigate.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/plot/jquery.flot.crosshair.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.validate.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/dataTables.buttons.min.js"></script>

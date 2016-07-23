@@ -1,12 +1,12 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var baseUrl = gwacRootURL + "/get-ot-detail.action?otName=";
+  var baseUrl = gwacRootURL + "/gwac/pgwac-ot-history-detail.action?otName=";
   var option1 = {
     legend: {show: false},
     series: {shadowSize: 0},
     points: {show: true},
-    lines: {show: true, fill: false},
+    lines: {show: false, fill: false},
     grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
     selection: {mode: "xy"},
     xaxis: {show: true, tickColor: 'transparent'},
@@ -431,13 +431,25 @@ $(function() {
     {
       return;
     }
+    var firstPoint = [];
+    var lastPoint = [];
+    firstPoint[0] = otCurveData[0];
+    lastPoint[0] = otCurveData[otCurveData.length - 1];
     var otCurveShow = [{
         data: otCurveData,
         color: '#71c73e',
-        points: {radius: 2} //fillColor: '#77b7c5'
+        points: {radius: 1} //fillColor: '#77b7c5'
+      }, {
+        data: firstPoint,
+        color: '#FF6666',
+        points: {radius: 3, fill: true, fillColor: "#FF6666"} //fillColor: '#77b7c5'
+      }, {
+        data: lastPoint,
+        color: '#FF6666',
+        points: {radius: 3} //fillColor: '#77b7c5'
       }
     ];
-    option1.lines.show = true;
+    option1.lines.show = false;
     option1.yaxis.transform = formate2;
     option1.yaxis.inverseTransform = formate2;
     otCurve = $.plot("#ot-curve", otCurveShow, option1);
@@ -472,7 +484,7 @@ $(function() {
         points: {radius: 2}
       };
     });
-    option1.lines.show = true;
+    option1.lines.show = false;
     option1.legend.show = true;
     option1.yaxis.transform = formate2;
     option1.yaxis.inverseTransform = formate2;
@@ -524,7 +536,7 @@ $(function() {
         points: {radius: 3} //fillColor: '#77b7c5'
       }
     ];
-    option1.lines.show = true;
+    option1.lines.show = false;
     option1.yaxis.transform = formate3;
     option1.yaxis.inverseTransform = formate3;
     otPosition = $.plot("#ot-position-curve", positionData, option1);

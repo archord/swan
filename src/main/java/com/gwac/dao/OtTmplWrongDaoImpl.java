@@ -19,6 +19,20 @@ import org.hibernate.Session;
 public class OtTmplWrongDaoImpl extends BaseHibernateDaoImpl<OtTmplWrong> implements OtTmplWrongDao {
   
   @Override
+  public OtTmplWrong getOtTmplByName(String otName) {
+
+    String sql = "select * from ot_tmpl_wrong where name='" + otName + "'";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(OtTmplWrong.class);
+    if (!q.list().isEmpty()) {
+      return (OtTmplWrong) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+  
+  @Override
   public List<OtTmplWrong> searchOT2TmplWrong(OtLevel2 ot2, float searchRadius, float mag) {
 
     SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);

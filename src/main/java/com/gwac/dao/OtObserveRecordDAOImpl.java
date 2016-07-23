@@ -7,6 +7,7 @@ package com.gwac.dao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtObserveRecordShow;
+import com.gwac.model.OtTmplWrong;
 import com.gwac.util.CommonFunction;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -26,6 +27,36 @@ import org.hibernate.Session;
 public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
+
+  @Override
+  public String getOt2TmplOpticalVaration(OtTmplWrong ot2Tmpl) {
+    Session session = getCurrentSession();
+    String sql = "SELECT name, array_to_string(array_agg(date_ut), ',')  dateUt,  array_to_string(array_agg(mag_aper),',')  mag "
+            + "FROM ( select ot2.name, extract(epoch from oorh.date_ut-'" + ot2Tmpl.getFirstFoundTimeUtc() + "') as date_ut, oorh.mag_aper "
+            + "from ot_observe_record_his oorh "
+            + "inner join ot_level2_his ot2 on oorh.ot_id =ot2.ot_id "
+            + "inner join ot_level2_match ot2m on ot2.ot_id=ot2m.ot_id and ot2m.mt_id=6 and ot2m.match_id=" + ot2Tmpl.getOtId() + " "
+            + "order by oorh.date_ut "
+            + ") as rst "
+            + "group by name;";
+
+    Query q = session.createSQLQuery(sql);
+    Iterator itor = q.list().iterator();
+
+    StringBuilder sb = new StringBuilder("[");
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      sb.append("{otName:\"");
+      sb.append(row[0]);
+      sb.append("\",dateUt:[");
+      sb.append(row[1]);
+      sb.append("],mag:[");
+      sb.append(row[2]);
+      sb.append("]},");
+    }
+    sb.append("]");
+    return sb.toString();
+  }
 
   @Override
   public void moveDataToHisTable() {
@@ -181,7 +212,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
-  
+
   @Override
   public List<OtObserveRecord> getAllOrderByDate() {
     Session session = getCurrentSession();

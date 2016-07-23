@@ -7,6 +7,7 @@ package com.gwac.dao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtObserveRecordShow;
+import com.gwac.model.OtTmplWrong;
 import java.util.List;
 
 /**
@@ -14,6 +15,8 @@ import java.util.List;
  * @author xy
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
+  
+  public String getOt2TmplOpticalVaration(OtTmplWrong ot2Tmpl);
 
   public void moveDataToHisTable();
 

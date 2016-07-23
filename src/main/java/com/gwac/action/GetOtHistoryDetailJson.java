@@ -4,10 +4,12 @@ import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.dao.OtTmplWrongDao;
 import com.gwac.dao.OtTypeDao;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtTmplWrong;
 import com.gwac.model.OtType;
 import com.gwac.model.UserInfo;
 import com.gwac.util.CommonFunction;
@@ -34,7 +36,7 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
 
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
-  private OtLevel2Dao obDao;
+  private OtTmplWrongDao ot2tmplDao;
   private OtObserveRecordDAO otorDao;
   private OtTypeDao ottDao;
   /**
@@ -45,11 +47,10 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
   /**
    * 返回结果
    */
-  private OtLevel2 ot2;
+  private OtTmplWrong ot2Tmpl;
   private List<FitsFileCut> ffcList;
   private FitsFileCutRef ffcRef;
   private String otOpticalVaration;
-  private String otPositionVaration;
   private String dataRootWebMap;
   private UserInfo userInfo;
   private List<OtType> otTypes;
@@ -62,31 +63,27 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
   public String execute() throws Exception {
 
     dataRootWebMap = getText("gwac.data.root.directory.webmap");
-        
-    if(session.containsKey("userInfo")){
-      userInfo = (UserInfo)session.get("userInfo");
-    }
 
-    otTypes=ottDao.findAll();
-    List<Integer> tlist = obDao.hisOrCurExist(otName);
-    if (!tlist.isEmpty()) {
-      Integer his = tlist.get(0);
-      queryHis = his == 1;
-      ot2 = obDao.getOtLevel2ByName(otName, queryHis);
-      ffcList = ffcDao.getCutImageByOtId(ot2.getOtId(), queryHis);
-
-      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2.getOtId());
-      if (ffcrs != null && ffcrs.size() > 0) {
-        ffcRef = ffcrs.get(0);
-      }
-      String tmp[] = otorDao.getOtOpticalVaration(ot2, queryHis).split("=");
-      otOpticalVaration = tmp[0];
-      otPositionVaration = tmp[1];
-    } else {
+    if (otName == null || otName.isEmpty()) {
       ffcList = new ArrayList();
-      otOpticalVaration = "[]";
-      otPositionVaration = "[]";
+      return "json";
     }
+
+    if (session.containsKey("userInfo")) {
+      userInfo = (UserInfo) session.get("userInfo");
+    }
+
+    queryHis = true;
+    otTypes = ottDao.findAll();
+
+    ot2Tmpl = ot2tmplDao.getOtTmplByName(otName);
+    ffcList = ffcDao.getCutImageByOtId(getOt2Tmpl().getOtId(), queryHis);
+
+    List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2Tmpl().getOtId());
+    if (ffcrs != null && ffcrs.size() > 0) {
+      ffcRef = ffcrs.get(0);
+    }
+    otOpticalVaration = otorDao.getOt2TmplOpticalVaration(getOt2Tmpl());
 
     return "json";
   }
@@ -110,13 +107,6 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
    */
   public String getOtName() {
     return otName;
-  }
-
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
   }
 
   /**
@@ -155,24 +145,10 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
   }
 
   /**
-   * @return the otPositionVaration
-   */
-  public String getOtPositionVaration() {
-    return otPositionVaration;
-  }
-
-  /**
    * @param otName the otName to set
    */
   public void setOtName(String otName) {
     this.otName = otName;
-  }
-
-  /**
-   * @return the ot2
-   */
-  public OtLevel2 getOt2() {
-    return ot2;
   }
 
   /**
@@ -213,6 +189,20 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
    */
   public List<OtType> getOtTypes() {
     return otTypes;
+  }
+
+  /**
+   * @param ot2tmplDao the ot2tmplDao to set
+   */
+  public void setOt2tmplDao(OtTmplWrongDao ot2tmplDao) {
+    this.ot2tmplDao = ot2tmplDao;
+  }
+
+  /**
+   * @return the ot2Tmpl
+   */
+  public OtTmplWrong getOt2Tmpl() {
+    return ot2Tmpl;
   }
 
 }
