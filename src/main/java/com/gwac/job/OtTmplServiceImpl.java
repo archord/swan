@@ -17,7 +17,9 @@ import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtTmplWrong;
 import com.gwac.util.CommonFunction;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -43,9 +45,9 @@ public class OtTmplServiceImpl implements OtTmplService {
   @Override
   public void startJob() {
 
-    if (isBeiJingServer || isTestServer) {
-      return;
-    }
+//    if (isBeiJingServer || isTestServer) {
+//      return;
+//    }
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -58,11 +60,11 @@ public class OtTmplServiceImpl implements OtTmplService {
     try {//JDBCConnectionException or some other exception
 //      generateOtTmpl('4'); //未匹配，假OT
 //      generateOtTmpl('1'); //真OT
-//      rematchAllOt2();
+      rematchAllOt2();
 //      generateOtTmpl2('4');
 //      findOT1();
-      otTmplDailyUpdate('4');
-      otTmplDailyUpdate('1');
+//      otTmplDailyUpdate('4');
+//      otTmplDailyUpdate('1');
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -185,6 +187,8 @@ public class OtTmplServiceImpl implements OtTmplService {
 
     List<String> dateStrs = ot2Dao.getAllDateStr();
     log.debug("total days: " + dateStrs.size());
+
+    MatchTable ott = mtDao.getMatchTableByTypeName("ot_level2_his");
     for (String dateStr : dateStrs) {
       List<OtLevel2> ot2s = ot2Dao.getOt2ByDate(dateStr);
       log.debug("date: " + dateStr + ", ot2 number: " + ot2s.size());
@@ -199,40 +203,43 @@ public class OtTmplServiceImpl implements OtTmplService {
         tot2.setOt2HisMatch((short) 0);
 
         List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong(tot2, ot2Searchbox, 0);
-        int matchNum = mot2s.size();
-        log.debug("name=" + tot2.getName() + ",match template star: " + matchNum + ", searchbox=" + ot2Searchbox);
-
-        if (matchNum > 0) {
-          double minDis = ot2Searchbox;
-          OtTmplWrong mot2 = null;
-          for (OtTmplWrong ottw : mot2s) {
-            Double tDis = CommonFunction.getGreatCircleDistance(tot2.getRa(), tot2.getDec(), ottw.getRa(), ottw.getDec());
-            log.debug("name=" + ottw.getName() + ", name=" + ottw.getName() + ", ra=" + ottw.getRa() + ", dec=" + ottw.getDec() + ", mag=" + ottw.getMag() + ", dist=" + tDis);
-            if (tDis < minDis) {
-              tDis = minDis;
-              mot2 = ottw;
-            }
-          }
-          if (mot2 != null) {
-            if (mot2.getMatchedTotal() > 1) {
-              Double tDis = CommonFunction.getGreatCircleDistance(tot2.getRa(), tot2.getDec(), mot2.getRa(), mot2.getDec());
-              MatchTable ott = mtDao.getMatchTableByTypeName("ot_level2_his");
-              OtLevel2Match ot2m = new OtLevel2Match();
-              ot2m.setOtId(tot2.getOtId());
-              ot2m.setMtId(ott.getMtId());
-              ot2m.setMatchId(mot2.getOtId());
-              ot2m.setRa(mot2.getRa());
-              ot2m.setDec(mot2.getDec());
-              ot2m.setMag(mot2.getMag());
-              ot2m.setDistance(tDis.floatValue());
-              ot2mDao.save(ot2m);
-              //匹配成功后设为1
-              tot2.setOt2HisMatch((short) 1);
-            }
+        double minDis = ot2Searchbox;
+        Map<OtTmplWrong, Double> tOT2Hism = new HashMap();
+        for (OtTmplWrong obj : mot2s) {
+          double tDis = CommonFunction.getGreatCircleDistance(tot2.getRa(), tot2.getDec(), obj.getRa(), obj.getDec());
+          if (tDis < minDis) {
+            tOT2Hism.put(obj, tDis);
           }
         }
 
+        Boolean hisType = false;
+        for (Map.Entry<OtTmplWrong, Double> entry : tOT2Hism.entrySet()) {
+          OtTmplWrong ootw = (OtTmplWrong) entry.getKey();
+          Double distance = (Double) entry.getValue();
+
+          OtLevel2Match ot2m = new OtLevel2Match();
+          ot2m.setOtId(tot2.getOtId());
+          ot2m.setMtId(ott.getMtId());
+          ot2m.setMatchId(Long.valueOf(ootw.getOtId()));
+          ot2m.setRa(ootw.getRa());
+          ot2m.setDec(ootw.getDec());
+          ot2m.setMag(ootw.getMag());
+          ot2m.setDistance(distance.floatValue());
+          ot2mDao.save(ot2m);
+
+          if (!hisType && ootw.getOtClass() == '1') {
+            tot2.setOtType(ootw.getOttId()); //ot2匹配到多个ot2历史目标时，类别设置为“真暂现源”中最后一个的类别
+            hisType = true;
+          }
+        }
+        if (hisType) {
+          ot2Dao.updateOTType(tot2);
+        }
+        if (tOT2Hism.size() > 0) {
+          tot2.setOt2HisMatch((short) tOT2Hism.size());
+        }
         ot2Dao.updateOt2HisMatch(tot2);
+//        log.debug(tot2.getName() + " match ot2 number:" + tOT2Hism.size());
       }
     }
   }

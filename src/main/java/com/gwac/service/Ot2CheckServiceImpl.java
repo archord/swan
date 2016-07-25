@@ -310,10 +310,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
 
     if (flag) {
-      ot2.setIsMatch((short) 2);
+      ot2.setIsMatch((short) 2); //匹配成功，找到匹配对应体
       ot2Dao.updateIsMatch(ot2);
     } else {//由定时查询改为消息队列查询后，这里需要主动更新
-      ot2.setIsMatch((short) 1);
+      ot2.setIsMatch((short) 1); //匹配不成功，未找到匹配对应体
       ot2Dao.updateIsMatch(ot2);
     }
   }

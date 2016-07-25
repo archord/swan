@@ -291,7 +291,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "select * from ot_level2 "
             + " where dpm_id=" + obj.getDpmId()
             + " and sky_id=" + obj.getSkyId()
-            + " and date_str='" + obj.getDateStr() + "'"
+//            + " and date_str='" + obj.getDateStr() + "'"
             + " and data_produce_method='" + obj.getDataProduceMethod() + "'"
             + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
