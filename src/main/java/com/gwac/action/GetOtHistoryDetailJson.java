@@ -77,13 +77,17 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
     otTypes = ottDao.findAll();
 
     ot2Tmpl = ot2tmplDao.getOtTmplByName(otName);
-    ffcList = ffcDao.getCutImageByOtId(getOt2Tmpl().getOtId(), queryHis);
+    if (ot2Tmpl != null) {
+      ffcList = ffcDao.getCutImageByOtId(ot2Tmpl.getOtId(), queryHis);
 
-    List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2Tmpl().getOtId());
-    if (ffcrs != null && ffcrs.size() > 0) {
-      ffcRef = ffcrs.get(0);
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2Tmpl.getOtId());
+      if (ffcrs != null && ffcrs.size() > 0) {
+        ffcRef = ffcrs.get(0);
+      }
+      otOpticalVaration = otorDao.getOt2TmplOpticalVaration(ot2Tmpl);
+    } else {
+      ffcList = new ArrayList();
     }
-    otOpticalVaration = otorDao.getOt2TmplOpticalVaration(getOt2Tmpl());
 
     return "json";
   }
