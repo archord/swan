@@ -258,7 +258,7 @@ $(function() {
       grid: {hoverable: true, color: '#646464', borderColor: 'transparent', borderWidth: 20, clickable: true},
       selection: {mode: "xy"},
       xaxis: {show: true, tickColor: 'transparent'},
-      yaxis: {show: true, tickDecimals: 2, tickFormatter: formate1, transform: formate2, inverseTransform: formate2},
+      yaxis: {show: true, tickDecimals: 1, tickFormatter: formate1, transform: formate2, inverseTransform: formate2},
       zoom: {interactive: true},
       pan: {interactive: true},
       crosshair: {mode: "xy"}
@@ -275,11 +275,23 @@ $(function() {
       if (item) {
         var x = item.datapoint[0].toFixed(4);
         var y = item.datapoint[1].toFixed(2);
-        $("#tooltip").html(x + ", " + y).css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
+        $("#tooltip").html(item.series.label + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
       } else {
         $("#tooltip").hide();
       }
     });
+    $("#ot-curve").bind("plotclick", function(event, pos, item) {
+      if (item) {
+        openDialog(item.series.label);
+      }
+    });
+  }
+
+  function openDialog(otName) {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var queryUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=" + otName;
+    window.open(queryUrl, '_blank');
+    return false;
   }
 
   function setNavi($c, $i) {
