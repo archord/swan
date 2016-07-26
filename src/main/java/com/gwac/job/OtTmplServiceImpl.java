@@ -233,12 +233,12 @@ public class OtTmplServiceImpl implements OtTmplService {
           }
         }
         if (hisType) {
-          ot2Dao.updateOTType(tot2);
+          ot2Dao.updateOTTypeHis(tot2);
         }
         if (tOT2Hism.size() > 0) {
           tot2.setOt2HisMatch((short) tOT2Hism.size());
         }
-        ot2Dao.updateOt2HisMatch(tot2);
+        ot2Dao.updateOt2HisMatchHis(tot2);
 //        log.debug(tot2.getName() + " match ot2 number:" + tOT2Hism.size());
       }
     }
