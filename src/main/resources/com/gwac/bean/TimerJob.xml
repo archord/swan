@@ -52,6 +52,7 @@
     <property name="ffcDao" ref="ffcDao" />
     <property name="otlv2Dao" ref="otbDao" />
     <property name="dpmDao" ref="dpmDao" />
+    <property name="oorDao" ref="otORDao" />
     <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
     <property name="headTailCutNumber" value="${gwac.image.head.tail.cut.number}" />
     <property name="isBeiJingServer" value="${gwac.server.beijing}" />

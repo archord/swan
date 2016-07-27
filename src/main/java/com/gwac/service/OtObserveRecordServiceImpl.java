@@ -14,6 +14,7 @@ import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.dao.OtTypeDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
@@ -22,6 +23,7 @@ import com.gwac.model.OTCatalog;
 import com.gwac.model.ObservationSky;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtType;
 import java.util.List;
 import javax.jms.Destination;
 import org.apache.commons.logging.Log;
@@ -48,6 +50,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private FitsFileCutRefDAO ffcrDao;
   private ObservationSkyDao skyDao;
   private UploadFileUnstoreDao ufuDao;
+  private OtTypeDao ottDao;
 
   private String rootPath;
   private String cutIDir;
@@ -157,24 +160,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 //          otLv2Dao.update(tlv2);
           otLv2Dao.updateSomeRealTimeInfo(tlv2);
 
-          String cutImg = String.format("%s_%04d", tlv2.getName(), oor.getFfNumber());
-          FitsFileCut ffc = new FitsFileCut();
-          ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-          ffc.setFileName(cutImg);
-          ffc.setOtId(tlv2.getOtId());
-          ffc.setNumber(number);
-          ffc.setFfId(ff.getFfId());
-          ffc.setDpmId((short) dpmId);
-          ffc.setImgX(oor.getX());
-          ffc.setImgY(oor.getY());
-          ffc.setRequestCut(false);
-          ffc.setSuccessCut(false);
-          ffc.setIsMissed(false);
-          ffc.setPriority((short) (number - tlv2.getFirstFfNumber()));
-          ffcDao.save(ffc);
-
+//          oor.setFfcId(ffc.getFfcId());
           oor.setOtId(tlv2.getOtId());
-          oor.setFfcId(ffc.getFfcId());
           otorDao.save(oor);
         } else {
 
@@ -507,5 +494,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setOtCheckDest(Destination otCheckDest) {
     this.otCheckDest = otCheckDest;
+  }
+
+  /**
+   * @param ottDao the ottDao to set
+   */
+  public void setOttDao(OtTypeDao ottDao) {
+    this.ottDao = ottDao;
   }
 }

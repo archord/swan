@@ -9,10 +9,12 @@ import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.model.DataProcessMachine;
 import com.gwac.model.FitsFile;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtObserveRecord;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,6 +36,8 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
   private FitsFileCutDAO ffcDao;
   private OtLevel2Dao otlv2Dao;
   private DataProcessMachineDAO dpmDao;
+  private OtObserveRecordDAO oorDao;
+
   private int successiveImageNumber;
   private int headTailCutNumber;
 
@@ -73,6 +77,47 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     for (OtLevel2 otlv2 : otlv2s) {
 //      log.debug("otlv2(id=" + otlv2.getOtId() + ") add it's uncutted image to DB.");
       int cuttedFfNumber = otlv2.getCuttedFfNumber();
+      if (cuttedFfNumber == 0) {
+        cuttedFfNumber = otlv2.getFirstFfNumber() > 2 ? otlv2.getFirstFfNumber() - 2 : 1;
+      }
+
+      List<FitsFileCut> tffcs = ffcDao.getFirstCutFile(otlv2);
+      List<OtObserveRecord> oors = oorDao.getUnCutRecord(otlv2.getOtId(), cuttedFfNumber);
+
+      if (tffcs.isEmpty()) {
+        continue;
+      }
+      FitsFileCut firstFfc = tffcs.get(0);
+
+      int oorIdx = 0;
+      for (int i = cuttedFfNumber; i <= otlv2.getLastFfNumber(); i++) {
+        String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
+        FitsFile tff = ffDao.getByName(ffName);
+        if (tff == null) {
+          log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
+          continue;
+        }
+        while ((oors.get(oorIdx).getFfNumber() < i) && (oorIdx < oors.size() - 1)) {
+          oorIdx++;
+        }
+
+        OtObserveRecord toor = oors.get(oorIdx);
+        FitsFileCut ffc = new FitsFileCut();
+        ffc.setFfId(tff.getFfId());
+        ffc.setStorePath(firstFfc.getStorePath());
+        ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
+        ffc.setOtId(otlv2.getOtId());
+        ffc.setNumber(i);
+        ffc.setDpmId(otlv2.getDpmId().shortValue());
+        ffc.setImgX(toor.getX());
+        ffc.setImgY(toor.getY());
+        ffc.setRequestCut(false);
+        ffc.setSuccessCut(false);
+        ffc.setIsMissed(true);
+        ffc.setPriority(Short.MAX_VALUE);
+        ffcDao.save(ffc);
+      }
+
       List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), cuttedFfNumber);
       if (ffcs.isEmpty()) {
         log.warn("otlv2 " + otlv2.getOtId() + " is not cut done, but uncuted ffcs is empty.");
@@ -91,28 +136,6 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         if (tNum < 1) {
           tNum = 1;  //number start from 1
         }
-        for (int i = tNum; i < headNum; i++) {
-          String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
-          FitsFile tff = ffDao.getByName(ffName);
-          if (tff == null) {
-            log.warn("can't find orig fits file " + ffName);
-            continue;
-          }
-          FitsFileCut ffc = new FitsFileCut();
-          ffc.setFfId(tff.getFfId());
-          ffc.setStorePath(headFFC.getStorePath());
-          ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
-          ffc.setOtId(otlv2.getOtId());
-          ffc.setNumber(i);
-          ffc.setDpmId(headFFC.getDpmId());
-          ffc.setImgX(headFFC.getImgX());
-          ffc.setImgY(headFFC.getImgY());
-          ffc.setRequestCut(false);
-          ffc.setSuccessCut(false);
-          ffc.setIsMissed(true);
-          ffc.setPriority(Short.MAX_VALUE);
-          ffcDao.save(ffc);
-        }
       }
 
 //      log.info("add center missed image");
@@ -130,7 +153,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           FitsFileCut ffc = new FitsFileCut();
           if (tff == null) {
             log.warn("can't find orig fits file " + ffName);
-            ffc.setFfId((long)0);
+            ffc.setFfId((long) 0);
           } else {
             ffc.setFfId(tff.getFfId());
           }
@@ -243,5 +266,12 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
    */
   public void setIsTestServer(Boolean isTestServer) {
     this.isTestServer = isTestServer;
+  }
+
+  /**
+   * @param oorDao the oorDao to set
+   */
+  public void setOorDao(OtObserveRecordDAO oorDao) {
+    this.oorDao = oorDao;
   }
 }

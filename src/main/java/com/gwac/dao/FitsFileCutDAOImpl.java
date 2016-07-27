@@ -5,6 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.FitsFileCut;
+import com.gwac.model.OtLevel2;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -19,6 +20,15 @@ import org.hibernate.Session;
 public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implements FitsFileCutDAO {
 
   private static final Log log = LogFactory.getLog(FitsFileCutDAOImpl.class);
+  
+  public List<FitsFileCut> getFirstCutFile(OtLevel2 ot2) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from fits_file_cut where ot_id=" + ot2.getOtId() + " and number=" + ot2.getFirstFfNumber();
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
+
 
   public void moveDataToHisTable() {
 

@@ -5,6 +5,7 @@
  */
 package com.gwac.dao;
 
+import com.gwac.model.OtLevel2;
 import com.gwac.model.OtType;
 import java.util.List;
 import org.hibernate.Query;
@@ -15,6 +16,20 @@ import org.hibernate.Session;
  * @author xy
  */
 public class OtTypeDaoImpl extends BaseHibernateDaoImpl<OtType> implements OtTypeDao {
+
+  @Override
+  public OtType getOt2Type(OtLevel2 ot2) {
+
+    String sql = "select * from ot_type where ott_id=" + ot2.getOtType() + "";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(OtType.class);
+    List<OtType> otts = q.list();
+    OtType tobj = null;
+    if (otts.size() > 0) {
+      tobj = otts.get(0);
+    }
+    return tobj;
+  }
 
   @Override
   public OtType getOtTypeByTypeName(String typeName) {

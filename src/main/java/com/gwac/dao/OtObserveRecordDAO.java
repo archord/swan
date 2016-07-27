@@ -15,6 +15,8 @@ import java.util.List;
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   
+  public List<OtObserveRecord> getUnCutRecord(long otId, int lastCuttedNum);
+  
   public List<OtObserveRecord> searchOT2TmplWrong(OtObserveRecord obj, float searchRadius, float mag);
   
   public List<OtObserveRecord> getOt1ByDate(String dateStr);

@@ -6,6 +6,7 @@
 
 package com.gwac.dao;
 
+import com.gwac.model.OtLevel2;
 import com.gwac.model.OtType;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import java.util.List;
  * @author xy
  */
 public interface OtTypeDao extends BaseHibernateDao<OtType> {
+  
+  public OtType getOt2Type(OtLevel2 ot2);
   
   public OtType getOtTypeByTypeName(String typeName);
   

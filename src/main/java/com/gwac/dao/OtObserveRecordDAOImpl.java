@@ -29,6 +29,15 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
   
   @Override
+  public List<OtObserveRecord> getUnCutRecord(long otId, int lastCuttedNum){
+    
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record where ot_id=" + otId + " and ff_number>=" + lastCuttedNum + " order by ff_number asc";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
+  
+  @Override
   public List<OtObserveRecord> searchOT2TmplWrong(OtObserveRecord obj, float searchRadius, float mag) {
 
     SearchBoxSphere sbs = new SearchBoxSphere(obj.getRaD(), obj.getDecD(), searchRadius);

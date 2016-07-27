@@ -108,6 +108,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return new ArrayList();
   }
 
+  @Override
   public void updateIsMatch(OtLevel2 ot2) {
 
     String sql = "update ot_level2 set is_match=" + ot2.getIsMatch() + " where ot_id=" + ot2.getOtId();
@@ -115,6 +116,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  @Override
   public List<OtLevel2> getUnMatched() {
 
     String sql = "WITH updated_rows AS "
@@ -125,6 +127,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
+  @Override
   public void moveDataToHisTable() {
 
     Session session = getCurrentSession();
@@ -132,6 +135,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  @Override
   public void updateAllFileCuttedById(long id) {
 
     Session session = getCurrentSession();
@@ -139,6 +143,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  @Override
   public List<OtLevel2> getMissedFFCLv2OT() {
 
     Session session = getCurrentSession();

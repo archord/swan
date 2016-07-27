@@ -127,12 +127,13 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       return;
     }
     log.debug("search ot2: " + ot2.getName());
+
     Boolean flag = false;
+    MatchTable ott = mtDao.getMatchTableByTypeName("cvs");
     Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
     for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
       Cvs tcvs = (Cvs) entry.getKey();
       Double distance = (Double) entry.getValue();
-      MatchTable ott = mtDao.getMatchTableByTypeName("cvs");
       OtLevel2Match ot2m = new OtLevel2Match();
       ot2m.setOtId(ot2.getOtId());
       ot2m.setMtId(ott.getMtId());
@@ -155,11 +156,11 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     }
 
     Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
+    ott = getMtDao().getMatchTableByTypeName("merged_other");
     for (Map.Entry<MergedOther, Double> entry : tmom.entrySet()) {
       MergedOther tmo = (MergedOther) entry.getKey();
       Double distance = (Double) entry.getValue();
 
-      MatchTable ott = getMtDao().getMatchTableByTypeName("merged_other");
       OtLevel2Match ot2m = new OtLevel2Match();
       ot2m.setOtId(ot2.getOtId());
       ot2m.setMtId(ott.getMtId());
@@ -181,12 +182,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       log.debug(ot2.getName() + " other :" + tmom.size());
     }
 
+    ott = getMtDao().getMatchTableByTypeName("rc3");
     Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
     for (Map.Entry<Rc3, Double> entry : trc3m.entrySet()) {
       Rc3 trc3 = (Rc3) entry.getKey();
       Double distance = (Double) entry.getValue();
 
-      MatchTable ott = getMtDao().getMatchTableByTypeName("rc3");
       OtLevel2Match ot2m = new OtLevel2Match();
       ot2m.setOtId(ot2.getOtId());
       ot2m.setMtId(ott.getMtId());
@@ -208,12 +209,12 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       log.debug(ot2.getName() + " rc3 :" + trc3m.size());
     }
 
+    ott = getMtDao().getMatchTableByTypeName("minor_planet");
     Map<MinorPlanet, Double> tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
     for (Map.Entry<MinorPlanet, Double> entry : tmpm.entrySet()) {
       MinorPlanet tmp = (MinorPlanet) entry.getKey();
       Double distance = (Double) entry.getValue();
 
-      MatchTable ott = getMtDao().getMatchTableByTypeName("minor_planet");
       OtLevel2Match ot2m = new OtLevel2Match();
       ot2m.setOtId(ot2.getOtId());
       ot2m.setMtId(ott.getMtId());
@@ -232,17 +233,19 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     if (tmpm.size() > 0) {
       ot2.setMinorPlanetMatch((short) tmpm.size());
       ot2Dao.updateMinorPlanetMatch(ot2);
+      ot2.setOtType((short)2);
+      ot2Dao.updateOTType(ot2);
       log.debug(ot2.getName() + " minor planet :" + tmpm.size());
     }
 
     long startTime = System.nanoTime();
+    ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
     Map<OtTmplWrong, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
     Boolean hisType = false;
     for (Map.Entry<OtTmplWrong, Double> entry : tOT2Hism.entrySet()) {
       OtTmplWrong tot2 = (OtTmplWrong) entry.getKey();
       Double distance = (Double) entry.getValue();
 
-      MatchTable ott = getMtDao().getMatchTableByTypeName("ot_level2_his");
       OtLevel2Match ot2m = new OtLevel2Match();
       ot2m.setOtId(ot2.getOtId());
       ot2m.setMtId(ott.getMtId());
@@ -254,7 +257,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2mDao.save(ot2m);
       flag = true;
 
-      if (!hisType && tot2.getOtClass()=='1') {
+      if (!hisType && tot2.getOtClass() == '1') {
         ot2.setOtType(tot2.getOttId());
         ot2Dao.updateOTType(ot2);
         hisType = true;
@@ -270,6 +273,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
     if (ot2.getDataProduceMethod() == '8') {
       startTime = System.nanoTime();
+      ott = getMtDao().getMatchTableByTypeName("usno");
       Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);//minorPlanetSearchbox
 //      log.debug("ot2: " + ot2.getName());
 //        log.debug("usnoMag: " + usnoMag);
@@ -278,7 +282,6 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
         Double distance = (Double) entry.getValue();
 
-        MatchTable ott = getMtDao().getMatchTableByTypeName("usno");
         OtLevel2Match ot2m = new OtLevel2Match();
         ot2m.setOtId(ot2.getOtId());
         ot2m.setMtId(ott.getMtId());

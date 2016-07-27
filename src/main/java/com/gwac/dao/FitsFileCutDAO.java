@@ -5,6 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.FitsFileCut;
+import com.gwac.model.OtLevel2;
 import java.util.List;
 
 /**
@@ -12,6 +13,8 @@ import java.util.List;
  * @author xy
  */
 public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
+  
+  public List<FitsFileCut> getFirstCutFile(OtLevel2 ot2);
 
   public void moveDataToHisTable();
 

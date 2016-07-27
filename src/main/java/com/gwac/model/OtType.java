@@ -21,6 +21,8 @@ public class OtType implements java.io.Serializable {
   private short ottId;
   private String ottName;
   private String comment;
+  private Short priority;
+  private Character otClass;
 
   public OtType() {
   }
@@ -65,6 +67,36 @@ public class OtType implements java.io.Serializable {
 
   public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  /**
+   * @return the priority
+   */
+  @Column(name = "priority")
+  public Short getPriority() {
+    return priority;
+  }
+
+  /**
+   * @param priority the priority to set
+   */
+  public void setPriority(Short priority) {
+    this.priority = priority;
+  }
+
+  /**
+   * @return the otClass
+   */
+  @Column(name = "ot_class")
+  public Character getOtClass() {
+    return otClass;
+  }
+
+  /**
+   * @param otClass the otClass to set
+   */
+  public void setOtClass(Character otClass) {
+    this.otClass = otClass;
   }
 
 }
