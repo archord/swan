@@ -27,16 +27,32 @@ import org.hibernate.Session;
 public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
-  
+
   @Override
-  public List<OtObserveRecord> getUnCutRecord(long otId, int lastCuttedNum){
-    
+  public void updateFfcId(OtObserveRecord oor) {
+    String sql = "update ot_observe_record set ffc_id=" + oor.getFfcId() + " where oor_id=" + oor.getOorId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public List<OtObserveRecord> getLastRecord(OtLevel2 ot2) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record where ot_id=" + ot2.getOtId() + " and ff_number=" + ot2.getLastFfNumber();
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
+
+  @Override
+  public List<OtObserveRecord> getUnCutRecord(long otId, int lastCuttedNum) {
+
     Session session = getCurrentSession();
     String sql = "select * from ot_observe_record where ot_id=" + otId + " and ff_number>=" + lastCuttedNum + " order by ff_number asc";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
-  
+
   @Override
   public List<OtObserveRecord> searchOT2TmplWrong(OtObserveRecord obj, float searchRadius, float mag) {
 
@@ -44,8 +60,8 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();
-      String sql = "select * from ot_observe_record_his where ot_id=0 and data_produce_method='" + obj.getDataProduceMethod() 
-              + "' and date_str='" + obj.getDateStr() + "' and sky_id="+ obj.getSkyId() + " and dpm_id!="+obj.getDpmId() + " and ";
+      String sql = "select * from ot_observe_record_his where ot_id=0 and data_produce_method='" + obj.getDataProduceMethod()
+              + "' and date_str='" + obj.getDateStr() + "' and sky_id=" + obj.getSkyId() + " and dpm_id!=" + obj.getDpmId() + " and ";
       if (tflag == 1) {
         sql += "ra_d between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
         sql += "dec_d between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
@@ -53,16 +69,16 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         sql += "(ra_d > " + sbs.getMinRa() + " or ra_d <" + sbs.getMaxRa() + ") and ";
         sql += "dec_d between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
       }
-      
+
       Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
       return q.list();
     }
     return new ArrayList();
   }
-  
+
   @Override
   public List<OtObserveRecord> getOt1ByDate(String dateStr) {
-    
+
     Session session = getCurrentSession();
     String sql = "select * from ot_observe_record_his where ot_id=0 and date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
@@ -86,7 +102,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     }
     return result;
   }
-  
+
   @Override
   public void moveDataToHisTable() {
 
@@ -241,7 +257,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
-  
+
   @Override
   public List<OtObserveRecord> getAllOrderByDate() {
     Session session = getCurrentSession();

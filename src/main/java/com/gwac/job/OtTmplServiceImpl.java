@@ -45,9 +45,9 @@ public class OtTmplServiceImpl implements OtTmplService {
   @Override
   public void startJob() {
 
-//    if (isBeiJingServer || isTestServer) {
-//      return;
-//    }
+    if (isTestServer) {
+      return;
+    }
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -60,11 +60,13 @@ public class OtTmplServiceImpl implements OtTmplService {
     try {//JDBCConnectionException or some other exception
 //      generateOtTmpl('4'); //未匹配，假OT
 //      generateOtTmpl('1'); //真OT
-      rematchAllOt2();
+
 //      generateOtTmpl2('4');
+//      generateOtTmpl2('1');
+//      rematchAllOt2();
 //      findOT1();
-//      otTmplDailyUpdate('4');
-//      otTmplDailyUpdate('1');
+      otTmplDailyUpdate('4');
+      otTmplDailyUpdate('1');
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -112,7 +114,7 @@ public class OtTmplServiceImpl implements OtTmplService {
         if (times++ > 20) {
           log.error("match too many times 21");
         }
-        List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong2(tot2, (float) (searchbox), 0);
+        List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong(tot2, (float) (searchbox), 0);
         int matchNum = mot2s.size();
         if (matchNum > tMchNum) {
           tMchNum = matchNum;
@@ -410,7 +412,7 @@ public class OtTmplServiceImpl implements OtTmplService {
           if (times++ > 20) {
             log.error("match too many times 21");
           }
-          List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong2(tot2, (float) (searchbox), 0);
+          List<OtTmplWrong> mot2s = ottwDao.searchOT2TmplWrong(tot2, (float) (searchbox), 0);
           int matchNum = mot2s.size();
           if (matchNum > tMchNum) {
             tMchNum = matchNum;
@@ -424,10 +426,10 @@ public class OtTmplServiceImpl implements OtTmplService {
 
             if (matchedOttws.size() > 0) {
               matchedOttws.add(otw);
-              OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
+              OtTmplWrong avgOttw = getAvgPosition(matchedOttws); //应该取ot2历史模板模板对应的所有ot2取平均值
               tot2.setRa(avgOttw.getRa());
               tot2.setDec(avgOttw.getDec());
-              float maxDist = getMaxDist(matchedOttws, avgOttw);
+              float maxDist = getMaxDist(matchedOttws, avgOttw); //应该取ot2历史模板模板对应的所有ot2，计算最远距离
               searchbox = maxDist + ot2Searchbox;
             } else {
               ottwDao.save(otw);
@@ -441,8 +443,8 @@ public class OtTmplServiceImpl implements OtTmplService {
         log.debug("match " + times + " times, final match number " + tMchNum);
 
         if (matchedOttws.size() > 1) {
-          OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
-          float maxDist = getMaxDist(matchedOttws, avgOttw);
+          OtTmplWrong avgOttw = getAvgPosition(matchedOttws); //应该取ot2历史模板模板对应的所有ot2取平均值
+          float maxDist = getMaxDist(matchedOttws, avgOttw); //应该取ot2历史模板模板对应的所有ot2，计算最远距离
 
           int totalMchNum = 0;
           OtTmplWrong firstOttw = null, tottw2 = null;

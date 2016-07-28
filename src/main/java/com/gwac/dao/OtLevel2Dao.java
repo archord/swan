@@ -15,6 +15,8 @@ import java.util.Map;
  */
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   
+  public List<OtLevel2> getUnCutRecord(int successiveImageNumber);
+  
   public void updateOt2HisMatchHis(OtLevel2 ot2);
   
   public void updateOTTypeHis(OtLevel2 ot2) ;

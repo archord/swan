@@ -27,18 +27,31 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
-  
+
   @Override
-  public List<OtLevel2> getTodayOt2(char otClass) {
-    
+  public List<OtLevel2> getUnCutRecord(int successiveImageNumber) {
+
     Session session = getCurrentSession();
-    String sql = "select ol2.* "
-            + " from ot_level2 ol2 "
-            + " inner join ot_type ott on ott.ott_id=ol2.ot_type and ott.ot_class='" + otClass +"'";
+    String sql = "select ot2.* "
+            + "from ot_level2 ot2 "
+            + "inner join ot_type ott on ott.ott_id=ot2.ot_type and ott.ot_class='1' "
+            + "inner join data_process_machine dpm on ot2.dpm_id=dpm.dpm_id and ot2.last_ff_number+" + successiveImageNumber + "<dpm.cur_process_number "
+            + "where ot2.data_produce_method='1';";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
-  
+
+  @Override
+  public List<OtLevel2> getTodayOt2(char otClass) {
+
+    Session session = getCurrentSession();
+    String sql = "select ol2.* "
+            + " from ot_level2 ol2 "
+            + " inner join ot_type ott on ott.ott_id=ol2.ot_type and ott.ot_class='" + otClass + "'";
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
+
   @Override
   public List<OtLevel2> getOt2ByDate(String dateStr) {
     Session session = getCurrentSession();
@@ -46,26 +59,26 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
-  
+
   /**
-   * 
+   *
    * @param dateStr
    * @param otClass ot_class的取值有5种： 0，未分类 1，真OT 2，动OT 3，错OT 4，假OT。
    * 考虑到大部分假的都未分类，为能建立完善的OT2历史模板，现在将“未分类”的值设置为4
-   * @return 
+   * @return
    */
   @Override
   public List<OtLevel2> getLv2OTByDateAndOTClass(String dateStr, char otClass) {
-    
+
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + " from ot_level2_his ol2 "
-            + " inner join ot_type ott on ott.ott_id=ol2.ot_type and ott.ot_class='" + otClass +"'"
+            + " inner join ot_type ott on ott.ott_id=ol2.ot_type and ott.ot_class='" + otClass + "'"
             + " where ol2.date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
-  
+
   @Override
   public List<String> getAllDateStr() {
 
@@ -99,7 +112,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
         sql += "(ra > " + sbs.getMinRa() + " or ra <" + sbs.getMaxRa() + ") and ";
         sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
       }
-      
+
       sql += " order by ot_id asc";
 
       Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
@@ -147,7 +160,11 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   public List<OtLevel2> getMissedFFCLv2OT() {
 
     Session session = getCurrentSession();
-    String sql = "select * from ot_level2 where all_file_cutted=false order by ot_id";
+    String sql = "select ot2.* "
+            + "from ot_level2 ot2 "
+            + "inner join ot_type ott on ott.ott_id=ot2.ot_type and ott.ot_class in ('1','2') "
+            + "where ot2.cutted_ff_number<ot2.last_ff_number and  ot2.data_produce_method='1' "
+            + "order by ot2.ot_id;";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
@@ -296,7 +313,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "select * from ot_level2 "
             + " where dpm_id=" + obj.getDpmId()
             + " and sky_id=" + obj.getSkyId()
-//            + " and date_str='" + obj.getDateStr() + "'"
+            //            + " and date_str='" + obj.getDateStr() + "'"
             + " and data_produce_method='" + obj.getDataProduceMethod() + "'"
             + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
@@ -590,25 +607,25 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   @Override
   public void updateOTType(OtLevel2 ot2) {
-    String sql = "update ot_level2 set ot_type=" + ot2.getOtType()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2 set ot_type=" + ot2.getOtType() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
-  
+
   @Override
   public void updateOTTypeHis(OtLevel2 ot2) {
-    String sql = "update ot_level2_his set ot_type=" + ot2.getOtType()+ " where ot_id=" + ot2.getOtId();
+    String sql = "update ot_level2_his set ot_type=" + ot2.getOtType() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
-  
+
   @Override
   public void updateOt2HisMatch(OtLevel2 ot2) {
     String sql = "update ot_level2 set ot2_his_match=" + ot2.getOt2HisMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }
-  
+
   @Override
   public void updateOt2HisMatchHis(OtLevel2 ot2) {
     String sql = "update ot_level2_his set ot2_his_match=" + ot2.getOt2HisMatch() + " where ot_id=" + ot2.getOtId();

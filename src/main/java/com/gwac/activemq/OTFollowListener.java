@@ -63,7 +63,7 @@ public class OTFollowListener implements MessageListener {
             log.error("send ot2 followPlan, close socket error.", ex);
           }
         } catch (IOException ex) {
-          log.debug("send ot2 followPlan to " + tIP + ":" + tPort + ", message:\n" + followPlan);
+          log.error("send ot2 followPlan to " + tIP + ":" + tPort + ", message:\n" + followPlan);
           log.error("send ot2 followPlan, cannot connect to server.", ex);
         }
       }

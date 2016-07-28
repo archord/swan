@@ -14,5 +14,4 @@ import java.util.List;
  */
 public interface OtTmplWrongDao extends BaseHibernateDao<OtTmplWrong> {
   public List<OtTmplWrong> searchOT2TmplWrong(OtLevel2 ot2, float searchRadius, float mag);
-  public List<OtTmplWrong> searchOT2TmplWrong2(OtLevel2 ot2, float searchRadius, float mag);
 }

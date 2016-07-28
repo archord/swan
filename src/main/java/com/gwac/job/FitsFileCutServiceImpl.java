@@ -59,6 +59,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     long startTime = System.nanoTime();
     try {//JDBCConnectionException or some other exception
       addMissedCutImages();
+      addMissedCutImagesForTrueOT2();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -70,6 +71,52 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
+  /**
+   * 对真OT2，当超过5帧没有出现时，预先切图到出现的最后一帧的后两帧 每天8点，定时将所有Ot2标示为切图完成
+   */
+  public void addMissedCutImagesForTrueOT2() {
+
+    List<OtLevel2> otlv2s = otlv2Dao.getUnCutRecord(successiveImageNumber);
+
+    for (OtLevel2 otlv2 : otlv2s) {
+      List<FitsFileCut> tffcs = ffcDao.getFirstCutFile(otlv2);
+      List<OtObserveRecord> oors = oorDao.getLastRecord(otlv2);
+
+      if (tffcs.isEmpty() || oors.isEmpty()) {
+        continue;
+      }
+      FitsFileCut firstFfc = tffcs.get(0);
+      OtObserveRecord lastRecord = oors.get(0);
+      
+      for (int i = otlv2.getLastFfNumber() + 1; i <= otlv2.getLastFfNumber()+2; i++) {
+        String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
+        FitsFile tff = ffDao.getByName(ffName);
+        if (tff == null) {
+          log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
+          continue;
+        }
+
+        FitsFileCut ffc = new FitsFileCut();
+        ffc.setFfId(tff.getFfId());
+        ffc.setStorePath(firstFfc.getStorePath());
+        ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
+        ffc.setOtId(otlv2.getOtId());
+        ffc.setNumber(i);
+        ffc.setDpmId(otlv2.getDpmId().shortValue());
+        ffc.setImgX(lastRecord.getX());
+        ffc.setImgY(lastRecord.getY());
+        ffc.setRequestCut(false);
+        ffc.setSuccessCut(false);
+        ffc.setIsMissed(true);
+        ffc.setPriority(Short.MAX_VALUE);
+        ffcDao.save(ffc);
+      }
+      
+      otlv2.setCuttedFfNumber(otlv2.getLastFfNumber()+2);
+      otlv2Dao.updateCuttedFfNumber(otlv2);
+    }
+  }
+
   public void addMissedCutImages() {
 
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
@@ -77,8 +124,12 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     for (OtLevel2 otlv2 : otlv2s) {
 //      log.debug("otlv2(id=" + otlv2.getOtId() + ") add it's uncutted image to DB.");
       int cuttedFfNumber = otlv2.getCuttedFfNumber();
+
+      /**
+       * cuttedFfNumber == 0代表ot2还没开始计算切图
+       */
       if (cuttedFfNumber == 0) {
-        cuttedFfNumber = otlv2.getFirstFfNumber() > 2 ? otlv2.getFirstFfNumber() - 2 : 1;
+        cuttedFfNumber = otlv2.getFirstFfNumber() > 2 ? otlv2.getFirstFfNumber() - (headTailCutNumber + 1) : 1;
       }
 
       List<FitsFileCut> tffcs = ffcDao.getFirstCutFile(otlv2);
@@ -90,18 +141,23 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       FitsFileCut firstFfc = tffcs.get(0);
 
       int oorIdx = 0;
-      for (int i = cuttedFfNumber; i <= otlv2.getLastFfNumber(); i++) {
+      for (int i = cuttedFfNumber + 1; i <= otlv2.getLastFfNumber(); i++) {
         String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
         FitsFile tff = ffDao.getByName(ffName);
         if (tff == null) {
           log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
           continue;
         }
-        while ((oors.get(oorIdx).getFfNumber() < i) && (oorIdx < oors.size() - 1)) {
+        while (oors.get(oorIdx).getFfNumber() <= i) {
           oorIdx++;
         }
 
-        OtObserveRecord toor = oors.get(oorIdx);
+        int tIdx = oorIdx;
+        if (i >= otlv2.getFirstFfNumber()) {
+          tIdx = oorIdx - 1;
+        }
+
+        OtObserveRecord toor = oors.get(tIdx);
         FitsFileCut ffc = new FitsFileCut();
         ffc.setFfId(tff.getFfId());
         ffc.setStorePath(firstFfc.getStorePath());
@@ -116,99 +172,15 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         ffc.setIsMissed(true);
         ffc.setPriority(Short.MAX_VALUE);
         ffcDao.save(ffc);
+        
+        if(toor.getFfNumber()==i){
+          toor.setFfcId(ffc.getFfcId());
+          oorDao.updateFfcId(toor);
+        }
       }
 
-      List<FitsFileCut> ffcs = ffcDao.getUnCutImageByOtId(otlv2.getOtId(), cuttedFfNumber);
-      if (ffcs.isEmpty()) {
-        log.warn("otlv2 " + otlv2.getOtId() + " is not cut done, but uncuted ffcs is empty.");
-        continue;
-      }
-      otlv2.setCuttedFfNumber(ffcs.get(ffcs.size() - 1).getNumber());
-//      otlv2Dao.update(otlv2);
+      otlv2.setCuttedFfNumber(otlv2.getLastFfNumber());
       otlv2Dao.updateCuttedFfNumber(otlv2);
-
-      //add head missed image
-      FitsFileCut headFFC = ffcs.get(0);
-      int headNum = headFFC.getNumber();
-
-      if (headNum == otlv2.getFirstFfNumber()) {
-        int tNum = headNum - headTailCutNumber;
-        if (tNum < 1) {
-          tNum = 1;  //number start from 1
-        }
-      }
-
-//      log.info("add center missed image");
-      //add center missed image
-      for (int i = 0; i < ffcs.size() - 1; i++) {
-
-        FitsFileCut curFFC = ffcs.get(i);
-        int firstNum = curFFC.getNumber();
-        int secondNum = ffcs.get(i + 1).getNumber();
-
-        for (int j = firstNum + 1; j < secondNum; j++) {
-//          log.info("add number " + j);
-          String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), j);
-          FitsFile tff = ffDao.getByName(ffName);
-          FitsFileCut ffc = new FitsFileCut();
-          if (tff == null) {
-            log.warn("can't find orig fits file " + ffName);
-            ffc.setFfId((long) 0);
-          } else {
-            ffc.setFfId(tff.getFfId());
-          }
-          ffc.setStorePath(curFFC.getStorePath());
-          ffc.setFileName(String.format("%s_%04d", otlv2.getName(), j));
-          ffc.setOtId(otlv2.getOtId());
-          ffc.setNumber(j);
-          ffc.setDpmId(curFFC.getDpmId());
-          ffc.setImgX(curFFC.getImgX());
-          ffc.setImgY(curFFC.getImgY());
-          ffc.setRequestCut(false);
-          ffc.setSuccessCut(false);
-          ffc.setIsMissed(true);
-          ffc.setPriority((short) (j - otlv2.getFirstFfNumber()));
-          ffcDao.save(ffc);
-        }
-      }
-
-//      log.info("add tail missed image");
-      //add tail missed image
-      DataProcessMachine dpm = dpmDao.getDpmById(otlv2.getDpmId());
-      int curProcessNumber = dpm.getCurProcessNumber();
-      FitsFileCut lastFFC = ffcs.get(ffcs.size() - 1);
-      int lastNumber = lastFFC.getNumber();
-//      int lastNumber = otlv2.getLastFfNumber();
-//      log.info("curProcessNumber " + curProcessNumber);
-
-      //如果超过5(successiveImageNumber)帧没有再出现新的图像，则标示该OT不会再出新的观测序列
-      if (curProcessNumber - lastNumber >= successiveImageNumber) {
-        int tNum = lastNumber + headTailCutNumber;
-        for (int i = lastNumber + 1; i <= tNum; i++) {
-//          log.info("add number " + i);
-          String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
-          FitsFile tff = ffDao.getByName(ffName);
-          if (tff == null) {
-            log.warn("add missed cut fits file, can't find orig fits file " + ffName);
-            continue;
-          }
-          FitsFileCut ffc = new FitsFileCut();
-          ffc.setFfId(tff.getFfId());
-          ffc.setStorePath(lastFFC.getStorePath());
-          ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
-          ffc.setOtId(otlv2.getOtId());
-          ffc.setNumber(i);
-          ffc.setDpmId(lastFFC.getDpmId());
-          ffc.setImgX(lastFFC.getImgX());
-          ffc.setImgY(lastFFC.getImgY());
-          ffc.setRequestCut(false);
-          ffc.setSuccessCut(false);
-          ffc.setIsMissed(true);
-          ffc.setPriority(Short.MAX_VALUE);
-          ffcDao.save(ffc);
-        }
-        otlv2Dao.updateAllFileCuttedById(otlv2.getOtId());
-      }
     }
   }
 

@@ -80,9 +80,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   @Override
   public void startJob() {
 
-    if (isBeiJingServer || isTestServer) {
+    if (isTestServer) {
       return;
     }
+    
     if (running == true) {
       log.debug("start job...");
       running = false;

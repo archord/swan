@@ -20,7 +20,19 @@ import org.hibernate.Session;
 public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implements FitsFileCutDAO {
 
   private static final Log log = LogFactory.getLog(FitsFileCutDAOImpl.class);
-  
+
+  @Override
+  public void save(FitsFileCut obj) {
+    Session session = getCurrentSession();
+    //createSQLQuery createQuery
+    String sql = "select ffc_id from fits_file_cut where ot_id=" + obj.getOtId() + " and number=" + obj.getNumber();
+    Query q = session.createSQLQuery(sql);
+    if (q.list().isEmpty()) {
+      super.save(obj);
+    }
+  }
+
+  @Override
   public List<FitsFileCut> getFirstCutFile(OtLevel2 ot2) {
 
     Session session = getCurrentSession();
@@ -29,7 +41,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     return q.list();
   }
 
-
+  @Override
   public void moveDataToHisTable() {
 
     Session session = getCurrentSession();
@@ -37,6 +49,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  @Override
   public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId) {
 
     Session session = getCurrentSession();

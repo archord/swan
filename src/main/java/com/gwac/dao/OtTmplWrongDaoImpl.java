@@ -42,34 +42,4 @@ public class OtTmplWrongDaoImpl extends BaseHibernateDaoImpl<OtTmplWrong> implem
     return new ArrayList();
   }
   
-  /**
-   * 测试用，查找ot_tmpl_wrong2表
-   * @param ot2
-   * @param searchRadius
-   * @param mag
-   * @return 
-   */
-  @Override
-  public List<OtTmplWrong> searchOT2TmplWrong2(OtLevel2 ot2, float searchRadius, float mag) {
-
-    SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
-    int tflag = sbs.calSearchBox();
-    if (tflag != 0) {
-      Session session = getCurrentSession();
-      String sql = "select * from ot_tmpl_wrong2 where data_produce_method='" + ot2.getDataProduceMethod() + "' and ";
-      if (tflag == 1) {
-        sql += "ra between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
-        sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
-      } else {
-        sql += "(ra > " + sbs.getMinRa() + " or ra <" + sbs.getMaxRa() + ") and ";
-        sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
-      }
-      
-      sql += " order by ot_id asc";
-
-      Query q = session.createSQLQuery(sql).addEntity(OtTmplWrong.class);
-      return q.list();
-    }
-    return new ArrayList();
-  }
 }

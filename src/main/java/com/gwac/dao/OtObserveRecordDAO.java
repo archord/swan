@@ -15,6 +15,10 @@ import java.util.List;
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   
+  public void updateFfcId(OtObserveRecord oor);
+  
+  public List<OtObserveRecord> getLastRecord(OtLevel2 ot2);
+  
   public List<OtObserveRecord> getUnCutRecord(long otId, int lastCuttedNum);
   
   public List<OtObserveRecord> searchOT2TmplWrong(OtObserveRecord obj, float searchRadius, float mag);
