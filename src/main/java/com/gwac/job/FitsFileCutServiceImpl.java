@@ -87,8 +87,8 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
       }
       FitsFileCut firstFfc = tffcs.get(0);
       OtObserveRecord lastRecord = oors.get(0);
-      
-      for (int i = otlv2.getLastFfNumber() + 1; i <= otlv2.getLastFfNumber()+2; i++) {
+
+      for (int i = otlv2.getLastFfNumber() + 1; i <= otlv2.getLastFfNumber() + 2; i++) {
         String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
         FitsFile tff = ffDao.getByName(ffName);
         if (tff == null) {
@@ -108,11 +108,11 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         ffc.setRequestCut(false);
         ffc.setSuccessCut(false);
         ffc.setIsMissed(true);
-        ffc.setPriority(Short.MAX_VALUE);
+        ffc.setPriority((short) (otlv2.getLastFfNumber() - i));
         ffcDao.save(ffc);
       }
-      
-      otlv2.setCuttedFfNumber(otlv2.getLastFfNumber()+2);
+
+      otlv2.setCuttedFfNumber(otlv2.getLastFfNumber() + 2);
       otlv2Dao.updateCuttedFfNumber(otlv2);
     }
   }
@@ -148,7 +148,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
           log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
           continue;
         }
-        while (oors.get(oorIdx).getFfNumber() <= i) {
+        while (oorIdx < oors.size() && oors.get(oorIdx).getFfNumber() <= i) {
           oorIdx++;
         }
 
@@ -170,10 +170,19 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         ffc.setRequestCut(false);
         ffc.setSuccessCut(false);
         ffc.setIsMissed(true);
-        ffc.setPriority(Short.MAX_VALUE);
+        if (toor.getFfNumber() == i || i < otlv2.getFirstFfNumber() || i > otlv2.getLastFfNumber()) {
+          if (i == otlv2.getLastFfNumber()) {
+            ffc.setPriority((short) 0);
+          } else {
+            ffc.setPriority((short) (i - otlv2.getFirstFfNumber()));
+          }
+        } else {
+          ffc.setPriority(Short.MAX_VALUE);
+        }
+
         ffcDao.save(ffc);
-        
-        if(toor.getFfNumber()==i){
+
+        if (toor.getFfNumber() == i) {
           toor.setFfcId(ffc.getFfcId());
           oorDao.updateFfcId(toor);
         }

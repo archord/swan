@@ -123,6 +123,7 @@
     <property name="ot2mDao" ref="ot2mDao" />
     <property name="usnoDao" ref="usnoDao" />
     <property name="cpfDao" ref="cpfDao" />
+    <property name="ottwdao" ref="ottwDao" />
     <property name="mergedSearchbox" value="${mingwac.merged.searchbox}" />	
     <property name="cvsSearchbox" value="${mingwac.cvs.searchbox}" />	
     <property name="rc3Searchbox" value="${mingwac.rc3.searchbox}" />	

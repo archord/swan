@@ -145,7 +145,7 @@
   
   <bean id="otTmplTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="otTmplJob" />
-    <property name="cronExpression" value="0 00 15 * * ?"/>
+    <property name="cronExpression" value="0 00 13 * * ?"/>
   </bean>
 
   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -153,9 +153,9 @@
       <list>
         <ref bean="imageStatusParmJob" />
         <ref bean="addMissedCutImageJob" />
-        <!--<ref bean="moveDataToHisJob" />-->
+        <ref bean="moveDataToHisJob" />
         <ref bean="foJob" />
-        <!--<ref bean="otTmplJob" />-->
+        <ref bean="otTmplJob" />
         
         <!--<ref bean="ot2CheckJob" />-->
         <!--<ref bean="fileTransferJob" />-->
@@ -168,9 +168,9 @@
       <list>
         <ref bean="imageStatusParmTrigger" />
         <ref bean="addMissedCutImageTrigger" />
-        <!--<ref bean="moveDataToHisTrigger" />-->
+        <ref bean="moveDataToHisTrigger" />
         <ref bean="foTrigger" />
-        <!--<ref bean="otTmplTrigger" />-->
+        <ref bean="otTmplTrigger" />
         
         <!--<ref bean="ot2CheckTrigger" />-->
         <!--<ref bean="fileTransferTrigger" />-->

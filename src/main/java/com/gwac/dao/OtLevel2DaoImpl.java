@@ -132,9 +132,10 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   @Override
   public List<OtLevel2> getUnMatched() {
 
-    String sql = "WITH updated_rows AS "
-            + "( update ot_level2 set is_match=1 where is_match=0 RETURNING * ) "
-            + " select * from updated_rows";
+//    String sql = "WITH updated_rows AS "
+//            + "( update ot_level2 set is_match=1 where is_match=0 RETURNING * ) "
+//            + " select * from updated_rows";
+    String sql = " select * from ot_level2 where is_match=0 order by ot_id";
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
