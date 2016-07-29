@@ -56,13 +56,18 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
   @Override
   public String getUnCuttedStarList(int dpmId, int size, int maxPriority) {
     Session session = getCurrentSession();
-//    String sql = "with updated_rows as "
-//            + "(update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId + " returning *) "
-//            + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
-//            + "from updated_rows ffc "
-//            + "inner join fits_file ff on ffc.ff_id=ff.ff_id;";
-
+    //对每个ot2，裁剪所有生成的切图文件
     String sql = "with updated_rows as "
+            + "(update fits_file_cut ffc1 "
+            + "set request_cut=true "
+            + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " order by priority asc limit " + size + ") ffc2 "
+            + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
+            + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
+            + "from updated_rows ffc "
+            + "inner join fits_file ff on ffc.ff_id=ff.ff_id;";
+
+    //对每个ot2，只裁剪优先级编号小于6的切图
+    String sql2 = "with updated_rows as "
             + "(update fits_file_cut ffc1 "
             + "set request_cut=true "
             + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " and priority<" + maxPriority + " order by priority asc limit " + size + ") ffc2 "

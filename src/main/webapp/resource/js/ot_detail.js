@@ -143,14 +143,14 @@ $(function() {
     $("#fuDec").val(ot2.dec);
 
     setFilter60();
-    $("#telescope").change(function(){
-      if($("#telescope").val()==='2'){
+    $("#telescope").change(function() {
+      if ($("#telescope").val() === '2') {
         setFilter30();
-      }else{
+      } else {
         setFilter60();
       }
     });
-    
+
     bootbox.setLocale("zh_CN");
     $("#followBtn").click(function() {
       bootbox.confirm({
@@ -172,7 +172,7 @@ $(function() {
       });
     });
   }
-  
+
   function setFilter60() {
     var filter60 = ["Lum", "Green", "R", "Blue", "V", "I", "B", "Red", "U", "null"];
     $('#filter').find('option').remove();
@@ -185,7 +185,7 @@ $(function() {
     $("#filter").val('R');
     $("#filter").change();
   }
-  
+
   function setFilter30() {
     var filter30 = ["null", "R", "B", "I", "U", "V"];
     $('#filter').find('option').remove();
@@ -704,9 +704,13 @@ $(function() {
           "data": "dont know",
           "render": formateRowNumber
         }, {
-          "targets": [2, 3],
+          "targets": [2],
           "data": "dont know",
           "render": formateRaDec
+        }, {
+          "targets": [3],
+          "data": "dont know",
+          "render": formateRaDec2
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -744,6 +748,19 @@ $(function() {
     var searchUrl = "http://simbad.u-strasbg.fr/simbad/sim-coo?CooFrame=FK5&CooEpoch=2000&CooEqui=2000&CooDefinedFrames=none&Radius=5&Radius.unit=arcmin&submit=submit%20query&Coord=";
     searchUrl += full.raD + "%20" + full.decD;
     return "<a href='" + searchUrl + "' title='点击在simbad搜寻OT对应坐标' target='_blank'>" + data + "</a>";
+  }
+
+  function formateRaDec2(data, type, full, meta) {
+    //dateUt: "2015-12-26T22:13:24"
+    var dateTime = full.dateUt.split("T");
+    var date = dateTime[0].split("-");
+    var time = dateTime[1].split(":");
+    var day = parseInt(date[2])+(parseInt(time[0])+parseInt(time[1])/60+parseInt(time[2])/3600)/24;
+    var raStr = degreeToHMS2(full.raD, "+");
+    var decStr = degreeToDMS2(full.decD, "+");
+    var searchUrl = "http://www.minorplanetcenter.net/cgi-bin/mpcheck.cgi?TextArea=&radius=15&limit=20.0&oc=327&sort=d&mot=h&tmot=s&pdes=u&needed=f&ps=n&type=p&which=pos&";
+    searchUrl += "year="+date[0]+"&month="+date[1]+"&day="+day+"&ra="+raStr+"&decl="+decStr;
+    return "<a href='" + searchUrl + "' title='点击在IAU小行星网站搜寻OT对应坐标' target='_blank'>" + data + "</a>";
   }
 
   function formateRowNumber(data, type, full, meta) {
@@ -819,11 +836,16 @@ $(function() {
   }
 
   function degreeToDMS(degree) {
+    var result = "";
+    if (degree < 0) {
+      result = "-";
+      degree = Math.abs(degree);
+    }
     var second = degree * 3600;
     var d = Math.floor(degree);
     var m = Math.floor((second % 3600) / 60);
     var s = (second % 60).toFixed(3);
-    var result = "";
+
     if (d < 10) {
       result = result + "0";
     }
@@ -860,4 +882,51 @@ $(function() {
     return result;
   }
 
+
+  function degreeToDMS2(degree, split) {
+    var result = "";
+    if (degree < 0) {
+      result = "-";
+      degree = Math.abs(degree);
+    }
+    var second = degree * 3600;
+    var d = Math.floor(degree);
+    var m = Math.floor((second % 3600) / 60);
+    var s = (second % 60).toFixed(3);
+
+    if (d < 10) {
+      result = result + "0";
+    }
+    result = result + d + split;
+    if (m < 10) {
+      result = result + "0";
+    }
+    result = result + m + split;
+    if (s < 10) {
+      result = result + "0";
+    }
+    result = result + s;
+    return result;
+  }
+
+  function degreeToHMS2(degree, split) {
+    var second = degree * 3600 * 24 / 360;
+    var h = Math.floor(second / 3600);
+    var m = Math.floor((second % 3600) / 60);
+    var s = (second % 60).toFixed(3);
+    var result = "";
+    if (h < 10) {
+      result = result + "0";
+    }
+    result = result + h + split;
+    if (m < 10) {
+      result = result + "0";
+    }
+    result = result + m + split;
+    if (s < 10) {
+      result = result + "0";
+    }
+    result = result + s;
+    return result;
+  }
 });

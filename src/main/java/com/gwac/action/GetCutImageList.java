@@ -76,7 +76,7 @@ public class GetCutImageList extends ActionSupport {
 
       dpmName = dpmName.trim();
       int dpmId = Integer.parseInt(dpmName.substring(1));
-      String content = ffcDao.getUnCuttedStarList(dpmId, 6, 6);
+      String content = ffcDao.getUnCuttedStarList(dpmId, 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
       try {
         if (!content.isEmpty()) {
           fileName = dpmName + "_" + CommonFunction.getCurDateTimeString() + ".lst";

@@ -85,8 +85,8 @@
       <div id="header">分布查询-天球坐标</div>
       <div id="sphereDisplay"></div>
       <div id="toolbar">
-        <span>sql语句：<textarea rows="1" cols="100" name="querySql" id="querySql">
-select ot_id id, name, ra, dec, mag from ot_tmpl_wrong where matched_total>2 and data_produce_method='1';
+        <span>sql语句：<textarea rows="2" cols="100" name="querySql" id="querySql">
+select ot_id id, name, ra, dec, mag from ot_tmpl_wrong where matched_total>20 and data_produce_method='1' and last_found_time_utc>'2015-10-01 00:00:00';
           </textarea>
           <button type="button" id="queryButton">查询</button></span>
       </div>
