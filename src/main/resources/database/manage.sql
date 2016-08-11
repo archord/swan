@@ -7,6 +7,9 @@ INSERT INTO ot_level2 SELECT * FROM ot_level2_his where date_str='151218';
 INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='151218';
 INSERT INTO fits_file_cut SELECT * FROM fits_file_cut_his where substring(store_path, 1,6)='151218';
 
+#展示151218那天的ot1，最大图像编号是2591
+update data_process_machine set cur_process_number=2400;
+
 ##统计模板切图表中，某天切图未返回的数量
 select dpm_id, count(ot_id) from fits_file_cut_ref where length(file_name)=21 and substring(store_path, 1, 6)='150129' group by dpm_id order by dpm_id;
 
