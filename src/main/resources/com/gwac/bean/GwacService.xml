@@ -31,6 +31,8 @@
     <property name="imgSDir" value="${gwac.data.imgstatus.directory}" />
     <property name="otListSubDir" value="${gwac.data.otlistsub.directory}" />
     <property name="cutImagesSubDir" value="${gwac.data.cutimagessub.directory}" />
+    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
+    <property name="isTestServer" value="${gwac.server.test}" />
   </bean>
   
   <bean id="userService" class="com.gwac.service.UserInfoServiceImpl" >

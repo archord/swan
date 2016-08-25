@@ -80,7 +80,7 @@
                 .attr("transform", function(d, i) {
                   return "translate(0," + y(i) + ")";
                 })
-                .each(rowDraw);
+                .each(rowDrawRect);
 
         row.append("line")
                 .attr("x2", width);
@@ -148,7 +148,7 @@
                   return y.rangeBand() / 2.0;
                 })
                 .attr("r", function(d, i) {
-                  return x.rangeBand() > y.rangeBand() ? Math.floor(y.rangeBand() / 2) : Math.floor(x.rangeBand() / 2);
+                  return x.rangeBand() > y.rangeBand() ? Math.floor(y.rangeBand() / 3) : Math.floor(x.rangeBand() / 3);
                 })
                 .attr("value", function(d) {
                   return d.name;

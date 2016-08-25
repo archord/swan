@@ -110,6 +110,10 @@
             <h4>声音提醒</h4>
             <input id="autoRing" type="checkbox" />
           </div>
+          <div class="col-xs-2 col-sm-2 col-md-1 " title="匹配不成功且回看为OT的会自动后随">
+            <h4>自动后随</h4>
+            <input id="autoFollowUp" type="checkbox" />
+          </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>自动刷新</h4>
             <input id="ot2ListTableAutoRefresh" type="checkbox"/>

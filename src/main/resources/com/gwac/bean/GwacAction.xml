@@ -4,6 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  <bean class="com.gwac.action.DataSyncRecvAction"  scope="prototype"></bean>
   
   <bean class="com.gwac.action.GetOtHistoryDetailJson"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
