@@ -64,7 +64,9 @@ public class OtTmplServiceImpl implements OtTmplService {
 //      generateOtTmpl2('4');
 //      generateOtTmpl2('1');
 //      rematchAllOt2();
+      
 //      findOT1();
+      
       otTmplDailyUpdate('4');
       otTmplDailyUpdate('1');
     } catch (Exception ex) {

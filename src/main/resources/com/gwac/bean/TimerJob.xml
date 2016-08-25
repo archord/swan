@@ -60,13 +60,9 @@
   </bean>
   
   <bean id="dataSyncService" class="com.gwac.job.DataSyncServiceImpl">
-    <property name="cfDao" ref="cfDao" />	
-    <property name="rootDir" value="${gwac.data.root.directory}" />	
-    <property name="otLDir" value="${gwac.data.otlist.directory}" />	
-    <property name="starLDir" value="${gwac.data.starlist.directory}" />
-    <property name="orgIDir" value="${gwac.data.origimage.directory}" />
-    <property name="cutIDir" value="${gwac.data.cutimages.directory}" />
-    <property name="cfgDir" value="${gwac.data.cfgfile.directory}" />
+    <property name="ffcDao" ref="ffcDao" />	
+    <property name="ffcrDao" ref="ffcrDao" />	
+    <property name="rootDir" value="${gwac.data.root.directory}" />
     <property name="serverUrl" value="${gwac.server.url.naoc}" />
     <property name="uploadUrl" value="${gwac.server.upload.url}" />
     <property name="mchNum" value="${gwac.machine.number}" />

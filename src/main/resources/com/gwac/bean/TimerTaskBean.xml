@@ -109,11 +109,15 @@
     <property name="startDelay" value="16000" /> <!-- 17500  -->
   </bean>
   
-  <bean id="dataSyncTrigger" 
-        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+  <bean id="dataSyncTrigger2" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="dataSyncJob" />
     <property name="repeatInterval" value="15000" /> <!-- 20000  -->
     <property name="startDelay" value="19000" /> <!-- 25000  -->
+  </bean>
+  
+  <bean id="dataSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="dataSyncJob" />
+    <property name="cronExpression" value="0/5 * 0-5,14-23 * * ?"/> <!-- 50 16 -->
   </bean>
   
   <bean id="monitorImageSyncTrigger" 
@@ -137,7 +141,7 @@
     <property name="cronExpression" value="0 50 16 * * ?"/> <!-- 50 16 -->
   </bean>
   
-  <!--  <bean id="otTmplTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+<!--  <bean id="otTmplTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="otTmplJob" />
     <property name="repeatInterval" value="15000000000000" />  
     <property name="startDelay" value="5000" />   
@@ -159,7 +163,7 @@
         
         <!--<ref bean="ot2CheckJob" />-->
         <!--<ref bean="fileTransferJob" />-->
-        <!--<ref bean="dataSyncJob" />-->
+        <ref bean="dataSyncJob" />
         <!--<ref bean="monitorImageSyncJob" />-->
         <!--<ref bean="otSubObserveRecordJob" />-->
       </list>
@@ -174,7 +178,7 @@
         
         <!--<ref bean="ot2CheckTrigger" />-->
         <!--<ref bean="fileTransferTrigger" />-->
-        <!--<ref bean="dataSyncTrigger" />-->
+        <ref bean="dataSyncTrigger" />
         <!--<ref bean="monitorImageSyncTrigger" />-->
         <!--<ref bean="otSubObserveRecordTrigger" />-->
       </list>

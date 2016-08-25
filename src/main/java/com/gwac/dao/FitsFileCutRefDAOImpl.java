@@ -20,6 +20,28 @@ import org.hibernate.Session;
 public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> implements FitsFileCutRefDAO {
 
   private static final Log log = LogFactory.getLog(FitsFileCutRefDAOImpl.class);
+  
+  @Override
+  public void updateIsRecvOk(long ffcrId){
+    Session session = getCurrentSession();
+    String sql = "update fits_file_cut_ref set is_recv_ok=true where ffcr_id=" + ffcrId;
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
+  public List<FitsFileCutRef> getUnSyncList(int size) {
+    Session session = getCurrentSession();
+
+    String sql = "with updated_rows as "
+            + "(update fits_file_cut_ref ffc1 "
+            + "set is_sync=true "
+            + "from (select ffcr_id from fits_file_cut_ref where success_cut=true and is_sync=false limit " + size + ") ffc2 "
+            + "where ffc1.ffcr_id=ffc2.ffcr_id returning *) "
+            + "select ffc.* "
+            + "from updated_rows ffc ";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
+    return q.list();
+  }
 
   public void updateByName(FitsFileCutRef ffcr) {
 

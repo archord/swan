@@ -12,6 +12,10 @@ import java.util.List;
  * @author xy
  */
 public interface FitsFileCutRefDAO extends BaseHibernateDao<FitsFileCutRef> {
+  
+  public void updateIsRecvOk(long ffcrId);
+  
+  public List<FitsFileCutRef> getUnSyncList(int size);
 
   public void updateByName(FitsFileCutRef ffcr);
 

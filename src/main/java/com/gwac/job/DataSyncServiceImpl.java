@@ -5,7 +5,11 @@
 package com.gwac.job;
 
 import com.gwac.dao.ConfigFileDao;
+import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.model.ConfigFile;
+import com.gwac.model.FitsFileCut;
+import com.gwac.model.FitsFileCutRef;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,13 +38,11 @@ import org.apache.http.util.EntityUtils;
 public class DataSyncServiceImpl implements DataSyncService {
 
   private static final Log log = LogFactory.getLog(DataSyncServiceImpl.class);
-  private ConfigFileDao cfDao;
+  private static long runCount = 0;
+
+  private FitsFileCutDAO ffcDao;
+  private FitsFileCutRefDAO ffcrDao;
   private String rootDir;
-  private String otLDir;
-  private String starLDir;
-  private String orgIDir;
-  private String cutIDir;
-  private String cfgDir;
   private String serverUrl;
   private String uploadUrl;
   private int mchNum; //gwac.machine.number
@@ -57,7 +59,7 @@ public class DataSyncServiceImpl implements DataSyncService {
     }
 
     if (running == true) {
-      log.debug("start job...");
+      log.debug("start sync job...");
       running = false;
     } else {
       log.warn("job is running, jump this scheduler.");
@@ -65,186 +67,143 @@ public class DataSyncServiceImpl implements DataSyncService {
     }
 
     long startTime = System.nanoTime();
-    try {//JDBCConnectionException or some other exception
-      List<ConfigFile> cfs = cfDao.getTopNUnSync(mchNum);
-      for (ConfigFile cf : cfs) {
-        syncConfigFile(cf);
-      }
+
+    try {
+      uploadFfc();
+      uploadFfcr();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
       if (running == false) {
         running = true;
       }
+
     }
+    runCount++;
     long endTime = System.nanoTime();
-    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+    log.debug("run " + runCount + "th, job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
-  private void syncConfigFile(ConfigFile cf) {
-
-    String configPath;
-    String configFile;
-    String[] otList;
-    String[] starList;
-    String[] origImage;
-    String[] cutImages;
-
-    InputStream input = null;
-    int fNum = 0;
-
-    CloseableHttpClient httpclient = HttpClients.createDefault();
+  public void uploadFfc() {
 
     try {
-      configPath = rootDir + "/" + cf.getStorePath();
-      configFile = cf.getFileName();
+      List<FitsFileCut> objs = ffcDao.getUnSyncList(10);
 
-      /**
-       * 解析配置文件
-       */
-      File tfile = new File(configPath, configFile);
-      if (!tfile.exists()) {
-        log.warn(tfile + " not exist.");
-        return;
-      } else {
-        log.debug("read config file: " + tfile.getAbsolutePath());
-      }
-      input = new FileInputStream(tfile);
-      Properties cfile = new Properties();
-      cfile.load(input);
+      if (!objs.isEmpty()) {
+        int fNum = 0;
+        MultipartEntityBuilder mpEntity = MultipartEntityBuilder.create();
+        for (FitsFileCut obj : objs) {
 
-      String dateStr = cfile.getProperty("date").trim();
-      String dpmName = cfile.getProperty("dpmname").trim();
-
-      if (dpmName.isEmpty()) {
-        dpmName = configFile.substring(0, 1) + configFile.substring(3, 5);
-      }
-
-      String tmpStr = cfile.getProperty("otlist");
-      otList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
-      if (otList != null) {
-        fNum += otList.length;
-      }
-
-      tmpStr = cfile.getProperty("starlist");
-      starList = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
-      if (starList != null) {
-        fNum += starList.length;
-      }
-
-      tmpStr = cfile.getProperty("origimage");
-      origImage = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
-      if (origImage != null) {
-        fNum += origImage.length;
-      }
-
-      tmpStr = cfile.getProperty("cutimages");
-      cutImages = (tmpStr == null || tmpStr.isEmpty()) ? null : tmpStr.trim().split(",");
-      if (cutImages != null) {
-        fNum += cutImages.length;
-      }
-
-      /**
-       * 发送配置文件及数据文件
-       */
-      HttpPost httppost = new HttpPost(serverUrl + uploadUrl);
-      MultipartEntityBuilder mpEntity = MultipartEntityBuilder.create();
-      mpEntity.addPart("dpmName", new StringBody(dpmName, ContentType.TEXT_PLAIN));
-      mpEntity.addPart("currentDirectory", new StringBody(dateStr, ContentType.TEXT_PLAIN));
-      mpEntity.addPart("configFile", new FileBody(tfile));
-
-      String rootPath = rootDir + "/" + dateStr + "/" + dpmName + "/";
-      log.debug("rootPath=" + rootPath);
-
-      if (otList != null) {
-        for (String tName : otList) {
-          String tpath = rootPath + otLDir + "/" + tName.trim();
-          File tfile1 = new File(tpath);
+          String tpath1 = rootDir + "/" + obj.getStorePath() + "/" + obj.getFileName();
+          if (tpath1.indexOf('.') == -1) {
+            tpath1 += ".fit";
+            String tpath2 = rootDir + "/" + obj.getStorePath() + "/" + obj.getFileName() + ".jpg";
+            File tfile2 = new File(tpath2);
+            if (tfile2.exists()) {
+              fNum++;
+              mpEntity.addPart("filePaths", new StringBody(obj.getStorePath(), ContentType.TEXT_PLAIN));
+              mpEntity.addPart("files", new FileBody(tfile2));
+            } else {
+              log.warn(tfile2.getAbsolutePath() + " not exist!");
+            }
+          }
+          File tfile1 = new File(tpath1);
           if (tfile1.exists()) {
-            mpEntity.addPart("fileUpload", new FileBody(tfile1));
+            fNum++;
+            mpEntity.addPart("filePaths", new StringBody(obj.getStorePath(), ContentType.TEXT_PLAIN));
+            mpEntity.addPart("files", new FileBody(tfile1));
           } else {
             log.warn(tfile1.getAbsolutePath() + " not exist!");
           }
         }
-      }
 
-      if (starList != null) {
-        for (String tName : starList) {
-          String tpath = rootPath + starLDir + "/" + tName.trim();
-          File tfile1 = new File(tpath);
-          if (tfile1.exists()) {
-            mpEntity.addPart("fileUpload", new FileBody(tfile1));
-          } else {
-            log.warn(tfile1.getAbsolutePath() + " not exist!");
+        if (doUpload(mpEntity)) {
+          for (FitsFileCut obj : objs) {
+            ffcDao.updateIsRecvOk(obj.getFfcId());
           }
         }
+        log.debug("obj: " + objs.size() + ", add ffc files: " + fNum);
       }
-
-      if (origImage != null) {
-        for (String tName : origImage) {
-          String tpath = rootPath + orgIDir + "/" + tName.trim();
-          File tfile1 = new File(tpath);
-          if (tfile1.exists()) {
-            mpEntity.addPart("fileUpload", new FileBody(tfile1));
-          } else {
-            log.warn(tfile1.getAbsolutePath() + " not exist!");
-          }
-        }
-      }
-
-      if (cutImages != null) {
-        for (String tName : cutImages) {
-          String tpath = rootPath + cutIDir + "/" + tName.trim();
-          File tfile1 = new File(tpath);
-          if (tfile1.exists()) {
-            mpEntity.addPart("fileUpload", new FileBody(tfile1));
-          } else {
-            log.warn(tfile1.getAbsolutePath() + " not exist!");
-          }
-        }
-      }
-
-      HttpEntity reqEntity = mpEntity.build();
-      httppost.setEntity(reqEntity);
-      CloseableHttpResponse response = httpclient.execute(httppost);
-      try {
-        log.debug(response.getStatusLine());
-        HttpEntity resEntity = response.getEntity();
-        if (resEntity != null) {
-          log.debug("response content: " + IOUtils.toString(resEntity.getContent()));
-        }
-        EntityUtils.consume(resEntity);
-      } catch (IOException ex) {
-        log.error("read response error", ex);
-      } catch (IllegalStateException ex) {
-        log.error("get content error", ex);
-      } finally {
-        response.close();
-      }
-
-    } catch (IOException ex) {
-      log.error("read property file or send request error", ex);
-    } finally {
-      if (input != null) {
-        try {
-          input.close();
-        } catch (IOException ex) {
-          log.error("close properties error", ex);
-        }
-        try {
-          httpclient.close();
-        } catch (IOException ex) {
-          log.error("close httpclient error", ex);
-        }
-      }
+    } catch (Exception ex) {
+      log.error("upload ffc error:", ex);
     }
   }
 
-  /**
-   * @param cfDao the cfDao to set
-   */
-  public void setCfDao(ConfigFileDao cfDao) {
-    this.cfDao = cfDao;
+  public void uploadFfcr() {
+
+    try {
+      List<FitsFileCutRef> objs = ffcrDao.getUnSyncList(10);
+
+      if (!objs.isEmpty()) {
+        int fNum = 0;
+        MultipartEntityBuilder mpEntity = MultipartEntityBuilder.create();
+        for (FitsFileCutRef obj : objs) {
+
+          String tpath1 = rootDir + "/" + obj.getStorePath() + "/" + obj.getFileName() + ".jpg";
+          File tfile1 = new File(tpath1);
+          if (tfile1.exists()) {
+            fNum++;
+            mpEntity.addPart("filePaths", new StringBody(obj.getStorePath(), ContentType.TEXT_PLAIN));
+            mpEntity.addPart("files", new FileBody(tfile1));
+          } else {
+            log.warn(tfile1.getAbsolutePath() + " not exist!");
+          }
+        }
+
+        if (fNum > 0 && doUpload(mpEntity)) {
+          for (FitsFileCutRef obj : objs) {
+            ffcrDao.updateIsRecvOk(obj.getFfcrId());
+          }
+          log.debug("obj: " + objs.size() + ", add ffcr files: " + fNum);
+        } else {
+          log.debug("cannot find any file.");
+        }
+      }
+    } catch (Exception ex) {
+      log.error("upload ffc error:", ex);
+    }
+  }
+
+  public boolean doUpload(MultipartEntityBuilder mpEntity) {
+
+    boolean flag = false;
+
+    HttpEntity reqEntity = mpEntity.build();
+    HttpPost httppost = new HttpPost(serverUrl + uploadUrl);
+    httppost.setEntity(reqEntity);
+
+    CloseableHttpClient httpclient = null;
+    CloseableHttpResponse response = null;
+    try {
+      httpclient = HttpClients.createDefault();
+      response = httpclient.execute(httppost);
+      log.debug(response.getStatusLine());
+      HttpEntity resEntity = response.getEntity();
+      if (resEntity != null) {
+        String rstContent = IOUtils.toString(resEntity.getContent());
+        log.debug("response content: " + rstContent);
+        if (rstContent.contains("Success")) {
+          flag = true;
+        }
+      }
+      EntityUtils.consume(resEntity);
+    } catch (IOException ex) {
+      log.error("read response error", ex);
+    } catch (IllegalStateException ex) {
+      log.error("get content error", ex);
+    } finally {
+      try {
+        if (response != null) {
+          response.close();
+        }
+        if (httpclient != null) {
+          httpclient.close();
+        }
+      } catch (IOException ex) {
+        log.error("close httpclient error", ex);
+      }
+    }
+    return flag;
   }
 
   /**
@@ -252,41 +211,6 @@ public class DataSyncServiceImpl implements DataSyncService {
    */
   public void setRootDir(String rootDir) {
     this.rootDir = rootDir;
-  }
-
-  /**
-   * @param otLDir the otLDir to set
-   */
-  public void setOtLDir(String otLDir) {
-    this.otLDir = otLDir;
-  }
-
-  /**
-   * @param starLDir the starLDir to set
-   */
-  public void setStarLDir(String starLDir) {
-    this.starLDir = starLDir;
-  }
-
-  /**
-   * @param orgIDir the orgIDir to set
-   */
-  public void setOrgIDir(String orgIDir) {
-    this.orgIDir = orgIDir;
-  }
-
-  /**
-   * @param cutIDir the cutIDir to set
-   */
-  public void setCutIDir(String cutIDir) {
-    this.cutIDir = cutIDir;
-  }
-
-  /**
-   * @param cfgDir the cfgDir to set
-   */
-  public void setCfgDir(String cfgDir) {
-    this.cfgDir = cfgDir;
   }
 
   /**
@@ -329,5 +253,19 @@ public class DataSyncServiceImpl implements DataSyncService {
    */
   public void setIsTestServer(Boolean isTestServer) {
     this.isTestServer = isTestServer;
+  }
+
+  /**
+   * @param ffcDao the ffcDao to set
+   */
+  public void setFfcDao(FitsFileCutDAO ffcDao) {
+    this.ffcDao = ffcDao;
+  }
+
+  /**
+   * @param ffcrDao the ffcrDao to set
+   */
+  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
+    this.ffcrDao = ffcrDao;
   }
 }

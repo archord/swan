@@ -14,6 +14,10 @@ import java.util.List;
  */
 public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
   
+  public void updateIsRecvOk(long ffcId);
+  
+  public List<FitsFileCut> getUnSyncList(int size);
+  
   public List<FitsFileCut> getFirstCutFile(OtLevel2 ot2);
 
   public void moveDataToHisTable();
