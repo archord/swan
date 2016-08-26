@@ -27,7 +27,7 @@
     </div>
 
     <!--for f1()--->
-<script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.js"></script>
+<script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.js"></script>
     <!--for f2()--->
     <!--<script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/js/d3/d3.v3.min.js"></script>-->
     <script type="text/javascript">

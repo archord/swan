@@ -73,6 +73,9 @@ public class UploadFileServiceImpl implements UploadFileService {
 
   private JmsTemplate jmsTemplate;
   private Destination otlistDest;
+  
+  private Boolean isBeiJingServer;
+  private Boolean isTestServer;
 
   public UploadFileServiceImpl() {
   }
@@ -956,6 +959,20 @@ public class UploadFileServiceImpl implements UploadFileService {
    */
   public void setOtlistDest(Destination otlistDest) {
     this.otlistDest = otlistDest;
+  }
+
+  /**
+   * @param isBeiJingServer the isBeiJingServer to set
+   */
+  public void setIsBeiJingServer(Boolean isBeiJingServer) {
+    this.isBeiJingServer = isBeiJingServer;
+  }
+
+  /**
+   * @param isTestServer the isTestServer to set
+   */
+  public void setIsTestServer(Boolean isTestServer) {
+    this.isTestServer = isTestServer;
   }
 
 }

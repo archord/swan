@@ -14,7 +14,7 @@
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="keywords" content="国家天文台，svom, gwac，望远镜阵列" />
     <meta http-equiv="description" content="GWAC数据展示页面" />
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
     <!-- Loading Bootstrap 说明文档http://v3.bootcss.com/css/ -->
     <link href="${pageContext.request.contextPath}/resource/flatui/css/vendor/bootstrap.min.css" rel="stylesheet">
     <!-- Loading Flat UI -->

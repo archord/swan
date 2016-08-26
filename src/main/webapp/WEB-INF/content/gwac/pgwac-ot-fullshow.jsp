@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>OT详细</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
 
     <!-- Loading Bootstrap -->
     <link href="${pageContext.request.contextPath}/resource/flatui/css/vendor/bootstrap.min.css" rel="stylesheet">

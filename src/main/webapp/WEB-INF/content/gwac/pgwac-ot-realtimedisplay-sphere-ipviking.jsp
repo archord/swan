@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <title>Norse - IPViking Live</title>
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/js/ipviking/ipviking.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/js/ipviking/flags.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/js/ipviking/fonts.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resource/js/ipviking/ipviking.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resource/js/ipviking/flags.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resource/js/ipviking/fonts.css">
   </head>
 
   <body class="f16">
@@ -16,7 +16,7 @@
     </div>
     <div id="content">
       <a href="http://norse-corp.com">
-        <img id="logo" src="<%=request.getContextPath()%>/js/ipviking/norse-white.png" alt="Norse Corp">
+        <img id="logo" src="<%=request.getContextPath()%>/resource/js/ipviking/norse-white.png" alt="Norse Corp">
       </a>
       <div id="info"></div>
 
