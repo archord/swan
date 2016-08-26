@@ -4,18 +4,13 @@
  */
 package com.gwac.job;
 
-import com.gwac.dao.ConfigFileDao;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
-import com.gwac.model.ConfigFile;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

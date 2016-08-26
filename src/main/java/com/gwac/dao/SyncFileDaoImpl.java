@@ -17,6 +17,7 @@ import org.hibernate.Session;
  */
 public class SyncFileDaoImpl extends BaseHibernateDaoImpl<SyncFile> implements SyncFileDao {
 
+  @Override
   public List<SyncFile> getUnSyncFile() {
 
     String sql = "WITH updated_rows AS "
@@ -32,6 +33,7 @@ public class SyncFileDaoImpl extends BaseHibernateDaoImpl<SyncFile> implements S
    *
    * @param sf
    */
+  @Override
   public void save(SyncFile sf) {
 
     String sql = "select * from sync_file where file_name='" + sf.getFileName() + "'";
@@ -40,6 +42,7 @@ public class SyncFileDaoImpl extends BaseHibernateDaoImpl<SyncFile> implements S
     if (q.list().size() > 0) {
       SyncFile tsf = (SyncFile) q.list().get(0);
       tsf.setIsSync(false);
+      tsf.setIsSyncSuccess(false);
       tsf.setStoreTime(new Date());
       super.update(tsf);
     } else {

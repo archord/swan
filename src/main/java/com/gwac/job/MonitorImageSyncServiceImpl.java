@@ -60,9 +60,7 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
 
     long startTime = System.nanoTime();
     try {//JDBCConnectionException or some other exception
-      List<SyncFile> sfs = sfDao.getUnSyncFile();
-      syncSyncFile(sfs);
-//    addImage();
+      doUploadImage();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -73,6 +71,81 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
+
+  public void doUploadImage() {
+
+    try {
+      List<SyncFile> objs = sfDao.getUnSyncFile();
+
+      if (!objs.isEmpty()) {
+        int fNum = 0;
+        MultipartEntityBuilder mpEntity = MultipartEntityBuilder.create();
+        for (SyncFile obj : objs) {
+
+          String tpath1 = rootDir + "/" + obj.getPath() + "/" + obj.getFileName();
+          File tfile1 = new File(tpath1);
+          if (tfile1.exists()) {
+            fNum++;
+            mpEntity.addPart("filePaths", new StringBody(obj.getPath(), ContentType.TEXT_PLAIN));
+            mpEntity.addPart("files", new FileBody(tfile1));
+          } else {
+            log.warn(tfile1.getAbsolutePath() + " not exist!");
+          }
+        }
+
+        if (fNum > 0 && doUpload(mpEntity)) {
+          log.debug("obj: " + objs.size() + ", add monitor images: " + fNum);
+        } else {
+          log.debug("cannot find any file.");
+        }
+      }
+    } catch (Exception ex) {
+      log.error("upload ffc error:", ex);
+    }
+  }
+
+  public boolean doUpload(MultipartEntityBuilder mpEntity) {
+
+    boolean flag = false;
+
+    HttpEntity reqEntity = mpEntity.build();
+    HttpPost httppost = new HttpPost(serverUrl + uploadUrl);
+    httppost.setEntity(reqEntity);
+
+    CloseableHttpClient httpclient = null;
+    CloseableHttpResponse response = null;
+    try {
+      httpclient = HttpClients.createDefault();
+      response = httpclient.execute(httppost);
+      log.debug(response.getStatusLine());
+      HttpEntity resEntity = response.getEntity();
+      if (resEntity != null) {
+        String rstContent = IOUtils.toString(resEntity.getContent());
+        log.debug("response content: " + rstContent);
+        if (rstContent.contains("Success")) {
+          flag = true;
+        }
+      }
+      EntityUtils.consume(resEntity);
+    } catch (IOException ex) {
+      log.error("read response error", ex);
+    } catch (IllegalStateException ex) {
+      log.error("get content error", ex);
+    } finally {
+      try {
+        if (response != null) {
+          response.close();
+        }
+        if (httpclient != null) {
+          httpclient.close();
+        }
+      } catch (IOException ex) {
+        log.error("close httpclient error", ex);
+      }
+    }
+    return flag;
+  }
+
 
   private void syncSyncFile(List<SyncFile> sfs) {
 
@@ -132,7 +205,7 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
     }
 
   }
-
+  
   private void addImage() {
 
     for (int i = 1; i < 13; i++) {

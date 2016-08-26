@@ -120,11 +120,16 @@
     <property name="cronExpression" value="0/5 * 0-5,14-23 * * ?"/> <!-- 50 16 -->
   </bean>
   
-  <bean id="monitorImageSyncTrigger" 
+  <bean id="monitorImageSyncTrigger2" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="monitorImageSyncJob" />
     <property name="repeatInterval" value="600000" /> <!-- 20000  -->
     <property name="startDelay" value="21000" /> <!-- 25000  -->
+  </bean>
+  
+  <bean id="monitorImageSyncTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="monitorImageSyncJob" />
+    <property name="cronExpression" value="0 0/5 0-5,17-23 * * ?"/> <!-- 50 16 -->
   </bean>
   
   <bean id="fileTransferTrigger" 
@@ -164,7 +169,7 @@
         <!--<ref bean="ot2CheckJob" />-->
         <!--<ref bean="fileTransferJob" />-->
         <ref bean="dataSyncJob" />
-        <!--<ref bean="monitorImageSyncJob" />-->
+        <ref bean="monitorImageSyncJob" />
         <!--<ref bean="otSubObserveRecordJob" />-->
       </list>
     </property>
@@ -179,7 +184,7 @@
         <!--<ref bean="ot2CheckTrigger" />-->
         <!--<ref bean="fileTransferTrigger" />-->
         <ref bean="dataSyncTrigger" />
-        <!--<ref bean="monitorImageSyncTrigger" />-->
+        <ref bean="monitorImageSyncTrigger" />
         <!--<ref bean="otSubObserveRecordTrigger" />-->
       </list>
     </property>

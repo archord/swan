@@ -131,9 +131,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     boolean mysqlCheck = true;
     Boolean flag = false;
     long endTime, startTime;
-    MatchTable ott = mtDao.getMatchTableByTypeName("cvs");
+    MatchTable ott = null;
 
     if (mysqlCheck) {
+      ott = mtDao.getMatchTableByTypeName("cvs");
       Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
       for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
         Cvs tcvs = (Cvs) entry.getKey();

@@ -35,7 +35,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     String sql = "with updated_rows as "
             + "(update fits_file_cut ffc1 "
             + "set is_sync=true "
-            + "from (select ffc_id from fits_file_cut where success_cut=true and is_sync=false limit " + size + ") ffc2 "
+            + "from (select ffc_id from fits_file_cut where success_cut=true and (is_sync=false or is_sync is null ) limit " + size + ") ffc2 "
             + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
             + "select ffc.* "
             + "from updated_rows ffc ";
