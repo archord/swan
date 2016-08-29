@@ -143,6 +143,16 @@ public class DataSyncServiceImpl implements DataSyncService {
           } else {
             log.warn(tfile1.getAbsolutePath() + " not exist!");
           }
+          
+          String tpath2 = rootDir + "/" + obj.getStorePath() + "/" + obj.getFileName() + ".fit";
+          File tfile2 = new File(tpath2);
+          if (tfile2.exists()) {
+            fNum++;
+            mpEntity.addPart("filePaths", new StringBody(obj.getStorePath(), ContentType.TEXT_PLAIN));
+            mpEntity.addPart("files", new FileBody(tfile2));
+          } else {
+            log.warn(tfile2.getAbsolutePath() + " not exist!");
+          }
         }
 
         if (fNum > 0 && doUpload(mpEntity)) {

@@ -18,6 +18,7 @@ import com.gwac.model.OtTmplWrong;
 import com.gwac.util.CommonFunction;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
@@ -64,9 +65,7 @@ public class OtTmplServiceImpl implements OtTmplService {
 //      generateOtTmpl2('4');
 //      generateOtTmpl2('1');
 //      rematchAllOt2();
-      
 //      findOT1();
-      
       otTmplDailyUpdate('4');
       otTmplDailyUpdate('1');
     } catch (Exception ex) {
@@ -134,12 +133,12 @@ public class OtTmplServiceImpl implements OtTmplService {
             tot2.setRa(avgOttw.getRa());
             tot2.setDec(avgOttw.getDec());
             float maxDist = getMaxDist(matchedOttws, avgOttw);
-            searchbox = maxDist + ot2Searchbox;
+            searchbox = maxDist*2 + ot2Searchbox;
           } else {
             ottwDao.save(otw);
             break;
           }
-        } else {
+        } else if (matchNum == 0) {
           ottwDao.save(otw);
           break;
         }
@@ -151,12 +150,12 @@ public class OtTmplServiceImpl implements OtTmplService {
         float maxDist = getMaxDist(matchedOttws, avgOttw);
 
         int totalMchNum = 0;
-        OtTmplWrong firstOttw = null, tottw2 = null;
+        OtTmplWrong firstOttw = null, tottw2 = null, toRemove = null;
         boolean flag = true;
         for (OtTmplWrong obj : matchedOttws) {
           totalMchNum += obj.getMatchedTotal();
           if (obj.getOtId() == tot2.getOtId()) {
-            matchedOttws.remove(obj);
+            toRemove = obj;
           }
           if (flag) {
             firstOttw = obj;
@@ -171,6 +170,8 @@ public class OtTmplServiceImpl implements OtTmplService {
             tottw2 = obj;
           }
         }
+        matchedOttws.remove(toRemove);
+
         firstOttw.setLastFoundTimeUtc(tottw2.getLastFoundTimeUtc());
         firstOttw.setMatchedTotal(totalMchNum);
         firstOttw.setRa(avgOttw.getRa());
@@ -432,12 +433,12 @@ public class OtTmplServiceImpl implements OtTmplService {
               tot2.setRa(avgOttw.getRa());
               tot2.setDec(avgOttw.getDec());
               float maxDist = getMaxDist(matchedOttws, avgOttw); //应该取ot2历史模板模板对应的所有ot2，计算最远距离
-              searchbox = maxDist + ot2Searchbox;
+              searchbox = maxDist*2 + ot2Searchbox;
             } else {
               ottwDao.save(otw);
               break;
             }
-          } else {
+          } else if (matchNum == 0) {
             ottwDao.save(otw);
             break;
           }
@@ -449,12 +450,12 @@ public class OtTmplServiceImpl implements OtTmplService {
           float maxDist = getMaxDist(matchedOttws, avgOttw); //应该取ot2历史模板模板对应的所有ot2，计算最远距离
 
           int totalMchNum = 0;
-          OtTmplWrong firstOttw = null, tottw2 = null;
+          OtTmplWrong firstOttw = null, tottw2 = null, toRemove = null;
           boolean flag = true;
           for (OtTmplWrong obj : matchedOttws) {
             totalMchNum += obj.getMatchedTotal();
             if (obj.getOtId() == 0) {
-              matchedOttws.remove(obj);
+              toRemove = obj;
             }
             if (flag) {
               firstOttw = obj;
@@ -469,6 +470,8 @@ public class OtTmplServiceImpl implements OtTmplService {
               tottw2 = obj;
             }
           }
+          matchedOttws.remove(toRemove);
+
           firstOttw.setLastFoundTimeUtc(tottw2.getLastFoundTimeUtc());
           firstOttw.setMatchedTotal(totalMchNum);
           firstOttw.setRa(avgOttw.getRa());
@@ -484,6 +487,39 @@ public class OtTmplServiceImpl implements OtTmplService {
       }
     }
 
+  }
+
+  public OtTmplWrong getAvgPosition(Map<Float, Float> ottws) {
+    OtTmplWrong avgOttw = new OtTmplWrong();
+    float avgRa = (float) 0;
+    float avgDec = (float) 0;
+    Iterator<Map.Entry<Float, Float>> iterator = ottws.entrySet().iterator();
+    while (iterator.hasNext()) {
+      Map.Entry<Float, Float> entry = iterator.next();
+      avgRa += entry.getKey();
+      avgDec += entry.getValue();
+    }
+    avgOttw.setRa(avgRa / ottws.size());
+    avgOttw.setDec(avgDec / ottws.size());
+    return avgOttw;
+  }
+
+  public float getMaxDist(Map<Float, Float> ottws, OtTmplWrong obj) {
+
+    Double maxDist = 0.0;
+    boolean first = true;
+    Iterator<Map.Entry<Float, Float>> iterator = ottws.entrySet().iterator();
+    while (iterator.hasNext()) {
+      Map.Entry<Float, Float> entry = iterator.next();
+      double tDis = CommonFunction.getGreatCircleDistance(entry.getKey(), entry.getValue(), obj.getRa(), obj.getDec());
+      if (first) {
+        maxDist = tDis;
+        first = false;
+      } else if (maxDist < tDis) {
+        maxDist = tDis;
+      }
+    }
+    return maxDist.floatValue();
   }
 
   public OtTmplWrong getAvgPosition(List<OtTmplWrong> ottws) {

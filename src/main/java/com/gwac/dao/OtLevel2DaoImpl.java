@@ -28,6 +28,24 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
 
+  public Map<Float, Float> getAllCoorByMatchId(String ids) {
+
+    Map<Float, Float> result = new HashMap<>();
+    String sql = "select ot2h.ra, ot2h.dec "
+            + "from ot_level2_his ot2h "
+            + "inner join ot_level2_match ot2m on ot2m.ot_id=ot2h.ot_id and ot2m.mt_id=6 and match_id in (" + ids + ");";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      Object row[] = (Object[]) iter.next();
+      result.put((float) row[0], (float) row[1]);
+    }
+    return result;
+  }
+
   @Override
   public List<OtLevel2> getUnCutRecord(int successiveImageNumber) {
 
