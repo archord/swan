@@ -47,7 +47,7 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     if (isTestServer) {
       return;
     }
-
+    
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -117,6 +117,9 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     }
   }
 
+  /**
+   * 1，OT2在生成时，已切图编号为0（cuttedFfNumber=0）
+   */
   public void addMissedCutImages() {
 
     List<OtLevel2> otlv2s = otlv2Dao.getMissedFFCLv2OT();
@@ -153,8 +156,12 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
         }
 
         int tIdx = oorIdx;
-        if (i >= otlv2.getFirstFfNumber()) {
+        if (i >= otlv2.getFirstFfNumber() && oorIdx > 0) {
           tIdx = oorIdx - 1;
+        }
+        //防止指针越界
+        if (tIdx < 0) {
+          tIdx = 0;
         }
 
         OtObserveRecord toor = oors.get(tIdx);

@@ -41,7 +41,7 @@ public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> im
     String sql3 = "delete from ot_level2_match where mt_id=6 and ot_id=" + curId + " and match_id=" + toId;
 
     Session session = getCurrentSession();
-    Query q = session.createSQLQuery(sql1).addEntity(OtLevel2MatchShow.class);
+    Query q = session.createSQLQuery(sql1).addEntity(OtLevel2Match.class);
     if (q.list().isEmpty()) {
       session.createSQLQuery(sql2).executeUpdate();
     } else {

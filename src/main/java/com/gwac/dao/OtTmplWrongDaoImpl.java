@@ -19,8 +19,19 @@ import org.hibernate.Session;
 public class OtTmplWrongDaoImpl extends BaseHibernateDaoImpl<OtTmplWrong> implements OtTmplWrongDao {
   
   @Override
+  public void save(OtTmplWrong ottw) {
+    
+    Session session = getCurrentSession();
+    String sql = "select * from ot_tmpl_wrong where ot_id=" + ottw.getOtId();
+    Query q = session.createSQLQuery(sql).addEntity(OtTmplWrong.class);
+    if (q.list().isEmpty()) {
+      super.save(ottw);
+    }
+  }
+  
+  @Override
   public List<OtTmplWrong> searchOT2TmplWrong(OtLevel2 ot2, float searchRadius, float mag) {
-
+    
     SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
@@ -35,7 +46,7 @@ public class OtTmplWrongDaoImpl extends BaseHibernateDaoImpl<OtTmplWrong> implem
       }
       
       sql += " order by ot_id asc";
-
+      
       Query q = session.createSQLQuery(sql).addEntity(OtTmplWrong.class);
       return q.list();
     }

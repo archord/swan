@@ -49,6 +49,7 @@ public class OtTmplServiceImpl implements OtTmplService {
     if (isTestServer) {
       return;
     }
+    
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -133,13 +134,15 @@ public class OtTmplServiceImpl implements OtTmplService {
             tot2.setRa(avgOttw.getRa());
             tot2.setDec(avgOttw.getDec());
             float maxDist = getMaxDist(matchedOttws, avgOttw);
-            searchbox = maxDist*2 + ot2Searchbox;
+            searchbox = maxDist * 2 + ot2Searchbox;
           } else {
             ottwDao.save(otw);
             break;
           }
-        } else if (matchNum == 0) {
-          ottwDao.save(otw);
+        } else {
+          if (matchNum == 0) {
+            ottwDao.save(otw);
+          }
           break;
         }
       }
@@ -433,13 +436,15 @@ public class OtTmplServiceImpl implements OtTmplService {
               tot2.setRa(avgOttw.getRa());
               tot2.setDec(avgOttw.getDec());
               float maxDist = getMaxDist(matchedOttws, avgOttw); //应该取ot2历史模板模板对应的所有ot2，计算最远距离
-              searchbox = maxDist*2 + ot2Searchbox;
+              searchbox = maxDist * 2 + ot2Searchbox;
             } else {
               ottwDao.save(otw);
               break;
             }
-          } else if (matchNum == 0) {
-            ottwDao.save(otw);
+          } else {
+            if (matchNum == 0) {
+              ottwDao.save(otw);
+            }
             break;
           }
         }
