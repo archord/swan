@@ -44,11 +44,11 @@
       <div class="menu-trigger"></div>
       <div id="main_content" cssClass="ym-wbox">
         <div id='grid-fixed'>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-monitor.action" target="_blank" ><p>GWAC状态监控页面</p></a>     </div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表分类监控页面</p></a>     </div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>CCD坏像素过滤</p></a>     </div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-monitor.action" target="_blank" ><p>状态监控</p></a>     </div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表</p></a>     </div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-pointing.action" target="_blank" ><p>转台跟踪</p></a>     </div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-ccd-image-realtime.action" target="_blank" ><p>CCD图像预览</p></a>     </div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-ccd-image-realtime.action" target="_blank" ><p>图像预览</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay.action" target="_blank" ><p>OT分布-XY</p></a>          </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank" ><p>OT分布-RaDec</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere-d3.action" target="_blank" ><p>OT分布3D</p></a></div>
@@ -56,7 +56,7 @@
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-sphere-distribution.action" target="_blank" ><p>模板分布</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot.action" target="_blank" ><p>OT2查询</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/manage/pfile-upload.action" target="_blank" ><p>上传文件</p></a></div>
-          <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>Mini-GWAC观测策略</p></a></div>
+          <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>观测策略</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-fwhm.action" target="_blank" ><p>半高全宽</p></a>                  </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-objnum.action" target="_blank" ><p>星的数目</p></a>                       </div>
@@ -65,7 +65,7 @@
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-diffmag.action" target="_blank" ><p>亮星星等差</p></a>                    </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-track.action" target="_blank" ><p>图像偏移量</p></a>                      </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-xyrms.action" target="_blank" ><p>图像对齐精度</p></a>                    </div>
-          <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-timeneed.action" target="_blank" ><p>数据处理消耗时间</p></a>             </div>
+          <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-timeneed.action" target="_blank" ><p>数据处理时间</p></a>             </div>
         </div>
         <div id='mason-fillers'>
           <div class='mason-fill-filler' style="margin: 5px;"></div>
@@ -79,9 +79,9 @@
         $("#grid-fixed").mason({
           itemSelector: '.mason-block',
           ratio: 1,
-          columns: [[14, 20, 5]],
+          columns: [[0, 300, 32]],
 //          sizes: [[1, 1], [2, 1]],
-          sizes: [[1, 1]],
+          sizes: [[8, 5]],
 //      promoted: [['xl', 2, 1]],
           filler: {itemSelector: '.mason-fill-filler', filler_class: 'mason_filler', keepDataAndEvents: true},
           layout: 'fluid',

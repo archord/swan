@@ -96,7 +96,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
             + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
-            + "where ol2.first_n_mark=false and ol2.is_match!=2 and ol2.data_produce_method='1'";
+            + "where ol2.is_match!=2 and ol2.data_produce_method='1'";  //ol2.first_n_mark=false and 
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
@@ -107,7 +107,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
             + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number "
-            + "where ol2.first_n_mark=false and ol2.is_match!=2 and ol2.data_produce_method='1'";
+            + "where ol2.is_match!=2 and ol2.data_produce_method='1'";  //ol2.first_n_mark=false and 
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }
@@ -117,7 +117,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
-            + "where ol2.first_n_mark=false and ol2.is_match=2 and ol2.data_produce_method='1'";
+            + "where ol2.is_match=2 and ol2.data_produce_method='1'";  //ol2.first_n_mark=false and 
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
   }

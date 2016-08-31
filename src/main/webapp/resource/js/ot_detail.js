@@ -449,7 +449,7 @@ $(function() {
         points: {radius: 3} //fillColor: '#77b7c5'
       }
     ];
-    option1.lines.show = false;
+    option1.lines.show = true;
     option1.yaxis.transform = formate2;
     option1.yaxis.inverseTransform = formate2;
     otCurve = $.plot("#ot-curve", otCurveShow, option1);
