@@ -6,6 +6,14 @@
 
   <bean class="com.gwac.action.DataSyncRecvAction"  scope="prototype"></bean>
   
+  <bean class="com.gwac.action.GetStarListJson"  scope="prototype">
+    <property name="dao" ref="ot2mDao" />
+  </bean>
+  
+  <bean class="com.gwac.action.GetStarRecordsJson"  scope="prototype">
+    <property name="dao" ref="otORDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetOtHistoryDetailJson"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
     <property name="ot2tmplDao" ref="ottwDao" />

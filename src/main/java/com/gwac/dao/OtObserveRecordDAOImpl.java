@@ -29,6 +29,43 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
   @Override
+  public String getMagCurveByTypeIdStarId(int typeId, long starId, int dataProduceMethod) {
+    Session session = getCurrentSession();
+    String sql = "SELECT name, array_to_string(array_agg(date_ut), ',')  dateUt,  array_to_string(array_agg(mag_aper),',')  mag,   "
+            + "array_to_string(array_agg(magerr_aper),',')  magerr   "
+            + "FROM ( select ot2.name, extract(epoch from oorh.date_ut-"
+            + "(select min(found_time_utc) from ot_level2_his where ot_id in "
+            + "(SELECT ot_id FROM ot_level2_match WHERE mt_id=" + typeId + " AND match_id=" + starId + "))) as date_ut, oorh.mag_aper, oorh.magerr_aper  "
+            + "from ot_observe_record_his oorh  "
+            + "inner join ot_level2_his ot2 on oorh.ot_id =ot2.ot_id and ot2.data_produce_method='" + dataProduceMethod + "' and ot2.ot_id in "
+            + "(SELECT ot_id FROM ot_level2_match ot2m WHERE ot2m.mt_id=" + typeId + " AND ot2m.match_id=" + starId + ") "
+            + "order by oorh.date_ut  "
+            + ") as rst  "
+            + "group by name;";
+
+    log.debug(sql);
+
+    Query q = session.createSQLQuery(sql);
+    Iterator itor = q.list().iterator();
+
+    StringBuilder sb = new StringBuilder("[");
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      sb.append("{otName:\"");
+      sb.append(row[0]);
+      sb.append("\",dateUt:[");
+      sb.append(row[1]);
+      sb.append("],mag:[");
+      sb.append(row[2]);
+      sb.append("],magerr:[");
+      sb.append(row[3]);
+      sb.append("]},");
+    }
+    sb.append("]");
+    return sb.toString();
+  }
+
+  @Override
   public String getOt2TmplOpticalVaration(OtTmplWrong ot2Tmpl) {
     Session session = getCurrentSession();
     String sql = "SELECT name, array_to_string(array_agg(date_ut), ',')  dateUt,  array_to_string(array_agg(mag_aper),',')  mag "

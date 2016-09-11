@@ -18,6 +18,19 @@ import org.hibernate.Session;
 public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> implements OtLevel2MatchDao {
 
   @Override
+  public List<Long> getIdsByStarType(int starType) {
+
+    Session session = getCurrentSession();
+    String sql = "select DISTINCT match_id "
+            + "from ot_level2_match "
+            + "where mt_id=" + starType
+            + " ORDER BY match_id;";
+
+    Query q = session.createSQLQuery(sql);
+    return q.list();
+  }
+
+  @Override
   public OtLevel2Match getByOt2Id(long ot2Id) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
@@ -27,17 +40,17 @@ public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> im
     Session session = getCurrentSession();
     String sql = "select mt.comments match_table_name, ot2h.name ot2_name, olm.* " //显示match_table_name不便于理解，偷懒，直接显示注释中文名
             + "from ot_level2_match olm "
-            + "inner join match_table mt on mt.mt_id=olm.mt_id "  // and mt.match_table_name='ot_level2_his'
+            + "inner join match_table mt on mt.mt_id=olm.mt_id " // and mt.match_table_name='ot_level2_his'
             + "left join ot_level2_his ot2h on ot2h.ot_id=olm.match_id and mt.match_table_name='ot_level2_his'"
             + "inner join ";
-    
-    if(queryHis){
+
+    if (queryHis) {
       sql += " ot_level2_his ";
-    }else{
+    } else {
       sql += " ot_level2 ";
     }
     sql += "ot2 on ot2.ot_id=olm.ot_id and ot2.name='" + otName + "';";
-    
+
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2MatchShow.class);
     return q.list();
   }

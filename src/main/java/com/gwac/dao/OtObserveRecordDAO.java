@@ -16,6 +16,8 @@ import java.util.List;
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   
+  public String getMagCurveByTypeIdStarId(int typeId, long starId, int dataProduceMethod);
+  
   public String getOt2TmplOpticalVaration(OtTmplWrong ot2Tmpl);
 
   public void moveDataToHisTable();

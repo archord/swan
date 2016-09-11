@@ -131,3 +131,15 @@ SELECT ot2.name ot_name, ffc.file_name
 FROM fits_file_cut ffc
 INNER JOIN ot_level2 ot2 ON ot2.ot_id=ffc.ot_id AND ot2.ot_type=17
 ORDER BY ot2.name, ffc.file_name;
+
+
+
+SELECT name, array_to_string(array_agg(date_ut), ',')  dateUt,  array_to_string(array_agg(mag_aper),',')  mag,  
+array_to_string(array_agg(magerr_aper),',')  magerr  
+FROM ( select ot2.name, extract(epoch from oorh.date_ut-(select min(found_time_utc) from ot_level2_his where ot_id in (SELECT ot_id FROM ot_level2_match WHERE mt_id=5 AND match_id=4))) as date_ut, oorh.mag_aper, oorh.magerr_aper 
+from ot_observe_record_his oorh 
+inner join ot_level2_his ot2 on oorh.ot_id =ot2.ot_id and ot2.ot_id in
+(SELECT ot_id FROM ot_level2_match ot2m WHERE ot2m.mt_id=5 AND ot2m.match_id=4)
+order by oorh.date_ut 
+) as rst 
+group by name;

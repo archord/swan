@@ -44,7 +44,6 @@
       <div class="menu-trigger"></div>
       <div id="main_content" cssClass="ym-wbox">
         <div id='grid-fixed'>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-monitor.action" target="_blank" ><p>状态监控</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-pointing.action" target="_blank" ><p>转台跟踪</p></a>     </div>
@@ -56,8 +55,12 @@
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-sphere-distribution.action" target="_blank" ><p>模板分布</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot.action" target="_blank" ><p>OT2查询</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/manage/pfile-upload.action" target="_blank" ><p>上传文件</p></a></div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-monitor.action" target="_blank" ><p>状态监控</p></a>     </div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-light-curve.action" target="_blank" ><p>小行星光变查看</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>观测策略</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
+          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/utc/" target="_blank" ><p>兴隆恒星时</p></a></div>
+          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/weather/yuntu" target="_blank" ><p>兴隆云图</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-fwhm.action" target="_blank" ><p>半高全宽</p></a>                  </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-objnum.action" target="_blank" ><p>星的数目</p></a>                       </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-bgbright.action" target="_blank" ><p>背景亮度</p></a>                     </div>

@@ -21,6 +21,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
 
   private static final Log log = LogFactory.getLog(FitsFileCutRefDAOImpl.class);
 
+  @Override
   public void updateByName(FitsFileCutRef ffcr) {
 
     Session session = getCurrentSession();
@@ -37,6 +38,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
    * @param dpmId
    * @return 
    */
+  @Override
   public String getUnCuttedStarList(int dpmId) {
     Session session = getCurrentSession();
     String sql = "with updated_rows as "

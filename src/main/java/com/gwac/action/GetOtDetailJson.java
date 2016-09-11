@@ -62,7 +62,7 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
   public String execute() throws Exception {
 
     dataRootWebMap = getText("gwac.data.root.directory.webmap");
-        
+            
     if(session.containsKey("userInfo")){
       userInfo = (UserInfo)session.get("userInfo");
     }

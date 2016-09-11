@@ -2,17 +2,14 @@ package com.gwac.action;
 
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
-import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.OtTmplWrongDao;
 import com.gwac.dao.OtTypeDao;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
-import com.gwac.model.OtLevel2;
 import com.gwac.model.OtTmplWrong;
 import com.gwac.model.OtType;
 import com.gwac.model.UserInfo;
-import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
 import java.util.List;

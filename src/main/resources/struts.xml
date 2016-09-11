@@ -9,7 +9,7 @@
   <constant name="struts.devMode" value="false" />
   <constant name="struts.convention.action.packages" value="com.gwac.action"/>
   <constant name="struts.convention.default.parent.package" value="json-default"/>
-  <constant name="struts.custom.i18n.resources" value="messages, systemconfig" /> <!-- , systemconfig -->
+  <constant name="struts.custom.i18n.resources" value="messages, systemconfig" /> <!-- , systemconfig systemconfig-test -->
   <constant name="struts.multipart.maxSize" value="104857600" /><!--该请求所上传的文件总大小不能超过100MB=104857600 -->
   <constant name="struts.multipart.saveDir" value="/tmp" />
     

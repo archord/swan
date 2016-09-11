@@ -78,7 +78,7 @@
                         </select>-->
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
-            <h4>CDD</h4>
+            <h4>CCD</h4>
             <select name="ot2qp.telscope" id="ot2Ccd" multiple="multiple" class="ot2QueryParameter">
               <option value="1">M01</option>
               <option value="2">M02</option>

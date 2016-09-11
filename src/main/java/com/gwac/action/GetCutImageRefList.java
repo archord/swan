@@ -87,7 +87,7 @@ public class GetCutImageRefList extends ActionSupport {
           File file = new File(destPath, fileName);
           if (!file.exists()) {
             file.createNewFile();
-            log.debug("create cut image list file " + file);
+            log.debug("create ref cut image list file " + file);
           }
           FileWriter fw = new FileWriter(file.getAbsoluteFile());
           BufferedWriter bw = new BufferedWriter(fw);
