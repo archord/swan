@@ -40,7 +40,7 @@ public class DataBackupServiceImpl implements DataBackupService {
   @Override
   public void startJob() {
 
-    if (isTestServer) {
+    if (isBeiJingServer || isTestServer) {
       return;
     }
 

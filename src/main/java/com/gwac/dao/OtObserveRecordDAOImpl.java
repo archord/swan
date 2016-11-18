@@ -149,7 +149,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Query q = session.createSQLQuery(unionSql);
     Iterator itor = q.list().iterator();
 
-//    Date baseDate = CommonFunction.stringToDate("2015-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+//    Date baseDate = CommonFunction.stringToDate("2015-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss.SSS");
     Date baseDate = ot2.getFoundTimeUtc();
     Calendar cal = Calendar.getInstance();
     cal.setTime(baseDate);

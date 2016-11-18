@@ -188,3 +188,15 @@ BEGIN
 			and earth_distance(ll_to_earth(oor1.ra_d,oor1.dec_d), ll_to_earth(oor2.ra_d,oor2.dec_d))*0.0323391930483951 <30;
 	END LOOP;
 END$$; 
+
+
+select date_str, dpm_id, sky_id, count(*) tnumber
+from ot_observe_record_his
+WHERE ot_id=0 AND data_produce_method='1' and date_str>'160901'
+group BY date_str, dpm_id, sky_id
+ORDER BY tnumber desc;
+
+select x, y, ra_d, dec_d, date_ut, mag_aper, ff_number, sky_id
+from ot_observe_record_his
+WHERE ot_id=0 AND data_produce_method='1' and date_str='160131' and dpm_id=2 and sky_id=34
+ORDER BY sky_id, ff_number;

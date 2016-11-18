@@ -118,7 +118,7 @@ public class CommonFunction {
   /**
    *
    * @param dateStr
-   * @param formater yyyy-MM-dd HH:mm:ss
+   * @param formater yyyy-MM-dd HH:mm:ss.SSS
    * @return
    */
   public static Date stringToDate(String dateStr, String formater) {
@@ -142,9 +142,9 @@ public class CommonFunction {
   }
 
   public static Date getUTCDate(Date date) {
-    SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-    SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     Date dateStr = null;
     try {
       dateStr = dateFormatLocal.parse(dateFormatGmt.format(date));

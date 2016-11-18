@@ -34,7 +34,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     String line;
     String splitBy = " +";  //正则表达式一到多个空格
     List<FollowUpCatalog> objs = new ArrayList<>();
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     try {
       File tfile = new File(path);
@@ -96,7 +96,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     String line = "";
     String splitBy = " +";
     List<OTCatalog> otList = new ArrayList<OTCatalog>();
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     int lineNum = 0;
     int lineNumReal = 0;
@@ -169,7 +169,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     String line = "";
     String splitBy = " +";
     List<OTCatalog> otList = new ArrayList<OTCatalog>();
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     try {
       File tfile = new File(path);
@@ -236,7 +236,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     String line = "";
     String splitBy = " +";
     List<OTCatalog> otList = new ArrayList<>();
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     try {
       File tfile = new File(path);
