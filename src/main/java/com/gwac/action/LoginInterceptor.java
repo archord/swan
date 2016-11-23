@@ -8,6 +8,8 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import java.util.Map;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 
 /**
@@ -16,18 +18,16 @@ import org.apache.struts2.ServletActionContext;
  */
 public class LoginInterceptor extends AbstractInterceptor {
 
+  private static final Log log = LogFactory.getLog(LoginInterceptor.class);
+
   @Override
   public String intercept(ActionInvocation invocation) throws Exception {
-    
+
     // 取得请求的Action名
     String name = invocation.getInvocationContext().getName();
-    System.out.println(name);
+    log.info("action name: " + name);
     // 如果用户想登录，则使之通过
-    if (!name.equals("pgwacOtDetail")) {
-      System.out.println("action name: "+ name);
-      return invocation.invoke();
-    } else {
-
+    if (name.equals("get-ot-detail-json") || name.equals("otFollowUp") || name.equals("pgwac-ot-detail2")) {
       // 取得Session
       ActionContext ac = invocation.getInvocationContext();
       Map session = (Map) ac.get(ServletActionContext.SESSION);
@@ -45,6 +45,9 @@ public class LoginInterceptor extends AbstractInterceptor {
           return invocation.invoke();
         }
       }
+    } else {
+      log.info("action name: " + name);
+      return invocation.invoke();
     }
   }
 

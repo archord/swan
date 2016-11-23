@@ -15,6 +15,14 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>-->
+<!--    <filter>
+        <filter-name>loginFilter</filter-name>
+        <filter-class>com.gwac.servlet.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
     <filter>
         <filter-name>struts2</filter-name>
         <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
@@ -32,25 +40,29 @@
     <filter-name>struts-cleanup</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>-->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/classes/applicationContext.xml</param-value>
-    </context-param>
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    <servlet>
-        <servlet-name>OT2InfoDownlaod</servlet-name>
-        <servlet-class>com.gwac.servlet.OT2InfoDownlaod</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>OT2InfoDownlaod</servlet-name>
-        <url-pattern>/downloadot2aaa</url-pattern>
-    </servlet-mapping>
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/classes/applicationContext.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>OT2InfoDownlaod</servlet-name>
+    <servlet-class>com.gwac.servlet.OT2InfoDownlaod</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OT2InfoDownlaod</servlet-name>
+    <url-pattern>/downloadot2aaa</url-pattern>
+  </servlet-mapping>
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <error-page>  
+    <error-code>404</error-code>  
+    <location>/error.jsp</location>  
+  </error-page> 
 </web-app>
