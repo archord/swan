@@ -55,7 +55,7 @@ public class GetCutImageList extends ActionSupport {
     echo = "";
 
     //必须设置传输机器名称
-    if (null == dpmName) {
+    if (null == dpmName || dpmName.isEmpty()) {
       echo = echo + "Must set machine name(dpmName).\n";
       flag = false;
     }

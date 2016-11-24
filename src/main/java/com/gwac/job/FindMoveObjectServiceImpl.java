@@ -20,22 +20,16 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class DataBackupServiceImpl implements BaseService {
+public class FindMoveObjectServiceImpl implements BaseService {
 
-  private static final Log log = LogFactory.getLog(DataBackupServiceImpl.class);
+  private static final Log log = LogFactory.getLog(FindMoveObjectServiceImpl.class);
 
   private static boolean running = true;
   private Boolean isBeiJingServer;
   private Boolean isTestServer;
 
   private OtLevel2Dao otlv2Dao;
-  private FitsFileCutDAO ffcDao;
   private OtObserveRecordDAO oorDao;
-  private ConfigFileDao cfDao;
-  private ImageStatusParameterDao ispDao;
-  private DataProcessMachineDAO dpmDao;
-  private UploadFileUnstoreDao ufuDao;
-  private CcdPixFilterDao cpfDao;
 
   @Override
   public void startJob() {
@@ -55,13 +49,7 @@ public class DataBackupServiceImpl implements BaseService {
     long startTime = System.nanoTime();
     try {//JDBCConnectionException or some other exception
       otlv2Dao.moveDataToHisTable();
-      ffcDao.moveDataToHisTable();
       oorDao.moveDataToHisTable();
-      cfDao.moveDataToHisTable();
-      ispDao.moveDataToHisTable();
-      dpmDao.everyDayInit();
-      ufuDao.removeAll();
-      cpfDao.removeAll();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -81,31 +69,10 @@ public class DataBackupServiceImpl implements BaseService {
   }
 
   /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
    * @param oorDao the oorDao to set
    */
   public void setOorDao(OtObserveRecordDAO oorDao) {
     this.oorDao = oorDao;
-  }
-
-  /**
-   * @return the cfDao
-   */
-  public ConfigFileDao getCfDao() {
-    return cfDao;
-  }
-
-  /**
-   * @param cfDao the cfDao to set
-   */
-  public void setCfDao(ConfigFileDao cfDao) {
-    this.cfDao = cfDao;
   }
 
   /**
@@ -120,41 +87,6 @@ public class DataBackupServiceImpl implements BaseService {
    */
   public void setIsTestServer(Boolean isTestServer) {
     this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @return the ispDao
-   */
-  public ImageStatusParameterDao getIspDao() {
-    return ispDao;
-  }
-
-  /**
-   * @param ispDao the ispDao to set
-   */
-  public void setIspDao(ImageStatusParameterDao ispDao) {
-    this.ispDao = ispDao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
-  }
-
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
-   * @param cpfDao the cpfDao to set
-   */
-  public void setCpfDao(CcdPixFilterDao cpfDao) {
-    this.cpfDao = cpfDao;
   }
 
 }

@@ -42,7 +42,7 @@ public class Logout extends ActionSupport implements SessionAware {
     msg = new HashMap<>();
     session.remove("userInfo");
     msg.put("flag", "1");
-    return "json";
+    return "login";
   }
 
   public String getEcho() {

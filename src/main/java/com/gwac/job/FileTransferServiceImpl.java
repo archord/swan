@@ -42,7 +42,7 @@ import org.apache.http.util.EntityUtils;
  *
  * @author xy
  */
-public class FileTransferServiceImpl implements FileTransferService {
+public class FileTransferServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(FileTransferServiceImpl.class);
   private static boolean running = true;
@@ -52,6 +52,7 @@ public class FileTransferServiceImpl implements FileTransferService {
   private WatchService watcher;
   private Boolean isSuccess = false;
 
+  @Override
   public void startJob() {
 
     if (isBeiJingServer || isTestServer) {

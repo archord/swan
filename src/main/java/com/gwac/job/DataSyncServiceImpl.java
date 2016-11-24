@@ -31,7 +31,7 @@ import org.apache.http.util.EntityUtils;
  *
  * @author xy
  */
-public class DataSyncServiceImpl implements DataSyncService {
+public class DataSyncServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(DataSyncServiceImpl.class);
   private ConfigFileDao cfDao;

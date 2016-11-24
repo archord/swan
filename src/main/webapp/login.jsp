@@ -14,7 +14,7 @@
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="keywords" content="国家天文台，svom, gwac，望远镜阵列" />
     <meta http-equiv="description" content="GWAC数据展示页面" />
-    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/sysimg/favicon.ico"/>
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
 
     <!-- Loading Bootstrap -->
     <link href="${pageContext.request.contextPath}/resource/flatui/css/vendor/bootstrap.min.css" rel="stylesheet">
@@ -35,13 +35,13 @@
       <div class="login">
         <div class="login-screen">
           <div class="login-icon">
-            <img src="${pageContext.request.contextPath}/sysimg/logo.png" alt="Ground Wide Astronomy Camera" />
+            <img src="${pageContext.request.contextPath}/resource/sysimg/logo.png" alt="Ground Wide Astronomy Camera" />
             <h4>欢迎登录 <small>GWAC</small></h4>
           </div>
 
           <div class="login-form">
             <div style="color:red"><s:fielderror/></div>
-            <form action="user-login.action" id="loginAction" method="post">
+            <form action="${pageContext.request.contextPath}/user-login.action" id="loginAction" method="post">
               <div class="form-group">
                 <input type="text" class="form-control login-field" value="" placeholder="请输入用户名" id="loginName" name="loginName" />
                 <label class="login-field-icon fui-user" for="login-name"></label>
@@ -66,8 +66,6 @@
     <script src="${pageContext.request.contextPath}/resource/flatui/js/vendor/video.js"></script>
     <script src="${pageContext.request.contextPath}/resource/flatui/js/flat-ui.min.js"></script>
 
-    <script>
-      videojs.options.flash.swf = "${pageContext.request.contextPath}/resource/flatui/js/vendors/video-js.swf"
-    </script>
+
   </body>
 </html>

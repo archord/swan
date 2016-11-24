@@ -38,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class ImageStatusParmServiceImpl implements ImageStatusParmService {
+public class ImageStatusParmServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(ImageStatusParmServiceImpl.class);
   private UploadFileUnstoreDao ufuDao;

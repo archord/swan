@@ -32,7 +32,7 @@ import org.apache.http.util.EntityUtils;
  *
  * @author xy
  */
-public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
+public class MonitorImageSyncServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(MonitorImageSyncServiceImpl.class);
   private static boolean running = true;

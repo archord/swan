@@ -25,22 +25,21 @@ import org.apache.struts2.interceptor.SessionAware;
 @Result(name = "error", location = "/error.jsp")
 @ExceptionMapping(exception = "java.lang.Exception", result = "error")
 public class Login extends ActionSupport implements SessionAware {
-
+  
   private static final long serialVersionUID = 7968544374444173511L;
   private static final Log log = LogFactory.getLog(Login.class);
-
+  
   private Map<String, Object> session;
-
+  
   private UserInfoDAO userDao;
-
+  
   private String loginName;
   private String loginPass;
   private String echo;
   private Map msg;
-
+  
   @Action(value = "/user-login", results = {
-    @Result(name = "success", location = "index.jsp"),
-    @Result(name = "input", location = "user/puser-login.jsp"),
+    @Result(name = "input", location = "login.jsp"),
     @Result(name = "json", type = "json", params = {"root", "msg"})
   })
   @Validations(requiredStrings = {
@@ -51,14 +50,14 @@ public class Login extends ActionSupport implements SessionAware {
             @ExpressionValidator(expression = "loginPass.trim().equals('test') != true", message = "用户名或密码错误。")
           })
   public String userLogin() throws Exception {
-
+    
     String result = SUCCESS;
     msg = new HashMap<>();
-
+    
     UserInfo user = new UserInfo();
     user.setLoginName(loginName);
     user.setPassword(loginPass);
-
+    
     List users = userDao.findUser(user);
     if (users.isEmpty()) {
       msg.put("flag", "0");
@@ -69,9 +68,9 @@ public class Login extends ActionSupport implements SessionAware {
       msg.put("userInfo", tuser);
       session.put("userInfo", tuser);
     }
-    return "json";
+    return "index";
   }
-
+  
   public String getEcho() {
     return echo;
   }
@@ -117,10 +116,10 @@ public class Login extends ActionSupport implements SessionAware {
   public void setUserDao(UserInfoDAO userDao) {
     this.userDao = userDao;
   }
-
+  
   @Override
   public void setSession(Map<String, Object> map) {
     this.session = map;
   }
-
+  
 }

@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class FitsFileCutServiceImpl implements FitsFileCutService {
+public class FitsFileCutServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(FitsFileCutServiceImpl.class);
 

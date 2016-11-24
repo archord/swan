@@ -143,3 +143,9 @@ inner join ot_level2_his ot2 on oorh.ot_id =ot2.ot_id and ot2.ot_id in
 order by oorh.date_ut 
 ) as rst 
 group by name;
+
+#按日期、天区、CCD编号查找交叉证认的OT1
+select x, y, ra_d, dec_d, date_ut, mag_aper, ff_number, sky_id
+from ot_observe_record_his
+WHERE ot_id=0 AND data_produce_method='1' and date_str='160131' and dpm_id=2 and sky_id=34
+ORDER BY sky_id, ff_number;

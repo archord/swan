@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * @author xy
  */
-public class FollowUpObservationServiceImpl implements FollowUpObservationService {
+public class FollowUpObservationServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(FollowUpObservationServiceImpl.class);
 

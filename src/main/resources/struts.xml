@@ -47,8 +47,10 @@
     <!--<default-action-ref name="unfoundPage"/>-->
 
     <global-results>
-      <result name="login" type="redirectAction">user/login.jsp</result>
-      <result name="error" type="redirectAction">/error.jsp</result>
+      <result name="index" type="redirectAction">index.action</result>
+      <result name="login" type="redirectAction">login.jsp</result>
+      <result name="error" type="redirectAction">error.jsp</result>
+      <result name="404" type="redirectAction">404.jsp</result>
       <result name="ajax" type="json">  
         <param name="root">message</param>  
       </result>  

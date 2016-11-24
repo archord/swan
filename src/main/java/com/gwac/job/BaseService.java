@@ -8,7 +8,7 @@ package com.gwac.job;
  *
  * @author xy
  */
-public interface DataBackupService {
+public interface BaseService {
 
   public void startJob();
 }
