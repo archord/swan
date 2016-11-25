@@ -8,11 +8,13 @@ import com.gwac.model.FollowUpObjectType;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository
 public class FollowUpObjectTypeDaoImpl extends BaseHibernateDaoImpl<FollowUpObjectType> implements FollowUpObjectTypeDao{
   
   @Override

@@ -25,17 +25,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
+import javax.annotation.Resource;
 import javax.jms.Destination;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author xy
  */
+@Service
 public class UploadFileServiceImpl implements UploadFileService {
 
   private static final Log log = LogFactory.getLog(UploadFileServiceImpl.class);
@@ -54,24 +58,41 @@ public class UploadFileServiceImpl implements UploadFileService {
   private String[] cutImagesSub;
 
   //系统配置文件信息
+  @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootDir;
+  @Value("#{syscfg.gwacDataOtlistDirectory}")
   private String otLDir;
+  @Value("#{syscfg.gwacDataStarlistDirectory}")
   private String starLDir;
+  @Value("#{syscfg.gwacDataOrigimageDirectory}")
   private String orgIDir;
+  @Value("#{syscfg.gwacDataCutimagesDirectory}")
   private String cutIDir;
+  @Value("#{syscfg.gwacDataCfgfileDirectory}")
   private String cfgDir;
+  @Value("#{syscfg.gwacDataVarlistDirectory}")
   private String varLDir;
+  @Value("#{syscfg.gwacDataImgstatusDirectory}")
   private String imgSDir;
+  @Value("#{syscfg.gwacDataOtlistsubDirectory}")
   private String otListSubDir;
+  @Value("#{syscfg.gwacDataCutimagessubDirectory}")
   private String cutImagesSubDir;
+  @Resource
   private UploadFileRecordDao ufrDao;
+  @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
   private DataProcessMachineDAO dpmDao;
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
   private ObservationSkyDao skyDao;
-
+  @Resource
   private JmsTemplate jmsTemplate;
+  @Resource
   private Destination otlistDest;
 
   public UploadFileServiceImpl() {
@@ -265,7 +286,7 @@ public class UploadFileServiceImpl implements UploadFileService {
           leftSize = Float.parseFloat(strs[3].replace('M', ' ')) / (float) (1024.0 * 1024.0);
         }
         if (strs[5].contains("%")) {
-          usedRatio = Float.parseFloat(strs[5].replace('%', ' '))/100;
+          usedRatio = Float.parseFloat(strs[5].replace('%', ' ')) / 100;
         }
       } catch (NumberFormatException ex) {
         log.error("parse totalSize error", ex);
@@ -776,186 +797,5 @@ public class UploadFileServiceImpl implements UploadFileService {
     return fileNum;
   }
 
-  /**
-   * @param otLDir the otLDir to set
-   */
-  public void setOtLDir(String otLDir) {
-    this.otLDir = otLDir;
-  }
-
-  /**
-   * @param starLDir the starLDir to set
-   */
-  public void setStarLDir(String starLDir) {
-    this.starLDir = starLDir;
-  }
-
-  /**
-   * @param orgIDir the orgIDir to set
-   */
-  public void setOrgIDir(String orgIDir) {
-    this.orgIDir = orgIDir;
-  }
-
-  /**
-   * @param cutIDir the cutIDir to set
-   */
-  public void setCutIDir(String cutIDir) {
-    this.cutIDir = cutIDir;
-  }
-
-  /**
-   * @param storePath the storePath to set
-   */
-  public void setStorePath(String storePath) {
-    this.storePath = storePath;
-  }
-
-  /**
-   * @param configFile the configFile to set
-   */
-  public void setConfigFile(String configFile) {
-    this.configFile = configFile;
-  }
-
-  /**
-   * @param ufrDao the ufrDao to set
-   */
-  public void setUfrDao(UploadFileRecordDao ufrDao) {
-    this.ufrDao = ufrDao;
-  }
-
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
-   * @return the cfgDir
-   */
-  public String getCfgDir() {
-    return cfgDir;
-  }
-
-  /**
-   * @param cfgDir the cfgDir to set
-   */
-  public void setCfgDir(String cfgDir) {
-    this.cfgDir = cfgDir;
-  }
-
-  /**
-   * @return the configPath
-   */
-  public String getConfigPath() {
-    return configPath;
-  }
-
-  /**
-   * @param configPath the configPath to set
-   */
-  public void setConfigPath(String configPath) {
-    this.configPath = configPath;
-  }
-
-  /**
-   * @return the rootDir
-   */
-  public String getRootDir() {
-    return rootDir;
-  }
-
-  /**
-   * @param rootDir the rootDir to set
-   */
-  public void setRootDir(String rootDir) {
-    this.rootDir = rootDir;
-  }
-
-  /**
-   * @return the dpmDao
-   */
-  public DataProcessMachineDAO getDpmDao() {
-    return dpmDao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
-  }
-
-  /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @return the ffcrDao
-   */
-  public FitsFileCutRefDAO getFfcrDao() {
-    return ffcrDao;
-  }
-
-  /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
-  }
-
-  /**
-   * @param varLDir the varLDir to set
-   */
-  public void setVarLDir(String varLDir) {
-    this.varLDir = varLDir;
-  }
-
-  /**
-   * @param imgSDir the imgSDir to set
-   */
-  public void setImgSDir(String imgSDir) {
-    this.imgSDir = imgSDir;
-  }
-
-  /**
-   * @param otListSubDir the otListSubDir to set
-   */
-  public void setOtListSubDir(String otListSubDir) {
-    this.otListSubDir = otListSubDir;
-  }
-
-  /**
-   * @param cutImagesSubDir the cutImagesSubDir to set
-   */
-  public void setCutImagesSubDir(String cutImagesSubDir) {
-    this.cutImagesSubDir = cutImagesSubDir;
-  }
-
-  /**
-   * @param skyDao the skyDao to set
-   */
-  public void setSkyDao(ObservationSkyDao skyDao) {
-    this.skyDao = skyDao;
-  }
-
-  /**
-   * @param jmsTemplate the jmsTemplate to set
-   */
-  public void setJmsTemplate(JmsTemplate jmsTemplate) {
-    this.jmsTemplate = jmsTemplate;
-  }
-
-  /**
-   * @param otlistDest the otlistDest to set
-   */
-  public void setOtlistDest(Destination otlistDest) {
-    this.otlistDest = otlistDest;
-  }
 
 }

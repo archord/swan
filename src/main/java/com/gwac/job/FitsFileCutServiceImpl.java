@@ -16,30 +16,42 @@ import com.gwac.model.FitsFileCut;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * 根据OtObserveRecordService产生的有观测记录的切图序列，计算序列中缺失的切图文件。
  *
  * @author xy
  */
-public class FitsFileCutServiceImpl implements FitsFileCutService {
+@Service(value = "fitsFileCutService")
+public class FitsFileCutServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(FitsFileCutServiceImpl.class);
-
   private static boolean running = true;
-  private Boolean isBeiJingServer;
-  private Boolean isTestServer;
-
+  
+  @Resource
   private FitsFileDAO ffDao;
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private OtLevel2Dao otlv2Dao;
+  @Resource
   private DataProcessMachineDAO dpmDao;
+  @Resource
   private OtObserveRecordDAO oorDao;
 
+  @Value("#{syscfg.gwacSuccessiveImageNumber}")
   private int successiveImageNumber;
+  @Value("#{syscfg.gwacImageHeadTailCutNumber}")
   private int headTailCutNumber;
+  @Value("#{syscfg.gwacServerBeijing}")
+  private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
+  private Boolean isTestServer;
 
   @Override
   public void startJob() {
@@ -200,66 +212,4 @@ public class FitsFileCutServiceImpl implements FitsFileCutService {
     }
   }
 
-  /**
-   * @param ffDao the ffDao to set
-   */
-  public void setFfDao(FitsFileDAO ffDao) {
-    this.ffDao = ffDao;
-  }
-
-  /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @param otlv2Dao the otlv2Dao to set
-   */
-  public void setOtlv2Dao(OtLevel2Dao otlv2Dao) {
-    this.otlv2Dao = otlv2Dao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
-  }
-
-  /**
-   * @param successiveImageNumber the successiveImageNumber to set
-   */
-  public void setSuccessiveImageNumber(int successiveImageNumber) {
-    this.successiveImageNumber = successiveImageNumber;
-  }
-
-  /**
-   * @param headTailCutNumber the headTailCutNumber to set
-   */
-  public void setHeadTailCutNumber(int headTailCutNumber) {
-    this.headTailCutNumber = headTailCutNumber;
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @param oorDao the oorDao to set
-   */
-  public void setOorDao(OtObserveRecordDAO oorDao) {
-    this.oorDao = oorDao;
-  }
 }

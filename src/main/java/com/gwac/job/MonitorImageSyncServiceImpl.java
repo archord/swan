@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import javax.annotation.Resource;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,22 +27,33 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * 对监测图像进行同步
  *
  * @author xy
  */
-public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
+@Service(value = "monitorImageSyncService")
+public class MonitorImageSyncServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(MonitorImageSyncServiceImpl.class);
   private static boolean running = true;
+  
+  @Resource
   private SyncFileDao sfDao;
+  @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootDir;
+  @Value("#{syscfg.gwacDataImgstatusDirectory}")
   private String statusImageLDir;
+  @Value("#{syscfg.gwacServerUrlNaoc}")
   private String serverUrl;
+  @Value("#{syscfg.gwacServerUploadimageUrl}")
   private String uploadUrl;
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
   @Override
@@ -150,7 +162,7 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
   private void syncSyncFile(List<SyncFile> sfs) {
 
     if (rootDir.charAt(rootDir.length() - 1) != '/') {
-      setRootDir(rootDir + "/");
+      rootDir = (rootDir + "/");
     }
 
     if (sfs != null && sfs.size() > 0) {
@@ -290,55 +302,6 @@ public class MonitorImageSyncServiceImpl implements MonitorImageSyncService {
       tsf.setStoreTime(new Date());
       sfDao.save(tsf);
     }
-  }
-
-  /**
-   * @param sfDao the sfDao to set
-   */
-  public void setSfDao(SyncFileDao sfDao) {
-    this.sfDao = sfDao;
-  }
-
-  /**
-   * @param rootDir the rootDir to set
-   */
-  public void setRootDir(String rootDir) {
-    this.rootDir = rootDir;
-  }
-
-  /**
-   * @param statusImageLDir the statusImageLDir to set
-   */
-  public void setStatusImageLDir(String statusImageLDir) {
-    this.statusImageLDir = statusImageLDir;
-  }
-
-  /**
-   * @param serverUrl the serverUrl to set
-   */
-  public void setServerUrl(String serverUrl) {
-    this.serverUrl = serverUrl;
-  }
-
-  /**
-   * @param uploadUrl the uploadUrl to set
-   */
-  public void setUploadUrl(String uploadUrl) {
-    this.uploadUrl = uploadUrl;
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
   }
 
 }

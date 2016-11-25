@@ -5,11 +5,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.OorTmp;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="oorTmpDao")
 public class OorTmpDaoImpl extends BaseHibernateDaoImpl<OorTmp> implements OorTmpDao {
   
 }

@@ -11,6 +11,7 @@ import com.gwac.model.FitsFileCutRef;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,26 +25,37 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * 数据同步 根据传输配置文件，将一级OT列表，切图，模板切图等传输到另一个服务器
  *
  * @author xy
  */
-public class DataSyncServiceImpl implements DataSyncService {
+@Service(value = "dataSyncService")
+public class DataSyncServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(DataSyncServiceImpl.class);
+  private static boolean running = true;
   private static long runCount = 0;
 
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootDir;
+  @Value("#{syscfg.gwacServerUrlNaoc}")
   private String serverUrl;
+  @Value("#{syscfg.gwacServerUploadimageUrl}")
   private String uploadUrl;
-  private int mchNum; //gwac.machine.number
+  @Value("#{syscfg.gwacMachineNumber}")
+  private int mchNum;
 
-  private static boolean running = true;
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
   @Override
@@ -211,66 +223,4 @@ public class DataSyncServiceImpl implements DataSyncService {
     return flag;
   }
 
-  /**
-   * @param rootDir the rootDir to set
-   */
-  public void setRootDir(String rootDir) {
-    this.rootDir = rootDir;
-  }
-
-  /**
-   * @param serverUrl the serverUrl to set
-   */
-  public void setServerUrl(String serverUrl) {
-    this.serverUrl = serverUrl;
-  }
-
-  /**
-   * @param mchNum the mchNum to set
-   */
-  public void setMchNum(int mchNum) {
-    this.mchNum = mchNum;
-  }
-
-  /**
-   * @return the uploadUrl
-   */
-  public String getUploadUrl() {
-    return uploadUrl;
-  }
-
-  /**
-   * @param uploadUrl the uploadUrl to set
-   */
-  public void setUploadUrl(String uploadUrl) {
-    this.uploadUrl = uploadUrl;
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
-  }
 }

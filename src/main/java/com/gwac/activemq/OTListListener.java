@@ -4,6 +4,7 @@ import com.gwac.model.UploadFileUnstore;
 import com.gwac.service.OtObserveRecordService;
 import java.text.DecimalFormat;
 import java.util.Date;
+import javax.annotation.Resource;
 import javax.jms.JMSException;
 
 import javax.jms.MapMessage;
@@ -11,12 +12,17 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
+@Service(value = "oTListListener")
 public class OTListListener implements MessageListener {
 
   private static final Log log = LogFactory.getLog(OTListListener.class);
+  @Resource(name = "otObserveRecordService")
   private OtObserveRecordService otObserveRecordService;
+  @Resource(name = "otVarObserveRecordService")
   private OtObserveRecordService otVarObserveRecordService;
+  @Resource(name = "otSubObserveRecordService")
   private OtObserveRecordService otSubObserveRecordService;
 
   @Override
@@ -46,34 +52,6 @@ public class OTListListener implements MessageListener {
     } catch (JMSException e) {
       log.error(e);
     }
-  }
-
-  /**
-   * @param otObserveRecordService the otObserveRecordService to set
-   */
-  public void setOtObserveRecordService(OtObserveRecordService otObserveRecordService) {
-    this.otObserveRecordService = otObserveRecordService;
-  }
-
-  /**
-   * @param otVarObserveRecordService the otVarObserveRecordService to set
-   */
-  public void setOtVarObserveRecordService(OtObserveRecordService otVarObserveRecordService) {
-    this.otVarObserveRecordService = otVarObserveRecordService;
-  }
-
-  /**
-   * @return the otSubObserveRecordService
-   */
-  public OtObserveRecordService getOtSubObserveRecordService() {
-    return otSubObserveRecordService;
-  }
-
-  /**
-   * @param otSubObserveRecordService the otSubObserveRecordService to set
-   */
-  public void setOtSubObserveRecordService(OtObserveRecordService otSubObserveRecordService) {
-    this.otSubObserveRecordService = otSubObserveRecordService;
   }
 
 }

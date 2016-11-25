@@ -25,44 +25,68 @@ import com.gwac.model.OtObserveRecord;
 import com.gwac.model.UploadFileUnstore;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
+import org.springframework.stereotype.Service;
 
 /**
  * 解析一级OT列表文件，计算二级OT，切图，模板切图。
  *
  * @author xy
  */
+@Service(value = "otVarObserveRecordService")
 public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
 
   private static final Log log = LogFactory.getLog(OtVarObserveRecordServiceImpl.class);
 
+  @Resource
   private OTCatalogDao otcDao;
+  @Resource
   private OtNumberDao otnDao;
+  @Resource
   private OtLevel2Dao otLv2Dao;
+  @Resource
   private FitsFileDAO ffDao;
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private OtObserveRecordDAO otorDao;
+  @Resource
   private DataProcessMachineDAO dpmDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
   private ObservationSkyDao skyDao;
+  @Resource
   private UploadFileUnstoreDao ufuDao;
 
+  @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
+  @Value("#{syscfg.gwacDataCutimagesDirectory}")
   private String cutIDir;
+  @Value("#{syscfg.gwacErrorbox}")
   private float errorBox;
+  @Value("#{syscfg.gwacSuccessiveImageNumber}")
   private int successiveImageNumber;
+  @Value("#{syscfg.gwacFirstNMarkNumber}")
   private int firstNMarkNumber;
+  @Value("#{syscfg.gwacOccurImageNumber}")
   private int occurNumber;
 
   private static boolean running = true;
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
+  @Resource
   private JmsTemplate jmsTemplate;
+  @Resource
   private Destination otCheckDest;
 
   /**
@@ -276,206 +300,4 @@ public class OtVarObserveRecordServiceImpl implements OtObserveRecordService {
     }
   }
 
-  /**
-   * @return the otorDao
-   */
-  public OtObserveRecordDAO getOtorDao() {
-    return otorDao;
-  }
-
-  /**
-   * @param otorDao the otorDao to set
-   */
-  public void setOtorDao(OtObserveRecordDAO otorDao) {
-    this.otorDao = otorDao;
-  }
-
-  /**
-   * @return the otcDao
-   */
-  public OTCatalogDao getOtcDao() {
-    return otcDao;
-  }
-
-  /**
-   * @param otcDao the otcDao to set
-   */
-  public void setOtcDao(OTCatalogDao otcDao) {
-    this.otcDao = otcDao;
-  }
-
-  /**
-   * @return the ffDao
-   */
-  public FitsFileDAO getFfDao() {
-    return ffDao;
-  }
-
-  /**
-   * @param ffDao the ffDao to set
-   */
-  public void setFfDao(FitsFileDAO ffDao) {
-    this.ffDao = ffDao;
-  }
-
-  /**
-   * @return the ffcDao
-   */
-  public FitsFileCutDAO getFfcDao() {
-    return ffcDao;
-  }
-
-  /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @return the otnDao
-   */
-  public OtNumberDao getOtnDao() {
-    return otnDao;
-  }
-
-  /**
-   * @param otnDao the otnDao to set
-   */
-  public void setOtnDao(OtNumberDao otnDao) {
-    this.otnDao = otnDao;
-  }
-
-  /**
-   * @return the dpmDao
-   */
-  public DataProcessMachineDAO getDpmDao() {
-    return dpmDao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
-  }
-
-  /**
-   * @return the otLv2Dao
-   */
-  public OtLevel2Dao getOtLv2Dao() {
-    return otLv2Dao;
-  }
-
-  /**
-   * @param otLv2Dao the otLv2Dao to set
-   */
-  public void setOtLv2Dao(OtLevel2Dao otLv2Dao) {
-    this.otLv2Dao = otLv2Dao;
-  }
-
-  /**
-   * @return the rootPath
-   */
-  public String getRootPath() {
-    return rootPath;
-  }
-
-  /**
-   * @param rootPath the rootPath to set
-   */
-  public void setRootPath(String rootPath) {
-    this.rootPath = rootPath;
-  }
-
-  /**
-   * @param errorBox the errorBox to set
-   */
-  public void setErrorBox(float errorBox) {
-    this.errorBox = errorBox;
-  }
-
-  /**
-   * @param successiveImageNumber the successiveImageNumber to set
-   */
-  public void setSuccessiveImageNumber(int successiveImageNumber) {
-    this.successiveImageNumber = successiveImageNumber;
-  }
-
-  /**
-   * @param occurNumber the occurNumber to set
-   */
-  public void setOccurNumber(int occurNumber) {
-    this.occurNumber = occurNumber;
-  }
-
-  /**
-   * @return the ffcrDao
-   */
-  public FitsFileCutRefDAO getFfcrDao() {
-    return ffcrDao;
-  }
-
-  /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @param firstNMarkNumber the firstNMarkNumber to set
-   */
-  public void setFirstNMarkNumber(int firstNMarkNumber) {
-    this.firstNMarkNumber = firstNMarkNumber;
-  }
-
-  /**
-   * @param skyDao the skyDao to set
-   */
-  public void setSkyDao(ObservationSkyDao skyDao) {
-    this.skyDao = skyDao;
-  }
-
-  /**
-   * @param cutIDir the cutIDir to set
-   */
-  public void setCutIDir(String cutIDir) {
-    this.cutIDir = cutIDir;
-  }
-
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
-   * @param jmsTemplate the jmsTemplate to set
-   */
-  public void setJmsTemplate(JmsTemplate jmsTemplate) {
-    this.jmsTemplate = jmsTemplate;
-  }
-
-  /**
-   * @param otCheckDest the otCheckDest to set
-   */
-  public void setOtCheckDest(Destination otCheckDest) {
-    this.otCheckDest = otCheckDest;
-  }
 }

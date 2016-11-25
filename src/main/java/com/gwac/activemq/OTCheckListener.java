@@ -1,6 +1,7 @@
 package com.gwac.activemq;
 
 import com.gwac.service.Ot2CheckService;
+import javax.annotation.Resource;
 import javax.jms.JMSException;
 
 import javax.jms.MapMessage;
@@ -8,10 +9,13 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
+@Service(value = "oTCheckListener")
 public class OTCheckListener implements MessageListener {
 
   private static final Log log = LogFactory.getLog(OTCheckListener.class);
+  @Resource
   private Ot2CheckService ot2CheckService;
 
   @Override
@@ -25,14 +29,5 @@ public class OTCheckListener implements MessageListener {
       log.error(e);
     }
   }
-
-  /**
-   * @param ot2CheckService the ot2CheckService to set
-   */
-  public void setOt2CheckService(Ot2CheckService ot2CheckService) {
-    this.ot2CheckService = ot2CheckService;
-  }
-
-
 
 }

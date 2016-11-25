@@ -13,11 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="mergedOtherDao")
 public class MergedOtherDaoImpl extends MysqlHibernateDaoImpl<MergedOther> implements MergedOtherDao {
   
   @Override

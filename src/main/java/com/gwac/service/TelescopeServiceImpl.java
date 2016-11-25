@@ -7,20 +7,24 @@ package com.gwac.service;
 import com.gwac.dao.TelescopeDAO;
 import com.gwac.model.Telescope;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author xy
  */
+@Service
 public class TelescopeServiceImpl implements TelescopeService {
 
+  @Resource
   private TelescopeDAO tspDao;
 
   @Override
   @Transactional
   public Number count() {
-    return getTspDao().count();
+    return tspDao.count();
   }
 
   public List<Telescope> findAll() {
@@ -32,20 +36,7 @@ public class TelescopeServiceImpl implements TelescopeService {
   public List<Telescope> findAll(int start, int resultSize) {
     String order[] = {"name"};
     int[] sorts = {1};
-    return getTspDao().findRecord(start, resultSize, order, sorts);
+    return tspDao.findRecord(start, resultSize, order, sorts);
   }
 
-  /**
-   * @return the tspDao
-   */
-  public TelescopeDAO getTspDao() {
-    return tspDao;
-  }
-
-  /**
-   * @param tspDao the tspDao to set
-   */
-  public void setTspDao(TelescopeDAO tspDao) {
-    this.tspDao = tspDao;
-  }
 }

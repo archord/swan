@@ -19,11 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="otCatalogDao")
 public class OTCatalogDaoImpl implements OTCatalogDao {
 
   private static final Log log = LogFactory.getLog(OTCatalogDaoImpl.class);

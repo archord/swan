@@ -29,28 +29,39 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * 解析一级OT列表文件，计算二级OT，切图，模板切图。
  *
  * @author xy
  */
-public class ImageStatusParmServiceImpl implements ImageStatusParmService {
+@Service(value = "imageStatusParmService")
+public class ImageStatusParmServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(ImageStatusParmServiceImpl.class);
-  private UploadFileUnstoreDao ufuDao;
-  private FitsFileDAO ffDao;
-  private ProcessStatusDao psDao;
-  private ImageStatusParameterDao ispDao;
-  private DataProcessMachineDAO dpmDao;
-
-  private String rootPath;
-
   private static boolean running = true;
+  
+  @Resource
+  private UploadFileUnstoreDao ufuDao;
+  @Resource
+  private FitsFileDAO ffDao;
+  @Resource
+  private ProcessStatusDao psDao;
+  @Resource
+  private ImageStatusParameterDao ispDao;
+  @Resource
+  private DataProcessMachineDAO dpmDao;
+  @Value("#{syscfg.gwacDataRootDirectory}")
+  private String rootPath;
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
   @Override
@@ -520,62 +531,6 @@ public class ImageStatusParmServiceImpl implements ImageStatusParmService {
     msg += String.format("%04.0f", isp.getFwhm() * 100);
     msg += "%";
     return msg;
-  }
-
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
-   * @param ffDao the ffDao to set
-   */
-  public void setFfDao(FitsFileDAO ffDao) {
-    this.ffDao = ffDao;
-  }
-
-  /**
-   * @param psDao the psDao to set
-   */
-  public void setPsDao(ProcessStatusDao psDao) {
-    this.psDao = psDao;
-  }
-
-  /**
-   * @param ispDao the ispDao to set
-   */
-  public void setIspDao(ImageStatusParameterDao ispDao) {
-    this.ispDao = ispDao;
-  }
-
-  /**
-   * @param rootPath the rootPath to set
-   */
-  public void setRootPath(String rootPath) {
-    this.rootPath = rootPath;
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
   }
 
 }

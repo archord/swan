@@ -12,29 +12,43 @@ import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * 数据转移，清空需要频繁查询的表，这些表只存储当天的最新数据，之后将表中数据移动到历史表
  *
  * @author xy
  */
-public class DataBackupServiceImpl implements DataBackupService {
+@Service(value = "dataBackupService")
+public class DataBackupServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(DataBackupServiceImpl.class);
-
   private static boolean running = true;
+  
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
+  @Resource
   private OtLevel2Dao otlv2Dao;
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private OtObserveRecordDAO oorDao;
+  @Resource
   private ConfigFileDao cfDao;
+  @Resource
   private ImageStatusParameterDao ispDao;
+  @Resource
   private DataProcessMachineDAO dpmDao;
+  @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
   private CcdPixFilterDao cpfDao;
 
   @Override
@@ -71,90 +85,6 @@ public class DataBackupServiceImpl implements DataBackupService {
     }
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
-  }
-
-  /**
-   * @param otlv2Dao the otlv2Dao to set
-   */
-  public void setOtlv2Dao(OtLevel2Dao otlv2Dao) {
-    this.otlv2Dao = otlv2Dao;
-  }
-
-  /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @param oorDao the oorDao to set
-   */
-  public void setOorDao(OtObserveRecordDAO oorDao) {
-    this.oorDao = oorDao;
-  }
-
-  /**
-   * @return the cfDao
-   */
-  public ConfigFileDao getCfDao() {
-    return cfDao;
-  }
-
-  /**
-   * @param cfDao the cfDao to set
-   */
-  public void setCfDao(ConfigFileDao cfDao) {
-    this.cfDao = cfDao;
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @return the ispDao
-   */
-  public ImageStatusParameterDao getIspDao() {
-    return ispDao;
-  }
-
-  /**
-   * @param ispDao the ispDao to set
-   */
-  public void setIspDao(ImageStatusParameterDao ispDao) {
-    this.ispDao = ispDao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
-  }
-
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
-   * @param cpfDao the cpfDao to set
-   */
-  public void setCpfDao(CcdPixFilterDao cpfDao) {
-    this.cpfDao = cpfDao;
   }
 
 }

@@ -10,15 +10,15 @@
   </bean>-->
   
   <bean id="otTmplService" class="com.gwac.job.OtTmplServiceImpl" >
-    <property name="ot2Searchbox" value="${mingwac.ot2his.searchbox}" />
+    <property name="ot2Searchbox" value="${mingwacOt2hisSearchbox}" />
     <property name="ottwDao" ref="ottwDao" />
     <property name="ot2Dao" ref="otbDao" />
     <property name="mtDao" ref="mtDao" />
     <property name="ot2mDao" ref="ot2mDao" />
     <property name="oorDao" ref="otORDao" />
     <property name="oorTmpDao" ref="oorTmpDao" />
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
   
   <bean id="imageStatusParmService" class="com.gwac.job.ImageStatusParmServiceImpl" >
@@ -27,9 +27,9 @@
     <property name="psDao" ref="psDao" />
     <property name="ispDao" ref="ispDao" />
     <property name="dpmDao" ref="dpmDao" />
-    <property name="rootPath" value="${gwac.data.root.directory}" />	
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="rootPath" value="${gwacDataRootDirectory}" />	
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
   
   <bean id="foService" class="com.gwac.job.FollowUpObservationServiceImpl">
@@ -41,10 +41,10 @@
     <property name="ot2Dao" ref="otbDao" />
     <property name="fuotDao" ref="fuotDao" />
     <property name="fuoDao" ref="fuoDao" />
-    <property name="followupErrorbox" value="${gwac.followup.errorbox}" />
-    <property name="rootPath" value="${gwac.data.root.directory}" />
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="followupErrorbox" value="${gwacFollowupErrorbox}" />
+    <property name="rootPath" value="${gwacDataRootDirectory}" />
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
   
   <bean id="ffcService" class="com.gwac.job.FitsFileCutServiceImpl">
@@ -53,31 +53,31 @@
     <property name="otlv2Dao" ref="otbDao" />
     <property name="dpmDao" ref="dpmDao" />
     <property name="oorDao" ref="otORDao" />
-    <property name="successiveImageNumber" value="${gwac.successive.image.number}" />
-    <property name="headTailCutNumber" value="${gwac.image.head.tail.cut.number}" />
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="successiveImageNumber" value="${gwacSuccessiveImageNumber}" />
+    <property name="headTailCutNumber" value="${gwacImageHeadTailCutNumber}" />
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
   
   <bean id="dataSyncService" class="com.gwac.job.DataSyncServiceImpl">
     <property name="ffcDao" ref="ffcDao" />	
     <property name="ffcrDao" ref="ffcrDao" />	
-    <property name="rootDir" value="${gwac.data.root.directory}" />
-    <property name="serverUrl" value="${gwac.server.url.naoc}" />
-    <property name="uploadUrl" value="${gwac.server.upload.url}" />
-    <property name="mchNum" value="${gwac.machine.number}" />
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="rootDir" value="${gwacDataRootDirectory}" />
+    <property name="serverUrl" value="${gwacServerUrlNaoc}" />
+    <property name="uploadUrl" value="${gwacServerUploadUrl}" />
+    <property name="mchNum" value="${gwacMachineNumber}" />
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
   
   <bean id="monitorImageSyncService" class="com.gwac.job.MonitorImageSyncServiceImpl">
     <property name="sfDao" ref="sfDao" />	
-    <property name="rootDir" value="${gwac.data.root.directory}" />	
-    <property name="statusImageLDir" value="${gwac.monitorimage.directory}" />
-    <property name="serverUrl" value="${gwac.server.url.naoc}" />
-    <property name="uploadUrl" value="${gwac.server.uploadimage.url}" />
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="rootDir" value="${gwacDataRootDirectory}" />	
+    <property name="statusImageLDir" value="${gwacMonitorimageDirectory}" />
+    <property name="serverUrl" value="${gwacServerUrlNaoc}" />
+    <property name="uploadUrl" value="${gwacServerUploadimageUrl}" />
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
     
   <bean id="moveDataToHisService" class="com.gwac.job.DataBackupServiceImpl">
@@ -89,13 +89,13 @@
     <property name="dpmDao" ref="dpmDao" />
     <property name="ufuDao" ref="ufuDao" />
     <property name="cpfDao" ref="cpfDao" />
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
   
   <bean id="fileTransferService" class="com.gwac.job.FileTransferServiceImpl">
-    <property name="isBeiJingServer" value="${gwac.server.beijing}" />
-    <property name="isTestServer" value="${gwac.server.test}" />
+    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
+    <property name="isTestServer" value="${gwacServerTest}" />
   </bean>
  
 </beans>

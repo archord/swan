@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BaseHibernateDao<T> {
 
-  public void setClazz(final Class<T> clazzToSet);
+//  public void setClazz(final Class<T> clazzToSet);
 
   public Number count();
 

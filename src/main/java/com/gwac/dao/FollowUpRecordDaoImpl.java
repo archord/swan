@@ -9,11 +9,13 @@ import com.gwac.model.Telescope;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="followUpRecordDao")
 public class FollowUpRecordDaoImpl extends BaseHibernateDaoImpl<FollowUpRecord> implements FollowUpRecordDao {
 
   @Override

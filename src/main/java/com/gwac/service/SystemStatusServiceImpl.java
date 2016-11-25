@@ -9,48 +9,25 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.DataProcessMachine;
 import com.gwac.model.OtLevel2;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author xy
  */
+@Service
 public class SystemStatusServiceImpl implements SystemStatusService {
 
+  @Resource
   private OtLevel2Dao otbDao;
+  @Resource
   private DataProcessMachineDAO dpmDao;
   
   public void updateSystemStatus(){
     
-    List<DataProcessMachine> dpms = getDpmDao().findAll();
+    List<DataProcessMachine> dpms = dpmDao.findAll();
     for(DataProcessMachine dpm : dpms){
     }
-  }
-
-  /**
-   * @return the otbDao
-   */
-  public OtLevel2Dao getOtbDao() {
-    return otbDao;
-  }
-
-  /**
-   * @param otbDao the otbDao to set
-   */
-  public void setOtbDao(OtLevel2Dao otbDao) {
-    this.otbDao = otbDao;
-  }
-
-  /**
-   * @return the dpmDao
-   */
-  public DataProcessMachineDAO getDpmDao() {
-    return dpmDao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
   }
 }

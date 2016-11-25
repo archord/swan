@@ -10,15 +10,25 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service(value = "oTFollowListener")
 public class OTFollowListener implements MessageListener {
 
   private static final Log log = LogFactory.getLog(OTFollowListener.class);
+  
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
+  @Value("#{syscfg.gwacFollowServerIp}")
   private String serverIP;
+  @Value("#{syscfg.gwacFollowServerPort}")
   private int serverPort;
+  @Value("#{syscfg.gwacFollow30ServerIp}")
   private String server30IP;
+  @Value("#{syscfg.gwacFollow30ServerPort}")
   private int server30Port;
 
   @Override
@@ -71,48 +81,6 @@ public class OTFollowListener implements MessageListener {
     } catch (JMSException e) {
       log.error("receive followPlan error!", e);
     }
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @param serverIP the serverIP to set
-   */
-  public void setServerIP(String serverIP) {
-    this.serverIP = serverIP;
-  }
-
-  /**
-   * @param serverPort the serverPort to set
-   */
-  public void setServerPort(int serverPort) {
-    this.serverPort = serverPort;
-  }
-
-  /**
-   * @param server30IP the server30IP to set
-   */
-  public void setServer30IP(String server30IP) {
-    this.server30IP = server30IP;
-  }
-
-  /**
-   * @param server30Port the server30Port to set
-   */
-  public void setServer30Port(int server30Port) {
-    this.server30Port = server30Port;
   }
 
 }

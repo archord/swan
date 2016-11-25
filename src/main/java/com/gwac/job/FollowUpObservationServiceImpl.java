@@ -22,32 +22,47 @@ import com.gwac.model.UploadFileUnstore;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author xy
  */
-public class FollowUpObservationServiceImpl implements FollowUpObservationService {
+@Service(value = "followUpObsService")
+public class FollowUpObservationServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(FollowUpObservationServiceImpl.class);
+  private static boolean running = true;
 
+  @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
   private FollowUpObservationDao foDao;
+  @Resource
   private FollowUpFitsfileDao fufDao;
+  @Resource
   private FollowUpRecordDao frDao;
+  @Resource
   private OTCatalogDao otcDao;
+  @Resource
   private OtLevel2Dao ot2Dao;
+  @Resource
   private FollowUpObjectTypeDao fuotDao;
+  @Resource
   private FollowUpObjectDao fuoDao;
 
+  @Value("#{syscfg.gwacFollowupErrorbox}")
   private float followupErrorbox;
+  @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
-
-  private static boolean running = true;
 
   @Override
   public void startJob() {
@@ -347,88 +362,5 @@ public class FollowUpObservationServiceImpl implements FollowUpObservationServic
     frDao.save(fur);
   }
 
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
-   * @param foDao the foDao to set
-   */
-  public void setFoDao(FollowUpObservationDao foDao) {
-    this.foDao = foDao;
-  }
-
-  /**
-   * @param fufDao the fufDao to set
-   */
-  public void setFufDao(FollowUpFitsfileDao fufDao) {
-    this.fufDao = fufDao;
-  }
-
-  /**
-   * @param frDao the frDao to set
-   */
-  public void setFrDao(FollowUpRecordDao frDao) {
-    this.frDao = frDao;
-  }
-
-  /**
-   * @param otcDao the otcDao to set
-   */
-  public void setOtcDao(OTCatalogDao otcDao) {
-    this.otcDao = otcDao;
-  }
-
-  /**
-   * @param rootPath the rootPath to set
-   */
-  public void setRootPath(String rootPath) {
-    this.rootPath = rootPath;
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @param ot2Dao the ot2Dao to set
-   */
-  public void setOt2Dao(OtLevel2Dao ot2Dao) {
-    this.ot2Dao = ot2Dao;
-  }
-
-  /**
-   * @param fuotDao the fuotDao to set
-   */
-  public void setFuotDao(FollowUpObjectTypeDao fuotDao) {
-    this.fuotDao = fuotDao;
-  }
-
-  /**
-   * @param followupErrorbox the followupErrorbox to set
-   */
-  public void setFollowupErrorbox(float followupErrorbox) {
-    this.followupErrorbox = followupErrorbox;
-  }
-
-  /**
-   * @param fuoDao the fuoDao to set
-   */
-  public void setFuoDao(FollowUpObjectDao fuoDao) {
-    this.fuoDao = fuoDao;
-  }
 
 }

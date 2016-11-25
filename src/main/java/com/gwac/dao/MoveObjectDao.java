@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package com.gwac.dao;
 
-package com.gwac.job;
-
-import com.gwac.model.UploadFileRecord;
+import com.gwac.model.MoveObject;
+import java.util.List;
 
 /**
  *
  * @author xy
  */
-public interface FitsFileCutService {
-  public void startJob();
+public interface MoveObjectDao extends BaseHibernateDao<MoveObject> {
+  
 }

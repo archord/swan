@@ -21,26 +21,39 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author xy
  */
-public class OtTmplServiceImpl implements OtTmplService {
+@Service(value = "otTmplService")
+public class OtTmplServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(OtTmplServiceImpl.class);
-
   private static boolean running = true;
+  
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
+  @Value("#{syscfg.mingwacOt2hisSearchbox}")
   private float ot2Searchbox;
+  @Resource
   private OtLevel2Dao ot2Dao;
+  @Resource
   private OtTmplWrongDao ottwDao;
+  @Resource
   private MatchTableDao mtDao;
+  @Resource
   private OtLevel2MatchDao ot2mDao;
+  @Resource
   private OtObserveRecordDAO oorDao;
+  @Resource
   private OorTmpDao oorTmpDao;
 
   @Override
@@ -554,69 +567,6 @@ public class OtTmplServiceImpl implements OtTmplService {
       }
     }
     return maxDist.floatValue();
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
-  }
-
-  /**
-   * @param ot2Searchbox the ot2Searchbox to set
-   */
-  public void setOt2Searchbox(float ot2Searchbox) {
-    this.ot2Searchbox = ot2Searchbox;
-  }
-
-  /**
-   * @param ot2Dao the ot2Dao to set
-   */
-  public void setOt2Dao(OtLevel2Dao ot2Dao) {
-    this.ot2Dao = ot2Dao;
-  }
-
-  /**
-   * @param ottwDao the ottwDao to set
-   */
-  public void setOttwDao(OtTmplWrongDao ottwDao) {
-    this.ottwDao = ottwDao;
-  }
-
-  /**
-   * @param mtDao the mtDao to set
-   */
-  public void setMtDao(MatchTableDao mtDao) {
-    this.mtDao = mtDao;
-  }
-
-  /**
-   * @param ot2mDao the ot2mDao to set
-   */
-  public void setOt2mDao(OtLevel2MatchDao ot2mDao) {
-    this.ot2mDao = ot2mDao;
-  }
-
-  /**
-   * @param oorDao the oorDao to set
-   */
-  public void setOorDao(OtObserveRecordDAO oorDao) {
-    this.oorDao = oorDao;
-  }
-
-  /**
-   * @param oorTmpDao the oorTmpDao to set
-   */
-  public void setOorTmpDao(OorTmpDao oorTmpDao) {
-    this.oorTmpDao = oorTmpDao;
   }
 
 }

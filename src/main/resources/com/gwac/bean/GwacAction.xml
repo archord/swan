@@ -14,12 +14,12 @@
   
   <bean class="com.gwac.action.GetCutImageRefList"  scope="prototype">
     <property name="ffcrDao" ref="ffcrDao" />
-    <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
+    <property name="rootWebDir" value="${gwacDataRootDirectory.webmap}" />
   </bean>
   
   <bean class="com.gwac.action.GetCutImageList"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
-    <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
+    <property name="rootWebDir" value="${gwacDataRootDirectory.webmap}" />
   </bean>
   
   <bean class="com.gwac.action.ShowFitsList"  scope="prototype">
@@ -67,7 +67,7 @@
     <property name="otDao" ref="otbDao" />
     <property name="oorDao" ref="otORDao" />
     <property name="dpmDao" ref="dpmDao" />	
-    <property name="dataDisk" value="${gwac.data.disk}" />	
+    <property name="dataDisk" value="${gwacDataDisk}" />	
   </bean>
   
   <bean class="com.gwac.action.CcdPixelFilterDelete" scope="prototype">

@@ -36,17 +36,23 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * 通过监控文件状态的改变，来将状态改变的文件进行同步，目前未实现
  *
  * @author xy
  */
-public class FileTransferServiceImpl implements FileTransferService {
+@Service(value = "fileTransferService")
+public class FileTransferServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(FileTransferServiceImpl.class);
   private static boolean running = true;
+  
+  @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
   private WatchService watcher;
@@ -202,20 +208,6 @@ public class FileTransferServiceImpl implements FileTransferService {
       running = true;
       log.info("job fileTransferJob is done.");
     }
-  }
-
-  /**
-   * @param isBeiJingServer the isBeiJingServer to set
-   */
-  public void setIsBeiJingServer(Boolean isBeiJingServer) {
-    this.isBeiJingServer = isBeiJingServer;
-  }
-
-  /**
-   * @param isTestServer the isTestServer to set
-   */
-  public void setIsTestServer(Boolean isTestServer) {
-    this.isTestServer = isTestServer;
   }
 
 }

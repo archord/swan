@@ -10,11 +10,13 @@ import com.gwac.model.OtType;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="otTypeDao")
 public class OtTypeDaoImpl extends BaseHibernateDaoImpl<OtType> implements OtTypeDao {
 
   @Override

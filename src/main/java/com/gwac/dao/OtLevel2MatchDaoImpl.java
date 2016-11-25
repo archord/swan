@@ -10,11 +10,13 @@ import com.gwac.model.OtLevel2MatchShow;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="otLevel2MatchDao")
 public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> implements OtLevel2MatchDao {
 
   @Override

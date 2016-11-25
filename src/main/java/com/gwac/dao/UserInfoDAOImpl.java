@@ -4,7 +4,9 @@ import com.gwac.model.UserInfo;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
+@Repository(value="userInfoDAO")
 public class UserInfoDAOImpl extends BaseHibernateDaoImpl<UserInfo> implements UserInfoDAO {
 
   @Override

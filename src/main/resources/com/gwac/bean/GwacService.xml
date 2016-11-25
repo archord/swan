@@ -21,16 +21,16 @@
     <property name="skyDao" ref="skyDao" />
     <property name="jmsTemplate" ref="jmsTemplate" />
     <property name="otlistDest" ref="otlistDest" />
-    <property name="rootDir" value="${gwac.data.root.directory}" />
-    <property name="otLDir" value="${gwac.data.otlist.directory}" />
-    <property name="starLDir" value="${gwac.data.starlist.directory}" />
-    <property name="orgIDir" value="${gwac.data.origimage.directory}" />
-    <property name="cutIDir" value="${gwac.data.cutimages.directory}" />
-    <property name="cfgDir" value="${gwac.data.cfgfile.directory}" />
-    <property name="varLDir" value="${gwac.data.varlist.directory}" />
-    <property name="imgSDir" value="${gwac.data.imgstatus.directory}" />
-    <property name="otListSubDir" value="${gwac.data.otlistsub.directory}" />
-    <property name="cutImagesSubDir" value="${gwac.data.cutimagessub.directory}" />
+    <property name="rootDir" value="${gwacDataRootDirectory}" />
+    <property name="otLDir" value="${gwacDataOtlistDirectory}" />
+    <property name="starLDir" value="${gwacDataStarlistDirectory}" />
+    <property name="orgIDir" value="${gwacDataOrigimageDirectory}" />
+    <property name="cutIDir" value="${gwacDataCutimagesDirectory}" />
+    <property name="cfgDir" value="${gwacDataCfgfileDirectory}" />
+    <property name="varLDir" value="${gwacDataVarlistDirectory}" />
+    <property name="imgSDir" value="${gwacDataImgstatusDirectory}" />
+    <property name="otListSubDir" value="${gwacDataOtlistsubDirectory}" />
+    <property name="cutImagesSubDir" value="${gwacDataCutimagessubDirectory}" />
   </bean>
   
   <bean id="userService" class="com.gwac.service.UserInfoServiceImpl" >

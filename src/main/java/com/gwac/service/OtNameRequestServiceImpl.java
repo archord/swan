@@ -14,15 +14,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author xy
  */
+@Service
 public class OtNameRequestServiceImpl implements OtNameRequestService {
 
+  @Resource
   private OtLevel2Dao obDao;
+  @Resource
   private OtNumberDao otnDao;
+  @Value("#{syscfg.gwacErrorbox}")
   private float errorBox;
 
   public List<OtLevel2> parseParaFile(File paraFile) {
@@ -84,24 +91,4 @@ public class OtNameRequestServiceImpl implements OtNameRequestService {
     return obs;
   }
 
-  /**
-   * @return the obDao
-   */
-  public OtLevel2Dao getObDao() {
-    return obDao;
-  }
-
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
-  }
-
-  /**
-   * @param errorBox the errorBox to set
-   */
-  public void setErrorBox(float errorBox) {
-    this.errorBox = errorBox;
-  }
 }

@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package com.gwac.dao;
 
-package com.gwac.job;
+import com.gwac.model.MoveObjectRecord;
+import java.util.List;
 
 /**
  *
  * @author xy
  */
-public interface FileTransferService {
-  public void startJob();
+public interface MoveObjectRecordDao extends BaseHibernateDao<MoveObjectRecord> {
   
 }
