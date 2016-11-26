@@ -48,8 +48,8 @@ public class HoughLine {
     this.lastPoint = null;
   }
 
-  public void addPoint(int pIdx, int frameNumber, float theta, float rho, float x, float y, Date dateUtc) {
-    this.addPoint(new HoughtPoint(pIdx, frameNumber, theta, rho, x, y, dateUtc));
+  public void addPoint(int pIdx, int frameNumber, float theta, float rho, float x, float y, Date dateUtc, long oorId) {
+    this.addPoint(new HoughtPoint(pIdx, frameNumber, theta, rho, x, y, dateUtc, oorId));
   }
 
   /**

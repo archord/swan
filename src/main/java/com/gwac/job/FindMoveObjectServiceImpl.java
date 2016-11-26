@@ -10,21 +10,21 @@ import com.gwac.dao.MoveObjectRecordDao;
 import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.linefind.DrawObject;
+import com.gwac.linefind.HoughFrame;
 import com.gwac.linefind.HoughTransform;
+import com.gwac.linefind.HoughtPoint;
 import com.gwac.linefind.LineObject;
 import com.gwac.model.DataProcessMachine;
+import com.gwac.model.MoveObject;
+import com.gwac.model.MoveObjectRecord;
 import com.gwac.model.ObservationSky;
 import com.gwac.model.OtObserveRecord;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
@@ -81,27 +81,29 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
   public void processAllDay() {
 
-//    List<String> dateStrs = otlv2Dao.getAllDateStr();
-//    List<ObservationSky> skys = observationSkyDao.findAll();
-//    List<DataProcessMachine> dpms = dpmDao.findAll();
-//    log.debug("total days: " + dateStrs.size());
-//    for (String dateStr : dateStrs) {
-//      for (DataProcessMachine dpm : dpms) {
-//        for (ObservationSky sky : skys) {
-//          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId());
-//        }
-//      }
-//    }
-    String dateStr = "160928";
-    int dpmId = 6;
-    int skyId = 11;
-    List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpmId, skyId);
-    System.out.println("size:" + oors.size());
-    processOneDay(oors);
+    List<String> dateStrs = otlv2Dao.getAllDateStr();
+    List<ObservationSky> skys = observationSkyDao.findAll();
+    List<DataProcessMachine> dpms = dpmDao.findAll();
+    log.debug("total days: " + dateStrs.size());
+    for (String dateStr : dateStrs) {
+      for (DataProcessMachine dpm : dpms) {
+        for (ObservationSky sky : skys) {
+          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId());
+          processOneDay(oors, dateStr, dpm.getDpmId(), sky.getSkyId());
+        }
+      }
+    }
+    
+//    String dateStr = "160928";
+//    int dpmId = 6;
+//    int skyId = 11;
+//    List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpmId, skyId);
+//    System.out.println("size:" + oors.size());
+//    processOneDay(oors, dateStr, dpmId, skyId);
 
   }
 
-  public void processOneDay(List<OtObserveRecord> oors) {
+  public void processOneDay(List<OtObserveRecord> oors, String dateStr, int dpmId, int skyId) {
 
     HoughTransform ht = new HoughTransform(imgWidth, imgHeight, thetaSize, rhoSize, thetaRange, rhoRange, maxHoughFrameNunmber, minValidPoint, maxDistance, rhoErrorTimes, validLineMinPoint);
 
@@ -126,9 +128,47 @@ public class FindMoveObjectServiceImpl implements BaseService {
     ArrayList<LineObject> fastObjs = ht.getFastObjs();
     ArrayList<LineObject> singleFrameObjs = ht.getSingleFrameObjs();
 
+    for (LineObject obj : mvObjs) {
+
+    }
+
 //    ht.saveLine2(outPath);
 //    DrawObject dObj = new DrawObject(ht);
 //    dObj.drawObjsAll("E:\\160928-5-11.png");
+  }
+
+  /**
+   *
+   * @param moveType 1，出现多帧，一帧一点，少数帧多个点；2，出现多帧，一帧多点；3，出现1帧，一帧多点
+   * @param obj
+   * @param dateStr
+   * @param dpmId
+   * @param skyId
+   */
+  public void saveLineObject(char moveType, LineObject obj, String dateStr, int dpmId, int skyId) {
+
+    MoveObject mObj = new MoveObject();
+    mObj.setDateStr(dateStr);
+    mObj.setDpmId(dpmId);
+    mObj.setSkyId(skyId);
+    mObj.setTotalFrameNumber((short) obj.frameList.size());
+    mObj.setAvgFramePointNumber((float) (obj.pointNumber * 1.0 / mObj.getTotalFrameNumber()));
+    mObj.setFirstFrameNum((short) obj.firstFrameNumber);
+    mObj.setFirstFrameTime(obj.firstPoint.getDateUtc());
+    mObj.setLastFrameNum((short) obj.lastFrameNumber);
+    mObj.setLastFrameTime(obj.lastPoint.getDateUtc());
+    mObj.setMovType(moveType);
+
+    moveObjectDao.save(mObj);
+    for (HoughtPoint hp : obj.pointList) {
+      MoveObjectRecord mor = new MoveObjectRecord();
+      mor.setMovId(mObj.getMovId());
+      mor.setOorId(hp.getOorId());
+      mor.setSpeedX(hp.getxSpeedt());
+      mor.setSpeedY(hp.getySpeedt());
+      moveObjectRecordDao.save(mor);
+    }
+
   }
 
 }

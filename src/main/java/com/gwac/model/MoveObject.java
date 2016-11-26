@@ -30,7 +30,7 @@ public class MoveObject implements java.io.Serializable {
   private Float meanSpeed;
   private Float speedSigma;
   private Short totalFrameNumber;
-  private Short avgFramePointNumber;
+  private Float avgFramePointNumber;
   private String comment;
   private Character movType;
   private String dateStr;
@@ -44,7 +44,7 @@ public class MoveObject implements java.io.Serializable {
     this.movId = movId;
   }
 
-  public MoveObject(long movId, Short firstFrameNum, Short lastFrameNum, Date firstFrameTime, Date lastFrameTime, Float minSpeed, Float maxSpeed, Float meanSpeed, Float speedSigma, Short totalFrameNumber, Short avgFramePointNumber, String comment, Character movType, String dateStr, Integer skyId, Integer dpmId) {
+  public MoveObject(long movId, Short firstFrameNum, Short lastFrameNum, Date firstFrameTime, Date lastFrameTime, Float minSpeed, Float maxSpeed, Float meanSpeed, Float speedSigma, Short totalFrameNumber, Float avgFramePointNumber, String comment, Character movType, String dateStr, Integer skyId, Integer dpmId) {
     this.movId = movId;
     this.firstFrameNum = firstFrameNum;
     this.lastFrameNum = lastFrameNum;
@@ -161,11 +161,11 @@ public class MoveObject implements java.io.Serializable {
   }
 
   @Column(name = "avg_frame_point_number")
-  public Short getAvgFramePointNumber() {
+  public Float getAvgFramePointNumber() {
     return this.avgFramePointNumber;
   }
 
-  public void setAvgFramePointNumber(Short avgFramePointNumber) {
+  public void setAvgFramePointNumber(Float avgFramePointNumber) {
     this.avgFramePointNumber = avgFramePointNumber;
   }
 

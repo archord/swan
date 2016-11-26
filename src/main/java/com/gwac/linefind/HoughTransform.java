@@ -149,7 +149,8 @@ public class HoughTransform {
       tline.removeOldFrame(curNumber - this.maxHoughFrameNunmber);
 
       if (tline.matchLastPoint(ot1, maxDistance)) {
-        tline.addPoint(numOT1s - 1, curNumber, (float) (thetaStep * t), (float) (fr * rhoStep), ot1.getX(), ot1.getY(), ot1.getDateUt());
+        tline.addPoint(numOT1s - 1, curNumber, (float) (thetaStep * t),
+                (float) (fr * rhoStep), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId());
         if (tline.validSize() >= this.minValidPoint) {
           LineObject lineObj = new LineObject((float) (t * thetaStep), (float) (r * rhoStep), imgXCenter, imgYCenter, (float) halfRho);
           lineObj.cloneLine(tline);
