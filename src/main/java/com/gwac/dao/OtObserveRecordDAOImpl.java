@@ -25,10 +25,22 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository(value="otObserveRecordDAO")
+@Repository(value = "otObserveRecordDAO")
 public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
+
+  @Override
+  public List<OtObserveRecord> getOt1ByDateDpmSkyId(String dateStr, int dpmId, int skyId) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record_his where ot_id=0 and data_produce_method='1' and date_str='" + dateStr
+            + "' and dpm_id=" + dpmId + " and sky_id=" + skyId
+            + " order by ff_number asc";
+    System.out.println("sql="+sql);
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
 
   @Override
   public void updateFfcId(OtObserveRecord oor) {

@@ -84,8 +84,8 @@ public class FindLineObject {
           lastFrameNumber = ot1.getFrameNumber();
           ht.endFrame();
         }
-        ht.historyAddPoint(ot1);
-        ht.lineAddPoint(ot1);
+//        ht.historyAddPoint(ot1);
+//        ht.lineAddPoint(ot1);
 
         pNum++;
       }

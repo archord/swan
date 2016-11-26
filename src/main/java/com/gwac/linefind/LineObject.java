@@ -3,6 +3,7 @@
  */
 package com.gwac.linefind;
 
+import com.gwac.model.OtObserveRecord;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -136,8 +137,8 @@ public class LineObject {
     lineObj.lastPoint = null;
   }
 
-  public void addPoint(int pIdx, int frameNumber, float theta, float rho, float x, float y, Date dateUtc) {
-    this.addPoint(new HoughtPoint(pIdx, frameNumber, theta, rho, x, y, dateUtc));
+  public void addPoint(int pIdx, int frameNumber, float theta, float rho, float x, float y, Date dateUtc, long oorId) {
+    this.addPoint(new HoughtPoint(pIdx, frameNumber, theta, rho, x, y, dateUtc, oorId));
   }
 
   /**
@@ -180,11 +181,11 @@ public class LineObject {
     return endLine;
   }
 
-  public boolean matchLastPoint(OT1 ot1, float maxDistance) {
+  public boolean matchLastPoint(OtObserveRecord ot1, float maxDistance) {
 
     boolean flag = true;
     if (this.pointNumber > 0) {
-      double distance = ot1.distance(lastPoint.getX(), lastPoint.getY());
+      double distance = CommonFunction.getLineDistance(ot1.getX(), ot1.getY(), lastPoint.getX(), lastPoint.getY());
       boolean deltaFlag = true;
       if (this.frameList.size() >= 2) {
         float xDelta = ot1.getX() - lastPoint.getX();
@@ -196,12 +197,12 @@ public class LineObject {
     return flag;
   }
 
-  public boolean matchLastPoint2(OT1 ot1, float maxDistance) {
+  public boolean matchLastPoint2(OtObserveRecord ot1, float maxDistance) {
 
     boolean distFlag = true;
     if (this.frameList.size() == 1) {
       HoughFrame tframe = this.frameList.get(0);
-      if (tframe.frameNumber == ot1.getFrameNumber()) {
+      if (tframe.frameNumber == ot1.getFfNumber()) {
         lastPoint = tframe.findNearestPoint(ot1);
       } else {
         lastPoint = tframe.findLastPoint(ot1);
@@ -212,7 +213,7 @@ public class LineObject {
         HoughtPoint tPoint = lastFrame.pointList.get(0);
         lastPoint = tPoint;
       } else {
-        if (lastFrame.frameNumber == ot1.getFrameNumber()) {
+        if (lastFrame.frameNumber == ot1.getFfNumber()) {
           lastPoint = lastFrame.findNearestPoint(ot1);
         } else {
           lastPoint = lastFrame.findLastPoint(ot1);
@@ -221,7 +222,7 @@ public class LineObject {
         }
       }
     }
-    double distance = ot1.distance(lastPoint.getX(), lastPoint.getY());
+    double distance = CommonFunction.getLineDistance(ot1.getX(), ot1.getY(), lastPoint.getX(), lastPoint.getY());
     distFlag = distance < maxDistance;
 
     boolean deltaFlag = true;
@@ -236,7 +237,7 @@ public class LineObject {
       float xDelta = ot1.getX() - lastPoint.getX();
       float yDelta = ot1.getY() - lastPoint.getY();
 //      int deltaTime = ot1.getFrameNumber() - lastPoint.getFrameNumber();
-      long deltaTime = ot1.getDate().getTime() - lastPoint.getDateUtc().getTime();
+      long deltaTime = ot1.getDateUt().getTime() - lastPoint.getDateUtc().getTime();
 //      speedFlag = (Math.abs(xDelta - this.speedX * deltaTime) < this.speedX * 0.5) && (Math.abs(yDelta - this.speedY * deltaTime) < this.speedY * 0.5);
 //      speedFlag = (Math.abs(xDelta - this.speedX * deltaTime) < 5) && (Math.abs(yDelta - this.speedY * deltaTime) < 5);
 
@@ -253,13 +254,13 @@ public class LineObject {
    * @param maxDistance 新目标与直线最后一个点的距离不超过maxDpListstance
    * @return
    */
-  public boolean matchLastPoint3(OT1 ot1, float maxDistance) {
+  public boolean matchLastPoint3(OtObserveRecord ot1, float maxDistance) {
 
     boolean flag = true;
     boolean deltaFlag = true;
     boolean speedFlag = true;
     if (this.frameList.size() <= 2) {
-      double distance = ot1.distance(lastPoint.getX(), lastPoint.getY());
+      double distance = CommonFunction.getLineDistance(ot1.getX(), ot1.getY(), lastPoint.getX(), lastPoint.getY());
       flag = distance < maxDistance;
       if (this.frameList.size() == 2) {
         float xDelta = ot1.getX() - lastPoint.getX();
@@ -270,7 +271,7 @@ public class LineObject {
       if (avgFramePointNumber < 2) {
         float xDelta = ot1.getX() - lastPoint.getX();
         float yDelta = ot1.getY() - lastPoint.getY();
-        int deltaTime = ot1.getFrameNumber() - lastPoint.getFrameNumber();
+        int deltaTime = ot1.getFfNumber()- lastPoint.getFrameNumber();
         speedFlag = (Math.abs(xDelta - this.speedX * deltaTime) < this.speedX * 0.5) && (Math.abs(yDelta - this.speedY * deltaTime) < this.speedY * 0.5);
       } else {
         if (this.frameList.size() >= 2) {
@@ -555,7 +556,7 @@ public class LineObject {
     this.frameList.clear();
   }
 
-  public void printInfo(ArrayList<OT1> historyOT1s) {
+  public void printInfo(ArrayList<OtObserveRecord> historyOT1s) {
 
     int i = 1;
     for (HoughFrame tFrame : frameList) {
@@ -576,24 +577,24 @@ public class LineObject {
     }
   }
 
-  public void printOT1Info2(ArrayList<OT1> historyOT1s) {
+  public void printOT1Info2(ArrayList<OtObserveRecord> historyOT1s) {
 
     int i = 0;
     for (HoughFrame tFrame : frameList) {
       for (HoughtPoint tPoint : tFrame.pointList) {
-        OT1 ot1 = historyOT1s.get(tPoint.getpIdx());
-        ot1.printInfo();
+        OtObserveRecord ot1 = historyOT1s.get(tPoint.getpIdx());
+//        ot1.printInfo();
         i++;
       }
     }
   }
 
-  public void printOT1Info(ArrayList<OT1> historyOT1s) {
+  public void printOT1Info(ArrayList<OtObserveRecord> historyOT1s) {
 
     int i = 0;
     for (HoughtPoint tPoint : pointList) {
-      OT1 ot1 = historyOT1s.get(tPoint.getpIdx());
-      ot1.printInfo();
+      OtObserveRecord ot1 = historyOT1s.get(tPoint.getpIdx());
+//      ot1.printInfo();
       i++;
     }
   }

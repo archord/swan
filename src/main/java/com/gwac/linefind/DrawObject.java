@@ -54,15 +54,15 @@ public class DrawObject {
     g2d.fillRect(0, 0, ht.imgWidth, ht.imgHeight);
     g2d.drawOval(ht.imgWidth - 40, ht.imgHeight - 40, 20, 20);
 
-    drawObjs(ht.mvObjs, g2d);
-    drawObjs(ht.fastObjs, g2d);
-    drawObjs(ht.singleFrameObjs, g2d);
+    drawObjs(ht.getMvObjs(), g2d);
+    drawObjs(ht.getFastObjs(), g2d);
+    drawObjs(ht.getSingleFrameObjs(), g2d);
 
-    int singleFrame = ht.singleFrameObjs.size();
-    int fastObjNum = ht.fastObjs.size();
+    int singleFrame = ht.getSingleFrameObjs().size();
+    int fastObjNum = ht.getFastObjs().size();
     int singlePoint = 0;
     int multiPoint = 0;
-    for (LineObject mvObj : ht.mvObjs) {
+    for (LineObject mvObj : ht.getMvObjs()) {
       if (mvObj.pointNumber < ht.validLineMinPoint) {
         continue;
       }
@@ -203,7 +203,7 @@ public class DrawObject {
     ArrayList<Integer> idxList = new ArrayList(Arrays.asList(idxArray));
 
     int j = 0;
-    for (LineObject mvObj : ht.mvObjs) {
+    for (LineObject mvObj : ht.getMvObjs()) {
 
       if (mvObj.pointNumber < ht.validLineMinPoint) {
         continue;

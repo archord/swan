@@ -3,6 +3,7 @@
  */
 package com.gwac.linefind;
 
+import com.gwac.model.OtObserveRecord;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,7 +83,7 @@ public class HoughLine {
    * @param maxDistance 新目标与直线最后一个点的距离不超过maxDpListstance
    * @return
    */
-  public boolean matchLastPoint(OT1 ot1, float maxDistance) {
+  public boolean matchLastPoint(OtObserveRecord ot1, float maxDistance) {
     boolean flag = true;
     if (this.pointNumber > 0) {
       if (this.pointNumber == 1) {
@@ -90,7 +91,7 @@ public class HoughLine {
         lastPoint = tPoint;
       } else if (this.frameList.size() == 1) {
         HoughFrame tframe = this.frameList.get(0);
-        if (tframe.frameNumber == ot1.getFrameNumber()) {
+        if (tframe.frameNumber == ot1.getFfNumber()) {
           lastPoint = tframe.findNearestPoint(ot1);
         } else {
           lastPoint = tframe.findLastPoint(ot1);
@@ -101,14 +102,14 @@ public class HoughLine {
           HoughtPoint tPoint = lastFrame.pointList.get(0);
           lastPoint = tPoint;
         } else {
-          if (lastFrame.frameNumber == ot1.getFrameNumber()) {
+          if (lastFrame.frameNumber == ot1.getFfNumber()) {
             lastPoint = lastFrame.findNearestPoint(ot1);
           } else {
             lastPoint = lastFrame.findLastPoint(ot1);
           }
         }
       }
-      double distance = ot1.distance(lastPoint.getX(), lastPoint.getY());
+      double distance = CommonFunction.getLineDistance(ot1.getX(), ot1.getY(), lastPoint.getX(), lastPoint.getY());
       flag = distance < maxDistance;
     }
     return flag;
@@ -178,7 +179,7 @@ public class HoughLine {
     this.frameList.clear();
   }
 
-  public void printInfo(ArrayList<OT1> historyOT1s) {
+  public void printInfo(ArrayList<OtObserveRecord> historyOT1s) {
 
     for (HoughFrame tFrame : frameList) {
       for (HoughtPoint tPoint : tFrame.pointList) {
@@ -187,24 +188,24 @@ public class HoughLine {
     }
   }
 
-  public void printOT1Info2(ArrayList<OT1> historyOT1s) {
+  public void printOT1Info2(ArrayList<OtObserveRecord> historyOT1s) {
 
     int i = 0;
     for (HoughFrame tFrame : frameList) {
       for (HoughtPoint tPoint : tFrame.pointList) {
-        OT1 ot1 = historyOT1s.get(tPoint.getpIdx());
-        ot1.printInfo();
+        OtObserveRecord ot1 = historyOT1s.get(tPoint.getpIdx());
+//        ot1.printInfo();
         i++;
       }
     }
   }
 
-  public void printOT1Info(ArrayList<OT1> historyOT1s) {
+  public void printOT1Info(ArrayList<OtObserveRecord> historyOT1s) {
 
     int i = 0;
     for (HoughtPoint tPoint : pointList) {
-      OT1 ot1 = historyOT1s.get(tPoint.getpIdx());
-      ot1.printInfo();
+      OtObserveRecord ot1 = historyOT1s.get(tPoint.getpIdx());
+//      ot1.printInfo();
       i++;
     }
   }

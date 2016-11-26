@@ -15,6 +15,9 @@ import java.util.List;
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   
+  
+  public List<OtObserveRecord> getOt1ByDateDpmSkyId(String dateStr, int dpmId, int skyId);
+  
   public void updateFfcId(OtObserveRecord oor);
   
   public List<OtObserveRecord> getLastRecord(OtLevel2 ot2);

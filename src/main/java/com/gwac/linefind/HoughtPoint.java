@@ -33,6 +33,7 @@ public class HoughtPoint implements Comparable, Cloneable {
   private float preY;
   private float preDeltaX;
   private float preDeltaY;
+  private long oorId;
 
   public void calSpeed(HoughtPoint tPoint) {
     this.xDelta = this.getX() - tPoint.getX();
@@ -69,7 +70,7 @@ public class HoughtPoint implements Comparable, Cloneable {
     return tstr;
   }
 
-  public HoughtPoint(int pIdx, int frameNumber, float theta, float rho, float x, float y, Date dateUtc) {
+  public HoughtPoint(int pIdx, int frameNumber, float theta, float rho, float x, float y, Date dateUtc, long oorId) {
     this.pIdx = pIdx;
     this.frameNumber = frameNumber;
     this.theta = theta;
@@ -77,6 +78,7 @@ public class HoughtPoint implements Comparable, Cloneable {
     this.x = x;
     this.y = y;
     this.dateUtc = dateUtc;
+    this.oorId = oorId;
   }
 
   public void calKtheta(HoughtPoint hp, float imgXCenter, float imgYCenter, float halfRho) {
@@ -423,5 +425,19 @@ public class HoughtPoint implements Comparable, Cloneable {
    */
   public void setPreDeltaY(float preDeltaY) {
     this.preDeltaY = preDeltaY;
+  }
+
+  /**
+   * @return the oorId
+   */
+  public long getOorId() {
+    return oorId;
+  }
+
+  /**
+   * @param oorId the oorId to set
+   */
+  public void setOorId(long oorId) {
+    this.oorId = oorId;
   }
 }

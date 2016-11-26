@@ -3,6 +3,7 @@
  */
 package com.gwac.linefind;
 
+import com.gwac.model.OtObserveRecord;
 import java.util.ArrayList;
 
 /**
@@ -44,12 +45,12 @@ public class HoughFrame {
    * @param ot1
    * @return
    */
-  public HoughtPoint findNearestPoint(OT1 ot1) {
+  public HoughtPoint findNearestPoint(OtObserveRecord ot1) {
 
     HoughtPoint nearest = null;
     double distance = Double.MAX_VALUE;
     for (HoughtPoint tpoint : this.pointList) {
-      double tDist = ot1.distance(tpoint.getX(), tpoint.getY());
+      double tDist = CommonFunction.getLineDistance(ot1.getX(), ot1.getY(), tpoint.getX(), tpoint.getY());
       if (tDist < distance) {
         distance = tDist;
         nearest = tpoint;
@@ -64,7 +65,7 @@ public class HoughFrame {
    * @param ot1
    * @return
    */
-  public HoughtPoint findLastPoint(OT1 ot1) {
+  public HoughtPoint findLastPoint(OtObserveRecord ot1) {
     HoughtPoint minPoint, maxPoint, lastPoint;
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       maxPoint = maxX;
@@ -73,13 +74,13 @@ public class HoughFrame {
       maxPoint = maxY;
       minPoint = minY;
     }
-    double distance1 = ot1.distance(minPoint.getX(), minPoint.getY());
-    double distance2 = ot1.distance(maxPoint.getX(), maxPoint.getY());
+    double distance1 = CommonFunction.getLineDistance(ot1.getX(), ot1.getY(), minPoint.getX(), minPoint.getY());
+    double distance2 = CommonFunction.getLineDistance(ot1.getX(), ot1.getY(), maxPoint.getX(), maxPoint.getY());
     lastPoint = distance1 < distance2 ? minPoint : maxPoint;
     return lastPoint;
   }
 
-  public HoughtPoint findLastPointUsingDelta(OT1 ot1, float lineDeltaX, float lineDeltaY) {
+  public HoughtPoint findLastPointUsingDelta(OtObserveRecord ot1, float lineDeltaX, float lineDeltaY) {
     HoughtPoint lastPoint;
     if (Math.abs(lineDeltaX) > Math.abs(lineDeltaY)) {
       if (lineDeltaX > 0) {
