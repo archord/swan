@@ -65,7 +65,7 @@ public class MoveObject implements java.io.Serializable {
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
     @Parameter(name = "max_lo", value = "49"),
-    @Parameter(name = "sequence", value = "ot_leve2_seq")})
+    @Parameter(name = "sequence", value = "mov_id_seq")})
   @Id
   @GeneratedValue(generator = "generator")
   @Column(name = "mov_id", unique = true, nullable = false)

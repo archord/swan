@@ -10,6 +10,7 @@ import com.gwac.dao.MoveObjectRecordDao;
 import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.linefind.DrawObject;
 import com.gwac.linefind.HoughFrame;
 import com.gwac.linefind.HoughTransform;
 import com.gwac.linefind.HoughtPoint;
@@ -89,18 +90,22 @@ public class FindMoveObjectServiceImpl implements BaseService {
       for (DataProcessMachine dpm : dpms) {
         for (ObservationSky sky : skys) {
           List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId());
-          processOneDay(oors, dateStr, dpm.getDpmId(), sky.getSkyId());
+          int ot1num = oors.size();
+          log.debug("day=" + dateStr + ", dmp=" + dpm.getDpmId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
+          if (ot1num > 0) {
+            processOneDay(oors, dateStr, dpm.getDpmId(), sky.getSkyId());
+          }
         }
       }
+      break;
     }
-    
+
 //    String dateStr = "160928";
 //    int dpmId = 6;
 //    int skyId = 11;
 //    List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpmId, skyId);
 //    System.out.println("size:" + oors.size());
 //    processOneDay(oors, dateStr, dpmId, skyId);
-
   }
 
   public void processOneDay(List<OtObserveRecord> oors, String dateStr, int dpmId, int skyId) {
@@ -127,14 +132,31 @@ public class FindMoveObjectServiceImpl implements BaseService {
     ArrayList<LineObject> mvObjs = ht.getMvObjs();
     ArrayList<LineObject> fastObjs = ht.getFastObjs();
     ArrayList<LineObject> singleFrameObjs = ht.getSingleFrameObjs();
+    log.debug("mvObjs:" + mvObjs.size() + ", fastObjs:" + fastObjs.size() + ", singleFrameObjs:" + singleFrameObjs.size());
 
-    for (LineObject obj : mvObjs) {
-
-    }
+    int idx = 1;
+//    for (LineObject obj : mvObjs) {
+//      if (obj.pointNumber >= validLineMinPoint) {
+//        saveLineObject('1', obj, dateStr, dpmId, skyId);
+//        log.debug(idx++);
+//      }
+//    }
+//    for (LineObject obj : fastObjs) {
+//      if (obj.pointNumber >= validLineMinPoint) {
+//        saveLineObject('2', obj, dateStr, dpmId, skyId);
+//        log.debug(idx++);
+//      }
+//    }
+//    for (LineObject obj : singleFrameObjs) {
+//      if (obj.pointNumber >= validLineMinPoint) {
+//        saveLineObject('3', obj, dateStr, dpmId, skyId);
+//        log.debug(idx++);
+//      }
+//    }
 
 //    ht.saveLine2(outPath);
-//    DrawObject dObj = new DrawObject(ht);
-//    dObj.drawObjsAll("E:\\160928-5-11.png");
+    DrawObject dObj = new DrawObject(ht);
+    dObj.drawObjsAll("E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png");
   }
 
   /**
