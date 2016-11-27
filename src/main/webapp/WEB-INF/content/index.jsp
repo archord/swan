@@ -52,6 +52,7 @@
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank" ><p>OT分布-RaDec</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere-d3.action" target="_blank" ><p>OT分布3D</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-timesequence-sphere.action" target="_blank" ><p>OT1分布3D</p></a></div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-mot-timesequence-sphere.action" target="_blank" ><p>移动展示</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-sphere-distribution.action" target="_blank" ><p>模板分布</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot.action" target="_blank" ><p>OT2查询</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/manage/pfile-upload.action" target="_blank" ><p>上传文件</p></a></div>

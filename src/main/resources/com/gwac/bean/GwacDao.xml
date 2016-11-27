@@ -3,6 +3,20 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  
+  <bean id="moveObjectDao" class="com.gwac.dao.MoveObjectDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.MoveObject</value>
+    </property>
+  </bean>
+
+  <bean id="moveObjectRecordDao" class="com.gwac.dao.MoveObjectRecordDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.MoveObjectRecord</value>
+    </property>
+  </bean>
 
   <bean id="coorShowDao" class="com.gwac.dao.CoordinateShowDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
