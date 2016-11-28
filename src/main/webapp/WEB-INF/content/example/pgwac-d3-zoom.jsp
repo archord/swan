@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <title>Animated World Zoom</title>
     <style>
-      @import url(/gwac/js/d3/maps.css);
+      @import url(<%=request.getContextPath()%>/resource/js/d3/maps.css);
 
       #control {
         width: 960px;
@@ -26,9 +26,9 @@
     <div id="control">
       <label for="north-up"><input type="checkbox" checked="" id="north-up"> North is up</label>
     </div>
-    <script src="/gwac/js/d3/d3.min.js"></script>
-    <script src="/gwac/js/d3/topojson.min.js"></script>
-    <script src="/gwac/js/d3/d3.geo.zoom.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/d3/topojson.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/d3/d3.geo.zoom.js"></script>
     <script>
 
       var degrees = 180 / Math.PI,
@@ -60,7 +60,7 @@
         northUp = this.checked;
       }).property("checked");
 
-      d3.json("/gwac/json/world-110m.json", function(error, world) {
+      d3.json("<%=request.getContextPath()%>/resource/json/world-110m.json", function(error, world) {
 
         var globe = {type: "Sphere"};
         var graticule = d3.geo.graticule()();

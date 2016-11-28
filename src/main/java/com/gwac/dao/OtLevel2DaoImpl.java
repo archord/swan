@@ -27,6 +27,16 @@ import org.hibernate.Session;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
+  
+  @Override
+  public List<String> getAllDateStr() {
+
+    String sql = "select distinct date_str from ot_level2 order by date_str;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    return q.list();
+  }
 
   @Override
   public List<OtLevel2> searchOT2His(OtLevel2 ot2, float searchRadius, float mag) {

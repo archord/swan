@@ -13,5 +13,9 @@ import java.util.List;
  * @author xy
  */
 public interface MoveObjectDao extends BaseHibernateDao<MoveObject> {
+
+  public String getMoveObjsByDate(String dateStr);
+
+  public String getNotMatchOTByDate(String dateStr);
   
 }

@@ -41,7 +41,7 @@ public class GetOt1TimeSequence extends ActionSupport implements SessionAware {
       firstOor = oors.get(0);
 
       Calendar cal = Calendar.getInstance();
-      Date baseDate = getFirstOor().getDateUt();
+      Date baseDate = firstOor.getDateUt();
       cal.setTime(baseDate);
       double baseDay = cal.getTimeInMillis() / 15000.0; //15S
 
@@ -56,7 +56,7 @@ public class GetOt1TimeSequence extends ActionSupport implements SessionAware {
         tmap.put("dpmid", oor.getDpmId());
         tmap.put("ffnumber", oor.getFfNumber());
         ot2TimeSequence.add(tmap);
-        if (number > getMaxNumber()) {
+        if (number > maxNumber) {
           maxNumber = number;
         }
       }

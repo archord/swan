@@ -17,7 +17,7 @@
 
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "get-ot1-timesequence-list.action";
+        var url = "get-mov-ot-sequence-list.action?dateStr=151218";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
         $("#sphereDisplay").height(mainHeight - headerHeight - 10);
@@ -25,35 +25,39 @@
         var gwac = $.gwac("#sphereDisplay", root, url);
         gwac.loadSkyList();
         gwac.loadDpmList();
-//        d3.json(gwac.url, function(errors, reqData) {
-//          gwac.parseData(reqData);
-//          gwac.draw();
-//          setTimeout(function() {
-//            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
-//          }, gwac.startAnimationDuration);
-//        });
-//
-//        $('#dynamicDrawOt1').change(function() {
-//          if ($(this).is(":checked")) {
-//            gwac.reParseData();
-//            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
-//          } else {
-//            clearInterval(gwac.ot1DrawInterval);
-//          }
-//        });
-//
-//        $('#changeView').click(function() {
-//          gwac.changeView(gwac);
-//        });
+        gwac.loadDateStrList();
+        d3.json(gwac.url, function(errors, reqData) {
+          gwac.parseData(reqData);
+          gwac.draw();
+          setTimeout(function() {
+            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
+          }, gwac.startAnimationDuration);
+        });
+
+        $('#dynamicDrawOt1').change(function() {
+          if ($(this).is(":checked")) {
+            gwac.reParseData();
+            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
+          } else {
+            clearInterval(gwac.ot1DrawInterval);
+          }
+        });
+
+        $('#changeView').click(function() {
+          gwac.changeView(gwac);
+        });
 
         function dynamicDrawOt1() {
           gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + 1) % (gwac.endFrame - gwac.startFrame + 1);
           $('#currentFrame').val(gwac.currentFrame);
           if (gwac.currentFrame > 0) {
             gwac.svg.selectAll(".ot1").remove();
+            gwac.svg.selectAll(".motLine").remove();
+            gwac.svg.selectAll(".motPoint").remove();
           }
-          gwac.ot1Data2.data.coordinates = gwac.ot1[gwac.currentFrame];
-          gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
+          gwac.ot1Data.data.coordinates = gwac.ot1[gwac.currentFrame - 1];
+          gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
+          gwac.drawMot();
         }
 
         $(window).resize(function() {
@@ -86,15 +90,17 @@
 
 
       /*.graticule {fill: none;stroke: #636B62;stroke-width: .5px;stroke-dasharray: 2,2;}*/
-      .graticule{stroke: #a9a9a9;stroke-width: 0.5px;}
-      .sphere{stroke: #636B62;stroke-width: 1.5px;}
-      .equator {stroke: #636B62;stroke-width: 1.5px;}
-      .primemeridian {stroke: #636B62;stroke-width: 1.5px;}
+      .graticule{stroke: #a9a9a9;stroke-width: 0.3px;}
+      .sphere{stroke: #636B62;stroke-width: 1px;}
+      .equator {stroke: #636B62;stroke-width: 1px;}
+      .primemeridian {stroke: #636B62;stroke-width: 1px;}
       .origin{stroke: #636B62;stroke-width: 5px;fill: #636B62;}
       .ot1{stroke: #fff;stroke-width: 1px;fill: #fff;}
       .ot2{stroke: #993399;stroke-width: 3px;fill: #993399;}
       .ot2mch{stroke: #FFFF99;stroke-width: 3px;fill: #FFFF99;}
       .ot2cur{stroke: #FF33CC;stroke-width: 5px;fill: #FF33CC;}
+      .motLine{stroke-width: 1.5px;}
+      .motPoint{stroke-width: 3px;fill: #FF33CC;}
 
     </style>
 
@@ -107,7 +113,7 @@
         <table style="border:0">
           <tr><td colspan="2"><input type="checkbox" checked="" id="dynamicDrawOt1"><span id="playot2">播放</span></td></tr>
           <tr><td>播放速度:</td><td><input type="text" id="playSpeed" class="ot1-input" value="400"/></td></tr>
-          <tr><td>每次间隔:</td><td><input type="text" id="playInterval" class="ot1-input" value="5"/></td></tr>
+          <tr><td>每次间隔:</td><td><input type="text" id="playInterval" class="ot1-input" value="1"/></td></tr>
           <tr><td>开始帧数:</td><td><input type="text" id="startFrame" class="ot1-input" value="1"/></td></tr>
           <tr><td>当前帧数:</td><td><input type="text" id="currentFrame" class="ot1-input" value="1"/></td></tr>
           <tr><td>结束帧数:</td><td><input type="text" id="endFrame" class="ot1-input" value="1"/></td></tr>

@@ -149,3 +149,34 @@ select x, y, ra_d, dec_d, date_ut, mag_aper, ff_number, sky_id
 from ot_observe_record_his
 WHERE ot_id=0 AND data_produce_method='1' and date_str='160131' and dpm_id=2 and sky_id=34
 ORDER BY sky_id, ff_number;
+
+#按日期查找，将结果转换为json
+#SELECT row_to_json((SELECT r FROM (SELECT mov_id, mov_detail) r))
+SELECT JSON_AGG((SELECT r FROM (SELECT mov_id, mov_detail) r))::text
+FROM( SELECT
+	moor.mov_id as mov_id, JSON_AGG((SELECT r FROM (SELECT moor.ff_number, moor.ra_d, moor.dec_d, moor.date_ut) r)) as mov_detail
+FROM (
+		SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x_temp, oor.y_temp, oor.date_ut, oor.oor_id, mor.mov_id
+		FROM ot_observe_record oor
+		LEFT JOIN move_object_record mor ON mor.oor_id = oor.oor_id
+		WHERE mor.mov_id IS NOT NULL AND oor.date_str='151218'
+		ORDER BY mov_id, date_ut
+	)as moor
+GROUP BY moor.mov_id
+order by moor.mov_id
+)as moor2
+
+#按日期查找，将结果转换为json
+SELECT text(JSON_AGG((SELECT r FROM (SELECT mov_id, tt_frm_num, mov_detail) r))) 
+FROM( SELECT 
+moor.mov_id as mov_id, moor.total_frame_number as tt_frm_num, JSON_AGG((SELECT r FROM (SELECT moor.ff_number, moor.ra_d, moor.dec_d, moor.date_ut) r)) as mov_detail 
+FROM ( 
+SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x_temp, oor.y_temp, oor.date_ut, oor.oor_id, mor.mov_id, mo.total_frame_number
+FROM ot_observe_record oor 
+INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id 
+INNER JOIN move_object mo ON mo.mov_id = mor.mov_id
+WHERE oor.ot_id=0 and mor.mov_id IS NOT NULL AND oor.date_str='151218'
+ORDER BY mov_id, date_ut, dec_d 
+)as moor 
+GROUP BY moor.mov_id, moor.total_frame_number
+)as moor2
