@@ -1,14 +1,8 @@
 package com.gwac.action;
 
-import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.MoveObjectDao;
-import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.model.DataProcessMachine;
-import com.gwac.model.OtLevel2;
-import com.gwac.model.OtObserveRecord;
 import com.opensymphony.xwork2.ActionSupport;
-import java.io.File;
 import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +19,7 @@ public class GetMovOtSequence extends ActionSupport {
   private static final Log log = LogFactory.getLog(GetMovOtSequence.class);
 
   private String dateStr;
-  
+
   private OtObserveRecordDAO oorDao = null;
   private MoveObjectDao movObjDao = null;
   private String motList;
@@ -37,18 +31,19 @@ public class GetMovOtSequence extends ActionSupport {
 
   @SuppressWarnings("unchecked")
   public String execute() {
-    
-     Object[] objs = oorDao.getMinMaxDateOt1(dateStr);
-     minDate = (Date)objs[0];
-     maxDate = (Date)objs[1];
-     minNum = (Integer)objs[2];
-     maxNum = (Integer)objs[3];
+
+    Object[] objs = oorDao.getMinMaxDateOt1(dateStr);
+    if (objs != null && objs.length == 4) {
+      minDate = (Date) objs[0];
+      maxDate = (Date) objs[1];
+      minNum = (Integer) objs[2];
+      maxNum = (Integer) objs[3];
+    }
 
     motList = movObjDao.getMoveObjsByDate(dateStr);
     ot1List = movObjDao.getNotMatchOTByDate(dateStr);
     return SUCCESS;
   }
-
 
   /**
    * @param movObjDao the movObjDao to set

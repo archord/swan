@@ -6,7 +6,10 @@
 package com.gwac.dao;
 
 import com.gwac.model.MoveObject;
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -19,20 +22,46 @@ import org.springframework.stereotype.Repository;
 public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implements MoveObjectDao {
 
   @Override
+  public Map<Long, String> getMoveObjsInfoByDate(String dateStr, char moveType, int minFrameNumber) {
+    Session session = getCurrentSession();
+    String sql = "SELECT moor.mov_id, text(ARRAY_AGG((SELECT r FROM (SELECT ra_d, dec_d, date_ut, dpm_id, x_temp, y_temp, ff_number) r))) as mov_detail  "
+            + "FROM (  "
+            + "SELECT mo.mov_id, oor.ra_d, oor.dec_d, oor.date_ut, oor.dpm_id, oor.x_temp, oor.y_temp, oor.ff_number "
+            + "FROM ot_observe_record oor  "
+            + "INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
+            + "INNER JOIN move_object mo ON mo.mov_id = mor.mov_id and mo.mov_type='" + moveType + "' and total_frame_number>" + minFrameNumber + "  "
+            + "WHERE oor.ot_id=0 and mor.mov_id IS NOT NULL AND oor.date_str='151218' "
+            + "ORDER BY mo.mov_id, oor.date_ut, oor.dec_d  "
+            + ")as moor  "
+            + "GROUP BY moor.mov_id order by moor.mov_id";
+
+    Query q = session.createSQLQuery(sql);
+
+    Map<Long, String> rst = new HashMap();
+    Iterator iter = q.list().iterator();
+    while (iter.hasNext()) {
+      Object row[] = (Object[]) iter.next();
+      BigInteger movId = (BigInteger) row[0];
+      rst.put(movId.longValue(), (String) row[1]);
+    }
+    return rst;
+  }
+
+  @Override
   public String getMoveObjsByDate(String dateStr) {
     Session session = getCurrentSession();
-    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mov_id, tt_frm_num, mov_detail) r)))  "
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mov_id, tt_frm_num, mov_type, mov_detail) r)))  "
             + "FROM( SELECT  "
-            + "moor.mov_id as mov_id, moor.total_frame_number as tt_frm_num, JSON_AGG((SELECT r FROM (SELECT moor.ff_number, moor.ra_d, moor.dec_d, moor.date_ut) r)) as mov_detail  "
+            + "moor.mov_id as mov_id, moor.total_frame_number as tt_frm_num, moor.mov_type as mov_type, JSON_AGG((SELECT r FROM (SELECT moor.ff_number, moor.ra_d, moor.dec_d, moor.date_ut ORDER BY (moor.mov_id, moor.date_ut, moor.dec_d)) r)) as mov_detail  "
             + "FROM (  "
-            + "SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x_temp, oor.y_temp, oor.date_ut, oor.oor_id, mor.mov_id, mo.total_frame_number "
+            + "SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x_temp, oor.y_temp, oor.date_ut, oor.oor_id, mor.mov_id, mo.total_frame_number, mo.mov_type "
             + "FROM ot_observe_record oor  "
             + "INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
             + "INNER JOIN move_object mo ON mo.mov_id = mor.mov_id "
-            + "WHERE oor.ot_id=0 and mor.mov_id IS NOT NULL AND oor.date_str=? "
-            + "ORDER BY mov_id, date_ut, dec_d  "
+            + "WHERE oor.ot_id=0 AND oor.date_str=? "
+            + "ORDER BY mo.mov_id, oor.date_ut, oor.dec_d  "
             + ")as moor  "
-            + "GROUP BY moor.mov_id, moor.total_frame_number "
+            + "GROUP BY moor.mov_id, moor.total_frame_number, moor.mov_type "
             + ")as moor2";
 
     String rst = "";

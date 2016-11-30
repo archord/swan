@@ -7,6 +7,7 @@ package com.gwac.dao;
 
 import com.gwac.model.MoveObject;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -17,5 +18,7 @@ public interface MoveObjectDao extends BaseHibernateDao<MoveObject> {
   public String getMoveObjsByDate(String dateStr);
 
   public String getNotMatchOTByDate(String dateStr);
+  
+  public Map<Long, String> getMoveObjsInfoByDate(String dateStr, char moveType, int minFrameNumber);
   
 }

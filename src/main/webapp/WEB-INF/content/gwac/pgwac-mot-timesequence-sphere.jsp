@@ -14,10 +14,9 @@
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/mot_timesequence_sphere.js"></script>
     <link href="<%=request.getContextPath()%>/resource/js/d3/maps.css" rel="stylesheet" type="text/css">
     <script>
-
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "get-mov-ot-sequence-list.action?dateStr=151218";
+        var url = "get-mov-ot-sequence-list.action?dateStr=161128";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
         $("#sphereDisplay").height(mainHeight - headerHeight - 10);
@@ -27,36 +26,46 @@
         gwac.loadDpmList();
         gwac.loadDateStrList();
         d3.json(gwac.url, function(errors, reqData) {
-          gwac.parseData(reqData);
-          gwac.draw();
-          setTimeout(function() {
-            gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
-          }, gwac.startAnimationDuration);
+          var motList = reqData.motList;
+          if (typeof (motList) !== "undefined" && motList !== null) {
+            gwac.parseData(reqData);
+            gwac.draw();
+            setTimeout(function() {
+              gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
+            }, gwac.startAnimationDuration);
+          } else {
+            console.log("Move Object List is null");
+            alert("Move Object List is null");
+          }
         });
 
         $('#dynamicDrawOt1').change(function() {
           if ($(this).is(":checked")) {
-            gwac.reParseData();
+            gwac.updateShowData();
             gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
           } else {
             clearInterval(gwac.ot1DrawInterval);
           }
         });
 
+        $('#movType').change(function() {
+          gwac.updateShowData();
+          dynamicDrawOt1();
+        });
+
         $('#changeView').click(function() {
           gwac.changeView(gwac);
         });
-
+        
         function dynamicDrawOt1() {
-          gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + 1) % (gwac.endFrame - gwac.startFrame + 1);
+          gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + gwac.playInterval) % (gwac.endFrame - gwac.startFrame + 1);
           $('#currentFrame').val(gwac.currentFrame);
           if (gwac.currentFrame > 0) {
             gwac.svg.selectAll(".ot1").remove();
             gwac.svg.selectAll(".motLine").remove();
             gwac.svg.selectAll(".motPoint").remove();
           }
-          gwac.ot1Data.data.coordinates = gwac.ot1[gwac.currentFrame - 1];
-          gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
+          gwac.drawOt1();
           gwac.drawMot();
         }
 
@@ -95,12 +104,12 @@
       .equator {stroke: #636B62;stroke-width: 1px;}
       .primemeridian {stroke: #636B62;stroke-width: 1px;}
       .origin{stroke: #636B62;stroke-width: 5px;fill: #636B62;}
-      .ot1{stroke: #fff;stroke-width: 1px;fill: #fff;}
+      .ot1{stroke: #fff;stroke-width: 1.5px;fill: #fff;}
       .ot2{stroke: #993399;stroke-width: 3px;fill: #993399;}
       .ot2mch{stroke: #FFFF99;stroke-width: 3px;fill: #FFFF99;}
       .ot2cur{stroke: #FF33CC;stroke-width: 5px;fill: #FF33CC;}
       .motLine{stroke-width: 1.5px;}
-      .motPoint{stroke-width: 3px;fill: #FF33CC;}
+      .motPoint{stroke-width: 2px;}
 
     </style>
 
@@ -114,12 +123,17 @@
           <tr><td colspan="2"><input type="checkbox" checked="" id="dynamicDrawOt1"><span id="playot2">播放</span></td></tr>
           <tr><td>播放速度:</td><td><input type="text" id="playSpeed" class="ot1-input" value="400"/></td></tr>
           <tr><td>每次间隔:</td><td><input type="text" id="playInterval" class="ot1-input" value="1"/></td></tr>
-          <tr><td>开始帧数:</td><td><input type="text" id="startFrame" class="ot1-input" value="1"/></td></tr>
-          <tr><td>当前帧数:</td><td><input type="text" id="currentFrame" class="ot1-input" value="1"/></td></tr>
-          <tr><td>结束帧数:</td><td><input type="text" id="endFrame" class="ot1-input" value="1"/></td></tr>
+          <tr><td>开始帧:</td><td><input type="text" id="startFrame" class="ot1-input" value="1"/></td></tr>
+          <tr><td>当前帧:</td><td><input type="text" id="currentFrame" class="ot1-input" value="1"/></td></tr>
+          <tr><td>结束帧:</td><td><input type="text" id="endFrame" class="ot1-input" value="1"/></td></tr>
           <tr><td>总帧数:</td><td><input type="text" id="totalFrame" class="ot1-input" value="1"/></td></tr>
-          <tr><td>边界左上:</td><td><input type="text" id="leftTopBound" class="ot1-input" value="60,60"/></td></tr>
-          <tr><td>边界右下:</td><td><input type="text" id="rightBottomBound" class="ot1-input" value="70,70"/></td></tr>
+          <tr><td>最少帧数:</td><td><input type="text" id="miniFrameNumber" class="ot1-input" value="1"/></td></tr>
+          <tr><td>目标类别:</td><td><select id="movType" class="ot1-input" data-toggle="select">
+                <option style="background-color:#000" value="0">所有类型</option>
+                <option style="background-color:#000" value="1" selected>多帧单点</option>
+                <option style="background-color:#000" value="2">多帧多点</option>
+                <option style="background-color:#000" value="3">一帧多点</option>
+              </select></td></tr>
           <tr><td>选择天区:</td><td><select name="formqp.obsSky" id="obsSky" class="ot1-input" data-toggle="select">
                 <option style="background-color:#000" value="0"  selected>请选择</option>
               </select></td></tr>
@@ -129,6 +143,8 @@
           <tr><td>选择日期</td><td><select name="formqp.obsDate" id="obsDate" class="ot1-input" data-toggle="select">
                 <option style="background-color:#000" value="0" selected>请选择</option>
               </select></td></tr>
+          <tr><td>边界左上:</td><td><input type="text" id="leftTopBound" class="ot1-input" value="60,60"/></td></tr>
+          <tr><td>边界右下:</td><td><input type="text" id="rightBottomBound" class="ot1-input" value="70,70"/></td></tr>
           <tr><td colspan="2"><a href="javascript:void(0);" id="changeView" style="text-decoration:none;color:#fff;">切换视角</a></td></tr>
         </table>
       </div>

@@ -2,7 +2,7 @@
 (function($) {
 
   function maybeCall(thing, ctx) {
-    return (typeof thing == 'function') ? (thing.call(ctx)) : thing;
+    return (typeof thing === 'function') ? (thing.call(ctx)) : thing;
   }
 
   function Gwac(placeholder, root, url) {
@@ -30,6 +30,8 @@
     endFrame: 1,
     totalFrame: 1,
     startAnimationDuration: 2000,
+    miniFrameNumber: 1,
+    movType: 1,
     firstOor: {},
     graticule: {data: d3.geo.graticule()(), class: "graticule"}, //球面网格，经度纬度方向上以10度为间隔
     labelPoint: {data: {type: "MultiPoint", coordinates: []}, class: "origin", radius: 1},
@@ -60,37 +62,24 @@
       gwac.firsDate = reqData.minDate;
       gwac.lastDate = reqData.maxDate;
 
+      gwac.startFrame = gwac.firstFrame;
+      gwac.currentFrame = gwac.firstFrame;
+      gwac.endFrame = gwac.lastFrame;
       gwac.maxNumber = gwac.lastFrame - gwac.firstFrame + 1;
+      gwac.totalFrame = gwac.maxNumber;
 
-      gwac.reParseData();
-    },
-    reParseData: function() {
-      gwac = this;
-      gwac.playSpeed = parseInt($("#playSpeed").val());
-      gwac.playInterval = parseInt($("#playInterval").val());
-      gwac.startFrame = parseInt($("#startFrame").val());
-      gwac.currentFrame = parseInt($("#currentFrame").val());
-      gwac.endFrame = parseInt($("#endFrame").val());
-      gwac.totalFrame = Math.ceil(gwac.maxNumber / gwac.playInterval);
-      if (gwac.startFrame > gwac.totalFrame) {
-        gwac.startFrame = 1;
-        $("#startFrame").val(gwac.startFrame);
-      }
-      if (gwac.endFrame > gwac.totalFrame || gwac.endFrame === 1) {
-        gwac.endFrame = gwac.totalFrame;
-        $("#endFrame").val(gwac.endFrame);
-      }
-      if (gwac.currentFrame > gwac.totalFrame || gwac.currentFrame < gwac.startFrame) {
-        gwac.currentFrame = gwac.startFrame;
-      }
-      $("#totalFrame").val(gwac.totalFrame);
+      $("#startFrame").val(gwac.firstFrame);
+      $("#currentFrame").val(gwac.firstFrame);
+      $("#endFrame").val(gwac.lastFrame);
+      $("#totalFrame").val(gwac.maxNumber);
 
-      for (var i = 0; i < gwac.totalFrame; i++) {
+
+      for (var i = 0; i < gwac.maxNumber; i++) {
         gwac.ot1[i] = [];
       }
       $.each(gwac.ot1Obj, function(i, item1) {
         $.each(item1.mov_detail, function(i, item2) {
-          gwac.ot1[Math.floor((item1.ff_number - gwac.firstFrame) / gwac.playInterval)].push([item2.ra_d, item2.dec_d]);
+          gwac.ot1[Math.floor(item1.ff_number - gwac.firstFrame)].push([item2.ra_d, item2.dec_d]);
         });
       });
 
@@ -99,15 +88,57 @@
       }
 
       $.each(gwac.motObj, function(i, item) {
+        var tcolor1 = 50;
+        var tcolor2 = 200;
         if (item.tt_frm_num > 1) {
-          item.color = d3.rgb(50 + Math.random() * 190, 50 + Math.random() * 190, 50 + Math.random() * 190);
+          var r = Math.random() * 255;
+          var g = Math.random() * 255;
+          var b = Math.random() * 255;
+          while ((r < tcolor1 && g < tcolor1 && b < tcolor1) || (r > tcolor2 && g > tcolor2 && b > tcolor2)) {
+            r = Math.random() * 255;
+            g = Math.random() * 255;
+            b = Math.random() * 255;
+          }
+          item.color = d3.rgb(r, g, b);
           item.fillColor = item.color;
         } else {
           item.color = d3.rgb(255, 255, 255);
-          item.fillColor = d3.rgb(0, 0, 255);
+          item.fillColor = item.color;
         }
+        item.mov_detail.sort(function(a, b) {
+          return (a['ff_number'] > b['ff_number']) ? 1 : ((a['ff_number'] < b['ff_number']) ? -1 : 0);
+        });
       });
       this.genLabelPoint();
+    },
+    updateShowData: function() {
+      gwac = this;
+      gwac.playSpeed = parseInt($("#playSpeed").val());
+      gwac.playInterval = parseInt($("#playInterval").val());
+      gwac.startFrame = parseInt($("#startFrame").val());
+      gwac.endFrame = parseInt($("#endFrame").val());
+      gwac.currentFrame = parseInt($("#currentFrame").val());
+      gwac.miniFrameNumber = parseInt($("#miniFrameNumber").val());
+      gwac.movType = parseInt($("#movType").val());
+
+      if (gwac.playInterval + gwac.startFrame > gwac.endFrame) {
+        gwac.playInterval = gwac.endFrame - gwac.startFrame;
+        $("#playInterval").val(gwac.playInterval);
+      }
+
+
+      if (gwac.startFrame < gwac.firstFrame || gwac.startFrame > gwac.lastFrame) {
+        gwac.startFrame = gwac.firstFrame;
+        $("#startFrame").val(gwac.startFrame);
+      }
+      if (gwac.endFrame > gwac.lastFrame || gwac.endFrame < gwac.firstFrame) {
+        gwac.endFrame = gwac.lastFrame;
+        $("#endFrame").val(gwac.endFrame);
+      }
+      if (gwac.currentFrame > gwac.endFrame || gwac.currentFrame < gwac.startFrame) {
+        gwac.currentFrame = gwac.startFrame;
+        $("#currentFrame").val(gwac.currentFrame);
+      }
     },
     draw: function() {
 
@@ -170,40 +201,56 @@
     },
     drawMot: function() {
       var gwac = this;
-      var tFrameIdx = gwac.firstFrame + gwac.currentFrame - 1;
       $.each(gwac.motObj, function(i, item1) {
-        var tLine = [];
-        $.each(item1.mov_detail, function(j, item2) {
-          if (item2.ff_number <= tFrameIdx) {
-            if (j === 1) {
-              var tmot = item1.mov_detail[0];
-              tLine.push([tmot.ra_d, tmot.dec_d]);
-              tLine.push([item2.ra_d, item2.dec_d]);
-            } else if (j > 1) {
-              tLine.push([item2.ra_d, item2.dec_d]);
+        var mvType = parseInt(item1.mov_type);
+        if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType)) {
+          var tLine = [];
+          $.each(item1.mov_detail, function(j, item2) {
+            if (item2.ff_number <= gwac.currentFrame) {
+              if (j === 1) {
+                var tmot = item1.mov_detail[0];
+                tLine.push([tmot.ra_d, tmot.dec_d]);
+                tLine.push([item2.ra_d, item2.dec_d]);
+              } else if (j > 1) {
+                tLine.push([item2.ra_d, item2.dec_d]);
+              }
             }
+          });
+          if (tLine.length > 0) {
+            gwac.motLineData.data.coordinates = tLine;
+            gwac.motPointData.data.coordinates = tLine;
+            var tnode = gwac.svg.append("path").datum(gwac.motLineData.data).attr("class", gwac.motLineData.class).attr('stroke', item1.color).attr("d", gwac.path);
+            tnode.append("title").text(item1.mov_id);
+            tnode.attr("value", i);
+            tnode.on("click", gwac.clickStar);
+
+            gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class).attr('stroke', item1.fillColor).attr("d", gwac.path);
           }
-        });
-        if (tLine.length > 0) {
-          gwac.motLineData.data.coordinates = tLine;
-          gwac.motPointData.data.coordinates = tLine;
-          gwac.svg.append("path").datum(gwac.motLineData.data).attr("class", gwac.motLineData.class).attr('stroke', item1.color).attr("d", gwac.path);
-          gwac.svg.append("path").datum(gwac.motPointData.data).attr("d", gwac.path.pointRadius(3)).attr("class", gwac.motLineData.class)
-                  .attr('stroke', item1.fillColor).attr("d", gwac.path);
         }
       });
 
     },
     drawOt1: function() {
       var gwac = this;
-
-      while (gwac.ot1[gwac.currentFrame - 1].length === 0) {
-        gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + 1) % (gwac.endFrame - gwac.startFrame + 1);
-        $('#currentFrame').val(gwac.currentFrame);
+      var startIdx = gwac.currentFrame - gwac.playInterval;
+      if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
+        startIdx = gwac.startFrame;
       }
-      gwac.ot1Data.data.coordinates = gwac.ot1[gwac.currentFrame - 1];
-      gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class).attr("d", gwac.path.pointRadius(1)).attr("d", gwac.path);
 
+      for (i = startIdx; i <= gwac.currentFrame; i++) {
+        var tIdx = i - gwac.startFrame;
+        if (gwac.ot1[tIdx] !== null && gwac.ot1[tIdx].length > 0) {
+          gwac.ot1Data.data.coordinates = gwac.ot1[tIdx];
+          gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class).attr("d", gwac.path);
+        }
+      }
+    },
+    clickStar: function() {
+      var tIdx = $(this).attr("value");
+      console.log(tIdx);
+      $.each(gwac.motObj[tIdx].mov_detail, function(j, item) {
+        console.log(item.ff_number);
+      });
     },
     changeView: function(gwac) {
       var tdata = {type: "MultiPoint", coordinates: []};

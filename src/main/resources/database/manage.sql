@@ -2,10 +2,10 @@
 WITH moved_rows AS ( DELETE FROM config_file RETURNING * ) INSERT INTO config_file_his SELECT * FROM moved_rows;
 
 ##将某天的记录由历史库插入到当前库
-INSERT INTO config_file SELECT * FROM config_file_his where substring(store_path, 1,6)='150129';
-INSERT INTO ot_level2 SELECT * FROM ot_level2_his where date_str='151218';
-INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='151218';
-INSERT INTO fits_file_cut SELECT * FROM fits_file_cut_his where substring(store_path, 1,6)='151218';
+INSERT INTO config_file SELECT * FROM config_file_his where substring(store_path, 1,6)='161128';
+INSERT INTO ot_level2 SELECT * FROM ot_level2_his where date_str='161128';
+INSERT INTO ot_observe_record SELECT * FROM ot_observe_record_his where date_str='161128';
+INSERT INTO fits_file_cut SELECT * FROM fits_file_cut_his where substring(store_path, 1,6)='161128';
 
 #展示151218那天的ot1，最大图像编号是2591
 update data_process_machine set cur_process_number=2400;
