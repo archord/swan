@@ -135,28 +135,28 @@ public class FindMoveObjectServiceImpl implements BaseService {
     log.debug("mvObjs:" + mvObjs.size() + ", fastObjs:" + fastObjs.size() + ", singleFrameObjs:" + singleFrameObjs.size());
 
     int idx = 1;
-//    for (LineObject obj : mvObjs) {
-//      if (obj.pointNumber >= validLineMinPoint) {
-//        saveLineObject('1', obj, dateStr, dpmId, skyId);
-//        log.debug(idx++);
-//      }
-//    }
-//    for (LineObject obj : fastObjs) {
-//      if (obj.pointNumber >= validLineMinPoint) {
-//        saveLineObject('2', obj, dateStr, dpmId, skyId);
-//        log.debug(idx++);
-//      }
-//    }
-//    for (LineObject obj : singleFrameObjs) {
-//      if (obj.pointNumber >= validLineMinPoint) {
-//        saveLineObject('3', obj, dateStr, dpmId, skyId);
-//        log.debug(idx++);
-//      }
-//    }
+    for (LineObject obj : mvObjs) {
+      if (obj.pointNumber >= validLineMinPoint) {
+        saveLineObject('1', obj, dateStr, dpmId, skyId);
+        log.debug(idx++);
+      }
+    }
+    for (LineObject obj : fastObjs) {
+      if (obj.pointNumber >= validLineMinPoint) {
+        saveLineObject('2', obj, dateStr, dpmId, skyId);
+        log.debug(idx++);
+      }
+    }
+    for (LineObject obj : singleFrameObjs) {
+      if (obj.pointNumber >= validLineMinPoint) {
+        saveLineObject('3', obj, dateStr, dpmId, skyId);
+        log.debug(idx++);
+      }
+    }
 
 //    ht.saveLine2(outPath);
-    DrawObject dObj = new DrawObject(ht);
-    dObj.drawObjsAll("E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png");
+//    DrawObject dObj = new DrawObject(ht);
+//    dObj.drawObjsAll("E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png");
   }
 
   /**
