@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2016-11-24 16:38:56 by Hibernate Tools 3.6.0
+// Generated 2016-12-4 18:51:52 by Hibernate Tools 3.6.0
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -21,21 +21,38 @@ import org.hibernate.annotations.Parameter;
 public class MoveObject implements java.io.Serializable {
 
   private long movId;
-  private Short firstFrameNum;
-  private Short lastFrameNum;
+  private Integer firstFrameNum;
+  private Integer lastFrameNum;
   private Date firstFrameTime;
   private Date lastFrameTime;
-  private Float minSpeed;
-  private Float maxSpeed;
-  private Float meanSpeed;
-  private Float speedSigma;
-  private Short totalFrameNumber;
+  private Integer totalFrameNumber;
   private Float avgFramePointNumber;
   private String comment;
   private Character movType;
   private String dateStr;
   private Integer skyId;
   private Integer dpmId;
+  private Integer pointNumber;
+  private Integer framePointMaxNumber;
+  private Integer framePointMultiNumber;
+  private Float posDiffSigma;
+  private Float posDiffMax;
+  private Float posDiffMean;
+  private Float traDiffSigma;
+  private Float traDiffMax;
+  private Float traDiffMean;
+  private Float tdecDiffSigma;
+  private Float tdecDiffMax;
+  private Float tdecDiffMean;
+  private Float posPolyn0;
+  private Float posPolyn1;
+  private Float posPolyn2;
+  private Float traPolyn0;
+  private Float traPolyn1;
+  private Float traPolyn2;
+  private Float tdecPolyn0;
+  private Float tdecPolyn1;
+  private Float tdecPolyn2;
 
   public MoveObject() {
   }
@@ -44,16 +61,12 @@ public class MoveObject implements java.io.Serializable {
     this.movId = movId;
   }
 
-  public MoveObject(long movId, Short firstFrameNum, Short lastFrameNum, Date firstFrameTime, Date lastFrameTime, Float minSpeed, Float maxSpeed, Float meanSpeed, Float speedSigma, Short totalFrameNumber, Float avgFramePointNumber, String comment, Character movType, String dateStr, Integer skyId, Integer dpmId) {
+  public MoveObject(long movId, Integer firstFrameNum, Integer lastFrameNum, Date firstFrameTime, Date lastFrameTime, Integer totalFrameNumber, Float avgFramePointNumber, String comment, Character movType, String dateStr, Integer skyId, Integer dpmId, Integer pointNumber, Integer framePointMaxNumber, Integer framePointMultiNumber, Float posDiffSigma, Float posDiffMax, Float posDiffMean, Float traDiffSigma, Float traDiffMax, Float traDiffMean, Float tdecDiffSigma, Float tdecDiffMax, Float tdecDiffMean, Float posPolyn0, Float posPolyn1, Float posPolyn2, Float traPolyn0, Float traPolyn1, Float traPolyn2, Float tdecPolyn0, Float tdecPolyn1, Float tdecPolyn2) {
     this.movId = movId;
     this.firstFrameNum = firstFrameNum;
     this.lastFrameNum = lastFrameNum;
     this.firstFrameTime = firstFrameTime;
     this.lastFrameTime = lastFrameTime;
-    this.minSpeed = minSpeed;
-    this.maxSpeed = maxSpeed;
-    this.meanSpeed = meanSpeed;
-    this.speedSigma = speedSigma;
     this.totalFrameNumber = totalFrameNumber;
     this.avgFramePointNumber = avgFramePointNumber;
     this.comment = comment;
@@ -61,6 +74,27 @@ public class MoveObject implements java.io.Serializable {
     this.dateStr = dateStr;
     this.skyId = skyId;
     this.dpmId = dpmId;
+    this.pointNumber = pointNumber;
+    this.framePointMaxNumber = framePointMaxNumber;
+    this.framePointMultiNumber = framePointMultiNumber;
+    this.posDiffSigma = posDiffSigma;
+    this.posDiffMax = posDiffMax;
+    this.posDiffMean = posDiffMean;
+    this.traDiffSigma = traDiffSigma;
+    this.traDiffMax = traDiffMax;
+    this.traDiffMean = traDiffMean;
+    this.tdecDiffSigma = tdecDiffSigma;
+    this.tdecDiffMax = tdecDiffMax;
+    this.tdecDiffMean = tdecDiffMean;
+    this.posPolyn0 = posPolyn0;
+    this.posPolyn1 = posPolyn1;
+    this.posPolyn2 = posPolyn2;
+    this.traPolyn0 = traPolyn0;
+    this.traPolyn1 = traPolyn1;
+    this.traPolyn2 = traPolyn2;
+    this.tdecPolyn0 = tdecPolyn0;
+    this.tdecPolyn1 = tdecPolyn1;
+    this.tdecPolyn2 = tdecPolyn2;
   }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -78,20 +112,20 @@ public class MoveObject implements java.io.Serializable {
   }
 
   @Column(name = "first_frame_num")
-  public Short getFirstFrameNum() {
+  public Integer getFirstFrameNum() {
     return this.firstFrameNum;
   }
 
-  public void setFirstFrameNum(Short firstFrameNum) {
+  public void setFirstFrameNum(Integer firstFrameNum) {
     this.firstFrameNum = firstFrameNum;
   }
 
   @Column(name = "last_frame_num")
-  public Short getLastFrameNum() {
+  public Integer getLastFrameNum() {
     return this.lastFrameNum;
   }
 
-  public void setLastFrameNum(Short lastFrameNum) {
+  public void setLastFrameNum(Integer lastFrameNum) {
     this.lastFrameNum = lastFrameNum;
   }
 
@@ -115,48 +149,12 @@ public class MoveObject implements java.io.Serializable {
     this.lastFrameTime = lastFrameTime;
   }
 
-  @Column(name = "min_speed", precision = 8, scale = 8)
-  public Float getMinSpeed() {
-    return this.minSpeed;
-  }
-
-  public void setMinSpeed(Float minSpeed) {
-    this.minSpeed = minSpeed;
-  }
-
-  @Column(name = "max_speed", precision = 8, scale = 8)
-  public Float getMaxSpeed() {
-    return this.maxSpeed;
-  }
-
-  public void setMaxSpeed(Float maxSpeed) {
-    this.maxSpeed = maxSpeed;
-  }
-
-  @Column(name = "mean_speed", precision = 8, scale = 8)
-  public Float getMeanSpeed() {
-    return this.meanSpeed;
-  }
-
-  public void setMeanSpeed(Float meanSpeed) {
-    this.meanSpeed = meanSpeed;
-  }
-
-  @Column(name = "speed_sigma", precision = 8, scale = 8)
-  public Float getSpeedSigma() {
-    return this.speedSigma;
-  }
-
-  public void setSpeedSigma(Float speedSigma) {
-    this.speedSigma = speedSigma;
-  }
-
   @Column(name = "total_frame_number")
-  public Short getTotalFrameNumber() {
+  public Integer getTotalFrameNumber() {
     return this.totalFrameNumber;
   }
 
-  public void setTotalFrameNumber(Short totalFrameNumber) {
+  public void setTotalFrameNumber(Integer totalFrameNumber) {
     this.totalFrameNumber = totalFrameNumber;
   }
 
@@ -212,6 +210,195 @@ public class MoveObject implements java.io.Serializable {
 
   public void setDpmId(Integer dpmId) {
     this.dpmId = dpmId;
+  }
+
+  @Column(name = "point_number")
+  public Integer getPointNumber() {
+    return this.pointNumber;
+  }
+
+  public void setPointNumber(Integer pointNumber) {
+    this.pointNumber = pointNumber;
+  }
+
+  @Column(name = "frame_point_max_number")
+  public Integer getFramePointMaxNumber() {
+    return this.framePointMaxNumber;
+  }
+
+  public void setFramePointMaxNumber(Integer framePointMaxNumber) {
+    this.framePointMaxNumber = framePointMaxNumber;
+  }
+
+  @Column(name = "frame_point_multi_number")
+  public Integer getFramePointMultiNumber() {
+    return this.framePointMultiNumber;
+  }
+
+  public void setFramePointMultiNumber(Integer framePointMultiNumber) {
+    this.framePointMultiNumber = framePointMultiNumber;
+  }
+
+  @Column(name = "pos_diff_sigma", precision = 8, scale = 8)
+  public Float getPosDiffSigma() {
+    return this.posDiffSigma;
+  }
+
+  public void setPosDiffSigma(Float posDiffSigma) {
+    this.posDiffSigma = posDiffSigma;
+  }
+
+  @Column(name = "pos_diff_max", precision = 8, scale = 8)
+  public Float getPosDiffMax() {
+    return this.posDiffMax;
+  }
+
+  public void setPosDiffMax(Float posDiffMax) {
+    this.posDiffMax = posDiffMax;
+  }
+
+  @Column(name = "pos_diff_mean", precision = 8, scale = 8)
+  public Float getPosDiffMean() {
+    return this.posDiffMean;
+  }
+
+  public void setPosDiffMean(Float posDiffMean) {
+    this.posDiffMean = posDiffMean;
+  }
+
+  @Column(name = "tra_diff_sigma", precision = 8, scale = 8)
+  public Float getTraDiffSigma() {
+    return this.traDiffSigma;
+  }
+
+  public void setTraDiffSigma(Float traDiffSigma) {
+    this.traDiffSigma = traDiffSigma;
+  }
+
+  @Column(name = "tra_diff_max", precision = 8, scale = 8)
+  public Float getTraDiffMax() {
+    return this.traDiffMax;
+  }
+
+  public void setTraDiffMax(Float traDiffMax) {
+    this.traDiffMax = traDiffMax;
+  }
+
+  @Column(name = "tra_diff_mean", precision = 8, scale = 8)
+  public Float getTraDiffMean() {
+    return this.traDiffMean;
+  }
+
+  public void setTraDiffMean(Float traDiffMean) {
+    this.traDiffMean = traDiffMean;
+  }
+
+  @Column(name = "tdec_diff_sigma", precision = 8, scale = 8)
+  public Float getTdecDiffSigma() {
+    return this.tdecDiffSigma;
+  }
+
+  public void setTdecDiffSigma(Float tdecDiffSigma) {
+    this.tdecDiffSigma = tdecDiffSigma;
+  }
+
+  @Column(name = "tdec_diff_max", precision = 8, scale = 8)
+  public Float getTdecDiffMax() {
+    return this.tdecDiffMax;
+  }
+
+  public void setTdecDiffMax(Float tdecDiffMax) {
+    this.tdecDiffMax = tdecDiffMax;
+  }
+
+  @Column(name = "tdec_diff_mean", precision = 8, scale = 8)
+  public Float getTdecDiffMean() {
+    return this.tdecDiffMean;
+  }
+
+  public void setTdecDiffMean(Float tdecDiffMean) {
+    this.tdecDiffMean = tdecDiffMean;
+  }
+
+  @Column(name = "pos_polyn0", precision = 8, scale = 8)
+  public Float getPosPolyn0() {
+    return this.posPolyn0;
+  }
+
+  public void setPosPolyn0(Float posPolyn0) {
+    this.posPolyn0 = posPolyn0;
+  }
+
+  @Column(name = "pos_polyn1", precision = 8, scale = 8)
+  public Float getPosPolyn1() {
+    return this.posPolyn1;
+  }
+
+  public void setPosPolyn1(Float posPolyn1) {
+    this.posPolyn1 = posPolyn1;
+  }
+
+  @Column(name = "pos_polyn2", precision = 8, scale = 8)
+  public Float getPosPolyn2() {
+    return this.posPolyn2;
+  }
+
+  public void setPosPolyn2(Float posPolyn2) {
+    this.posPolyn2 = posPolyn2;
+  }
+
+  @Column(name = "tra_polyn0", precision = 8, scale = 8)
+  public Float getTraPolyn0() {
+    return this.traPolyn0;
+  }
+
+  public void setTraPolyn0(Float traPolyn0) {
+    this.traPolyn0 = traPolyn0;
+  }
+
+  @Column(name = "tra_polyn1", precision = 8, scale = 8)
+  public Float getTraPolyn1() {
+    return this.traPolyn1;
+  }
+
+  public void setTraPolyn1(Float traPolyn1) {
+    this.traPolyn1 = traPolyn1;
+  }
+
+  @Column(name = "tra_polyn2", precision = 8, scale = 8)
+  public Float getTraPolyn2() {
+    return this.traPolyn2;
+  }
+
+  public void setTraPolyn2(Float traPolyn2) {
+    this.traPolyn2 = traPolyn2;
+  }
+
+  @Column(name = "tdec_polyn0", precision = 8, scale = 8)
+  public Float getTdecPolyn0() {
+    return this.tdecPolyn0;
+  }
+
+  public void setTdecPolyn0(Float tdecPolyn0) {
+    this.tdecPolyn0 = tdecPolyn0;
+  }
+
+  @Column(name = "tdec_polyn1", precision = 8, scale = 8)
+  public Float getTdecPolyn1() {
+    return this.tdecPolyn1;
+  }
+
+  public void setTdecPolyn1(Float tdecPolyn1) {
+    this.tdecPolyn1 = tdecPolyn1;
+  }
+
+  @Column(name = "tdec_polyn2", precision = 8, scale = 8)
+  public Float getTdecPolyn2() {
+    return this.tdecPolyn2;
+  }
+
+  public void setTdecPolyn2(Float tdecPolyn2) {
+    this.tdecPolyn2 = tdecPolyn2;
   }
 
 }

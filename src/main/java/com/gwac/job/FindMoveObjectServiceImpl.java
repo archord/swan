@@ -63,10 +63,10 @@ public class FindMoveObjectServiceImpl implements BaseService {
   private int rhoSize = 100;
   private int thetaRange = 36;
   private int rhoRange = 10;
-  private int maxHoughFrameNunmber = 10;
+  private int maxHoughFrameNunmber = 30;
   private int validLineMinPoint = 5;
   private float maxDistance = 100;
-  private int minValidPoint = 3;
+  private int minValidPoint = 5;
   private float rhoErrorTimes = (float) 0.2; //0.2
 
   int count = 1;
@@ -82,7 +82,9 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
   public void processAllDay() {
 
-    List<String> dateStrs = otlv2Dao.getAllDateStr();
+//    List<String> dateStrs = otlv2Dao.getAllDateStr();
+    List<String> dateStrs = new ArrayList();
+    dateStrs.add("161128");
     List<ObservationSky> skys = observationSkyDao.findAll();
     List<DataProcessMachine> dpms = dpmDao.findAll();
     log.debug("total days: " + dateStrs.size());
@@ -129,34 +131,19 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     ht.endAllFrame();
 
-    ArrayList<LineObject> mvObjs = ht.getMvObjs();
-    ArrayList<LineObject> fastObjs = ht.getFastObjs();
-    ArrayList<LineObject> singleFrameObjs = ht.getSingleFrameObjs();
-    log.debug("mvObjs:" + mvObjs.size() + ", fastObjs:" + fastObjs.size() + ", singleFrameObjs:" + singleFrameObjs.size());
-
-    int idx = 1;
-    for (LineObject obj : mvObjs) {
-      if (obj.pointNumber >= validLineMinPoint) {
-        saveLineObject('1', obj, dateStr, dpmId, skyId);
-        log.debug(idx++);
-      }
-    }
-    for (LineObject obj : fastObjs) {
-      if (obj.pointNumber >= validLineMinPoint) {
-        saveLineObject('2', obj, dateStr, dpmId, skyId);
-        log.debug(idx++);
-      }
-    }
-    for (LineObject obj : singleFrameObjs) {
-      if (obj.pointNumber >= validLineMinPoint) {
-        saveLineObject('3', obj, dateStr, dpmId, skyId);
-        log.debug(idx++);
-      }
-    }
+//    int idx = 1;
+//    for (LineObject obj : ht.mvObjs) {
+//      if (obj.pointNumber >= validLineMinPoint) {
+//        saveLineObject(obj, dateStr, dpmId, skyId);
+////        log.debug(idx++);
+//      }
+//    }
+    log.debug(dateStr + "-" + dpmId + "-" + skyId + ", mvObjs:" + ht.mvObjs.size());
 
 //    ht.saveLine2(outPath);
-//    DrawObject dObj = new DrawObject(ht);
-//    dObj.drawObjsAll("E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png");
+    String imgPath = "E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png";
+    DrawObject dObj = new DrawObject(ht);
+    dObj.drawObjsAll(imgPath);
   }
 
   /**
@@ -167,27 +154,46 @@ public class FindMoveObjectServiceImpl implements BaseService {
    * @param dpmId
    * @param skyId
    */
-  public void saveLineObject(char moveType, LineObject obj, String dateStr, int dpmId, int skyId) {
+  public void saveLineObject(LineObject obj, String dateStr, int dpmId, int skyId) {
 
     MoveObject mObj = new MoveObject();
     mObj.setDateStr(dateStr);
     mObj.setDpmId(dpmId);
     mObj.setSkyId(skyId);
-    mObj.setTotalFrameNumber((short) obj.frameList.size());
-    mObj.setAvgFramePointNumber((float) (obj.pointNumber * 1.0 / mObj.getTotalFrameNumber()));
-    mObj.setFirstFrameNum((short) obj.firstFrameNumber);
+    mObj.setFirstFrameNum(obj.firstFrameNumber);
     mObj.setFirstFrameTime(obj.firstPoint.getDateUtc());
-    mObj.setLastFrameNum((short) obj.lastFrameNumber);
+    mObj.setLastFrameNum(obj.lastFrameNumber);
     mObj.setLastFrameTime(obj.lastPoint.getDateUtc());
-    mObj.setMovType(moveType);
+    mObj.setMovType(obj.lineType);
+    mObj.setTotalFrameNumber(obj.frameList.size());
+    mObj.setAvgFramePointNumber(obj.avgFramePointNumber);
+    mObj.setFramePointMaxNumber(obj.framePointMaxNumber);
+    mObj.setFramePointMultiNumber(obj.framePointMultiNumber);
+    mObj.setPointNumber(obj.pointNumber);
+    mObj.setPosDiffMax((float) obj.xySigmaMax);
+    mObj.setPosDiffMean((float) obj.xySigmaMean);
+    mObj.setPosDiffSigma((float) obj.xySigma);
+    mObj.setTraDiffMax((float) obj.txSigmaMax);
+    mObj.setTraDiffMean((float) obj.txSigmaMean);
+    mObj.setTraDiffSigma((float) obj.txSigma);
+    mObj.setTdecDiffMax((float) obj.tySigmaMax);
+    mObj.setTdecDiffMean((float) obj.tySigmaMean);
+    mObj.setTdecDiffSigma((float) obj.tySigma);
+    mObj.setPosPolyn0((float) obj.xyCoeff[0]);
+    mObj.setPosPolyn1((float) obj.xyCoeff[1]);
+    mObj.setPosPolyn2((float) obj.xyCoeff[2]);
+    mObj.setTraPolyn0((float) obj.txCoeff[0]);
+    mObj.setTraPolyn1((float) obj.txCoeff[1]);
+    mObj.setTraPolyn2((float) obj.txCoeff[2]);
+    mObj.setTdecPolyn0((float) obj.tyCoeff[0]);
+    mObj.setTdecPolyn1((float) obj.tyCoeff[1]);
+    mObj.setTdecPolyn2((float) obj.tyCoeff[2]);
 
     moveObjectDao.save(mObj);
     for (HoughtPoint hp : obj.pointList) {
       MoveObjectRecord mor = new MoveObjectRecord();
       mor.setMovId(mObj.getMovId());
       mor.setOorId(hp.getOorId());
-      mor.setSpeedX(hp.getxSpeedt());
-      mor.setSpeedY(hp.getySpeedt());
       moveObjectRecordDao.save(mor);
     }
 

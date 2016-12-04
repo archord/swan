@@ -196,7 +196,7 @@ WHERE ot_id=0 AND data_produce_method='1' and date_str>'160901'
 group BY date_str, dpm_id, sky_id
 ORDER BY tnumber desc;
 
-select x, y, ra_d, dec_d, date_ut, mag_aper, ff_number, sky_id
+select x, y, ra_d, dec_d, date_ut, mag_aper, ff_number, sky_id, x_temp, y_temp
 from ot_observe_record_his
-WHERE ot_id=0 AND data_produce_method='1' and date_str='160131' and dpm_id=2 and sky_id=34
+WHERE ot_id=0 AND data_produce_method='1' and date_str='161128' and dpm_id=7 and sky_id=35
 ORDER BY sky_id, ff_number;

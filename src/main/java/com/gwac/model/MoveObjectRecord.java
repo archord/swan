@@ -1,5 +1,5 @@
 package com.gwac.model;
-// Generated 2016-11-24 16:38:56 by Hibernate Tools 3.6.0
+// Generated 2016-12-4 18:51:52 by Hibernate Tools 3.6.0
 
 
 import javax.persistence.Column;
@@ -18,8 +18,8 @@ public class MoveObjectRecord  implements java.io.Serializable {
 
 
      private long oorId;
-     private Float speedX;
-     private Float speedY;
+     private Float speedRa;
+     private Float speedDec;
      private Float speedGreatCircle;
      private Long movId;
 
@@ -30,10 +30,10 @@ public class MoveObjectRecord  implements java.io.Serializable {
     public MoveObjectRecord(long oorId) {
         this.oorId = oorId;
     }
-    public MoveObjectRecord(long oorId, Float speedX, Float speedY, Float speedGreatCircle, Long movId) {
+    public MoveObjectRecord(long oorId, Float speedRa, Float speedDec, Float speedGreatCircle, Long movId) {
        this.oorId = oorId;
-       this.speedX = speedX;
-       this.speedY = speedY;
+       this.speedRa = speedRa;
+       this.speedDec = speedDec;
        this.speedGreatCircle = speedGreatCircle;
        this.movId = movId;
     }
@@ -51,23 +51,23 @@ public class MoveObjectRecord  implements java.io.Serializable {
     }
 
     
-    @Column(name="speed_x", precision=8, scale=8)
-    public Float getSpeedX() {
-        return this.speedX;
+    @Column(name="speed_ra", precision=8, scale=8)
+    public Float getSpeedRa() {
+        return this.speedRa;
     }
     
-    public void setSpeedX(Float speedX) {
-        this.speedX = speedX;
+    public void setSpeedRa(Float speedRa) {
+        this.speedRa = speedRa;
     }
 
     
-    @Column(name="speed_y", precision=8, scale=8)
-    public Float getSpeedY() {
-        return this.speedY;
+    @Column(name="speed_dec", precision=8, scale=8)
+    public Float getSpeedDec() {
+        return this.speedDec;
     }
     
-    public void setSpeedY(Float speedY) {
-        this.speedY = speedY;
+    public void setSpeedDec(Float speedDec) {
+        this.speedDec = speedDec;
     }
 
     

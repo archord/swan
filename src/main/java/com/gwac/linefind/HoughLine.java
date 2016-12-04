@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 /**
  *
@@ -28,16 +29,47 @@ public class HoughLine {
    *
    * @param theta
    * @param rho
-   * @param imgXCenter
-   * @param imgYCenter
    */
-  public HoughLine(float theta, float rho, float imgXCenter, float imgYCenter, float halfRho) {
+  public HoughLine(float theta, float rho) {
     this.theta = theta;
     this.rho = rho;
     this.frameList = new ArrayList();
     this.pointList = new ArrayList();
     this.pointNumber = 0;
     this.lastFrameNumber = Integer.MIN_VALUE;
+  }
+
+  public double lineRegression() {
+
+    SimpleRegression reg = new SimpleRegression();
+    for (HoughtPoint ot1 : pointList) {
+      reg.addData(ot1.getX(), ot1.getY());
+    }
+
+    double sigma = Math.sqrt(reg.getSumSquaredErrors() / (pointList.size() - 1));
+    if (sigma > 10) {
+      double sigma2 = Double.MAX_VALUE;
+      while (sigma < sigma2) {
+        for (int i = 0; i < pointList.size();) {
+          HoughtPoint ot1 = pointList.get(i);
+          float preY = (float) reg.predict(ot1.getX());
+          double ydiff = preY - ot1.getY();
+          if ((Math.abs(ydiff) > 1.3 * sigma)) {
+            this.removePoint(ot1);
+            reg.removeData(ot1.getX(), ot1.getY());
+          } else {
+            i++;
+          }
+        }
+        sigma2 = sigma;
+        sigma = Math.sqrt(reg.getSumSquaredErrors() / (pointList.size() - 1));
+        if (sigma < 10) {
+          break;
+        }
+      }
+    }
+
+    return sigma;
   }
 
   public void clearAll() {
@@ -48,8 +80,8 @@ public class HoughLine {
     this.lastPoint = null;
   }
 
-  public void addPoint(int pIdx, int frameNumber, float theta, float rho, float x, float y, Date dateUtc, long oorId) {
-    this.addPoint(new HoughtPoint(pIdx, frameNumber, theta, rho, x, y, dateUtc, oorId));
+  public void addPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, long oorId) {
+    this.addPoint(new HoughtPoint(pIdx, frameNumber, x, y, dateUtc, oorId));
   }
 
   /**
@@ -183,30 +215,8 @@ public class HoughLine {
 
     for (HoughFrame tFrame : frameList) {
       for (HoughtPoint tPoint : tFrame.pointList) {
-        tPoint.printInfo();
+        System.out.println(tPoint.getAllInfo());
       }
-    }
-  }
-
-  public void printOT1Info2(ArrayList<OtObserveRecord> historyOT1s) {
-
-    int i = 0;
-    for (HoughFrame tFrame : frameList) {
-      for (HoughtPoint tPoint : tFrame.pointList) {
-        OtObserveRecord ot1 = historyOT1s.get(tPoint.getpIdx());
-//        ot1.printInfo();
-        i++;
-      }
-    }
-  }
-
-  public void printOT1Info(ArrayList<OtObserveRecord> historyOT1s) {
-
-    int i = 0;
-    for (HoughtPoint tPoint : pointList) {
-      OtObserveRecord ot1 = historyOT1s.get(tPoint.getpIdx());
-//      ot1.printInfo();
-      i++;
     }
   }
 

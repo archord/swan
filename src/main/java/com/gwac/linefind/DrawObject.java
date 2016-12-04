@@ -3,6 +3,7 @@
  */
 package com.gwac.linefind;
 
+import com.gwac.model.OtObserveRecord;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -27,6 +28,7 @@ public class DrawObject {
   private final HoughTransform ht;
   private int drawIdx;
   private ArrayList<Integer> idxList;
+  private int outNum = 0;
 
   public DrawObject(HoughTransform ht) {
 
@@ -42,7 +44,9 @@ public class DrawObject {
 
   public void drawObjsAll(String fName) {
 
-    Integer idxArray[] = {13, 20, 25, 27};
+//    Integer idxArray[] = {14, 16, 19, 20, 6, 10, 23, 40, 43, 47};
+//    Integer idxArray[] = {13, 14, 15, 20}; // 14, 16, 19, 20; 6, 10, 23; 40, 43, 47;15,17,21,22,23
+    Integer idxArray[] = {};
     idxList = new ArrayList(Arrays.asList(idxArray));
 
 //    BufferedImage image = new BufferedImage(imgWidth*2, imgHeight*2, BufferedImage.TYPE_INT_ARGB);
@@ -54,15 +58,15 @@ public class DrawObject {
     g2d.fillRect(0, 0, ht.imgWidth, ht.imgHeight);
     g2d.drawOval(ht.imgWidth - 40, ht.imgHeight - 40, 20, 20);
 
-    drawObjs(ht.getMvObjs(), g2d);
-    drawObjs(ht.getFastObjs(), g2d);
-    drawObjs(ht.getSingleFrameObjs(), g2d);
+    drawObjs(ht.mvObjs, g2d);
+    drawObjs(ht.fastObjs, g2d);
+    drawObjs(ht.singleFrameObjs, g2d);
 
-    int singleFrame = ht.getSingleFrameObjs().size();
-    int fastObjNum = ht.getFastObjs().size();
+    int singleFrame = ht.singleFrameObjs.size();
+    int fastObjNum = ht.fastObjs.size();
     int singlePoint = 0;
     int multiPoint = 0;
-    for (LineObject mvObj : ht.getMvObjs()) {
+    for (LineObject mvObj : ht.mvObjs) {
       if (mvObj.pointNumber < ht.validLineMinPoint) {
         continue;
       }
@@ -74,7 +78,7 @@ public class DrawObject {
     }
     System.out.println("totalLine=" + (singleFrame + singlePoint + multiPoint + fastObjNum)
             + ", singleFrame=" + singleFrame + ", fastObjNum=" + fastObjNum + ", singlePoint="
-            + singlePoint + ", multiPoint=" + multiPoint);
+            + singlePoint + ", multiPoint=" + multiPoint + ", outNum=" + outNum);
 
     try {
       javax.imageio.ImageIO.write(image, "png", new File(fName));
@@ -96,16 +100,21 @@ public class DrawObject {
 
     for (LineObject mvObj : lineObjs) {
 
-      // || !(mvObj.avgFramePointNumber>1.1&&mvObj.frameList.size()>1)  || mvObj.frameList.size() <= 1   || mvObj.frameList.size() <= 20
-      if ((mvObj.pointNumber < ht.validLineMinPoint) || (mvObj.avgFramePointNumber < 1.5 && mvObj.frameList.size() < 5)) {
+//      if (!(mvObj.framePointMaxNumber > 2 && mvObj.avgFramePointNumber > 2)) {
+//      if (!(mvObj.framePointMaxNumber > 2 && mvObj.avgFramePointNumber <= 2)) {
+//      if (!(mvObj.framePointMaxNumber <= 2 &&mvObj.avgFramePointNumber > 1 && mvObj.avgFramePointNumber <= 2)) {
+//      if (!(mvObj.avgFramePointNumber <= 1)) {
+      if (mvObj.pointNumber < ht.validLineMinPoint) {
         this.drawIdx++;
         continue;
       }
 
-//      if (!(idxList.contains(new Integer(this.drawIdx)))) {
-//        this.drawIdx++;
-//        continue;
-//      }
+      if (!idxList.isEmpty() && !(idxList.contains(new Integer(this.drawIdx)))) {
+        this.drawIdx++;
+        continue;
+      }
+
+      outNum++;
 
       HoughtPoint firstOT1 = mvObj.firstPoint;
       HoughtPoint lastOT1 = mvObj.lastPoint;
@@ -140,6 +149,8 @@ public class DrawObject {
           int x = (int) (tPoint.getX() - pointSize2 / 2);
           int y = (int) (tPoint.getY() - pointSize2 / 2);
           g2d.drawRect(x, y, pointSize2, pointSize2);
+//          drawStr = "" + (tPoint.getFrameNumber());
+//          g2d.drawString(drawStr, (int) x + pointSize, (int) y + pointSize);
         }
       }
 
@@ -149,123 +160,44 @@ public class DrawObject {
       drawStr = "" + (this.drawIdx);
       g2d.drawString(drawStr, (int) lastOT1.getX() + pointSize, (int) lastOT1.getY() + pointSize);
 
-//      String debugStr = String.format("line%03d: theta=%6.2f Deg, theta=%4.2f arc, theta=%6.2f, "
-//              + "rho=%10.5f, rho=%10.5f, lastRho=%10.5f, lastRho=%10.5f, pnumber=%3d, fnumber=%3d, avgfNumber=%5.2f",
-//              this.drawIdx, mvObj.theta * 180 / Math.PI, mvObj.theta, mvObj.theta / ht.thetaStep,
-//              mvObj.rho / ht.rhoStep, mvObj.rho, mvObj.lastRho / ht.rhoStep, mvObj.lastRho,
-//              mvObj.pointNumber, mvObj.frameList.size(), mvObj.avgFramePointNumber);
+//      String debugStr = String.format("line%03d: %s", this.drawIdx, mvObj.getOutLineInfo());
 //      System.out.println(debugStr);
-//      mvObj.updateThetaRho();
-//      if (idxList.contains(this.drawIdx)) {
-//        System.out.println("frameSize=" + mvObj.frameList.size());
-//      }
-//      mvObj.calAllSpeed();
+//      mvObj.analysis();
+//      mvObj.updateInfo();
+//      mvObj.statistic();
+//      mvObj.findFirstAndLastPoint();
+//      debugStr = String.format("line%03d: %s", this.drawIdx, mvObj.getOutLineInfo());
+//      System.out.println(debugStr);
+//      System.out.println("***");
 //
 //      System.out.println("pIdx\t frameNumber\t x\t y\t xDelta\t yDelta\t fnDelta\t timeDelta\t xSpeedfn\t ySpeedt\t preX\t preY\t preDeltaX\t preDeltaY\n");
 //      mvObj.printInfo2();
 //      mvObj.printOT1Info(ht.historyOT1s);
-
       this.drawIdx++;
+
     }
   }
 
-  public void drawPoint2(String fName) {
-
-    int colorLength = 1000;
-    Color colors[] = new Color[colorLength];
-    Random random = new Random();
-    for (int i = 0; i < colorLength; i++) {
-//      colors[i] = new Color(100 + random.nextInt(156), 100 + random.nextInt(156), 100 + random.nextInt(156));
-      colors[i] = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-    }
+  /**
+   * 画出星表的点位图
+   *
+   * @param fName
+   */
+  public void drawPoint(String fName) {
 
     BufferedImage image = new BufferedImage(ht.imgWidth, ht.imgHeight, BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2d = image.createGraphics();
     BasicStroke bs = new BasicStroke(2);
-    BasicStroke bs2 = new BasicStroke(3);
-    BasicStroke bs3 = new BasicStroke(7);
-    Font font1 = new Font("Times New Roman", Font.BOLD, 30);
-    Font font2 = new Font("Times New Roman", Font.BOLD, 12);
-//    g2d.translate(0, imgHeight);
-//    g2d.scale(1, -1);
     g2d.setBackground(Color.WHITE);
     g2d.fillRect(0, 0, ht.imgWidth, ht.imgHeight);
     g2d.setStroke(bs);
     g2d.setColor(Color.RED);
-    g2d.drawOval(ht.imgWidth - 40, ht.imgHeight - 40, 20, 20);
-
-    int pointSize = 12;
     int pointSize2 = 6;
-    // draw the lines back onto the image 
-    int totalLine = 0;
 
-    Integer idxArray[] = {66, 88};
-    ArrayList<Integer> idxList = new ArrayList(Arrays.asList(idxArray));
-
-    int j = 0;
-    for (LineObject mvObj : ht.getMvObjs()) {
-
-      if (mvObj.pointNumber < ht.validLineMinPoint) {
-        continue;
-      }
-
-//      if (!(idxList.contains(new Integer(j)))) {
-//        j++;
-//        continue;
-//      }
-      g2d.setColor(colors[j % colorLength]);
-
-      HoughtPoint firstOT1 = mvObj.firstPoint;
-      HoughtPoint lastOT1 = mvObj.lastPoint;
-
-      int x1 = (int) firstOT1.getX();
-      int y1 = (int) firstOT1.getY();
-      int x2 = (int) lastOT1.getX();
-      int y2 = (int) lastOT1.getY();
-      g2d.setStroke(bs);
-//      g2d.drawLine(x1, y1, x2, y2);
-      g2d.setStroke(bs3);
-      g2d.drawRect(x1 - pointSize / 2, y1 - pointSize / 2, pointSize, pointSize);
-      g2d.drawRect(x2 - pointSize / 2, y2 - pointSize / 2, pointSize, pointSize);
-
-      String drawStr = "";
-
-      g2d.setFont(font2);
-      drawStr = "" + firstOT1.getpIdx();
-      g2d.drawString(drawStr, (int) x1 + pointSize, (int) y1 - pointSize);
-      drawStr = "" + lastOT1.getpIdx();
-      g2d.drawString(drawStr, (int) x2 + pointSize, (int) y2 - pointSize);
-
-      g2d.setStroke(bs2);
-
-      for (HoughFrame tFrame : mvObj.frameList) {
-        for (HoughtPoint tPoint : tFrame.pointList) {
-          g2d.setColor(colors[j % colorLength]);
-          int x = (int) (tPoint.getX() - pointSize2 / 2);
-          int y = (int) (tPoint.getY() - pointSize2 / 2);
-          g2d.drawRect(x, y, pointSize2, pointSize2);
-
-          g2d.setFont(font2);
-          drawStr = "" + tPoint.getpIdx();
-          g2d.drawString(drawStr, (int) x + pointSize, (int) y - pointSize);
-        }
-      }
-      g2d.setColor(Color.BLACK);
-      g2d.setFont(font1);
-      drawStr = "" + (j);
-      g2d.drawString(drawStr, (int) lastOT1.getX() + 3 * pointSize, (int) lastOT1.getY() + pointSize);
-
-      String debugStr = String.format("line%03d: theta=%6.2f Deg, theta=%4.2f arc, theta=%6.2f, "
-              + "rho=%10.5f, rho=%10.5f, lastRho=%10.5f, lastRho=%10.5f, pnumber=%3d, fnumber=%3d, avgfNumber=%5.2f",
-              j, mvObj.theta * 180 / Math.PI, mvObj.theta, mvObj.theta / ht.thetaStep,
-              mvObj.rho / ht.rhoStep, mvObj.rho, mvObj.lastRho / ht.rhoStep, mvObj.lastRho,
-              mvObj.pointNumber, mvObj.frameList.size(), mvObj.avgFramePointNumber);
-      System.out.println(debugStr);
-//      if (idxList.contains(j)) {
-      mvObj.printInfo2();
-//      }
-
-      j++;
+    for (OtObserveRecord ot1 : ht.historyOT1s) {
+      int x = (int) (ot1.getX() - pointSize2 / 2);
+      int y = (int) (ot1.getY() - pointSize2 / 2);
+      g2d.drawRect(x, y, pointSize2, pointSize2);
     }
 
     try {
