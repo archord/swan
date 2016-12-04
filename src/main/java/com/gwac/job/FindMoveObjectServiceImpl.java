@@ -74,10 +74,17 @@ public class FindMoveObjectServiceImpl implements BaseService {
 //  @Scheduled(cron = "0/1 * *  * * ? ")
   @Override
   public void startJob() {
-    int aa = count++;
-    log.warn(aa + " start, move object number: ");
+
+    if (true || isBeiJingServer || isTestServer) {
+      return;
+    }
+
+    long startTime = System.nanoTime();
+
     processAllDay();
-    log.warn(aa + " end, move object number: ");
+
+    long endTime = System.nanoTime();
+    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
   public void processAllDay() {
@@ -93,8 +100,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
         for (ObservationSky sky : skys) {
           List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId());
           int ot1num = oors.size();
-          log.debug("day=" + dateStr + ", dmp=" + dpm.getDpmId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
           if (ot1num > 0) {
+            log.debug("day=" + dateStr + ", dmp=" + dpm.getDpmId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
             processOneDay(oors, dateStr, dpm.getDpmId(), sky.getSkyId());
           }
         }
@@ -118,6 +125,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
     int frameCount = 0;
     int pNum = 0;
     for (OtObserveRecord oor : oors) {
+      oor.setX(oor.getXTemp());
+      oor.setY(oor.getYTemp());
       if (lastFrameNumber != oor.getFfNumber()) {
         lastFrameNumber = oor.getFfNumber();
         ht.endFrame();
@@ -131,19 +140,17 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     ht.endAllFrame();
 
-//    int idx = 1;
-//    for (LineObject obj : ht.mvObjs) {
-//      if (obj.pointNumber >= validLineMinPoint) {
-//        saveLineObject(obj, dateStr, dpmId, skyId);
-////        log.debug(idx++);
-//      }
-//    }
+    for (LineObject obj : ht.mvObjs) {
+      if (obj.pointNumber >= validLineMinPoint && obj.isValidLine()) {
+        saveLineObject(obj, dateStr, dpmId, skyId);
+      }
+    }
     log.debug(dateStr + "-" + dpmId + "-" + skyId + ", mvObjs:" + ht.mvObjs.size());
 
 //    ht.saveLine2(outPath);
-    String imgPath = "E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png";
-    DrawObject dObj = new DrawObject(ht);
-    dObj.drawObjsAll(imgPath);
+//    String imgPath = "E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png";
+//    DrawObject dObj = new DrawObject(ht);
+//    dObj.drawObjsAll(imgPath);
   }
 
   /**

@@ -84,8 +84,17 @@ public class LineObject {
     lineType = '0';
   }
 
+  public boolean isValidLine() {
+    boolean isValid = true;
+    if (this.avgFramePointNumber <= 2 && (this.tySigma > 10 || this.txSigma > 10)) {
+      isValid = false;
+    }
+    return isValid;
+  }
+
   public boolean isEndLine(int frameNumber) {
     if (!endLine && lastFrameNumber < frameNumber) {
+      this.removeSinglePointOfMultiFrame();
       this.analysis();
       this.updateInfo();
       this.statistic();
@@ -202,7 +211,13 @@ public class LineObject {
     double preYDiff = Math.abs(ot1.getY() - preNextYByX(ot1.getX()));
     if (preYDiff < 10) {
       if (this.framePointMaxNumber > 2) {
-        isOnLine = true;
+        if (this.frameList.size() >= 2 && ot1.getFfNumber() != this.lastFrameNumber) {
+          float xDelta = ot1.getX() - lastPoint.getX();
+          float yDelta = ot1.getY() - lastPoint.getY();
+          isOnLine = (xDelta * deltaX > 0) && (yDelta * deltaY > 0);
+        } else {
+          isOnLine = true;
+        }
       } else {
         double preXDiff = Math.abs(ot1.getX() - preNextXByT(ot1.getDateUt().getTime()));
         double preYDiff2 = Math.abs(ot1.getY() - preNextYByT(ot1.getDateUt().getTime()));
@@ -296,6 +311,9 @@ public class LineObject {
   public void getDelta() {
 
     if (frameList.size() > 1) {
+
+      updateTheta();
+
       HoughFrame firstFrame = frameList.get(0);
       HoughFrame lastFrame = frameList.get(frameList.size() - 1);
       HoughtPoint ffMinPoint, lfMinPoint;
@@ -315,6 +333,28 @@ public class LineObject {
       HoughFrame firstFrame = frameList.get(0);
       deltaX = firstFrame.deltaX;
       deltaY = firstFrame.deltaY;
+    }
+  }
+
+  public void updateTheta() {
+
+    if (this.pointNumber >= 2) {
+      HoughtPoint fPoint = pointList.get(0);
+      HoughtPoint lPoint = pointList.get(this.pointNumber - 1);
+
+      double xDelta = fPoint.getX() - lPoint.getX();
+      double yDelta = fPoint.getY() - lPoint.getY();
+      float ktheta = (float) (Math.atan2(yDelta, xDelta));
+
+      if (ktheta < 0) {
+        ktheta += Math.PI;
+      }
+
+      if (ktheta < Math.PI / 2) {
+        this.theta = (float) (ktheta + Math.PI / 2);
+      } else {
+        this.theta = (float) (ktheta - Math.PI / 2);
+      }
     }
   }
 

@@ -104,7 +104,12 @@ public class DrawObject {
 //      if (!(mvObj.framePointMaxNumber > 2 && mvObj.avgFramePointNumber <= 2)) {
 //      if (!(mvObj.framePointMaxNumber <= 2 &&mvObj.avgFramePointNumber > 1 && mvObj.avgFramePointNumber <= 2)) {
 //      if (!(mvObj.avgFramePointNumber <= 1)) {
-      if (mvObj.pointNumber < ht.validLineMinPoint) {
+      if (mvObj.pointNumber < ht.minValidPoint) {
+        this.drawIdx++;
+        continue;
+      }
+
+      if (!mvObj.isValidLine()) {
         this.drawIdx++;
         continue;
       }
