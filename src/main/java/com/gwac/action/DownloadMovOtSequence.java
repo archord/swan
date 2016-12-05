@@ -32,7 +32,7 @@ import org.apache.struts2.convention.annotation.Result;
  * @author xy
  */
 @Actions({
-  @Action(value = "/downloadmobj", results = {
+  @Action(value = "/downloadmot", results = {
     @Result(name = "download", type = "stream",
             params = {"contentType", "application/octet-stream",
               "inputName", "inputStream",
