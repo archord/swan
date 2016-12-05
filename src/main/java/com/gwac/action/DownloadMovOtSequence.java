@@ -1,56 +1,125 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.gwac.action;
 
-import com.gwac.dao.DataProcessMachineDAO;
+/**
+ *
+ * @author xy
+ */
 import com.gwac.dao.MoveObjectDao;
-import com.gwac.dao.OtLevel2Dao;
-import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.model.DataProcessMachine;
-import com.gwac.model.OtLevel2;
-import com.gwac.model.OtObserveRecord;
+import static com.opensymphony.xwork2.Action.NONE;
+import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
-import java.io.File;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
 
+/*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
+/* wget command example: */
+/* wget http://localhost:8080/gwac/downloadot2.action?otName=M151207_C00163*/
+/**
+ * @author xy
+ */
+
 @Actions({
-  @Action(value = "/down-mov-ot-sequence-list", results = {
-    @Result(name = "success", type = "json")})})
+  @Action(value = "/downloadmobj", results = {
+    @Result(name = "success", type = "stream",
+            params = {"contentType", "application/octet-stream",
+              "inputName", "inputStream",
+              "contentDisposition", "attachment;filename=\"${fileName}\"",
+              "bufferSize", "1024"})})
+})
 public class DownloadMovOtSequence extends ActionSupport {
 
-  private static final long serialVersionUID = 5078264279068585793L;
+  private static final long serialVersionUID = 5078264279068327193L;
   private static final Log log = LogFactory.getLog(DownloadMovOtSequence.class);
 
+  private InputStream inputStream;
+//  private long contentLength; //该变量要么设置一个对的值，要不不设置
+  private String fileName;
+  private String contentType;
+
+  private String dateStr;
   private final char moveType = '1';
   private final int minFrameNumber = 20;
-  private String dateStr;
   private MoveObjectDao movObjDao = null;
 
-  @SuppressWarnings("unchecked")
+  @Override
   public String execute() {
 
-    Map<Long, String> movObjs = movObjDao.getMoveObjsInfoByDate(dateStr, moveType, minFrameNumber);
-    for (Map.Entry<Long, String> entry : movObjs.entrySet()) {
-      System.out.println(entry.getKey());
+    contentType = "application/octet-stream";
+    fileName = "empty.zip";
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    //必须OT名称
+    if (null != dateStr && !dateStr.isEmpty()) {
+      dateStr = dateStr.trim();
+      String dataRootDir = getText("gwac.data.root.directory");
+      fileName = dateStr + ".zip";
+
+      Map<Long, String> movObjs = movObjDao.getMoveObjsInfoByDate(dateStr, moveType, minFrameNumber);
+
+      try {
+        if (!movObjs.isEmpty()) {
+          fileName = dateStr + "_" + movObjs.size() + ".zip";
+          try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            for (Map.Entry<Long, String> entry : movObjs.entrySet()) {
+              String fname = String.format("%05d.txt", entry.getKey());
+              String records = entry.getValue();
+              records = records.substring(3, records.length() - 3).replace(")\",\"(", "\n");
+              records = records.replace("\\\"", "");
+              zos.putNextEntry(new ZipEntry(fname));
+              zos.write(records.getBytes());
+              zos.closeEntry();
+            }
+            zos.flush();
+            zos.close();
+          }
+        }
+      } catch (IOException e) {
+        log.error("ZIP date=" + dateStr + " info error.", e);
+      }
+
     }
-    for (Map.Entry<Long, String> entry : movObjs.entrySet()) {
-      String records = entry.getValue();
-      records = records.substring(3, records.length() - 3).replace(")\",\"(", "\n");
-      records = records.replace("\\\"", "");
-      System.out.println(entry.getKey() + ": \n" + records);
-    }
+    inputStream = new ByteArrayInputStream(baos.toByteArray());
 
     return SUCCESS;
   }
 
+  public String display() {
+    return NONE;
+  }
+
   /**
-   * @param movObjDao the movObjDao to set
+   * @return the inputStream
    */
-  public void setMovObjDao(MoveObjectDao movObjDao) {
-    this.movObjDao = movObjDao;
+  public InputStream getInputStream() throws Exception {
+    return inputStream;
+  }
+
+  /**
+   * @return the fileName
+   */
+  public String getFileName() {
+    return fileName;
+  }
+
+  /**
+   * @return the contentType
+   */
+  public String getContentType() {
+    return contentType;
   }
 
   /**
@@ -58,6 +127,13 @@ public class DownloadMovOtSequence extends ActionSupport {
    */
   public void setDateStr(String dateStr) {
     this.dateStr = dateStr;
+  }
+
+  /**
+   * @param movObjDao the movObjDao to set
+   */
+  public void setMovObjDao(MoveObjectDao movObjDao) {
+    this.movObjDao = movObjDao;
   }
 
 }

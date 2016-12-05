@@ -14,7 +14,7 @@
   </bean>
   
   <bean class="com.gwac.action.GetDateStrListJson"  scope="prototype">
-    <property name="dao" ref="otbDao" />
+    <property name="dao" ref="moveObjectDao" />
   </bean>
   
   <bean class="com.gwac.action.GetDpmListJson"  scope="prototype">

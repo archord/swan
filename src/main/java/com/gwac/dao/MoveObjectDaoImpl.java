@@ -9,6 +9,7 @@ import com.gwac.model.MoveObject;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -22,15 +23,25 @@ import org.springframework.stereotype.Repository;
 public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implements MoveObjectDao {
 
   @Override
+  public List<String> getAllDateStr() {
+
+    String sql = "select distinct date_str from move_object order by date_str;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    return q.list();
+  }
+
+  @Override
   public Map<Long, String> getMoveObjsInfoByDate(String dateStr, char moveType, int minFrameNumber) {
     Session session = getCurrentSession();
-    String sql = "SELECT moor.mov_id, text(ARRAY_AGG((SELECT r FROM (SELECT ra_d, dec_d, date_ut, dpm_id, x_temp, y_temp, ff_number) r))) as mov_detail  "
+    String sql = "SELECT moor.mov_id, text(ARRAY_AGG((SELECT r FROM (SELECT ra_d, dec_d, date_ut, x_temp, y_temp, dpm_id, ff_number) r))) as mov_detail  "
             + "FROM (  "
             + "SELECT mo.mov_id, oor.ra_d, oor.dec_d, oor.date_ut, oor.dpm_id, oor.x_temp, oor.y_temp, oor.ff_number "
-            + "FROM ot_observe_record oor  "
+            + "FROM ot_observe_record_his oor  "
             + "INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
             + "INNER JOIN move_object mo ON mo.mov_id = mor.mov_id and mo.mov_type='" + moveType + "' and total_frame_number>" + minFrameNumber + "  "
-            + "WHERE oor.ot_id=0 and mor.mov_id IS NOT NULL AND oor.date_str='151218' "
+            + "WHERE oor.ot_id=0 and mor.mov_id IS NOT NULL AND oor.date_str='" + dateStr + "' "
             + "ORDER BY mo.mov_id, oor.date_ut, oor.dec_d  "
             + ")as moor  "
             + "GROUP BY moor.mov_id order by moor.mov_id";

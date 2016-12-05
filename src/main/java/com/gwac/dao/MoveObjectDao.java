@@ -14,6 +14,8 @@ import java.util.Map;
  * @author xy
  */
 public interface MoveObjectDao extends BaseHibernateDao<MoveObject> {
+  
+  public List<String> getAllDateStr();
 
   public String getMoveObjsByDate(String dateStr);
 

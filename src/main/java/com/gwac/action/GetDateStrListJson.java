@@ -1,6 +1,7 @@
 package com.gwac.action;
 
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.MoveObjectDao;
 import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.DataProcessMachine;
@@ -20,7 +21,7 @@ public class GetDateStrListJson extends ActionSupport {
   private static final long serialVersionUID = -3454448234583441394L;
   private static final Log log = LogFactory.getLog(GetDateStrListJson.class);
 
-  private OtLevel2Dao dao;
+  private MoveObjectDao dao;
   private List<String> objs;
 
   @Actions({
@@ -37,7 +38,7 @@ public class GetDateStrListJson extends ActionSupport {
   /**
    * @param dao the dao to set
    */
-  public void setDao(OtLevel2Dao dao) {
+  public void setDao(MoveObjectDao dao) {
     this.dao = dao;
   }
 
