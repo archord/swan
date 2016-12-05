@@ -45,7 +45,7 @@ public class LoginFilter implements Filter {
     httpResp.setContentType("text/html");
     httpResp.setCharacterEncoding("utf-8");
     HttpSession session = httpReq.getSession();
-    PrintWriter out = httpResp.getWriter();
+//    PrintWriter out = httpResp.getWriter();
 
     String requestUri = httpReq.getRequestURI();
     String ctxPath = httpReq.getContextPath(); // 项目名/gwac

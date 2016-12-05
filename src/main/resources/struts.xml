@@ -65,24 +65,14 @@
       <result>/404.jsp</result>
     </action>
     
-<!--    <action name="downloadot2" class="com.gwac.action.OT2InfoDownload">
+    <action name="downloadot2" class="com.gwac.action.OT2InfoDownload">
       <result name="success" type="stream">
         <param name="contentType">${contentType}</param>
         <param name="inputName">inputStream</param>
         <param name="contentDisposition">attachment;filename="${fileName}"</param>
         <param name="bufferSize">1024</param>
       </result> 
-    </action>-->
-    
-    
-<!--    <action name="downloadmot" class="com.gwac.action.DownloadMovOtSequence">
-      <result name="success" type="stream">
-        <param name="contentType">${contentType}</param>
-        <param name="inputName">inputStream</param>
-        <param name="contentDisposition">attachment;filename="${fileName}"</param>
-        <param name="bufferSize">1024</param>
-      </result> 
-    </action>-->
+    </action>
 
   </package>
 	

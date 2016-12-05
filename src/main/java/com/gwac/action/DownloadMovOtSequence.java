@@ -31,10 +31,9 @@ import org.apache.struts2.convention.annotation.Result;
 /**
  * @author xy
  */
-
 @Actions({
   @Action(value = "/downloadmobj", results = {
-    @Result(name = "success", type = "stream",
+    @Result(name = "download", type = "stream",
             params = {"contentType", "application/octet-stream",
               "inputName", "inputStream",
               "contentDisposition", "attachment;filename=\"${fileName}\"",
@@ -94,7 +93,7 @@ public class DownloadMovOtSequence extends ActionSupport {
     }
     inputStream = new ByteArrayInputStream(baos.toByteArray());
 
-    return SUCCESS;
+    return "download";
   }
 
   public String display() {
