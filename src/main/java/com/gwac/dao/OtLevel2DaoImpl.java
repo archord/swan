@@ -31,7 +31,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   @Override
   public List<String> getAllDateStr() {
 
-    String sql = "select distinct date_str from ot_level2 order by date_str;";
+    String sql = "select distinct date_str from ot_level2_his where date_str>'161001' order by date_str;";
 
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);

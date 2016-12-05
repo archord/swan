@@ -5824,6 +5824,13 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   width: 800px;
   margin: auto;
   color: #fff;
+}
+.login123 {
+  position: relative;
+  padding: 38px;
+  width: 800px;
+  margin: auto;
+  color: #fff;
   /*background: url(../img/login/imac.png) 0 0 no-repeat;*/
   /*background-size: 940px 778px;*/
 }

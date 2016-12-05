@@ -16,7 +16,7 @@
     <script>
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "get-mov-ot-sequence-list.action?dateStr=161128";
+        var url = "get-mov-ot-sequence-list.action?dateStr=";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
         $("#sphereDisplay").height(mainHeight - headerHeight - 10);
@@ -25,38 +25,65 @@
         gwac.loadSkyList();
         gwac.loadDpmList();
         gwac.loadDateStrList();
-        d3.json(gwac.url, function(errors, reqData) {
-          var motList = reqData.motList;
-          if (typeof (motList) !== "undefined" && motList !== null) {
-            gwac.parseData(reqData);
-            gwac.draw();
-            setTimeout(function() {
-              gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
-            }, gwac.startAnimationDuration);
-          } else {
-            console.log("Move Object List is null");
-            alert("Move Object List is null");
-          }
-        });
+        loadData();
+
 
         $('#dynamicDrawOt1').change(function() {
           if ($(this).is(":checked")) {
             gwac.updateShowData();
+            if (typeof (gwac.ot1DrawInterval) !== "undefined" && gwac.ot1DrawInterval !== null) {
+              clearInterval(gwac.ot1DrawInterval);
+            }
             gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
           } else {
             clearInterval(gwac.ot1DrawInterval);
           }
         });
 
+        $('#obsDate').change(function() {
+          loadData();
+        });
+
         $('#movType').change(function() {
           gwac.updateShowData();
+          //保证在选择类型时，currentFrame不增加，因为dynamicDrawOt1会对currentFrame增加playInterval
+          gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame - gwac.playInterval) % (gwac.endFrame - gwac.startFrame + 1);
           dynamicDrawOt1();
         });
 
         $('#changeView').click(function() {
           gwac.changeView(gwac);
         });
-        
+
+        function loadData() {
+
+          var dateStr = $("#obsDate").val();
+          if (dateStr !== '0') {
+
+            if (typeof (gwac.ot1DrawInterval) !== "undefined" && gwac.ot1DrawInterval !== null) {
+              clearInterval(gwac.ot1DrawInterval);
+            }
+
+            var movUrl = root + "/" + url + dateStr;
+//            console.log(movUrl);
+
+            d3.json(movUrl, function(errors, reqData) {
+              var motList = reqData.motList;
+              var ot1List = reqData.ot1List;
+              if (typeof (motList) !== "undefined" && motList !== null && typeof (ot1List) !== "undefined" && ot1List !== null) {
+                gwac.parseData(reqData);
+                gwac.draw();
+                setTimeout(function() {
+                  gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
+                }, gwac.startAnimationDuration);
+              } else {
+                console.log("Cannot find data on day " + dateStr + ".");
+                alert("Cannot find data on day " + dateStr + ".");
+              }
+            });
+          }
+        }
+
         function dynamicDrawOt1() {
           gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + gwac.playInterval) % (gwac.endFrame - gwac.startFrame + 1);
           $('#currentFrame').val(gwac.currentFrame);
@@ -131,16 +158,17 @@
           <tr><td>目标类别:</td><td><select id="movType" class="ot1-input" data-toggle="select">
                 <option style="background-color:#000" value="0">所有类型</option>
                 <option style="background-color:#000" value="1" selected>多帧单点</option>
-                <option style="background-color:#000" value="2">多帧多点</option>
-                <option style="background-color:#000" value="3">一帧多点</option>
+                <option style="background-color:#000" value="2">多帧两点</option>
+                <option style="background-color:#000" value="3">多帧多点</option>
+                <option style="background-color:#000" value="4">一帧多点</option>
+              </select></td></tr>
+          <tr><td>选择日期</td><td><select name="formqp.obsDate" id="obsDate" class="ot1-input" data-toggle="select">
+                <option style="background-color:#000" value="0" selected>请选择</option>
               </select></td></tr>
           <tr><td>选择天区:</td><td><select name="formqp.obsSky" id="obsSky" class="ot1-input" data-toggle="select">
                 <option style="background-color:#000" value="0"  selected>请选择</option>
               </select></td></tr>
           <tr><td>选择CCD:</td><td><select name="formqp.obsCcd" id="obsCcd" class="ot1-input" data-toggle="select">
-                <option style="background-color:#000" value="0" selected>请选择</option>
-              </select></td></tr>
-          <tr><td>选择日期</td><td><select name="formqp.obsDate" id="obsDate" class="ot1-input" data-toggle="select">
                 <option style="background-color:#000" value="0" selected>请选择</option>
               </select></td></tr>
           <tr><td>边界左上:</td><td><input type="text" id="leftTopBound" class="ot1-input" value="60,60"/></td></tr>
