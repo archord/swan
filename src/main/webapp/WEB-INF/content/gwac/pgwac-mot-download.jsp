@@ -66,13 +66,16 @@
       </div>      
       <div class="row ot-list-top">
         <form id="motDownloadAction">
-          <div class="col-xs-2 col-sm-2 col-md-2 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <select name="dateStr" id="dateStr" class="ot1-input" data-toggle="select">
               <option value="0" selected>选择日期</option>
             </select>
           </div>
-          <div class="col-xs-2 col-sm-2 col-md-2 ">
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <input type="button" value="下载" class="btn btn-primary" id="motDownloadButton"/>
+          </div>
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
+            <a href="${pageContext.request.contextPath}/user-logout.action" title="点击注销">注销</a>
           </div>
         </form>
       </div>
@@ -82,7 +85,8 @@
           下载方法：选择日期，点击下载按钮，即可下载指定日期的移动目标。<br/>
           文件命名格式：选择日期_移动目标个数.zip。<br/>
           压缩文件中每个文件是一个移动目标的记录详细，各数据列之间用“,”隔开，数据列标签如下所示：<br/>
-          赤经，赤纬，UTC时间，图像X坐标，图像Y坐标，CCD编号，图像顺序号
+          赤经，赤纬，UTC时间，图像X坐标，图像Y坐标，CCD编号，图像顺序号<br/>
+          注：最新的数据（前一天），需要在第二天下午5点以后才能下载
           </div>
         </div>
       </div>

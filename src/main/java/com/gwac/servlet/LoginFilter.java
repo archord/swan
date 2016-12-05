@@ -57,7 +57,18 @@ public class LoginFilter implements Filter {
     } else {
       UserInfo tuser = (UserInfo) session.getAttribute("userInfo");
       if (tuser != null) {
-        chain.doFilter(request, response);
+        if (tuser.getLoginName().equals("moveobject")) {
+          String downloadPage = "/gwac/pgwac-mot-download.action";
+          if (uri.equals("/downloadmot.action") || uri.equals("/user-logout.action")) {
+            chain.doFilter(request, response);
+          } else if (!uri.equals(downloadPage)) {
+            httpResp.sendRedirect(ctxPath + downloadPage);
+          } else {
+            chain.doFilter(request, response);
+          }
+        } else {
+          chain.doFilter(request, response);
+        }
       } else {
         httpResp.sendRedirect(ctxPath + loginUrl);
       }
