@@ -31,12 +31,16 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
   @Override
-  public List<OtObserveRecord> getOt1ByDateDpmSkyId(String dateStr, int dpmId, int skyId) {
+  public List<OtObserveRecord> getOt1ByDateDpmSkyId(String dateStr, int dpmId, int skyId, boolean history) {
 
     Session session = getCurrentSession();
-    String sql = "select * from ot_observe_record_his where ot_id=0 and ra_d is not null and dec_d is not null "
+    String sql = "select * from ot_observe_record";
+    if (history) {
+      sql += "_his";
+    }
+    sql += " where ot_id=0 and ra_d is not null and dec_d is not null "
             + "and x_temp is not null and y_temp is not null and data_produce_method='1' and date_str='" + dateStr
-            + "' and dpm_id=" + dpmId + " and sky_id=" + skyId 
+            + "' and dpm_id=" + dpmId + " and sky_id=" + skyId
             + " order by ff_number asc";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();

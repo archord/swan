@@ -105,29 +105,33 @@ public class LineObject {
   }
 
   /**
-   * 将目标分为3类，并对framePointMaxNumber大于等于2而且this.avgFramePointNumber小于等于2的目标一帧中的多个点合并为1个点
-   * 使用顺序 mvObj.analysis(); mvObj.updateInfo(); mvObj.statistic();
-   * mvObj.findFirstAndLastPoint();
+   * 根据帧数据点个数，将目标分为4类：
+   * 1，多帧出现，每一帧只有一个数据点
+   * 2，多帧出现，每一帧有一到多个数据点，且至少有一帧最少有两个数据点，且帧平均数据点数量不大于2
+   * 3，多帧出现，每一帧有一到多个数据点，且大部分帧的数据点个数大于2
+   * 4，单帧出现，该帧数据点个数大于2（大于移动目标识别的最小阈值validLineMinPoint=5）
+   * 使用顺序 mvObj.analysis(); mvObj.updateInfo(); mvObj.statistic();mvObj.findFirstAndLastPoint();
    */
   public void analysis() {
     if (this.frameList.size() == 1 && this.avgFramePointNumber > 2) {
-      lineType = '3';
+      lineType = '4';
     } else {
       if (this.framePointMaxNumber > 2 && this.avgFramePointNumber > 2) {
-        lineType = '2';
+        lineType = '3';
       } else if (this.framePointMaxNumber > 2 && this.avgFramePointNumber <= 2) {
         if (this.framePointMultiNumber == 1) {
-          lineType = '2';
+          lineType = '3';
         } else {
-          lineType = '1';
+          lineType = '2';
         }
       } else if (this.framePointMaxNumber <= 2 && this.avgFramePointNumber > 1 && this.avgFramePointNumber <= 2) {
-        lineType = '1';
+        lineType = '2';
       } else if (this.avgFramePointNumber <= 1) {
         lineType = '1';
       }
     }
 
+    //对framePointMaxNumber大于等于2而且this.avgFramePointNumber小于等于2的目标一帧中的多个点合并为1个点
     if (false && lineType == '1' && this.avgFramePointNumber > 1) {
 
       for (HoughFrame hf : this.frameList) {

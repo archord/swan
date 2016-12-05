@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository(value="otLevel2Dao")
+@Repository(value = "otLevel2Dao")
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
 
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
@@ -100,11 +100,13 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   }
 
   @Override
-  public List<String> getAllDateStr() {
+  public List<String> getAllDateStr(boolean history) {
 
     List<String> result = new ArrayList<>();
-    String sql = "select distinct date_str from ot_level2 where ot_type is not null order by date_str;";
-
+    String sql = "select distinct date_str from ot_level2;";
+    if (history) {
+      sql = "select distinct date_str from ot_level2_his where date_str>'161001' order by date_str;";
+    }
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);
     List list = q.list();

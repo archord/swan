@@ -75,30 +75,58 @@ public class FindMoveObjectServiceImpl implements BaseService {
   @Override
   public void startJob() {
 
-    if (true || isBeiJingServer || isTestServer) {
+    if (isBeiJingServer || isTestServer) {
       return;
     }
 
     long startTime = System.nanoTime();
 
-    processAllDay();
+    processToday();
 
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
   }
 
-  public void processAllDay() {
+  public void processToday() {
 
-//    List<String> dateStrs = otlv2Dao.getAllDateStr();
-    List<String> dateStrs = new ArrayList();
-    dateStrs.add("161128");
+    boolean history = false;
+
+    List<String> dateStrs = otlv2Dao.getAllDateStr(history);
     List<ObservationSky> skys = observationSkyDao.findAll();
     List<DataProcessMachine> dpms = dpmDao.findAll();
     log.debug("total days: " + dateStrs.size());
     for (String dateStr : dateStrs) {
       for (DataProcessMachine dpm : dpms) {
         for (ObservationSky sky : skys) {
-          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId());
+          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId(), history);
+          int ot1num = oors.size();
+          if (ot1num > 0) {
+            log.debug("day=" + dateStr + ", dmp=" + dpm.getDpmId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
+            processOneDay(oors, dateStr, dpm.getDpmId(), sky.getSkyId());
+          }
+        }
+      }
+      break;
+    }
+  }
+
+  /**
+   * 对所有历史数据进行处理，大于161001的
+   */
+  public void processHisAllDay() {
+
+    boolean history = true;
+
+    List<String> dateStrs = otlv2Dao.getAllDateStr(history);
+//    List<String> dateStrs = new ArrayList();
+//    dateStrs.add("161128");
+    List<ObservationSky> skys = observationSkyDao.findAll();
+    List<DataProcessMachine> dpms = dpmDao.findAll();
+    log.debug("total days: " + dateStrs.size());
+    for (String dateStr : dateStrs) {
+      for (DataProcessMachine dpm : dpms) {
+        for (ObservationSky sky : skys) {
+          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId(), history);
           int ot1num = oors.size();
           if (ot1num > 0) {
             log.debug("day=" + dateStr + ", dmp=" + dpm.getDpmId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
