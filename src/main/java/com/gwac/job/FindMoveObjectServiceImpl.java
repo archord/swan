@@ -82,6 +82,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
     long startTime = System.nanoTime();
 
     processToday();
+//    processHisAllDay();
 
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
@@ -95,6 +96,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
     List<ObservationSky> skys = observationSkyDao.findAll();
     List<DataProcessMachine> dpms = dpmDao.findAll();
     log.debug("total days: " + dateStrs.size());
+    
     for (String dateStr : dateStrs) {
       for (DataProcessMachine dpm : dpms) {
         for (ObservationSky sky : skys) {
@@ -106,7 +108,6 @@ public class FindMoveObjectServiceImpl implements BaseService {
           }
         }
       }
-      break;
     }
   }
 
@@ -123,6 +124,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
     List<ObservationSky> skys = observationSkyDao.findAll();
     List<DataProcessMachine> dpms = dpmDao.findAll();
     log.debug("total days: " + dateStrs.size());
+    
     for (String dateStr : dateStrs) {
       for (DataProcessMachine dpm : dpms) {
         for (ObservationSky sky : skys) {
@@ -134,7 +136,6 @@ public class FindMoveObjectServiceImpl implements BaseService {
           }
         }
       }
-      break;
     }
 
 //    String dateStr = "160928";

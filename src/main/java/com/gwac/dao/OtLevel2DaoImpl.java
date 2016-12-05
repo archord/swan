@@ -105,8 +105,25 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     List<String> result = new ArrayList<>();
     String sql = "select distinct date_str from ot_level2;";
     if (history) {
-      sql = "select distinct date_str from ot_level2_his where date_str>'161001' order by date_str;";
+      sql = "select distinct date_str from ot_level2_his where date_str>'161003' order by date_str;";
     }
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      String his = (String) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
+
+  @Override
+  public List<String> getAllDateStr() {
+
+    List<String> result = new ArrayList<>();
+    String sql = "select distinct date_str from ot_level2 where ot_type is not null order by date_str;";
+
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);
     List list = q.list();

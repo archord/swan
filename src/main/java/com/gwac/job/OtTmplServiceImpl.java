@@ -205,10 +205,8 @@ public class OtTmplServiceImpl implements BaseService {
   }
 
   public void rematchAllOt2() {
-    
-    boolean history = true;
 
-    List<String> dateStrs = ot2Dao.getAllDateStr(history);
+    List<String> dateStrs = ot2Dao.getAllDateStr();
     log.debug("total days: " + dateStrs.size());
 
     MatchTable ott = mtDao.getMatchTableByTypeName("ot_level2_his");
@@ -272,10 +270,8 @@ public class OtTmplServiceImpl implements BaseService {
    * 考虑到大部分假的都未分类，为能建立完善的OT2历史模板，现在将“未分类”的值设置为4
    */
   public void generateOtTmpl(char otClass) {
-    
-    boolean history = true;
 
-    List<String> dateStrs = ot2Dao.getAllDateStr(history);
+    List<String> dateStrs = ot2Dao.getAllDateStr();
     log.debug("total days: " + dateStrs.size());
     for (String dateStr : dateStrs) {
       List<OtLevel2> ot2s = ot2Dao.getLv2OTByDateAndOTClass(dateStr, otClass);
@@ -396,10 +392,8 @@ public class OtTmplServiceImpl implements BaseService {
    * @param otClass
    */
   public void generateOtTmpl2(char otClass) {
-    
-    boolean history = true;
 
-    List<String> dateStrs = ot2Dao.getAllDateStr(history);
+    List<String> dateStrs = ot2Dao.getAllDateStr();
     log.debug("total days: " + dateStrs.size());
     for (String dateStr : dateStrs) {
       List<OtLevel2> ot2s = ot2Dao.getLv2OTByDateAndOTClass(dateStr, otClass);

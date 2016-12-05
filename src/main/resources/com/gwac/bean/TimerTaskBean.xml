@@ -89,9 +89,10 @@
     <property name="startDelay" value="5000" />   
   </bean>-->
   
+  <!-- 13点40 -->
   <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="findMoveObjectJob" />
-    <property name="cronExpression" value="0 40 13 * * ?"/> <!-- 13点40 -->
+    <property name="cronExpression" value="0 40 13 * * ?"/> 
   </bean>
 
   <!-- Simple Trigger, run every 15 seconds -->
