@@ -22,7 +22,7 @@ public abstract class MysqlUsnoHibernateDaoImpl<T extends Serializable> implemen
   public static final int SORT_DESC = 2;
   private Class<T> clazz;
   
-  @Resource(name = "sessionFactory")
+  @Resource(name = "sessionFactoryMysqlUson")
   private SessionFactory sessionFactory;
 
 

@@ -13,6 +13,13 @@
       </property>
   </bean-->
   
+  <bean id="ot2CheckJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="ot2CheckService" /> 
+    <property name="targetMethod" value="startJob" /> 
+    <property name="concurrent" value="false" />
+  </bean> 
+  
   <bean id="findMoveObjectJob" 
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
     <property name="targetObject" ref="findMoveObjectService" /> 
@@ -75,6 +82,13 @@
     <property name="targetMethod" value="startJob" /> 
     <property name="concurrent" value="false" />
   </bean> 
+  
+  <bean id="ot2CheckTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="ot2CheckJob" />
+    <property name="repeatInterval" value="150000000000" />  
+    <property name="startDelay" value="10000" />   
+  </bean>
   
   <bean id="foTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -148,6 +162,8 @@
         <ref bean="foTrigger" />
         <ref bean="otTmplTrigger" />
         <ref bean="findMoveObjectTrigger" />
+        
+        <!--<ref bean="ot2CheckTrigger" />-->
         
         <!--<ref bean="fileTransferTrigger" />-->
         <ref bean="dataSyncTrigger" />

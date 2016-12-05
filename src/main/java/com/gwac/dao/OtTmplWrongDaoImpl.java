@@ -38,7 +38,9 @@ public class OtTmplWrongDaoImpl extends BaseHibernateDaoImpl<OtTmplWrong> implem
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();
-      String sql = "select * from ot_tmpl_wrong where data_produce_method='" + ot2.getDataProduceMethod() + "' and ";
+      String sql = "select * from ot_tmpl_wrong "
+              + "where last_found_time_utc>(CURRENT_TIMESTAMP - interval '180' day) "
+              + "and data_produce_method='" + ot2.getDataProduceMethod() + "' and ";
       if (tflag == 1) {
         sql += "ra between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
         sql += "dec between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";

@@ -44,7 +44,7 @@ import org.springframework.stereotype.Service;
  *
  * @author xy
  */
-@Service
+@Service(value = "ot2CheckService")
 public class Ot2CheckServiceImpl implements Ot2CheckService {
 
   private static final Log log = LogFactory.getLog(Ot2CheckServiceImpl.class);
@@ -85,6 +85,15 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   @Resource
   private OtLevel2Dao ot2Dao;
   @Resource
+  private CcdPixFilterDao cpfDao;
+  @Resource
+  private MatchTableDao mtDao;
+  @Resource
+  private OtLevel2MatchDao ot2mDao;
+  @Resource
+  private OtTmplWrongDao ottwdao;
+  
+  @Resource
   private CVSQueryDao cvsDao;
   @Resource
   private MergedOtherDao moDao;
@@ -94,14 +103,6 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private Rc3Dao rc3Dao;
   @Resource
   private UsnoCatalogDao usnoDao;
-  @Resource
-  private CcdPixFilterDao cpfDao;
-  @Resource
-  private MatchTableDao mtDao;
-  @Resource
-  private OtLevel2MatchDao ot2mDao;
-  @Resource
-  private OtTmplWrongDao ottwdao;
 
   private static boolean running = true;
 
@@ -698,4 +699,22 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return ott.getMatchTableName() + CommonFunction.getDateString(CommonFunction.getUTCDate(new Date()));
   }
 
+  public void printConfigParameter() {
+    log.debug("isBeiJingServer=" + isBeiJingServer);
+    log.debug("isTestServer=" + isTestServer);
+    log.debug("mergedSearchbox=" + mergedSearchbox);
+    log.debug("cvsSearchbox=" + cvsSearchbox);
+    log.debug("rc3Searchbox=" + rc3Searchbox);
+    log.debug("minorPlanetSearchbox=" + minorPlanetSearchbox);
+    log.debug("ot2Searchbox=" + ot2Searchbox);
+    log.debug("usnoSearchbox=" + usnoSearchbox);
+    log.debug("usnoSearchbox2=" + usnoSearchbox2);
+    log.debug("mergedMag=" + mergedMag);
+    log.debug("cvsMag=" + cvsMag);
+    log.debug("rc3MinMag=" + rc3MinMag);
+    log.debug("rc3MaxMag=" + rc3MaxMag);
+    log.debug("minorPlanetMag=" + minorPlanetMag);
+    log.debug("usnoMag=" + usnoMag);
+    log.debug("usnoMag2=" + usnoMag2);
+  }
 }
