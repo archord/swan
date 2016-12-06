@@ -247,10 +247,10 @@
     },
     clickStar: function() {
       var tIdx = $(this).attr("value");
-      console.log(tIdx);
-      $.each(gwac.motObj[tIdx].mov_detail, function(j, item) {
-        console.log(item.ff_number);
-      });
+      console.log(gwac.motObj[tIdx].mov_id);
+//      $.each(gwac.motObj[tIdx].mov_detail, function(j, item) {
+//        console.log(item.ff_number);
+//      });
     },
     changeView: function(gwac) {
       var tdata = {type: "MultiPoint", coordinates: []};

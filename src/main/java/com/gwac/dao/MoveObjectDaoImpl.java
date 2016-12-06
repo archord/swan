@@ -94,7 +94,7 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
             + "		SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x_temp, oor.y_temp, oor.date_ut, oor.oor_id, mor.mov_id "
             + "		FROM ot_observe_record_his oor "
             + "		LEFT JOIN move_object_record mor ON mor.oor_id = oor.oor_id "
-            + "		WHERE oor.ot_id=0 and mor.mov_id IS NULL AND oor.date_str=? "
+            + "		WHERE oor.ot_id=0 and oor.data_produce_method='1' and mor.mov_id IS NULL AND oor.date_str=? "
             + "		ORDER BY date_ut "
             + "	)as moor "
             + "GROUP BY moor.ff_number "
