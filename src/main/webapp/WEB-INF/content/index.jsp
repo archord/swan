@@ -61,7 +61,7 @@
           <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>观测策略</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
           <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/utc/" target="_blank" ><p>兴隆恒星时</p></a></div>
-          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/weather/yuntu" target="_blank" ><p>兴隆云图</p></a></div>
+          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/weather/yuntu.jhtml" target="_blank" ><p>兴隆云图</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-fwhm.action" target="_blank" ><p>半高全宽</p></a>                  </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-objnum.action" target="_blank" ><p>星的数目</p></a>                       </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-bgbright.action" target="_blank" ><p>背景亮度</p></a>                     </div>
