@@ -201,47 +201,50 @@
     },
     drawMot: function() {
       var gwac = this;
-      $.each(gwac.motObj, function(i, item1) {
-        var mvType = parseInt(item1.mov_type);
-        if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType)) {
-          var tLine = [];
-          $.each(item1.mov_detail, function(j, item2) {
-            if (item2.ff_number <= gwac.currentFrame) {
-              if (j === 1) {
-                var tmot = item1.mov_detail[0];
-                tLine.push([tmot.ra_d, tmot.dec_d]);
-                tLine.push([item2.ra_d, item2.dec_d]);
-              } else if (j > 1) {
-                tLine.push([item2.ra_d, item2.dec_d]);
+      if (gwac.motObj.length > 0 && gwac.movType !== '5') {
+        $.each(gwac.motObj, function(i, item1) {
+          var mvType = parseInt(item1.mov_type);
+          if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType)) {
+            var tLine = [];
+            $.each(item1.mov_detail, function(j, item2) {
+              if (item2.ff_number <= gwac.currentFrame) {
+                if (j === 1) {
+                  var tmot = item1.mov_detail[0];
+                  tLine.push([tmot.ra_d, tmot.dec_d]);
+                  tLine.push([item2.ra_d, item2.dec_d]);
+                } else if (j > 1) {
+                  tLine.push([item2.ra_d, item2.dec_d]);
+                }
               }
+            });
+            if (tLine.length > 0) {
+              gwac.motLineData.data.coordinates = tLine;
+              gwac.motPointData.data.coordinates = tLine;
+              var tnode = gwac.svg.append("path").datum(gwac.motLineData.data).attr("class", gwac.motLineData.class).attr('stroke', item1.color).attr("d", gwac.path);
+              tnode.append("title").text(item1.mov_id);
+              tnode.attr("value", i);
+              tnode.on("click", gwac.clickStar);
+
+              gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class).attr('stroke', item1.fillColor).attr("d", gwac.path);
             }
-          });
-          if (tLine.length > 0) {
-            gwac.motLineData.data.coordinates = tLine;
-            gwac.motPointData.data.coordinates = tLine;
-            var tnode = gwac.svg.append("path").datum(gwac.motLineData.data).attr("class", gwac.motLineData.class).attr('stroke', item1.color).attr("d", gwac.path);
-            tnode.append("title").text(item1.mov_id);
-            tnode.attr("value", i);
-            tnode.on("click", gwac.clickStar);
-
-            gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class).attr('stroke', item1.fillColor).attr("d", gwac.path);
           }
-        }
-      });
-
+        });
+      }
     },
     drawOt1: function() {
       var gwac = this;
-      var startIdx = gwac.currentFrame - gwac.playInterval;
-      if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
-        startIdx = gwac.startFrame;
-      }
+      if (gwac.ot1.length > 0) {
+        var startIdx = gwac.currentFrame - gwac.playInterval;
+        if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
+          startIdx = gwac.startFrame;
+        }
 
-      for (i = startIdx; i <= gwac.currentFrame; i++) {
-        var tIdx = i - gwac.startFrame;
-        if (gwac.ot1[tIdx] !== null && gwac.ot1[tIdx].length > 0) {
-          gwac.ot1Data.data.coordinates = gwac.ot1[tIdx];
-          gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class).attr("d", gwac.path);
+        for (i = startIdx; i <= gwac.currentFrame; i++) {
+          var tIdx = i - gwac.startFrame;
+          if (gwac.ot1[tIdx] !== null && gwac.ot1[tIdx].length > 0) {
+            gwac.ot1Data.data.coordinates = gwac.ot1[tIdx];
+            gwac.curnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class).attr("d", gwac.path);
+          }
         }
       }
     },

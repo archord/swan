@@ -60,6 +60,11 @@
           var dateStr = $("#obsDate").val();
           if (dateStr !== '0') {
 
+            if ($('#dynamicDrawOt1').attr("checked")) {
+              $('#dynamicDrawOt1').attr("checked", false);
+              console.log(false);
+            }
+
             if (typeof (gwac.ot1DrawInterval) !== "undefined" && gwac.ot1DrawInterval !== null) {
               clearInterval(gwac.ot1DrawInterval);
             }
@@ -76,6 +81,11 @@
                 setTimeout(function() {
                   gwac.ot1DrawInterval = setInterval(dynamicDrawOt1, gwac.playSpeed);
                 }, gwac.startAnimationDuration);
+
+                if (!$('#dynamicDrawOt1').attr("checked")) {
+                  $('#dynamicDrawOt1').attr("checked", true);
+                  console.log(true);
+                }
               } else {
                 console.log("Cannot find data on day " + dateStr + ".");
                 alert("Cannot find data on day " + dateStr + ".");
@@ -87,7 +97,7 @@
         function dynamicDrawOt1() {
           gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame + gwac.playInterval) % (gwac.endFrame - gwac.startFrame + 1);
           $('#currentFrame').val(gwac.currentFrame);
-          if (gwac.currentFrame > 0) {
+          if (gwac.currentFrame > 1) {
             gwac.svg.selectAll(".ot1").remove();
             gwac.svg.selectAll(".motLine").remove();
             gwac.svg.selectAll(".motPoint").remove();
@@ -155,15 +165,16 @@
           <tr><td>结束帧:</td><td><input type="text" id="endFrame" class="ot1-input" value="1"/></td></tr>
           <tr><td>总帧数:</td><td><input type="text" id="totalFrame" class="ot1-input" value="1"/></td></tr>
           <tr><td>最少帧数:</td><td><input type="text" id="miniFrameNumber" class="ot1-input" value="1"/></td></tr>
+          <tr><td>选择日期</td><td><select name="formqp.obsDate" id="obsDate" class="ot1-input" data-toggle="select">
+                <option style="background-color:#000" value="0" selected>请选择</option>
+              </select></td></tr>
           <tr><td>目标类别:</td><td><select id="movType" class="ot1-input" data-toggle="select">
                 <option style="background-color:#000" value="0">所有类型</option>
                 <option style="background-color:#000" value="1" selected>多帧单点</option>
                 <option style="background-color:#000" value="2">多帧两点</option>
                 <option style="background-color:#000" value="3">多帧多点</option>
                 <option style="background-color:#000" value="4">一帧多点</option>
-              </select></td></tr>
-          <tr><td>选择日期</td><td><select name="formqp.obsDate" id="obsDate" class="ot1-input" data-toggle="select">
-                <option style="background-color:#000" value="0" selected>请选择</option>
+                <option style="background-color:#000" value="5">其他</option>
               </select></td></tr>
           <tr><td>选择天区:</td><td><select name="formqp.obsSky" id="obsSky" class="ot1-input" data-toggle="select">
                 <option style="background-color:#000" value="0"  selected>请选择</option>
