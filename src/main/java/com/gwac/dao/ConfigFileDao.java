@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface ConfigFileDao extends BaseHibernateDao<ConfigFile> {
   
+  public void removeOldRecordByDay(String dateStr);
+  
   public void moveDataToHisTable();
 
   public Boolean exist(ConfigFile obj);

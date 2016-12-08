@@ -15,10 +15,21 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository(value="uploadFileRecordDao")
+@Repository(value = "uploadFileRecordDao")
 public class UploadFileRecordDaoImpl extends BaseHibernateDaoImpl<UploadFileRecord> implements UploadFileRecordDao {
 
   private static final Log log = LogFactory.getLog(UploadFileRecordDaoImpl.class);
+
+  /**
+   * 删除day天以前的所有数据
+   * @param day 
+   */
+  @Override
+  public void removeOldRecordByDay(int day) {
+    String sql = "DELETE FROM upload_file_record where upload_date<(CURRENT_TIMESTAMP - interval '" + day + "' day);";
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
 
   @Override
   public void save(UploadFileRecord obj) {
