@@ -33,15 +33,22 @@ public class GetMovOtSequence extends ActionSupport {
   public String execute() {
 
     Object[] objs = oorDao.getMinMaxDateOt1(dateStr);
-    if (objs != null && objs.length == 4) {
+    if (objs != null && objs.length == 4 && objs[0] != null && objs[1] != null && objs[2] != null && objs[3] != null) {
       minDate = (Date) objs[0];
       maxDate = (Date) objs[1];
       minNum = (Integer) objs[2];
       maxNum = (Integer) objs[3];
+      motList = movObjDao.getMoveObjsByDate(dateStr);
+      ot1List = movObjDao.getNotMatchOTByDate(dateStr);
+    } else {
+      minDate = null;
+      maxDate = null;
+      minNum = 0;
+      maxNum = 0;
+      motList = "";
+      ot1List = "";
     }
 
-    motList = movObjDao.getMoveObjsByDate(dateStr);
-    ot1List = movObjDao.getNotMatchOTByDate(dateStr);
     return SUCCESS;
   }
 

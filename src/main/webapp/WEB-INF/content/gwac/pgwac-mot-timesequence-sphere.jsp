@@ -7,15 +7,17 @@
     <meta charset="utf-8">
     <title>OT分布实时概览图-天球坐标</title>
     <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/jquery.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/topojson.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.geo.zoom.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/mot_timesequence_sphere.js"></script>
-    <link href="<%=request.getContextPath()%>/resource/js/d3/maps.css" rel="stylesheet" type="text/css">
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resource/js/plot/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resource/js/d3/d3.min.js"></script>
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resource/js/d3/topojson.min.js"></script>
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resource/js/d3/d3.geo.zoom.js"></script>
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resource/js/mot_timesequence_sphere.js"></script>
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resource/js/shiftzoom.js" ></script>
+    <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/resource/js/jquery/jquery-ui.min.js"></script>
+    <link href="${pageContext.request.contextPath}/resource/js/d3/maps.css" rel="stylesheet" type="text/css">
     <script>
       $(function() {
-        var root = "<%=request.getContextPath()%>";
+        var root = "${pageContext.request.contextPath}";
         var url = "get-mov-ot-sequence-list.action?dateStr=";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
@@ -62,7 +64,6 @@
 
             if ($('#dynamicDrawOt1').attr("checked")) {
               $('#dynamicDrawOt1').attr("checked", false);
-              console.log(false);
             }
 
             if (typeof (gwac.ot1DrawInterval) !== "undefined" && gwac.ot1DrawInterval !== null) {
@@ -75,7 +76,8 @@
             d3.json(movUrl, function(errors, reqData) {
               var motList = reqData.motList;
               var ot1List = reqData.ot1List;
-              if (typeof (motList) !== "undefined" && motList !== null && typeof (ot1List) !== "undefined" && ot1List !== null) {
+              if (typeof (motList) !== "undefined" && motList !== null && motList !== ""
+                      && typeof (ot1List) !== "undefined" && ot1List !== null && ot1List !== "") {
                 gwac.parseData(reqData);
                 gwac.draw();
                 setTimeout(function() {
@@ -84,7 +86,6 @@
 
                 if (!$('#dynamicDrawOt1').attr("checked")) {
                   $('#dynamicDrawOt1').attr("checked", true);
-                  console.log(true);
                 }
               } else {
                 console.log("Cannot find data on day " + dateStr + ".");
@@ -116,11 +117,40 @@
           $("#sphereDisplay").height(winHeight - $("#header").height() - 10);
           gwac.draw();
         });
+
+
+        $("#dragDiv").draggable({
+          cursor: "crosshair"
+        });
+        $("#imageShowArea").mouseover(function() {
+          $("#dragDiv").draggable("disable");
+        });
+        $("#imageShowArea").mouseout(function() {
+          $("#dragDiv").draggable("enable");
+        });
+        $("#closeDragDiv").click(function() {
+          $("#dragDiv").hide();
+        });
+        shiftzoom.defaultCurpath = '${pageContext.request.contextPath}/resource/images/cursors/';
+
+
+        function loadOTImg(src, imgX, imgY) {
+          var img = document.getElementById('otImgShow');
+          $("#otImgShow").attr("src", src);
+          $("#otImgShow").load(function() {
+            shiftzoom.add(img, {showcoords: true, relativecoords: true, zoom: 100});
+          });
+          setTimeout(function() {
+            var img = document.getElementById('otImgShow');
+            shiftzoom.moveto(img, parseInt(imgX), parseInt(imgY));
+          }, 500);
+          $("#dragDiv").show();
+        }
       });
 
     </script>
     <style>
-      /*@import url(<%=request.getContextPath()%>/resource/js/d3/maps.css);*/
+      /*@import url(${pageContext.request.contextPath}/resource/js/d3/maps.css);*/
 
       body{background-color: black;}
       path {fill: none;stroke-linejoin: round;}
@@ -141,13 +171,17 @@
       .equator {stroke: #636B62;stroke-width: 1px;}
       .primemeridian {stroke: #636B62;stroke-width: 1px;}
       .origin{stroke: #636B62;stroke-width: 5px;fill: #636B62;}
-      .ot1{stroke: #fff;stroke-width: 1.5px;fill: #fff;}
+      .ot1{stroke: #fff;stroke-width: 3px;fill: #fff;}
+      /*.ot1:hover{stroke-width: 8px;z-index: 1000}*/
       .ot2{stroke: #993399;stroke-width: 3px;fill: #993399;}
       .ot2mch{stroke: #FFFF99;stroke-width: 3px;fill: #FFFF99;}
       .ot2cur{stroke: #FF33CC;stroke-width: 5px;fill: #FF33CC;}
-      .motLine{stroke-width: 1.5px;}
-      .motPoint{stroke-width: 2px;}
+      .motLine{stroke-width: 1px;}
+      .motLine3{stroke-width: 0.5px;}
+      .motPoint{stroke-width: 3px;}
+      /*.motPoint:hover{stroke-width: 8px;z-index: 1000}*/
 
+      img.shiftzoom { visibility: hidden; }
     </style>
 
   </head>
@@ -184,10 +218,25 @@
               </select></td></tr>
           <tr><td>边界左上:</td><td><input type="text" id="leftTopBound" class="ot1-input" value="60,60"/></td></tr>
           <tr><td>边界右下:</td><td><input type="text" id="rightBottomBound" class="ot1-input" value="70,70"/></td></tr>
-          <tr><td colspan="2"><a href="javascript:void(0);" id="changeView" style="text-decoration:none;color:#fff;">切换视角</a></td></tr>
+          <tr><td colspan="2"><a href="javascript:void(0);" id="changeView" style="text-decoration:none;color:#fff;">切换视角</a>
+              <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/></td></tr>
         </table>
       </div>
     </div>
     <div id="tooltip">a simple tooltip</div>
+
+    <div id="dragDiv" style="position: absolute; top:150px;left:300px; width:410px; height:422px;padding-top: 6px;background: black; display: none;">
+      <div style="background: #999999;width:400px; height:22px;text-align: center;margin:0px 5px 0px 5px;">
+        <span id="otCoordinate" style="font-size: 14px; text-decoration: none;font-style: normal;color: white;font-family:'Times New Roman',Georgia,Serif;" title="点击灰色栏拖动">坐标信息</span>
+        <div style="float:right;width:21px; height:21px;">
+          <img id="closeDragDiv" src="${pageContext.request.contextPath}/resource/images/close3.png" style="width:21px; height:21px;" title="点击关闭"/></div>
+      </div>
+      <div id="imageShowArea" style="position:relative;float:left;width:400px; height:400px; border:0px; background: black; padding: 0px 5px 5px 5px;"> 
+        <div style="width:400px; height:400px; background: url(${pageContext.request.contextPath}/resource/images/indicator.gif) 50% 50% no-repeat;border:0px;">
+          <img id="otImgShow" width="400" height="400" alt="ot image" border="0" />
+        </div>
+        <div style="position:absolute; top:195px; left:195px; width:10px; height:10px;border:1px solid #F00;border-radius: 3px;  z-index: 10000"></div>
+      </div>
+    </div>
   </body>
 </html>

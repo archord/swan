@@ -105,7 +105,7 @@ public class GwacFileReceive extends ActionSupport {
               dir.mkdirs();
             }
 
-            String tfilename1 = dpmName + "ccdimg.jpg";
+            String tfilename1 = dpmName + "_ccdimg.jpg";
             File destFile1 = new File(otDstPath, tfilename1);
             File destFile2 = new File(thumbnailPath, tfilename);
             if (destFile1.exists()) {
