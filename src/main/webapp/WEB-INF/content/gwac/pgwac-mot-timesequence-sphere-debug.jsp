@@ -178,8 +178,8 @@
       .ot2cur{stroke: #FF33CC;stroke-width: 5px;fill: #FF33CC;}
       .motLine{stroke-width: 1px;}
       .motLine3{stroke-width: 0.5px;}
-      .motPoint{stroke-width: 6px;}
-      /*.motPoint:hover{stroke-width: 8px;z-index: 1000}*/
+      .motPoint{stroke-width: 1px;}
+      .motPoint:hover{stroke-width: 2px;stroke: red;}
 
       img.shiftzoom { visibility: hidden; }
     </style>

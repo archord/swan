@@ -260,7 +260,11 @@
                 }
 
                 gwac.motPointData.data.coordinates = [[item2.ra_d, item2.dec_d]];
-                var tnode = gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class).attr('stroke', item1.fillColor).attr("d", gwac.path);
+                //.attr("d", path.pointRadius(10))
+                var tnode = gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class)
+                        .style('stroke', item1.fillColor)
+                        .style('fill', item1.fillColor)
+                        .attr("d", gwac.path.pointRadius(5));
                 tnode.append("title").text(item2.file_name);
                 tnode.attr("file_name", item2.file_name);
                 tnode.attr("x", item2.x);
