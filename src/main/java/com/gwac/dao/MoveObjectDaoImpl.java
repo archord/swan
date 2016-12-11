@@ -25,7 +25,7 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
   @Override
   public List<String> getAllDateStr() {
 
-    String sql = "select distinct date_str from move_object order by date_str;";
+    String sql = "select distinct date_str from move_object order by date_str desc;";
 
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);

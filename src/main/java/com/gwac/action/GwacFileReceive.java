@@ -38,36 +38,36 @@ import org.apache.struts2.convention.annotation.Result;
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
 public class GwacFileReceive extends ActionSupport {
-
+  
   private static final Log log = LogFactory.getLog(GwacFileReceive.class);
-
+  
   private DataProcessMachineDAO dpmDao;
   private SyncFileDao sfDao;
-
+  
   private List<File> fileUpload = new ArrayList<File>();
   private List<String> fileUploadContentType = new ArrayList<String>();
   private List<String> fileUploadFileName = new ArrayList<String>();
   private String echo = "";
-
+  
   @Action(value = "gwacFileReceive", results = {
     @Result(location = "manage/result.jsp", name = SUCCESS),
     @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() throws Exception {
-
+    
     boolean flag = true;
     String result = SUCCESS;
-
+    
     if (fileUpload.isEmpty()) {
       setEcho(echo + "Error, must upload data file(fileUpload).\n");
       flag = false;
     }
-
+    
     if (fileUpload.size() != fileUploadFileName.size()) {
       setEcho(echo + "Error，please check upload command and retry!\n");
       flag = false;
     }
-
+    
     if (flag) {
       String destPath = getText("gwac.data.root.directory");
       if (destPath.charAt(destPath.length() - 1) != '/') {
@@ -77,7 +77,7 @@ public class GwacFileReceive extends ActionSupport {
       //接收参数配置文件
       String storeDirName = getText("gwac.monitorimage.directory");
       String otDstPath = destPath + storeDirName + "/";
-
+      
       File tDir = new File(otDstPath);
       if (!tDir.exists()) {
         tDir.mkdirs();
@@ -90,6 +90,7 @@ public class GwacFileReceive extends ActionSupport {
         if (tfilename.isEmpty()) {
           continue;
         }
+        String updateFileName = tfilename;
         log.debug("receive file " + tfilename);
 
         //M4_07_161128_1_220060_0705_ccdimg.jpg
@@ -104,8 +105,9 @@ public class GwacFileReceive extends ActionSupport {
             if (!dir.exists()) {
               dir.mkdirs();
             }
-
+            
             String tfilename1 = dpmName + "_ccdimg.jpg";
+            updateFileName = tfilename1;
             File destFile1 = new File(otDstPath, tfilename1);
             File destFile2 = new File(thumbnailPath, tfilename);
             if (destFile1.exists()) {
@@ -120,7 +122,7 @@ public class GwacFileReceive extends ActionSupport {
               FileUtils.copyFile(file, destFile1);
               FileUtils.moveFile(file, destFile2);
             }
-
+            
             try {
               int dpmId = Integer.parseInt(dpmIdStr);
               dpmDao.updateMonitorImageTime(dpmId);
@@ -136,7 +138,7 @@ public class GwacFileReceive extends ActionSupport {
             if (file != null && file.exists()) {
               FileUtils.moveFile(file, destFile);
             }
-
+            
             try {
               int dpmId = Integer.parseInt(tfilename.substring(1, 3));
               dpmDao.updateMonitorImageTime(dpmId);
@@ -155,16 +157,25 @@ public class GwacFileReceive extends ActionSupport {
             FileUtils.moveFile(file, destFile);
           }
         }
-
-        SyncFile tsf = new SyncFile();
-        tsf.setFileName(tfilename);
-        tsf.setIsSync(false);
-        tsf.setIsSyncSuccess(false);
-        tsf.setPath(storeDirName);
-        tsf.setStoreTime(new Date());
-        sfDao.save(tsf);
+        
+        try {
+          boolean isBeiJingServer = Boolean.parseBoolean(getText("gwac.server.beijing"));
+          
+          if (!isBeiJingServer) {
+            SyncFile tsf = new SyncFile();
+//        tsf.setFileName(tfilename);
+            tsf.setFileName(updateFileName);
+            tsf.setIsSync(false);
+            tsf.setIsSyncSuccess(false);
+            tsf.setPath(storeDirName);
+            tsf.setStoreTime(new Date());
+            sfDao.save(tsf);
+          }
+        } catch (Exception e) {
+          log.error("update syncfile error:", e);
+        }
       }
-
+      
       echo += "success\n";
     } else {
       result = ERROR;
@@ -176,10 +187,10 @@ public class GwacFileReceive extends ActionSupport {
      */
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", getEcho());
-
+    
     return result;
   }
-
+  
   public String display() {
     return NONE;
   }
@@ -260,5 +271,5 @@ public class GwacFileReceive extends ActionSupport {
   public void setSfDao(SyncFileDao sfDao) {
     this.sfDao = sfDao;
   }
-
+  
 }
