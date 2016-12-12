@@ -171,8 +171,8 @@
       .equator {stroke: #636B62;stroke-width: 1px;}
       .primemeridian {stroke: #636B62;stroke-width: 1px;}
       .origin{stroke: #636B62;stroke-width: 5px;fill: #636B62;}
-      .ot1{stroke: #fff;stroke-width: 6px;fill: #fff;}
-      /*.ot1:hover{stroke-width: 8px;z-index: 1000}*/
+      .ot1{stroke-width: 1px;}
+      .ot1:hover{stroke-width: 2px;stroke: red;}
       .ot2{stroke: #993399;stroke-width: 3px;fill: #993399;}
       .ot2mch{stroke: #FFFF99;stroke-width: 3px;fill: #FFFF99;}
       .ot2cur{stroke: #FF33CC;stroke-width: 5px;fill: #FF33CC;}

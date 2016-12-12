@@ -262,13 +262,13 @@
                 gwac.motPointData.data.coordinates = [[item2.ra_d, item2.dec_d]];
                 //.attr("d", path.pointRadius(10))
                 var tnode = gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class)
-                        .style('stroke', item1.fillColor)
                         .style('fill', item1.fillColor)
-                        .attr("d", gwac.path.pointRadius(5));
+                        .attr("d", gwac.path.pointRadius(6));
                 tnode.append("title").text(item2.file_name);
                 tnode.attr("file_name", item2.file_name);
                 tnode.attr("x", item2.x);
                 tnode.attr("y", item2.y);
+                tnode.on("mouseover", gwac.clickStar);
                 tnode.on("click", gwac.clickStar);
               }
             });
@@ -300,11 +300,14 @@
           if (gwac.ot1[tIdx] !== null && gwac.ot1[tIdx].length > 0) {
             $.each(gwac.ot1[tIdx], function(j, ot1item) {
               gwac.ot1Data.data.coordinates = [[ot1item[0], ot1item[1]]];
-              var tnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class).attr("d", gwac.path);
+              var tnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class)
+                      .style('fill', '#FFF')
+                      .attr("d", gwac.path.pointRadius(6));
               tnode.append("title").text(ot1item[4]);
               tnode.attr("file_name", ot1item[4]);
               tnode.attr("x", ot1item[2]);
               tnode.attr("y", ot1item[3]);
+              tnode.on("mouseover", gwac.clickStar);
               tnode.on("click", gwac.clickStar);
             });
           }
