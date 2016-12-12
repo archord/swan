@@ -157,6 +157,7 @@
       <div id="toolbar">
         <table style="border:0">
           <tr><td colspan="2"><input type="checkbox" checked="" id="dynamicDrawOt1"><span id="playot2">播放</span></td></tr>
+          <tr><td colspan="2"><input type="checkbox" id="singleFramePlay"><span id="singleFrameLabel">单帧播放</span></td></tr>
           <tr><td>播放速度:</td><td><input type="text" id="playSpeed" class="ot1-input" value="400"/></td></tr>
           <tr><td>每次间隔:</td><td><input type="text" id="playInterval" class="ot1-input" value="1"/></td></tr>
           <tr><td>开始帧:</td><td><input type="text" id="startFrame" class="ot1-input" value="1"/></td></tr>

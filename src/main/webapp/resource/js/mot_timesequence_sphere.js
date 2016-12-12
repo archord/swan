@@ -32,6 +32,7 @@
     startAnimationDuration: 2000,
     miniFrameNumber: 1,
     movType: 1,
+    singleFramePlay: false,
     firstOor: {},
     graticule: {data: d3.geo.graticule()(), class: "graticule"}, //球面网格，经度纬度方向上以10度为间隔
     labelPoint: {data: {type: "MultiPoint", coordinates: []}, class: "origin", radius: 1},
@@ -120,6 +121,7 @@
       gwac.currentFrame = parseInt($("#currentFrame").val());
       gwac.miniFrameNumber = parseInt($("#miniFrameNumber").val());
       gwac.movType = parseInt($("#movType").val());
+      gwac.singleFramePlay = $('#singleFramePlay').is(":checked")
 
       if (gwac.playInterval + gwac.startFrame > gwac.endFrame) {
         gwac.playInterval = gwac.endFrame - gwac.startFrame;
@@ -202,29 +204,41 @@
     drawMot: function() {
       var gwac = this;
       if (gwac.motObj.length > 0 && gwac.movType !== '5') {
+
+        var startIdx = gwac.currentFrame - gwac.playInterval;
+        if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
+          startIdx = gwac.startFrame;
+        }
         $.each(gwac.motObj, function(i, item1) {
           var mvType = parseInt(item1.mov_type);
           if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType)) {
             var tLine = [];
             $.each(item1.mov_detail, function(j, item2) {
-              if (item2.ff_number <= gwac.currentFrame) {
-                if (j === 1) {
-                  var tmot = item1.mov_detail[0];
-                  tLine.push([tmot.ra_d, tmot.dec_d]);
-                  tLine.push([item2.ra_d, item2.dec_d]);
-                } else if (j > 1) {
-                  tLine.push([item2.ra_d, item2.dec_d]);
+              if (item2.ff_number >= gwac.startFrame && item2.ff_number <= gwac.currentFrame) {
+                if (gwac.singleFramePlay) {
+                  if (item2.ff_number <= gwac.currentFrame && item2.ff_number > startIdx) {
+                    tLine.push([item2.ra_d, item2.dec_d]);
+                  }
+                } else {
+                  if (j === 1) {
+                    var tmot = item1.mov_detail[0];
+                    tLine.push([tmot.ra_d, tmot.dec_d]);
+                    tLine.push([item2.ra_d, item2.dec_d]);
+                  } else if (j > 1) {
+                    tLine.push([item2.ra_d, item2.dec_d]);
+                  }
                 }
               }
             });
             if (tLine.length > 0) {
-              gwac.motLineData.data.coordinates = tLine;
+              if (!gwac.singleFramePlay) {
+                gwac.motLineData.data.coordinates = tLine;
+                var tnode = gwac.svg.append("path").datum(gwac.motLineData.data).attr("class", gwac.motLineData.class).attr('stroke', item1.color).attr("d", gwac.path);
+                tnode.append("title").text(item1.mov_id);
+                tnode.attr("value", i);
+                tnode.on("click", gwac.clickStar);
+              }
               gwac.motPointData.data.coordinates = tLine;
-              var tnode = gwac.svg.append("path").datum(gwac.motLineData.data).attr("class", gwac.motLineData.class).attr('stroke', item1.color).attr("d", gwac.path);
-              tnode.append("title").text(item1.mov_id);
-              tnode.attr("value", i);
-              tnode.on("click", gwac.clickStar);
-
               gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class).attr('stroke', item1.fillColor).attr("d", gwac.path);
             }
           }
@@ -233,7 +247,7 @@
     },
     drawOt1: function() {
       var gwac = this;
-      if (gwac.ot1.length > 0) {
+      if (gwac.ot1.length > 0 && (!gwac.singleFramePlay || gwac.movType === 0)) {
         var startIdx = gwac.currentFrame - gwac.playInterval;
         if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
           startIdx = gwac.startFrame;

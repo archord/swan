@@ -248,19 +248,9 @@
         $.each(gwac.motObj, function(i, item1) {
           var mvType = parseInt(item1.mov_type);
           if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType)) {
-            var tLine = [];
             $.each(item1.mov_detail, function(j, item2) {
-              if (item2.ff_number <= gwac.currentFrame) {
-                if (j === 1) {
-                  var tmot = item1.mov_detail[0];
-                  tLine.push([tmot.ra_d, tmot.dec_d]);
-                  tLine.push([item2.ra_d, item2.dec_d]);
-                } else if (j > 1) {
-                  tLine.push([item2.ra_d, item2.dec_d]);
-                }
-
+              if (item2.ff_number <= gwac.currentFrame && item2.ff_number >= gwac.startFrame) {
                 gwac.motPointData.data.coordinates = [[item2.ra_d, item2.dec_d]];
-                //.attr("d", path.pointRadius(10))
                 var tnode = gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class)
                         .style('fill', item1.fillColor)
                         .attr("d", gwac.path.pointRadius(6));
@@ -272,17 +262,6 @@
                 tnode.on("click", gwac.clickStar);
               }
             });
-//            if (tLine.length > 0) {
-//              gwac.motLineData.data.coordinates = tLine;
-//              gwac.motPointData.data.coordinates = tLine;
-//              if (gwac.movType !== '3') {
-//                gwac.motLineData.class = "motLine";
-//              } else {
-//                gwac.motLineData.class = "motLine3";
-//              }
-//              var tnode = gwac.svg.append("path").datum(gwac.motLineData.data).attr("class", gwac.motLineData.class).attr('stroke', item1.fillColor).attr("d", gwac.path);
-//              tnode.append("title").text("movObjId:" + item1.mov_id);
-//            }
           }
         });
       }
