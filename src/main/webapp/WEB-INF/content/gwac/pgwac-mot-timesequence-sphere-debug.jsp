@@ -133,6 +133,44 @@
         });
         shiftzoom.defaultCurpath = '${pageContext.request.contextPath}/resource/images/cursors/';
 
+        $("#aheadButton").click(showAheadImg);
+        $("#nextButton").click(showNextImg);
+
+        function showAheadImg() {
+          showOtOrigImg(-1);
+        }
+        function showNextImg() {
+          showOtOrigImg(1);
+        }
+
+        function showOtOrigImg(interval) {
+          //http://10.0.10.236/images/thumbnail/161003/M11/M6_11_161003_1_351020_0026_ccdimg.jpg
+          var otImgUrl = $("#otImgShow_img").attr("src");
+          if (typeof (otImgUrl) === "undefined" || otImgUrl === null) {
+            otImgUrl = $("#otImgShow").attr("src");
+          }
+          if (typeof (otImgUrl) !== "undefined" && otImgUrl !== null) {
+            var fname = otImgUrl.substring(otImgUrl.lastIndexOf("/") + 1);
+            var fnamber = parseInt(fname.substring(22, 26)) + interval;
+            var turl = otImgUrl.substring(0, otImgUrl.lastIndexOf("/") + 1);
+            var lastfname = fname.substring(0, 22) + prefixInteger(fnamber, 4);
+            var lasturl = turl + lastfname + "_ccdimg.jpg";
+
+            var img = document.getElementById('otImgShow');
+            $("#otCoordinate").html(lastfname + ".fit");
+            $("#otImgShow").attr("src", lasturl);
+            $("#otImgShow_img").attr("src", lasturl);
+//            setTimeout(function() {
+//              shiftzoom.zooming(img, 100);
+//            }, 1000);
+          } else {
+            console.log("cannot find ot orign image!");
+          }
+        }
+
+        function prefixInteger(num, length) {
+          return (Array(length).join('0') + num).slice(-length);
+        }
 
         function loadOTImg(src, imgX, imgY) {
           var img = document.getElementById('otImgShow');
@@ -182,6 +220,23 @@
       .motPoint:hover{stroke-width: 2px;stroke: red;}
 
       img.shiftzoom { visibility: hidden; }
+
+      #aheadButton {
+        margin-right:5px;
+        float:right;
+        border: 10px solid #999;
+        border-right-color: #000;
+        width: 0;
+        height: 0;
+      }
+      #nextButton{
+        float:right;
+        border: 10px solid #999;
+        border-left-color: #000;
+        width: 0;
+        height: 0;
+      }
+      #closeButton{float:right;width:21px; height:21px;}
     </style>
 
   </head>
@@ -228,14 +283,16 @@
     <div id="dragDiv" style="position: absolute; top:150px;left:300px; width:410px; height:422px;padding-top: 6px;background: black; display: none;">
       <div style="background: #999999;width:400px; height:22px;text-align: center;margin:0px 5px 0px 5px;">
         <span id="otCoordinate" style="font-size: 14px; text-decoration: none;font-style: normal;color: white;font-family:'Times New Roman',Georgia,Serif;" title="点击灰色栏拖动">坐标信息</span>
-        <div style="float:right;width:21px; height:21px;">
+        <div id="closeButton">
           <img id="closeDragDiv" src="${pageContext.request.contextPath}/resource/images/close3.png" style="width:21px; height:21px;" title="点击关闭"/></div>
+        <div id="nextButton" title="下一幅图"></div>
+        <div id="aheadButton" title="上一幅图"></div>
       </div>
       <div id="imageShowArea" style="position:relative;float:left;width:400px; height:400px; border:0px; background: black; padding: 0px 5px 5px 5px;"> 
         <div style="width:400px; height:400px; background: url(${pageContext.request.contextPath}/resource/images/indicator.gif) 50% 50% no-repeat;border:0px;">
           <img id="otImgShow" width="400" height="400" alt="ot image" border="0" />
         </div>
-        <div style="position:absolute; top:195px; left:195px; width:10px; height:10px;border:1px solid #F00;border-radius: 3px;  z-index: 10000"></div>
+        <div style="position:absolute; top:194px; left:194px; width:10px; height:10px;border:1px solid #F00;border-radius: 3px;  z-index: 10000"></div>
       </div>
     </div>
   </body>

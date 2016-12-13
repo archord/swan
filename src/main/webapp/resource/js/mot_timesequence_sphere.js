@@ -248,7 +248,7 @@
     drawOt1: function() {
       var gwac = this;
       if (gwac.ot1.length > 0 && (!gwac.singleFramePlay || gwac.movType === 0)) {
-        var startIdx = gwac.currentFrame - gwac.playInterval;
+        var startIdx = gwac.currentFrame - gwac.playInterval + 1;
         if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
           startIdx = gwac.startFrame;
         }

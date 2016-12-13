@@ -253,7 +253,7 @@
                 gwac.motPointData.data.coordinates = [[item2.ra_d, item2.dec_d]];
                 var tnode = gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class)
                         .style('fill', item1.fillColor)
-                        .attr("d", gwac.path.pointRadius(6));
+                        .attr("d", gwac.path.pointRadius(3));
                 tnode.append("title").text(item2.file_name);
                 tnode.attr("file_name", item2.file_name);
                 tnode.attr("x", item2.x);
@@ -269,7 +269,7 @@
     drawOt1: function() {
       var gwac = this;
       if (gwac.ot1.length > 0) {
-        var startIdx = gwac.currentFrame - gwac.playInterval;
+        var startIdx = gwac.currentFrame - gwac.playInterval + 1;
         if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
           startIdx = gwac.startFrame;
         }
@@ -281,7 +281,7 @@
               gwac.ot1Data.data.coordinates = [[ot1item[0], ot1item[1]]];
               var tnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class)
                       .style('fill', '#FFF')
-                      .attr("d", gwac.path.pointRadius(6));
+                      .attr("d", gwac.path.pointRadius(3));
               tnode.append("title").text(ot1item[4]);
               tnode.attr("file_name", ot1item[4]);
               tnode.attr("x", ot1item[2]);
@@ -298,8 +298,8 @@
       var fName = $(this).attr("file_name");
       var x = $(this).attr("x");
       var y = $(this).attr("y");
-      var rootUrl = $("#gwacRootURL").val();
-//      var rootUrl = "http://10.0.10.236";
+//      var rootUrl = $("#gwacRootURL").val();
+      var rootUrl = "http://10.0.10.236";
       var otImgUrl = rootUrl + "/images/thumbnail/" + fName.substring(6, 12) + "/" + fName.substring(0, 1) + fName.substring(3, 5) + "/" + fName.substring(0, 26) + "_ccdimg.jpg";
 //      console.log(otImgUrl + ", " + x + ", " + y);
       console.log(fName + ", " + x + ", " + y);
@@ -315,7 +315,7 @@
       setTimeout(function() {
         var img = document.getElementById('otImgShow');
         var imgHeight = shiftzoom.get(img, 'maxheight');
-//        console.log(imgHeight);
+        shiftzoom.zooming(img, 100);
         shiftzoom.moveto(img, parseInt(x), parseInt(imgHeight - y));
       }, 1000);
     },
