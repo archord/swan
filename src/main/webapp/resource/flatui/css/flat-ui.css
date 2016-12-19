@@ -5825,15 +5825,6 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
   margin: auto;
   color: #fff;
 }
-.login123 {
-  position: relative;
-  padding: 38px;
-  width: 800px;
-  margin: auto;
-  color: #fff;
-  /*background: url(../img/login/imac.png) 0 0 no-repeat;*/
-  /*background-size: 940px 778px;*/
-}
 .login-screen {
   min-height: 473px;
   padding: 100px 38px 0px 38px;
@@ -5903,7 +5894,6 @@ fieldset[disabled] .navbar-inverse .navbar-btn.active {
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-o-min-device-pixel-ratio: 2/1), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 2) {
   .login {
-    background-image: url(../img/login/imac-2x.png);
   }
 }
 footer {

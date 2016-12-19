@@ -292,7 +292,7 @@
         <div style="width:400px; height:400px; background: url(${pageContext.request.contextPath}/resource/images/indicator.gif) 50% 50% no-repeat;border:0px;">
           <img id="otImgShow" width="400" height="400" alt="ot image" border="0" />
         </div>
-        <div style="position:absolute; top:194px; left:194px; width:10px; height:10px;border:1px solid #F00;border-radius: 3px;  z-index: 10000"></div>
+        <div style="position:absolute; top:193px; left:196px; width:15px; height:15px;border:1px solid #F00;border-radius: 3px;  z-index: 10000"></div>
       </div>
     </div>
   </body>

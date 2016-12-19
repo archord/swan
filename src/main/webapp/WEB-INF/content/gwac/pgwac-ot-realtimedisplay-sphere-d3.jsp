@@ -61,12 +61,12 @@
       .primemeridian {stroke: #636B62;stroke-width: 1.5px;}
       .origin{stroke: #636B62;stroke-width: 5px;fill: #636B62;}
       .ot1{stroke: #fff;stroke-width: 1px;fill: #fff;}
-      .ot2{stroke: #993399;stroke-width: 4px;fill: #993399;}
-      .ot2:hover{stroke: #993399;stroke-width: 6px;fill: #993399;z-index: 1000}
+      .ot2{stroke: #993399;stroke-width: 1px;fill: #993399;}
+      .ot2:hover{stroke: red;stroke-width: 2px;fill: #993399;z-index: 1000}
       .ot2mch{stroke: #FFFF99;stroke-width: 1px;fill: #FFFF99;}
-      .ot2mch:hover{stroke: red;stroke-width: 3px;fill: #FFFF99;z-index: 1000}
-      .ot2cur{stroke: #FF33CC;stroke-width: 4px;fill: #FF33CC;}
-      .ot2cur:hover{stroke: #FF33CC;stroke-width: 8px;fill: #FF33CC;z-index: 1000}
+      .ot2mch:hover{stroke: red;stroke-width: 2px;fill: #FFFF99;z-index: 1000}
+      .ot2cur{stroke: #FF33CC;stroke-width: 1px;fill: #FF33CC;}
+      .ot2cur:hover{stroke: red;stroke-width: 2px;fill: #FF33CC;z-index: 1000}
     </style>
 
   </head>

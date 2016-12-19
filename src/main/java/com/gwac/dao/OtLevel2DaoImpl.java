@@ -387,7 +387,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
     if (isQueryParameterEmpty && ot2qp.getSize() == 0) {
       ot2qp.setStart(0);
-      ot2qp.setSize(100);
+      ot2qp.setSize(30);
     }
 
     String tstr = sql.toString().replace(",)", ")");

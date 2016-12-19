@@ -105,26 +105,29 @@
                 for (var i = 0; i < gwac.reqData.otLv2.length; i++) {
                   var tstar = gwac.reqData.otLv2[i];
                   var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
-                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2Data.class).attr("d", path);
+                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2Data.class).attr("d", path.pointRadius(3));
                   tnode.append("title").text(tstar.name + "," + mName + "(" + tstar.ra + "," + tstar.dec + ")");
                   tnode.attr("value", tstar.name);
                   tnode.on("click", gwac.clickStar);
+                  tnode.on("mouseover", gwac.clickStar);
                 }
                 for (var i = 0; i < gwac.reqData.otLv2Mch.length; i++) {
                   var tstar = gwac.reqData.otLv2Mch[i];
                   var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
-                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2mchData.class).attr("d", path.pointRadius(5));
+                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2mchData.class).attr("d", path.pointRadius(3));
                   tnode.append("title").text(tstar.name + "," + mName + "(" + tstar.ra + "," + tstar.dec + ")");
                   tnode.attr("value", tstar.name);
                   tnode.on("click", gwac.clickStar);
+                  tnode.on("mouseover", gwac.clickStar);
                 }
                 for (var i = 0; i < gwac.reqData.otLv2Cur.length; i++) {
                   var tstar = gwac.reqData.otLv2Cur[i];
                   var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
-                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2curData.class).attr("d", path);
+                  var tnode = svg.append("path").datum({type: "Point", coordinates: [tstar.ra, tstar.dec]}).attr("class", gwac.ot2curData.class).attr("d", path.pointRadius(3));
                   tnode.append("title").text(tstar.name + "," + mName + "(" + tstar.ra + "," + tstar.dec + ")");
                   tnode.attr("value", tstar.name);
                   tnode.on("click", gwac.clickStar);
+                  tnode.on("mouseover", gwac.clickStar);
                 }
                 svg.append("path").datum(gwac.origin.data).attr("class", gwac.origin.class).attr("d", path.pointRadius(1)).append("title").text("origin(0,0)");
               });

@@ -30,10 +30,10 @@
                ajaxhistory="%{ajaxhistory}" defaultIndicator="myDefaultIndicator" 
                defaultLoadingText="Please wait ..."/>
     </s:else>
-    <link href="<s:url value="/resource/themes/showcase/jquery-ui.css" />" rel="stylesheet" type="text/css" />
-    <link href="<s:url value="/resource/styles/flexible-grids.css" />" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/resource/themes/showcase/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/resource/styles/flexible-grids.css" rel="stylesheet" type="text/css" />
     <!--[if lte IE 7]>
-    <link href="<s:url value="/resource/yaml/core/iehacks.min.css" />" rel="stylesheet" type="text/css" />
+    <link href="${pageContext.request.contextPath}/resource/yaml/core/iehacks.min.css" rel="stylesheet" type="text/css" />
     <![endif]-->
 
     <!--[if lt IE 9]>
@@ -45,11 +45,11 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/struts/xhtml/validation.js"></script>
 
     <!-- This file includes necessary functions/topics for validation and all topic examples -->
-    <script type="text/javascript" src="<s:url value="/resource/js/showcase.js" />"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/showcase.js"></script>
     <!-- Extend the Struts2 jQuery Plugin with an richtext editor -->
-    <script type="text/javascript" src="<s:url value="/resource/js/extendplugin.js" />"></script>
-    <link href="${pageContext.request.contextPath}/resource/css/gwac-style.css" rel="stylesheet" type="text/css" />
-    
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/extendplugin.js"></script>
+    <link type="text/css" href="${pageContext.request.contextPath}/resource/css/gwac-style.css" rel="stylesheet" />
+
 
   </head>
   <body>

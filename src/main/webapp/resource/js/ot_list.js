@@ -164,7 +164,7 @@ $(function() {
       "processing": true,
       "searching": true,
       "lengthChange": true,
-      "pageLength": 20,
+      "pageLength": 16,
       "scrollX": true,
       "ajax": {
         url: queryUrl,
@@ -179,17 +179,17 @@ $(function() {
         {"data": "ytemp"},
         {"data": "identify"},
         {"data": "total"},
-        {"data": "rc3Match"},
+        {"data": "otType"},
+        {"data": "lookBackResult"},
         {"data": "minorPlanetMatch"},
-        {"data": "cvsMatch"},
-        {"data": "otherMatch"},
         {"data": "ot2HisMatch"},
         {"data": "usnoMatch"},
-        {"data": "lookBackResult"},
-        {"data": "firstNMark"},
+        {"data": "rc3Match"},
         {"data": "foCount"},
         {"data": "followUpResult"},
-        {"data": "otType"}
+        {"data": "cvsMatch"},
+        {"data": "otherMatch"},
+        {"data": "firstNMark"}
       ],
       "columnDefs": [{
           "targets": 0,
@@ -208,35 +208,34 @@ $(function() {
           "data": "dont know",
           "render": floatFormate2
         }, {
-          "targets": 8,
+          "targets": 12,
           "data": "dont know",
           "render": formateRC3
         }, {
-          "targets": 12,
+          "targets": 11,
           "data": "dont know",
           "render": formateOT2His
         }, {
-          "targets": 14,
+          "targets": 9,
           "data": "dont know",
           "render": formateLookBack
         }, {
-          "targets": 15,
+          "targets": 18,
           "data": "dont know",
           "render": formateFirstNMark
         }, {
-          "targets": 18,
+          "targets": 8,
           "data": "dont know",
           "render": formateOtType
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
                 '<option value="10">10</option>' +
+                '<option value="16">16</option>' +
                 '<option value="20">20</option>' +
-                '<option value="50">50</option>' +
-                '<option value="100">100</option>' +
                 '<option value="-1">All</option>' +
                 '</select> 条',
-        "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条。<span style='color:red'>注：为提升体验，在默认(没有查询条件)情况下，该页面最多只显示最新的100条记录。</span>",
+        "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条。<span style='color:red'>注：为提升体验，在默认(没有查询条件)情况下，该页面最多只显示最新的30条记录。</span>",
         "search": "模糊查询:",
         "paginate": {
           "first": "首页",

@@ -57,25 +57,6 @@
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>分类标识</h4>
             <select name="ot2qp.otType" id="ot2Type" multiple="multiple" class="ot2QueryParameter"></select>
-            <!--            <select name="ot2qp.otType" id="ot2Type" multiple="multiple">
-                          <option value="1">假OT</option>
-                          <option value="2">小行星</option>
-                          <option value="3">移动目标</option>
-                          <option value="4">鬼像</option>
-                          <option value="5">坏像素</option>
-                          <option value="6">坏像列</option>
-                          <option value="7">热像素</option>
-                          <option value="8">OT候选体</option>
-                          <option value="9">超新星</option>
-                          <option value="10">GRB</option>
-                          <option value="11">耀发候选体</option>
-                          <option value="12">灰尘</option>
-                          <option value="13">彗星</option>
-                          <option value="14">近地天体</option>
-                          <option value="15">变星</option>
-                          <option value="16">空场</option>
-                          <option value="17">凹槽</option>
-                        </select>-->
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>CCD</h4>
@@ -128,9 +109,11 @@
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
             <thead><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
-                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>回看</th><th>前N分钟</th><th>后随次数</th><th>后随结果</th><th>分类标识</th></tr></thead>
+                <th>分类标识</th><th>回看</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th><th>后随结果</th>
+                <th>CVS</th><th>Other</th><th>前N分钟</th></tr></thead>
             <tfoot><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
-                <th>RC3</th><th>小行星</th><th>CVS</th><th>Other</th><th>OT2</th><th>USNO</th><th>回看</th><th>前N分钟</th><th>后随次数</th><th>后随结果</th><th>分类标识</th></tr></tfoot>
+                <th>分类标识</th><th>回看</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th><th>后随结果</th>
+                <th>CVS</th><th>Other</th><th>前N分钟</th></tr></tfoot>
           </table>
         </div>                                   
       </div>
