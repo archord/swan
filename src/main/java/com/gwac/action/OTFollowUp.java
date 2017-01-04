@@ -50,41 +50,41 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
   public String execute() {
 
     if (ot2fp != null) {
-      UserInfo user = new UserInfo();
-      user.setName(ot2fp.getUserName());
-      userDao.save(user);
-
-      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName(), false);
-      ot2.setFoCount((short) (ot2.getFoCount() + 1));
+      
+      UserInfo user = userDao.getUserByLoginName(ot2fp.getUserName());
+      if (user != null) {
+        OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName(), false);
+        ot2.setFoCount((short) (ot2.getFoCount() + 1));
 //      ot2Dao.update(ot2);
-      ot2Dao.updateFoCount(ot2);
-      ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
+        ot2Dao.updateFoCount(ot2);
+        ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
 
-      FollowUpObservation fo = new FollowUpObservation();
-      fo.setBackImageCount(0);
-      fo.setDec(ot2fp.getDec());
-      fo.setEpoch(ot2fp.getEpoch());
-      fo.setExposeDuration((short) ot2fp.getExpTime());
-      fo.setFilter(ot2fp.getFilter());
-      fo.setFoName(ot2fp.getFollowName());
-      fo.setFoObjCount((short) 0);
-      fo.setFrameCount((short) ot2fp.getFrameCount());
-      fo.setImageType(ot2fp.getImageType());
-      fo.setOtId(ot2.getOtId());
-      fo.setPriority((short) ot2fp.getPriority());
-      fo.setRa(ot2fp.getRa());
-      fo.setUserId(user.getUiId());
-      fo.setTriggerTime(new Date());
-      fo.setTriggerType("MANUAL"); //MANUAL AUTO
-      fo.setTelescopeId(ot2fp.getTelescope());
+        FollowUpObservation fo = new FollowUpObservation();
+        fo.setBackImageCount(0);
+        fo.setDec(ot2fp.getDec());
+        fo.setEpoch(ot2fp.getEpoch());
+        fo.setExposeDuration((short) ot2fp.getExpTime());
+        fo.setFilter(ot2fp.getFilter());
+        fo.setFoName(ot2fp.getFollowName());
+        fo.setFoObjCount((short) 0);
+        fo.setFrameCount((short) ot2fp.getFrameCount());
+        fo.setImageType(ot2fp.getImageType());
+        fo.setOtId(ot2.getOtId());
+        fo.setPriority((short) ot2fp.getPriority());
+        fo.setRa(ot2fp.getRa());
+        fo.setUserId(user.getUiId());
+        fo.setTriggerTime(new Date());
+        fo.setTriggerType("MANUAL"); //MANUAL AUTO
+        fo.setTelescopeId(ot2fp.getTelescope());
+        foDao.save(fo);
 
-      foDao.save(fo);
-
-      MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
-      jmsTemplate.send(otFollowDest, tmc);
-
-      log.debug(getOt2fp().getTriggerMsg());
-      setResult("success!");
+        MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
+        jmsTemplate.send(otFollowDest, tmc);
+        log.debug(getOt2fp().getTriggerMsg());
+        setResult("success!");
+      } else {
+        setResult("cannot followup, please login!");
+      }
     }
 
     return SUCCESS;

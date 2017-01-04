@@ -4,6 +4,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
+  <bean class="com.gwac.action.RegOrigImage"  scope="prototype">
+  </bean>
+  <bean class="com.gwac.action.CommonLog"  scope="prototype">
+  </bean>
+  <bean class="com.gwac.action.CommonFileUpload"  scope="prototype">
+  </bean>
+
   <bean class="com.gwac.action.DownloadMovOtSequence"  scope="prototype">
     <property name="movObjDao" ref="moveObjectDao" />
   </bean>

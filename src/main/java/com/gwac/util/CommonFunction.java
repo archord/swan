@@ -141,6 +141,34 @@ public class CommonFunction {
     return mNums;
   }
 
+  /**
+   *
+   * @param dateStr formate"yyMMdd","161112",为保证正确性，dateStr和格式化字符串必须严格对应
+   * @return
+   */
+  public static String getUniqueDateStr(String dateStr) {
+    Calendar cal = Calendar.getInstance();
+    Date curDate = CommonFunction.stringToDate(dateStr, "yyMMddHHmmssSSS");
+    cal.setTime(curDate);
+    int hour = cal.get(Calendar.HOUR_OF_DAY);
+    if (hour >= 0 && hour < 12) {
+      cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
+    }
+    return getDateString(getUTCDate(cal.getTime()));
+  }
+
+  public static String getUniqueDateStr() {
+    Calendar cal = Calendar.getInstance();
+    Date curDate = new Date();
+    cal.setTime(curDate);
+    int hour = cal.get(Calendar.HOUR_OF_DAY);
+    if (hour >= 0 && hour < 12) {
+      cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
+    }
+//    return getDateString(getUTCDate(cal.getTime()));
+    return getDateString(cal.getTime());
+  }
+
   public static Date getUTCDate(Date date) {
     SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));

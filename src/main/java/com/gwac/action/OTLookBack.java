@@ -52,7 +52,7 @@ public class OTLookBack extends ActionSupport {
 
     //必须设置望远镜名称
     if (null == ot2name || ot2name.isEmpty()) {
-      setEcho(getEcho() + "Error, must set tspname.\n");
+      setEcho(getEcho() + "Error, must set ot2name.\n");
     } else {
       OtLevel2 ot2 = new OtLevel2();
       ot2.setName(ot2name.trim());
@@ -66,6 +66,9 @@ public class OTLookBack extends ActionSupport {
           log.error("sleep error", e);
         }
         OtLevel2 tot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+        if (tot2 == null) {
+          break;
+        }
         if (tot2.getLookBackResult() == 0) {
           trst = ot2Dao.updateLookBackResult(ot2);
           log.debug((i + 2) + " update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
@@ -74,7 +77,7 @@ public class OTLookBack extends ActionSupport {
           break;
         }
       }
-      echo = "success.\n";
+      echo = "lookback success.\n";
     }
 
     log.debug(getEcho());

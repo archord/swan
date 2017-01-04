@@ -27,7 +27,6 @@ public class GetOtTypeJson extends ActionSupport implements SessionAware {
   /**
    * 返回结果
    */
-  private UserInfo userInfo;
   private List<OtType> otTypes;
 
   @Actions({
@@ -37,9 +36,6 @@ public class GetOtTypeJson extends ActionSupport implements SessionAware {
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
         
-    if(session.containsKey("userInfo")){
-      userInfo = (UserInfo)session.get("userInfo");
-    }
     otTypes=ottDao.getOtTypes();
     return "json";
   }
@@ -47,13 +43,6 @@ public class GetOtTypeJson extends ActionSupport implements SessionAware {
   @Override
   public void setSession(Map<String, Object> map) {
     this.session = map;
-  }
-
-  /**
-   * @return the userInfo
-   */
-  public UserInfo getUserInfo() {
-    return userInfo;
   }
 
   /**

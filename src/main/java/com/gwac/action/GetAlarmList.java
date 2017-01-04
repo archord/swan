@@ -16,18 +16,15 @@ import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "error", location = "/error.jsp")
 @ExceptionMapping(exception = "java.lang.Exception", result = "error")
-public class GetAlarmList extends ActionSupport implements SessionAware {
+public class GetAlarmList extends ActionSupport {
 
   private static final long serialVersionUID = -3454448234588641394L;
   private static final Log log = LogFactory.getLog(GetAlarmList.class);
-
-  private Map<String, Object> session;
 
   private MultimediaResourceDao mrDao;
   /**
    * 返回结果
    */
-  private UserInfo userInfo;
   private List<MultimediaResource> multimediaResources;
 
   @Actions({
@@ -36,24 +33,9 @@ public class GetAlarmList extends ActionSupport implements SessionAware {
   })
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
-        
-    if(session.containsKey("userInfo")){
-      userInfo = (UserInfo)session.get("userInfo");
-    }
+
     multimediaResources = mrDao.findAll();
     return "json";
-  }
-
-  @Override
-  public void setSession(Map<String, Object> map) {
-    this.session = map;
-  }
-
-  /**
-   * @return the userInfo
-   */
-  public UserInfo getUserInfo() {
-    return userInfo;
   }
 
   /**
