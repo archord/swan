@@ -27,6 +27,15 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     String sql = "WITH moved_rows AS ( DELETE FROM fits_file_cut RETURNING * ) INSERT INTO fits_file_cut_his SELECT * FROM moved_rows;";
     session.createSQLQuery(sql).executeUpdate();
   }
+  
+  @Override
+  public List<FitsFileCut> getByName(String ffcName) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from fits_file_cut where file_name="+ffcName+"";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
 
   @Override
   public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId) {

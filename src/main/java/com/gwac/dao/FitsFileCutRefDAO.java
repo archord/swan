@@ -12,6 +12,8 @@ import java.util.List;
  * @author xy
  */
 public interface FitsFileCutRefDAO extends BaseHibernateDao<FitsFileCutRef> {
+  
+  public List<FitsFileCutRef> getByName(String ffcName);
 
   public void updateByName(FitsFileCutRef ffcr);
 

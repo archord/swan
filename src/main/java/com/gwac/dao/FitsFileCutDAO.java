@@ -12,7 +12,9 @@ import java.util.List;
  * @author xy
  */
 public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
-  
+
+  public List<FitsFileCut> getByName(String ffcName);
+
   public List<FitsFileCut> getTmplCutImageByOtId(long otId, Boolean queryHis);
 
   public void moveDataToHisTable();
@@ -20,12 +22,12 @@ public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
   public void uploadSuccessCutByName(String fileName);
 
   public String getUnCuttedStarList(int dpmId, int size, int maxPriority);
-  
+
   public List<FitsFileCut> getCutImageByOtId(long otId, Boolean queryHis);
 
   public List<FitsFileCut> getCutImageByOtName(String otName);
 
   public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId);
-  
+
   public List<FitsFileCut> getCutImageByOtNameFromHis(String otName);
 }

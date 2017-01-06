@@ -22,21 +22,31 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
   private static final Log log = LogFactory.getLog(FitsFileCutRefDAOImpl.class);
 
   @Override
+  public List<FitsFileCutRef> getByName(String ffcName) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from fits_file_cut_ref where file_name=" + ffcName.substring(0, ffcName.indexOf("_ref") + 4) + "";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
+    return q.list();
+  }
+
+  @Override
   public void updateByName(FitsFileCutRef ffcr) {
 
     Session session = getCurrentSession();
-    String sql = "update fits_file_cut_ref set success_cut=true, generate_time='"+
-            CommonFunction.getDateTimeString(ffcr.getGenerateTime(), "yyyyMMdd HHmmss")+
-            "', file_name='"+
-            ffcr.getFileName() +
-            "' where file_name='" + ffcr.getFileName().substring(0, ffcr.getFileName().indexOf("_ref") + 4) + "'";
+    String sql = "update fits_file_cut_ref set success_cut=true, generate_time='"
+            + CommonFunction.getDateTimeString(ffcr.getGenerateTime(), "yyyyMMdd HHmmss")
+            + "', file_name='"
+            + ffcr.getFileName()
+            + "' where file_name='" + ffcr.getFileName().substring(0, ffcr.getFileName().indexOf("_ref") + 4) + "'";
     session.createSQLQuery(sql).executeUpdate();
   }
 
   /**
    * 查询望远镜dpmId所对应的没有请求过的（request_cut=false）所有OT模板切图
+   *
    * @param dpmId
-   * @return 
+   * @return
    */
   @Override
   public String getUnCuttedStarList(int dpmId) {
@@ -70,15 +80,14 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
 //    session.createSQLQuery(sql).executeUpdate();
     return rst.toString();
   }
-  
-  
+
   public List<FitsFileCutRef> getCutImageByOtId(long otId) {
 
     Session session = getCurrentSession();
     String sql = "select * "
             + "from fits_file_cut_ref ffcr "
             + "where ffcr.success_cut=true and ffcr.ot_id='" + otId + "';";
-    
+
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
     return q.list();
   }
@@ -95,9 +104,9 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
     String sql = "select * "
             + "from fits_file_cut_ref ffcr "
             + "where ffcr.success_cut=true and ffcr.ot_id=(select ot_id from ot_level2 ob where ob.name='" + otName + "');";
-    
+
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
     return q.list();
   }
-  
+
 }
