@@ -18,18 +18,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class ConfigFileDaoImpl extends BaseHibernateDaoImpl<ConfigFile> implements ConfigFileDao {
-
-  /**
-   * 删除dateStr以前的所有数据
-   * @param dateStr 
-   */
-  @Override
-  public void removeOldRecordByDay(String dateStr) {
-    String sql = "DELETE FROM config_file_his where substr(store_path, 1, 6)<'" + dateStr + "';";
-    Session session = getCurrentSession();
-    session.createSQLQuery(sql).executeUpdate();
-  }
-
+  
   public void moveDataToHisTable() {
 
     Session session = getCurrentSession();

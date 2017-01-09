@@ -11,5 +11,5 @@ import com.gwac.model.UploadFileRecord;
  * @author xy
  */
 public interface UploadFileRecordDao extends BaseHibernateDao<UploadFileRecord>{
-  public void removeOldRecordByDay(int day);
+  
 }

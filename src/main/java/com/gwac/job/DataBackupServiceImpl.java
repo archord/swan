@@ -11,11 +11,7 @@ import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +28,7 @@ public class DataBackupServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(DataBackupServiceImpl.class);
   private static boolean running = true;
-
+  
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
   @Value("#{syscfg.gwacServerTest}")
@@ -54,8 +50,6 @@ public class DataBackupServiceImpl implements BaseService {
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private CcdPixFilterDao cpfDao;
-  @Resource
-  private UploadFileRecordDao uploadFileRecordDao;
 
   @Override
   public void startJob() {
@@ -77,21 +71,11 @@ public class DataBackupServiceImpl implements BaseService {
       otlv2Dao.moveDataToHisTable();
       ffcDao.moveDataToHisTable();
       oorDao.moveDataToHisTable();
+      cfDao.moveDataToHisTable();
       ispDao.moveDataToHisTable();
       dpmDao.everyDayInit();
-      cpfDao.removeAll();
       ufuDao.removeAll();
-
-      int keepDay = 7;
-      SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(new Date());
-      cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - keepDay);
-      String removeDateStr = sdf.format(cal.getTime());
-
-      uploadFileRecordDao.removeOldRecordByDay(keepDay);
-      cfDao.removeOldRecordByDay(removeDateStr);
-      cfDao.moveDataToHisTable();
+      cpfDao.removeAll();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
