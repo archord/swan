@@ -8,15 +8,16 @@ import org.hibernate.Session;
 public class UserInfoDAOImpl extends BaseHibernateDaoImpl<UserInfo> implements UserInfoDAO {
 
   @Override
-  public void save(UserInfo user) {
+  public UserInfo getUserByLoginName(String loginName) {
+
     Session session = getCurrentSession();
-    String sql = "select * from user_info where name='" + user.getName() + "' ";
+    String sql = "select * from user_info where login_name='" + loginName.trim() + "' ";
     Query q = session.createSQLQuery(sql).addEntity(UserInfo.class);
-    if (!q.list().isEmpty()) {
-      UserInfo tuser = (UserInfo) q.list().get(0);
-      user.setUiId(tuser.getUiId());
+    List list = q.list();
+    if (list.size() > 0) {
+      return (UserInfo) list.get(0);
     } else {
-      super.save(user);
+      return null;
     }
   }
 

@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface UserInfoDAO  extends BaseHibernateDao<UserInfo>{
 	
-	public void save(UserInfo user);
+	public UserInfo getUserByLoginName(String loginName);
 	public List<UserInfo> findUser(UserInfo user);
 }
