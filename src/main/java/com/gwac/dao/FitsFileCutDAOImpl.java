@@ -32,7 +32,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
   public List<FitsFileCut> getByName(String ffcName) {
 
     Session session = getCurrentSession();
-    String sql = "select * from fits_file_cut where file_name="+ffcName+"";
+    String sql = "select * from fits_file_cut where file_name='"+ffcName+"'";
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     return q.list();
   }

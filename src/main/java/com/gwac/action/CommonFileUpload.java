@@ -9,7 +9,11 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.activemq.OTListMessageCreator;
+import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.FitsFileCut;
+import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
@@ -46,7 +50,9 @@ import org.springframework.jms.core.MessageCreator;
 public class CommonFileUpload extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
-  
+
+  private FitsFileCutDAO ffcDao;
+  private FitsFileCutRefDAO ffcrDao;
   private UploadFileUnstoreDao ufuDao;
   private JmsTemplate jmsTemplate;
   private Destination otlistDest;
@@ -112,7 +118,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     if (flag) {
       try {
         if (sendTime != null && !sendTime.isEmpty()) {
-          SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+          SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
           sendTimeObj = sdf.parse(sendTime);
         }
       } catch (ParseException ex) {
@@ -144,26 +150,40 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           log.debug("create dir " + destDir);
         }
 
+        //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, magclb:9, impre:a, 
+        char tfileType = '0';
+        String tpath = "";
+        boolean tflag = false;
         if ("crsot1".equals(fileType)) {
-          String tpath = destPath + getText("gwac.data.otlist.directory") + "/";
-          storeOt1List(fileUpload, fileUploadFileName, tpath, rootPath);
-        } else if ("ot2im".equals(fileType) || "ot2imr".equals(fileType)) {
-          String tpath = destPath + getText("gwac.data.cutimages.directory") + "/";
-          storeOT2CutImage(fileUpload, fileUploadFileName, tpath, rootPath);
+          tflag = true;
+          tfileType = '1';
+          tpath = destPath + getText("gwac.data.otlist.directory");
         } else if ("imqty".equals(fileType)) {
-          String tpath = destPath + getText("gwac.data.imgstatus.directory") + "/";
-          storeFile(fileUpload, fileUploadFileName, tpath, rootPath);
+          tflag = true;
+          tfileType = '7';
+          tpath = destPath + getText("gwac.data.imgstatus.directory");
         } else if ("impre".equals(fileType)) {
+          tflag = true;
+          tfileType = 'a';
           String thead = getText("gwac.data.thumbnail.directory");
-          String tpath = rootPath + thead + "/" + dateStr + "/" + dpmName + "/";
-          storeFile(fileUpload, fileUploadFileName, tpath, rootPath);
+          tpath = rootPath + thead + "/" + dateStr + "/" + dpmName;
         } else if ("magclb".equals(fileType)) {
-          String tpath = destPath + getText("gwac.data.magcalibration.directory") + "/";
-          storeFile(fileUpload, fileUploadFileName, tpath, rootPath);
-        } else {
-          log.warn("unrecognize fileType:" + fileType);
+          tflag = true;
+          tfileType = '9';
+          tpath = destPath + getText("gwac.data.magcalibration.directory");
         }
-        echo += "success upload " + fileUpload.size() + " files.";
+        if (tflag) {
+          storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
+          echo += "success upload " + fileUpload.size() + " files.";
+        } else if ("ot2im".equals(fileType) || "ot2imr".equals(fileType)) {
+          storeOT2CutImage(fileUpload, fileUploadFileName, rootPath);
+        } else {
+          echo += "unrecognize fileType:" + fileType;
+          for (String fname : fileUploadFileName) {
+            echo += ", fname:" + fname;
+          }
+          log.warn(echo);
+        }
         endTime = System.nanoTime();
       } catch (Exception ex) {
         log.error("delete or move file errror ", ex);
@@ -182,7 +202,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     return result;
   }
 
-  public void storeOT2CutImage(List<File> files, List<String> fnames, String path, String rootPath) {
+  public void storeOT2CutImage(List<File> files, List<String> fnames, String rootPath) {
 
     int i = 0;
     for (File file : files) {
@@ -190,22 +210,59 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       if (tfilename.isEmpty()) {
         continue;
       }
-      log.debug("receive file " + tfilename + " to " + path);
-      File destFile = new File(path, tfilename);
-      //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-      try {
-        if (destFile.exists()) {
-          log.warn(destFile + " already exist, delete it.");
-          FileUtils.forceDelete(destFile);
+
+      String tpath = "";
+      if ("ot2im".equals(fileType)) {
+        List<FitsFileCut> ffcs = ffcDao.getByName(tfilename.substring(0, tfilename.indexOf('.')));
+        if (ffcs.size() > 0) {
+          FitsFileCut ffc = ffcs.get(0);
+          tpath = rootPath + ffc.getStorePath();
         }
-        FileUtils.moveFile(file, destFile);
-      } catch (IOException ex) {
-        log.error("delete or move file errror ", ex);
+      } else if ("ot2imr".equals(fileType)) {
+        List<FitsFileCutRef> ffcrs = ffcrDao.getByName(tfilename);
+        if (ffcrs.size() > 0) {
+          FitsFileCutRef ffrc = ffcrs.get(0);
+          tpath = rootPath + ffrc.getStorePath();
+          try {
+            if (file.exists() && tfilename.endsWith("jpg")) {
+              String dateStr = tfilename.substring(tfilename.indexOf("ref_") + 4, tfilename.indexOf(".jpg"));
+              if (dateStr != null && dateStr.length() == 15) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
+                Date genDate = sdf.parse(dateStr.replace('T', ' '));
+
+                FitsFileCutRef ffcr = new FitsFileCutRef();
+                ffcr.setFileName(tfilename.substring(0, tfilename.indexOf(".jpg")));
+                ffcr.setGenerateTime(genDate);
+                ffcr.setSuccessCut(Boolean.TRUE);
+                ffcrDao.updateByName(ffcr);
+              } else {
+                log.error("ot2 ref cut file date error, date=" + dateStr);
+              }
+            }
+          } catch (ParseException ex) {
+            log.error("parse ref cut image date error.");
+          }
+        }
+      }
+      log.debug("receive file " + tfilename + " to " + tpath);
+
+      if (!tpath.isEmpty()) {
+        File destFile = new File(tpath, tfilename);
+        //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+        try {
+          if (destFile.exists()) {
+            log.warn(destFile + " already exist, delete it.");
+            FileUtils.forceDelete(destFile);
+          }
+          FileUtils.moveFile(file, destFile);
+        } catch (IOException ex) {
+          log.error("delete or move file errror ", ex);
+        }
       }
     }
   }
 
-  public void storeOt1List(List<File> files, List<String> fnames, String path, String rootPath) {
+  public void storeFile(List<File> files, List<String> fnames, String path, String rootPath, char fileType) {
 
     int i = 0;
     for (File file : files) {
@@ -229,36 +286,15 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       UploadFileUnstore obj = new UploadFileUnstore();
       obj.setStorePath(path.substring(rootPath.length()));
       obj.setFileName(tfilename);
-      obj.setFileType('1');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
+      obj.setFileType(fileType);   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
       obj.setUploadDate(new Date());
       if (sendTimeObj != null) {
         obj.setSendTime(sendTimeObj);
       }
       ufuDao.save(obj);
-      MessageCreator tmc = new OTListMessageCreator(obj);
-      jmsTemplate.send(otlistDest, tmc);
-    }
-  }
-
-  public void storeFile(List<File> files, List<String> fnames, String path, String rootPath) {
-
-    int i = 0;
-    for (File file : files) {
-      String tfilename = fnames.get(i++).trim();
-      if (tfilename.isEmpty()) {
-        continue;
-      }
-      log.debug("receive file " + tfilename);
-      File destFile = new File(path, tfilename);
-      //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-      try {
-        if (destFile.exists()) {
-          log.warn(destFile + " already exist, delete it.");
-          FileUtils.forceDelete(destFile);
-        }
-        FileUtils.moveFile(file, destFile);
-      } catch (IOException ex) {
-        log.error("delete or move file errror ", ex);
+      if ('1' == fileType) {
+        MessageCreator tmc = new OTListMessageCreator(obj);
+        jmsTemplate.send(otlistDest, tmc);
       }
     }
   }
@@ -312,6 +348,41 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
    */
   public void setSendTime(String sendTime) {
     this.sendTime = sendTime;
+  }
+
+  /**
+   * @param ufuDao the ufuDao to set
+   */
+  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
+    this.ufuDao = ufuDao;
+  }
+
+  /**
+   * @param jmsTemplate the jmsTemplate to set
+   */
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+
+  /**
+   * @param otlistDest the otlistDest to set
+   */
+  public void setOtlistDest(Destination otlistDest) {
+    this.otlistDest = otlistDest;
+  }
+
+  /**
+   * @param ffcDao the ffcDao to set
+   */
+  public void setFfcDao(FitsFileCutDAO ffcDao) {
+    this.ffcDao = ffcDao;
+  }
+
+  /**
+   * @param ffcrDao the ffcrDao to set
+   */
+  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
+    this.ffcrDao = ffcrDao;
   }
 
 }

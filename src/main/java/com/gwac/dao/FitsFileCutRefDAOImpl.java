@@ -25,7 +25,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
   public List<FitsFileCutRef> getByName(String ffcName) {
 
     Session session = getCurrentSession();
-    String sql = "select * from fits_file_cut_ref where file_name=" + ffcName.substring(0, ffcName.indexOf("_ref") + 4) + "";
+    String sql = "select * from fits_file_cut_ref where file_name='" + ffcName.substring(0, ffcName.indexOf("_ref") + 4) + "'";
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
     return q.list();
   }

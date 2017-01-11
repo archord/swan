@@ -14,12 +14,14 @@
     <property name="fnumDao" ref="fnumDao" />
   </bean>
   
-  <bean class="com.gwac.action.RegOrigImage"  scope="prototype">
-  </bean>
   <bean class="com.gwac.action.CommonLog"  scope="prototype">
   </bean>
   <bean class="com.gwac.action.CommonFileUpload"  scope="prototype">
     <property name="ufuDao" ref="ufuDao" />
+    <property name="jmsTemplate" ref="jmsTemplate" />
+    <property name="otlistDest" ref="otlistDest" />
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
   </bean>
 
   <bean class="com.gwac.action.DownloadMovOtSequence"  scope="prototype">
