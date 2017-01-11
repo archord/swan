@@ -5,6 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.ObjectIdentity;
+import com.gwac.model.ObjectType;
 import java.math.BigInteger;
 import java.util.Iterator;
 import org.apache.commons.logging.Log;
@@ -21,16 +22,21 @@ public class ObjectIdentityDaoImpl extends BaseHibernateDaoImpl<ObjectIdentity> 
   private static final Log log = LogFactory.getLog(ObjectIdentityDaoImpl.class);
 
   @Override
-  public ObjectIdentity getByType(String typeName, String objName) {
-
+  public ObjectIdentity getByName(ObjectType objType, String objName) {
     Session session = getCurrentSession();
-    String sql = "select * from fits_file where file_name='" + typeName + "'";
+    String sql = "select * from object_identity where obj_type_id=? and obj_name=?";
     Query q = session.createSQLQuery(sql).addEntity(ObjectIdentity.class);
+    q.setShort(0, objType.getObjTypeId());
+    q.setString(1, objName);
 
     if (!q.list().isEmpty()) {
       return (ObjectIdentity) q.list().get(0);
     } else {
-      return null;
+      ObjectIdentity obj = new ObjectIdentity();
+      obj.setObjName(objName);
+      obj.setObjTypeId(objType.getObjTypeId());
+      super.save(obj);
+      return obj;
     }
   }
 

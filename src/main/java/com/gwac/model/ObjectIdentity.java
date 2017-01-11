@@ -105,7 +105,7 @@ public class ObjectIdentity  implements java.io.Serializable {
     }
 
     
-    @Column(name="obj _ manfacturer", length=128)
+    @Column(name="obj_manfacturer", length=128)
     public String getObjManfacturer() {
         return this.objManfacturer;
     }
@@ -125,7 +125,7 @@ public class ObjectIdentity  implements java.io.Serializable {
     }
 
     
-    @Column(name="obj _sn", length=128)
+    @Column(name="obj_sn", length=128)
     public String getObjSn() {
         return this.objSn;
     }
@@ -135,7 +135,7 @@ public class ObjectIdentity  implements java.io.Serializable {
     }
 
     
-    @Column(name="obj _mac", length=128)
+    @Column(name="obj_mac", length=128)
     public String getObjMac() {
         return this.objMac;
     }
@@ -145,7 +145,7 @@ public class ObjectIdentity  implements java.io.Serializable {
     }
 
     
-    @Column(name="obj _ip", length=128)
+    @Column(name="obj_ip", length=128)
     public String getObjIp() {
         return this.objIp;
     }
@@ -175,7 +175,7 @@ public class ObjectIdentity  implements java.io.Serializable {
     }
 
     
-    @Column(name="obj_type_id_ inner")
+    @Column(name="obj_type_id_inner")
     public Short getObjTypeIdInner() {
         return this.objTypeIdInner;
     }
@@ -215,7 +215,7 @@ public class ObjectIdentity  implements java.io.Serializable {
     }
 
     
-    @Column(name="obj_ unit_id_ inner")
+    @Column(name="obj_unit_id_inner")
     public Short getObjUnitIdInner() {
         return this.objUnitIdInner;
     }
@@ -225,7 +225,7 @@ public class ObjectIdentity  implements java.io.Serializable {
     }
 
     
-    @Column(name="obj _array_id")
+    @Column(name="obj_array_id")
     public Short getObjArrayId() {
         return this.objArrayId;
     }

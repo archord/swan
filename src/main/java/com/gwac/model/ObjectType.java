@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class ObjectType  implements java.io.Serializable {
 
 
-     private int objTypeId;
+     private short objTypeId;
      private String objTypeName;
      private String objTypeNameEn;
      private String objCfgTmplFile;
@@ -28,10 +28,10 @@ public class ObjectType  implements java.io.Serializable {
     }
 
 	
-    public ObjectType(int objTypeId) {
+    public ObjectType(short objTypeId) {
         this.objTypeId = objTypeId;
     }
-    public ObjectType(int objTypeId, String objTypeName, String objTypeNameEn, String objCfgTmplFile, String comment, String objTypeNameCh) {
+    public ObjectType(short objTypeId, String objTypeName, String objTypeNameEn, String objCfgTmplFile, String comment, String objTypeNameCh) {
        this.objTypeId = objTypeId;
        this.objTypeName = objTypeName;
        this.objTypeNameEn = objTypeNameEn;
@@ -44,11 +44,11 @@ public class ObjectType  implements java.io.Serializable {
 
     
     @Column(name="obj_type_id", unique=true, nullable=false)
-    public int getObjTypeId() {
+    public short getObjTypeId() {
         return this.objTypeId;
     }
     
-    public void setObjTypeId(int objTypeId) {
+    public void setObjTypeId(short objTypeId) {
         this.objTypeId = objTypeId;
     }
 

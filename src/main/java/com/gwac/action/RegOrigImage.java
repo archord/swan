@@ -9,24 +9,36 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.FileNumberDao;
+import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.ObjectIdentityDao;
+import com.gwac.dao.ObjectTypeDao;
 import com.gwac.dao.ObservationSkyDao;
+import com.gwac.model.FileNumber;
+import com.gwac.model.FitsFile2;
+import com.gwac.model.ObjectIdentity;
+import com.gwac.model.ObjectType;
+import com.gwac.model.ObservationSky;
+import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.util.Date;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
 
 /**
  * from MultipleCommonFileUploadAction
  *
  * @author xy
  */
-public class RegOrigImage extends ActionSupport {
+public class RegOrigImage extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(RegOrigImage.class);
 
@@ -38,10 +50,20 @@ public class RegOrigImage extends ActionSupport {
   private String imgName;
   private String imgPath;
   private String genTime; //yyyyMMddHHmmssSSS
-  
-  ObservationSkyDao obsSkyDao; //fieldId
-  DataProcessMachineDAO dpmDao;
-  ObjectIdentityDao objIdtyDao;
+
+  private ObservationSkyDao obsSkyDao; //fieldId
+  private DataProcessMachineDAO dpmDao;
+  private ObjectIdentityDao objIdtyDao;
+  private ObjectTypeDao objTypeDao;
+  private FitsFile2DAO ff2Dao;
+  private FileNumberDao fnumDao;
+
+  private Map<String, Object> appMap = null;
+  private String dateStr = null;
+  private ObjectType groupType = null;
+  private ObjectType unitType = null;
+  private ObjectType cameraType = null;
+  private ObjectType computerType = null;
 
   private String echo = "";
 
@@ -53,7 +75,6 @@ public class RegOrigImage extends ActionSupport {
 
     String result = SUCCESS;
     echo = "";
-
     log.debug("groupId:" + groupId);
     log.debug("unitId:" + unitId);
     log.debug("camId:" + camId);
@@ -63,12 +84,81 @@ public class RegOrigImage extends ActionSupport {
     log.debug("imgPath:" + imgPath);
     log.debug("genTime:" + genTime);
 
-    echo = "register image success!";
-    log.debug(echo);
+    if (groupId == null || groupId.isEmpty() || unitId == null || unitId.isEmpty()
+            || camId == null || camId.isEmpty() || gridId == null || gridId.isEmpty()
+            || fieldId == null || fieldId.isEmpty() || imgName == null || imgName.isEmpty()
+            || imgPath == null || imgPath.isEmpty() || genTime == null || genTime.isEmpty() || genTime.length() != "yyyyMMddHHmmssSSS".length()) {
+      echo = "all parameter cannot be empty, and genTime must formated as 'yyyyMMddHHmmssSSS'.";
+      log.warn(echo);
+    } else {
+
+      boolean isExist = ff2Dao.exist(imgName);
+      if (isExist) {
+        echo = imgName+" already exist.";
+      } else {
+        initObjType();
+        dpmDao.getDpmByName(camId);
+
+        int gridId = 1;
+        ObjectIdentity group = objIdtyDao.getByName(groupType, groupId);
+        ObjectIdentity unit = objIdtyDao.getByName(unitType, unitId);
+        ObjectIdentity camera = objIdtyDao.getByName(cameraType, camId);
+        ObservationSky obsSky = obsSkyDao.getByName(fieldId);
+        Date ffDate = CommonFunction.stringToDate(genTime, "yyyyMMddHHmmssSSS");
+
+        FileNumber fnum = new FileNumber();
+        fnum.setCamId(camera.getObjId());
+        fnum.setDateStr(dateStr);
+        fnum.setFieldId((int) obsSky.getSkyId());
+        fnum.setGridId(gridId);
+        int ffNumber = fnumDao.getNextNumber(fnum);
+
+        FitsFile2 ff2 = new FitsFile2();
+        ff2.setCamId(camera.getObjId());
+        ff2.setFfNumber(ffNumber);
+        ff2.setFieldId((int) obsSky.getSkyId());
+        ff2.setGenTime(ffDate);
+        ff2.setGridId((short) gridId);
+        ff2.setGroupId(group.getObjId());
+        ff2.setImgName(imgName);
+        ff2.setImgPath(imgPath);
+        ff2.setUnitId(unit.getObjId());
+        ff2Dao.save(ff2);
+        echo = "register image success!";
+      }
+      log.debug(echo);
+    }
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
-
     return result;
+  }
+
+  public void initObjType() {
+    dateStr = (String) appMap.get("datestr");
+    if (null == dateStr) {
+      dateStr = CommonFunction.getUniqueDateStr();
+      appMap.put("datestr", dateStr);
+    }
+    groupType = (ObjectType) appMap.get("group");
+    if (groupType == null) {
+      groupType = objTypeDao.getByName("group");
+      appMap.put("group", groupType);
+    }
+    unitType = (ObjectType) appMap.get("unit");
+    if (unitType == null) {
+      unitType = objTypeDao.getByName("unit");
+      appMap.put("unit", unitType);
+    }
+    cameraType = (ObjectType) appMap.get("camera");
+    if (cameraType == null) {
+      cameraType = objTypeDao.getByName("camera");
+      appMap.put("camera", cameraType);
+    }
+    computerType = (ObjectType) appMap.get("computer");
+    if (computerType == null) {
+      computerType = objTypeDao.getByName("computer");
+      appMap.put("computer", computerType);
+    }
   }
 
   public String display() {
@@ -136,6 +226,53 @@ public class RegOrigImage extends ActionSupport {
    */
   public void setGenTime(String genTime) {
     this.genTime = genTime;
+  }
+
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appMap = map;
+  }
+
+  /**
+   * @param obsSkyDao the obsSkyDao to set
+   */
+  public void setObsSkyDao(ObservationSkyDao obsSkyDao) {
+    this.obsSkyDao = obsSkyDao;
+  }
+
+  /**
+   * @param dpmDao the dpmDao to set
+   */
+  public void setDpmDao(DataProcessMachineDAO dpmDao) {
+    this.dpmDao = dpmDao;
+  }
+
+  /**
+   * @param objIdtyDao the objIdtyDao to set
+   */
+  public void setObjIdtyDao(ObjectIdentityDao objIdtyDao) {
+    this.objIdtyDao = objIdtyDao;
+  }
+
+  /**
+   * @param objTypeDao the objTypeDao to set
+   */
+  public void setObjTypeDao(ObjectTypeDao objTypeDao) {
+    this.objTypeDao = objTypeDao;
+  }
+
+  /**
+   * @param ff2Dao the ff2Dao to set
+   */
+  public void setFf2Dao(FitsFile2DAO ff2Dao) {
+    this.ff2Dao = ff2Dao;
+  }
+
+  /**
+   * @param fnumDao the fnumDao to set
+   */
+  public void setFnumDao(FileNumberDao fnumDao) {
+    this.fnumDao = fnumDao;
   }
 
 }

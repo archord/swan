@@ -4,6 +4,34 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
+  <bean id="fnumDao" class="com.gwac.dao.FileNumberDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FileNumber</value>
+    </property>
+  </bean>
+  
+  <bean id="ff2Dao" class="com.gwac.dao.FitsFile2DAOImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.FitsFile2</value>
+    </property>
+  </bean>
+  
+  <bean id="objTypeDao" class="com.gwac.dao.ObjectTypeDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.ObjectType</value>
+    </property>
+  </bean>
+  
+  <bean id="objIdentityDao" class="com.gwac.dao.ObjectIdentityDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.ObjectIdentity</value>
+    </property>
+  </bean>
+  
   <bean id="moveObjectDao" class="com.gwac.dao.MoveObjectDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">

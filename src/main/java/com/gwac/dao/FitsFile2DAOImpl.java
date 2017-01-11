@@ -20,11 +20,19 @@ public class FitsFile2DAOImpl extends BaseHibernateDaoImpl<FitsFile2> implements
 
   private static final Log log = LogFactory.getLog(FitsFile2DAOImpl.class);
 
+  public boolean exist(String ffName) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from fits_file2 where img_name='" + ffName + "'";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFile2.class);
+    return !q.list().isEmpty();
+  }
+
   @Override
   public FitsFile2 getByName(String ffName) {
 
     Session session = getCurrentSession();
-    String sql = "select * from fits_file where file_name='" + ffName + "'";
+    String sql = "select * from fits_file2 where img_name='" + ffName + "'";
     Query q = session.createSQLQuery(sql).addEntity(FitsFile2.class);
 
     if (!q.list().isEmpty()) {
@@ -38,7 +46,7 @@ public class FitsFile2DAOImpl extends BaseHibernateDaoImpl<FitsFile2> implements
   public void save(FitsFile2 obj) {
     Session session = getCurrentSession();
     //createSQLQuery createQuery
-    String sql = "select ff_id from fits_file where file_name='"
+    String sql = "select ff_id from fits_file2 where img_name='"
             + obj.getImgName() + "'";
     Query q = session.createSQLQuery(sql);
     if (q.list().isEmpty()) {
