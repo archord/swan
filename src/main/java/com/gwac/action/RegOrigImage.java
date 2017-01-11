@@ -8,6 +8,9 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.ObjectIdentityDao;
+import com.gwac.dao.ObservationSkyDao;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
@@ -35,6 +38,10 @@ public class RegOrigImage extends ActionSupport {
   private String imgName;
   private String imgPath;
   private String genTime; //yyyyMMddHHmmssSSS
+  
+  ObservationSkyDao obsSkyDao; //fieldId
+  DataProcessMachineDAO dpmDao;
+  ObjectIdentityDao objIdtyDao;
 
   private String echo = "";
 

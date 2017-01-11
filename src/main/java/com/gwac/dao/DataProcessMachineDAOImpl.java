@@ -57,7 +57,10 @@ public class DataProcessMachineDAOImpl extends BaseHibernateDaoImpl<DataProcessM
     if (!q.list().isEmpty()) {
       return (DataProcessMachine) q.list().get(0);
     } else {
-      return null;
+      DataProcessMachine tdpm = new DataProcessMachine();
+      tdpm.setName(name);
+      super.save(tdpm);
+      return tdpm;
     }
   }
 
