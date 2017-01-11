@@ -177,6 +177,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           echo += "success upload " + fileUpload.size() + " files.";
         } else if ("ot2im".equals(fileType) || "ot2imr".equals(fileType)) {
           storeOT2CutImage(fileUpload, fileUploadFileName, rootPath);
+          echo += "success upload " + fileUpload.size() + " files.";
         } else {
           echo += "unrecognize fileType:" + fileType;
           for (String fname : fileUploadFileName) {

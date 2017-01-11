@@ -4,6 +4,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
+  <bean id="sysLogDao" class="com.gwac.dao.SystemLogDaoImpl" >
+    <property name="sessionFactory" ref="sessionFactory" />
+    <property name="clazz">
+      <value>com.gwac.model.SystemLog</value>
+    </property>
+  </bean>
+  
   <bean id="fnumDao" class="com.gwac.dao.FileNumberDaoImpl" >
     <property name="sessionFactory" ref="sessionFactory" />
     <property name="clazz">

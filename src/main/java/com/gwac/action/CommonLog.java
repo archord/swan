@@ -8,25 +8,19 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.SystemLogDao;
+import com.gwac.model.SystemLog;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
+import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.ApplicationAware;
 
 /**
  * from MultipleCommonFileUploadAction
@@ -36,11 +30,13 @@ import org.apache.struts2.interceptor.ApplicationAware;
 public class CommonLog extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(CommonLog.class);
+  
+  private SystemLogDao sysLogDao;
 
   private String logType;
   private String msgType;
   private Integer msgCode;
-  private String msgDate;
+  private String msgDate; //yyyy-MM-ddTHH:mm:ss.SSS
   private String msgContent;
 
   private String echo = "";
@@ -53,32 +49,36 @@ public class CommonLog extends ActionSupport {
 
     String result = SUCCESS;
     echo = "";
+    
+    Date tdate = CommonFunction.stringToDate(msgDate.replace('T', ' '), "yyyy-MM-dd HH:mm:ss.SSS");
+    SystemLog sysLog = new SystemLog();
+    sysLog.setLogDate(tdate);
+    sysLog.setLogContent(msgContent);
+    
+    
     if ("logchb".equals(logType)) {
-      storeLogMsgChb();
+      sysLog.setLogCode(msgCode);
+      if(msgType.equals("error")){
+        sysLog.setLogType('1');
+      }else if(msgType.equals("state")){
+        sysLog.setLogType('2');
+      }else{
+        sysLog.setLogType('3');
+      }
       echo += "success receive logs.";
     } else if ("loglxm".equals(logType)) {
-      storeLogMsgLxm();
+        sysLog.setLogType('4');
       echo += "success receive logs.";
     } else {
       echo += "unrecognize logType:" + logType;
     }
+    sysLogDao.save(sysLog);
 
     log.debug(echo);
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
 
     return result;
-  }
-
-  public void storeLogMsgChb() {
-    log.debug("msgType=" + msgType);
-    log.debug("msgCode=" + msgCode);
-    log.debug("msgDate=" + msgDate);
-    log.debug("msgContent=" + msgContent);
-  }
-
-  public void storeLogMsgLxm() {
-    log.debug("msgContent=" + msgContent);
   }
 
   public String display() {
@@ -125,6 +125,13 @@ public class CommonLog extends ActionSupport {
    */
   public void setMsgContent(String msgContent) {
     this.msgContent = msgContent;
+  }
+
+  /**
+   * @param sysLogDao the sysLogDao to set
+   */
+  public void setSysLogDao(SystemLogDao sysLogDao) {
+    this.sysLogDao = sysLogDao;
   }
 
 }

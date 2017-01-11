@@ -15,7 +15,9 @@
   </bean>
   
   <bean class="com.gwac.action.CommonLog"  scope="prototype">
+    <property name="sysLogDao" ref="sysLogDao" />
   </bean>
+  
   <bean class="com.gwac.action.CommonFileUpload"  scope="prototype">
     <property name="ufuDao" ref="ufuDao" />
     <property name="jmsTemplate" ref="jmsTemplate" />
