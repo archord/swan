@@ -6,6 +6,7 @@ package com.gwac.service;
 
 import com.gwac.activemq.OTCheckMessageCreator;
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.FitsFileDAO;
@@ -16,6 +17,7 @@ import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
+import com.gwac.model.FitsFile2;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OTCatalog;
@@ -41,7 +43,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private OTCatalogDao otcDao;
   private OtNumberDao otnDao;
   private OtLevel2Dao otLv2Dao;
-  private FitsFileDAO ffDao;
+  private FitsFile2DAO ff2Dao;
   private FitsFileCutDAO ffcDao;
   private OtObserveRecordDAO otorDao;
   private DataProcessMachineDAO dpmDao;
@@ -76,41 +78,34 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
     if (storePath != null && fileName != null) {
 
       List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
+      FitsFile2 ff2 = ff2Dao.getByName(fileName);
+      String dateStr = fileName.substring(fileName.lastIndexOf('_')+1, fileName.lastIndexOf('T'));
+      String ccdType = fileName.substring(0,1);
       for (OTCatalog otc : otcs) {
 
         String otListPath = storePath;
-        String orgImg = otc.getImageName(); //M2_03_140630_1_255020_0024.fit
-        String ccdType = orgImg.substring(0, 1); //"M"
-        String fileDate = orgImg.substring(6, 12);  //140828
-        String dpmName = ccdType + orgImg.substring(3, 5);
-        int dpmId = Integer.parseInt(orgImg.substring(3, 5));  //应该在数据库中通过dpmName查询
-        int number = Integer.parseInt(orgImg.substring(22, 26));
-        String skyName = orgImg.substring(15, 21);
-        ObservationSky sky = skyDao.getByName(skyName);
 
-        FitsFile ff = new FitsFile();
-        ff.setFileName(orgImg);
-        ffDao.save(ff);
 
         OtLevel2 otLv2 = new OtLevel2();
         otLv2.setRa(otc.getRaD());
         otLv2.setDec(otc.getDecD());
         otLv2.setFoundTimeUtc(otc.getDateUt());
-        otLv2.setIdentify(orgImg.substring(0, 21));
+        otLv2.setIdentify(fileName.substring(0, 4));
         otLv2.setXtemp(otc.getXTemp());
         otLv2.setYtemp(otc.getYTemp());
-        otLv2.setLastFfNumber(number);
-        otLv2.setDpmId(dpmId);
-        otLv2.setDateStr(fileDate);
+        otLv2.setLastFfNumber(ff2.getFfNumber());
+        otLv2.setDpmId(ff2.getCamId());
+        //G002_Mon_objt_161219T11523152.fit
+        otLv2.setDateStr(dateStr);
         otLv2.setAllFileCutted(false);
-        otLv2.setSkyId(sky.getSkyId());
+        otLv2.setSkyId(ff2.getFieldId().shortValue());
         otLv2.setDataProduceMethod('1');    //星表匹配一级OT
         otLv2.setMag(otc.getMagAper());
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
         oor.setFfcId((long) 0);
-        oor.setFfId(ff.getFfId());
+        oor.setFfId(ff2.getFfId());
         oor.setRaD(otc.getRaD());
         oor.setDecD(otc.getDecD());
         oor.setX(otc.getX());
@@ -128,20 +123,20 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setEllipticity(otc.getEllipticity());
         oor.setClassStar(otc.getClassStar());
         //oor.setOtFlag(otc.getOtFlag());
-        oor.setFfNumber(number);
-        oor.setDateStr(fileDate);
-        oor.setDpmId(dpmId);
+        oor.setFfNumber(ff2.getFfNumber());
+        oor.setDateStr(dateStr);
+        oor.setDpmId(ff2.getCamId());
         oor.setRequestCut(false);
         oor.setSuccessCut(false);
-        oor.setSkyId(sky.getSkyId());
+        oor.setSkyId(ff2.getFieldId().shortValue());
         oor.setDataProduceMethod('1');    //星表匹配一级OT
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较
         OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
         if (tlv2 != null) {
-          if (tlv2.getFirstFfNumber() > number) {
-            tlv2.setFirstFfNumber(number);
+          if (tlv2.getFirstFfNumber() > ff2.getFfNumber()) {
+            tlv2.setFirstFfNumber(ff2.getFfNumber());
             tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
           } else {
             tlv2.setLastFfNumber(otLv2.getLastFfNumber());
@@ -160,15 +155,15 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
           ffc.setFileName(cutImg);
           ffc.setOtId(tlv2.getOtId());
-          ffc.setNumber(number);
-          ffc.setFfId(ff.getFfId());
-          ffc.setDpmId((short) dpmId);
+          ffc.setNumber(ff2.getFfNumber());
+          ffc.setFfId(ff2.getFfId());
+          ffc.setDpmId(ff2.getCamId().shortValue());
           ffc.setImgX(oor.getX());
           ffc.setImgY(oor.getY());
           ffc.setRequestCut(false);
           ffc.setSuccessCut(false);
           ffc.setIsMissed(false);
-          ffc.setPriority((short) (number - tlv2.getFirstFfNumber()));
+          ffc.setPriority((short) (ff2.getFfNumber() - tlv2.getFirstFfNumber()));
           ffcDao.save(ffc);
 
           oor.setOtId(tlv2.getOtId());
@@ -182,8 +177,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           if (oors.size() >= occurNumber) {
             OtObserveRecord oor1 = oors.get(0);
 
-            int otNumber = otnDao.getNumberByDate(fileDate);
-            String otName = String.format("%s%s_C%05d", ccdType, fileDate, otNumber);
+            int otNumber = otnDao.getJfovNumberByDate(dateStr);
+            String otName = String.format("%s%s_C%05d", ccdType, dateStr, otNumber);
 
             OtLevel2 tOtLv2 = new OtLevel2();
             tOtLv2.setName(otName);
@@ -196,7 +191,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setLastFfNumber(oors.get(oors.size() - 1).getFfNumber());  //已有序列的最大一个编号（最后一个），数据库中查询时，按照升序排列
             tOtLv2.setTotal(oors.size());
             tOtLv2.setDpmId(oor1.getDpmId());
-            tOtLv2.setDateStr(fileDate);
+            tOtLv2.setDateStr(dateStr);
             tOtLv2.setAllFileCutted(false);
             tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
             tOtLv2.setCuttedFfNumber(0);
@@ -214,14 +209,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setOtType((short) 0);
             tOtLv2.setLookBackResult((short) 0);
             tOtLv2.setFollowUpResult((short) 0);
-
-            int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
-
-            if (oor1.getFfNumber() - firstRecordNumber <= firstNMarkNumber) {
-              tOtLv2.setFirstNMark(true);
-            } else {
-              tOtLv2.setFirstNMark(false);
-            }
             otLv2Dao.save(tOtLv2);
 
             MessageCreator tmc = new OTCheckMessageCreator(tOtLv2);
@@ -233,7 +220,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
             FitsFileCutRef ffcr = new FitsFileCutRef();
             ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
-            ffcr.setFfId(ff.getFfId());
+            ffcr.setFfId(ff2.getFfId());
             ffcr.setFileName(ffcrName);
             ffcr.setOtId(tOtLv2.getOtId());
             ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
@@ -252,7 +239,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
               ffc.setOtId(tOtLv2.getOtId());
               ffc.setNumber(tOor.getFfNumber());
               ffc.setFfId(tOor.getFfId());
-              ffc.setDpmId((short) dpmId);
+              ffc.setDpmId(ff2.getCamId().shortValue());
               ffc.setImgX(tOor.getX());
               ffc.setImgY(tOor.getY());
               ffc.setRequestCut(false);
@@ -329,20 +316,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
    */
   public void setOtcDao(OTCatalogDao otcDao) {
     this.otcDao = otcDao;
-  }
-
-  /**
-   * @return the ffDao
-   */
-  public FitsFileDAO getFfDao() {
-    return ffDao;
-  }
-
-  /**
-   * @param ffDao the ffDao to set
-   */
-  public void setFfDao(FitsFileDAO ffDao) {
-    this.ffDao = ffDao;
   }
 
   /**

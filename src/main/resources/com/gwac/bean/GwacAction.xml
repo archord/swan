@@ -19,6 +19,7 @@
   <bean class="com.gwac.action.CommonLog"  scope="prototype">
   </bean>
   <bean class="com.gwac.action.CommonFileUpload"  scope="prototype">
+    <property name="ufuDao" ref="ufuDao" />
   </bean>
 
   <bean class="com.gwac.action.DownloadMovOtSequence"  scope="prototype">

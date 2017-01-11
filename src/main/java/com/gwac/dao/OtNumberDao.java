@@ -13,4 +13,6 @@ import com.gwac.model.OtNumber;
 public interface OtNumberDao extends BaseHibernateDao<OtNumber>{
   public int getNumberByDate(String date);
   public int getSubNumberByDate(String date);
+  public int getJfovNumberByDate(String date);
+  public int getJfovSubNumberByDate(String date);
 }

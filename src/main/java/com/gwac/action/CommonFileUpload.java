@@ -149,7 +149,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           storeOt1List(fileUpload, fileUploadFileName, tpath, rootPath);
         } else if ("ot2im".equals(fileType) || "ot2imr".equals(fileType)) {
           String tpath = destPath + getText("gwac.data.cutimages.directory") + "/";
-          storeOT2Image(fileUpload, fileUploadFileName, tpath, rootPath);
+          storeOT2CutImage(fileUpload, fileUploadFileName, tpath, rootPath);
         } else if ("imqty".equals(fileType)) {
           String tpath = destPath + getText("gwac.data.imgstatus.directory") + "/";
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath);
@@ -182,7 +182,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     return result;
   }
 
-  public void storeOT2Image(List<File> files, List<String> fnames, String path, String rootPath) {
+  public void storeOT2CutImage(List<File> files, List<String> fnames, String path, String rootPath) {
 
     int i = 0;
     for (File file : files) {
