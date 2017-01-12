@@ -293,6 +293,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       obj.setFileName(tfilename);
       obj.setFileType(fileType);   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6
       obj.setUploadDate(new Date());
+      obj.setUploadSuccess(Boolean.TRUE);
       if (sendTimeObj != null) {
         obj.setSendTime(sendTimeObj);
       }
