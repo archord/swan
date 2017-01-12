@@ -83,11 +83,15 @@
   
   <bean class="com.gwac.action.GetCutImageRefList"  scope="prototype">
     <property name="ffcrDao" ref="ffcrDao" />
+    <property name="objIdtyDao" ref="objIdentityDao" />
+    <property name="objTypeDao" ref="objTypeDao" />
     <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
   </bean>
   
   <bean class="com.gwac.action.GetCutImageList"  scope="prototype">
     <property name="ffcDao" ref="ffcDao" />
+    <property name="objIdtyDao" ref="objIdentityDao" />
+    <property name="objTypeDao" ref="objTypeDao" />
     <property name="rootWebDir" value="${gwac.data.root.directory.webmap}" />
   </bean>
   

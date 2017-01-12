@@ -53,9 +53,9 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
     Session session = getCurrentSession();
     String sql = "with updated_rows as "
             + "(update fits_file_cut_ref set request_cut=true where request_cut=false and dpm_id=" + dpmId + " returning *) "
-            + "select ff.file_name ffname, ot.xtemp, ot.ytemp, ffcr.file_name ffcrname "
+            + "select ff.img_name ffname, ot.xtemp, ot.ytemp, ffcr.file_name ffcrname "
             + "from updated_rows ffcr "
-            + "inner join fits_file ff on ffcr.ff_id=ff.ff_id "
+            + "inner join fits_file2 ff on ffcr.ff_id=ff.ff_id "
             + "inner join ot_level2 ot on ot.ot_id=ffcr.ot_id ";
     Query q = session.createSQLQuery(sql);
     List tlst = q.list();

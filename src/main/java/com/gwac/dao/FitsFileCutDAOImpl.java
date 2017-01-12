@@ -71,19 +71,10 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
             + "set request_cut=true "
             + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " order by priority asc limit " + size + ") ffc2 "
             + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
-            + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
+            + "select ff.img_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
             + "from updated_rows ffc "
-            + "inner join fits_file ff on ffc.ff_id=ff.ff_id;";
+            + "inner join fits_file2 ff on ffc.ff_id=ff.ff_id;";
 
-    //对每个ot2，只裁剪优先级编号小于6的切图
-    String sql2 = "with updated_rows as "
-            + "(update fits_file_cut ffc1 "
-            + "set request_cut=true "
-            + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " and priority<" + maxPriority + " order by priority asc limit " + size + ") ffc2 "
-            + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
-            + "select ff.file_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
-            + "from updated_rows ffc "
-            + "inner join fits_file ff on ffc.ff_id=ff.ff_id;";
     Query q = session.createSQLQuery(sql);
     List tlst = q.list();
     if (tlst.size() > 0) {

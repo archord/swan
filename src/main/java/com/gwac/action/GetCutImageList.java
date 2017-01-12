@@ -9,6 +9,10 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.ObjectIdentityDao;
+import com.gwac.dao.ObjectTypeDao;
+import com.gwac.model.ObjectIdentity;
+import com.gwac.model.ObjectType;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -21,28 +25,34 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* wget command example: */
-/* wget http://190.168.1.25/getCutImageList.action?dpmName=M01 -O aa.list*/
+/* wget http://190.168.1.25/getCutImageList.action?cameraName=M01 -O aa.list*/
 /**
  * @author xy
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-public class GetCutImageList extends ActionSupport {
+public class GetCutImageList extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(GetCutImageList.class);
-  private String dpmName;
+  private String cameraName;
   private FitsFileCutDAO ffcDao;
   private InputStream fileInputStream;
   private String fileName;
   private String rootWebDir;
   private String echo = "";
+
+  private ObjectIdentityDao objIdtyDao;
+  private ObjectTypeDao objTypeDao;
+  private Map<String, Object> appMap = null;
 
   @Action(value = "getCutImageList", results = {
     @Result(location = "forward.jsp", name = SUCCESS),
@@ -55,8 +65,8 @@ public class GetCutImageList extends ActionSupport {
     echo = "";
 
     //必须设置传输机器名称
-    if (null == dpmName || dpmName.isEmpty()) {
-      echo = echo + "Must set machine name(dpmName).\n";
+    if (null == cameraName || cameraName.isEmpty()) {
+      echo = echo + "Must set machine name(cameraName).\n";
       flag = false;
     }
 
@@ -74,12 +84,18 @@ public class GetCutImageList extends ActionSupport {
         log.debug("create dir " + tmpDir);
       }
 
-      dpmName = dpmName.trim();
-      int dpmId = Integer.parseInt(dpmName.substring(1));
-      String content = ffcDao.getUnCuttedStarList(dpmId, 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
+      ObjectType cameraType = (ObjectType) appMap.get("camera");
+      if (cameraType == null) {
+        cameraType = objTypeDao.getByName("camera");
+        appMap.put("camera", cameraType);
+      }
+
+      cameraName = cameraName.trim();
+      ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
+      String content = ffcDao.getUnCuttedStarList(objId.getObjId(), 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
       try {
         if (!content.isEmpty()) {
-          fileName = dpmName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
+          fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
           File file = new File(destPath, fileName);
           if (!file.exists()) {
             file.createNewFile();
@@ -106,61 +122,7 @@ public class GetCutImageList extends ActionSupport {
     }
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
-    ctx.getSession().put("fileName", rootWebDir+"/tmp/" + fileName);
-    return result;
-  }
-
-  @Action(value = "getCutImageList1", results = {
-    @Result(name = "success", type = "stream",
-            params = {"contentType", "application/octet-stream",
-              "inputName", "fileInputStream",
-              "contentDisposition", "attachment;filename=\"${fileName}\"",
-              "bufferSize", "4096"})})
-  public String upload1() throws Exception {
-
-    boolean flag = true;
-    String result = SUCCESS;
-    echo = "";
-
-    //必须设置传输机器名称
-    if (null == dpmName) {
-      echo = echo + "Must set machine name(dpmName).\n";
-      flag = false;
-    }
-
-    if (flag) {
-      String rootPath = getText("gwac.data.root.directory");
-      String destPath = rootPath;
-      if (destPath.charAt(destPath.length() - 1) != '/') {
-        destPath += "/tmp/";
-      } else {
-        destPath += "tmp/";
-      }
-      fileName = dpmName + "-" + ((int) (Math.random() * 1000) + 1) + ".lst";
-      log.debug("destPath=" + destPath + fileName);
-      File tmpDir = new File(destPath);
-      if (!tmpDir.exists()) {
-        tmpDir.mkdirs();
-      }
-      File file = new File(destPath, fileName);
-      if (!file.exists()) {
-        file.createNewFile();
-      }
-      int dpmId = Integer.parseInt(dpmName.substring(1));
-      String content = ffcDao.getUnCuttedStarList(dpmId, 6, 6);
-      FileWriter fw = new FileWriter(file.getAbsoluteFile());
-      BufferedWriter bw = new BufferedWriter(fw);
-      bw.write(content);
-      bw.close();
-      fileInputStream = new FileInputStream(new File(destPath, fileName));
-      echo = echo + "Upload success，total upload files.\n";
-      //otORDao.saveOTCopy(configFileFileName);
-    } else {
-      result = ERROR;
-    }
-
-    log.info(echo);
-
+    ctx.getSession().put("fileName", rootWebDir + "/tmp/" + fileName);
     return result;
   }
 
@@ -170,13 +132,6 @@ public class GetCutImageList extends ActionSupport {
 
   public InputStream getFileInputStream() {
     return fileInputStream;
-  }
-
-  /**
-   * @param dpmName the dpmName to set
-   */
-  public void setDpmName(String dpmName) {
-    this.dpmName = dpmName;
   }
 
   /**
@@ -200,4 +155,29 @@ public class GetCutImageList extends ActionSupport {
     this.rootWebDir = rootWebDir;
   }
 
+  /**
+   * @param cameraName the cameraName to set
+   */
+  public void setCameraName(String cameraName) {
+    this.cameraName = cameraName;
+  }
+
+  /**
+   * @param objIdtyDao the objIdtyDao to set
+   */
+  public void setObjIdtyDao(ObjectIdentityDao objIdtyDao) {
+    this.objIdtyDao = objIdtyDao;
+  }
+
+  /**
+   * @param objTypeDao the objTypeDao to set
+   */
+  public void setObjTypeDao(ObjectTypeDao objTypeDao) {
+    this.objTypeDao = objTypeDao;
+  }
+
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appMap = map;
+  }
 }
