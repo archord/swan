@@ -6,6 +6,7 @@ package com.gwac.service;
 
 import com.gwac.activemq.OTCheckMessageCreator;
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.FitsFileDAO;
@@ -17,6 +18,7 @@ import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.OtTypeDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile;
+import com.gwac.model.FitsFile2;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OTCatalog;
@@ -51,7 +53,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   @Resource
   private OtLevel2Dao otLv2Dao;
   @Resource
-  private FitsFileDAO ffDao;
+  private FitsFile2DAO ff2Dao;
   @Resource
   private FitsFileCutDAO ffcDao;
   @Resource
@@ -102,44 +104,41 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   public void parseLevel1Ot(long ufuId, String storePath, String fileName) {
 
     if (storePath != null && fileName != null) {
+      
+      FitsFile2 ff2 = ff2Dao.getByName(fileName.substring(0, fileName.indexOf('.'))+".fit"); 
+      if(ff2==null){
+        return;
+      }
+      String fileDate = fileName.substring(fileName.lastIndexOf('_')+1, fileName.lastIndexOf('T'));
+      String ccdType = fileName.substring(0,1);
+      int number = ff2.getFfNumber();
+      int dpmId = ff2.getCamId();
 
       List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
       log.debug(fileName + ", otlv1 size:" + otcs.size());
       for (OTCatalog otc : otcs) {
 
         String otListPath = storePath;
-        String orgImg = otc.getImageName(); //M2_03_140630_1_255020_0024.fit
-        String ccdType = orgImg.substring(0, 1); //"M"
-        String fileDate = orgImg.substring(6, 12);  //140828
-        String dpmName = ccdType + orgImg.substring(3, 5);
-        int dpmId = Integer.parseInt(orgImg.substring(3, 5));  //应该在数据库中通过dpmName查询
-        int number = Integer.parseInt(orgImg.substring(22, 26));
-        String skyName = orgImg.substring(15, 21);
-        ObservationSky sky = skyDao.getByName(skyName);
-
-        FitsFile ff = new FitsFile();
-        ff.setFileName(orgImg);
-        ffDao.save(ff);
 
         OtLevel2 otLv2 = new OtLevel2();
         otLv2.setRa(otc.getRaD());
         otLv2.setDec(otc.getDecD());
         otLv2.setFoundTimeUtc(otc.getDateUt());
-        otLv2.setIdentify(orgImg.substring(0, 21));
+        otLv2.setIdentify(fileName.substring(0, 4));
         otLv2.setXtemp(otc.getXTemp());
         otLv2.setYtemp(otc.getYTemp());
         otLv2.setLastFfNumber(number);
         otLv2.setDpmId(dpmId);
         otLv2.setDateStr(fileDate);
         otLv2.setAllFileCutted(false);
-        otLv2.setSkyId(sky.getSkyId());
+        otLv2.setSkyId(ff2.getFieldId().shortValue());
         otLv2.setDataProduceMethod('1');    //星表匹配一级OT
         otLv2.setMag(otc.getMagAper());
 
         OtObserveRecord oor = new OtObserveRecord();
         oor.setOtId((long) 0);
         oor.setFfcId((long) 0);
-        oor.setFfId(ff.getFfId());
+        oor.setFfId(ff2.getFfId());
         oor.setRaD(otc.getRaD());
         oor.setDecD(otc.getDecD());
         oor.setX(otc.getX());
@@ -162,7 +161,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setDpmId(dpmId);
         oor.setRequestCut(false);
         oor.setSuccessCut(false);
-        oor.setSkyId(sky.getSkyId());
+        oor.setSkyId(ff2.getFieldId().shortValue());
         oor.setDataProduceMethod('1');    //星表匹配一级OT
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
@@ -196,7 +195,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
           if (oors.size() >= occurNumber) {
             OtObserveRecord oor1 = oors.get(0);
 
-            int otNumber = otnDao.getNumberByDate(fileDate);
+            int otNumber = otnDao.getJfovNumberByDate(fileDate);
             String otName = String.format("%s%s_C%05d", ccdType, fileDate, otNumber);
             log.debug("generate new ot :" + otName + ", from file: " + fileName);
 
@@ -230,13 +229,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setLookBackResult((short) 0);
             tOtLv2.setFollowUpResult((short) 0);
 
-            int firstRecordNumber = dpmDao.getFirstRecordNumber(dpmName);
-
-            if (oor1.getFfNumber() - firstRecordNumber <= firstNMarkNumber) {
-              tOtLv2.setFirstNMark(true);
-            } else {
-              tOtLv2.setFirstNMark(false);
-            }
             otLv2Dao.save(tOtLv2);
 
             MessageCreator tmc = new OTCheckMessageCreator(tOtLv2);
@@ -248,7 +240,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
             FitsFileCutRef ffcr = new FitsFileCutRef();
             ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
-            ffcr.setFfId(ff.getFfId());
+            ffcr.setFfId(ff2.getFfId());
             ffcr.setFileName(ffcrName);
             ffcr.setOtId(tOtLv2.getOtId());
             ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);

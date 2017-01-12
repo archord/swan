@@ -23,6 +23,8 @@ public class OtNumber implements java.io.Serializable {
   private Character otLevel;
   private Integer varNumber;
   private Integer subNumber;
+  private Integer jfwvNumber;
+  private Integer jfovSubNumber;
 
   public OtNumber() {
   }
@@ -110,6 +112,36 @@ public class OtNumber implements java.io.Serializable {
    */
   public void setSubNumber(Integer subNumber) {
     this.subNumber = subNumber;
+  }
+
+  /**
+   * @return the jfwvNumber
+   */
+  @Column(name = "jfov_number")
+  public Integer getJfwvNumber() {
+    return jfwvNumber;
+  }
+
+  /**
+   * @param jfwvNumber the jfwvNumber to set
+   */
+  public void setJfwvNumber(Integer jfwvNumber) {
+    this.jfwvNumber = jfwvNumber;
+  }
+
+  /**
+   * @return the jfovSubNumber
+   */
+  @Column(name = "jfov_sub_number")
+  public Integer getJfovSubNumber() {
+    return jfovSubNumber;
+  }
+
+  /**
+   * @param jfovSubNumber the jfovSubNumber to set
+   */
+  public void setJfovSubNumber(Integer jfovSubNumber) {
+    this.jfovSubNumber = jfovSubNumber;
   }
 
 }

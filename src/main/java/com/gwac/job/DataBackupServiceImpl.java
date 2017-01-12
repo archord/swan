@@ -54,7 +54,10 @@ public class DataBackupServiceImpl implements BaseService {
   @Override
   public void startJob() {
 
-    if (isBeiJingServer || isTestServer) {
+//    if (isBeiJingServer || isTestServer) {
+//      return;
+//    }
+    if (isTestServer) {
       return;
     }
 
