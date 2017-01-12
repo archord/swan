@@ -218,6 +218,10 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         if (ffcs.size() > 0) {
           FitsFileCut ffc = ffcs.get(0);
           tpath = rootPath + ffc.getStorePath();
+
+          if (tfilename.indexOf(".jpg") > 0 || tfilename.indexOf(".png") > 0) {
+            ffcDao.uploadSuccessCutByName(tfilename.substring(0, tfilename.indexOf('.')));
+          }
         }
       } else if ("ot2imr".equals(fileType)) {
         List<FitsFileCutRef> ffcrs = ffcrDao.getByName(tfilename);

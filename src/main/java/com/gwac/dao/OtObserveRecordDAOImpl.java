@@ -131,9 +131,9 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
     String unionSql = "";
     if (queryHis) {
-      unionSql = sql1 + " union " + sql2 + " order by oor_id asc";
+      unionSql = sql1 + " union " + sql2 + " order by date_ut asc";
     } else {
-      unionSql = sql1 + " order by oor_id asc";
+      unionSql = sql1 + " order by date_ut asc";
     }
 
     Query q = session.createSQLQuery(unionSql);
