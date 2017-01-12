@@ -5,12 +5,14 @@
 package com.gwac.job;
 
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.ProcessStatusDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.DataProcessMachine;
 import com.gwac.model.FitsFile;
+import com.gwac.model.FitsFile2;
 import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.ProcessStatus;
 import com.gwac.model.UploadFileUnstore;
@@ -46,11 +48,11 @@ public class ImageStatusParmServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(ImageStatusParmServiceImpl.class);
   private static boolean running = true;
-  
+
   @Resource
   private UploadFileUnstoreDao ufuDao;
   @Resource
-  private FitsFileDAO ffDao;
+  private FitsFile2DAO ff2Dao;
   @Resource
   private ProcessStatusDao psDao;
   @Resource
@@ -117,6 +119,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
 
             String tStr;
             String tStr2;
+            FitsFile2 ff2 = null;
             int dpmId = -1;
             int prcNum = -1;
             Date imageTime = null;
@@ -140,15 +143,10 @@ public class ImageStatusParmServiceImpl implements BaseService {
             }
 
             if (StringUtils.isNotBlank(imageName)) {
-              String ccdType = imageName.substring(0, 1); //"M"
-              String dpmName = ccdType + imageName.substring(3, 5);  //应该在数据库中通过dpmName查询
-              String numberStr = imageName.substring(22, 26);
-              DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
-              if (dpm != null) {
-                dpmId = dpm.getDpmId();
-              }
-              if (StringUtils.isNumeric(numberStr)) {
-                prcNum = Integer.parseInt(numberStr);
+              ff2 = ff2Dao.getByName(imageName.substring(0, imageName.indexOf('.')) + ".fit");
+              if (ff2 != null) {
+                dpmId = ff2.getCamId();
+                prcNum = ff2.getFfNumber();
               }
             }
 
@@ -293,12 +291,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
                 log.error("VC1: " + tStr, e);
               }
 
-              tStr2 = cfile.getProperty("DirData");
-              FitsFile ff = new FitsFile();
-              ff.setFileName(imageName);
-              ff.setStorePath(tStr2);
-              ffDao.save(ff);
-              isp.setFfId(ff.getFfId());
+              isp.setFfId(ff2.getFfId());
 
               tStr = cfile.getProperty("ra_mount");
               try {
@@ -385,9 +378,9 @@ public class ImageStatusParmServiceImpl implements BaseService {
                 log.error("exptime: " + tStr, e);
               }
 
-              tStr = cfile.getProperty("CC_RA");
+              tStr = cfile.getProperty("ra_imgCenter");
               try {
-                isp.setImgCenterRa(Float.parseFloat(tStr.trim()));
+                isp.setImgCenterRa(Float.parseFloat(tStr.trim())); 
               } catch (NumberFormatException e) {
                 isp.setImgCenterRa(new Float(-99));
                 log.warn("ra_imgCenter=" + tStr, e);
@@ -396,7 +389,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
                 log.error("ra_imgCenter: " + tStr, e);
               }
 
-              tStr = cfile.getProperty("CC_DEC");
+              tStr = cfile.getProperty("dec_imgCenter");
               try {
                 isp.setImgCenterDec(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
@@ -497,7 +490,6 @@ public class ImageStatusParmServiceImpl implements BaseService {
 //        float tXshift = previoueIsp.getXshift() - isp.getXshift();
 //        float tYshift = previoueIsp.getYshift() - isp.getYshift();
 //        && (tXshift * tXshift + tYshift * tYshift) < 0.5
-
         Boolean s1 = Math.abs(isp.getXshift() + 99) > 0.00001
                 && isp.getFwhm() < 10 && isp.getFwhm() > 1
                 && isp.getXrms() > 0 && isp.getXrms() < 0.13
