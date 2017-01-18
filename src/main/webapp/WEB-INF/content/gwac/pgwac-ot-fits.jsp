@@ -66,6 +66,7 @@
         <p id="before"><a href="#" onClick="return showFits('before');">上一帧</a></p>
         <p id="next"><a href="#" onClick="return showFits('next');">下一帧</a></p>
         <p id="template"><a href="#" onClick="return showFits('template');">显示模板</a></p>
+        <p id="template"><a href="#" onClick="return showFits('sub');">显示相减后图像</a></p>
         <p style="color:red;">在图中按住鼠标左键拖动调节对比度，鼠标左键不要超出图的范围，如果依然不够清楚，可以在Scale菜单中选择其他调节算法。</p>
       </div>
       <div class="JS9" id="JS9"></div>
@@ -105,6 +106,12 @@
           url = ffcrPath + ffcrName;
           $("#title").html(ffcrName);
           curFitsName = ffcrName;
+        } else if (command === 'sub') {
+          //G170110_C00527_0138_ref_20170110T121901664.jpg
+          var subName = ffcrName.substring(0, ffcrName.indexOf("_ref")) + "_sub.fit"
+          url = ffcrPath + subName;
+          $("#title").html(subName);
+          curFitsName = subName;
         } else {
           if (command === 'start') {
             curNum = 1;

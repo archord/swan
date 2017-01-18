@@ -8,25 +8,9 @@ package com.gwac.action;
  *
  * @author xy
  */
-import com.gwac.dao.DataProcessMachineDAO;
-import com.gwac.dao.FileNumberDao;
-import com.gwac.dao.FitsFile2DAO;
-import com.gwac.dao.ObjectIdentityDao;
-import com.gwac.dao.ObjectTypeDao;
-import com.gwac.dao.ObservationSkyDao;
-import com.gwac.model.FileNumber;
-import com.gwac.model.FitsFile2;
-import com.gwac.model.ObjectIdentity;
-import com.gwac.model.ObjectType;
-import com.gwac.model.ObservationSky;
 import com.gwac.service.DataBackupService;
-import com.gwac.util.CommonFunction;
-import static com.opensymphony.xwork2.Action.ERROR;
-import static com.opensymphony.xwork2.Action.INPUT;
-import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import java.util.Date;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
