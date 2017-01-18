@@ -48,17 +48,17 @@ import org.springframework.jms.core.MessageCreator;
  * @author xy
  */
 public class CommonFileUpload extends ActionSupport implements ApplicationAware {
-
+  
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
-
+  
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
   private UploadFileUnstoreDao ufuDao;
   private JmsTemplate jmsTemplate;
   private Destination otlistDest;
-
+  
   private Map<String, Object> appmap;
-
+  
   private String fileType;
   private String sendTime; //yyyyMMddHHmmssSSS
   private Date sendTimeObj;
@@ -66,20 +66,20 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private List<String> fileUploadContentType = new ArrayList<String>();
   private List<String> fileUploadFileName = new ArrayList<String>();
   private String echo = "";
-
+  
   @Action(value = "commonFileUpload", results = {
     @Result(location = "manage/result.jsp", name = SUCCESS),
     @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() {
-
+    
     long startTime = System.nanoTime();
     long endTime = 0;
-
+    
     boolean flag = true;
     String result = SUCCESS;
     echo = "";
-
+    
     log.debug("fileType=" + fileType + ": " + fileUpload.size() + " files.");
 
     //必须设置传输机器名称
@@ -94,7 +94,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       echo = echo + "Error, must upload data file(fileUpload).\n";
       flag = false;
     }
-
+    
     if (fileUpload.size() != fileUploadFileName.size()) {
       echo = echo + "Error，please check upload command and retry!\n";
       flag = false;
@@ -114,7 +114,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       flag = false;
     }
     log.debug("fileTotalSize:" + fileTotalSize * 1.0 / 1048576 + "MB");
-
+    
     if (flag) {
       try {
         if (sendTime != null && !sendTime.isEmpty()) {
@@ -137,13 +137,13 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         //G002_Mon_objt_161219T11523152
         String tfName = fileUploadFileName.get(0);
         String dpmName = tfName.substring(0, tfName.indexOf("_"));
-
+        
         String rootPath = getText("gwac.data.root.directory");
         if (rootPath.charAt(rootPath.length() - 1) != '/') {
           rootPath += "/";
         }
         String destPath = rootPath + dateStr + "/" + dpmName + "/";
-
+        
         File destDir = new File(destPath);
         if (!destDir.exists()) {
           destDir.mkdirs();
@@ -172,10 +172,11 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           tfileType = '9';
           tpath = destPath + getText("gwac.data.magcalibration.directory");
         }
+        
         if (tflag) {
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
           echo += "success upload " + fileUpload.size() + " files.";
-        } else if ("ot2im".equals(fileType) || "ot2imr".equals(fileType)) {
+        } else if ("ot2im".equals(fileType) || "ot2imr".equals(fileType) || "ot2ims".equals(fileType)) {
           storeOT2CutImage(fileUpload, fileUploadFileName, rootPath);
           echo += "success upload " + fileUpload.size() + " files.";
         } else {
@@ -192,36 +193,43 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     } else {
       result = ERROR;
     }
-
+    
     log.debug(echo);
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
-
+    
     double time1 = 1.0 * (endTime - startTime) / 1e9;
     log.debug("fileType=" + fileType + ": " + fileUpload.size() + " files, total time: " + time1 + "s, ");
-
+    
     return result;
   }
-
+  
   public void storeOT2CutImage(List<File> files, List<String> fnames, String rootPath) {
-
+    
     int i = 0;
     for (File file : files) {
       String tfilename = fnames.get(i++).trim();
       if (tfilename.isEmpty()) {
         continue;
       }
-
+      log.debug("receive: " + tfilename);
+      
       String tpath = "";
       if ("ot2im".equals(fileType)) {
         List<FitsFileCut> ffcs = ffcDao.getByName(tfilename.substring(0, tfilename.indexOf('.')));
         if (ffcs.size() > 0) {
           FitsFileCut ffc = ffcs.get(0);
           tpath = rootPath + ffc.getStorePath();
-
+          
           if (tfilename.indexOf(".jpg") > 0 || tfilename.indexOf(".png") > 0) {
             ffcDao.uploadSuccessCutByName(tfilename.substring(0, tfilename.indexOf('.')));
           }
+        }
+      } else if ("ot2ims".equals(fileType)) { //M170117_C00033_0139_sub.jpg
+        List<FitsFileCut> ffcs = ffcDao.getByName(tfilename.substring(0, tfilename.indexOf("_sub")));
+        if (ffcs.size() > 0) {
+          FitsFileCut ffc = ffcs.get(0);
+          tpath = rootPath + ffc.getStorePath();
         }
       } else if ("ot2imr".equals(fileType)) {
         List<FitsFileCutRef> ffcrs = ffcrDao.getByName(tfilename);
@@ -229,12 +237,14 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           FitsFileCutRef ffrc = ffcrs.get(0);
           tpath = rootPath + ffrc.getStorePath();
           try {
+            //G170110_C00482_0007_ref_20170110T121901664.jpg
             if (file.exists() && tfilename.endsWith("jpg")) {
               String dateStr = tfilename.substring(tfilename.indexOf("ref_") + 4, tfilename.indexOf(".jpg"));
-              if (dateStr != null && dateStr.length() == 15) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
+              // && dateStr.length() == 15
+              if (dateStr != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmssSSS");
                 Date genDate = sdf.parse(dateStr.replace('T', ' '));
-
+                
                 FitsFileCutRef ffcr = new FitsFileCutRef();
                 ffcr.setFileName(tfilename.substring(0, tfilename.indexOf(".jpg")));
                 ffcr.setGenerateTime(genDate);
@@ -250,7 +260,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         }
       }
       log.debug("receive file " + tfilename + " to " + tpath);
-
+      
       if (!tpath.isEmpty()) {
         File destFile = new File(tpath, tfilename);
         //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
@@ -266,9 +276,9 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       }
     }
   }
-
+  
   public void storeFile(List<File> files, List<String> fnames, String path, String rootPath, char fileType) {
-
+    
     int i = 0;
     for (File file : files) {
       String tfilename = fnames.get(i++).trim();
@@ -287,7 +297,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       } catch (IOException ex) {
         log.error("delete or move file errror ", ex);
       }
-
+      
       UploadFileUnstore obj = new UploadFileUnstore();
       obj.setStorePath(path.substring(rootPath.length()));
       obj.setFileName(tfilename);
@@ -301,10 +311,24 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       if ('1' == fileType) {
         MessageCreator tmc = new OTListMessageCreator(obj);
         jmsTemplate.send(otlistDest, tmc);
+      } else if ('a' == fileType) {
+        String tpath = rootPath + getText("gwac.monitorimage.directory");
+        String tname = tfilename.substring(0, tfilename.indexOf("_")) + "_ccdimg.jpg";
+        File preFile = new File(tpath, tname);
+        try {
+          if (preFile.exists()) {
+            FileUtils.forceDelete(preFile);
+          }
+          if (destFile.exists()) {
+            FileUtils.copyFile(destFile, preFile);
+          }
+        } catch (IOException ex) {
+          log.error("delete or move file errror ", ex);
+        }
       }
     }
   }
-
+  
   public String display() {
     return NONE;
   }
@@ -322,7 +346,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   public void setFileType(String fileType) {
     this.fileType = fileType;
   }
-
+  
   @Override
   public void setApplication(Map<String, Object> map) {
     this.appmap = map;
@@ -390,5 +414,5 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
   }
-
+  
 }

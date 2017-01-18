@@ -4,6 +4,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+   <bean id="dataBackupService" class="com.gwac.service.DataBackupServiceImpl">
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="otlv2Dao" ref="otbDao" />
+    <property name="oorDao" ref="otORDao" />
+    <property name="cfDao" ref="cfDao" />
+    <property name="ispDao" ref="ispDao" />
+    <property name="dpmDao" ref="dpmDao" />
+    <property name="ufuDao" ref="ufuDao" />
+    <property name="cpfDao" ref="cpfDao" />
+  </bean>
+  
   <bean id="dpmService" class="com.gwac.service.DataProcessMachineServiceImpl">
     <property name="dpmDao" ref="dpmDao" />	
   </bean>

@@ -112,6 +112,11 @@ public abstract class MysqlHibernateDaoImpl<T extends Serializable> implements B
   public void deleteById(final Long entityId) {
     this.delete(this.getById(entityId));
   }
+  
+  @Transactional(readOnly = false)
+  public void deleteAll(String tableName) {
+    getCurrentSession().createSQLQuery("delete * from " + tableName).executeUpdate();
+  }
 
   public final Session getCurrentSession() {
     return sessionFactory.getCurrentSession();

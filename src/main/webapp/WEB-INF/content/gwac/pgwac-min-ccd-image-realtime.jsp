@@ -9,36 +9,49 @@
     <script type="text/javascript">
 
       $(function() {
+        $('.imgStyle').each(function() {
+          var winWidth = $(window).width();
+          var winHeight = $(window).height();
+          console.log(winWidth);
+          console.log(winHeight);
+          var imgWidth = winHeight / 4 - (25);
+          var imgHeight = imgWidth;
+          $(this).css("width", imgWidth);
+          $(this).css("height", imgHeight);
+        });
+
         var dataurl = "<%=request.getContextPath()%>/get-dpm-monitor-image-time.action";
-        
+
         function onImageReceived(result) {
           var dpms = result.dpms;
           for (var i = 0; i < dpms.length; i++) {
-            $("#span" + dpms[i].dpmId).html(dpms[i].name+" ("+dpms[i].curProcessNumber+"-"+dpms[i].monitorImageTime.replace("T", " ")+")");
+            $("#span" + (i + 1)).html(dpms[i].name + " (" + dpms[i].curProcessNumber + ")");
           }
         }
-        
+
         function updateImage() {
-          for (var i = 1; i <= 12; i++) {
+          for (var i = 1; i <= 25; i++) {
             var orgSrc = $('#img' + i).attr('src');
             orgSrc += "?timestamp=123456";
             orgSrc = orgSrc.substring(0, orgSrc.indexOf('?'));
             orgSrc += "?timestamp=" + new Date().getTime();
             $("#img" + i).attr("src", orgSrc);
           }
-          $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
+//          $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
         }
         updateImage();
         setInterval(updateImage, 15000);
-        
+
         function shijian()
         {
           var date = new Date();
           var xiaoshi = date.getHours();
           var fen = date.getMinutes();
           var miao = date.getSeconds();
-          if (fen <= 9)fen = "0" + fen;
-          if (miao <= 9)miao = "0" + miao;
+          if (fen <= 9)
+            fen = "0" + fen;
+          if (miao <= 9)
+            miao = "0" + miao;
           var xianshi = "<font class='b'>" + xiaoshi + ":" + fen + ":" + miao + "</font>";
           $("#a").html(xianshi);
         }
@@ -52,86 +65,117 @@
         font-size: 16px;
         font-weight: bold;
       }
-      .style6 {font-size: 22px;font-weight: bold;}
+      .style6 {font-size: 14px;font-weight: bold;}
       .style7 {font-size: 12px}
       .imgStyle{
-        width:450px;
-        height:250px;
+        width:200px;
+        height:200px;
         border-radius: 6px; 
       }
       -->
     </style></head>
 
   <body>
-    <table width="900" border="0">
-      <!--=E to get the time-->
-      <!--=E ======================-->
+    <table width="100%" border="0">
       <tr>
-        <td>
-          <div align="center">
-            <span class="style3">----- Mini-GWAC CCD Image Monitor ----- </span>
-            <div id="a"></div>
-            <!--=E ===============-->
-          </div></td>
+        <td><div align="center" class="style6"><span id="span1">G001</span> </div></td>
+        <td><div align="center" class="style6"><span id="span2">G002</span> </div></td>
+        <td><div align="center" class="style6"><span id="span3">G003</span></div></td>
+        <td><div align="center" class="style6"><span id="span4">G004</span></div></td>
+        <td><div align="center" class="style6"><span id="span5">G005</span></div></td>
+        <td><div align="center" class="style6"><span id="span6">G006</span></div></td>
+        <td><div align="center" class="style6"><span id="span7">G007</span></div></td>
       </tr>
-
-      <tr>
-        <td>
-          <table width="616" border="0">
-            <tr>
-              <td width="454"><div align="center" class="style6"><span id="span1">M01</span> </div></td>
-              <td width="454"><div align="center" class="style6"><span id="span2">M02</span> </div></td>
-              <td width="454"><div align="center" class="style6"><span id="span3">M03</span></div></td>
-              <td width="454"><div align="center" class="style6"><span id="span4">M04</span></div></td>
-            </tr>
-            <tr>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M01_ccdimg.jpg"><img id="img1" src="/images/realTimeOtDistribution/M01_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M02_ccdimg.jpg"><img id="img2" src="/images/realTimeOtDistribution/M02_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M03_ccdimg.jpg"><img id="img3" src="/images/realTimeOtDistribution/M03_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M04_ccdimg.jpg"><img id="img4" src="/images/realTimeOtDistribution/M04_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-            </tr>
-            <tr>
-              <td width="454"><div align="center" class="style6"><span id="span5">M05</span> </div></td>
-              <td><div align="center" class="style6"><span id="span6">M06</span> </div></td>
-              <td><div align="center" class="style6"><span id="span7">M07</span></div></td>
-              <td><div align="center" class="style6"><span id="span8">M08</span></div></td>
-            </tr>
-            <tr>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M05_ccdimg.jpg"><img id="img5" src="/images/realTimeOtDistribution/M05_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M06_ccdimg.jpg"><img id="img6" src="/images/realTimeOtDistribution/M06_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M07_ccdimg.jpg"><img id="img7" src="/images/realTimeOtDistribution/M07_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M08_ccdimg.jpg"><img id="img8" src="/images/realTimeOtDistribution/M08_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-            </tr>
-            <tr>
-              <td width="454"><div align="center" class="style6"><span id="span9">M09</span> </div></td>
-              <td width="454"><div align="center" class="style6"><span id="span10">M10</span> </div></td>
-              <td width="454"><div align="center" class="style6"><span id="span11">M11</span></div></td>
-              <td width="454"><div align="center" class="style6"><span id="span12">M12</span></div></td>
-            </tr>
-            <tr>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M09_ccdimg.jpg"><img id="img9" src="/images/realTimeOtDistribution/M09_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M10_ccdimg.jpg"><img id="img10" src="/images/realTimeOtDistribution/M10_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M11_ccdimg.jpg"><img id="img11" src="/images/realTimeOtDistribution/M11_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-              <td width="454"><div align="center">
-                  <a href="/images/realTimeOtDistribution/M12_ccdimg.jpg"><img id="img12" src="/images/realTimeOtDistribution/M12_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
-            </tr>
-          </table>
       <tr>
         <td><div align="center">
-            <p class="style7">Copyright: GWAC project. </p>
-          </div></td>
-        <td>&nbsp;</td>
+            <a href="/images/realTimeOtDistribution/G001_ccdimg.jpg"><img id="img1" src="/images/realTimeOtDistribution/G001_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G002_ccdimg.jpg"><img id="img2" src="/images/realTimeOtDistribution/G002_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G003_ccdimg.jpg"><img id="img3" src="/images/realTimeOtDistribution/G003_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G004_ccdimg.jpg"><img id="img4" src="/images/realTimeOtDistribution/G004_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G004_ccdimg.jpg"><img id="img5" src="/images/realTimeOtDistribution/G005_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G006_ccdimg.jpg"><img id="img6" src="/images/realTimeOtDistribution/G006_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G007_ccdimg.jpg"><img id="img7" src="/images/realTimeOtDistribution/G007_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+      </tr>
+      <tr>
+        <td><div align="center" class="style6"><span id="span8">G008</span></div></td>
+        <td><div align="center" class="style6"><span id="span9">G009</span></div></td>
+        <td><div align="center" class="style6"><span id="span10">G010</span></div></td>
+        <td><div align="center" class="style6"><span id="span11">G011</span> </div></td>
+        <td><div align="center" class="style6"><span id="span12">G012</span> </div></td>
+        <td><div align="center" class="style6"><span id="span13">G013</span> </div></td>
+        <td><div align="center" class="style6"><span id="span14">G014</span> </div></td>
+      </tr>
+      <tr>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G008_ccdimg.jpg"><img id="img8" src="/images/realTimeOtDistribution/G008_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G005_ccdimg.jpg"><img id="img9" src="/images/realTimeOtDistribution/G009_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G005_ccdimg.jpg"><img id="img10" src="/images/realTimeOtDistribution/G010_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img11" src="/images/realTimeOtDistribution/G011_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img12" src="/images/realTimeOtDistribution/G012_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img13" src="/images/realTimeOtDistribution/G013_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img14" src="/images/realTimeOtDistribution/G014_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+      </tr>
+      <tr>
+        <td><div align="center" class="style6"><span id="span15">G015</span> </div></td>
+        <td><div align="center" class="style6"><span id="span16">G016</span> </div></td>
+        <td><div align="center" class="style6"><span id="span17">G017</span> </div></td>
+        <td><div align="center" class="style6"><span id="span18">G018</span> </div></td>
+        <td><div align="center" class="style6"><span id="span19">G019</span> </div></td>
+        <td><div align="center" class="style6"><span id="span20">G020</span> </div></td>
+        <td><div align="center" class="style6"><span id="span21">G021</span> </div></td>
+      </tr>
+      <tr>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img15" src="/images/realTimeOtDistribution/G015_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img16" src="/images/realTimeOtDistribution/G016_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img17" src="/images/realTimeOtDistribution/G017_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img18" src="/images/realTimeOtDistribution/G018_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img19" src="/images/realTimeOtDistribution/G019_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img20" src="/images/realTimeOtDistribution/G020_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img21" src="/images/realTimeOtDistribution/G021_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+      </tr>
+      <tr>
+        <td><div align="center" class="style6"><span id="span22">G022</span> </div></td>
+        <td><div align="center" class="style6"><span id="span23">G023</span> </div></td>
+        <td><div align="center" class="style6"><span id="span24">G024</span> </div></td>
+        <td><div align="center" class="style6"><span id="span25">G025</span> </div></td>
+        <td><div align="center" class="style6"><span id="span23">G000</span> </div></td>
+        <td><div align="center" class="style6"><span id="span24">G000</span> </div></td>
+        <td><div align="center" class="style6"><span id="span25">G000</span> </div></td>
+      </tr>
+      <tr>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img22" src="/images/realTimeOtDistribution/G022_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img23" src="/images/realTimeOtDistribution/G023_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img24" src="/images/realTimeOtDistribution/G024_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img25" src="/images/realTimeOtDistribution/G025_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img26" src="/images/realTimeOtDistribution/G000_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img27" src="/images/realTimeOtDistribution/G000_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
+        <td><div align="center">
+            <a href="/images/realTimeOtDistribution/G009_ccdimg.jpg"><img id="img28" src="/images/realTimeOtDistribution/G000_ccdimg.jpg" class="imgStyle" border="0"/></a></div></td>
       </tr>
     </table>
   </body>

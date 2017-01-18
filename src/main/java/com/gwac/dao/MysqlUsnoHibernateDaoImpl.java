@@ -113,6 +113,11 @@ public abstract class MysqlUsnoHibernateDaoImpl<T extends Serializable> implemen
     this.delete(this.getById(entityId));
   }
 
+  @Transactional(readOnly = false)
+  public void deleteAll(String tableName) {
+    getCurrentSession().createSQLQuery("delete * from " + tableName).executeUpdate();
+  }
+  
   public final Session getCurrentSession() {
     return sessionFactory.getCurrentSession();
   }

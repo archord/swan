@@ -49,7 +49,7 @@
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-pointing.action" target="_blank" ><p>转台跟踪</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-ccd-image-realtime.action" target="_blank" ><p>图像预览</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay.action" target="_blank" ><p>OT分布-XY</p></a>          </div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank" ><p>OT分布-RaDec</p></a></div>
+          <!--<div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere.action" target="_blank" ><p>OT分布-RaDec</p></a></div>-->
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere-d3.action" target="_blank" ><p>OT分布3D</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-timesequence-sphere.action" target="_blank" ><p>OT1分布3D</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-mot-timesequence-sphere.action" target="_blank" ><p>移动展示</p></a></div>
@@ -61,8 +61,8 @@
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-light-curve.action" target="_blank" ><p>小行星光变查看</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>观测策略</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
-          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/utc/" target="_blank" ><p>兴隆恒星时</p></a></div>
-          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/weather/yuntu.jhtml" target="_blank" ><p>兴隆云图</p></a></div>
+<!--          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/utc/" target="_blank" ><p>兴隆恒星时</p></a></div>
+          <div class='mason-block x2'><a href="http://www.xinglong-naoc.org/weather/yuntu.jhtml" target="_blank" ><p>兴隆云图</p></a></div>-->
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-fwhm.action" target="_blank" ><p>半高全宽</p></a>                  </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-objnum.action" target="_blank" ><p>星的数目</p></a>                       </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-bgbright.action" target="_blank" ><p>背景亮度</p></a>                     </div>
@@ -71,7 +71,8 @@
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-track.action" target="_blank" ><p>图像偏移量</p></a>                      </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-xyrms.action" target="_blank" ><p>图像对齐精度</p></a>                    </div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-min-timeneed.action" target="_blank" ><p>数据处理时间</p></a>             </div>
-          <div class='mason-block'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>
+          <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" ><p>系统配置</p></a>             </div>
+          <div class='mason-block x3'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>
         </div>
         <div id='mason-fillers'>
           <div class='mason-fill-filler' style="margin: 5px;"></div>

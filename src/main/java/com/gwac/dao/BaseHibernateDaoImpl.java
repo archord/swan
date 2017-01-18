@@ -24,7 +24,7 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
   public void setClazz(final Class<T> clazzToSet) {
     clazz = clazzToSet;
   }
-  
+
   public Number count() {
     return (Number) getCurrentSession().createCriteria(clazz).setProjection(Projections.rowCount()).uniqueResult();
   }
@@ -111,6 +111,11 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
   @Transactional(readOnly = false)
   public void deleteById(final Long entityId) {
     this.delete(this.getById(entityId));
+  }
+
+  @Transactional(readOnly = false)
+  public void deleteAll(String tableName) {
+    getCurrentSession().createSQLQuery("delete from " + tableName).executeUpdate();
   }
 
   public final Session getCurrentSession() {
