@@ -14,9 +14,11 @@ public class OTCheckMessageCreator implements MessageCreator {
 
   private static final Log log = LogFactory.getLog(OTCheckMessageCreator.class);
   private final OtLevel2 ot2;
+  private final Boolean autoFollowUp;
 
-  public OTCheckMessageCreator(OtLevel2 ot2) {
+  public OTCheckMessageCreator(OtLevel2 ot2, Boolean autoFollowUp) {
     this.ot2 = ot2;
+    this.autoFollowUp = autoFollowUp;
   }
 
   @Override
@@ -24,7 +26,8 @@ public class OTCheckMessageCreator implements MessageCreator {
 
     MapMessage message = session.createMapMessage();
     message.setLong("ot2Id", ot2.getOtId());
-    log.debug("send ot2 check message, ot2Id=" + ot2.getOtId() + ", ot2name=" + ot2.getName());
+    message.setBoolean("autoFollowUp", autoFollowUp);
+    log.debug("send ot2 check message, ot2Id=" + ot2.getOtId() + ", ot2name=" + ot2.getName() + ", autoFollowUp=" + autoFollowUp);
     return message;
   }
 

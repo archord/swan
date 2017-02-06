@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-  
+    
   <bean class="com.gwac.action.DownloadMovOtSequence"  scope="prototype">
     <property name="movObjDao" ref="moveObjectDao" />
   </bean>
@@ -78,6 +78,9 @@
   
   <bean class="com.gwac.action.OTLookBack"  scope="prototype">
     <property name="ot2Dao" ref="otbDao" />
+    <property name="foDao" ref="foDao" />
+    <property name="jmsTemplate" ref="jmsTemplate" />
+    <property name="otFollowDest" ref="otFollowDest" />
   </bean>
   
   <bean class="com.gwac.action.OT2InfoDownload"  scope="prototype">

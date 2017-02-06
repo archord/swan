@@ -298,8 +298,8 @@
       var fName = $(this).attr("file_name");
       var x = $(this).attr("x");
       var y = $(this).attr("y");
-      var rootUrl = $("#gwacRootURL").val();
-//      var rootUrl = "http://10.0.10.236";
+//      var rootUrl = $("#gwacRootURL").val();
+      var rootUrl = "http://10.0.10.236";
 //      var rootUrl = "http://190.168.1.25";
       var otImgUrl = rootUrl + "/images/thumbnail/" + fName.substring(6, 12) + "/" + fName.substring(0, 1) + fName.substring(3, 5) + "/" + fName.substring(0, 26) + "_ccdimg.jpg";
 //      console.log(otImgUrl + ", " + x + ", " + y);

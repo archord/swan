@@ -8,17 +8,30 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.activemq.OTFollowMessageCreator;
+import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.model.ApplicationParameters;
+import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtLevel2FollowParameter;
+import com.gwac.model.UserInfo;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.util.Date;
+import java.util.Map;
+import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
+import org.apache.struts2.interceptor.SessionAware;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* curl command example: */
@@ -31,7 +44,7 @@ import org.apache.struts2.convention.annotation.Result;
 //@ParentPackage(value="struts-default")
 //@Controller()
 //@Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class OTLookBack extends ActionSupport {
+public class OTLookBack extends ActionSupport implements SessionAware, ApplicationAware {
 
   private static final Log log = LogFactory.getLog(OTLookBack.class);
 
@@ -39,7 +52,13 @@ public class OTLookBack extends ActionSupport {
   private Short flag; //图像相减有目标1，图像相减没有目标2, 0代表没处理或处理报错
   private String echo = "";
 
+  private Map<String, Object> appMap;
+  private Map<String, Object> session;
+
   private OtLevel2Dao ot2Dao;
+  private FollowUpObservationDao foDao;
+  private JmsTemplate jmsTemplate;
+  private Destination otFollowDest;
 
   @Action(value = "otLookBack", results = {
     @Result(location = "manage/result.jsp", name = SUCCESS),
@@ -54,9 +73,14 @@ public class OTLookBack extends ActionSupport {
     if (null == ot2name || ot2name.isEmpty()) {
       setEcho(getEcho() + "Error, must set tspname.\n");
     } else {
+      ApplicationParameters appParam = (ApplicationParameters) appMap.get("appParam");
+      if (flag == 1 && appParam != null && appParam.isAutoFollowUp()) {
+        autoFollowUp();
+      }
       OtLevel2 ot2 = new OtLevel2();
       ot2.setName(ot2name.trim());
       ot2.setLookBackResult(flag);
+
       int trst = ot2Dao.updateLookBackResult(ot2);
       log.debug("1 update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
       for (int i = 0; i < 5; i++) {
@@ -86,6 +110,59 @@ public class OTLookBack extends ActionSupport {
     ctx.getSession().put("echo", getEcho());
 
     return result;
+  }
+
+  public Boolean autoFollowUp() {
+
+    Boolean flag = false;
+    UserInfo user = (UserInfo) session.get("userInfo");
+    if (user != null) {
+      flag = true;
+      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+
+      if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
+              || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
+        ot2.setFoCount((short) (ot2.getFoCount() + 1));
+        ot2Dao.updateFoCount(ot2);
+
+        OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
+        ot2fp.setFollowName(String.format("%s_%03d", ot2name, ot2.getFoCount()));
+        ot2fp.setDec(ot2.getDec());
+        ot2fp.setRa(ot2.getRa());
+        ot2fp.setExpTime((short) 20);
+        ot2fp.setFilter("R");
+        ot2fp.setFrameCount(5);
+        ot2fp.setTelescope((short) 1);
+        ot2fp.setPriority(11);
+        ot2fp.setUserName(user.getLoginName());
+        ot2fp.setOtName(ot2name);
+
+        FollowUpObservation fo = new FollowUpObservation();
+        fo.setBackImageCount(0);
+        fo.setDec(ot2fp.getDec());
+        fo.setEpoch(ot2fp.getEpoch());
+        fo.setExposeDuration((short) ot2fp.getExpTime());
+        fo.setFilter(ot2fp.getFilter());
+        fo.setFoName(ot2fp.getFollowName());
+        fo.setFoObjCount((short) 0);
+        fo.setFrameCount((short) ot2fp.getFrameCount());
+        fo.setImageType(ot2fp.getImageType());
+        fo.setOtId(ot2.getOtId());
+        fo.setPriority((short) ot2fp.getPriority());
+        fo.setRa(ot2fp.getRa());
+        fo.setUserId(user.getUiId());
+        fo.setTriggerTime(new Date());
+        fo.setTriggerType("AUTO"); //MANUAL AUTO
+        fo.setTelescopeId(ot2fp.getTelescope());
+        foDao.save(fo);
+
+        MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
+        jmsTemplate.send(otFollowDest, tmc);
+      }
+    } else {
+      log.debug("user not login, cannot auto follow up, please login!");
+    }
+    return flag;
   }
 
   /**
@@ -121,6 +198,37 @@ public class OTLookBack extends ActionSupport {
    */
   public void setOt2Dao(OtLevel2Dao ot2Dao) {
     this.ot2Dao = ot2Dao;
+  }
+
+  @Override
+  public void setSession(Map<String, Object> map) {
+    this.session = map;
+  }
+
+  /**
+   * @param foDao the foDao to set
+   */
+  public void setFoDao(FollowUpObservationDao foDao) {
+    this.foDao = foDao;
+  }
+
+  /**
+   * @param jmsTemplate the jmsTemplate to set
+   */
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+
+  /**
+   * @param otFollowDest the otFollowDest to set
+   */
+  public void setOtFollowDest(Destination otFollowDest) {
+    this.otFollowDest = otFollowDest;
+  }
+
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appMap = map;
   }
 
 }

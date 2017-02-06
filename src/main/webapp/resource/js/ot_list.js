@@ -14,6 +14,7 @@ $(function() {
   loadOT2Type();
   loadOT2Alarm();
   initAlarmPlayer();
+  initAutoFollowUp();
   loadQueryParmeter();
   loadOT2List();
 
@@ -35,6 +36,56 @@ $(function() {
 //    console.log("curTotalOT2:"+curTotalOT2);
   });
 
+  function initAutoFollowUp() {
+
+    getAutoFollowUp();
+
+    $("#autoFollowUp").change(function() {
+      if ($('#autoFollowUp').is(':checked')) {
+        setAutoFollowUp('true');
+      } else {
+        setAutoFollowUp('false');
+      }
+    });
+  }
+
+  function getAutoFollowUp() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var setParameterUrl = "get-app-parameter.action"
+    var url = gwacRootURL + "/" + setParameterUrl;
+    $.ajax({
+      type: "get",
+      url: url,
+      data: "app=1",
+      async: true,
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+        if (data.autoFollowUp) {
+          $("#autoFollowUp").attr("checked", "true");
+        } else {
+          $("#autoFollowUp").removeAttr("checked");
+        }
+      }
+    });
+  }
+
+  function setAutoFollowUp(val) {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var setParameterUrl = "set-app-parameter.action"
+    var url = gwacRootURL + "/" + setParameterUrl;
+    console.log(url);
+    $.ajax({
+      type: "get",
+      url: url,
+      data: "autoFollowUp=" + val,
+      async: true,
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+      }
+    });
+  }
 
   function initAlarmPlayer() {
     var gwacRootURL = $("#gwacRootURL").val();
@@ -260,11 +311,11 @@ $(function() {
   }
 
   function floatFormate3(data, type, full, meta) {
-    return data.toFixed(3);
+    return data !== null ? data.toFixed(3) : data;
   }
 
   function floatFormate2(data, type, full, meta) {
-    return data.toFixed(2);
+    return data !== null ? data.toFixed(2) : data;
   }
 
   function formateRC3(data, type, full, meta) {
@@ -302,7 +353,7 @@ $(function() {
     if (full.rc3Match > 0) {
       return "<a href='" + url + "' target='_blank' class='importantRC3' title='点击查看OT详细'>" + data + "</a>";
     } else if (((full.isMatch === 0 || full.isMatch === 1) && (full.lookBackResult === 0 || full.lookBackResult === 1)
-            &&(full.otType===0 || full.otType === 8 || full.otType === 9 || full.otType === 10 || full.otType === 11))
+            && (full.otType === 0 || full.otType === 8 || full.otType === 9 || full.otType === 10 || full.otType === 11))
             || (full.otType === 8 || full.otType === 9 || full.otType === 10 || full.otType === 11)) {
       return "<a href='" + url + "' target='_blank' class='importantOT2' title='点击查看OT详细'>" + data + "</a>";
     } else {
