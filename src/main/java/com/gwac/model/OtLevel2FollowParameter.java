@@ -33,7 +33,7 @@ public class OtLevel2FollowParameter {
     this.imageType="LIGHT";
     this.begineTime="-1";
     this.endTime="-1";
-    this.priority = 10;
+    this.priority = 70;
   }
   
   

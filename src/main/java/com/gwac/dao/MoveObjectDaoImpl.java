@@ -61,12 +61,12 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
   @Override
   public String getMoveObjsByDate(String dateStr) {
     Session session = getCurrentSession();
-    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mov_id, tt_frm_num, mov_type, mov_detail) r)))  "
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mov_id, tt_frm_num, mov_type, dpm_id, sky_id, mov_detail) r)))  "
             + "FROM( SELECT  "
-            + "moor.mov_id as mov_id, moor.total_frame_number as tt_frm_num, moor.mov_type as mov_type, "
+            + "moor.mov_id as mov_id, moor.total_frame_number as tt_frm_num, moor.mov_type as mov_type, moor.dpm_id as dpm_id, moor.sky_id as sky_id, "
             + "JSON_AGG((SELECT r FROM (SELECT moor.ff_number, moor.ra_d, moor.dec_d, moor.x, moor.y, moor.file_name ORDER BY (moor.mov_id, moor.ff_number, moor.dec_d)) r)) as mov_detail  "
             + "FROM (  "
-            + "SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x, oor.y, oor.date_ut, oor.oor_id, mor.mov_id, mo.total_frame_number, mo.mov_type, ff.file_name "
+            + "SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x, oor.y, oor.date_ut, oor.oor_id, mor.mov_id, mo.total_frame_number, mo.mov_type, ff.file_name, mo.dpm_id, mo.sky_id "
             + "FROM ot_observe_record_his oor  "
             + "INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
             + "INNER JOIN move_object mo ON mo.mov_id = mor.mov_id "
@@ -74,7 +74,7 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
             + "WHERE oor.ot_id=0 AND oor.date_str=? "
             + "ORDER BY mo.mov_id, oor.date_ut, oor.dec_d  "
             + ")as moor  "
-            + "GROUP BY moor.mov_id, moor.total_frame_number, moor.mov_type "
+            + "GROUP BY moor.mov_id, moor.total_frame_number, moor.mov_type, moor.dpm_id, moor.sky_id "
             + ")as moor2";
 
     String rst = "";

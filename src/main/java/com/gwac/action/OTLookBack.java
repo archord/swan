@@ -133,7 +133,7 @@ public class OTLookBack extends ActionSupport implements SessionAware, Applicati
         ot2fp.setFilter("R");
         ot2fp.setFrameCount(5);
         ot2fp.setTelescope((short) 1);
-        ot2fp.setPriority(11);
+        ot2fp.setPriority(20);
         ot2fp.setUserName(user.getLoginName());
         ot2fp.setOtName(ot2name);
 

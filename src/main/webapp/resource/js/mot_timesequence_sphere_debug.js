@@ -244,10 +244,12 @@
     },
     drawMot: function() {
       var gwac = this;
+      var obsSky = $("#obsSky").val();
+      var obsCcd = parseInt($("#obsCcd").val());
       if (gwac.motObj.length > 0 && gwac.movType !== '5') {
         $.each(gwac.motObj, function(i, item1) {
           var mvType = parseInt(item1.mov_type);
-          if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType)) {
+          if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType) && (obsCcd === 0 || obsCcd === item1.dpm_id)) {
             $.each(item1.mov_detail, function(j, item2) {
               if (item2.ff_number <= gwac.currentFrame && item2.ff_number >= gwac.startFrame) {
                 gwac.motPointData.data.coordinates = [[item2.ra_d, item2.dec_d]];
@@ -298,8 +300,8 @@
       var fName = $(this).attr("file_name");
       var x = $(this).attr("x");
       var y = $(this).attr("y");
-//      var rootUrl = $("#gwacRootURL").val();
-      var rootUrl = "http://10.0.10.236";
+      var rootUrl = $("#gwacRootURL").val();
+//      var rootUrl = "http://10.0.10.236";
 //      var rootUrl = "http://190.168.1.25";
       var otImgUrl = rootUrl + "/images/thumbnail/" + fName.substring(6, 12) + "/" + fName.substring(0, 1) + fName.substring(3, 5) + "/" + fName.substring(0, 26) + "_ccdimg.jpg";
 //      console.log(otImgUrl + ", " + x + ", " + y);

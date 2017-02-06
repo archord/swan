@@ -53,6 +53,13 @@
           dynamicDrawOt1();
         });
 
+        $('#obsCcd').change(function() {
+          gwac.updateShowData();
+          //保证在选择类型时，currentFrame不增加，因为dynamicDrawOt1会对currentFrame增加playInterval
+          gwac.currentFrame = gwac.startFrame + (gwac.currentFrame - gwac.startFrame - gwac.playInterval) % (gwac.endFrame - gwac.startFrame + 1);
+          dynamicDrawOt1();
+        });
+
         $('#changeView').click(function() {
           gwac.changeView(gwac);
         });
