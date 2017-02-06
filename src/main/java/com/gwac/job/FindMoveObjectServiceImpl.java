@@ -12,7 +12,7 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.linefind.DrawObject;
 import com.gwac.linefind.HoughFrame;
-import com.gwac.linefind.HoughTransform;
+import com.gwac.linefind.FindMoveObject;
 import com.gwac.linefind.HoughtPoint;
 import com.gwac.linefind.LineObject;
 import com.gwac.model.DataProcessMachine;
@@ -81,8 +81,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     long startTime = System.nanoTime();
 
-    processToday();
-//    processHisAllDay();
+//    processToday();
+    processHisAllDay();
 
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
@@ -96,7 +96,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
     List<ObservationSky> skys = observationSkyDao.findAll();
     List<DataProcessMachine> dpms = dpmDao.findAll();
     log.debug("total days: " + dateStrs.size());
-    
+
     for (String dateStr : dateStrs) {
       for (DataProcessMachine dpm : dpms) {
         for (ObservationSky sky : skys) {
@@ -109,6 +109,18 @@ public class FindMoveObjectServiceImpl implements BaseService {
         }
       }
     }
+  }
+
+  public void processTest() {
+
+    boolean history = true;
+    String dateStr = "160928";
+    int dpmId = 6;
+    int skyId = 11;
+
+    List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpmId, skyId, history);
+    System.out.println("size:" + oors.size());
+    processOneDay(oors, dateStr, dpmId, skyId);
   }
 
   /**
@@ -124,7 +136,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
     List<ObservationSky> skys = observationSkyDao.findAll();
     List<DataProcessMachine> dpms = dpmDao.findAll();
     log.debug("total days: " + dateStrs.size());
-    
+
     for (String dateStr : dateStrs) {
       for (DataProcessMachine dpm : dpms) {
         for (ObservationSky sky : skys) {
@@ -137,49 +149,34 @@ public class FindMoveObjectServiceImpl implements BaseService {
         }
       }
     }
-
-//    String dateStr = "160928";
-//    int dpmId = 6;
-//    int skyId = 11;
-//    List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpmId, skyId);
-//    System.out.println("size:" + oors.size());
-//    processOneDay(oors, dateStr, dpmId, skyId);
   }
 
   public void processOneDay(List<OtObserveRecord> oors, String dateStr, int dpmId, int skyId) {
 
-    HoughTransform ht = new HoughTransform(imgWidth, imgHeight, thetaSize, rhoSize, thetaRange, rhoRange, maxHoughFrameNunmber, minValidPoint, maxDistance, rhoErrorTimes, validLineMinPoint);
+    FindMoveObject fmo = new FindMoveObject();
 
     int lastFrameNumber = 0;
-    int frameCount = 0;
-    int pNum = 0;
+    List<OtObserveRecord> singleFrame = new ArrayList<>();
     for (OtObserveRecord oor : oors) {
       oor.setX(oor.getXTemp());
       oor.setY(oor.getYTemp());
       if (lastFrameNumber != oor.getFfNumber()) {
         lastFrameNumber = oor.getFfNumber();
-        ht.endFrame();
+        fmo.addFrame(singleFrame);
+        singleFrame.clear();
       }
-      ht.historyAddPoint(oor);
-      ht.lineAddPoint(oor);
-
-      pNum++;
-
+      singleFrame.add(oor);
     }
+    fmo.addFrame(singleFrame);
+    fmo.endAllFrame();
 
-    ht.endAllFrame();
-
-    for (LineObject obj : ht.mvObjs) {
+    for (LineObject obj : fmo.mvObjs) {
       if (obj.pointNumber >= validLineMinPoint && obj.isValidLine()) {
         saveLineObject(obj, dateStr, dpmId, skyId);
       }
     }
-    log.debug(dateStr + "-" + dpmId + "-" + skyId + ", mvObjs:" + ht.mvObjs.size());
+    log.debug(dateStr + "-" + dpmId + "-" + skyId + ", mvObjs:" + fmo.mvObjs.size());
 
-//    ht.saveLine2(outPath);
-//    String imgPath = "E:\\" + dateStr + "-" + dpmId + "-" + skyId + ".png";
-//    DrawObject dObj = new DrawObject(ht);
-//    dObj.drawObjsAll(imgPath);
   }
 
   /**

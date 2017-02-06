@@ -36,7 +36,7 @@ public class OtTmplServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(OtTmplServiceImpl.class);
   private static boolean running = true;
-  
+
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
   @Value("#{syscfg.gwacServerTest}")
@@ -62,7 +62,7 @@ public class OtTmplServiceImpl implements BaseService {
     if (isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -96,6 +96,7 @@ public class OtTmplServiceImpl implements BaseService {
   public void otTmplDailyUpdate(char otClass) {
 
     List<OtLevel2> ot2s = ot2Dao.getTodayOt2(otClass);
+    MatchTable ott = mtDao.getMatchTableByTypeName("ot_level2_his");
 
     for (OtLevel2 tot2 : ot2s) {
       log.debug("processing " + tot2.getName());
@@ -119,6 +120,15 @@ public class OtTmplServiceImpl implements BaseService {
       otw.setOttId(tot2.getOtType());
       otw.setOtClass(otClass);
       otw.setRadius((float) 0);
+
+      OtLevel2Match ot2m = new OtLevel2Match();
+      ot2m.setOtId(tot2.getOtId());
+      ot2m.setMtId(ott.getMtId());
+      ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
+      ot2m.setRa(tot2.getRa());
+      ot2m.setDec(tot2.getDec());
+      ot2m.setMag(tot2.getMag());
+      ot2m.setDistance(new Float(0));
 
       double searchbox = ot2Searchbox;
       List<OtTmplWrong> matchedOttws = new ArrayList();
@@ -149,11 +159,13 @@ public class OtTmplServiceImpl implements BaseService {
             float maxDist = getMaxDist(matchedOttws, avgOttw);
             searchbox = maxDist * 2 + ot2Searchbox;
           } else {
+            ot2mDao.save(ot2m);
             ottwDao.save(otw);
             break;
           }
         } else {
           if (matchNum == 0) {
+            ot2mDao.save(ot2m);
             ottwDao.save(otw);
           }
           break;
