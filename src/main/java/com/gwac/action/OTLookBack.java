@@ -112,57 +112,57 @@ public class OTLookBack extends ActionSupport implements SessionAware, Applicati
     return result;
   }
 
-  public Boolean autoFollowUp() {
+  public void autoFollowUp() {
 
-    Boolean flag = false;
-    UserInfo user = (UserInfo) session.get("userInfo");
-    if (user != null) {
-      flag = true;
-      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
 
-      if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
-              || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
-        ot2.setFoCount((short) (ot2.getFoCount() + 1));
-        ot2Dao.updateFoCount(ot2);
+    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
+            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
+      ot2.setFoCount((short) (ot2.getFoCount() + 1));
+      ot2Dao.updateFoCount(ot2);
 
-        OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
-        ot2fp.setFollowName(String.format("%s_%03d", ot2name, ot2.getFoCount()));
-        ot2fp.setDec(ot2.getDec());
-        ot2fp.setRa(ot2.getRa());
-        ot2fp.setExpTime((short) 20);
-        ot2fp.setFilter("R");
-        ot2fp.setFrameCount(5);
-        ot2fp.setTelescope((short) 1);
-        ot2fp.setPriority(20);
+      OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
+      ot2fp.setFollowName(String.format("%s_%03d", ot2name, ot2.getFoCount()));
+      ot2fp.setDec(ot2.getDec());
+      ot2fp.setRa(ot2.getRa());
+      ot2fp.setExpTime((short) 20);
+      ot2fp.setFilter("R");
+      ot2fp.setFrameCount(5);
+      ot2fp.setTelescope((short) 1);
+      ot2fp.setPriority(20);
+
+      UserInfo user = (UserInfo) session.get("userInfo");
+      if (user != null) {
         ot2fp.setUserName(user.getLoginName());
-        ot2fp.setOtName(ot2name);
-
-        FollowUpObservation fo = new FollowUpObservation();
-        fo.setBackImageCount(0);
-        fo.setDec(ot2fp.getDec());
-        fo.setEpoch(ot2fp.getEpoch());
-        fo.setExposeDuration((short) ot2fp.getExpTime());
-        fo.setFilter(ot2fp.getFilter());
-        fo.setFoName(ot2fp.getFollowName());
-        fo.setFoObjCount((short) 0);
-        fo.setFrameCount((short) ot2fp.getFrameCount());
-        fo.setImageType(ot2fp.getImageType());
-        fo.setOtId(ot2.getOtId());
-        fo.setPriority((short) ot2fp.getPriority());
-        fo.setRa(ot2fp.getRa());
-        fo.setUserId(user.getUiId());
-        fo.setTriggerTime(new Date());
-        fo.setTriggerType("AUTO"); //MANUAL AUTO
-        fo.setTelescopeId(ot2fp.getTelescope());
-        foDao.save(fo);
-
-        MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
-        jmsTemplate.send(otFollowDest, tmc);
+      } else {
+        ot2fp.setUserName("gwac");
+        log.debug("user not login, use system user 'gwac'!");
       }
-    } else {
-      log.debug("user not login, cannot auto follow up, please login!");
+      ot2fp.setOtName(ot2name);
+
+      FollowUpObservation fo = new FollowUpObservation();
+      fo.setBackImageCount(0);
+      fo.setDec(ot2fp.getDec());
+      fo.setEpoch(ot2fp.getEpoch());
+      fo.setExposeDuration((short) ot2fp.getExpTime());
+      fo.setFilter(ot2fp.getFilter());
+      fo.setFoName(ot2fp.getFollowName());
+      fo.setFoObjCount((short) 0);
+      fo.setFrameCount((short) ot2fp.getFrameCount());
+      fo.setImageType(ot2fp.getImageType());
+      fo.setOtId(ot2.getOtId());
+      fo.setPriority((short) ot2fp.getPriority());
+      fo.setRa(ot2fp.getRa());
+      fo.setUserId(user.getUiId());
+      fo.setTriggerTime(new Date());
+      fo.setTriggerType("AUTO"); //MANUAL AUTO
+      fo.setTelescopeId(ot2fp.getTelescope());
+      foDao.save(fo);
+
+      MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
+      jmsTemplate.send(otFollowDest, tmc);
+      log.debug(ot2fp.getTriggerMsg());
     }
-    return flag;
   }
 
   /**
