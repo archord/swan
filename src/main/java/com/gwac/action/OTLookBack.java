@@ -11,6 +11,7 @@ package com.gwac.action;
 import com.gwac.activemq.OTFollowMessageCreator;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.UserInfoDAO;
 import com.gwac.model.ApplicationParameters;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
@@ -57,6 +58,7 @@ public class OTLookBack extends ActionSupport implements SessionAware, Applicati
 
   private OtLevel2Dao ot2Dao;
   private FollowUpObservationDao foDao;
+  private UserInfoDAO userDao;
   private JmsTemplate jmsTemplate;
   private Destination otFollowDest;
 
@@ -130,16 +132,10 @@ public class OTLookBack extends ActionSupport implements SessionAware, Applicati
       ot2fp.setFrameCount(5);
       ot2fp.setTelescope((short) 1);
       ot2fp.setPriority(20);
-
-      UserInfo user = (UserInfo) session.get("userInfo");
-      if (user != null) {
-        ot2fp.setUserName(user.getLoginName());
-      } else {
-        ot2fp.setUserName("gwac");
-        log.debug("user not login, use system user 'gwac'!");
-      }
       ot2fp.setOtName(ot2name);
+      ot2fp.setUserName("gwac");
 
+      UserInfo user = userDao.getUserByLoginName("gwac");
       FollowUpObservation fo = new FollowUpObservation();
       fo.setBackImageCount(0);
       fo.setDec(ot2fp.getDec());
@@ -153,7 +149,9 @@ public class OTLookBack extends ActionSupport implements SessionAware, Applicati
       fo.setOtId(ot2.getOtId());
       fo.setPriority((short) ot2fp.getPriority());
       fo.setRa(ot2fp.getRa());
-      fo.setUserId(user.getUiId());
+      if (user != null) {
+        fo.setUserId(user.getUiId());
+      }
       fo.setTriggerTime(new Date());
       fo.setTriggerType("AUTO"); //MANUAL AUTO
       fo.setTelescopeId(ot2fp.getTelescope());
