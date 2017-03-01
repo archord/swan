@@ -229,4 +229,11 @@ public class OTLookBack extends ActionSupport implements SessionAware, Applicati
     this.appMap = map;
   }
 
+  /**
+   * @param userDao the userDao to set
+   */
+  public void setUserDao(UserInfoDAO userDao) {
+    this.userDao = userDao;
+  }
+
 }

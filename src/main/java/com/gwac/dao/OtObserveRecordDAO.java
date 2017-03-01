@@ -17,6 +17,8 @@ import java.util.List;
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
 
   public Object[] getMinMaxDateOt1(String dateStr);
+  
+  public Object[] getMinMaxDateOt12(String dateStr);
 
   public String getMagCurveByTypeIdStarId(int typeId, long starId, int dataProduceMethod);
 

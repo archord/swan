@@ -8,6 +8,11 @@
     <property name="movObjDao" ref="moveObjectDao" />
   </bean>
   
+  <bean class="com.gwac.action.GetMovOtSequence2"  scope="prototype">
+    <property name="movObjDao" ref="moveObjectDao" />
+    <property name="oorDao" ref="otORDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetMovOtSequence"  scope="prototype">
     <property name="movObjDao" ref="moveObjectDao" />
     <property name="oorDao" ref="otORDao" />
@@ -79,6 +84,7 @@
   <bean class="com.gwac.action.OTLookBack"  scope="prototype">
     <property name="ot2Dao" ref="otbDao" />
     <property name="foDao" ref="foDao" />
+    <property name="userDao" ref="userDAO" />
     <property name="jmsTemplate" ref="jmsTemplate" />
     <property name="otFollowDest" ref="otFollowDest" />
   </bean>

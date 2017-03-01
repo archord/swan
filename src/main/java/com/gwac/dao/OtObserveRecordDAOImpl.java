@@ -543,5 +543,16 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Object[] row = (Object[]) itor.next();
     return row;
   }
+  
+  @Override
+  public Object[] getMinMaxDateOt12(String dateStr) {
+    Session session = getCurrentSession();
+    String sql = "SELECT min(date_ut) minDate, max(date_ut) maxDate "
+            + "FROM ot_observe_record WHERE ot_id=0 and date_str ='" + dateStr + "'";
+
+    Iterator itor = session.createSQLQuery(sql).list().iterator();
+    Object[] row = (Object[]) itor.next();
+    return row;
+  }
 
 }

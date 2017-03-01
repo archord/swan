@@ -7,6 +7,7 @@ package com.gwac.dao;
 
 import com.gwac.model.MoveObject;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -80,6 +81,100 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
     String rst = "";
     Query q = session.createSQLQuery(sql);
     q.setString(0, dateStr);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
+  /**
+   * 使用时间排序，以前使用ffnumber排序
+   *
+   * @param dateStr
+   * @param startDate
+   * @param fromDate
+   * @param toDate
+   * @return
+   */
+  @Override
+  public String getMoveObjsByDate(String dateStr, Date fromDate, Date toDate) {
+    Session session = getCurrentSession();
+    String sql = "SELECT TEXT ("
+            + "	JSON_AGG ("
+            + "		("
+            + "			SELECT"
+            + "				r"
+            + "			FROM"
+            + "				("
+            + "					SELECT"
+            + "						mov_id,"
+            + "						mov_type,"
+            + "						dpm_id,"
+            + "						mov_detail"
+            + "				) r"
+            + "		)"
+            + "	)"
+            + ")"
+            + "FROM"
+            + "	("
+            + "		SELECT"
+            + "			moor.mov_id AS mov_id,"
+            + "			moor.mov_type AS mov_type,"
+            + "			moor.dpm_id AS dpm_id,"
+            + "			JSON_AGG ("
+            + "				("
+            + "					SELECT"
+            + "						r"
+            + "					FROM"
+            + "						("
+            + "							SELECT"
+            + "								moor.date_ut,"
+            + "								moor.ra_d,"
+            + "								moor.dec_d"
+            + "							ORDER BY"
+            + "								("
+            + "									moor.mov_id,"
+            + "									moor.date_ut,"
+            + "									moor.dec_d"
+            + "								)"
+            + "						) r"
+            + "				)"
+            + "			) AS mov_detail"
+            + "		FROM"
+            + "			("
+            + "				SELECT"
+            + "					oor.ra_d,"
+            + "					oor.dec_d,"
+            + "					oor.date_ut,"
+            + "					oor.oor_id,"
+            + "					mor.mov_id,"
+            + "					mo.mov_type,"
+            + "					mo.dpm_id"
+            + "				FROM"
+            + "					ot_observe_record oor"
+            + "				INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id"
+            + "				INNER JOIN move_object mo ON mo.mov_id = mor.mov_id"
+            + "				INNER JOIN fits_file ff ON ff.ff_id = oor.ff_id"
+            + "				WHERE"
+            + "					oor.ot_id = 0"
+            + "				AND oor.date_str =?"
+            + "				and oor.date_ut>=? and oor.date_ut<=?"
+            + "				ORDER BY"
+            + "					mo.mov_id,"
+            + "					oor.date_ut,"
+            + "					oor.dec_d"
+            + "			) AS moor"
+            + "		GROUP BY"
+            + "			moor.mov_id,"
+            + "			moor.mov_type,"
+            + "			moor.dpm_id"
+            + "	) AS moor2";
+
+    String rst = "";
+    Query q = session.createSQLQuery(sql);
+    q.setString(0, dateStr);
+    q.setTimestamp(1, fromDate);
+    q.setTimestamp(2, toDate);
     if (q.list().size() > 0) {
       rst = (String) q.list().get(0);
     }
