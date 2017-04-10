@@ -110,6 +110,11 @@ public class CommonFunction {
     return formatter.format(date);
   }
 
+  public static String getDateTimeString2(Date date) {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    return formatter.format(date);
+  }
+
   public static String getDateTimeString(Date date, String formater) {
     SimpleDateFormat formatter = new SimpleDateFormat(formater);
     return formatter.format(date);

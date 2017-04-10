@@ -6,6 +6,7 @@ package com.gwac.dao;
 
 import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.UploadFileUnstore;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +22,12 @@ public interface ImageStatusParameterDao extends BaseHibernateDao<ImageStatusPar
   public List<ImageStatusParameter> getImgStatusParmByDate(String dateStr);
   
   public List<ImageStatusParameter> getCurAllParm();
+  
+  public String getCurAllParmJson();
+  
+  public String getJsonByParm(List<String> parmName);
+  
+  public Date getMinDate();
   
   public List<ImageStatusParameter> getLatestParmOfAllDpm();
   

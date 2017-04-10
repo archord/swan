@@ -7,6 +7,7 @@ package com.gwac.dao;
 import com.gwac.model.ImageStatusParameter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +30,12 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     session.createSQLQuery(sql).executeUpdate();
   }
 
+  /**
+   * 获取上一帧的参数
+   *
+   * @param isp
+   * @return
+   */
   @Override
   public ImageStatusParameter getPreviousStatus(ImageStatusParameter isp) {
 
@@ -44,6 +51,11 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     }
   }
 
+  /**
+   * 获取当前库中所有参数
+   *
+   * @return
+   */
   @Override
   public List<ImageStatusParameter> getCurAllParm() {
     Session session = getCurrentSession();
@@ -52,6 +64,83 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     return q.list();
   }
 
+  /**
+   * 获取当前库中所有参数
+   *
+   * @return
+   */
+  @Override
+  public String getCurAllParmJson() {
+    Session session = getCurrentSession();
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT dpm_id, par_detail) r))) "
+            + "FROM( "
+            + "SELECT isp.dpm_id, JSON_AGG((SELECT r FROM (SELECT isp.fwhm, isp.obj_num, isp.bg_bright, "
+            + "isp.avg_limit, isp.xshift, isp.yshift, isp.xrms, isp.yrms, isp.proc_time, isp.temperature_actual, "
+            + "to_char(isp.time_obs_ut, 'YYYY/MM/DD HH:MM:SS') time_obs_ut) r)) as par_detail "
+            + "FROM image_status_parameter isp "
+            + "GROUP BY isp.dpm_id "
+            + ")as moor";
+
+    String rst = "";
+    Query q = session.createSQLQuery(sql);
+//    q.setString(0, dateStr);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
+  public Date getMinDate() {
+    Session session = getCurrentSession();
+    String sql = "SELECT min(time_obs_ut) from image_status_parameter ";
+    Date rst = null;
+    Query q = session.createSQLQuery(sql);
+    if (q.list().size() > 0) {
+      rst = (Date) q.list().get(0);
+    }
+    return rst;
+  }
+
+  /**
+   * 获取当前库中所有参数
+   *
+   * @param parmName
+   * @return
+   */
+  @Override
+  public String getJsonByParm(List<String> parmName) {
+    Session session = getCurrentSession();
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT dpm_id, par_detail) r))) "
+            + "FROM( "
+            + "SELECT isp.dpm_id, JSON_AGG((SELECT r FROM (SELECT ";
+    for (String tpar : parmName) {
+      sql += tpar + ", ";
+    }
+    sql = sql + "prc_num, isp.time_obs_ut) r)) as par_detail "
+            + "FROM image_status_parameter isp WHERE ";
+    for (int i = 0; i < parmName.size(); i++) {
+      String tpar = parmName.get(i);
+      if (i > 0) {
+        sql += " and abs(" + tpar + "+99)>0.0001 and " + tpar + " is not null ";
+      } else {
+        sql += " abs(" + tpar + "+99)>0.0001 and " + tpar + " is not null ";
+      }
+    }
+    sql = sql + "GROUP BY isp.dpm_id order by isp.dpm_id)as moor";
+
+    String rst = "";
+    Query q = session.createSQLQuery(sql);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
+  /**
+   * 获取最新一帧的参数
+   *
+   * @return
+   */
   @Override
   public List<ImageStatusParameter> getLatestParmOfAllDpm() {
     Session session = getCurrentSession();
@@ -63,6 +152,12 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     return q.list();
   }
 
+  /**
+   * 未实现
+   *
+   * @param dateStr
+   * @return
+   */
   @Override
   public List<ImageStatusParameter> getImgStatusParmByDate(String dateStr) {
     Session session = getCurrentSession();

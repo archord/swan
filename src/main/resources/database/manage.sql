@@ -180,3 +180,11 @@ ORDER BY mov_id, date_ut, dec_d
 )as moor 
 GROUP BY moor.mov_id, moor.total_frame_number
 )as moor2
+
+##按ccd编号查询系统参数信息
+SELECT text(JSON_AGG((SELECT r FROM (SELECT dpm_id, par_detail) r))) 
+FROM( 
+SELECT isp.dpm_id, JSON_AGG((SELECT r FROM (SELECT isp.fwhm, isp.obj_num, isp.bg_bright, isp.avg_limit, isp.xshift, isp.yshift, isp.xrms, isp.yrms, isp.proc_time, isp.temperature_actual, to_char(isp.time_obs_ut, 'YYYY/MM/DD HH:MM:SS') time_obs_ut) r)) as par_detail
+FROM image_status_parameter isp
+GROUP BY isp.dpm_id
+)as moor
