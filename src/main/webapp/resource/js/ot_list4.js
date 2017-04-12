@@ -170,6 +170,9 @@ $(function() {
       "ajax": {
         url: queryUrl,
         dataSrc: 'gridModel',
+        data: function(d) {
+          return reConstructParameter(d);
+        },
         type: 'GET'
       },
       "columns": [

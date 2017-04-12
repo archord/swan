@@ -6,23 +6,27 @@
 package com.gwac.dao;
 
 import com.gwac.model.SystemLog;
-import java.math.BigInteger;
-import java.util.List;
 import org.hibernate.Query;
-import org.hibernate.Session;
 
 /**
  *
  * @author xy
  */
 public class SystemLogDaoImpl extends BaseHibernateDaoImpl<SystemLog> implements SystemLogDao {
-  
-  public List<SystemLog> findRecord1(int start, int resultSize, String[] orderNames, int[] sort) {
 
-    String sql = "select * from system_log where  ";
-    Query q = getCurrentSession().createQuery(sql);
-    q.setFirstResult(start);
-    q.setMaxResults(resultSize);
-    return q.list();
+  @Override
+  public String findRecord(int start, int length) {
+
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT log_id, log_type, log_code, log_date, log_content) r))) "
+            + "from(SELECT sl.* FROM system_log sl ORDER BY log_date desc OFFSET " + start + " LIMIT " + length + " )as tmp1";
+
+    System.out.println(sql);
+    
+    String rst = "";
+    Query q = this.getCurrentSession().createSQLQuery(sql);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
   }
 }

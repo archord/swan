@@ -4,6 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
+  <bean class="com.gwac.action.GetSystemLogList"  scope="prototype">
+    <property name="dao" ref="sysLogDao" />
+  </bean>
+
   <bean class="com.gwac.action.GetParmListJson"  scope="prototype">
     <property name="dao" ref="ispDao" />
   </bean>
