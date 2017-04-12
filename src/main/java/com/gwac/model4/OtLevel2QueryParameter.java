@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.model;
+package com.gwac.model4;
 
 import com.gwac.util.CommonFunction;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class OtLevel2QueryParameter {
    * 查询结果集的大小，从start开始，查询size条记录
    */
   private int start;
-  private int size;
+  private int length;
   private String otName;
   private List<String> processType;
   private List<String> telscope;
@@ -47,7 +47,7 @@ public class OtLevel2QueryParameter {
             + ", isMatch=" + isMatch + ", otName=" + otName
             + ", matchType=" + matchType + ", otType=" + otType 
             + ", lookBackResult=" + lookBackResult + ", followUpResult=" + getFollowUpResult()
-            + ", start=" + start + ", size=" + size;
+            + ", start=" + start + ", length=" + length;
   }
 
   public void removeEmpty() {
@@ -226,19 +226,6 @@ public class OtLevel2QueryParameter {
     this.start = start;
   }
 
-  /**
-   * @return the size
-   */
-  public int getSize() {
-    return size;
-  }
-
-  /**
-   * @param size the size to set
-   */
-  public void setSize(int size) {
-    this.size = size;
-  }
 
   /**
    * @return the queryHis
@@ -350,5 +337,19 @@ public class OtLevel2QueryParameter {
    */
   public void setFollowUpResult(List<String> followUpResult) {
     this.followUpResult = followUpResult;
+  }
+
+  /**
+   * @return the length
+   */
+  public int getLength() {
+    return length;
+  }
+
+  /**
+   * @param length the length to set
+   */
+  public void setLength(int length) {
+    this.length = length;
   }
 }

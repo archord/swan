@@ -2,7 +2,7 @@ package com.gwac.action;
 
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.OtLevel2;
-import com.gwac.model.OtLevel2QueryParameter;
+import com.gwac.model4.OtLevel2QueryParameter;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
 import org.apache.commons.logging.Log;
@@ -69,7 +69,7 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
     // Calculate the first row to read
     int from = to - rows;
     ot2qp.setStart(from);
-    ot2qp.setSize(rows);
+    ot2qp.setLength(rows);
 
     // Set to = max rows
     if (to > records) {

@@ -135,6 +135,10 @@
     <property name="ottDao" ref="ottDao" />
   </bean>
   
+  <bean class="com.gwac.action.GetOtLevel2List4"  scope="prototype">
+    <property name="obDao" ref="otbDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetOtLevel2List2"  scope="prototype">
     <property name="obDao" ref="otbDao" />
   </bean>

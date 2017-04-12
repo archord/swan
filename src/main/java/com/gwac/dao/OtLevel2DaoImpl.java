@@ -5,7 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.OtLevel2;
-import com.gwac.model.OtLevel2QueryParameter;
+import com.gwac.model4.OtLevel2QueryParameter;
 import com.gwac.util.CommonFunction;
 import com.gwac.util.SearchBoxSphere;
 import java.math.BigInteger;
@@ -385,9 +385,9 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       isQueryParameterEmpty = false;
     }
 
-    if (isQueryParameterEmpty && ot2qp.getSize() == 0) {
+    if (isQueryParameterEmpty && ot2qp.getLength() == 0) {
       ot2qp.setStart(0);
-      ot2qp.setSize(30);
+      ot2qp.setLength(30);
     }
 
     String tstr = sql.toString().replace(",)", ")");
@@ -404,9 +404,9 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 //    log.debug(unionSql);
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
-    if (ot2qp.getSize() != 0) {
+    if (ot2qp.getLength() != 0) {
       q.setFirstResult(ot2qp.getStart());
-      q.setMaxResults(ot2qp.getSize());
+      q.setMaxResults(ot2qp.getLength());
     }
     return q.list();
   }
@@ -420,7 +420,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     StringBuilder sql = new StringBuilder("");
 
     ot2qp.removeEmpty();
-    log.debug(ot2qp.toString());
+//    log.debug(ot2qp.toString());
 
     if (ot2qp.getOtName() != null && !ot2qp.getOtName().isEmpty()) {
       sql.append(" and name='").append(ot2qp.getOtName()).append("' ");

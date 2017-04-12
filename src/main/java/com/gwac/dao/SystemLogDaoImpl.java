@@ -17,4 +17,12 @@ import org.hibernate.Session;
  */
 public class SystemLogDaoImpl extends BaseHibernateDaoImpl<SystemLog> implements SystemLogDao {
   
+  public List<SystemLog> findRecord1(int start, int resultSize, String[] orderNames, int[] sort) {
+
+    String sql = "select * from system_log where  ";
+    Query q = getCurrentSession().createQuery(sql);
+    q.setFirstResult(start);
+    q.setMaxResults(resultSize);
+    return q.list();
+  }
 }

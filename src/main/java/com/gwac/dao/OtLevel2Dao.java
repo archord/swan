@@ -5,7 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.OtLevel2;
-import com.gwac.model.OtLevel2QueryParameter;
+import com.gwac.model4.OtLevel2QueryParameter;
 import java.util.List;
 import java.util.Map;
 

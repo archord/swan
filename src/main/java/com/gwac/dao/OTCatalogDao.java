@@ -5,7 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.FollowUpCatalog;
-import com.gwac.model.OTCatalog;
+import com.gwac.model4.OTCatalog;
 import java.util.List;
 
 /**

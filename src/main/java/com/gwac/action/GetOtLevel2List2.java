@@ -2,7 +2,7 @@ package com.gwac.action;
 
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.OtLevel2;
-import com.gwac.model.OtLevel2QueryParameter;
+import com.gwac.model4.OtLevel2QueryParameter;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
@@ -16,7 +16,7 @@ import org.apache.struts2.interceptor.SessionAware;
 public class GetOtLevel2List2 extends ActionSupport implements SessionAware {
 
   private static final long serialVersionUID = 5073694279068543593L;
-  private static final Log log = LogFactory.getLog(GetOtLevel2List.class);
+  private static final Log log = LogFactory.getLog(GetOtLevel2List2.class);
   // Your result List
   private List<OtLevel2> gridModel;
   // get how many rows we want to have into the grid - rowNum attribute in the
