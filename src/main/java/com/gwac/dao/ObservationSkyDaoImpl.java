@@ -28,9 +28,9 @@ public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> 
   }
 
   @Override
-  public ObservationSky getByName(String name, int fieldId) {
+  public ObservationSky getByName(String name, int gridId) {
     Session session = getCurrentSession();
-    String sql = "select * from observation_sky where sky_name='" + name + "' and field_id="+fieldId;
+    String sql = "select * from observation_sky where sky_name='" + name + "' and grid_id="+gridId;
     Query q = session.createSQLQuery(sql).addEntity(ObservationSky.class);
 
     if (!q.list().isEmpty()) {
@@ -38,6 +38,7 @@ public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> 
     } else {
       ObservationSky sky = new ObservationSky();
       sky.setSkyName(name);
+      sky.setGridId(gridId);
       super.save(sky);
       return sky;
     }

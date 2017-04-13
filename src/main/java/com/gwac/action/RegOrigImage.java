@@ -88,8 +88,8 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
     if (groupId == null || groupId.isEmpty() || unitId == null || unitId.isEmpty()
             || camId == null || camId.isEmpty() || gridId == null || gridId.isEmpty()
             || fieldId == null || fieldId.isEmpty() || imgName == null || imgName.isEmpty()
-            || imgPath == null || imgPath.isEmpty() || genTime == null || genTime.isEmpty() || genTime.length() != "yyyyMMddHHmmssSSS".length()) {
-      echo = "all parameter cannot be empty, and genTime must formated as 'yyyyMMddHHmmssSSS'.";
+            || imgPath == null || imgPath.isEmpty() || genTime == null || genTime.isEmpty() || genTime.length() != "yyyy-MM-ddTHH:mm:ss.SSSSSS".length()) {
+      echo = "all parameter cannot be empty, and genTime must formated as 'yyyy-MM-ddTHH:mm:ss.SSSSSS'.";
       log.warn(echo);
     } else {
 
@@ -98,7 +98,7 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
         echo = imgName+" already exist.";
       } else {
         initObjType();
-        camId = imgName.substring(0, 1) + camId;
+//        camId = imgName.substring(0, 1) + camId;
         dpmDao.getDpmByName(camId);
 
 //        int gridId = 1;
@@ -107,7 +107,9 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
         ObjectIdentity camera = objIdtyDao.getByName(cameraType, camId);
         ObjectIdentity grid = objIdtyDao.getByName(gridType, gridId);
         ObservationSky obsSky = obsSkyDao.getByName(fieldId, grid.getObjId());
-        Date ffDate = CommonFunction.stringToDate(genTime, "yyyyMMddHHmmssSSS");
+        
+        String tDateStr = genTime.substring(0, "yyyy-MM-ddTHH:mm:ss.SSS".length()).replace('T', ' ');
+        Date ffDate = CommonFunction.stringToDate(tDateStr, "yyyy-MM-dd HH:mm:ss.SSS");
 
         FileNumber fnum = new FileNumber();
         fnum.setCamId(camera.getObjId());

@@ -30,7 +30,7 @@ public class ObservationSky  implements java.io.Serializable {
      private Float raMinN;
      private Float decMaxN;
      private Float decMinN;
-     private int fieldId;
+     private int gridId;
 
     public ObservationSky() {
     }
@@ -157,21 +157,19 @@ public class ObservationSky  implements java.io.Serializable {
     }
 
   /**
-   * @return the fieldId
+   * @return the gridId
    */
-  public int getFieldId() {
-    return fieldId;
+    @Column(name="grid_id")
+  public int getGridId() {
+    return gridId;
   }
 
   /**
-   * @param fieldId the fieldId to set
+   * @param gridId the gridId to set
    */
-  public void setFieldId(int fieldId) {
-    this.fieldId = fieldId;
+  public void setGridId(int gridId) {
+    this.gridId = gridId;
   }
-
-
-
 
 }
 
