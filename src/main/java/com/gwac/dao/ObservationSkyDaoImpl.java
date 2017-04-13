@@ -18,6 +18,7 @@ public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> 
 
   private static final Log log = LogFactory.getLog(ObservationSkyDaoImpl.class);
 
+  @Override
   public List<String> getAllSkyName() {
 
     String sql = "SELECT sky_name FROM observation_sky order by sky_name asc";
@@ -27,9 +28,9 @@ public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> 
   }
 
   @Override
-  public ObservationSky getByName(String name) {
+  public ObservationSky getByName(String name, int fieldId) {
     Session session = getCurrentSession();
-    String sql = "select * from observation_sky where sky_name='" + name + "'";
+    String sql = "select * from observation_sky where sky_name='" + name + "' and field_id="+fieldId;
     Query q = session.createSQLQuery(sql).addEntity(ObservationSky.class);
 
     if (!q.list().isEmpty()) {

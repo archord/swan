@@ -20,7 +20,7 @@ import org.hibernate.annotations.Parameter;
 public class ObservationSky  implements java.io.Serializable {
 
 
-     private short skyId;
+     private int skyId;
      private String skyName;
      private Float raMaxS;
      private Float raMinS;
@@ -30,15 +30,16 @@ public class ObservationSky  implements java.io.Serializable {
      private Float raMinN;
      private Float decMaxN;
      private Float decMinN;
+     private int fieldId;
 
     public ObservationSky() {
     }
 
 	
-    public ObservationSky(short skyId) {
+    public ObservationSky(int skyId) {
         this.skyId = skyId;
     }
-    public ObservationSky(short skyId, String skyName, Float raMaxS, Float raMinS, Float decMaxS, Float decMinS, Float raMaxN, Float raMinN, Float decMaxN, Float decMinN) {
+    public ObservationSky(int skyId, String skyName, Float raMaxS, Float raMinS, Float decMaxS, Float decMinS, Float raMaxN, Float raMinN, Float decMaxN, Float decMinN) {
        this.skyId = skyId;
        this.skyName = skyName;
        this.raMaxS = raMaxS;
@@ -57,11 +58,11 @@ public class ObservationSky  implements java.io.Serializable {
      @Id 
   @GeneratedValue(generator = "generator")
     @Column(name="sky_id", unique=true, nullable=false)
-    public short getSkyId() {
+    public int getSkyId() {
         return this.skyId;
     }
     
-    public void setSkyId(short skyId) {
+    public void setSkyId(int skyId) {
         this.skyId = skyId;
     }
 
@@ -154,6 +155,20 @@ public class ObservationSky  implements java.io.Serializable {
     public void setDecMinN(Float decMinN) {
         this.decMinN = decMinN;
     }
+
+  /**
+   * @return the fieldId
+   */
+  public int getFieldId() {
+    return fieldId;
+  }
+
+  /**
+   * @param fieldId the fieldId to set
+   */
+  public void setFieldId(int fieldId) {
+    this.fieldId = fieldId;
+  }
 
 
 

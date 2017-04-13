@@ -64,6 +64,7 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
   private ObjectType unitType = null;
   private ObjectType cameraType = null;
   private ObjectType computerType = null;
+  private ObjectType gridType = null;
 
   private String echo = "";
 
@@ -97,20 +98,22 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
         echo = imgName+" already exist.";
       } else {
         initObjType();
+        camId = imgName.substring(0, 1) + camId;
         dpmDao.getDpmByName(camId);
 
-        int gridId = 1;
+//        int gridId = 1;
         ObjectIdentity group = objIdtyDao.getByName(groupType, groupId);
         ObjectIdentity unit = objIdtyDao.getByName(unitType, unitId);
         ObjectIdentity camera = objIdtyDao.getByName(cameraType, camId);
-        ObservationSky obsSky = obsSkyDao.getByName(fieldId);
+        ObjectIdentity grid = objIdtyDao.getByName(gridType, gridId);
+        ObservationSky obsSky = obsSkyDao.getByName(fieldId, grid.getObjId());
         Date ffDate = CommonFunction.stringToDate(genTime, "yyyyMMddHHmmssSSS");
 
         FileNumber fnum = new FileNumber();
         fnum.setCamId(camera.getObjId());
         fnum.setDateStr(dateStr);
         fnum.setFieldId((int) obsSky.getSkyId());
-        fnum.setGridId(gridId);
+        fnum.setGridId(grid.getObjId());
         int ffNumber = fnumDao.getNextNumber(fnum);
 
         FitsFile2 ff2 = new FitsFile2();
@@ -118,7 +121,7 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
         ff2.setFfNumber(ffNumber);
         ff2.setFieldId((int) obsSky.getSkyId());
         ff2.setGenTime(ffDate);
-        ff2.setGridId((short) gridId);
+        ff2.setGridId(grid.getObjId());
         ff2.setGroupId(group.getObjId());
         ff2.setImgName(imgName);
         ff2.setImgPath(imgPath);
@@ -158,6 +161,11 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
     if (computerType == null) {
       computerType = objTypeDao.getByName("computer");
       appMap.put("computer", computerType);
+    }
+    gridType = (ObjectType) appMap.get("grid");
+    if (gridType == null) {
+      gridType = objTypeDao.getByName("grid");
+      appMap.put("grid", gridType);
     }
   }
 

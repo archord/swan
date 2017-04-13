@@ -20,6 +20,7 @@ public class FitsFile2DAOImpl extends BaseHibernateDaoImpl<FitsFile2> implements
 
   private static final Log log = LogFactory.getLog(FitsFile2DAOImpl.class);
 
+  @Override
   public boolean exist(String ffName) {
 
     Session session = getCurrentSession();

@@ -14,5 +14,5 @@ public interface ObservationSkyDao extends BaseHibernateDao<ObservationSky> {
 
   public List<String> getAllSkyName();
 
-  public ObservationSky getByName(String name);
+  public ObservationSky getByName(String name, int fieldId);
 }

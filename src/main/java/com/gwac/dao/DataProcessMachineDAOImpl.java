@@ -50,6 +50,7 @@ public class DataProcessMachineDAOImpl extends BaseHibernateDaoImpl<DataProcessM
 //    session.createSQLQuery(sql).executeUpdate();
   }
 
+  @Override
   public DataProcessMachine getDpmByName(String name) {
     Session session = getCurrentSession();
     String sql = "select * from data_process_machine where name='" + name + "';";
@@ -59,6 +60,10 @@ public class DataProcessMachineDAOImpl extends BaseHibernateDaoImpl<DataProcessM
     } else {
       DataProcessMachine tdpm = new DataProcessMachine();
       tdpm.setName(name);
+      tdpm.setCurProcessNumber(0);
+      tdpm.setFirstRecordNumber(0);
+      tdpm.setUsedStorageSize(new Float(0));
+      tdpm.setTotalStorageSize(new Float(1));
       super.save(tdpm);
       return tdpm;
     }
