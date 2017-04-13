@@ -108,10 +108,10 @@
       <div class="row ot-list-body">
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
-            <thead><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
+            <thead><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>CCD</th><th>记录总数</th>
                 <th>分类标识</th><th>回看</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th><th>后随结果</th>
                 <th>CVS</th><th>Other</th><th>前N分钟</th></tr></thead>
-            <tfoot><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>首帧标识字符串</th><th>记录总数</th>
+            <tfoot><tr><th>ID</th><th>OT名</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>CCD</th><th>记录总数</th>
                 <th>分类标识</th><th>回看</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th><th>后随结果</th>
                 <th>CVS</th><th>Other</th><th>前N分钟</th></tr></tfoot>
           </table>

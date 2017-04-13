@@ -51,16 +51,19 @@ public class DataBackupServiceImpl implements DataBackupService {
   @Override
   public void deleteData() {
     try {
-      otlv2Dao.deleteAll("ot_level2_match");
-      otlv2Dao.deleteAll("ot_level2_his");
-      otlv2Dao.deleteAll("fits_file_cut_ref");
-      otlv2Dao.deleteAll("system_log");
-      otlv2Dao.deleteAll("fits_file2");
-      
       otlv2Dao.deleteAll("ot_level2");
-      ffcDao.deleteAll("fits_file_cut");
+//      otlv2Dao.deleteAll("ot_level2_his");
+//      otlv2Dao.deleteAll("ot_level2_match");
+      
       oorDao.deleteAll("ot_observe_record");
+//      oorDao.deleteAll("ot_observe_record_his");
+      
+      otlv2Dao.deleteAll("fits_file2");
+      otlv2Dao.deleteAll("fits_file_cut");
+//      otlv2Dao.deleteAll("fits_file_cut_ref");
+      
       cfDao.deleteAll("config_file");
+      otlv2Dao.deleteAll("system_log");
       ispDao.deleteAll("image_status_parameter");
       dpmDao.everyDayInit();
       ufuDao.removeAll();

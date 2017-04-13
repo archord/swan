@@ -28,8 +28,9 @@
       <div class="row ot-list-body">
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
-            <thead><tr><th>ID</th><th>日志日期</th><th>内容</th><th>日志类型</th><th>日志编码</th></tr></thead>
-            <tfoot><tr><th>ID</th><th>日志日期</th><th>内容</th><th>日志类型</th><th>日志编码</th></tr></tfoot>
+            <!--<thead><tr><th>ID</th><th>日志日期</th><th>内容</th><th>日志类型</th><th>日志编码</th></tr></thead>-->
+            <thead><tr><th>ID</th><th>日志日期</th><th>内容</th><th>日志编码</th><th>IP地址</th></tr></thead>
+            <tfoot><tr><th>ID</th><th>日志日期</th><th>内容</th><th>日志编码</th><th>IP地址</th></tr></tfoot>
           </table>
         </div>                                   
       </div>

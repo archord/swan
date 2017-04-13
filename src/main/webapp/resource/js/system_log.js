@@ -47,8 +47,8 @@ $(function() {
         {"data": "log_id"},
         {"data": "log_date"},
         {"data": "log_content"},
-        {"data": "log_type"},
-        {"data": "log_code"}
+        {"data": "log_code"},
+        {"data": "msg_ip"}
       ],
       "columnDefs": [{
           "targets": 0,
@@ -62,7 +62,7 @@ $(function() {
           "width": "2%"
         },{
           "targets": 4,
-          "width": "2%"
+          "width": "6%"
         }],
       "language": {
         "lengthMenu": '显示 <select>' +

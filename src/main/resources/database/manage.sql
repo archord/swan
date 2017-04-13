@@ -190,7 +190,7 @@ GROUP BY isp.dpm_id
 )as moor
 
 ##查询日志信息
-SELECT JSON_AGG((SELECT r FROM (SELECT log_id, log_type, log_code, log_date, log_content) r))
+SELECT text(JSON_AGG((SELECT r FROM (SELECT log_id, log_type, log_code, log_date, log_content) r)))
 from(
 SELECT sl.*
 FROM system_log sl

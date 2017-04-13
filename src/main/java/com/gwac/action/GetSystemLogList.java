@@ -9,6 +9,7 @@ import org.apache.struts2.convention.annotation.Result;
 
 /**
  * 对OT2列表分页显示
+ *
  * @author xy
  */
 @Result(name = "success", type = "json")
@@ -38,6 +39,9 @@ public class GetSystemLogList extends ActionSupport {
   public String execute() {
 
     dataStr = dao.findRecord(start, length);
+    if (dataStr == null) {
+      dataStr = "[]";
+    }
     recordsTotal = dao.count().intValue();
     recordsFiltered = recordsTotal;
 
@@ -99,6 +103,5 @@ public class GetSystemLogList extends ActionSupport {
   public void setDao(SystemLogDao dao) {
     this.dao = dao;
   }
-
 
 }

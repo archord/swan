@@ -19,6 +19,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 
@@ -34,6 +35,7 @@ public class CommonLog extends ActionSupport {
   private SystemLogDao sysLogDao;
 
   private String logType;
+  private String msgSource;
   private String msgType;
   private Integer msgCode;
   private String msgDate; //yyyy-MM-ddTHH:mm:ss.SSS
@@ -50,11 +52,13 @@ public class CommonLog extends ActionSupport {
     String result = SUCCESS;
     echo = "";
     
+    String ip = ServletActionContext.getRequest().getRemoteAddr();
     Date tdate = CommonFunction.stringToDate(msgDate.replace('T', ' '), "yyyy-MM-dd HH:mm:ss.SSS");
     SystemLog sysLog = new SystemLog();
     sysLog.setLogDate(tdate);
     sysLog.setLogContent(msgContent);
-    
+    sysLog.setMsgIP(ip);
+    sysLog.setMsgSource(msgSource);
     
     if ("logchb".equals(logType)) {
       sysLog.setLogCode(msgCode);
@@ -132,6 +136,13 @@ public class CommonLog extends ActionSupport {
    */
   public void setSysLogDao(SystemLogDao sysLogDao) {
     this.sysLogDao = sysLogDao;
+  }
+
+  /**
+   * @param msgSource the msgSource to set
+   */
+  public void setMsgSource(String msgSource) {
+    this.msgSource = msgSource;
   }
 
 }

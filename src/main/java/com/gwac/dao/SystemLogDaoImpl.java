@@ -17,10 +17,8 @@ public class SystemLogDaoImpl extends BaseHibernateDaoImpl<SystemLog> implements
   @Override
   public String findRecord(int start, int length) {
 
-    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT log_id, log_type, log_code, log_date, log_content) r))) "
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT log_id, log_type, log_code, log_date, log_content, msg_source, msg_ip) r))) "
             + "from(SELECT sl.* FROM system_log sl ORDER BY log_date desc OFFSET " + start + " LIMIT " + length + " )as tmp1";
-
-    System.out.println(sql);
     
     String rst = "";
     Query q = this.getCurrentSession().createSQLQuery(sql);

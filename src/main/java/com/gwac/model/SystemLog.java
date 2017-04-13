@@ -23,6 +23,8 @@ public class SystemLog implements java.io.Serializable {
   private Integer logCode;
   private Date logDate;
   private String logContent;
+  private String msgSource;
+  private String msgIP;
 
   public SystemLog() {
   }
@@ -104,6 +106,36 @@ public class SystemLog implements java.io.Serializable {
    */
   public void setLogContent(String logContent) {
     this.logContent = logContent;
+  }
+
+  /**
+   * @return the msgSource
+   */
+  @Column(name = "msg_source")
+  public String getMsgSource() {
+    return msgSource;
+  }
+
+  /**
+   * @param msgSource the msgSource to set
+   */
+  public void setMsgSource(String msgSource) {
+    this.msgSource = msgSource;
+  }
+
+  /**
+   * @return the msgIP
+   */
+  @Column(name = "msg_ip")
+  public String getMsgIP() {
+    return msgIP;
+  }
+
+  /**
+   * @param msgIP the msgIP to set
+   */
+  public void setMsgIP(String msgIP) {
+    this.msgIP = msgIP;
   }
 
 }
