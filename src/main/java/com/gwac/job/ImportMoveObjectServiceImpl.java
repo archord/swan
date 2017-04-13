@@ -55,9 +55,10 @@ public class ImportMoveObjectServiceImpl implements BaseService {
   @Override
   public void startJob() {
 
-//    if (isBeiJingServer || isTestServer) {
-//      return;
-//    }
+    if (isBeiJingServer || isTestServer) {
+      return;
+    }
+    
     long startTime = System.nanoTime();
     getAll();
     long endTime = System.nanoTime();
