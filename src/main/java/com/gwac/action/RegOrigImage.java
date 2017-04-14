@@ -62,7 +62,8 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
   private String dateStr = null;
   private ObjectType groupType = null;
   private ObjectType unitType = null;
-  private ObjectType cameraType = null;
+  private ObjectType ffovCameraType = null;
+  private ObjectType jfovCameraType = null;
   private ObjectType computerType = null;
   private ObjectType gridType = null;
 
@@ -95,7 +96,7 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
 
       boolean isExist = ff2Dao.exist(imgName);
       if (isExist) {
-        echo = imgName+" already exist.";
+        echo = imgName + " already exist.";
       } else {
         initObjType();
 //        camId = imgName.substring(0, 1) + camId;
@@ -104,10 +105,15 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
 //        int gridId = 1;
         ObjectIdentity group = objIdtyDao.getByName(groupType, groupId);
         ObjectIdentity unit = objIdtyDao.getByName(unitType, unitId);
-        ObjectIdentity camera = objIdtyDao.getByName(cameraType, camId);
+        ObjectIdentity camera;
+        if (Integer.parseInt(camId) % 5 == 0) {
+          camera = objIdtyDao.getByName(ffovCameraType, camId);
+        } else {
+          camera = objIdtyDao.getByName(jfovCameraType, camId);
+        }
         ObjectIdentity grid = objIdtyDao.getByName(gridType, gridId);
         ObservationSky obsSky = obsSkyDao.getByName(fieldId, grid.getObjId());
-        
+
         String tDateStr = genTime.substring(0, "yyyy-MM-ddTHH:mm:ss.SSS".length()).replace('T', ' ');
         Date ffDate = CommonFunction.stringToDate(tDateStr, "yyyy-MM-dd HH:mm:ss.SSS");
 
@@ -154,10 +160,15 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
       unitType = objTypeDao.getByName("unit");
       appMap.put("unit", unitType);
     }
-    cameraType = (ObjectType) appMap.get("camera");
-    if (cameraType == null) {
-      cameraType = objTypeDao.getByName("camera");
-      appMap.put("camera", cameraType);
+    ffovCameraType = (ObjectType) appMap.get("FFoV");
+    if (ffovCameraType == null) {
+      ffovCameraType = objTypeDao.getByName("FFoV");
+      appMap.put("FFoV", ffovCameraType);
+    }
+    jfovCameraType = (ObjectType) appMap.get("JFoV");
+    if (jfovCameraType == null) {
+      jfovCameraType = objTypeDao.getByName("JFoV");
+      appMap.put("JFoV", jfovCameraType);
     }
     computerType = (ObjectType) appMap.get("computer");
     if (computerType == null) {
