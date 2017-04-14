@@ -22,6 +22,7 @@ import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.jms.Destination;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -48,17 +50,17 @@ import org.springframework.jms.core.MessageCreator;
  * @author xy
  */
 public class CommonFileUpload extends ActionSupport implements ApplicationAware {
-  
+
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
-  
+
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
   private UploadFileUnstoreDao ufuDao;
   private JmsTemplate jmsTemplate;
   private Destination otlistDest;
-  
+
   private Map<String, Object> appmap;
-  
+
   private String fileType;
   private String sendTime; //yyyyMMddHHmmssSSS
   private Date sendTimeObj;
@@ -66,21 +68,21 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private List<String> fileUploadContentType = new ArrayList<String>();
   private List<String> fileUploadFileName = new ArrayList<String>();
   private String echo = "";
-  
+
   @Action(value = "commonFileUpload", results = {
     @Result(location = "manage/result.jsp", name = SUCCESS),
     @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() {
-    
+
     long startTime = System.nanoTime();
     long endTime = 0;
-    
+
     boolean flag = true;
     String result = SUCCESS;
     echo = "";
-    
-    log.debug("fileType=" + fileType + ": " + fileUpload.size() + " files.");
+
+    log.debug("sendTime=" + sendTime + ", fileType=" + fileType + ": " + fileUpload.size() + " files.");
 
     //必须设置传输机器名称
     if (null == fileType || fileType.isEmpty()) {
@@ -94,7 +96,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       echo = echo + "Error, must upload data file(fileUpload).\n";
       flag = false;
     }
-    
+
     if (fileUpload.size() != fileUploadFileName.size()) {
       echo = echo + "Error，please check upload command and retry!\n";
       flag = false;
@@ -114,7 +116,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       flag = false;
     }
     log.debug("fileTotalSize:" + fileTotalSize * 1.0 / 1048576 + "MB");
-    
+
     if (flag) {
       try {
         if (sendTime != null && !sendTime.isEmpty()) {
@@ -123,7 +125,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         }
       } catch (ParseException ex) {
         sendTimeObj = null;
-        log.error("parse sendTime error", ex);
+        log.error("parse sendTime: " + sendTime + " error", ex);
       }
       try {
         String dateStr = (String) appmap.get("datestr");
@@ -137,13 +139,13 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         //G002_Mon_objt_161219T11523152
         String tfName = fileUploadFileName.get(0);
         String dpmName = tfName.substring(0, tfName.indexOf("_"));
-        
+
         String rootPath = getText("gwac.data.root.directory");
         if (rootPath.charAt(rootPath.length() - 1) != '/') {
           rootPath += "/";
         }
         String destPath = rootPath + dateStr + "/" + dpmName + "/";
-        
+
         File destDir = new File(destPath);
         if (!destDir.exists()) {
           destDir.mkdirs();
@@ -172,7 +174,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           tfileType = '9';
           tpath = destPath + getText("gwac.data.magcalibration.directory");
         }
-        
+
         if (tflag) {
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
           echo += "success upload " + fileUpload.size() + " files.";
@@ -193,19 +195,19 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     } else {
       result = ERROR;
     }
-    
+
     log.debug(echo);
     ActionContext ctx = ActionContext.getContext();
     ctx.getSession().put("echo", echo);
-    
+
     double time1 = 1.0 * (endTime - startTime) / 1e9;
     log.debug("fileType=" + fileType + ": " + fileUpload.size() + " files, total time: " + time1 + "s, ");
-    
+
     return result;
   }
-  
+
   public void storeOT2CutImage(List<File> files, List<String> fnames, String rootPath) {
-    
+
     int i = 0;
     for (File file : files) {
       String tfilename = fnames.get(i++).trim();
@@ -213,14 +215,14 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         continue;
       }
       log.debug("receive: " + tfilename);
-      
+
       String tpath = "";
       if ("ot2im".equals(fileType)) {
         List<FitsFileCut> ffcs = ffcDao.getByName(tfilename.substring(0, tfilename.indexOf('.')));
         if (ffcs.size() > 0) {
           FitsFileCut ffc = ffcs.get(0);
           tpath = rootPath + ffc.getStorePath();
-          
+
           if (tfilename.indexOf(".jpg") > 0 || tfilename.indexOf(".png") > 0) {
             ffcDao.uploadSuccessCutByName(tfilename.substring(0, tfilename.indexOf('.')));
           }
@@ -244,7 +246,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
               if (dateStr != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmssSSS");
                 Date genDate = sdf.parse(dateStr.replace('T', ' '));
-                
+
                 FitsFileCutRef ffcr = new FitsFileCutRef();
                 ffcr.setFileName(tfilename.substring(0, tfilename.indexOf(".jpg")));
                 ffcr.setGenerateTime(genDate);
@@ -260,7 +262,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         }
       }
       log.debug("receive file " + tfilename + " to " + tpath);
-      
+
       if (!tpath.isEmpty()) {
         File destFile = new File(tpath, tfilename);
         //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
@@ -276,9 +278,9 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       }
     }
   }
-  
+
   public void storeFile(List<File> files, List<String> fnames, String path, String rootPath, char fileType) {
-    
+
     int i = 0;
     for (File file : files) {
       String tfilename = fnames.get(i++).trim();
@@ -297,7 +299,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       } catch (IOException ex) {
         log.error("delete or move file errror ", ex);
       }
-      
+
       UploadFileUnstore obj = new UploadFileUnstore();
       obj.setStorePath(path.substring(rootPath.length()));
       obj.setFileName(tfilename);
@@ -314,6 +316,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       } else if ('a' == fileType) {
         String tpath = rootPath + getText("gwac.monitorimage.directory");
         String tname = tfilename.substring(0, tfilename.indexOf("_")) + "_ccdimg.jpg";
+        String tnameSub = tfilename.substring(0, tfilename.indexOf("_")) + "_ccdimg_sub.jpg";
         File preFile = new File(tpath, tname);
         try {
           if (preFile.exists()) {
@@ -322,13 +325,34 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           if (destFile.exists()) {
             FileUtils.copyFile(destFile, preFile);
           }
+          int toWidth = 400;
+          int toHeight = 400;
+          getThumbnail(tname, tnameSub, toWidth, toHeight);
         } catch (IOException ex) {
           log.error("delete or move file errror ", ex);
         }
       }
     }
   }
-  
+
+  public void getThumbnail(String src, String dest, int toWidth, int toHeight) {
+
+    BufferedImage result = null;
+    try {
+      File srcfile = new File(src);
+      if (!srcfile.exists()) {
+        log.error("image " + src + " does not exist.");
+      }
+      BufferedImage im = ImageIO.read(srcfile);
+
+      result = new BufferedImage(toWidth, toHeight, BufferedImage.TYPE_BYTE_GRAY);
+      result.getGraphics().drawImage(im.getScaledInstance(toWidth, toHeight, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+      ImageIO.write(result, "jpg", new File(dest));
+    } catch (IOException e) {
+      log.error("create thumbnail error:", e);
+    }
+  }
+
   public String display() {
     return NONE;
   }
@@ -346,7 +370,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   public void setFileType(String fileType) {
     this.fileType = fileType;
   }
-  
+
   @Override
   public void setApplication(Map<String, Object> map) {
     this.appmap = map;
@@ -414,5 +438,5 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
   }
-  
+
 }
