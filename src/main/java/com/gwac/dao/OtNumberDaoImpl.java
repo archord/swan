@@ -84,6 +84,7 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
     return number;
   }
 
+  @Override
   public int getJfovNumberByDate(String date) {
 
     int number = 1;

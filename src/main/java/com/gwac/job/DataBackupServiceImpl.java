@@ -11,6 +11,7 @@ import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
+import com.gwac.dao.SystemLogDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
@@ -28,7 +29,7 @@ public class DataBackupServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(DataBackupServiceImpl.class);
   private static boolean running = true;
-  
+
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
   @Value("#{syscfg.gwacServerTest}")
@@ -50,6 +51,8 @@ public class DataBackupServiceImpl implements BaseService {
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private CcdPixFilterDao cpfDao;
+  @Resource
+  private SystemLogDao sysLogDao;
 
   @Override
   public void startJob() {
@@ -79,6 +82,8 @@ public class DataBackupServiceImpl implements BaseService {
       dpmDao.everyDayInit();
       ufuDao.removeAll();
       cpfDao.removeAll();
+      int day = 7;
+      sysLogDao.removeOldRecord(day);
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
