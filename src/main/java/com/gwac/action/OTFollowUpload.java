@@ -24,11 +24,13 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* curl command example: */
@@ -45,9 +47,11 @@ import org.apache.struts2.convention.annotation.Result;
 //@ParentPackage(value="struts-default")
 //@Controller()
 //@Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class OTFollowUpload extends ActionSupport {
+public class OTFollowUpload extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(OTFollowUpload.class);
+
+  private Map<String, Object> appmap;
 
   private String tspname;
   private String ot2name;
@@ -110,16 +114,24 @@ public class OTFollowUpload extends ActionSupport {
     }
 
     if (flag) {
-      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(getOt2name(), false);
-      if (null != ot2) {
-        String idStr = ot2.getIdentify();
+      String ot2FfName = ot2Dao.getOT2FitsFileName(ot2name, false);
+      if (null != ot2FfName) {
+
+        String dateStr = (String) appmap.get("datestr");
+        if (null == dateStr) {
+          dateStr = CommonFunction.getUniqueDateStr();
+          appmap.put("datestr", dateStr);
+          log.debug("has not dateStr:" + dateStr);
+        } else {
+          log.debug("has dateStr:" + dateStr);
+        }
 
         rootPath = getText("gwac.data.root.directory");
         destPath = rootPath;
         if (destPath.charAt(destPath.length() - 1) != '/') {
-          destPath += "/" + CommonFunction.getStorePath(idStr) + "/";
+          destPath += "/" + dateStr + "/" + ot2FfName.substring(0, ot2FfName.indexOf("_")) + "/";
         } else {
-          destPath += CommonFunction.getStorePath(idStr) + "/";
+          destPath += dateStr + "/" + ot2FfName.substring(0, ot2FfName.indexOf("_")) + "/";
         }
 
         File destDir = new File(destPath);
@@ -376,5 +388,10 @@ public class OTFollowUpload extends ActionSupport {
    */
   public void setFufDao(FollowUpFitsfileDao fufDao) {
     this.fufDao = fufDao;
+  }
+
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appmap = map;
   }
 }

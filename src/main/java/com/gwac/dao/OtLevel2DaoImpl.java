@@ -184,6 +184,28 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   }
 
   @Override
+  public String getOT2FitsFileName(String otName, Boolean queryHis) {
+
+    String sql1 = "select ff2.img_name from ot_level2 ot2 inner join fits_file2 ff2 on ot2.ff_id=ff2.ff_id where ot2.name='" + otName + "'";
+    String sql2 = "select ff2.img_name from ot_level2_his ot2 inner join fits_file2_his ff2 on ot2.ff_id=ff2.ff_id where ot2.name='" + otName + "'";
+
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = sql2;
+    } else {
+      unionSql = sql1;
+    }
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql);
+    if (!q.list().isEmpty()) {
+      return (String) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
   public OtLevel2 getOtLevel2ByNameFromHis(String otName) {
     Session session = getCurrentSession();
     String sql = "select * from ot_level2_his where name='" + otName + "';";
