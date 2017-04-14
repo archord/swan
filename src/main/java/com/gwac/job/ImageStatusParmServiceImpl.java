@@ -4,32 +4,28 @@
  */
 package com.gwac.job;
 
-import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFile2DAO;
-import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.ImageStatusParameterDao;
-import com.gwac.dao.ProcessStatusDao;
+import com.gwac.dao.ObjectIdentityDao;
 import com.gwac.dao.UploadFileUnstoreDao;
-import com.gwac.model.DataProcessMachine;
-import com.gwac.model.FitsFile;
-import com.gwac.model.FitsFile2;
+import com.gwac.model.FitsFile2Show;
 import com.gwac.model.ImageStatusParameter;
-import com.gwac.model.ProcessStatus;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
@@ -54,11 +50,9 @@ public class ImageStatusParmServiceImpl implements BaseService {
   @Resource
   private FitsFile2DAO ff2Dao;
   @Resource
-  private ProcessStatusDao psDao;
+  private ObjectIdentityDao objIdDao;
   @Resource
   private ImageStatusParameterDao ispDao;
-  @Resource
-  private DataProcessMachineDAO dpmDao;
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
   @Value("#{syscfg.gwacServerBeijing}")
@@ -105,7 +99,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
     log.debug("size=" + ufus.size());
 
     if (!ufus.isEmpty()) {
-      List<ImageStatusParameter> isps = new ArrayList<>();
+      Map<ImageStatusParameter, FitsFile2Show> isps = new HashMap<>();
       DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
       DateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -119,8 +113,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
 
             String tStr;
             String tStr2;
-            FitsFile2 ff2 = null;
-            int dpmId = -1;
+            FitsFile2Show ff2 = null;
+            int ccdId = -1;
             int prcNum = -1;
             Date imageTime = null;
 
@@ -143,19 +137,19 @@ public class ImageStatusParmServiceImpl implements BaseService {
             }
 
             if (StringUtils.isNotBlank(imageName)) {
-              ff2 = ff2Dao.getByName(imageName.substring(0, imageName.indexOf('.')) + ".fit");
+              ff2 = ff2Dao.getShowByName(imageName.substring(0, imageName.indexOf('.')) + ".fit");
               if (ff2 != null) {
-                dpmId = ff2.getCamId();
+                ccdId = ff2.getCamId();
                 prcNum = ff2.getFfNumber();
               }
             }
 
             //时间，机器编号，图像编号，任何一个不正常，该条记录没有意义
-            if (imageTime != null && dpmId != -1 && prcNum != -1) {
+            if (imageTime != null && ccdId != -1 && prcNum != -1) {
               ImageStatusParameter isp = new ImageStatusParameter();
 
               isp.setTimeObsUt(imageTime);
-              isp.setDpmId(dpmId);
+              isp.setDpmId(ccdId);
               isp.setPrcNum(prcNum);
 
               tStr = cfile.getProperty("Obj_Num");
@@ -293,36 +287,6 @@ public class ImageStatusParmServiceImpl implements BaseService {
 
               isp.setFfId(ff2.getFfId());
 
-              tStr = cfile.getProperty("ra_mount");
-              try {
-                isp.setMountRa(Float.parseFloat(tStr.trim()));
-              } catch (NumberFormatException e) {
-                isp.setMountRa(CommonFunction.dmsToDegree(tStr));
-                log.warn("ra_mount=" + tStr, e);
-              } catch (Exception e) {
-                isp.setMountRa(CommonFunction.dmsToDegree(tStr));
-                log.error("ra_mount: " + tStr, e);
-              }
-
-              tStr = cfile.getProperty("dec_mount");
-              try {
-                isp.setMountDec(Float.parseFloat(tStr.trim()));
-              } catch (NumberFormatException e) {
-                isp.setMountDec(CommonFunction.dmsToDegree(tStr));
-                log.warn("dec_mount=" + tStr, e);
-              } catch (Exception e) {
-                isp.setMountDec(CommonFunction.dmsToDegree(tStr));
-                log.error("dec_mount: " + tStr, e);
-              }
-
-              tStr = cfile.getProperty("State");
-              if (StringUtils.isNotBlank(tStr) && !StringUtils.equalsIgnoreCase(tStr, "nan")) {
-                ProcessStatus ps = new ProcessStatus();
-                ps.setPsName(tStr);
-                psDao.save(ps);
-                isp.setProcStageId(ps.getPsId());
-              }
-
               tStr = cfile.getProperty("TimeProcess");
               try {
                 isp.setProcTime(Float.parseFloat(tStr.trim()));
@@ -378,9 +342,31 @@ public class ImageStatusParmServiceImpl implements BaseService {
                 log.error("exptime: " + tStr, e);
               }
 
+              tStr = cfile.getProperty("ra_mount");
+              try {
+                isp.setMountRa(Float.parseFloat(tStr.trim()));
+              } catch (NumberFormatException e) {
+                isp.setMountRa(CommonFunction.dmsToDegree(tStr));
+                log.warn("ra_mount=" + tStr, e);
+              } catch (Exception e) {
+                isp.setMountRa(CommonFunction.dmsToDegree(tStr));
+                log.error("ra_mount: " + tStr, e);
+              }
+
+              tStr = cfile.getProperty("dec_mount");
+              try {
+                isp.setMountDec(Float.parseFloat(tStr.trim()));
+              } catch (NumberFormatException e) {
+                isp.setMountDec(CommonFunction.dmsToDegree(tStr));
+                log.warn("dec_mount=" + tStr, e);
+              } catch (Exception e) {
+                isp.setMountDec(CommonFunction.dmsToDegree(tStr));
+                log.error("dec_mount: " + tStr, e);
+              }
+
               tStr = cfile.getProperty("ra_imgCenter");
               try {
-                isp.setImgCenterRa(Float.parseFloat(tStr.trim())); 
+                isp.setImgCenterRa(Float.parseFloat(tStr.trim()));
               } catch (NumberFormatException e) {
                 isp.setImgCenterRa(new Float(-99));
                 log.warn("ra_imgCenter=" + tStr, e);
@@ -410,8 +396,20 @@ public class ImageStatusParmServiceImpl implements BaseService {
                   log.error("procEndTiime: " + tStr, e);
                 }
               }
+
+              tStr = cfile.getProperty("AstroFlag");
+              try {
+                isp.setAstroFlag(Integer.parseInt(tStr.trim()));
+              } catch (NumberFormatException e) {
+                isp.setAstroFlag(new Integer(-99));
+                log.warn("AstroFlag=" + tStr, e);
+              } catch (Exception e) {
+                isp.setAstroFlag(new Integer(-99));
+                log.error("AstroFlag: " + tStr, e);
+              }
+
               isp.setSendSuccess(false);
-              isps.add(isp);
+              isps.put(isp, ff2);
               ispDao.save(isp);
             }
 
@@ -429,37 +427,25 @@ public class ImageStatusParmServiceImpl implements BaseService {
       }
 
       if (!isBeiJingServer && isps.size() > 0) {
-        String ip = "190.168.1.32"; //190.168.1.32
-        int port = 18851;
+        String ip = "172.28.1.11"; //190.168.1.32
+        int port = 4011;
         Socket socket = null;
         DataOutputStream out = null;
 
         try {
           socket = new Socket(ip, port);
           out = new DataOutputStream(socket.getOutputStream());
-          for (ImageStatusParameter isp : isps) {
-            if (chechStatus(isp)) {
-              String tmsg = getFWHMMessage(isp);
-              try {
-                out.write(tmsg.getBytes());
-                out.flush();
-                log.debug("send fwhm, dpmId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
-              } catch (IOException ex) {
-                log.error("send fwhm, send message error.", ex);
-              }
-              isp.setSendSuccess(true);
-              ispDao.update(isp);
-
-              try {
-                Thread.sleep(100);
-              } catch (InterruptedException ex) {
-                log.error("send fwhm, delay error.", ex);
-              }
-            } else {
-              log.debug("send fwhm, image status do not meet send status.");
+          Iterator<Map.Entry<ImageStatusParameter, FitsFile2Show>> entries = isps.entrySet().iterator();
+          while (entries.hasNext()) {
+            Map.Entry<ImageStatusParameter, FitsFile2Show> entry = entries.next();
+            ImageStatusParameter tisp = entry.getKey();
+            FitsFile2Show tff2 = entry.getValue();
+            sendFocus(tisp, tff2, out);
+            sendGuide(tisp, tff2, out);
+            if (tisp.getSendSuccess()) {
+              ispDao.update(tisp);
             }
           }
-
           try {
             out.close();
             socket.close();
@@ -470,26 +456,81 @@ public class ImageStatusParmServiceImpl implements BaseService {
           log.error("send fwhm, cannot connect to server.", ex);
         }
       }
-
     }
   }
 
-  public Boolean chechStatus(ImageStatusParameter isp) {
-    log.debug("psId=" + isp.getProcStageId());
-    Boolean flag = false;
-    ProcessStatus ps = psDao.getByPsId((short) isp.getProcStageId());
-    if (ps != null && !StringUtils.equalsIgnoreCase(ps.getPsName(), "TempMaking")
-            && !StringUtils.equalsIgnoreCase(ps.getPsName(), "BadComImage")) {
+  public void sendFocus(ImageStatusParameter isp, FitsFile2Show ff2, DataOutputStream out) {
+    if (chechFocusStatus(isp)) {
+      String tmsg = getFWHMMessage(isp, ff2);
+//      try {
+//        out.write(tmsg.getBytes());
+//        out.flush();
+        log.debug("send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+//      } catch (IOException ex) {
+//        log.error("send fwhm, send message error.", ex);
+//      }
+      isp.setSendSuccess(true);
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException ex) {
+        log.error("send fwhm, delay error.", ex);
+      }
+    } else {
+      log.debug("send fwhm, image status do not meet send status.");
+    }
+  }
 
-//      ImageStatusParameter previoueIsp = ispDao.getPreviousStatus(isp);
-//      previoueIsp != null && previoueIsp.getXshift() != null && previoueIsp.getYshift() != null
+  public void sendGuide(ImageStatusParameter isp, FitsFile2Show ff2, DataOutputStream out) {
+    if (chechGuideStatus(isp)) {
+      String tmsg = getGuideMessage(isp, ff2);
+//      try {
+//        out.write(tmsg.getBytes());
+//        out.flush();
+        log.debug("send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+//      } catch (IOException ex) {
+//        log.error("send fwhm, send message error.", ex);
+//      }
+      isp.setSendSuccess(true);
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException ex) {
+        log.error("send fwhm, delay error.", ex);
+      }
+    } else {
+      log.debug("send fwhm, image status do not meet send status.");
+    }
+  }
+
+  public Boolean chechGuideStatus(ImageStatusParameter isp) {
+
+    Boolean flag = false;
+    if (isp.getAstroFlag() <= 1 && isp.getAstroFlag() >= -1) {
+      if (isp.getMountDec() != null && isp.getMountRa() != null
+              && isp.getImgCenterDec() != null && isp.getImgCenterRa() != null
+              && isp.getMountDec() >= -90 && isp.getMountDec() <= 90
+              && isp.getMountRa() >= 0 && isp.getMountRa() <= 360
+              && isp.getImgCenterDec() >= -90 && isp.getImgCenterDec() <= 90
+              && isp.getImgCenterRa() >= 0 && isp.getImgCenterRa() <= 360) {
+        String typeName = objIdDao.getObjTypeName(isp.getDpmId());
+        if (typeName.equalsIgnoreCase("FFoV")) {
+          flag = true;
+        }
+      }
+    } else {
+      log.error("wrong image parameter, skip!");
+    }
+    return flag;
+  }
+
+  public Boolean chechFocusStatus(ImageStatusParameter isp) {
+
+    Boolean flag = false;
+    if (isp.getAstroFlag() <= 1 && isp.getAstroFlag() >= -1) {
+
       if (isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
               && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
               && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
 
-//        float tXshift = previoueIsp.getXshift() - isp.getXshift();
-//        float tYshift = previoueIsp.getYshift() - isp.getYshift();
-//        && (tXshift * tXshift + tYshift * tYshift) < 0.5
         Boolean s1 = Math.abs(isp.getXshift() + 99) > 0.00001
                 && isp.getFwhm() < 10 && isp.getFwhm() > 1
                 && isp.getXrms() > 0 && isp.getXrms() < 0.13
@@ -507,22 +548,43 @@ public class ImageStatusParmServiceImpl implements BaseService {
         flag = s1 || s2;
       }
     } else {
-      log.error("image status is null or has null porperties!");
+      log.error("wrong image parameter, skip!");
     }
     return flag;
   }
 
-  public String getFWHMMessage(ImageStatusParameter isp) {
-    int dpmId = isp.getDpmId();
-    String msg = "d#fwhm" + (int) Math.ceil(dpmId / 2.0);
-    if (dpmId % 2 == 0) {
-      msg += "N";
-    } else {
-      msg += "S";
-    }
-    msg += String.format("%04.0f", isp.getFwhm() * 100);
-    msg += "%";
-    return msg;
+  public String getGuideMessage(ImageStatusParameter isp, FitsFile2Show ff2) {
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("guide Group_ID=");
+    sb.append(ff2.getGroupName());
+    sb.append(", Unit_ID=");
+    sb.append(ff2.getUnitName());
+    sb.append(", ra=");
+    sb.append(isp.getImgCenterRa());
+    sb.append(", dec=");
+    sb.append(isp.getImgCenterDec());
+    sb.append(", objra=");
+    sb.append(isp.getMountRa());
+    sb.append(", objdec=");
+    sb.append(isp.getMountDec());
+    sb.append("\n");
+    return sb.toString();
+  }
+
+  public String getFWHMMessage(ImageStatusParameter isp, FitsFile2Show ff2) {
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("focus Group_ID=");
+    sb.append(ff2.getGroupName());
+    sb.append(", Unit_ID=");
+    sb.append(ff2.getUnitName());
+    sb.append(", Cam_ID=");
+    sb.append(ff2.getCamName());
+    sb.append(", Value=");
+    sb.append(isp.getFwhm());
+    sb.append("\n");
+    return sb.toString();
   }
 
 }

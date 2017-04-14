@@ -5,6 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.FitsFile2;
+import com.gwac.model.FitsFile2Show;
 
 /**
  *
@@ -13,6 +14,8 @@ import com.gwac.model.FitsFile2;
 public interface FitsFile2DAO extends BaseHibernateDao<FitsFile2> {
 
   public FitsFile2 getByName(String ffName);
-  
+
+  public FitsFile2Show getShowByName(String ffName);
+
   public boolean exist(String ffName);
 }
