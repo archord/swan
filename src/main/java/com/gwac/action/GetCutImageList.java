@@ -84,13 +84,22 @@ public class GetCutImageList extends ActionSupport implements ApplicationAware {
         log.debug("create dir " + tmpDir);
       }
 
-      ObjectType cameraType = (ObjectType) appMap.get("camera");
-      if (cameraType == null) {
-        cameraType = objTypeDao.getByName("camera");
-        appMap.put("camera", cameraType);
-      }
-
       cameraName = cameraName.trim();
+      ObjectType cameraType;
+      if (Integer.parseInt(cameraName) % 5 == 0) {
+        cameraType = (ObjectType) appMap.get("FFoV");
+        if (cameraType == null) {
+          cameraType = objTypeDao.getByName("FFoV");
+          appMap.put("FFoV", cameraType);
+        }
+      } else {
+        cameraType = (ObjectType) appMap.get("JFoV");
+        if (cameraType == null) {
+          cameraType = objTypeDao.getByName("JFoV");
+          appMap.put("JFoV", cameraType);
+        }
+      }
+      
       ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
       String content = ffcDao.getUnCuttedStarList(objId.getObjId(), 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
       try {

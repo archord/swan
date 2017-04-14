@@ -253,7 +253,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
                 ffcr.setSuccessCut(Boolean.TRUE);
                 ffcrDao.updateByName(ffcr);
               } else {
-                log.error("ot2 ref cut file date error, date=" + dateStr);
+                log.error("ot2 ref cut file date error, ref file name=" + tfilename);
               }
             }
           } catch (ParseException ex) {

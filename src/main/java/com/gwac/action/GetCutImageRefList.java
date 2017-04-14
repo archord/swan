@@ -57,7 +57,7 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
   private ObjectIdentityDao objIdtyDao;
   private ObjectTypeDao objTypeDao;
   private Map<String, Object> appMap = null;
-  
+
   @Action(value = "getCutImageRefList", results = {
     @Result(location = "forward.jsp", name = SUCCESS),
     @Result(location = "forward.jsp", name = INPUT),
@@ -88,16 +88,23 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
       }
 
       cameraName = cameraName.trim();
-      
-      ObjectType cameraType = (ObjectType) appMap.get("camera");
-      if (cameraType == null) {
-        cameraType = objTypeDao.getByName("camera");
-        appMap.put("camera", cameraType);
+      ObjectType cameraType;
+      if (Integer.parseInt(cameraName) % 5 == 0) {
+        cameraType = (ObjectType) appMap.get("FFoV");
+        if (cameraType == null) {
+          cameraType = objTypeDao.getByName("FFoV");
+          appMap.put("FFoV", cameraType);
+        }
+      } else {
+        cameraType = (ObjectType) appMap.get("JFoV");
+        if (cameraType == null) {
+          cameraType = objTypeDao.getByName("JFoV");
+          appMap.put("JFoV", cameraType);
+        }
       }
 
-      cameraName = cameraName.trim();
       ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
-      
+
       String content = getFfcrDao().getUnCuttedStarList(objId.getObjId());
       try {
         if (!content.isEmpty()) {
@@ -164,7 +171,7 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
   public void setRootWebDir(String rootWebDir) {
     this.rootWebDir = rootWebDir;
   }
-  
+
   @Override
   public void setApplication(Map<String, Object> map) {
     this.appMap = map;
