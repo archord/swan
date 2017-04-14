@@ -116,13 +116,12 @@ public class RegOrigImage extends ActionSupport implements ApplicationAware {
         ObjectIdentity grid = objIdtyDao.getByName(gridType, gridId);
         ObservationSky obsSky = obsSkyDao.getByName(fieldId, grid.getObjId());
 
-        String tDateStr;
-        String tDateFormate = "yyyy-MM-ddTHH:mm:ss.SSS";
+        String tDateStr = genTime;
+        String tDateFormate = "yyyy-MM-dd HH:mm:ss.SSS";
         if (genTime.length() > tDateFormate.length()) {
-          tDateStr = genTime.substring(0, tDateFormate.length()).replace('T', ' ');
-        } else {
-          tDateStr = genTime.replace('T', ' ');
+          tDateStr = genTime.substring(0, tDateFormate.length());
         }
+        tDateStr = tDateStr.replace('T', ' ');
         Date ffDate = CommonFunction.stringToDate(tDateStr, tDateFormate);
 
         FileNumber fnum = new FileNumber();
