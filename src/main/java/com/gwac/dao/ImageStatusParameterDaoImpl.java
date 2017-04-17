@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository(value="imageStatusParameterDao")
+@Repository(value="ispDao")
 public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatusParameter> implements ImageStatusParameterDao {
 
   private static final Log log = LogFactory.getLog(ImageStatusParameterDaoImpl.class);

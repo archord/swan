@@ -137,10 +137,13 @@ public class ImageStatusParmServiceImpl implements BaseService {
             }
 
             if (StringUtils.isNotBlank(imageName)) {
-              ff2 = ff2Dao.getShowByName(imageName.substring(0, imageName.indexOf('.')) + ".fit");
+              String tname = imageName.substring(0, imageName.indexOf('.')) + ".fit";
+              ff2 = ff2Dao.getShowByName(tname);
               if (ff2 != null) {
                 ccdId = ff2.getCamId();
                 prcNum = ff2.getFfNumber();
+              }else{
+                log.error("cannot find image :"+ tname);
               }
             }
 
@@ -411,6 +414,9 @@ public class ImageStatusParmServiceImpl implements BaseService {
               isp.setSendSuccess(false);
               isps.put(isp, ff2);
               ispDao.save(isp);
+            }else{
+              //imageTime != null && ccdId != -1 && prcNum
+              log.error("imageTime != null && ccdId != -1 && prcNum");
             }
 
             try {
