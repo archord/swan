@@ -327,7 +327,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           }
           int toWidth = 400;
           int toHeight = 400;
-          getThumbnail(tname, tnameSub, toWidth, toHeight);
+          getThumbnail(tpath, tname, tnameSub, toWidth, toHeight);
         } catch (IOException ex) {
           log.error("delete or move file errror ", ex);
         }
@@ -335,16 +335,16 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     }
   }
 
-  public void getThumbnail(String src, String dest, int toWidth, int toHeight) {
+  public void getThumbnail(String path, String src, String dest, int toWidth, int toHeight) {
 
     BufferedImage result = null;
     try {
-      File srcfile = new File(src);
+      File srcfile = new File(path, src);
       if (srcfile.exists()) {
         BufferedImage im = ImageIO.read(srcfile);
         result = new BufferedImage(toWidth, toHeight, BufferedImage.TYPE_BYTE_GRAY);
         result.getGraphics().drawImage(im.getScaledInstance(toWidth, toHeight, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
-        ImageIO.write(result, "jpg", new File(dest));
+        ImageIO.write(result, "jpg", new File(path, dest));
       } else {
         log.error("image " + src + " does not exist.");
       }
