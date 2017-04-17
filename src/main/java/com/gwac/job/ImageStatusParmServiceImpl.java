@@ -468,13 +468,13 @@ public class ImageStatusParmServiceImpl implements BaseService {
   public void sendFocus(ImageStatusParameter isp, FitsFile2Show ff2, DataOutputStream out) {
     if (chechFocusStatus(isp)) {
       String tmsg = getFWHMMessage(isp, ff2);
-//      try {
-//        out.write(tmsg.getBytes());
-//        out.flush();
+      try {
+        out.write(tmsg.getBytes());
+        out.flush();
         log.debug("start send focus, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
-//      } catch (IOException ex) {
-//        log.error("send fwhm, send message error.", ex);
-//      }
+      } catch (IOException ex) {
+        log.error("send fwhm, send message error.", ex);
+      }
       isp.setSendSuccess(true);
       try {
         Thread.sleep(100);
@@ -489,13 +489,13 @@ public class ImageStatusParmServiceImpl implements BaseService {
   public void sendGuide(ImageStatusParameter isp, FitsFile2Show ff2, DataOutputStream out) {
     if (chechGuideStatus(isp)) {
       String tmsg = getGuideMessage(isp, ff2);
-//      try {
-//        out.write(tmsg.getBytes());
-//        out.flush();
-        log.debug("start send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
-//      } catch (IOException ex) {
-//        log.error("send fwhm, send message error.", ex);
-//      }
+      try {
+        out.write(tmsg.getBytes());
+        out.flush();
+        log.debug("start send guide, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+      } catch (IOException ex) {
+        log.error("send guide, send message error.", ex);
+      }
       isp.setSendSuccess(true);
       try {
         Thread.sleep(100);
@@ -518,10 +518,9 @@ public class ImageStatusParmServiceImpl implements BaseService {
               && isp.getImgCenterDec() >= -90 && isp.getImgCenterDec() <= 90
               && isp.getImgCenterRa() >= 0 && isp.getImgCenterRa() <= 360) {
         String typeName = objIdDao.getObjTypeName(isp.getDpmId());
-//        if (typeName.equalsIgnoreCase("FFoV")) {
-//          flag = true;
-//        }
-        flag = true;
+        if (typeName.equalsIgnoreCase("FFoV")) {
+          flag = true;
+        }
       }
     } else {
       log.error("wrong guide parameter, skip!");
@@ -538,7 +537,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
               && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
               && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
         
-        if(isp.getFwhm() < 5 && isp.getFwhm() > 1){
+        if(isp.getFwhm() < 5 && isp.getFwhm() >=0){
                 flag = true;
         }
 
@@ -590,7 +589,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
     sb.append(ff2.getGroupName());
     sb.append(", Unit_ID=");
     sb.append(ff2.getUnitName());
-    sb.append(", Cam_ID=");
+    sb.append(", Camera_ID=");
     sb.append(ff2.getCamName());
     sb.append(", Value=");
     sb.append(isp.getFwhm());
