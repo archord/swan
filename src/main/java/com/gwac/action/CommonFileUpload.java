@@ -340,14 +340,14 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     BufferedImage result = null;
     try {
       File srcfile = new File(src);
-      if (!srcfile.exists()) {
+      if (srcfile.exists()) {
+        BufferedImage im = ImageIO.read(srcfile);
+        result = new BufferedImage(toWidth, toHeight, BufferedImage.TYPE_BYTE_GRAY);
+        result.getGraphics().drawImage(im.getScaledInstance(toWidth, toHeight, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+        ImageIO.write(result, "jpg", new File(dest));
+      } else {
         log.error("image " + src + " does not exist.");
       }
-      BufferedImage im = ImageIO.read(srcfile);
-
-      result = new BufferedImage(toWidth, toHeight, BufferedImage.TYPE_BYTE_GRAY);
-      result.getGraphics().drawImage(im.getScaledInstance(toWidth, toHeight, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
-      ImageIO.write(result, "jpg", new File(dest));
     } catch (IOException e) {
       log.error("create thumbnail error:", e);
     }
