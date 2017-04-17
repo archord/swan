@@ -28,9 +28,12 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -52,6 +55,7 @@ import org.springframework.jms.core.MessageCreator;
 public class CommonFileUpload extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
+  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "impre", "magclb"}));
 
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
@@ -61,13 +65,12 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
 
   private Map<String, Object> appmap;
 
-  private String camId;
   private String fileType;
   private String sendTime; //yyyyMMddHHmmssSSS
   private Date sendTimeObj;
-  private List<File> fileUpload = new ArrayList<File>();
-  private List<String> fileUploadContentType = new ArrayList<String>();
-  private List<String> fileUploadFileName = new ArrayList<String>();
+  private List<File> fileUpload = new ArrayList<>();
+  private List<String> fileUploadContentType = new ArrayList<>();
+  private List<String> fileUploadFileName = new ArrayList<>();
   private String echo = "";
 
   @Action(value = "commonFileUpload", results = {
@@ -83,13 +86,8 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     String result = SUCCESS;
     echo = "";
 
-    log.debug("camId=" + camId + ",sendTime=" + sendTime + ", fileType=" + fileType + ": " + fileUpload.size() + " files.");
+    log.debug("sendTime=" + sendTime + ", fileType=" + fileType + ": " + fileUpload.size() + " files.");
 
-    if (null == camId || camId.isEmpty()) {
-      echo = echo + "Error, must set camId.\n";
-      flag = false;
-    }
-    
     //必须设置传输机器名称
     if (null == fileType || fileType.isEmpty()) {
       echo = echo + "Error, must set file type(fileType).\n";
@@ -147,38 +145,39 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         if (rootPath.charAt(rootPath.length() - 1) != '/') {
           rootPath += "/";
         }
-        String destPath = rootPath + dateStr + "/" + camId + "/";
-
-        File destDir = new File(destPath);
-        if (!destDir.exists()) {
-          destDir.mkdirs();
-          log.debug("create dir " + destDir);
-        }
 
         //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, magclb:9, impre:a, 
-        char tfileType = '0';
-        String tpath = "";
-        boolean tflag = false;
-        if ("crsot1".equals(fileType)) {
-          tflag = true;
-          tfileType = '1';
-          tpath = destPath + getText("gwac.data.otlist.directory");
-        } else if ("imqty".equals(fileType)) {
-          tflag = true;
-          tfileType = '7';
-          tpath = destPath + getText("gwac.data.imgstatus.directory");
-        } else if ("impre".equals(fileType)) {
-          tflag = true;
-          tfileType = 'a';
-          String thead = getText("gwac.data.thumbnail.directory");
-          tpath = rootPath + thead + "/" + dateStr + "/" + camId;
-        } else if ("magclb".equals(fileType)) {
-          tflag = true;
-          tfileType = '9';
-          tpath = destPath + getText("gwac.data.magcalibration.directory");
-        }
-
-        if (tflag) {
+        if (typeSet.contains(fileType)) {
+          //G002_Mon_objt_161219T11523152
+          String tfName = fileUploadFileName.get(0);
+          String dpmName = tfName.substring(0, tfName.indexOf("_"));
+          String destPath = rootPath + dateStr + "/" + dpmName + "/";
+          File destDir = new File(destPath);
+          if (!destDir.exists()) {
+            destDir.mkdirs();
+            log.debug("create dir " + destDir);
+          }
+          char tfileType = '0';
+          String tpath = "";
+          switch (fileType) {
+            case "crsot1":
+              tfileType = '1';
+              tpath = destPath + getText("gwac.data.otlist.directory");
+              break;
+            case "imqty":
+              tfileType = '7';
+              tpath = destPath + getText("gwac.data.imgstatus.directory");
+              break;
+            case "impre":
+              tfileType = 'a';
+              String thead = getText("gwac.data.thumbnail.directory");
+              tpath = rootPath + thead + "/" + dateStr + "/" + dpmName;
+              break;
+            case "magclb":
+              tfileType = '9';
+              tpath = destPath + getText("gwac.data.magcalibration.directory");
+              break;
+          }
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
           echo += "success upload " + fileUpload.size() + " files.";
         } else if ("ot2im".equals(fileType) || "ot2imr".equals(fileType) || "ot2ims".equals(fileType)) {
@@ -441,12 +440,4 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
   }
-
-  /**
-   * @param camId the camId to set
-   */
-  public void setCamId(String camId) {
-    this.camId = camId;
-  }
-
 }
