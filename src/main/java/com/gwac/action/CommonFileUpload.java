@@ -61,6 +61,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
 
   private Map<String, Object> appmap;
 
+  private String camId;
   private String fileType;
   private String sendTime; //yyyyMMddHHmmssSSS
   private Date sendTimeObj;
@@ -82,8 +83,13 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     String result = SUCCESS;
     echo = "";
 
-    log.debug("sendTime=" + sendTime + ", fileType=" + fileType + ": " + fileUpload.size() + " files.");
+    log.debug("camId=" + camId + ",sendTime=" + sendTime + ", fileType=" + fileType + ": " + fileUpload.size() + " files.");
 
+    if (null == camId || camId.isEmpty()) {
+      echo = echo + "Error, must set camId.\n";
+      flag = false;
+    }
+    
     //必须设置传输机器名称
     if (null == fileType || fileType.isEmpty()) {
       echo = echo + "Error, must set file type(fileType).\n";
@@ -136,15 +142,12 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         } else {
           log.debug("has dateStr:" + dateStr);
         }
-        //G002_Mon_objt_161219T11523152
-        String tfName = fileUploadFileName.get(0);
-        String dpmName = tfName.substring(0, tfName.indexOf("_"));
 
         String rootPath = getText("gwac.data.root.directory");
         if (rootPath.charAt(rootPath.length() - 1) != '/') {
           rootPath += "/";
         }
-        String destPath = rootPath + dateStr + "/" + dpmName + "/";
+        String destPath = rootPath + dateStr + "/" + camId + "/";
 
         File destDir = new File(destPath);
         if (!destDir.exists()) {
@@ -168,7 +171,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           tflag = true;
           tfileType = 'a';
           String thead = getText("gwac.data.thumbnail.directory");
-          tpath = rootPath + thead + "/" + dateStr + "/" + dpmName;
+          tpath = rootPath + thead + "/" + dateStr + "/" + camId;
         } else if ("magclb".equals(fileType)) {
           tflag = true;
           tfileType = '9';
@@ -437,6 +440,13 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
    */
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
+  }
+
+  /**
+   * @param camId the camId to set
+   */
+  public void setCamId(String camId) {
+    this.camId = camId;
   }
 
 }
