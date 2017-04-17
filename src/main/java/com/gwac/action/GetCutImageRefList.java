@@ -91,41 +91,37 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
       ObjectType cameraType;
       if (Integer.parseInt(cameraName) % 5 == 0) {
         cameraType = (ObjectType) appMap.get("FFoV");
-        if (cameraType == null) {
-          cameraType = objTypeDao.getByName("FFoV");
-          appMap.put("FFoV", cameraType);
-        }
       } else {
         cameraType = (ObjectType) appMap.get("JFoV");
-        if (cameraType == null) {
-          cameraType = objTypeDao.getByName("JFoV");
-          appMap.put("JFoV", cameraType);
-        }
       }
-
-      ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
-
-      String content = getFfcrDao().getUnCuttedStarList(objId.getObjId());
       try {
-        if (!content.isEmpty()) {
-          fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
-          File file = new File(destPath, fileName);
-          if (!file.exists()) {
-            file.createNewFile();
-            log.debug("create ref cut image list file " + file);
+        String content = "";
+        if (cameraType != null) {
+          //模板切图和观测图像切图同时进行时，会对ccd同时进行两次注册；现阶段通过cameraType在图像注册时，保证图像注册程序先插入ccd信息，但是并不能解决问题
+          //解决方案：1，不用动态注册ccd等信息（ObjectIdentity），提前在数据库登记完成，后来程序只用查询
+          //2，动态注册，但是只在图像注册程序中注册，然后写入Application，其他进行从里面读取
+          ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
+          content = getFfcrDao().getUnCuttedStarList(objId.getObjId());
+          if (!content.isEmpty()) {
+            fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
+            File file = new File(destPath, fileName);
+            if (!file.exists()) {
+              file.createNewFile();
+              log.debug("create ref cut image list file " + file);
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
           }
-          FileWriter fw = new FileWriter(file.getAbsoluteFile());
-          BufferedWriter bw = new BufferedWriter(fw);
-          bw.write(content);
-          bw.close();
-        } else {
+        }
+        if (content.isEmpty()) {
           fileName = "empty.lst";
           File file = new File(destPath, fileName);
           if (!file.exists()) {
             file.createNewFile();
             log.debug("create empty file " + file);
           }
-//          log.debug("no cut images found at this time.");
         }
       } catch (IOException ex) {
         log.error("create or write file error ", ex);

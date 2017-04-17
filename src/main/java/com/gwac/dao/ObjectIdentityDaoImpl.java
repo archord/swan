@@ -32,6 +32,7 @@ public class ObjectIdentityDaoImpl extends BaseHibernateDaoImpl<ObjectIdentity> 
     if (!q.list().isEmpty()) {
       return (ObjectIdentity) q.list().get(0);
     } else {
+      log.debug("add obj: obj_type_id=" + objType.getObjTypeId() + ", obj_name=" + objName);
 //      String sql2 = "insert into object_identity(obj_type_id, obj_name)values(?,?)";
 //      Query q2 = session.createSQLQuery(sql2);
 //      q2.setShort(0, objType.getObjTypeId());

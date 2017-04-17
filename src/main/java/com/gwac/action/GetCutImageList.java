@@ -88,40 +88,35 @@ public class GetCutImageList extends ActionSupport implements ApplicationAware {
       ObjectType cameraType;
       if (Integer.parseInt(cameraName) % 5 == 0) {
         cameraType = (ObjectType) appMap.get("FFoV");
-        if (cameraType == null) {
-          cameraType = objTypeDao.getByName("FFoV");
-          appMap.put("FFoV", cameraType);
-        }
       } else {
         cameraType = (ObjectType) appMap.get("JFoV");
-        if (cameraType == null) {
-          cameraType = objTypeDao.getByName("JFoV");
-          appMap.put("JFoV", cameraType);
-        }
       }
-      
-      ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
-      String content = ffcDao.getUnCuttedStarList(objId.getObjId(), 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
+
       try {
-        if (!content.isEmpty()) {
-          fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
-          File file = new File(destPath, fileName);
-          if (!file.exists()) {
-            file.createNewFile();
-            log.debug("create cut image list file " + file);
+        String content = "";
+        if (cameraType != null) {
+          ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
+          content = ffcDao.getUnCuttedStarList(objId.getObjId(), 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
+          if (!content.isEmpty()) {
+            fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
+            File file = new File(destPath, fileName);
+            if (!file.exists()) {
+              file.createNewFile();
+              log.debug("create cut image list file " + file);
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
           }
-          FileWriter fw = new FileWriter(file.getAbsoluteFile());
-          BufferedWriter bw = new BufferedWriter(fw);
-          bw.write(content);
-          bw.close();
-        } else {
+        }
+        if (content.isEmpty()) {
           fileName = "empty.lst";
           File file = new File(destPath, fileName);
           if (!file.exists()) {
             file.createNewFile();
             log.debug("create empty file " + file);
           }
-//          log.debug("no cut images found at this time.");
         }
       } catch (IOException ex) {
         log.error("create or write file error ", ex);
