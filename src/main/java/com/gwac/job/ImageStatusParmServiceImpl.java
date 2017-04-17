@@ -450,10 +450,10 @@ public class ImageStatusParmServiceImpl implements BaseService {
             out.close();
             socket.close();
           } catch (IOException ex) {
-            log.error("send fwhm, close socket error.", ex);
+            log.error("send focus or guide, close socket error.", ex);
           }
         } catch (IOException ex) {
-          log.error("send fwhm, cannot connect to server.", ex);
+          log.error("send focus or guide, cannot connect to server.", ex);
         }
       }
     }
@@ -465,7 +465,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
 //      try {
 //        out.write(tmsg.getBytes());
 //        out.flush();
-        log.debug("send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+        log.debug("start send focus, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
 //      } catch (IOException ex) {
 //        log.error("send fwhm, send message error.", ex);
 //      }
@@ -486,7 +486,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
 //      try {
 //        out.write(tmsg.getBytes());
 //        out.flush();
-        log.debug("send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+        log.debug("start send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
 //      } catch (IOException ex) {
 //        log.error("send fwhm, send message error.", ex);
 //      }
@@ -512,12 +512,13 @@ public class ImageStatusParmServiceImpl implements BaseService {
               && isp.getImgCenterDec() >= -90 && isp.getImgCenterDec() <= 90
               && isp.getImgCenterRa() >= 0 && isp.getImgCenterRa() <= 360) {
         String typeName = objIdDao.getObjTypeName(isp.getDpmId());
-        if (typeName.equalsIgnoreCase("FFoV")) {
-          flag = true;
-        }
+//        if (typeName.equalsIgnoreCase("FFoV")) {
+//          flag = true;
+//        }
+        flag = true;
       }
     } else {
-      log.error("wrong image parameter, skip!");
+      log.error("wrong guide parameter, skip!");
     }
     return flag;
   }
@@ -530,25 +531,29 @@ public class ImageStatusParmServiceImpl implements BaseService {
       if (isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
               && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
               && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
+        
+        if(isp.getFwhm() < 5 && isp.getFwhm() > 1){
+                flag = true;
+        }
 
-        Boolean s1 = Math.abs(isp.getXshift() + 99) > 0.00001
-                && isp.getFwhm() < 10 && isp.getFwhm() > 1
-                && isp.getXrms() > 0 && isp.getXrms() < 0.13
-                && isp.getYrms() > 0 && isp.getYrms() < 0.13
-                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
-                && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
-                && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
-                && isp.getS2n() < 0.5
-                && isp.getAvgLimit() > 11;
-        Boolean s2 = (isp.getXshift() + 99) < 0.00001
-                && isp.getFwhm() < 10 && isp.getFwhm() > 1
-                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
-                && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
-                && isp.getBgBright() < 10000 && isp.getBgBright() > 1000;
-        flag = s1 || s2;
+//        Boolean s1 = Math.abs(isp.getXshift() + 99) > 0.00001
+//                && isp.getFwhm() < 10 && isp.getFwhm() > 1
+//                && isp.getXrms() > 0 && isp.getXrms() < 0.13
+//                && isp.getYrms() > 0 && isp.getYrms() < 0.13
+//                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
+//                && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
+//                && isp.getBgBright() < 10000 && isp.getBgBright() > 1000
+//                && isp.getS2n() < 0.5
+//                && isp.getAvgLimit() > 11;
+//        Boolean s2 = (isp.getXshift() + 99) < 0.00001
+//                && isp.getFwhm() < 10 && isp.getFwhm() > 1
+//                && isp.getAvgEllipticity() > 0 && isp.getAvgEllipticity() < 0.26
+//                && isp.getObjNum() > 5000 && isp.getObjNum() < 30000
+//                && isp.getBgBright() < 10000 && isp.getBgBright() > 1000;
+//        flag = s1 || s2;
       }
     } else {
-      log.error("wrong image parameter, skip!");
+      log.error("wrong focus parameter, skip!");
     }
     return flag;
   }
