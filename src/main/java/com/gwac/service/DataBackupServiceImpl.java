@@ -58,6 +58,7 @@ public class DataBackupServiceImpl implements DataBackupService {
       otlv2Dao.deleteAll("ot_tmpl_wrong");
       otlv2Dao.deleteAll("move_object");
       otlv2Dao.deleteAll("move_object_record");
+      otlv2Dao.deleteAll("observation_sky");
       
       otlv2Dao.deleteAll("ot_level2");
       oorDao.deleteAll("ot_observe_record");
