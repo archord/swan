@@ -52,9 +52,11 @@
         }
 
         function updateCenterImage() {
+          var origSrc = "/images/realTimeOtDistribution/G" + pad((centerImgIdx + 1), 3) + "_ccdimg.jpg?timestamp=" + new Date().getTime();
           var cenSrc = $("#img" + (centerImgIdx + 1)).attr("src");
           var cenSpan = $("#span" + (centerImgIdx + 1)).html();
           $('#imgCenter').attr("src", cenSrc);
+          $('#imgCenterUrl').attr("href", origSrc);
           $("#centerSpan").html(cenSpan);
           centerImgIdx = (centerImgIdx + 1) % totalImgNum;
         }
@@ -114,7 +116,7 @@
         <td><div align="center">
             <a href="/images/realTimeOtDistribution/G003_ccdimg.jpg"><img id="img3" src="/images/realTimeOtDistribution/G003_ccdimg_sub.jpg" class="imgStyle" border="0"/></a></div></td>
         <td colspan="3" rowspan="5"><div align="center">
-            <a href="/images/realTimeOtDistribution/GWAC_ccdimg.jpg"><img id="imgCenter" src="/images/realTimeOtDistribution/GWAC_ccdimg_sub.jpg" class="imgStyle" border="0"/></a></div></td>
+            <a id="imgCenterUrl" href="/images/realTimeOtDistribution/GWAC_ccdimg.jpg"><img id="imgCenter" src="/images/realTimeOtDistribution/GWAC_ccdimg_sub.jpg" class="imgStyle" border="0"/></a></div></td>
         <td><div align="center">
             <a href="/images/realTimeOtDistribution/G004_ccdimg.jpg"><img id="img4" src="/images/realTimeOtDistribution/G004_ccdimg_sub.jpg" class="imgStyle" border="0"/></a></div></td>
         <td><div align="center">
