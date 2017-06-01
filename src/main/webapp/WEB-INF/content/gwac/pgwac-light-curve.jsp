@@ -14,7 +14,7 @@
     <meta http-equiv="description" content="GWAC光变分类页面" />
     <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
 
-    <title>GWAC光变曲线- <s:text name="showcase.version"/></title>
+    <title>GWAC小行星历史查看- <s:text name="showcase.version"/></title>
 
     <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.css" rel="stylesheet">

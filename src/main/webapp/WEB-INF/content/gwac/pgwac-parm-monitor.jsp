@@ -11,10 +11,10 @@
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
     <meta http-equiv="keywords" content="国家天文台,svom,gwac,望远镜阵列,光变分类" />
-    <meta http-equiv="description" content="GWAC光变分类页面" />
+    <meta http-equiv="description" content="GWAC参数监控" />
     <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
 
-    <title>GWAC光变曲线- <s:text name="showcase.version"/></title>
+    <title>GWAC参数监控- <s:text name="showcase.version"/></title>
 
     <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.css" rel="stylesheet">

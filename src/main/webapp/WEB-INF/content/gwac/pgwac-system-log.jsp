@@ -6,7 +6,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex">
-    <title>OT实时列表</title>
+    <title>GWAC系统日志页面</title>
     <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="pragma" content="no-cache" />

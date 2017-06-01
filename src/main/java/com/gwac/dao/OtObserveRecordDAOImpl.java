@@ -338,14 +338,14 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   public List<OtObserveRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis) {
 
     Session session = getCurrentSession();
-    String sql1 = "select ff.file_name ff_name, ff.store_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
+    String sql1 = "select ff.img_name ff_name, ff.img_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
             + "from ot_observe_record oor "
-            + "left join fits_file ff on oor.ff_id=ff.ff_id "
+            + "left join fits_file2 ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut ffc on oor.ffc_id=ffc.ffc_id "
             + "where oor.ot_id=(select ob.ot_id from ot_level2 ob where name='" + otName + "') ";
-    String sql2 = "select ff.file_name ff_name, ff.store_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
+    String sql2 = "select ff.img_name ff_name, ff.img_path ff_path, ffc.file_name ffc_name, ffc.store_path ffc_path, oor.*"
             + "from ot_observe_record_his oor "
-            + "left join fits_file ff on oor.ff_id=ff.ff_id "
+            + "left join fits_file2 ff on oor.ff_id=ff.ff_id "
             + "left join fits_file_cut_his ffc on oor.ffc_id=ffc.ffc_id "
             + "where oor.ot_id=(select ob.ot_id from ot_level2_his ob where name='" + otName + "') ";
 

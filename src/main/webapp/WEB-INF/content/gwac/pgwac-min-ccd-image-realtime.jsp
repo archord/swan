@@ -62,7 +62,7 @@
         }
 //        updateImage();
         setInterval(updateImage, 15000);
-        setInterval(updateCenterImage, 5000);
+        setInterval(updateCenterImage, 1000);
 
         function shijian()
         {

@@ -112,12 +112,12 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     Session session = getCurrentSession();
     String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT dpm_id, par_detail) r))) "
             + "FROM( "
-            + "SELECT isp.dpm_id, JSON_AGG((SELECT r FROM (SELECT ";
+            + "SELECT oi.obj_name as dpm_id, JSON_AGG((SELECT r FROM (SELECT ";
     for (String tpar : parmName) {
       sql += tpar + ", ";
     }
     sql = sql + "prc_num, isp.time_obs_ut) r)) as par_detail "
-            + "FROM image_status_parameter isp WHERE ";
+            + "FROM image_status_parameter isp inner join object_identity oi on oi.obj_id=isp.dpm_id WHERE ";
     for (int i = 0; i < parmName.size(); i++) {
       String tpar = parmName.get(i);
       if (i > 0) {
@@ -126,7 +126,7 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
         sql += " abs(" + tpar + "+99)>0.0001 and " + tpar + " is not null ";
       }
     }
-    sql = sql + "GROUP BY isp.dpm_id order by isp.dpm_id)as moor";
+    sql = sql + "GROUP BY oi.obj_name order by oi.obj_name)as moor";
 
     String rst = "";
     Query q = session.createSQLQuery(sql);
