@@ -69,6 +69,7 @@
               <option value="yrms">图像对齐精度Y</option>
               <option value="proc_time">数据处理时间</option>
               <option value="temperature_actual">实际温度</option>
+              <option value="temperature_set">设定温度</option>
             </select>
           </div>
         </div>
