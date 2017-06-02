@@ -142,8 +142,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
               if (ff2 != null) {
                 ccdId = ff2.getCamId();
                 prcNum = ff2.getFfNumber();
-              }else{
-                log.error("cannot find image :"+ tname);
+              } else {
+                log.error("cannot find image :" + tname);
               }
             }
 
@@ -414,7 +414,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
               isp.setSendSuccess(false);
               isps.put(isp, ff2);
               ispDao.save(isp);
-            }else{
+            } else {
               //imageTime != null && ccdId != -1 && prcNum
               log.error("imageTime != null && ccdId != -1 && prcNum");
             }
@@ -521,6 +521,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
         if (typeName.equalsIgnoreCase("FFoV")) {
           flag = true;
         }
+      } else {
+        log.error("wrong guide parameter, skip!");
       }
     } else {
       log.error("wrong guide parameter, skip!");
@@ -536,9 +538,9 @@ public class ImageStatusParmServiceImpl implements BaseService {
       if (isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
               && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
               && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
-        
-        if(isp.getFwhm() < 5 && isp.getFwhm() >=0){
-                flag = true;
+
+        if (isp.getFwhm() < 5 && isp.getFwhm() > 0) {
+          flag = true;
         }
 
 //        Boolean s1 = Math.abs(isp.getXshift() + 99) > 0.00001
