@@ -103,7 +103,7 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
           ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
           content = getFfcrDao().getUnCuttedStarList(objId.getObjId());
           if (!content.isEmpty()) {
-            fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
+            fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + "_ref.lst";
             File file = new File(destPath, fileName);
             if (!file.exists()) {
               file.createNewFile();
