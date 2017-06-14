@@ -17,7 +17,7 @@ public interface FitsFileCutRefDAO extends BaseHibernateDao<FitsFileCutRef> {
 
   public void updateByName(FitsFileCutRef ffcr);
 
-  public String getUnCuttedStarList(int dpmId);
+  public String getUnCuttedStarList(int dpmId, int size);
 
   public List<FitsFileCutRef> getCutImageByOtName(String otName);
   

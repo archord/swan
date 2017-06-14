@@ -50,14 +50,19 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
    * @return
    */
   @Override
-  public String getUnCuttedStarList(int dpmId) {
+  public String getUnCuttedStarList(int dpmId, int size) {
     Session session = getCurrentSession();
+    
     String sql = "with updated_rows as "
-            + "(update fits_file_cut_ref set request_cut=true where request_cut=false and dpm_id=" + dpmId + " returning *) "
+            + "(update fits_file_cut_ref ffc1 "
+            + "set request_cut=true "
+            + "from (select ffcr_id from fits_file_cut_ref where request_cut=false and dpm_id=" + dpmId + " order by ffcr_id asc limit " + size + ") ffc2 "
+            + "where ffc1.ffcr_id=ffc2.ffcr_id returning *) "
             + "select ff.img_name ffname, ot.xtemp, ot.ytemp, ffcr.file_name ffcrname "
             + "from updated_rows ffcr "
             + "inner join fits_file2 ff on ffcr.ff_id=ff.ff_id "
             + "inner join ot_level2 ot on ot.ot_id=ffcr.ot_id ";
+    
     Query q = session.createSQLQuery(sql);
     List tlst = q.list();
     if (tlst.size() > 0) {

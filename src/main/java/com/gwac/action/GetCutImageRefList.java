@@ -101,7 +101,7 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
           //解决方案：1，不用动态注册ccd等信息（ObjectIdentity），提前在数据库登记完成，后来程序只用查询
           //2，动态注册，但是只在图像注册程序中注册，然后写入Application，其他进行从里面读取
           ObjectIdentity objId = objIdtyDao.getByName(cameraType, cameraName);
-          content = getFfcrDao().getUnCuttedStarList(objId.getObjId());
+          content = getFfcrDao().getUnCuttedStarList(objId.getObjId(), 6);
           if (!content.isEmpty()) {
             fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + "_ref.lst";
             File file = new File(destPath, fileName);
