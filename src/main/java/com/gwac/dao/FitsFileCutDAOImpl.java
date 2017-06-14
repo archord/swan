@@ -69,7 +69,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     String sql = "with updated_rows as "
             + "(update fits_file_cut ffc1 "
             + "set request_cut=true "
-            + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " order by priority asc limit " + size + ") ffc2 "
+            + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " order by priority asc, ot_id desc limit " + size + ") ffc2 "
             + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
             + "select ff.img_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
             + "from updated_rows ffc "
