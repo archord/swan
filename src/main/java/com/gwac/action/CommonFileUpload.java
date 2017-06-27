@@ -55,7 +55,7 @@ import org.springframework.jms.core.MessageCreator;
 public class CommonFileUpload extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
-  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "impre", "magclb"}));
+  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im"}));
 
   private FitsFileCutDAO ffcDao;
   private FitsFileCutRefDAO ffcrDao;
@@ -168,6 +168,10 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
               tfileType = '7';
               tpath = destPath + getText("gwac.data.imgstatus.directory");
               break;
+            case "subot1":
+              tfileType = '8';
+              tpath = destPath + getText("gwac.data.otlistsub.directory");
+              break;
             case "impre":
               tfileType = 'a';
               String thead = getText("gwac.data.thumbnail.directory");
@@ -176,6 +180,10 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
             case "magclb":
               tfileType = '9';
               tpath = destPath + getText("gwac.data.magcalibration.directory");
+              break;
+            case "subot2im":
+              tfileType = '4';
+              tpath = destPath + getText("gwac.data.cutimages.directory");
               break;
           }
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
@@ -219,7 +227,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       log.debug("receive: " + tfilename);
 
       String tpath = "";
-      if ("ot2im".equals(fileType)) {
+      if ("ot2im".equals(fileType)) {//交叉证认OT2切图，和图像相减OT2切图
         List<FitsFileCut> ffcs = ffcDao.getByName(tfilename.substring(0, tfilename.indexOf('.')));
         if (ffcs.size() > 0) {
           FitsFileCut ffc = ffcs.get(0);
@@ -229,13 +237,13 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
             ffcDao.uploadSuccessCutByName(tfilename.substring(0, tfilename.indexOf('.')));
           }
         }
-      } else if ("ot2ims".equals(fileType)) { //M170117_C00033_0139_sub.jpg
+      } else if ("ot2ims".equals(fileType)) { //M170117_C00033_0139_sub.jpg 交叉证认OT2切图与模板切图相减后的图像
         List<FitsFileCut> ffcs = ffcDao.getByName(tfilename.substring(0, tfilename.indexOf("_sub")));
         if (ffcs.size() > 0) {
           FitsFileCut ffc = ffcs.get(0);
           tpath = rootPath + ffc.getStorePath();
         }
-      } else if ("ot2imr".equals(fileType)) {
+      } else if ("ot2imr".equals(fileType)) {//交叉证认OT2模板切图
         List<FitsFileCutRef> ffcrs = ffcrDao.getByName(tfilename);
         if (ffcrs.size() > 0) {
           FitsFileCutRef ffrc = ffcrs.get(0);
@@ -312,7 +320,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         obj.setSendTime(sendTimeObj);
       }
       ufuDao.save(obj);
-      if ('1' == fileType) {
+      if ('1' == fileType || '8' == fileType) {
         MessageCreator tmc = new OTListMessageCreator(obj);
         jmsTemplate.send(otlistDest, tmc);
       } else if ('a' == fileType) {
