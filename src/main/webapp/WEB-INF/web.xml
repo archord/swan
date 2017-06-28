@@ -41,6 +41,9 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  <listener>  
+    <listener-class>com.gwac.servlet.TimingUpdateDateDirStrListener</listener-class>  
+  </listener>  
   <servlet>
     <servlet-name>OT2InfoDownlaod</servlet-name>
     <servlet-class>com.gwac.servlet.OT2InfoDownlaod</servlet-class>
