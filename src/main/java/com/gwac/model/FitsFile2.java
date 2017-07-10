@@ -28,7 +28,7 @@ public class FitsFile2  implements java.io.Serializable {
      private Integer groupId;
      private Integer unitId;
      private Integer camId;
-     private Short gridId;
+     private Integer gridId;
      private Integer fieldId;
      private String imgName;
      private String imgPath;
@@ -41,7 +41,7 @@ public class FitsFile2  implements java.io.Serializable {
     public FitsFile2(long ffId) {
         this.ffId = ffId;
     }
-    public FitsFile2(long ffId, Integer ffNumber, Integer groupId, Integer unitId, Integer camId, Short gridId, Integer fieldId, String imgName, String imgPath, Date genTime) {
+    public FitsFile2(long ffId, Integer ffNumber, Integer groupId, Integer unitId, Integer camId, Integer gridId, Integer fieldId, String imgName, String imgPath, Date genTime) {
        this.ffId = ffId;
        this.ffNumber = ffNumber;
        this.groupId = groupId;
@@ -110,11 +110,11 @@ public class FitsFile2  implements java.io.Serializable {
 
     
     @Column(name="grid_id")
-    public Short getGridId() {
+    public Integer getGridId() {
         return this.gridId;
     }
     
-    public void setGridId(Short gridId) {
+    public void setGridId(Integer gridId) {
         this.gridId = gridId;
     }
 

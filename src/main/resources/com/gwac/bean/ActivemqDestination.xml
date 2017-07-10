@@ -30,5 +30,8 @@
   <bean id="otFollowDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
     <constructor-arg value="OT_FOLLOW_LIST" />
   </bean>
+  <bean id="regOrigImageDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+    <constructor-arg value="REG_ORIG_IMAGE_LIST" />
+  </bean>
       
 </beans>

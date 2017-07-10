@@ -20,8 +20,6 @@ public class OTListListener implements MessageListener {
   private static final Log log = LogFactory.getLog(OTListListener.class);
   @Resource(name = "otObserveRecordService")
   private OtObserveRecordService otObserveRecordService;
-  @Resource(name = "otVarObserveRecordService")
-  private OtObserveRecordService otVarObserveRecordService;
   @Resource(name = "otSubObserveRecordService")
   private OtObserveRecordService otSubObserveRecordService;
 
@@ -39,7 +37,7 @@ public class OTListListener implements MessageListener {
       if (fileType == '1') {
         otObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else if (fileType == '6') {
-        otVarObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
+//        otVarObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else if (fileType == '8') {
         otSubObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else {

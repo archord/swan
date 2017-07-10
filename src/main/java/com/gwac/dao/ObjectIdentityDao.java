@@ -5,11 +5,15 @@
 package com.gwac.dao;
 
 import com.gwac.model.ObjectIdentity;
+import com.gwac.model.ObjectType;
 
 /**
  *
  * @author xy
  */
 public interface ObjectIdentityDao extends BaseHibernateDao<ObjectIdentity> {
+  
+  public ObjectIdentity getByName(ObjectType objType, String objName);
+  
   public String getObjTypeName(int objId);
 }

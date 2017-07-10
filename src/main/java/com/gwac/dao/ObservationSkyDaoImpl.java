@@ -20,20 +20,21 @@ public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> 
     private static final Log log = LogFactory.getLog(ObservationSkyDaoImpl.class);
     
     @Override
-    public ObservationSky getByName(String name) {
-        Session session = getCurrentSession();
-        String sql = "select * from observation_sky where sky_name='" + name + "'";
-        Query q = session.createSQLQuery(sql).addEntity(ObservationSky.class);
-        
-        if (!q.list().isEmpty()) {
-            return (ObservationSky) q.list().get(0);
-        } else {
-            ObservationSky sky = new ObservationSky();
-            sky.setSkyName(name);
-            super.save(sky);
-            return sky;
-        }
+  public ObservationSky getByName(String name, int gridId) {
+    Session session = getCurrentSession();
+    String sql = "select * from observation_sky where sky_name='" + name + "' and grid_id="+gridId;
+    Query q = session.createSQLQuery(sql).addEntity(ObservationSky.class);
+
+    if (!q.list().isEmpty()) {
+      return (ObservationSky) q.list().get(0);
+    } else {
+      ObservationSky sky = new ObservationSky();
+      sky.setSkyName(name);
+      sky.setGridId(gridId);
+      super.save(sky);
+      return sky;
     }
+  }
     
     @Override
     public void save(ObservationSky obj) {

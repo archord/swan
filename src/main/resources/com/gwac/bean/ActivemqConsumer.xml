@@ -2,144 +2,29 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-   
-  <!--ot check dest, listener, consumer--> 
-<!--  <bean id="otCheckListener" class="com.gwac.activemq.OTCheckListener">
-    <property name="ot2CheckService" ref="ot2CheckService" />
-  </bean>-->
   <bean id="otCheckConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
     <property name="connectionFactory" ref="jmsFactory"/>
     <property name="destination" ref="otCheckDest" />
     <property name="messageListener" ref="oTCheckListener" />
   </bean>
-  <!--ot check dest, listener, consumer--> 
-    
-  <!--ot list dest, listener, consumer--> 
-<!--  <bean id="otListListener" class="com.gwac.activemq.OTListListener">
-    <property name="otObserveRecordService" ref="otObserveRecordService" />
-    <property name="otVarObserveRecordService" ref="otVarObserveRecordService" />
-    <property name="otSubObserveRecordService" ref="otSubObserveRecordService" />
-  </bean>-->
+  
   <bean id="otListConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
     <property name="connectionFactory" ref="jmsFactory"/>
     <property name="destination" ref="otlistDest" />
     <property name="messageListener" ref="oTListListener" />
   </bean>
-  <!--ot list dest, listener, consumer--> 
-
-  <!--ot follow dest, listener, consumer--> 
-<!--  <bean id="otFollowListener" class="com.gwac.activemq.OTFollowListener">
-    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
-    <property name="isTestServer" value="${gwacServerTest}" />
-    <property name="serverIP" value="${gwacFollowServerIp}" />
-    <property name="serverPort" value="${gwacFollowServerPort}" />
-    <property name="server30IP" value="${gwacFollow30ServerIp}" />
-    <property name="server30Port" value="${gwacFollow30ServerPort}" />
-  </bean>-->
+  
   <bean id="otFollowConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
     <property name="connectionFactory" ref="jmsFactory"/>
     <property name="destination" ref="otFollowDest" />
     <property name="messageListener" ref="oTFollowListener" />
   </bean>
-  <!--ot follow dest, listener, consumer--> 
-<!--    
-  <bean id="otObserveRecordService" class="com.gwac.service.OtObserveRecordServiceImpl" >
-    <property name="otorDao" ref="otORDao" />
-    <property name="otcDao" ref="otcDao" />
-    <property name="otnDao" ref="otnDao" />
-    <property name="otLv2Dao" ref="otbDao" />
-    <property name="ffDao" ref="ffDao" />
-    <property name="ffcDao" ref="ffcDao" />
-    <property name="dpmDao" ref="dpmDao" />	
-    <property name="ffcrDao" ref="ffcrDao" />
-    <property name="skyDao" ref="skyDao" />
-    <property name="ufuDao" ref="ufuDao" />
-    <property name="jmsTemplate" ref="jmsTemplate" />
-    <property name="otCheckDest" ref="otCheckDest" />
-    <property name="rootPath" value="${gwacDataRootDirectory}" />	
-    <property name="cutIDir" value="${gwacDataCutimagesDirectory}" />
-    <property name="errorBox" value="${gwacErrorbox}" />	
-    <property name="successiveImageNumber" value="${gwacSuccessiveImageNumber}" />
-    <property name="occurNumber" value="${gwacOccurImageNumber}" />
-    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
-    <property name="isTestServer" value="${gwacServerTest}" />
-    <property name="firstNMarkNumber" value="${gwacFirstNMarkNumber}" />
-  </bean>
   
-  <bean id="otVarObserveRecordService" class="com.gwac.service.OtVarObserveRecordServiceImpl" >
-    <property name="otorDao" ref="otORDao" />
-    <property name="otcDao" ref="otcDao" />
-    <property name="otnDao" ref="otnDao" />
-    <property name="otLv2Dao" ref="otbDao" />
-    <property name="ffDao" ref="ffDao" />
-    <property name="ffcDao" ref="ffcDao" />
-    <property name="dpmDao" ref="dpmDao" />	
-    <property name="ffcrDao" ref="ffcrDao" />
-    <property name="skyDao" ref="skyDao" />
-    <property name="ufuDao" ref="ufuDao" />
-    <property name="jmsTemplate" ref="jmsTemplate" />
-    <property name="otCheckDest" ref="otCheckDest" />
-    <property name="rootPath" value="${gwacDataRootDirectory}" />	
-    <property name="cutIDir" value="${gwacDataCutimagesDirectory}" />
-    <property name="errorBox" value="${gwacErrorbox}" />	
-    <property name="successiveImageNumber" value="${gwacSuccessiveImageNumber}" />
-    <property name="occurNumber" value="${gwacOccurImageNumber}" />
-    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
-    <property name="isTestServer" value="${gwacServerTest}" />
-    <property name="firstNMarkNumber" value="${gwacFirstNMarkNumber}" />
+  <bean id="regOrigImageConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="jmsFactory"/>
+    <property name="destination" ref="regOrigImageDest" />
+    <property name="messageListener" ref="regOrigImageListener" />
   </bean>
-  
-  <bean id="otSubObserveRecordService" class="com.gwac.service.OtSubObserveRecordServiceImpl" >
-    <property name="otorDao" ref="otORDao" />
-    <property name="otcDao" ref="otcDao" />
-    <property name="otnDao" ref="otnDao" />
-    <property name="otLv2Dao" ref="otbDao" />
-    <property name="ffDao" ref="ffDao" />
-    <property name="ffcDao" ref="ffcDao" />
-    <property name="dpmDao" ref="dpmDao" />	
-    <property name="ffcrDao" ref="ffcrDao" />
-    <property name="skyDao" ref="skyDao" />
-    <property name="ufuDao" ref="ufuDao" />
-    <property name="jmsTemplate" ref="jmsTemplate" />
-    <property name="otCheckDest" ref="otCheckDest" />
-    <property name="rootPath" value="${gwacDataRootDirectory}" />	
-    <property name="cutIDir" value="${gwacDataCutimagesDirectory}" />
-    <property name="errorBox" value="${gwacErrorbox}" />	
-    <property name="successiveImageNumber" value="${gwacSuccessiveImageNumber}" />
-    <property name="cutOccurNumber" value="${gwacOccurCutimageNumber}" />
-    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
-    <property name="isTestServer" value="${gwacServerTest}" />
-    <property name="firstNMarkNumber" value="${gwacFirstNMarkNumber}" />
-  </bean>
-  
-  <bean id="ot2CheckService" class="com.gwac.service.Ot2CheckServiceImpl" >
-    <property name="ot2Dao" ref="otbDao" />
-    <property name="cvsDao" ref="cvsDao" />
-    <property name="moDao" ref="moDao" />
-    <property name="mpDao" ref="mpDao" />
-    <property name="rc3Dao" ref="rc3Dao" />
-    <property name="mtDao" ref="mtDao" />
-    <property name="ot2mDao" ref="ot2mDao" />
-    <property name="usnoDao" ref="usnoDao" />
-    <property name="cpfDao" ref="cpfDao" />
-    <property name="ottwdao" ref="ottwDao" />
-    <property name="mergedSearchbox" value="${mingwacMergedSearchbox}" />	
-    <property name="cvsSearchbox" value="${mingwacCvsSearchbox}" />	
-    <property name="rc3Searchbox" value="${mingwacRc3Searchbox}" />	
-    <property name="minorPlanetSearchbox" value="${mingwacMinorplanetSearchbox}" />
-    <property name="ot2Searchbox" value="${mingwacOt2hisSearchbox}" />
-    <property name="usnoSearchbox" value="${mingwacUsnoSearchbox}" />
-    <property name="mergedMag" value="${mingwacMergedMag}" />	
-    <property name="cvsMag" value="${mingwacCvsMag}" />	
-    <property name="rc3MinMag" value="${mingwacRc3Minmag}" />	
-    <property name="rc3MaxMag" value="${mingwacRc3Maxmag}" />	
-    <property name="usnoMag" value="${mingwacUsnoMag}" />	
-    <property name="minorPlanetMag" value="${mingwacMinorplanetMag}" />	
-    <property name="isBeiJingServer" value="${gwacServerBeijing}" />
-    <property name="isTestServer" value="${gwacServerTest}" />
-    <property name="usnoSearchbox2" value="${mingwacUsnoSearchbox2}" />
-    <property name="usnoMag2" value="${mingwacUsnoMag2}" />
-  </bean>-->
+ 
   
 </beans>

@@ -11,5 +11,5 @@ import com.gwac.model.ObservationSky;
  * @author xy
  */
 public interface ObservationSkyDao  extends BaseHibernateDao<ObservationSky>{
-    public ObservationSky getByName(String name);
+  public ObservationSky getByName(String name, int gridId);
 }

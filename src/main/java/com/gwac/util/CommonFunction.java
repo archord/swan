@@ -128,7 +128,8 @@ public class CommonFunction {
     } catch (ParseException ex) {
       log.error("string to date error.", ex);
     }
-    return new Date();
+//    return new Date();
+    return null;
   }
 
   public static List<Integer> getMissedNumber(List<Integer> nums) {
