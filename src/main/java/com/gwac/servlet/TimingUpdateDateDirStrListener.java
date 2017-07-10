@@ -11,6 +11,8 @@ import java.util.TimerTask;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -18,10 +20,12 @@ import javax.servlet.ServletContextListener;
  */
 public class TimingUpdateDateDirStrListener implements ServletContextListener {
 
+  private static final Log log = LogFactory.getLog(TimingUpdateDateDirStrListener.class);
   private Timer timer;
 
   @Override
   public void contextInitialized(ServletContextEvent sce) {
+    updateDateStr(sce.getServletContext());
     timer = new Timer(true);
     timer.schedule(new TimingUpdateDateDirStrTask(sce.getServletContext()), 0, 1800 * 1000);
   }
@@ -44,11 +48,14 @@ public class TimingUpdateDateDirStrListener implements ServletContextListener {
     public void run() {
       Calendar cal = Calendar.getInstance();
       if (C_SCHEDULE_HOUR == cal.get(Calendar.HOUR_OF_DAY)) {
-        String dateStr = CommonFunction.getUniqueDateStr();
-        context.setAttribute("datestr", dateStr);
-        System.out.println("update dateStr=" + context.getAttribute("datestr"));
+        updateDateStr(context);
       }
     }
+  }
 
+  public void updateDateStr(ServletContext context) {
+    String dateStr = CommonFunction.getUniqueDateStr();
+    context.setAttribute("datestr", dateStr);
+    log.debug("update dateStr=" + context.getAttribute("datestr"));
   }
 }

@@ -4,6 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
   
+  <bean class="com.gwac.action.RegTemplateAction"  scope="prototype">
+    <property name="srTmptDao" ref="srTmptDao" />
+  </bean>
+  
   <bean class="com.gwac.action.GetSystemLogList"  scope="prototype">
     <property name="dao" ref="sysLogDao" />
   </bean>
@@ -16,13 +20,10 @@
     <property name="dataBackupService" ref="dataBackupService" />
   </bean>
   
-  <bean class="com.gwac.action.RegOrigImage"  scope="prototype">
-    <property name="obsSkyDao" ref="skyDao" />
-    <property name="dpmDao" ref="dpmDao" />
-    <property name="objIdtyDao" ref="objIdentityDao" />
+  <bean class="com.gwac.action.RegOrigImageAction"  scope="prototype">
+    <property name="jmsTemplate" ref="jmsTemplate" />
+    <property name="msgDest" ref="regOrigImageDest" />
     <property name="objTypeDao" ref="objTypeDao" />
-    <property name="ff2Dao" ref="ff2Dao" />
-    <property name="fnumDao" ref="fnumDao" />
   </bean>
   
   <bean class="com.gwac.action.CommonLog"  scope="prototype">

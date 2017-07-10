@@ -116,12 +116,13 @@ public class CommonFunction {
    */
   public static Date stringToDate(String dateStr, String formater) {
     try {
-      SimpleDateFormat sdf = new SimpleDateFormat(formater);
-      return sdf.parse(dateStr);
+    SimpleDateFormat sdf = new SimpleDateFormat(formater);
+    return sdf.parse(dateStr);
     } catch (ParseException ex) {
       log.error("string to date error.", ex);
-    }
-    return new Date();
+  }
+//    return new Date();
+    return null;
   }
 
   public static List<Integer> getMissedNumber(List<Integer> nums) {
@@ -151,9 +152,9 @@ public class CommonFunction {
   }
 
   /**
-   * 获取观测日期字符串，每个观测夜（下午6点到第二天早上6点）
-   * 使用开始时的日期值生成，用于生成存储数据的文件夹的名称
-   * @return 
+   * 获取观测日期字符串，每个观测夜（下午6点到第二天早上6点） 使用开始时的日期值生成，用于生成存储数据的文件夹的名称
+   *
+   * @return
    */
   public static String getUniqueDateStr() {
     Calendar cal = Calendar.getInstance();
