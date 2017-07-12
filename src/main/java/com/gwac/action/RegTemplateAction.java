@@ -244,6 +244,7 @@ public class RegTemplateAction extends ActionSupport {
       obj.setUnitId(unitId);
       srTmptDao.save(obj);
       echo = "regist template success!";
+      log.debug(obj.toString());
     } else {
       echo = "regist template failure!";
       log.error("tmplate is null");
