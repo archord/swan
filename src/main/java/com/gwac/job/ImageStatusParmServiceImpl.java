@@ -411,6 +411,9 @@ public class ImageStatusParmServiceImpl implements BaseService {
                 log.error("AstroFlag: " + tStr, e);
               }
 
+              tStr = cfile.getProperty("template_path");
+              isp.setTemplatePath(tStr);
+
               isp.setSendSuccess(false);
               isps.put(isp, ff2);
               ispDao.save(isp);

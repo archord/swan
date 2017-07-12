@@ -50,6 +50,7 @@ public class ImageStatusParameter implements java.io.Serializable {
   private Date procEndTime;
   private Boolean sendSuccess;
   private int astroFlag;
+  private String templatePath;
 
   public ImageStatusParameter() {
   }
@@ -372,6 +373,21 @@ public class ImageStatusParameter implements java.io.Serializable {
    */
   public void setAstroFlag(int astroFlag) {
     this.astroFlag = astroFlag;
+  }
+
+  /**
+   * @return the templatePath
+   */
+  @Column(name = "template_path")
+  public String getTemplatePath() {
+    return templatePath;
+  }
+
+  /**
+   * @param templatePath the templatePath to set
+   */
+  public void setTemplatePath(String templatePath) {
+    this.templatePath = templatePath;
   }
 
 }
