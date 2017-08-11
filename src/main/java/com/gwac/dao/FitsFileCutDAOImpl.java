@@ -71,9 +71,10 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
             + "set request_cut=true "
             + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " order by priority asc, ot_id desc limit " + size + ") ffc2 "
             + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
-            + "select ff.img_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname "
+            + "select ff.img_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname, isp.template_path "
             + "from updated_rows ffc "
-            + "inner join fits_file2 ff on ffc.ff_id=ff.ff_id;";
+            + "inner join fits_file2 ff on ffc.ff_id=ff.ff_id "
+            + "inner join image_status_parameter isp on isp.ff_id=ff.ff_id;";
 
     Query q = session.createSQLQuery(sql);
     List tlst = q.list();
@@ -92,6 +93,8 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
       rst.append(row[2]);
       rst.append(" ");
       rst.append(row[3]);
+      rst.append(" ");
+      rst.append(row[4]);
       rst.append("\n");
     }
     return rst.toString();
