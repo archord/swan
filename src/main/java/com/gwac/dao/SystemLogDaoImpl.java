@@ -6,6 +6,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.SystemLog;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
@@ -15,10 +17,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository(value="sysLogDao")
 public class SystemLogDaoImpl extends BaseHibernateDaoImpl<SystemLog> implements SystemLogDao {
+  
+  private static final Log log = LogFactory.getLog(SystemLogDaoImpl.class);
 
   @Override
   public void removeOldRecord(int day) {
     String sql = "DELETE FROM system_log WHERE log_date<(LOCALTIMESTAMP-interval '" + day + " day')";
+    log.debug(sql);
     this.getCurrentSession().createSQLQuery(sql).executeUpdate();
   }
 
