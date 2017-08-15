@@ -26,6 +26,18 @@ public class SystemLogDaoImpl extends BaseHibernateDaoImpl<SystemLog> implements
     log.debug(sql);
     this.getCurrentSession().createSQLQuery(sql).executeUpdate();
   }
+  
+  /**
+   * 
+   * @param day
+   * @param codes values example "2012,400"
+   */
+  @Override
+  public void removeOldRecord(int day, String codes) {
+    String sql = "DELETE FROM system_log WHERE log_date<(LOCALTIMESTAMP-interval '" + day + " day') and log_code in ("+codes+")";
+    log.debug(sql);
+    this.getCurrentSession().createSQLQuery(sql).executeUpdate();
+  }
 
   @Override
   public String findRecord(int start, int length) {

@@ -83,7 +83,10 @@ public class DataBackupServiceImpl implements BaseService {
       ufuDao.removeAll();
       cpfDao.removeAll();
       int day = 7;
+      int day2 = 1;
+      String codes = "2012,400";
       sysLogDao.removeOldRecord(day);
+      sysLogDao.removeOldRecord(day2, codes);
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {

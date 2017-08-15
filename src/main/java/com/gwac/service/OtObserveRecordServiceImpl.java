@@ -240,7 +240,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
             FitsFileCutRef ffcr = new FitsFileCutRef();
             ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
-            ffcr.setFfId(ff2.getFfId());
+            ffcr.setFfId(oor1.getFfId());
             ffcr.setFileName(ffcrName);
             ffcr.setOtId(tOtLv2.getOtId());
             ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
