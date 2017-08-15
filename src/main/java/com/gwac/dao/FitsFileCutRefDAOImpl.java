@@ -60,15 +60,12 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
             + "where ffc1.ffcr_id=ffc2.ffcr_id returning *) "
             + "select ff.img_name ffname, ot.xtemp, ot.ytemp, ffcr.file_name ffcrname, isp.template_path "
             + "from updated_rows ffcr "
-            + "inner join fits_file2 ff on ffcr.ff_id=ff.ff_id "
-            + "inner join ot_level2 ot on ot.ot_id=ffcr.ot_id "
-            + "inner join image_status_parameter isp on isp.ff_id=ff.ff_id;";
+            + "left join fits_file2 ff on ffcr.ff_id=ff.ff_id "
+            + "left join ot_level2 ot on ot.ot_id=ffcr.ot_id "
+            + "left join image_status_parameter isp on isp.ff_id=ff.ff_id;";
     
     Query q = session.createSQLQuery(sql);
     List tlst = q.list();
-    if (tlst.size() > 0) {
-      log.debug("get " + tlst.size() + " ref cut images.");
-    }
 
     Iterator itor = tlst.iterator();
     StringBuilder rst = new StringBuilder();
@@ -84,6 +81,10 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
       rst.append(" ");
       rst.append(row[4]);
       rst.append("\n");
+    }
+    if (tlst.size() > 0) {
+      log.debug("get " + tlst.size() + " ref cut images.");
+      log.debug(rst.toString());
     }
 //    sql = "update fits_file_cut set request_cut=true where request_cut=false and dpm_id=" + dpmId;
 //    session.createSQLQuery(sql).executeUpdate();
