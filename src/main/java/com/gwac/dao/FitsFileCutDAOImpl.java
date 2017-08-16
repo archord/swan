@@ -73,7 +73,8 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
             + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
             + "select ff.img_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname, ff.img_path "
             + "from updated_rows ffc "
-            + "inner join fits_file2 ff on ffc.ff_id=ff.ff_id;";
+            + "inner join fits_file2 ff on ffc.ff_id=ff.ff_id "
+            + "order by ffc.ot_id asc, ffc.number asc;";
 
     Query q = session.createSQLQuery(sql);
     List tlst = q.list();
