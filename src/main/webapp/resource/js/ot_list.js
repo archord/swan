@@ -281,6 +281,12 @@ $(function() {
       result = 'OT';
     } else if (data === 2) {
       result = 'FOT';
+    } else if (data === 3) {
+      result = 'FNBG';
+    } else if (data === 4) {
+      result = 'FOBJ';
+    } else if (data === 5) {
+      result = 'FSUB';
     }
     return result;
   }
