@@ -287,6 +287,8 @@ $(function() {
       result = 'FOBJ';
     } else if (data === 5) {
       result = 'FSUB';
+    } else if (data === 6) {
+      result = 'FMCH'; //图像匹配失败
     }
     return result;
   }
