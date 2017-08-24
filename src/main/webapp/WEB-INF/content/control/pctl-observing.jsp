@@ -18,12 +18,13 @@
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/jquery-ui-1.12.1/jquery-ui.min.js"></script>
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
-    <style type="text/css">  
-      html {
-        height: 99%;
-      }
-      body {
-        min-height: 98%;
+    <style type="text/css"> 
+      html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width:100%;  
+        text-align: center;
       }
       .obs_plan_table {width:98%}
       .obs_plan {  
@@ -44,8 +45,10 @@
         -webkit-border-radius: 0.5em;
       }
       .tab_container{
-        width:95%; 
-        text-align: left;
+        width:100%; 
+        height: 93%;
+        text-align: center;
+        border:0;
       }
       .manual_container_tel{
         border: 3px solid #c5c5c5;
@@ -57,24 +60,20 @@
         min-height: 500px;
         padding: 5px;
       }
-      .manual_container_col{padding: 0 5px}
+      .manual_container_col{padding: 5px}
       .background {fill: #000;}
       line {stroke: #000;}
     </style>  
   </head>
   <body>
 
-    <div id="tabs" style="width:98%; height:95%;position: absolute">
-      <ul>
-        <li><a href="#tabs-1">状态监控</a></li>
+    <div id="tabs" style="width:98%; height:100%;margin:0 auto;border:0;">
+      <ul style="margin:12px;">
         <li><a href="#tabs-2">常规模式</a></li>
         <li><a href="#tabs-3">手动模式</a></li>
         <li><a href="#tabs-4">同步模式</a></li>
         <li><a href="<%=request.getContextPath()%>/control/pctl-observing-tab5.action">动态页面</a></li>
       </ul>
-      <div id="tabs-1" class="tab_container">
-        <%@include file="pctl-observing-tab1-1.jsp"%>
-      </div>
       <div id="tabs-2" class="tab_container">
         <%@include file="pctl-observing-tab2.jsp"%>
       </div>

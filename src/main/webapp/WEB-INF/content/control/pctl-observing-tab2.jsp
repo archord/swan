@@ -5,38 +5,31 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<table style="text-align: center; width: 98%; height: 600px">
-  <tr height="50"><td>待执行观测计划列表
-      <select height="30"><option>全部望远镜</option>
-        <option>望远镜01</option>
-        <option>望远镜02</option>
-        <option>望远镜03</option>
-        <option>望远镜04</option>
-        <option>望远镜05</option>
-        <option>望远镜06</option>
-        <option>望远镜07</option>
-        <option>望远镜08</option>
-      </select></td>
-    <td>已经执行观测计划列表 
-      <select height="30"><option>全部望远镜</option>
-        <option>望远镜01</option>
-        <option>望远镜02</option>
-        <option>望远镜03</option>
-        <option>望远镜04</option>
-        <option>望远镜05</option>
-        <option>望远镜06</option>
-        <option>望远镜07</option>
-        <option>望远镜08</option>
-      </select></td></tr>
-  <tr>
-    <td><textarea  class="obs_plan" wrap="off">
-观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1观测计划1
-观测计划1
-观测计划1
-      </textarea></td>
-    <td><textarea  class="obs_plan" wrap="off">
-观测计划1
-观测计划1
-观测计划1
-      </textarea></td>
-  </tr></table>
+<div id="tabs-monitor-table-div" style="width:100%; height:100%;margin:0 auto;border:0;">
+  <div>
+    待执行观测计划列表&nbsp;&nbsp;&nbsp;&nbsp;
+    <select height="30"><option>全部望远镜</option>
+      <option>望远镜01</option>
+      <option>望远镜02</option>
+      <option>望远镜03</option>
+      <option>望远镜04</option>
+      <option>望远镜05</option>
+      <option>望远镜06</option>
+      <option>望远镜07</option>
+      <option>望远镜08</option>
+    </select>
+  </div>
+  <div id="ot-list">
+    <table id="ot-list-table" class="display" cellspacing="0" width="100%">
+      <thead><tr><th>ID</th><th>生成时间</th><th>望远镜(GID-UID)</th><th>观测类型</th><th>天区(GID-FID)</th>
+          <th>ObjID</th><th>RA</th><th>DEC</th><th>历元</th>
+          <th>图像类型</th><th>曝光时间</th><th>延迟时间</th><th>总帧数</th><th>优先级</th><th>开始时间</th><th>结束时间</th>
+          <th>目标RA</th><th>目标DEC</th><th>目标历元</th><th>位置误差</th><th>分组ID</th><th>计划类型</th></tr></thead>
+
+      <thead><tr><th>ID</th><th>生成时间</th><th>望远镜(GID-UID)</th><th>观测类型</th><th>天区(GID-FID)</th>
+          <th>ObjID</th><th>RA</th><th>DEC</th><th>历元</th>
+          <th>图像类型</th><th>曝光时间</th><th>延迟时间</th><th>总帧数</th><th>优先级</th><th>开始时间</th><th>结束时间</th>
+          <th>目标RA</th><th>目标DEC</th><th>目标历元</th><th>位置误差</th><th>分组ID</th><th>计划类型</th></tr></thead>
+    </table>
+  </div>  
+</div>
