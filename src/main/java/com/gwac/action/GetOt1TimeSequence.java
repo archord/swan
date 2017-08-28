@@ -9,6 +9,7 @@ import com.gwac.model.OtObserveRecord;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -25,6 +26,7 @@ public class GetOt1TimeSequence extends ActionSupport implements SessionAware {
   private static final Log log = LogFactory.getLog(GetOt1TimeSequence.class);
 
   private Map<String, Object> session;
+  @Resource
   private OtObserveRecordDAO oorDao = null;
 
   private List<Map<String, Object>> ot2TimeSequence;
@@ -68,13 +70,6 @@ public class GetOt1TimeSequence extends ActionSupport implements SessionAware {
   @Override
   public void setSession(Map<String, Object> session) {
     this.session = session;
-  }
-
-  /**
-   * @param oorDao the oorDao to set
-   */
-  public void setOorDao(OtObserveRecordDAO oorDao) {
-    this.oorDao = oorDao;
   }
 
   /**

@@ -6,15 +6,14 @@ import com.gwac.model.UserInfo;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserInfoServiceImpl implements UserInfoService {
 
+  @Resource
   UserInfoDAO userDAO;
-
-  //DI via Spring
-  public void setUserDAO(UserInfoDAO userDAO) {
-    this.userDAO = userDAO;
-  }
 
   //call DAO to save user
   public ServiceResult addUser(UserInfo user) {

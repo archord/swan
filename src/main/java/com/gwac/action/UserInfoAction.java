@@ -7,11 +7,13 @@ import java.util.List;
 import com.gwac.service.UserInfoService;
 import com.gwac.model.UserInfo;
 import com.opensymphony.xwork2.ModelDriven;
+import javax.annotation.Resource;
 
 public class UserInfoAction implements ModelDriven {
 
   UserInfo user = new UserInfo();
   List<UserInfo> userList = new ArrayList<UserInfo>();
+  @Resource
   UserInfoService userService;
   //DI via Spring
 

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -48,9 +49,13 @@ public class OT2InfoDownload extends ActionSupport {
   private String contentType;
 
   private String otName;
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
   private OtLevel2Dao ot2Dao;
+  @Resource
   private OtObserveRecordDAO otorDao;
 
   private String echo;
@@ -128,13 +133,6 @@ public class OT2InfoDownload extends ActionSupport {
   }
 
   /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
    * @return the inputStream
    */
   public InputStream getInputStream() throws Exception {
@@ -160,27 +158,6 @@ public class OT2InfoDownload extends ActionSupport {
    */
   public String getContentType() {
     return contentType;
-  }
-
-  /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
-  }
-
-  /**
-   * @param otorDao the otorDao to set
-   */
-  public void setOtorDao(OtObserveRecordDAO otorDao) {
-    this.otorDao = otorDao;
-  }
-
-  /**
-   * @param ot2Dao the ot2Dao to set
-   */
-  public void setOt2Dao(OtLevel2Dao ot2Dao) {
-    this.ot2Dao = ot2Dao;
   }
 
 }

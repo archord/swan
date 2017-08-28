@@ -4,6 +4,7 @@ import com.gwac.dao.CoordinateShowDao;
 import com.gwac.model.CoordinateShow;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -21,6 +22,7 @@ public class GetCoorlList extends ActionSupport implements SessionAware {
   private Map<String, Object> session;
 
   private List<CoordinateShow> objs;
+  @Resource
   private CoordinateShowDao csDao;
 
   private String querySql;
@@ -55,13 +57,6 @@ public class GetCoorlList extends ActionSupport implements SessionAware {
    */
   public List<CoordinateShow> getObjs() {
     return objs;
-  }
-
-  /**
-   * @param csDao the csDao to set
-   */
-  public void setCsDao(CoordinateShowDao csDao) {
-    this.csDao = csDao;
   }
 
   /**

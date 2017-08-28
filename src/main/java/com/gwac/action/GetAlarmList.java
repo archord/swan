@@ -6,6 +6,7 @@ import com.gwac.model.UserInfo;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -21,6 +22,7 @@ public class GetAlarmList extends ActionSupport {
   private static final long serialVersionUID = -3454448234588641394L;
   private static final Log log = LogFactory.getLog(GetAlarmList.class);
 
+  @Resource
   private MultimediaResourceDao mrDao;
   /**
    * 返回结果
@@ -36,13 +38,6 @@ public class GetAlarmList extends ActionSupport {
 
     multimediaResources = mrDao.findAll();
     return "json";
-  }
-
-  /**
-   * @param mrDao the mrDao to set
-   */
-  public void setMrDao(MultimediaResourceDao mrDao) {
-    this.mrDao = mrDao;
   }
 
   /**

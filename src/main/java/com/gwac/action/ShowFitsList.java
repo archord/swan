@@ -10,6 +10,7 @@ import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -25,8 +26,11 @@ public class ShowFitsList extends ActionSupport {
   private static final long serialVersionUID = -3454448234588657934L;
   private static final Log log = LogFactory.getLog(ShowFitsList.class);
 
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
   private OtLevel2Dao obDao;
   /**
    * 查询条件
@@ -116,13 +120,6 @@ public class ShowFitsList extends ActionSupport {
   }
 
   /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
    * @return the otName
    */
   public String getOtName() {
@@ -151,13 +148,6 @@ public class ShowFitsList extends ActionSupport {
   }
 
   /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
-  }
-
-  /**
    * @return the startImgNum
    */
   public int getStartImgNum() {
@@ -169,20 +159,6 @@ public class ShowFitsList extends ActionSupport {
    */
   public void setStartImgNum(int startImgNum) {
     this.startImgNum = startImgNum;
-  }
-
-  /**
-   * @return the ffcrDao
-   */
-  public FitsFileCutRefDAO getFfcrDao() {
-    return ffcrDao;
-  }
-
-  /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
   }
 
   /**

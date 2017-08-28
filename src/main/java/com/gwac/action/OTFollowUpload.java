@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -64,9 +65,13 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   private String rootPath;
   private String destPath;
 
+  @Resource
   private OtLevel2Dao ot2Dao;
+  @Resource
   private UploadFileRecordDao ufrDao;
+  @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
   private FollowUpFitsfileDao fufDao;
 
   private String echo = "";
@@ -265,13 +270,6 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   }
 
   /**
-   * @param ot2Dao the ot2Dao to set
-   */
-  public void setOt2Dao(OtLevel2Dao ot2Dao) {
-    this.ot2Dao = ot2Dao;
-  }
-
-  /**
    * @return the tspname
    */
   public String getTspname() {
@@ -356,20 +354,6 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   }
 
   /**
-   * @param ufrDao the ufrDao to set
-   */
-  public void setUfrDao(UploadFileRecordDao ufrDao) {
-    this.ufrDao = ufrDao;
-  }
-
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
    * @return the followname
    */
   public String getFollowname() {
@@ -381,13 +365,6 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
    */
   public void setFollowname(String followname) {
     this.followname = followname;
-  }
-
-  /**
-   * @param fufDao the fufDao to set
-   */
-  public void setFufDao(FollowUpFitsfileDao fufDao) {
-    this.fufDao = fufDao;
   }
 
   @Override

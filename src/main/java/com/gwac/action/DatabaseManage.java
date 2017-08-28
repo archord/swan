@@ -78,13 +78,6 @@ public class DatabaseManage extends ActionSupport implements ApplicationAware {
   }
 
   /**
-   * @param dataBackupService the dataBackupService to set
-   */
-  public void setDataBackupService(DataBackupService dataBackupService) {
-    this.dataBackupService = dataBackupService;
-  }
-
-  /**
    * @param operation the operation to set
    */
   public void setOperation(String operation) {

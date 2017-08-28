@@ -3,6 +3,7 @@ package com.gwac.action;
 import com.gwac.dao.ObservationSkyDao;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -17,6 +18,7 @@ public class GetSkyListJson extends ActionSupport {
   private static final long serialVersionUID = -3454448234583441394L;
   private static final Log log = LogFactory.getLog(GetSkyListJson.class);
 
+  @Resource
   private ObservationSkyDao dao;
   private List<String> objs;
 
@@ -29,13 +31,6 @@ public class GetSkyListJson extends ActionSupport {
 
     objs = dao.getAllSkyName();
     return "json";
-  }
-
-  /**
-   * @param dao the dao to set
-   */
-  public void setDao(ObservationSkyDao dao) {
-    this.dao = dao;
   }
 
   /**

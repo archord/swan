@@ -4,6 +4,7 @@ import com.gwac.dao.MoveObjectDao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -20,7 +21,9 @@ public class GetMovOtSequence extends ActionSupport {
 
   private String dateStr;
 
+  @Resource
   private OtObserveRecordDAO oorDao = null;
+  @Resource
   private MoveObjectDao movObjDao = null;
   private String motList;
   private String ot1List;
@@ -53,13 +56,6 @@ public class GetMovOtSequence extends ActionSupport {
   }
 
   /**
-   * @param movObjDao the movObjDao to set
-   */
-  public void setMovObjDao(MoveObjectDao movObjDao) {
-    this.movObjDao = movObjDao;
-  }
-
-  /**
    * @return the motList
    */
   public String getMotList() {
@@ -78,13 +74,6 @@ public class GetMovOtSequence extends ActionSupport {
    */
   public void setDateStr(String dateStr) {
     this.dateStr = dateStr;
-  }
-
-  /**
-   * @param oorDao the oorDao to set
-   */
-  public void setOorDao(OtObserveRecordDAO oorDao) {
-    this.oorDao = oorDao;
   }
 
   /**

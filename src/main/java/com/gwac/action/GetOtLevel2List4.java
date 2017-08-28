@@ -10,6 +10,7 @@ import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
@@ -36,6 +37,7 @@ public class GetOtLevel2List4 extends ActionSupport {
   private int recordsTotal;
   private int recordsFiltered;
 
+  @Resource
   private OtLevel2Dao obDao = null;
   private OtLevel2QueryParameter ot2qp;
 
@@ -96,13 +98,6 @@ public class GetOtLevel2List4 extends ActionSupport {
    */
   public int getRecordsFiltered() {
     return recordsFiltered;
-  }
-
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
   }
 
   /**

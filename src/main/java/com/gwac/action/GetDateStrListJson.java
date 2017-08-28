@@ -7,6 +7,7 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.DataProcessMachine;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -21,6 +22,7 @@ public class GetDateStrListJson extends ActionSupport {
   private static final long serialVersionUID = -3454448234583441394L;
   private static final Log log = LogFactory.getLog(GetDateStrListJson.class);
 
+  @Resource
   private MoveObjectDao dao;
   private List<String> objs;
 

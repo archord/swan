@@ -7,6 +7,7 @@ import com.gwac.model.OtLevel2;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -24,7 +25,9 @@ public class GetOtFollowupObjectList extends ActionSupport {
   private String otName;
   private Boolean queryHis;
 
+  @Resource
   private FollowUpObjectDao fuoDao;
+  @Resource
   private OtLevel2Dao obDao;
 
   private OtLevel2 ot2;
@@ -64,21 +67,7 @@ public class GetOtFollowupObjectList extends ActionSupport {
     this.queryHis = queryHis;
   }
 
-  /**
-   * @param fuoDao the fuoDao to set
-   */
-  public void setFuoDao(FollowUpObjectDao fuoDao) {
-    this.fuoDao = fuoDao;
-  }
-
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
-  }
-
-  /**
+   /**
    * @return the ot2
    */
   public OtLevel2 getOt2() {

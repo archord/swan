@@ -11,6 +11,7 @@ import org.apache.struts2.convention.annotation.Result;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.interceptor.SessionAware;
@@ -24,6 +25,7 @@ public class OTClassify extends ActionSupport implements SessionAware {
   private static final long serialVersionUID = 7968544374444173511L;
   private static final Log log = LogFactory.getLog(OTClassify.class);
   
+  @Resource
   private OtLevel2Dao ot2Dao;
 
   private Map<String, Object> session;
@@ -65,13 +67,6 @@ public class OTClassify extends ActionSupport implements SessionAware {
   @Override
   public void setSession(Map<String, Object> map) {
     this.session = map;
-  }
-
-  /**
-   * @param ot2Dao the ot2Dao to set
-   */
-  public void setOt2Dao(OtLevel2Dao ot2Dao) {
-    this.ot2Dao = ot2Dao;
   }
 
   /**

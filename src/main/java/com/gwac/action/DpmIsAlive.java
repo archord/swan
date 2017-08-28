@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +38,7 @@ public class DpmIsAlive extends ActionSupport {
 
     private static final Log log = LogFactory.getLog(DpmIsAlive.class);
 
+    @Resource
     private DataProcessMachineDAO dpmDao;
 
     protected String dpm = "";
@@ -57,7 +59,7 @@ public class DpmIsAlive extends ActionSupport {
             dpmDao.updateLastActiveTime(dpm);
             echo += "success\n";
         }
-        
+
         /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
          * 用jsp的out，则不会有两个空行。
          * 在这里将结果信息存储在session中，在jsp页面获得返回信息。
@@ -84,13 +86,6 @@ public class DpmIsAlive extends ActionSupport {
      */
     public void setEcho(String echo) {
         this.echo = echo;
-    }
-
-    /**
-     * @param dpmDao the dpmDao to set
-     */
-    public void setDpmDao(DataProcessMachineDAO dpmDao) {
-        this.dpmDao = dpmDao;
     }
 
     /**

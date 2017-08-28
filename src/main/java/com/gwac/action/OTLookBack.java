@@ -15,6 +15,7 @@ import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -39,6 +40,7 @@ public class OTLookBack extends ActionSupport {
   private Short flag; //图像相减有目标1，图像相减没有目标2, 0代表没处理或处理报错
   private String echo = "";
 
+  @Resource
   private OtLevel2Dao ot2Dao;
 
   @Action(value = "otLookBack", results = {
@@ -117,13 +119,6 @@ public class OTLookBack extends ActionSupport {
    */
   public void setEcho(String echo) {
     this.echo = echo;
-  }
-
-  /**
-   * @param ot2Dao the ot2Dao to set
-   */
-  public void setOt2Dao(OtLevel2Dao ot2Dao) {
-    this.ot2Dao = ot2Dao;
   }
 
 }

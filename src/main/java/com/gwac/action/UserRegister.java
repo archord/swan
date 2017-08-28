@@ -16,6 +16,7 @@ import com.opensymphony.xwork2.validator.annotations.Validations;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 
 @InterceptorRef("jsonValidationWorkflowStack")
 @Validations(requiredStrings = {
@@ -36,6 +37,7 @@ public class UserRegister extends ActionSupport {
   private String address;
   private String echo;
   
+  @Resource
   private UserInfoService userService;
 
 
@@ -82,20 +84,6 @@ public class UserRegister extends ActionSupport {
    */
   public void setLoginpasswordrep(String loginpasswordrep) {
     this.loginpasswordrep = loginpasswordrep;
-  }
-
-  /**
-   * @return the userService
-   */
-  public UserInfoService getUserService() {
-    return userService;
-  }
-
-  /**
-   * @param userService the userService to set
-   */
-  public void setUserService(UserInfoService userService) {
-    this.userService = userService;
   }
 
   /**

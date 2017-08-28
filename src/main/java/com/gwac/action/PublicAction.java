@@ -5,6 +5,7 @@ package com.gwac.action;
 
 import com.gwac.service.PublicService;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -20,6 +21,7 @@ public class PublicAction extends ActionSupport {
   private static final long serialVersionUID = 1435264279738343593L;
   private static final Log log = LogFactory.getLog(PublicAction.class);
 
+  @Resource
   private PublicService publicService;
   
   @Actions({
@@ -32,10 +34,5 @@ public class PublicAction extends ActionSupport {
     return "json";
   }
 
-  /**
-   * @param publicService the publicService to set
-   */
-  public void setPublicService(PublicService publicService) {
-    this.publicService = publicService;
-  }
+
 }

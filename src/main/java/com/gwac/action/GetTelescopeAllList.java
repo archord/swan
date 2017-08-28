@@ -9,6 +9,7 @@ import org.apache.struts2.convention.annotation.Result;
 import com.gwac.model.Telescope;
 import com.gwac.service.TelescopeService;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 
@@ -22,6 +23,7 @@ public class GetTelescopeAllList extends ActionSupport {
   private static final Log log = LogFactory.getLog(GetTelescopeAllList.class);
   private List<Telescope> gridModel;
 
+  @Resource
   private TelescopeService tspService = null;
 
   @SuppressWarnings("unchecked")
@@ -31,12 +33,6 @@ public class GetTelescopeAllList extends ActionSupport {
     setGridModel(tspService.findAll());
 
     return SUCCESS;
-  }
-  /**
-   * @param tspService the tspService to set
-   */
-  public void setTspService(TelescopeService tspService) {
-    this.tspService = tspService;
   }
 
   /**

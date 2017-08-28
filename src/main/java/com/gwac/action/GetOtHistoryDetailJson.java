@@ -14,6 +14,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -31,10 +32,15 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
 
   private Map<String, Object> session;
 
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
   private OtTmplWrongDao ot2tmplDao;
+  @Resource
   private OtObserveRecordDAO otorDao;
+  @Resource
   private OtTypeDao ottDao;
   /**
    * 查询条件
@@ -96,14 +102,7 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
     return ffcList;
   }
 
-  /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
+   /**
    * @return the otName
    */
   public String getOtName() {
@@ -111,24 +110,10 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
   }
 
   /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
-  }
-
-  /**
    * @return the otOpticalVaration
    */
   public String getOtOpticalVaration() {
     return otOpticalVaration;
-  }
-
-  /**
-   * @param otorDao the otorDao to set
-   */
-  public void setOtorDao(OtObserveRecordDAO otorDao) {
-    this.otorDao = otorDao;
   }
 
   /**
@@ -179,24 +164,10 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
   }
 
   /**
-   * @param ottDao the ottDao to set
-   */
-  public void setOttDao(OtTypeDao ottDao) {
-    this.ottDao = ottDao;
-  }
-
-  /**
    * @return the otTypes
    */
   public List<OtType> getOtTypes() {
     return otTypes;
-  }
-
-  /**
-   * @param ot2tmplDao the ot2tmplDao to set
-   */
-  public void setOt2tmplDao(OtTmplWrongDao ot2tmplDao) {
-    this.ot2tmplDao = ot2tmplDao;
   }
 
   /**

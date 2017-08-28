@@ -417,38 +417,4 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     this.sendTime = sendTime;
   }
 
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
-  }
-
-  /**
-   * @param jmsTemplate the jmsTemplate to set
-   */
-  public void setJmsTemplate(JmsTemplate jmsTemplate) {
-    this.jmsTemplate = jmsTemplate;
-  }
-
-  /**
-   * @param otlistDest the otlistDest to set
-   */
-  public void setOtlistDest(Destination otlistDest) {
-    this.otlistDest = otlistDest;
-  }
-
-  /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
-  }
 }

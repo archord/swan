@@ -3,6 +3,7 @@ package com.gwac.action;
 import com.gwac.dao.SystemLogDao;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
@@ -32,6 +33,7 @@ public class GetSystemLogList extends ActionSupport {
   private int recordsTotal;
   private int recordsFiltered;
 
+  @Resource
   private SystemLogDao dao = null;
 
   @SuppressWarnings("unchecked")
@@ -95,13 +97,6 @@ public class GetSystemLogList extends ActionSupport {
    */
   public String getDataStr() {
     return dataStr;
-  }
-
-  /**
-   * @param dao the dao to set
-   */
-  public void setDao(SystemLogDao dao) {
-    this.dao = dao;
   }
 
 }

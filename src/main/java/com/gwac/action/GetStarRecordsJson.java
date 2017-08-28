@@ -4,6 +4,7 @@ import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.model.OtObserveRecord;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -20,6 +21,7 @@ public class GetStarRecordsJson extends ActionSupport {
 
   private int starType;
   private long starId;
+  @Resource
   private OtObserveRecordDAO dao;
   private String starRecords;
   private String starRecords2;
@@ -35,13 +37,6 @@ public class GetStarRecordsJson extends ActionSupport {
     starRecords2 = dao.getMagCurveByTypeIdStarId(starType, starId, 8);
 
     return "json";
-  }
-
-  /**
-   * @param dao the dao to set
-   */
-  public void setDao(OtObserveRecordDAO dao) {
-    this.dao = dao;
   }
 
   /**

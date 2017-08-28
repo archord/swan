@@ -5,6 +5,7 @@ import com.gwac.dao.OtLevel2MatchDao;
 import com.gwac.model.OtLevel2MatchShow;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
@@ -41,7 +42,9 @@ public class GetOtMatchList extends ActionSupport implements SessionAware {
   private Integer records = 0;
   private boolean loadonce = false;
   private Map<String, Object> session;
+  @Resource
   private OtLevel2MatchDao otmDao;
+  @Resource
   private OtLevel2Dao obDao;
   private String otName;
   private Boolean queryHis;
@@ -195,13 +198,6 @@ public class GetOtMatchList extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @param otmDao the otmDao to set
-   */
-  public void setOtmDao(OtLevel2MatchDao otmDao) {
-    this.otmDao = otmDao;
-  }
-
-  /**
    * @return the otName
    */
   public String getOtName() {
@@ -241,13 +237,6 @@ public class GetOtMatchList extends ActionSupport implements SessionAware {
    */
   public void setQueryHis(Boolean queryHis) {
     this.queryHis = queryHis;
-  }
-
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
   }
 
 }

@@ -18,6 +18,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.text.ParseException;
 import java.util.Date;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -170,13 +171,6 @@ public class RegTemplateAction extends ActionSupport {
     this.fwhm = fwhm;
   }
 
-  /**
-   * @param srTmptDao the srTmptDao to set
-   */
-  public void setSrTmptDao(SkyRegionTemplateDao srTmptDao) {
-    this.srTmptDao = srTmptDao;
-  }
-
   private static final Log log = LogFactory.getLog(RegTemplateAction.class);
 
   private String tmptName;
@@ -199,6 +193,7 @@ public class RegTemplateAction extends ActionSupport {
   private String storePath;
   private Integer starNum;
   private Float fwhm;
+  @Resource
   private SkyRegionTemplateDao srTmptDao;
 
   private String echo = "";

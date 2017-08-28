@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -29,10 +30,15 @@ public class ShowFollowupFitsList extends ActionSupport {
   private static final long serialVersionUID = -3454274234588641394L;
   private static final Log log = LogFactory.getLog(ShowFollowupFitsList.class);
 
+  @Resource
   private OtLevel2Dao obDao;
+  @Resource
   private FollowUpFitsfileDao fufDao;
+  @Resource
   private FollowUpRecordDao furDao;
+  @Resource
   private FollowUpObjectTypeDao fuotDao;
+  @Resource
   private FollowUpObjectDao fuoDao;
 
   private String otName;
@@ -73,33 +79,6 @@ public class ShowFollowupFitsList extends ActionSupport {
     return "json";
   }
 
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
-  }
-
-  /**
-   * @param fufDao the fufDao to set
-   */
-  public void setFufDao(FollowUpFitsfileDao fufDao) {
-    this.fufDao = fufDao;
-  }
-
-  /**
-   * @param furDao the furDao to set
-   */
-  public void setFurDao(FollowUpRecordDao furDao) {
-    this.furDao = furDao;
-  }
-
-  /**
-   * @param fuotDao the fuotDao to set
-   */
-  public void setFuotDao(FollowUpObjectTypeDao fuotDao) {
-    this.fuotDao = fuotDao;
-  }
 
   /**
    * @param otName the otName to set
@@ -120,13 +99,6 @@ public class ShowFollowupFitsList extends ActionSupport {
    */
   public List<FollowUpObjectType> getFuots() {
     return fuots;
-  }
-
-  /**
-   * @param fuoDao the fuoDao to set
-   */
-  public void setFuoDao(FollowUpObjectDao fuoDao) {
-    this.fuoDao = fuoDao;
   }
 
   /**

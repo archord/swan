@@ -6,6 +6,7 @@ import com.gwac.model4.OtLevel2QueryParameter;
 import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
@@ -42,6 +43,7 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
   private Integer records = 0;
   private boolean loadonce = false;
   private Map<String, Object> session;
+  @Resource
   private OtLevel2Dao obDao = null;
   private OtLevel2QueryParameter ot2qp;
 
@@ -218,12 +220,6 @@ public class GetOtLevel2List extends ActionSupport implements SessionAware {
     this.session = session;
   }
 
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
-  }
 
   /**
    * @return the ot2qp

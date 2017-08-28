@@ -27,11 +27,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
+import org.springframework.beans.factory.annotation.Value;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* curl command example: */
@@ -48,13 +50,17 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
 
   private static final Log log = LogFactory.getLog(GetCutImageRefList.class);
   private String cameraName;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
   private InputStream fileInputStream;
   private String fileName;
+  @Value("#{syscfg.gwacDataRootDirectoryWebmap}")
   private String rootWebDir;
   private String echo = "";
 
+  @Resource
   private ObjectIdentityDao objIdtyDao;
+  @Resource
   private ObjectTypeDao objTypeDao;
   private Map<String, Object> appMap = null;
 
@@ -162,10 +168,6 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
    */
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
-  }
-
-  public void setRootWebDir(String rootWebDir) {
-    this.rootWebDir = rootWebDir;
   }
 
   @Override

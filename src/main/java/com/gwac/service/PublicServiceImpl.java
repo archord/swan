@@ -8,13 +8,17 @@ import com.gwac.model.MultimediaResource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author xy
  */
+@Service
 public class PublicServiceImpl implements PublicService {
 
+  @Resource
   private MultimediaResourceDao mrDao;
 
   /**

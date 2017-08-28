@@ -16,6 +16,7 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.struts2.convention.annotation.ExceptionMapping;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.interceptor.SessionAware;
@@ -31,6 +32,7 @@ public class Login extends ActionSupport implements SessionAware {
 
   private Map<String, Object> session;
 
+  @Resource
   private UserInfoDAO userDao;
 
   private String loginName;
@@ -108,13 +110,6 @@ public class Login extends ActionSupport implements SessionAware {
    */
   public Map getMsg() {
     return msg;
-  }
-
-  /**
-   * @param userDao the userDao to set
-   */
-  public void setUserDao(UserInfoDAO userDao) {
-    this.userDao = userDao;
   }
 
   @Override

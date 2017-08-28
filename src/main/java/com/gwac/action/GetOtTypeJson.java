@@ -6,6 +6,7 @@ import com.gwac.model.UserInfo;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -23,6 +24,7 @@ public class GetOtTypeJson extends ActionSupport implements SessionAware {
 
   private Map<String, Object> session;
 
+  @Resource
   private OtTypeDao ottDao;
   /**
    * 返回结果
@@ -43,13 +45,6 @@ public class GetOtTypeJson extends ActionSupport implements SessionAware {
   @Override
   public void setSession(Map<String, Object> map) {
     this.session = map;
-  }
-
-  /**
-   * @param ottDao the ottDao to set
-   */
-  public void setOttDao(OtTypeDao ottDao) {
-    this.ottDao = ottDao;
   }
 
   /**

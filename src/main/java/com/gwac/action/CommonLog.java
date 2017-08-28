@@ -99,13 +99,6 @@ public class CommonLog extends ActionSupport {
   }
 
   /**
-   * @param logType the logType to set
-   */
-  public void setLogType(String logType) {
-    this.logType = logType;
-  }
-
-  /**
    * @param msgType the msgType to set
    */
   public void setMsgType(String msgType) {

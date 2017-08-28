@@ -14,6 +14,7 @@ import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,10 +41,15 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
   private String result = "";
   private OtLevel2FollowParameter ot2fp;
 
+  @Resource
   private FollowUpObservationDao foDao;
+  @Resource
   private OtLevel2Dao ot2Dao;
+  @Resource
   private UserInfoDAO userDao;
+  @Resource
   private JmsTemplate jmsTemplate;
+  @Resource
   private Destination otFollowDest;
 
   @SuppressWarnings("unchecked")
@@ -90,26 +96,6 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
     return SUCCESS;
   }
 
-  /**
-   * @param foDao the foDao to set
-   */
-  public void setFoDao(FollowUpObservationDao foDao) {
-    this.foDao = foDao;
-  }
-
-  /**
-   * @param ot2Dao the ot2Dao to set
-   */
-  public void setOt2Dao(OtLevel2Dao ot2Dao) {
-    this.ot2Dao = ot2Dao;
-  }
-
-  /**
-   * @param userDao the userDao to set
-   */
-  public void setUserDao(UserInfoDAO userDao) {
-    this.userDao = userDao;
-  }
 
   @Override
   public void setSession(Map<String, Object> map) {
@@ -142,20 +128,6 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
    */
   public void setOt2fp(OtLevel2FollowParameter ot2fp) {
     this.ot2fp = ot2fp;
-  }
-
-  /**
-   * @param jmsTemplate the jmsTemplate to set
-   */
-  public void setJmsTemplate(JmsTemplate jmsTemplate) {
-    this.jmsTemplate = jmsTemplate;
-  }
-
-  /**
-   * @param otFollowDest the otFollowDest to set
-   */
-  public void setOtFollowDest(Destination otFollowDest) {
-    this.otFollowDest = otFollowDest;
   }
 
 }

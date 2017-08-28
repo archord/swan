@@ -4,6 +4,7 @@ import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.model.UploadFileRecord;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
@@ -41,6 +42,7 @@ public class GetUploadFileRecordList extends ActionSupport implements SessionAwa
   private boolean loadonce = false;
   private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
+  @Resource
   private UploadFileRecordDao ufrDao = null;
 
   @SuppressWarnings("unchecked")
@@ -214,13 +216,6 @@ public class GetUploadFileRecordList extends ActionSupport implements SessionAwa
 
   public void setSession(Map<String, Object> session) {
     this.session = session;
-  }
-
-  /**
-   * @param ufrDao the ufrDao to set
-   */
-  public void setUfrDao(UploadFileRecordDao ufrDao) {
-    this.ufrDao = ufrDao;
   }
 
 }

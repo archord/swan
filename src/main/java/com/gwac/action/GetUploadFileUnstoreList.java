@@ -4,6 +4,7 @@ import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.UploadFileUnstore;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
@@ -41,6 +42,7 @@ public class GetUploadFileUnstoreList extends ActionSupport implements SessionAw
   private boolean loadonce = false;
   private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
+  @Resource
   private UploadFileUnstoreDao ufuDao = null;
 
   @SuppressWarnings("unchecked")
@@ -214,13 +216,6 @@ public class GetUploadFileUnstoreList extends ActionSupport implements SessionAw
 
   public void setSession(Map<String, Object> session) {
     this.session = session;
-  }
-
-  /**
-   * @param ufuDao the ufuDao to set
-   */
-  public void setUfuDao(UploadFileUnstoreDao ufuDao) {
-    this.ufuDao = ufuDao;
   }
 
 }

@@ -3,6 +3,7 @@ package com.gwac.action;
 import com.gwac.dao.OtLevel2MatchDao;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -18,6 +19,7 @@ public class GetStarListJson extends ActionSupport{
   private static final Log log = LogFactory.getLog(GetStarListJson.class);
 
   private int starType;
+  @Resource
   private OtLevel2MatchDao dao;
   private List<Long> objs;
 
@@ -31,13 +33,6 @@ public class GetStarListJson extends ActionSupport{
     objs=dao.getIdsByStarType(starType);
     
     return "json";
-  }
-
-  /**
-   * @param dao the dao to set
-   */
-  public void setDao(OtLevel2MatchDao dao) {
-    this.dao = dao;
   }
 
   /**

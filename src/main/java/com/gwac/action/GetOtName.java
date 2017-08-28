@@ -18,6 +18,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -33,6 +34,7 @@ import org.apache.struts2.convention.annotation.Result;
 public class GetOtName extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(UserRegister.class);
+  @Resource
   private OtNameRequestService onrService;
   private File requestList;
   private List<String> fileUploadContentType = new ArrayList<String>();
@@ -124,10 +126,4 @@ public class GetOtName extends ActionSupport {
     this.requestList = requestList;
   }
 
-  /**
-   * @param onrService the onrService to set
-   */
-  public void setOnrService(OtNameRequestService onrService) {
-    this.onrService = onrService;
-  }
 }

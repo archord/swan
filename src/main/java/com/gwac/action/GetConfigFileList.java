@@ -6,6 +6,7 @@ import com.gwac.model.ConfigFile;
 import com.gwac.model.UploadFileUnstore;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
@@ -43,6 +44,7 @@ public class GetConfigFileList extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
+  @Resource
   private ConfigFileDao cfDao = null;
 
   @SuppressWarnings("unchecked")
@@ -217,13 +219,6 @@ public class GetConfigFileList extends ActionSupport implements SessionAware {
   @Override
   public void setSession(Map<String, Object> session) {
     this.session = session;
-  }
-
-  /**
-   * @param cfDao the ufuDao to set
-   */
-  public void setCfDao(ConfigFileDao cfDao) {
-    this.cfDao = cfDao;
   }
 
 }

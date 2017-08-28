@@ -9,6 +9,7 @@ import org.apache.struts2.convention.annotation.Result;
 import com.gwac.model.DataProcessMachine;
 import com.gwac.service.DataProcessMachineService;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
@@ -43,6 +44,7 @@ public class GetDpmList extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
+  @Resource
   private DataProcessMachineService dpmService = null;
 
   @SuppressWarnings("unchecked")
@@ -218,20 +220,6 @@ public class GetDpmList extends ActionSupport implements SessionAware {
 
   public void setTotalrows(Integer totalrows) {
     this.totalrows = totalrows;
-  }
-
-  /**
-   * @return the dpmService
-   */
-//  public DataProcessMachineService getDpmService() {
-//    return dpmService;
-//  }
-
-  /**
-   * @param dpmService the dpmService to set
-   */
-  public void setDpmService(DataProcessMachineService dpmService) {
-    this.dpmService = dpmService;
   }
 
   public void setSession(Map<String, Object> session) {

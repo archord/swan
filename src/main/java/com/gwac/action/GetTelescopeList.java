@@ -9,6 +9,7 @@ import org.apache.struts2.convention.annotation.Result;
 import com.gwac.model.Telescope;
 import com.gwac.service.TelescopeService;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
@@ -43,6 +44,7 @@ public class GetTelescopeList extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
+  @Resource
   private TelescopeService tspService = null;
 
   @SuppressWarnings("unchecked")
@@ -230,11 +232,5 @@ public class GetTelescopeList extends ActionSupport implements SessionAware {
     this.session = session;
   }
 
-  /**
-   * @param tspService the tspService to set
-   */
-  public void setTspService(TelescopeService tspService) {
-    this.tspService = tspService;
-  }
 
 }

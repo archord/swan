@@ -9,6 +9,7 @@ import com.gwac.model.OtObserveRecord;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
 import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -28,9 +29,12 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
   private List<OtLevel2> otLv2;
   private List<OtLevel2> otLv2Cur;
   private List<OtLevel2> otLv2Mch;
+  @Resource
   private OtLevel2Dao otDao = null;
+  @Resource
   private OtObserveRecordDAO oorDao = null;
   private List<DataProcessMachine> dpms;
+  @Resource
   private DataProcessMachineDAO dpmDao;
 
   private String dateStr;
@@ -117,27 +121,6 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
    */
   public void setOtLv2Cur(List<OtLevel2> otLv2Cur) {
     this.otLv2Cur = otLv2Cur;
-  }
-
-  /**
-   * @param otDao the otDao to set
-   */
-  public void setOtDao(OtLevel2Dao otDao) {
-    this.otDao = otDao;
-  }
-
-  /**
-   * @param oorDao the oorDao to set
-   */
-  public void setOorDao(OtObserveRecordDAO oorDao) {
-    this.oorDao = oorDao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
   }
 
   /**

@@ -14,6 +14,7 @@ import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,12 +28,13 @@ import org.apache.struts2.util.ServletContextAware;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-public class GlobalParameterSet extends ActionSupport implements ServletContextAware{
+public class GlobalParameterSet extends ActionSupport implements ServletContextAware {
 
     private static final Log log = LogFactory.getLog(GlobalParameterSet.class);
 
     private ServletContext globalContext;
-    
+
+    @Resource
     private DataProcessMachineDAO dpmDao;
 
     protected String dpm = "";
@@ -53,7 +55,7 @@ public class GlobalParameterSet extends ActionSupport implements ServletContextA
             dpmDao.updateLastActiveTime(dpm);
             echo += "success\n";
         }
-        
+
         /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
          * 用jsp的out，则不会有两个空行。
          * 在这里将结果信息存储在session中，在jsp页面获得返回信息。
@@ -83,22 +85,15 @@ public class GlobalParameterSet extends ActionSupport implements ServletContextA
     }
 
     /**
-     * @param dpmDao the dpmDao to set
-     */
-    public void setDpmDao(DataProcessMachineDAO dpmDao) {
-        this.dpmDao = dpmDao;
-    }
-
-    /**
      * @param dpm the dpm to set
      */
     public void setDpm(String dpm) {
         this.dpm = dpm;
     }
 
-  @Override
-  public void setServletContext(ServletContext sc) {
-    this.globalContext = sc;
-  }
+    @Override
+    public void setServletContext(ServletContext sc) {
+        this.globalContext = sc;
+    }
 
 }

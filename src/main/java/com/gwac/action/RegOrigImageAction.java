@@ -18,6 +18,7 @@ import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.Map;
+import javax.annotation.Resource;
 import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,9 +46,12 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
   private String imgPath;
   private String genTime; //yyyyMMddHHmmssSSS
 
+  @Resource
   private JmsTemplate jmsTemplate;
+  @Resource
   private Destination msgDest;
 
+  @Resource
   private ObjectTypeDao objTypeDao;
 
   private Map<String, Object> appMap = null;
@@ -210,25 +214,5 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
     this.appMap = map;
   }
 
-  /**
-   * @param objTypeDao the objTypeDao to set
-   */
-  public void setObjTypeDao(ObjectTypeDao objTypeDao) {
-    this.objTypeDao = objTypeDao;
-  }
-
-  /**
-   * @param jmsTemplate the jmsTemplate to set
-   */
-  public void setJmsTemplate(JmsTemplate jmsTemplate) {
-    this.jmsTemplate = jmsTemplate;
-  }
-
-  /**
-   * @param msgDest the msgDest to set
-   */
-  public void setMsgDest(Destination msgDest) {
-    this.msgDest = msgDest;
-  }
 
 }

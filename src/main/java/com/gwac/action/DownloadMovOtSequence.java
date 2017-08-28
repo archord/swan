@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -52,6 +53,7 @@ public class DownloadMovOtSequence extends ActionSupport {
   private String dateStr;
   private final char moveType = '1';
   private final int minFrameNumber = 20;
+  @Resource
   private MoveObjectDao movObjDao = null;
 
   @Override
@@ -126,13 +128,6 @@ public class DownloadMovOtSequence extends ActionSupport {
    */
   public void setDateStr(String dateStr) {
     this.dateStr = dateStr;
-  }
-
-  /**
-   * @param movObjDao the movObjDao to set
-   */
-  public void setMovObjDao(MoveObjectDao movObjDao) {
-    this.movObjDao = movObjDao;
   }
 
 }

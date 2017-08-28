@@ -7,6 +7,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -22,6 +23,7 @@ public class GetParmListJson extends ActionSupport {
   private static final Log log = LogFactory.getLog(GetParmListJson.class);
 
   private String queryParm;
+  @Resource
   private ImageStatusParameterDao dao;
   private String parStr;
   private String minDate;
@@ -72,12 +74,6 @@ public class GetParmListJson extends ActionSupport {
     return "json";
   }
 
-  /**
-   * @param dao the dao to set
-   */
-  public void setDao(ImageStatusParameterDao dao) {
-    this.dao = dao;
-  }
 
   /**
    * @return the parStr

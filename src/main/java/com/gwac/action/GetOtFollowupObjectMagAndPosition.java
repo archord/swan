@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -32,8 +33,11 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
   private String otName;
   private Boolean queryHis;
 
+  @Resource
   private OtLevel2Dao obDao;
+  @Resource
   private FollowUpObjectDao fuoDao;
+  @Resource
   private FollowUpRecordDao furDao;
 
   private OtLevel2 ot2;
@@ -168,31 +172,10 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
   }
 
   /**
-   * @param fuoDao the fuoDao to set
-   */
-  public void setFuoDao(FollowUpObjectDao fuoDao) {
-    this.fuoDao = fuoDao;
-  }
-
-  /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
-  }
-
-  /**
    * @return the ot2
    */
   public OtLevel2 getOt2() {
     return ot2;
-  }
-
-  /**
-   * @param furDao the furDao to set
-   */
-  public void setFurDao(FollowUpRecordDao furDao) {
-    this.furDao = furDao;
   }
 
   /**

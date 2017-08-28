@@ -26,11 +26,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
+import org.springframework.beans.factory.annotation.Value;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* wget command example: */
@@ -44,13 +46,17 @@ public class GetCutImageList extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(GetCutImageList.class);
   private String cameraName;
+  @Resource
   private FitsFileCutDAO ffcDao;
   private InputStream fileInputStream;
   private String fileName;
+  @Value("#{syscfg.gwacDataRootDirectoryWebmap}")
   private String rootWebDir;
   private String echo = "";
 
+  @Resource
   private ObjectIdentityDao objIdtyDao;
+  @Resource
   private ObjectTypeDao objTypeDao;
   private Map<String, Object> appMap = null;
 
@@ -146,39 +152,12 @@ public class GetCutImageList extends ActionSupport implements ApplicationAware {
   }
 
   /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
-   * @param rootWebDir the rootWebDir to set
-   */
-  public void setRootWebDir(String rootWebDir) {
-    this.rootWebDir = rootWebDir;
-  }
-
-  /**
    * @param cameraName the cameraName to set
    */
   public void setCameraName(String cameraName) {
     this.cameraName = cameraName;
   }
 
-  /**
-   * @param objIdtyDao the objIdtyDao to set
-   */
-  public void setObjIdtyDao(ObjectIdentityDao objIdtyDao) {
-    this.objIdtyDao = objIdtyDao;
-  }
-
-  /**
-   * @param objTypeDao the objTypeDao to set
-   */
-  public void setObjTypeDao(ObjectTypeDao objTypeDao) {
-    this.objTypeDao = objTypeDao;
-  }
 
   @Override
   public void setApplication(Map<String, Object> map) {

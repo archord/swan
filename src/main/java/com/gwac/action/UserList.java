@@ -29,6 +29,7 @@ import com.gwac.model.UserInfo;
 import com.gwac.dao.CustomerDAO;
 import com.gwac.service.UserInfoService;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 
 @Result(name = "success", type = "json")
 public class UserList extends ActionSupport implements SessionAware {
@@ -74,6 +75,7 @@ public class UserList extends ActionSupport implements SessionAware {
   private boolean loadonce = false;
   private Map<String, Object> session;
   private List<UserInfo> myCustomers;
+  @Resource
   private UserInfoService userService;
 
   @SuppressWarnings("unchecked")
@@ -257,18 +259,5 @@ public class UserList extends ActionSupport implements SessionAware {
     this.totalrows = totalrows;
   }
 
-  /**
-   * @return the userService
-   */
-//  public UserInfoService getUserService() {
-//    return userService;
-//  }
-
-  /**
-   * @param userService the userService to set
-   */
-  public void setUserService(UserInfoService userService) {
-    this.userService = userService;
-  }
 
 }

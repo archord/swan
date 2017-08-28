@@ -14,6 +14,7 @@ import org.apache.struts2.convention.annotation.Result;
 
 import com.gwac.model.Telescope;
 import com.opensymphony.xwork2.ActionSupport;
+import javax.annotation.Resource;
 
 @Actions({
   @Action(value = "/edit-telescope-entry", results = {
@@ -32,6 +33,7 @@ public class EditTelescopeEntry extends ActionSupport {
   private Float focalRatio;
   private String ccdType;
   private List<Telescope> objList;
+  @Resource
   private TelescopeDAO tspDao;
 
   @SuppressWarnings("unchecked")
@@ -165,13 +167,6 @@ public class EditTelescopeEntry extends ActionSupport {
    */
   public void setObjList(List<Telescope> objList) {
     this.objList = objList;
-  }
-
-  /**
-   * @param tspDao the tspDao to set
-   */
-  public void setTspDao(TelescopeDAO tspDao) {
-    this.tspDao = tspDao;
   }
 
   /**

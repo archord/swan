@@ -15,6 +15,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -32,10 +33,15 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
 
   private Map<String, Object> session;
 
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
   private OtLevel2Dao obDao;
+  @Resource
   private OtObserveRecordDAO otorDao;
+  @Resource
   private OtTypeDao ottDao;
   /**
    * 查询条件
@@ -99,13 +105,6 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @param ffcDao the ffcDao to set
-   */
-  public void setFfcDao(FitsFileCutDAO ffcDao) {
-    this.ffcDao = ffcDao;
-  }
-
-  /**
    * @return the otName
    */
   public String getOtName() {
@@ -113,31 +112,10 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
   }
 
   /**
-   * @param obDao the obDao to set
-   */
-  public void setObDao(OtLevel2Dao obDao) {
-    this.obDao = obDao;
-  }
-
-  /**
-   * @param ffcrDao the ffcrDao to set
-   */
-  public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
-    this.ffcrDao = ffcrDao;
-  }
-
-  /**
    * @return the otOpticalVaration
    */
   public String getOtOpticalVaration() {
     return otOpticalVaration;
-  }
-
-  /**
-   * @param otorDao the otorDao to set
-   */
-  public void setOtorDao(OtObserveRecordDAO otorDao) {
-    this.otorDao = otorDao;
   }
 
   /**
@@ -199,13 +177,6 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
    */
   public UserInfo getUserInfo() {
     return userInfo;
-  }
-
-  /**
-   * @param ottDao the ottDao to set
-   */
-  public void setOttDao(OtTypeDao ottDao) {
-    this.ottDao = ottDao;
   }
 
   /**
