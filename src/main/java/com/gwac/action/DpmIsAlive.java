@@ -11,7 +11,7 @@ package com.gwac.action;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.SyncFileDao;
 import com.gwac.model.SyncFile;
-import com.gwac.service.SendMessage;
+import com.gwac.util.SendMessage;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;

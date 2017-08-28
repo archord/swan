@@ -1,8 +1,9 @@
 /*
  * mseeworld工作室，致力于人工智能研究。Email: xyag.902@163.com
  */
-package com.gwac.service;
+package com.gwac.util;
 
+import com.gwac.util.SendMessage;
 import com.gwac.model.ImageStatusParameter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

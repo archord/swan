@@ -1,7 +1,7 @@
 /*
  * mseeworld工作室，致力于人工智能研究。Email: xyag.902@163.com
  */
-package com.gwac.service;
+package com.gwac.util;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
