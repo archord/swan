@@ -126,7 +126,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
           log.debug("has dateStr:" + dateStr);
         }
 
-        rootPath = getText("gwac.data.root.directory");
+        rootPath = getText("gwacDataRootDirectory");
         destPath = rootPath;
         if (destPath.charAt(destPath.length() - 1) != '/') {
           destPath += "/" + dateStr + "/" + ot2FfName.substring(0, ot2FfName.indexOf("_")) + "/";
@@ -164,7 +164,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
 
   public void receiveFollowObjectList() {
 
-    String otFollowListPath = destPath + getText("gwac.data.otfollowlist.directory");
+    String otFollowListPath = destPath + getText("gwacDataOtfollowlistDirectory");
     File otFollowListDir = new File(otFollowListPath);
     if (!otFollowListDir.exists()) {
       otFollowListDir.mkdir();
@@ -211,7 +211,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   public void receiveOTFollowImg() {
 
     if (null != getFitsname() && null != getFitsnameFileName() && !fitsnameFileName.trim().isEmpty()) {
-      String fitsNamePath = destPath + getText("gwac.data.otfollowimg.directory");
+      String fitsNamePath = destPath + getText("gwacDataOtfollowimgDirectory");
       File fitsNameDir = new File(fitsNamePath);
       if (!fitsNameDir.exists()) {
         fitsNameDir.mkdir();

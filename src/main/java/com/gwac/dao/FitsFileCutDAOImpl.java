@@ -5,21 +5,24 @@
 package com.gwac.dao;
 
 import com.gwac.model.FitsFileCut;
+import com.gwac.model.OtLevel2;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository
 public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implements FitsFileCutDAO {
 
   private static final Log log = LogFactory.getLog(FitsFileCutDAOImpl.class);
-
+  
   @Override
   public void moveDataToHisTable() {
 
@@ -33,6 +36,48 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
 
     Session session = getCurrentSession();
     String sql = "select * from fits_file_cut where file_name='"+ffcName+"'";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
+  
+  @Override
+  public void updateIsRecvOk(long ffcId){
+    Session session = getCurrentSession();
+    String sql = "update fits_file_cut set is_recv_ok=true where ffc_id=" + ffcId;
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
+  public List<FitsFileCut> getUnSyncList(int size) {
+    Session session = getCurrentSession();
+
+    String sql = "with updated_rows as "
+            + "(update fits_file_cut ffc1 "
+            + "set is_sync=true "
+            + "from (select ffc_id from fits_file_cut where success_cut=true and (is_sync=false or is_sync is null ) limit " + size + ") ffc2 "
+            + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
+            + "select ffc.* "
+            + "from updated_rows ffc ";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
+    return q.list();
+  }
+
+  @Override
+  public void save(FitsFileCut obj) {
+    Session session = getCurrentSession();
+    //createSQLQuery createQuery
+    String sql = "select ffc_id from fits_file_cut where ot_id=" + obj.getOtId() + " and number=" + obj.getNumber();
+    Query q = session.createSQLQuery(sql);
+    if (q.list().isEmpty()) {
+      super.save(obj);
+    }
+  }
+
+  @Override
+  public List<FitsFileCut> getFirstCutFile(OtLevel2 ot2) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from fits_file_cut where ot_id=" + ot2.getOtId() + " and number=" + ot2.getFirstFfNumber();
     Query q = session.createSQLQuery(sql).addEntity(FitsFileCut.class);
     return q.list();
   }
@@ -69,7 +114,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     String sql = "with updated_rows as "
             + "(update fits_file_cut ffc1 "
             + "set request_cut=true "
-            + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " order by priority asc, ot_id desc limit " + size + ") ffc2 "
+            + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " and priority<" + maxPriority + " order by priority asc limit " + size + ") ffc2 "
             + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
             + "select ff.img_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname, ff.img_path "
             + "from updated_rows ffc "

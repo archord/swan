@@ -88,7 +88,7 @@ public class DataSyncRecvAction extends ActionSupport {
 
     if (flag) {
 
-      String rootPath = getText("gwac.data.root.directory");
+      String rootPath = getText("gwacDataRootDirectory");
       if (rootPath.charAt(rootPath.length() - 1) != '/') {
         rootPath += "/";
       }

@@ -9,6 +9,7 @@ import com.gwac.model.OtObserveRecord;
 import com.gwac.model.OtObserveRecordShow;
 import com.gwac.model.OtTmplWrong;
 import com.gwac.util.CommonFunction;
+import com.gwac.util.SearchBoxSphere;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,11 +20,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value = "otObserveRecordDAO")
 public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
@@ -62,7 +65,8 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     sb.append("]");
     return sb.toString();
   }
-
+  
+  
   @Override
   public String getOt2TmplOpticalVaration(OtTmplWrong ot2Tmpl) {
     Session session = getCurrentSession();
@@ -91,6 +95,97 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     }
     sb.append("]");
     return sb.toString();
+  }
+  
+  @Override
+  public List<OtObserveRecord> getOt1ByDateDpmSkyId(String dateStr, int dpmId, int skyId, boolean history) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record";
+    if (history) {
+      sql += "_his";
+    }
+    sql += " where ot_id=0 and ra_d is not null and dec_d is not null "
+            + "and x_temp is not null and y_temp is not null and data_produce_method='1' and date_str='" + dateStr
+            + "' and dpm_id=" + dpmId + " and sky_id=" + skyId
+            + " order by ff_number asc";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
+
+  @Override
+  public void updateFfcId(OtObserveRecord oor) {
+    String sql = "update ot_observe_record set ffc_id=" + oor.getFfcId() + " where oor_id=" + oor.getOorId();
+    Session session = getCurrentSession();
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public List<OtObserveRecord> getLastRecord(OtLevel2 ot2) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record where ot_id=" + ot2.getOtId() + " and ff_number=" + ot2.getLastFfNumber();
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
+
+  @Override
+  public List<OtObserveRecord> getUnCutRecord(long otId, int lastCuttedNum) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record where ot_id=" + otId + " and ff_number>=" + lastCuttedNum + " order by ff_number asc";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
+
+  @Override
+  public List<OtObserveRecord> searchOT2TmplWrong(OtObserveRecord obj, float searchRadius, float mag) {
+
+    SearchBoxSphere sbs = new SearchBoxSphere(obj.getRaD(), obj.getDecD(), searchRadius);
+    int tflag = sbs.calSearchBox();
+    if (tflag != 0) {
+      Session session = getCurrentSession();
+      String sql = "select * from ot_observe_record_his where ot_id=0 and data_produce_method='" + obj.getDataProduceMethod()
+              + "' and date_str='" + obj.getDateStr() + "' and sky_id=" + obj.getSkyId() + " and dpm_id!=" + obj.getDpmId() + " and ";
+      if (tflag == 1) {
+        sql += "ra_d between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
+        sql += "dec_d between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+      } else {
+        sql += "(ra_d > " + sbs.getMinRa() + " or ra_d <" + sbs.getMaxRa() + ") and ";
+        sql += "dec_d between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
+      }
+
+      Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+      return q.list();
+    }
+    return new ArrayList();
+  }
+
+  @Override
+  public List<OtObserveRecord> getOt1ByDate(String dateStr) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from ot_observe_record_his where ot_id=0 and date_str='" + dateStr + "'";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
+
+  @Override
+  public List<String> getAllDateStr() {
+
+    List<String> result = new ArrayList<>();
+    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null order by date_str;";
+//    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null and date_str<'141027' order by date_str;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      String his = (String) iter.next();
+      result.add(his);
+    }
+    return result;
   }
 
   @Override
@@ -139,7 +234,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Query q = session.createSQLQuery(unionSql);
     Iterator itor = q.list().iterator();
 
-//    Date baseDate = CommonFunction.stringToDate("2015-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+//    Date baseDate = CommonFunction.stringToDate("2015-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss.SSS");
     Date baseDate = ot2.getFoundTimeUtc();
     Calendar cal = Calendar.getInstance();
     cal.setTime(baseDate);
@@ -542,6 +637,6 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Iterator itor = session.createSQLQuery(sql).list().iterator();
     Object[] row = (Object[]) itor.next();
     return row;
-  }
+}
 
 }

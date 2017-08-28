@@ -13,6 +13,10 @@ import java.util.List;
  * @author xy
  */
 public interface SystemLogDao extends BaseHibernateDao<SystemLog> {
+  
+  public void removeOldRecord(int day);
 
   public String findRecord(int start, int length);
+  
+  public void removeOldRecord(int day, String codes);
 }

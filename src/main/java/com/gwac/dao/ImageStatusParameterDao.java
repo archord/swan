@@ -23,14 +23,14 @@ public interface ImageStatusParameterDao extends BaseHibernateDao<ImageStatusPar
   
   public List<ImageStatusParameter> getCurAllParm();
   
+  public List<ImageStatusParameter> getLatestParmOfAllDpm();
+  
+  public ImageStatusParameter getPreviousStatus(ImageStatusParameter isp);
+  
   public String getCurAllParmJson();
   
   public String getJsonByParm(List<String> parmName);
   
   public Date getMinDate();
-  
-  public List<ImageStatusParameter> getLatestParmOfAllDpm();
-  
-  public ImageStatusParameter getPreviousStatus(ImageStatusParameter isp);
   
 }

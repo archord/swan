@@ -33,6 +33,8 @@ public class FitsFileCutRef  implements java.io.Serializable {
      private Boolean successCut;
      private Long dpmId;
      private Long ffId;
+     private Boolean isSync;
+     private Boolean isRecvOk;
 
     public FitsFileCutRef() {
     }
@@ -160,6 +162,36 @@ public class FitsFileCutRef  implements java.io.Serializable {
     }
 
 
+
+  /**
+   * @return the isSync
+   */
+    @Column(name="is_sync")
+  public Boolean getIsSync() {
+    return isSync;
+  }
+
+  /**
+   * @param isSync the isSync to set
+   */
+  public void setIsSync(Boolean isSync) {
+    this.isSync = isSync;
+  }
+
+  /**
+   * @return the isRecvOk
+   */
+    @Column(name="is_recv_ok")
+  public Boolean getIsRecvOk() {
+    return isRecvOk;
+  }
+
+  /**
+   * @param isRecvOk the isRecvOk to set
+   */
+  public void setIsRecvOk(Boolean isRecvOk) {
+    this.isRecvOk = isRecvOk;
+  }
 
 
 }

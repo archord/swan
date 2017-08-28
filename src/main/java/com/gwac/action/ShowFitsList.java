@@ -49,7 +49,7 @@ public class ShowFitsList extends ActionSupport {
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
 
-    String dataRootWebMap = getText("gwac.data.root.directory.webmap");
+    String dataRootWebMap = getText("gwacDataRootDirectoryWebmap");
 
     List<Integer> tlist = obDao.hisOrCurExist(otName);
     if (!tlist.isEmpty()) {

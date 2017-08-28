@@ -7,11 +7,13 @@ import com.gwac.model.CoordinateShow;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository
 public class CoordinateShowDaoImpl extends BaseHibernateDaoImpl<CoordinateShow> implements CoordinateShowDao {
 
   @Override

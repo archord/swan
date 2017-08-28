@@ -15,11 +15,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="minorPlanetDao")
 public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> implements MinorPlanetDao {
 
   private static final Log log = LogFactory.getLog(MinorPlanetDaoImpl.class);

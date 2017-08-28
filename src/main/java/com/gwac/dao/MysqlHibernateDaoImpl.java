@@ -1,7 +1,9 @@
 package com.gwac.dao;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -19,10 +21,13 @@ public abstract class MysqlHibernateDaoImpl<T extends Serializable> implements B
   public static final int SORT_ASC = 1;
   public static final int SORT_DESC = 2;
   private Class<T> clazz;
-  SessionFactory sessionFactory;
+  
+  @Resource(name = "sessionFactoryMysql")
+  private SessionFactory sessionFactory;
 
-  public void setClazz(final Class<T> clazzToSet) {
-    clazz = clazzToSet;
+  public MysqlHibernateDaoImpl() {
+    ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
+    clazz = (Class<T>) pt.getActualTypeArguments()[0];
   }
 
   public Number count() {
@@ -112,7 +117,7 @@ public abstract class MysqlHibernateDaoImpl<T extends Serializable> implements B
   public void deleteById(final Long entityId) {
     this.delete(this.getById(entityId));
   }
-  
+
   @Transactional(readOnly = false)
   public void deleteAll(String tableName) {
     getCurrentSession().createSQLQuery("delete * from " + tableName).executeUpdate();

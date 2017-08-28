@@ -6,11 +6,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.SkyRegionTemplate;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="skyRegionTemplateDao")
 public class SkyRegionTemplateDaoImpl  extends BaseHibernateDaoImpl<SkyRegionTemplate> implements SkyRegionTemplateDao{
   
 }

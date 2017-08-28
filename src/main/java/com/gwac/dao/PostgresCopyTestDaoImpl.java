@@ -18,11 +18,13 @@ import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.postgresql.PGConnection;
 import org.postgresql.copy.CopyManager;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="postgresCopyTestDao")
 public class PostgresCopyTestDaoImpl extends BaseHibernateDaoImpl<OtObserveRecord> {
   
   private static final Log log = LogFactory.getLog(PostgresCopyTestDaoImpl.class);

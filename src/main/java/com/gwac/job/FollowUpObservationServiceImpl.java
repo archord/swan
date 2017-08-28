@@ -1,0 +1,366 @@
+/*
+ * mseeworld工作室，致力于人工智能研究。Email: xyag.902@163.com
+ */
+package com.gwac.job;
+
+import com.gwac.dao.FollowUpFitsfileDao;
+import com.gwac.dao.FollowUpObjectDao;
+import com.gwac.dao.FollowUpObjectTypeDao;
+import com.gwac.dao.FollowUpObservationDao;
+import com.gwac.dao.FollowUpRecordDao;
+import com.gwac.dao.OTCatalogDao;
+import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.FollowUpCatalog;
+import com.gwac.model.FollowUpFitsfile;
+import com.gwac.model.FollowUpObject;
+import com.gwac.model.FollowUpObjectType;
+import com.gwac.model.FollowUpObservation;
+import com.gwac.model.FollowUpRecord;
+import com.gwac.model.OtLevel2;
+import com.gwac.model.UploadFileUnstore;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Resource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+/**
+ *
+ * @author xy
+ */
+@Service(value = "followUpObsService")
+public class FollowUpObservationServiceImpl implements BaseService {
+
+  private static final Log log = LogFactory.getLog(FollowUpObservationServiceImpl.class);
+  private static boolean running = true;
+
+  @Resource
+  private UploadFileUnstoreDao ufuDao;
+  @Resource
+  private FollowUpObservationDao foDao;
+  @Resource
+  private FollowUpFitsfileDao fufDao;
+  @Resource
+  private FollowUpRecordDao frDao;
+  @Resource
+  private OTCatalogDao otcDao;
+  @Resource
+  private OtLevel2Dao ot2Dao;
+  @Resource
+  private FollowUpObjectTypeDao fuotDao;
+  @Resource
+  private FollowUpObjectDao fuoDao;
+
+  @Value("#{syscfg.gwacFollowupErrorbox}")
+  private float followupErrorbox;
+  @Value("#{syscfg.gwacDataRootDirectory}")
+  private String rootPath;
+  @Value("#{syscfg.gwacServerBeijing}")
+  private Boolean isBeiJingServer;
+  @Value("#{syscfg.gwacServerTest}")
+  private Boolean isTestServer;
+
+  @Override
+  public void startJob() {
+
+    if (isTestServer) {
+      return;
+    }
+
+    if (running == true) {
+      log.debug("start job...");
+      running = false;
+    } else {
+      log.warn("job is running, jump this scheduler.");
+      return;
+    }
+
+    long startTime = System.nanoTime();
+    try {//JDBCConnectionException or some other exception
+      parseAllDBInfo();
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
+    }
+    long endTime = System.nanoTime();
+    double time1 = 1.0 * (endTime - startTime) / 1e9;
+    log.debug("job consume: FollowUpObservation " + time1 + ".");
+  }
+
+  public void parseAllDBInfo() {
+    List<UploadFileUnstore> ufus = ufuDao.getFollowUpFile();
+    log.debug("size=" + ufus.size());
+
+    if (!ufus.isEmpty()) {
+      for (UploadFileUnstore obj : ufus) {
+        parseFollowUpInfo(obj.getUfuId(), obj.getStorePath(), obj.getFileName());
+        ufuDao.updateProcessDoneTime(obj.getUfuId());
+      }
+    }
+  }
+
+  public void parseFollowUpInfo(long ufuId, String storePath, String fileName) {
+
+    String ot2Name = fileName.substring(0, 14);
+    String foName = fileName.substring(0, 18);
+//    String foName = fileName.substring(0, 14) + "_001";
+
+    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name, false);
+    if (ot2 == null) {
+      log.error("can not find OtLevel2:" + ot2Name);
+      return;
+    }
+    FollowUpObservation fo = foDao.getByName(foName);
+    if (fo == null) {
+      log.error("can not find FollowUpObservation:" + foName);
+      return;
+    }
+    List<FollowUpCatalog> objs = otcDao.getFollowUpCatalog(rootPath + "/" + storePath + "/" + fileName);
+
+    FollowUpFitsfile fuf = new FollowUpFitsfile();
+    if (objs.size() > 0) { //解析并存储FollUpFits文件
+      FollowUpCatalog tfr = objs.get(0);
+      String ffName = tfr.getFfName().replaceFirst(ot2Name, foName);
+      String ffPath = storePath.replace("otfollowlist", "otfollowimg");
+      fuf.setFfName(ffName);
+      fuf.setFfPath(ffPath);
+      fuf.setFoId(fo.getFoId());
+      File tfile = new File(rootPath + "/" + ffPath + "/" + ffName);
+      if (tfile.exists()) {
+        fuf.setIsUpload(true);
+      } else {
+        fuf.setIsUpload(false);
+      }
+      fufDao.save(fuf);
+
+      short checkId = 0;
+      short miniotId = 0;
+      short catasId = 0;
+      short newotId = 0;
+      FollowUpObjectType tfuot = fuotDao.getOtTypeByTypeName("CHECK");
+      if (tfuot != null) {
+        checkId = tfuot.getFuoTypeId();
+      }
+      tfuot = fuotDao.getOtTypeByTypeName("MINIOT");
+      if (tfuot != null) {
+        miniotId = tfuot.getFuoTypeId();
+      }
+      tfuot = fuotDao.getOtTypeByTypeName("CATAS");
+      if (tfuot != null) {
+        catasId = tfuot.getFuoTypeId();
+      }
+      tfuot = fuotDao.getOtTypeByTypeName("NEWOT");
+      if (tfuot != null) {
+        newotId = tfuot.getFuoTypeId();
+      }
+
+      List<FollowUpCatalog> checkObjs = new ArrayList<>();
+      List<FollowUpCatalog> miniotObjs = new ArrayList<>();
+      List<FollowUpCatalog> catasObjs = new ArrayList<>();
+      List<FollowUpCatalog> newotObjs = new ArrayList<>();
+      for (FollowUpCatalog obj : objs) {
+        if (obj.getOtType().trim().equalsIgnoreCase("CHECK")) {
+          checkObjs.add(obj);
+        } else if (obj.getOtType().trim().equalsIgnoreCase("MINIOT")) {
+          miniotObjs.add(obj);
+        } else if (obj.getOtType().trim().equalsIgnoreCase("CATAS")) {
+          catasObjs.add(obj);
+        } else if (obj.getOtType().trim().equalsIgnoreCase("NEWOT")) {
+          newotObjs.add(obj);
+        }
+      }
+
+      for (FollowUpCatalog obj : checkObjs) {
+        saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), checkId);
+      }
+
+      if (miniotObjs.size() > 0) {
+        for (FollowUpCatalog obj : miniotObjs) {
+          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), miniotId);
+        }
+      } else if (catasObjs.size() > 0) {
+        for (FollowUpCatalog obj : catasObjs) {
+          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), catasId);
+        }
+      } else if (newotObjs.size() > 0) {
+        for (FollowUpCatalog obj : newotObjs) {
+          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+        }
+        /*//只有一个NewOT时，才存储
+         if (newotObjs.size() == 1) {
+         for (FollowUpCatalog obj : newotObjs) {
+         saveFollowUpCatalogNewOt(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+         }
+         } else {
+         for (FollowUpCatalog obj : newotObjs) {
+         saveNewOtRecord(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+         }
+         }*/
+      }
+    }
+  }
+
+  public void saveFollowUpCatalogNewOt(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
+
+    FollowUpObject fuo = new FollowUpObject();
+    fuo.setOtId(ot2Id);
+    fuo.setFoId(foId);
+    fuo.setFuoTypeId(fuotId);
+    fuo.setStartTimeUtc(obj.getDateUt());
+    fuo.setLastRa(obj.getRa());
+    fuo.setLastDec(obj.getDec());
+    fuo.setLastX(obj.getX());
+    fuo.setLastY(obj.getY());
+    fuo.setFoundSerialNumber(obj.getFuSerialNumber());
+    fuo.setRecordTotal(1);
+
+    int newOtNum = fuoDao.countTypeNumberByFoId(fuo);
+
+    if (newOtNum == 1) {
+      List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
+      if (fuos.size() > 0) {
+        FollowUpObject tfuo = fuos.get(0);
+        fuo.setFuoId(tfuo.getFuoId());
+
+        tfuo.setLastRa(fuo.getLastRa());
+        tfuo.setLastDec(fuo.getLastDec());
+        tfuo.setLastX(fuo.getLastX());
+        tfuo.setLastY(fuo.getLastY());
+        tfuo.setRecordTotal(tfuo.getRecordTotal() + 1);
+        if (fuo.getFoundSerialNumber() < tfuo.getFoundSerialNumber()) {
+          tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
+          tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());
+        }
+        fuoDao.update(tfuo);
+      } else {
+        int fuoNum = fuoDao.countTypeNumberByOtId(fuo);
+        String fuoName = String.format("%s%02d", obj.getOtType(), fuoNum + 1);
+        fuo.setFuoName(fuoName);
+        fuoDao.save(fuo);
+      }
+    }
+
+    FollowUpRecord fur = new FollowUpRecord();
+    if (newOtNum == 1) {
+      fur.setFuoId(fuo.getFuoId());
+    }
+    fur.setFoId(foId);
+    fur.setDateUtc(obj.getDateUt());
+    fur.setFilter(obj.getFilter());
+    fur.setRa(obj.getRa());
+    fur.setDec(obj.getDec());
+    fur.setX(obj.getX());
+    fur.setY(obj.getY());
+    fur.setMagCalUsno(obj.getMagClbtUsno());
+    fur.setMagErr(obj.getMagErr());
+    fur.setEllipticity(obj.getEllipticity());
+    fur.setClassStar(obj.getClassStar());
+    fur.setFwhm(obj.getFwhm());
+    fur.setFlag(obj.getFlag());
+    fur.setB2(obj.getB2());
+    fur.setR2(obj.getR2());
+    fur.setI(obj.getI());
+    fur.setFuoTypeId(fuotId);
+    fur.setFrObjId(obj.getObjLabel());
+    fur.setFuSerialNumber(obj.getFuSerialNumber());
+    fur.setFufId(fufId);
+    frDao.save(fur);
+  }
+
+  public void saveNewOtRecord(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
+
+    FollowUpRecord fur = new FollowUpRecord();
+//    fur.setFuoId(fuo.getFuoId());
+    fur.setFoId(foId);
+    fur.setDateUtc(obj.getDateUt());
+    fur.setFilter(obj.getFilter());
+    fur.setRa(obj.getRa());
+    fur.setDec(obj.getDec());
+    fur.setX(obj.getX());
+    fur.setY(obj.getY());
+    fur.setMagCalUsno(obj.getMagClbtUsno());
+    fur.setMagErr(obj.getMagErr());
+    fur.setEllipticity(obj.getEllipticity());
+    fur.setClassStar(obj.getClassStar());
+    fur.setFwhm(obj.getFwhm());
+    fur.setFlag(obj.getFlag());
+    fur.setB2(obj.getB2());
+    fur.setR2(obj.getR2());
+    fur.setI(obj.getI());
+    fur.setFuoTypeId(fuotId);
+    fur.setFrObjId(obj.getObjLabel());
+    fur.setFuSerialNumber(obj.getFuSerialNumber());
+    fur.setFufId(fufId);
+    frDao.save(fur);
+  }
+
+  public void saveFollowUpCatalog(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
+
+    FollowUpObject fuo = new FollowUpObject();
+    fuo.setOtId(ot2Id);
+    fuo.setFoId(foId);
+    fuo.setFuoTypeId(fuotId);
+    fuo.setStartTimeUtc(obj.getDateUt());
+    fuo.setLastRa(obj.getRa());
+    fuo.setLastDec(obj.getDec());
+    fuo.setLastX(obj.getX());
+    fuo.setLastY(obj.getY());
+    fuo.setFoundSerialNumber(obj.getFuSerialNumber());
+    fuo.setRecordTotal(1);
+
+    List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
+    if (fuos.size() > 0) {
+      FollowUpObject tfuo = fuos.get(0);
+      fuo.setFuoId(tfuo.getFuoId());
+
+      tfuo.setLastRa(fuo.getLastRa());
+      tfuo.setLastDec(fuo.getLastDec());
+      tfuo.setLastX(fuo.getLastX());
+      tfuo.setLastY(fuo.getLastY());
+      tfuo.setRecordTotal(tfuo.getRecordTotal() + 1);
+      if (fuo.getFoundSerialNumber() < tfuo.getFoundSerialNumber()) {
+        tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
+        tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());
+      }
+      fuoDao.update(tfuo);
+    } else {
+      int fuoNum = fuoDao.countTypeNumberByOtId(fuo);
+      String fuoName = String.format("%s%02d", obj.getOtType(), fuoNum + 1);
+      fuo.setFuoName(fuoName);
+      fuoDao.save(fuo);
+    }
+
+    FollowUpRecord fur = new FollowUpRecord();
+    fur.setFuoId(fuo.getFuoId());
+    fur.setFoId(foId);
+    fur.setDateUtc(obj.getDateUt());
+    fur.setFilter(obj.getFilter());
+    fur.setRa(obj.getRa());
+    fur.setDec(obj.getDec());
+    fur.setX(obj.getX());
+    fur.setY(obj.getY());
+    fur.setMagCalUsno(obj.getMagClbtUsno());
+    fur.setMagErr(obj.getMagErr());
+    fur.setEllipticity(obj.getEllipticity());
+    fur.setClassStar(obj.getClassStar());
+    fur.setFwhm(obj.getFwhm());
+    fur.setFlag(obj.getFlag());
+    fur.setB2(obj.getB2());
+    fur.setR2(obj.getR2());
+    fur.setI(obj.getI());
+    fur.setFuoTypeId(fuotId);
+    fur.setFrObjId(obj.getObjLabel());
+    fur.setFuSerialNumber(obj.getFuSerialNumber());
+    fur.setFufId(fufId);
+    frDao.save(fur);
+  }
+
+
+}

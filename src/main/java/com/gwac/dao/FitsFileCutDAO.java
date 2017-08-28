@@ -5,6 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.FitsFileCut;
+import com.gwac.model.OtLevel2;
 import java.util.List;
 
 /**
@@ -12,22 +13,26 @@ import java.util.List;
  * @author xy
  */
 public interface FitsFileCutDAO extends BaseHibernateDao<FitsFileCut> {
-
-  public List<FitsFileCut> getByName(String ffcName);
-
-  public List<FitsFileCut> getTmplCutImageByOtId(long otId, Boolean queryHis);
-
+  
   public void moveDataToHisTable();
+  
+  public List<FitsFileCut> getByName(String ffcName);
+  
+  public void updateIsRecvOk(long ffcId);
+  
+  public List<FitsFileCut> getUnSyncList(int size);
+  
+  public List<FitsFileCut> getFirstCutFile(OtLevel2 ot2);
 
   public void uploadSuccessCutByName(String fileName);
 
   public String getUnCuttedStarList(int dpmId, int size, int maxPriority);
-
+  
   public List<FitsFileCut> getCutImageByOtId(long otId, Boolean queryHis);
 
   public List<FitsFileCut> getCutImageByOtName(String otName);
 
   public List<FitsFileCut> getUnCutImageByOtId(long otId, int lastCuttedId);
-
+  
   public List<FitsFileCut> getCutImageByOtNameFromHis(String otName);
 }

@@ -9,10 +9,13 @@
   <import resource="DataSource.xml"/>
   <import resource="HibernateSessionFactory.xml"/>
   
-  <import resource="com/gwac/bean/GwacDao.xml"/>
-  <import resource="com/gwac/bean/GwacService.xml"/>
-  <import resource="com/gwac/bean/GwacAction.xml"/>
+  <util:properties id="syscfg" location="classpath:systemconfig.properties"/>  
+  <context:annotation-config />  
+  <context:component-scan base-package="com.gwac.dao,com.gwac.job,com.gwac.service,com.gwac.activemq"/>  
+    
+  <import resource="com/gwac/bean/ActimqDestination.xml"/>
+  <import resource="com/gwac/bean/ActivemqConsumer.xml"/>
   
-  <import resource="com/gwac/bean/ActivemqDestination.xml"/>
+  <import resource="com/gwac/bean/TimerTaskBean.xml"/>
   
 </beans>

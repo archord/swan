@@ -15,7 +15,21 @@ import java.util.Map;
  */
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   
+  public List<OtLevel2> getUnCutRecord(int successiveImageNumber);
+  
+  public void updateOt2HisMatchHis(OtLevel2 ot2);
+  
+  public void updateOTTypeHis(OtLevel2 ot2) ;
+  
+  public List<OtLevel2> getTodayOt2(char otClass);
+  
+  public List<OtLevel2> getOt2ByDate(String dateStr);
+  
   public List<String> getAllDateStr();
+  
+  public List<String> getAllDateStr(boolean history);
+  
+  public List<OtLevel2> getLv2OTByDateAndOTClass(String dateStr, char otClass);
 
   public void moveDataToHisTable();
 
@@ -30,8 +44,6 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox, int n);
 
   public OtLevel2 getOtLevel2ByName(String otName, Boolean queryHis);
-  
-  public String getOT2FitsFileName(String otName, Boolean queryHis);
 
   public OtLevel2 getOtLevel2ByNameFromHis(String otName);
 
@@ -86,4 +98,7 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public void updateFoCount(OtLevel2 ot2);
 
   public List<OtLevel2> getUnMatched();
+  
+  public String getOT2FitsFileName(String otName, Boolean queryHis);
+  
 }

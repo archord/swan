@@ -5,11 +5,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.SystemStatus;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="systemStatusDao")
 public class SystemStatusDaoImpl extends BaseHibernateDaoImpl<SystemStatus> implements SystemStatusDao{
   
 }

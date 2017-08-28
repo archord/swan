@@ -5,11 +5,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.MultimediaResource;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository
 public class MultimediaResourceDaoImpl extends BaseHibernateDaoImpl<MultimediaResource> implements MultimediaResourceDao {
   
 }

@@ -64,7 +64,7 @@ public class OT2InfoDownload extends ActionSupport {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     //必须OT名称
     if (null != otName && !otName.isEmpty() && otName.length() == 14) {
-      String dataRootDir = getText("gwac.data.root.directory");
+      String dataRootDir = getText("gwacDataRootDirectory");
       fileName = otName + ".zip";
 
       List<Integer> tlist = ot2Dao.hisOrCurExist(otName);

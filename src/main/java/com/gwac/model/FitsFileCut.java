@@ -36,6 +36,8 @@ public class FitsFileCut  implements java.io.Serializable {
      private Float imgY;
      private Boolean isMissed;
      private Short priority;
+     private Boolean isSync;
+     private Boolean isRecvOk;
 
     public FitsFileCut() {
     }
@@ -230,6 +232,36 @@ public class FitsFileCut  implements java.io.Serializable {
    */
   public void setPriority(Short priority) {
     this.priority = priority;
+  }
+
+  /**
+   * @return the isSync
+   */
+    @Column(name="is_sync")
+  public Boolean getIsSync() {
+    return isSync;
+  }
+
+  /**
+   * @param isSync the isSync to set
+   */
+  public void setIsSync(Boolean isSync) {
+    this.isSync = isSync;
+  }
+
+  /**
+   * @return the isRecvOk
+   */
+    @Column(name="is_recv_ok")
+  public Boolean getIsRecvOk() {
+    return isRecvOk;
+  }
+
+  /**
+   * @param isRecvOk the isRecvOk to set
+   */
+  public void setIsRecvOk(Boolean isRecvOk) {
+    this.isRecvOk = isRecvOk;
   }
 
 

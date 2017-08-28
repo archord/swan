@@ -12,11 +12,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value = "fnumDao")
 public class FileNumberDaoImpl extends BaseHibernateDaoImpl<FileNumber> implements FileNumberDao {
 
   private static final Log log = LogFactory.getLog(FileNumberDaoImpl.class);

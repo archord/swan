@@ -10,11 +10,13 @@ import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository
 public class ConfigFileDaoImpl extends BaseHibernateDaoImpl<ConfigFile> implements ConfigFileDao {
   
   public void moveDataToHisTable() {
@@ -37,11 +39,12 @@ public class ConfigFileDaoImpl extends BaseHibernateDaoImpl<ConfigFile> implemen
     return flag;
   }
 
+  @Override
   public List<ConfigFile> getTopNUnSync(int topn) {
 
     String sql = "with updated_rows as"
-            + "(with tmp as (select min(cf_id) min_id from config_file where is_sync=false) "
-            + "update config_file set is_sync=true "
+            + "(with tmp as (select min(cf_id) min_id from config_file_his where is_sync=false) "
+            + "update config_file_his set is_sync=true "
             + "where cf_id<(select min_id+" + topn + " from tmp) and cf_id>=(select min_id from tmp) returning *) "
             + "select * from updated_rows;";
 

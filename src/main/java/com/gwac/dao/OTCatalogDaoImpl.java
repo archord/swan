@@ -19,11 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="otCatalogDao")
 public class OTCatalogDaoImpl implements OTCatalogDao {
 
   private static final Log log = LogFactory.getLog(OTCatalogDaoImpl.class);
@@ -71,13 +73,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         log.error("file not exist " + tfile);
       }
     } catch (FileNotFoundException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (IOException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (ParseException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (Exception e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } finally {
       if (br != null) {
         try {
@@ -98,6 +100,9 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     List<OTCatalog> otList = new ArrayList<OTCatalog>();
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    int lineNum = 0;
+    int lineNumReal = 0;
+
     try {
       File tfile = new File(path);
       if (!tfile.exists()) {
@@ -106,9 +111,11 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
       }
       br = new BufferedReader(new FileReader(tfile));
       while ((line = br.readLine()) != null) {
+        lineNum++;
         if (line.charAt(0) == '#') {
           continue;
         }
+        lineNumReal++;
         // split on comma(',')  
         String[] strs = line.split(splitBy);
         // create car object to store values  
@@ -138,13 +145,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
       }
 
     } catch (FileNotFoundException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (IOException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (ParseException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (Exception e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } finally {
       if (br != null) {
         try {
@@ -154,6 +161,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         }
       }
     }
+    log.debug(path + ",line number:" + lineNum + ",line number real:" + lineNumReal);
     return otList;
   }
 
@@ -163,7 +171,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     String line = "";
     String splitBy = " +";
     List<OTCatalog> otList = new ArrayList<OTCatalog>();
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     try {
       File tfile = new File(path);
@@ -205,13 +213,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
       }
 
     } catch (FileNotFoundException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (IOException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (ParseException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (Exception e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } finally {
       if (br != null) {
         try {
@@ -230,7 +238,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     String line = "";
     String splitBy = " +";
     List<OTCatalog> otList = new ArrayList<>();
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     try {
       File tfile = new File(path);
@@ -274,13 +282,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
       }
 
     } catch (FileNotFoundException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (IOException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (ParseException e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } catch (Exception e) {
-      log.error("parse file error:"+path, e);
+      log.error("parse file error:" + path, e);
     } finally {
       if (br != null) {
         try {

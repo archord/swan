@@ -7,14 +7,18 @@ package com.gwac.service;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.model.DataProcessMachine;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author xy
  */
+@Service
 public class DataProcessMachineServiceImpl implements DataProcessMachineService {
 
+  @Resource
   private DataProcessMachineDAO dpmDao;
 
   @Override
@@ -31,17 +35,4 @@ public class DataProcessMachineServiceImpl implements DataProcessMachineService 
     return dpmDao.findRecord(start, resultSize, order,sorts);
   }
 
-  /**
-   * @return the dpmDao
-   */
-  public DataProcessMachineDAO getDpmDao() {
-    return dpmDao;
-  }
-
-  /**
-   * @param dpmDao the dpmDao to set
-   */
-  public void setDpmDao(DataProcessMachineDAO dpmDao) {
-    this.dpmDao = dpmDao;
-  }
 }

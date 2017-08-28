@@ -10,11 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository
 public class CcdPixFilterDaoImpl extends BaseHibernateDaoImpl<CcdPixFilter> implements CcdPixFilterDao {
 
   @Override

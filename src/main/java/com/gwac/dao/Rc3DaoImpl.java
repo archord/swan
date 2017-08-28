@@ -13,11 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="rc3Dao")
 public class Rc3DaoImpl extends MysqlHibernateDaoImpl<Rc3> implements Rc3Dao {
   
   @Override

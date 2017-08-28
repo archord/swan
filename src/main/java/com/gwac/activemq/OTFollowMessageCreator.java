@@ -1,7 +1,6 @@
 package com.gwac.activemq;
 
 import com.gwac.model4.OtLevel2FollowParameter;
-import com.gwac.model.UploadFileUnstore;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;

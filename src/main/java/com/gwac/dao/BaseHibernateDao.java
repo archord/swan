@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface BaseHibernateDao<T> {
 
-  public void setClazz(final Class<T> clazzToSet);
+//  public void setClazz(final Class<T> clazzToSet);
 
   public Number count();
 
@@ -23,6 +23,6 @@ public interface BaseHibernateDao<T> {
   public void delete(final T entity);
 
   public void deleteById(final Long entityId);
-
+  
   public void deleteAll(String tableName);
 }

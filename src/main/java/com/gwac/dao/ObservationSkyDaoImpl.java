@@ -9,11 +9,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value = "observationSkyDao")
 public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> implements ObservationSkyDao {
 
   private static final Log log = LogFactory.getLog(ObservationSkyDaoImpl.class);
@@ -30,7 +32,7 @@ public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> 
   @Override
   public ObservationSky getByName(String name, int gridId) {
     Session session = getCurrentSession();
-    String sql = "select * from observation_sky where sky_name='" + name + "' and grid_id="+gridId;
+    String sql = "select * from observation_sky where sky_name='" + name + "' and grid_id=" + gridId;
     Query q = session.createSQLQuery(sql).addEntity(ObservationSky.class);
 
     if (!q.list().isEmpty()) {

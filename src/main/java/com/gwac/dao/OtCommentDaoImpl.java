@@ -9,11 +9,13 @@ import com.gwac.model.OtComment;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="otCommentDao")
 public class OtCommentDaoImpl extends BaseHibernateDaoImpl<OtComment> implements OtCommentDao {
 
 }

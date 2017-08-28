@@ -13,11 +13,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="ispDao")
 public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatusParameter> implements ImageStatusParameterDao {
 
   private static final Log log = LogFactory.getLog(ImageStatusParameterDaoImpl.class);
@@ -64,6 +66,7 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     return q.list();
   }
 
+  
   /**
    * 获取当前库中所有参数
    *
@@ -135,7 +138,7 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     }
     return rst;
   }
-
+  
   /**
    * 获取最新一帧的参数
    *

@@ -9,11 +9,13 @@ import com.gwac.model.MatchTable;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="matchTableDao")
 public class MatchTableDaoImpl extends BaseHibernateDaoImpl<MatchTable> implements MatchTableDao {
 
   @Override

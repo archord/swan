@@ -5,16 +5,19 @@
 package com.gwac.dao;
 
 import com.gwac.model.UploadFileUnstore;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value="uploadFileUnstoreDao")
 public class UploadFileUnstoreDaoImpl extends BaseHibernateDaoImpl<UploadFileUnstore> implements UploadFileUnstoreDao {
 
   private static final Log log = LogFactory.getLog(UploadFileUnstoreDaoImpl.class);
@@ -77,8 +80,11 @@ public class UploadFileUnstoreDaoImpl extends BaseHibernateDaoImpl<UploadFileUns
   @Override
   public void updateProcessDoneTime(long ufuId) {
     Session session = getCurrentSession();
-    String sql = "update upload_file_unstore set process_done_time=current_timestamp where ufu_id=" + ufuId;
-    session.createSQLQuery(sql).executeUpdate();
+//    String sql = "update upload_file_unstore set process_done_time=current_timestamp where ufu_id=" + ufuId;
+    String sql = "update upload_file_unstore set process_done_time=? where ufu_id=" + ufuId;
+    Query q = session.createSQLQuery(sql);
+    q.setTimestamp(0, new Date());
+    q.executeUpdate();
   }
 
   @Override

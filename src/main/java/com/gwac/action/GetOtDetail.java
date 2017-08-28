@@ -58,8 +58,8 @@ public class GetOtDetail extends ActionSupport {
     
     String result = SUCCESS;
     
-    String dataRoot = getText("gwac.data.root.directory");
-    String dataRootWebMap = getText("gwac.data.root.directory.webmap");
+    String dataRoot = getText("gwacDataRootDirectory");
+    String dataRootWebMap = getText("gwacDataRootDirectoryWebmap");
 
     
     List<Integer> tlist = obDao.hisOrCurExist(otName);

@@ -1,7 +1,9 @@
 package com.gwac.dao;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -15,16 +17,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public abstract class BaseHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
 
-  private static final Log log = LogFactory.getLog(BaseHibernateDaoImpl.class);
   public static final int SORT_ASC = 1;
   public static final int SORT_DESC = 2;
+  
+  private static final Log log = LogFactory.getLog(BaseHibernateDaoImpl.class);
   private Class<T> clazz;
-  SessionFactory sessionFactory;
+  
+  @Resource(name = "sessionFactory")
+  private SessionFactory sessionFactory;
 
-  public void setClazz(final Class<T> clazzToSet) {
-    clazz = clazzToSet;
+  public BaseHibernateDaoImpl() {
+    ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
+    clazz = (Class<T>) pt.getActualTypeArguments()[0];
   }
 
+//  public void setClazz(final Class<T> clazzToSet) {
+//    clazz = clazzToSet;
+//  }
   public Number count() {
     return (Number) getCurrentSession().createCriteria(clazz).setProjection(Projections.rowCount()).uniqueResult();
   }
@@ -122,7 +131,7 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
     return sessionFactory.getCurrentSession();
   }
 
-  public void setSessionFactory(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
-  }
+//  public void setSessionFactory(SessionFactory sessionFactory) {
+//    this.sessionFactory = sessionFactory;
+//  }
 }

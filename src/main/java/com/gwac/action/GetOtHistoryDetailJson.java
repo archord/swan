@@ -59,7 +59,7 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
 
-    dataRootWebMap = getText("gwac.data.root.directory.webmap");
+    dataRootWebMap = getText("gwacDataRootDirectoryWebmap");
 
     if (otName == null || otName.isEmpty()) {
       ffcList = new ArrayList();

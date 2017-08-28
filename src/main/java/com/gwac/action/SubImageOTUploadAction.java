@@ -108,7 +108,7 @@
 //       }
 //       */
 //
-//      String rootPath = getText("gwac.data.root.directory");
+//      String rootPath = getText("gwacDataRootDirectory");
 //      String destPath = rootPath;
 //      if (destPath.charAt(destPath.length() - 1) != '/') {
 //        destPath += "/" + currentDirectory + "/" + dpmName + "/";

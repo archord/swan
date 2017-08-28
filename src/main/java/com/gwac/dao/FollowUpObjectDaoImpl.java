@@ -8,11 +8,13 @@ import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository
 public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> implements FollowUpObjectDao {
   
   @Override

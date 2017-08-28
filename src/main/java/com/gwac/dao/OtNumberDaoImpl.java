@@ -11,11 +11,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author xy
  */
+@Repository(value = "otnDao")
 public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements OtNumberDao {
 
   private static final Log log = LogFactory.getLog(OtNumberDaoImpl.class);
@@ -82,6 +84,7 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
     return number;
   }
 
+  @Override
   public int getJfovNumberByDate(String date) {
 
     int number = 1;

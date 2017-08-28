@@ -141,7 +141,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           log.debug("has dateStr:" + dateStr);
         }
 
-        String rootPath = getText("gwac.data.root.directory");
+        String rootPath = getText("gwacDataRootDirectory");
         if (rootPath.charAt(rootPath.length() - 1) != '/') {
           rootPath += "/";
         }
@@ -162,28 +162,28 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           switch (fileType) {
             case "crsot1":
               tfileType = '1';
-              tpath = destPath + getText("gwac.data.otlist.directory");
+              tpath = destPath + getText("gwacDataOtlistDirectory");
               break;
             case "imqty":
               tfileType = '7';
-              tpath = destPath + getText("gwac.data.imgstatus.directory");
+              tpath = destPath + getText("gwacDataImgstatusDirectory");
               break;
             case "subot1":
               tfileType = '8';
-              tpath = destPath + getText("gwac.data.otlistsub.directory");
+              tpath = destPath + getText("gwacDataOtlistsubDirectory");
               break;
             case "impre":
               tfileType = 'a';
-              String thead = getText("gwac.data.thumbnail.directory");
+              String thead = getText("gwacDataThumbnailDirectory");
               tpath = rootPath + thead + "/" + dateStr + "/" + dpmName;
               break;
             case "magclb":
               tfileType = '9';
-              tpath = destPath + getText("gwac.data.magcalibration.directory");
+              tpath = destPath + getText("gwacDataMagcalibrationDirectory");
               break;
             case "subot2im":
               tfileType = '4';
-              tpath = destPath + getText("gwac.data.cutimages.directory");
+              tpath = destPath + getText("gwacDataCutimagesDirectory");
               break;
           }
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
@@ -324,7 +324,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         MessageCreator tmc = new OTListMessageCreator(obj);
         jmsTemplate.send(otlistDest, tmc);
       } else if ('a' == fileType) {
-        String tpath = rootPath + getText("gwac.monitorimage.directory");
+        String tpath = rootPath + getText("gwacMonitorimageDirectory");
         String tname = tfilename.substring(0, tfilename.indexOf("_")) + "_ccdimg.jpg";
         String tnameSub = tfilename.substring(0, tfilename.indexOf("_")) + "_ccdimg_sub.jpg";
         File preFile = new File(tpath, tname);

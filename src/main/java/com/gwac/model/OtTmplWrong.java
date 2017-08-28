@@ -30,6 +30,7 @@ public class OtTmplWrong implements java.io.Serializable {
   private Boolean isValid;
   private Short ottId;
   private Character otClass;
+  private Float radius;
 
   public OtTmplWrong() {
   }
@@ -182,6 +183,20 @@ public class OtTmplWrong implements java.io.Serializable {
    */
   public void setOtClass(Character otClass) {
     this.otClass = otClass;
+  }
+
+  /**
+   * @return the radius
+   */
+  public Float getRadius() {
+    return radius;
+  }
+
+  /**
+   * @param radius the radius to set
+   */
+  public void setRadius(Float radius) {
+    this.radius = radius;
   }
 
 }

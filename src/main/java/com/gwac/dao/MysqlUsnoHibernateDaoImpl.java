@@ -1,7 +1,9 @@
 package com.gwac.dao;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -19,12 +21,16 @@ public abstract class MysqlUsnoHibernateDaoImpl<T extends Serializable> implemen
   public static final int SORT_ASC = 1;
   public static final int SORT_DESC = 2;
   private Class<T> clazz;
-  SessionFactory sessionFactory;
+  
+  @Resource(name = "sessionFactoryMysqlUson")
+  private SessionFactory sessionFactory;
 
-  public void setClazz(final Class<T> clazzToSet) {
-    clazz = clazzToSet;
+
+  public MysqlUsnoHibernateDaoImpl() {
+    ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
+    clazz = (Class<T>) pt.getActualTypeArguments()[0];
   }
-
+  
   public Number count() {
     return (Number) getCurrentSession().createCriteria(clazz).setProjection(Projections.rowCount()).uniqueResult();
   }
@@ -122,7 +128,4 @@ public abstract class MysqlUsnoHibernateDaoImpl<T extends Serializable> implemen
     return sessionFactory.getCurrentSession();
   }
 
-  public void setSessionFactory(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
-  }
 }
