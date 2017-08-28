@@ -8,10 +8,10 @@ import com.gwac.model.CcdPixFilter;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
 
 /**
@@ -26,6 +26,7 @@ public class CcdPixelFilterAdd extends ActionSupport {
   private static final long serialVersionUID = -3454448234588641394L;
   private static final Log log = LogFactory.getLog(CcdPixelFilterAdd.class);
 
+  @Resource
   private CcdPixFilterDao cpfDao;
   private CcdPixFilter ccdFilter;
 
@@ -37,7 +38,7 @@ public class CcdPixelFilterAdd extends ActionSupport {
     msg = new HashMap<>();
     
     try {
-      cpfDao.save(getCcdFilter());
+      cpfDao.save(ccdFilter);
       msg.put("flag", "1");
     } catch (Exception e) {
       msg.put("flag", "0");
@@ -45,13 +46,6 @@ public class CcdPixelFilterAdd extends ActionSupport {
     }
 
     return "json";
-  }
-
-  /**
-   * @param cpfDao the ffcDao to set
-   */
-  public void setCpfDao(CcdPixFilterDao cpfDao) {
-    this.cpfDao = cpfDao;
   }
 
   /**

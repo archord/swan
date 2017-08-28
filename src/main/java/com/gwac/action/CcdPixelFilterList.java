@@ -9,6 +9,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -26,6 +27,7 @@ public class CcdPixelFilterList  extends ActionSupport{
   private static final long serialVersionUID = -3454448234588641394L;
   private static final Log log = LogFactory.getLog(CcdPixelFilterList.class);
 
+  @Resource
   private CcdPixFilterDao cpfDao;
   private List<CcdPixFilter> gridModel;
 
@@ -39,13 +41,6 @@ public class CcdPixelFilterList  extends ActionSupport{
     }
 
     return "json";
-  }
-
-  /**
-   * @param cpfDao the cpfDao to set
-   */
-  public void setCpfDao(CcdPixFilterDao cpfDao) {
-    this.cpfDao = cpfDao;
   }
 
   /**

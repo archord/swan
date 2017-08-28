@@ -14,7 +14,6 @@ import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
-import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
@@ -34,8 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.jms.Destination;
 import org.apache.commons.io.FileUtils;
@@ -57,10 +55,15 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
   private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im"}));
 
+  @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
   private JmsTemplate jmsTemplate;
+  @Resource
   private Destination otlistDest;
 
   private Map<String, Object> appmap;

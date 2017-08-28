@@ -17,6 +17,7 @@ import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.Date;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
@@ -32,6 +33,7 @@ public class CommonLog extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(CommonLog.class);
   
+  @Resource
   private SystemLogDao sysLogDao;
 
   private String logType;

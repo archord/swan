@@ -13,12 +13,14 @@ import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Repository;
 
 /**
  * 数据转移，清空需要频繁查询的表，这些表只存储当天的最新数据，之后将表中数据移动到历史表
  *
  * @author xy
  */
+@Repository
 public class DataBackupServiceImpl implements DataBackupService {
 
   private static final Log log = LogFactory.getLog(DataBackupServiceImpl.class);

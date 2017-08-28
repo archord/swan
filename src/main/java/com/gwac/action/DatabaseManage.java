@@ -12,6 +12,7 @@ import com.gwac.service.DataBackupService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
@@ -30,6 +31,7 @@ public class DatabaseManage extends ActionSupport implements ApplicationAware {
   private String operation;
   private String dateStr;
 
+  @Resource
   private DataBackupService dataBackupService;
   private Map<String, Object> appMap = null;
 
