@@ -33,7 +33,6 @@ public class SystemLog implements java.io.Serializable {
     this.logId = logId;
   }
 
-
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
     @Parameter(name = "max_lo", value = "49"),
     @Parameter(name = "sequence", value = "log_id_seq")})
