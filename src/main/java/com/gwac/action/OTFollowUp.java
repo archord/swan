@@ -49,7 +49,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
   private UserInfoDAO userDao;
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource
+  @Resource(name="otFollowDest")
   private Destination otFollowDest;
 
   @SuppressWarnings("unchecked")

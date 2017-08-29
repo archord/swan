@@ -84,7 +84,7 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
   private int totalRecord = 0;
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource
+  @Resource(name="otCheckDest")
   private Destination otCheckDest;
 
   public void startJob() {

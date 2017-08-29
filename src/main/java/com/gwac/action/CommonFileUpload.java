@@ -63,7 +63,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource
+  @Resource(name="otlistDest")
   private Destination otlistDest;
 
   private Map<String, Object> appmap;

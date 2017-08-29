@@ -86,7 +86,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource
+  @Resource(name="otCheckDest")
   private Destination otCheckDest;
 
   /**

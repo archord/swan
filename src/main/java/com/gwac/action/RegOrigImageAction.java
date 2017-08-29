@@ -48,7 +48,7 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
 
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource
+  @Resource(name="regOrigImageDest")
   private Destination msgDest;
 
   @Resource
