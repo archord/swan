@@ -26,8 +26,5 @@
   <context:component-scan base-package="com.gwac.dao,com.gwac.job,com.gwac.service,com.gwac.activemq"/>  
     
   <import resource="com/gwac/bean/ActivemqDestination.xml"/>
-  <import resource="com/gwac/bean/ActivemqConsumer.xml"/>
-  
-  <import resource="com/gwac/bean/TimerTaskBean.xml"/>
   
 </beans>

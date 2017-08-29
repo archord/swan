@@ -37,12 +37,11 @@ $(function() {
 
 
   function initAlarmPlayer() {
-    var gwacRootURL = $("#gwacRootURL").val();
     alarmPlayer = $("#alarm-player");
     alarmPlayer.jPlayer({
       ready: function() {
         alarmPlayer.jPlayer("setMedia", {
-          mp3: gwacRootURL + "/" + $('#newOTAlarm').val()
+          mp3: "/gwac-resources/" + $('#newOTAlarm').val()
         });
       },
       loop: false
@@ -57,7 +56,7 @@ $(function() {
     var optionSelected = $("#newOTAlarm").find("option:selected");
     var valueSelected = optionSelected.val();
     alarmPlayer.jPlayer("setMedia", {
-      mp3: gwacRootURL + "/" + valueSelected
+      mp3: "/gwac-resources/" + valueSelected
     });
     alarmPlayer.jPlayer("play");
   }

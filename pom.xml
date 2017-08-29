@@ -13,7 +13,7 @@
   <url>http://maven.apache.org</url>
   
   <description>
-    GWAC Project Union.
+    GWAC Project Union .
   </description>
   
   <modules>
@@ -22,6 +22,7 @@
     <module>gwac-log</module>
     <module>gwac-web</module>
     <module>gwac-web-backend</module>
+    <module>gwac-web-resources</module>
   </modules>
   
   <!--add a plugin: maven-install-plugin-->

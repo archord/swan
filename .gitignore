@@ -7,3 +7,5 @@
 /target/
 /gwac-core/target/
 /gwac-web/target/
+/gwac-backend/target/
+/gwac-web-resources/target/

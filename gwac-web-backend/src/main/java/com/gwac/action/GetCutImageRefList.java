@@ -32,7 +32,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.ApplicationAware;
 import org.springframework.beans.factory.annotation.Value;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
@@ -46,7 +45,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-public class GetCutImageRefList extends ActionSupport implements ApplicationAware {
+public class GetCutImageRefList extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(GetCutImageRefList.class);
   private String cameraName;
@@ -168,11 +167,6 @@ public class GetCutImageRefList extends ActionSupport implements ApplicationAwar
    */
   public void setFfcrDao(FitsFileCutRefDAO ffcrDao) {
     this.ffcrDao = ffcrDao;
-  }
-
-  @Override
-  public void setApplication(Map<String, Object> map) {
-    this.appMap = map;
   }
 
   /**

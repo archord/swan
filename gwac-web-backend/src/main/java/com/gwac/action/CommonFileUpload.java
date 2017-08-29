@@ -41,7 +41,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.ApplicationAware;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
@@ -50,7 +49,7 @@ import org.springframework.jms.core.MessageCreator;
  *
  * @author xy
  */
-public class CommonFileUpload extends ActionSupport implements ApplicationAware {
+public class CommonFileUpload extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
   private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im"}));
@@ -383,12 +382,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   public void setFileType(String fileType) {
     this.fileType = fileType;
   }
-
-  @Override
-  public void setApplication(Map<String, Object> map) {
-    this.appmap = map;
-  }
-
+  
   /**
    * @param fileUpload the fileUpload to set
    */

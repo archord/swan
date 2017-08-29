@@ -9,20 +9,12 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.DataProcessMachineDAO;
-import com.gwac.dao.SyncFileDao;
-import com.gwac.model.SyncFile;
-import com.gwac.util.SendMessage;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.annotation.Resource;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
