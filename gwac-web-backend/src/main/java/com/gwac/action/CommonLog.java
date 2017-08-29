@@ -76,6 +76,7 @@ public class CommonLog extends ActionSupport {
         sysLog.setLogType('4');
       echo += "success receive logs.";
     } else {
+        sysLog.setLogType('0');
       echo += "unrecognize logType:" + logType;
     }
     sysLogDao.save(sysLog);
@@ -96,6 +97,13 @@ public class CommonLog extends ActionSupport {
    */
   public String getEcho() {
     return echo;
+  }
+
+  /**
+   * @param logType the logType to set
+   */
+  public void setLogType(String logType) {
+    this.logType = logType;
   }
 
   /**

@@ -169,6 +169,13 @@ public class RegTemplateAction extends ActionSupport {
     this.fwhm = fwhm;
   }
 
+  /**
+   * @param srTmptDao the srTmptDao to set
+   */
+  public void setSrTmptDao(SkyRegionTemplateDao srTmptDao) {
+    this.srTmptDao = srTmptDao;
+  }
+
   private static final Log log = LogFactory.getLog(RegTemplateAction.class);
 
   private String tmptName;

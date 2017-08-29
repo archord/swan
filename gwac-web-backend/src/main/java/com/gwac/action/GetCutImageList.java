@@ -21,7 +21,6 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
 import org.springframework.beans.factory.annotation.Value;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
@@ -41,7 +41,7 @@ import org.springframework.beans.factory.annotation.Value;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-public class GetCutImageList extends ActionSupport {
+public class GetCutImageList extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(GetCutImageList.class);
   private String cameraName;
@@ -157,4 +157,8 @@ public class GetCutImageList extends ActionSupport {
     this.cameraName = cameraName;
   }
 
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appMap = map;
+  }
 }

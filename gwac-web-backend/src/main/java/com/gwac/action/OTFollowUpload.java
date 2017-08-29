@@ -31,6 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* curl command example: */
@@ -47,7 +48,7 @@ import org.apache.struts2.convention.annotation.Result;
 //@ParentPackage(value="struts-default")
 //@Controller()
 //@Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class OTFollowUpload extends ActionSupport {
+public class OTFollowUpload extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(OTFollowUpload.class);
 
@@ -366,4 +367,8 @@ public class OTFollowUpload extends ActionSupport {
     this.followname = followname;
   }
 
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appmap = map;
+  }
 }

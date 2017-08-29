@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
@@ -32,7 +33,7 @@ import org.springframework.jms.core.MessageCreator;
  *
  * @author xy
  */
-public class RegOrigImageAction extends ActionSupport {
+public class RegOrigImageAction extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(RegOrigImageAction.class);
 
@@ -206,6 +207,11 @@ public class RegOrigImageAction extends ActionSupport {
    */
   public void setGenTime(String genTime) {
     this.genTime = genTime;
+  }
+
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appMap = map;
   }
 
 }
