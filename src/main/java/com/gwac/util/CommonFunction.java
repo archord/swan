@@ -99,8 +99,12 @@ public class CommonFunction {
   }
 
   public static String getDateTimeString2(Date date) {
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    return formatter.format(date);
+    String dateStr = "";
+    if (date != null) {
+      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      dateStr = formatter.format(date);
+    }
+    return dateStr;
   }
 
   public static String getDateTimeString(Date date, String formater) {
@@ -116,11 +120,11 @@ public class CommonFunction {
    */
   public static Date stringToDate(String dateStr, String formater) {
     try {
-    SimpleDateFormat sdf = new SimpleDateFormat(formater);
-    return sdf.parse(dateStr);
+      SimpleDateFormat sdf = new SimpleDateFormat(formater);
+      return sdf.parse(dateStr);
     } catch (ParseException ex) {
       log.error("string to date error.", ex);
-  }
+    }
 //    return new Date();
     return null;
   }
