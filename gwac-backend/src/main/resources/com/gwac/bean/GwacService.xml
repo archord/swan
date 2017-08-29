@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="dpmService" class="com.gwac.service.DataProcessMachineServiceImpl">
+    <property name="dpmDao" ref="dpmDao" />	
+  </bean>
+  
+  <bean id="tspService" class="com.gwac.service.TelescopeServiceImpl">
+    <property name="tspDao" ref="tspDao" />	
+  </bean>
+  
+  <bean id="ufService" class="com.gwac.service.UploadFileServiceImpl" scope="prototype">
+    <property name="ufrDao" ref="ufrDao" />
+    <property name="ufuDao" ref="ufuDao" />
+    <property name="dpmDao" ref="dpmDao" />	
+    <property name="ffcDao" ref="ffcDao" />
+    <property name="ffcrDao" ref="ffcrDao" />
+    <property name="skyDao" ref="skyDao" />
+    <property name="jmsTemplate" ref="jmsTemplate" />
+    <property name="otlistDest" ref="otlistDest" />
+    <property name="rootDir" value="${gwacDataRootDirectory}" />
+    <property name="otLDir" value="${gwacDataOtlistDirectory}" />
+    <property name="starLDir" value="${gwacDataStarlistDirectory}" />
+    <property name="orgIDir" value="${gwacDataOrigimageDirectory}" />
+    <property name="cutIDir" value="${gwacDataCutimagesDirectory}" />
+    <property name="cfgDir" value="${gwacDataCfgfileDirectory}" />
+    <property name="varLDir" value="${gwacDataVarlistDirectory}" />
+    <property name="imgSDir" value="${gwacDataImgstatusDirectory}" />
+    <property name="otListSubDir" value="${gwacDataOtlistsubDirectory}" />
+    <property name="cutImagesSubDir" value="${gwacDataCutimagessubDirectory}" />
+  </bean>
+  
+  <bean id="userService" class="com.gwac.service.UserInfoServiceImpl" >
+    <property name="userDAO" ref="userDAO" />
+  </bean>
+ 
+</beans>

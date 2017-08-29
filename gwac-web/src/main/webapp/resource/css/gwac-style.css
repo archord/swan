@@ -1,0 +1,40 @@
+
+table.table-style{
+  text-align: left;
+  font-size: 14px;
+}
+table.table-style tr th{
+  padding: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+table.table-style tr td{
+  padding: 3px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+form#getOtListForm table td{
+  font-size: 14px;
+  padding: 3px;
+}
+form#getOtListForm table td input{
+  height: 22px;
+}
+
+#main_content{
+  margin: auto;
+}
+
+.ot-query-grid {
+  margin: auto;
+}
+
+.ot-query-form{
+  width:1170px;
+  text-align: left;
+  /*margin: auto;*/
+}
+.ot-query-form input, .ot-query-form select{
+  width:100px;
+}

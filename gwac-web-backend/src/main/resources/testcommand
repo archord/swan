@@ -1,0 +1,18 @@
+curl  http://url/gwac/uploadAction.action \
+-F dpmName=m01 \
+-F currentDirectory=20140505 \
+-F configFile=@data-upload-config.properties \
+-F fileUpload=@res_M1AB_M1_02_140328_1_160060_0209_matchchb.log \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.png \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.png 
+
+curl  http://url/gwac/gwacFileReceive.action \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055.png \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.fit \
+-F fileUpload=@M1_02_140328_1_160060_0205_OT_X1059Y2055_ref.png 
+
+curl  http://url:8077/gwac/gwacFileReceive.action -F fileUpload=@gwac-20150201.sql
+curl  http://url:8077/gwac/realTimeOtDstImageUpload.action -F fileUpload=@gwac-20150201.sql

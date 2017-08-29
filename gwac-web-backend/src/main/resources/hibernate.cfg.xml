@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.password">gdb%980</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://10.36.1.154:5432/gwac</property>
+    <property name="hibernate.connection.username">gwac</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <mapping class="com.gwac.model.OtObserveRecordHis"/>
+    <mapping class="com.gwac.model.SystemStatus"/>
+    <mapping class="com.gwac.model.FollowUpObservation"/>
+    <mapping class="com.gwac.model.OtNumber"/>
+    <mapping class="com.gwac.model.SyncFile"/>
+    <mapping class="com.gwac.model.UploadFileUnstore"/>
+    <mapping class="com.gwac.model.FollowUpObject"/>
+    <mapping class="com.gwac.model.UserInfo"/>
+    <mapping class="com.gwac.model.VariationType"/>
+    <mapping class="com.gwac.model.OtObserveRecordShow"/>
+    <mapping class="com.gwac.model.DataProcessMachine"/>
+    <mapping class="com.gwac.model.OtLevel3"/>
+    <mapping class="com.gwac.model.ConfigFile"/>
+    <mapping class="com.gwac.model.Customer"/>
+    <mapping class="com.gwac.model.UserActionLog"/>
+    <mapping class="com.gwac.model.OtLevel2"/>
+    <mapping class="com.gwac.model.Gimbal"/>
+    <mapping class="com.gwac.model.OtLevel2His"/>
+    <mapping class="com.gwac.model.OtObserveRecordTmp"/>
+    <mapping class="com.gwac.model.StarKnow"/>
+    <mapping class="com.gwac.model.MatchTable"/>
+    <mapping class="com.gwac.model.OtType"/>
+    <mapping class="com.gwac.model.VarStarRecord"/>
+    <mapping class="com.gwac.model.FitsFileCutHis"/>
+    <mapping class="com.gwac.model.OtObserveRecord"/>
+    <mapping class="com.gwac.model.FollowUpCatalog"/>
+    <mapping class="com.gwac.model.OtComment"/>
+    <mapping class="com.gwac.model.FollowUpObjectType"/>
+    <mapping class="com.gwac.model.ObservationSky"/>
+    <mapping class="com.gwac.model.Telescope"/>
+    <mapping class="com.gwac.model.OtLevel2Match"/>
+    <mapping class="com.gwac.model.FollowUpFitsfile"/>
+    <mapping class="com.gwac.model.Environment"/>
+    <mapping class="com.gwac.model.ConfigFileHis"/>
+    <mapping class="com.gwac.model.OtLevel2FollowParameter"/>
+    <mapping class="com.gwac.model.OtLevel2MatchShow"/>
+    <mapping class="com.gwac.model.FollowUpRecord"/>
+    <mapping class="com.gwac.model.UploadFileRecord"/>
+    <mapping class="com.gwac.model.ImageStatusParameterHis"/>
+    <mapping class="com.gwac.model.OTCatalog"/>
+    <mapping class="com.gwac.model.StarKnowObserveRecord"/>
+    <mapping class="com.gwac.model.Grb"/>
+    <mapping class="com.gwac.model.Ot2RealtimeQueryParmeter"/>
+    <mapping class="com.gwac.model.StarListFile"/>
+    <mapping class="com.gwac.model.ProcessStatus"/>
+    <mapping class="com.gwac.model.VarStarRecordHis"/>
+    <mapping class="com.gwac.model.FitsFileCut"/>
+    <mapping class="com.gwac.model.ImageStatusParameter"/>
+    <mapping class="com.gwac.model.OtLevel2QueryParameter"/>
+    <mapping class="com.gwac.model.UserAction"/>
+    <mapping class="com.gwac.model.FitsFileCutRef"/>
+    <mapping class="com.gwac.model.FitsFile"/>
+  </session-factory>
+</hibernate-configuration>

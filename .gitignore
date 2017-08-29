@@ -5,3 +5,5 @@
 *.war
 *.ear
 /target/
+/gwac-core/target/
+/gwac-web/target/

@@ -1,0 +1,12 @@
+{"type": "Topology",
+  "transform": {"scale": [1, 1], "translate": [0, 0]},
+  "objects": {
+    "land": {"type": "MultiPolygon", "arcs": [[[0]], [[1]], [[2]]]},
+    "countries": {"type": "GeometryCollection",
+      "geometries": [
+        {"type": "Polygon", "arcs": [[0]], "id": 51},
+        {"type": "MultiPolygon", "arcs": [[[2]]], "id": 10}]}},
+  "arcs": [[[5, 5], [0, 10], [10, 0], [0, -10], [-10, 0]],
+    [[30, 30], [0, 10], [10, 0], [0, -10], [-10, 0]],
+    [[60, 60], [0, 10], [10, 0], [0, -10], [-10, 0]]
+  ]}
