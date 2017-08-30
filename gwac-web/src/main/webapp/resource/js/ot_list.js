@@ -41,7 +41,7 @@ $(function() {
     alarmPlayer.jPlayer({
       ready: function() {
         alarmPlayer.jPlayer("setMedia", {
-          mp3: "/gwac-resources/" + $('#newOTAlarm').val()
+          mp3: "/gresources/" + $('#newOTAlarm').val()
         });
       },
       loop: false
@@ -56,7 +56,7 @@ $(function() {
     var optionSelected = $("#newOTAlarm").find("option:selected");
     var valueSelected = optionSelected.val();
     alarmPlayer.jPlayer("setMedia", {
-      mp3: "/gwac-resources/" + valueSelected
+      mp3: "/gresources/" + valueSelected
     });
     alarmPlayer.jPlayer("play");
   }

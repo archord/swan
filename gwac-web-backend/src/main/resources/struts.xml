@@ -29,17 +29,6 @@
   <package name="default" namespace="/" extends="json-default">
     
 
-    <!-- 自定义拦截器 -->
-    <interceptors>
-      <interceptor name="userAuthority" class="com.gwac.action.LoginInterceptor"/>
-      <!-- 自定义拦截器堆栈 -->
-      <interceptor-stack name="gwacStack">
-        <interceptor-ref name="userAuthority"/>
-        <!-- 引用默认的拦截器堆栈 -->
-        <interceptor-ref name="defaultStack"/>
-      </interceptor-stack>
-    </interceptors>
-
     <!-- 重定义默认拦截器堆栈 -->
     <default-interceptor-ref name="defaultStack"/>
     

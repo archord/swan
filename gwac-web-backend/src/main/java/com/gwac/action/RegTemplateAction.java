@@ -16,9 +16,13 @@ import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 
@@ -204,10 +208,8 @@ public class RegTemplateAction extends ActionSupport {
   private String echo = "";
 
   @Action(value = "regTemplateImg", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS)
-    ,
-    @Result(location = "manage/result.jsp", name = INPUT)
-    ,
+    @Result(location = "manage/result.jsp", name = SUCCESS),
+    @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String action1() {
 
@@ -250,9 +252,22 @@ public class RegTemplateAction extends ActionSupport {
       log.error("tmplate is null");
     }
 
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", echo);
-    return result;
+    sendResultMsg(echo);
+
+    return null;
+  }
+
+  public void sendResultMsg(String msg) {
+
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out;
+    try {
+      out = response.getWriter();
+      out.print(msg);
+    } catch (IOException ex) {
+      log.error("response error: ", ex);
+    }
   }
 
 }

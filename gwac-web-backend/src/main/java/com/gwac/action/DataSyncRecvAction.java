@@ -11,15 +11,17 @@ package com.gwac.action;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 
@@ -128,18 +130,27 @@ public class DataSyncRecvAction extends ActionSupport {
     }
 
     log.debug(echo);
-    /* 如果使用struts2的标签，返回结果会有两个空行，这个显示在命令行不好看。
-     * 用jsp的out，则不会有两个空行。
-     * 在这里将结果信息存储在session中，在jsp页面获得返回信息。
-     */
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", echo);
 
     long endTime = System.nanoTime();
     double time1 = 1.0 * (endTime - startTime) / 1e9;
     log.debug("total time: " + time1 + "s.");
 
-    return result;
+    sendResultMsg(echo);
+
+    return null;
+  }
+
+  public void sendResultMsg(String msg) {
+
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out;
+    try {
+      out = response.getWriter();
+      out.print(msg);
+    } catch (IOException ex) {
+      log.error("response error: ", ex);
+    }
   }
 
   public String display() {

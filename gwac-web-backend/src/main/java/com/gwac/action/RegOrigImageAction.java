@@ -17,11 +17,15 @@ import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.jms.Destination;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
@@ -48,7 +52,7 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
 
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource(name="regOrigImageDest")
+  @Resource(name = "regOrigImageDest")
   private Destination msgDest;
 
   @Resource
@@ -66,10 +70,8 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
   private String echo = "";
 
   @Action(value = "regOrigImg", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS)
-    ,
-    @Result(location = "manage/result.jsp", name = INPUT)
-    ,
+    @Result(location = "manage/result.jsp", name = SUCCESS),
+    @Result(location = "manage/result.jsp", name = INPUT),
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() {
 
@@ -99,9 +101,22 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
       echo = "receive parameter success.";
       log.debug(echo);
     }
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", echo);
-    return result;
+
+    sendResultMsg(echo);
+    return null;
+  }
+
+  public void sendResultMsg(String msg) {
+
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out;
+    try {
+      out = response.getWriter();
+      out.print(msg);
+    } catch (IOException ex) {
+      log.error("response error: ", ex);
+    }
   }
 
   public void initObjType() {

@@ -19,11 +19,11 @@ import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,9 +36,11 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.jms.Destination;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
@@ -63,7 +65,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource(name="otlistDest")
+  @Resource(name = "otlistDest")
   private Destination otlistDest;
 
   private Map<String, Object> appmap;
@@ -209,14 +211,25 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       result = ERROR;
     }
 
-    log.debug(echo);
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", echo);
-
     double time1 = 1.0 * (endTime - startTime) / 1e9;
     log.debug("fileType=" + fileType + ": " + fileUpload.size() + " files, total time: " + time1 + "s, ");
 
-    return result;
+    log.debug(echo);
+    sendResultMsg(echo);
+    return null;
+  }
+
+  public void sendResultMsg(String msg) {
+
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out;
+    try {
+      out = response.getWriter();
+      out.print(msg);
+    } catch (IOException ex) {
+      log.error("response error: ", ex);
+    }
   }
 
   public void storeOT2CutImage(List<File> files, List<String> fnames, String rootPath) {
@@ -417,4 +430,4 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     this.sendTime = sendTime;
   }
 
-  }
+}

@@ -24,10 +24,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Map;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
@@ -127,12 +130,23 @@ public class GetCutImageList extends ActionSupport implements ApplicationAware {
         log.error("create or write file error ", ex);
       }
     } else {
+      fileName = "empty.lst";
       result = ERROR;
     }
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", echo);
-    ctx.getSession().put("fileName", rootWebDir + "/tmp/" + fileName);
-    return result;
+    String imgList = rootWebDir + "/tmp/" + fileName;
+    returnFile(imgList);
+    return null;
+  }
+
+  public void returnFile(String fpath) {
+
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html;charset=UTF-8");
+    try {
+      response.sendRedirect(fpath);
+    } catch (IOException ex) {
+      log.error("response error: ", ex);
+    }
   }
 
   public String display() {
