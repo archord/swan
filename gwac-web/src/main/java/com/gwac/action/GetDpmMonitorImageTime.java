@@ -15,11 +15,10 @@ import org.apache.struts2.interceptor.SessionAware;
 @Actions({
   @Action(value = "/get-dpm-monitor-image-time", results = {
     @Result(name = "success", type = "json")})})
-public class GetDpmMonitorImageTime extends ActionSupport implements SessionAware {
+public class GetDpmMonitorImageTime extends ActionSupport {
 
   private static final long serialVersionUID = 1358264279068585793L;
   private static final Log log = LogFactory.getLog(GetDpmMonitorImageTime.class);
-  private Map<String, Object> session;
   private List<DataProcessMachine> dpms;
   @Resource
   private DataProcessMachineDAO dpmDao;
@@ -28,10 +27,6 @@ public class GetDpmMonitorImageTime extends ActionSupport implements SessionAwar
   public String execute() {
     setDpms(dpmDao.findAll());
     return SUCCESS;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   /**

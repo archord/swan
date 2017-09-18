@@ -11,10 +11,9 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class GetOtLevel2List2 extends ActionSupport implements SessionAware {
+public class GetOtLevel2List2 extends ActionSupport {
 
   private static final long serialVersionUID = 5073694279068543593L;
   private static final Log log = LogFactory.getLog(GetOtLevel2List2.class);
@@ -43,7 +42,6 @@ public class GetOtLevel2List2 extends ActionSupport implements SessionAware {
   // All Records
   private Integer records = 0;
   private boolean loadonce = false;
-  private Map<String, Object> session;
   @Resource
   private OtLevel2Dao obDao = null;
   private OtLevel2QueryParameter ot2qp;
@@ -196,10 +194,6 @@ public class GetOtLevel2List2 extends ActionSupport implements SessionAware {
 
   public void setTotalrows(Integer totalrows) {
     this.totalrows = totalrows;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   /**

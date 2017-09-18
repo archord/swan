@@ -25,6 +25,10 @@ public class GetSystemLogList extends ActionSupport {
   private int draw;
   private int start;
   private int length;
+  private String dateStart;
+  private String dateEnd;
+  private String logCode;
+  private String msgIp;
 
   /**
    * search result
@@ -39,8 +43,16 @@ public class GetSystemLogList extends ActionSupport {
   @SuppressWarnings("unchecked")
 //  @Transactional(readOnly=true)
   public String execute() {
+    
+//    log.debug("draw="+draw);
+//    log.debug("start="+start);
+//    log.debug("length="+length);
+//    log.debug("dateStart="+dateStart);
+//    log.debug("dateEnd="+dateEnd);
+//    log.debug("logCode="+logCode);
+//    log.debug("msgIp="+msgIp);
 
-    dataStr = dao.findRecord(start, length);
+    dataStr = dao.findRecord(start, length, dateStart, dateEnd, logCode, msgIp);
     if (dataStr == null) {
       dataStr = "[]";
     }
@@ -97,6 +109,34 @@ public class GetSystemLogList extends ActionSupport {
    */
   public String getDataStr() {
     return dataStr;
+  }
+
+  /**
+   * @param dateStart the dateStart to set
+   */
+  public void setDateStart(String dateStart) {
+    this.dateStart = dateStart;
+  }
+
+  /**
+   * @param dateEnd the dateEnd to set
+   */
+  public void setDateEnd(String dateEnd) {
+    this.dateEnd = dateEnd;
+  }
+
+  /**
+   * @param logCode the logCode to set
+   */
+  public void setLogCode(String logCode) {
+    this.logCode = logCode;
+  }
+
+  /**
+   * @param msgIp the msgIp to set
+   */
+  public void setMsgIp(String msgIp) {
+    this.msgIp = msgIp;
   }
 
 }

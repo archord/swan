@@ -18,6 +18,8 @@
 
   </head>
   <body>
-    <h1>GWAC信息展示平台——后台数据采集</h1>
+    <h3>GWAC信息展示平台——后台数据采集</h3>
+    <h1 style="color: red"><a href="/gwac">GWAC用户页面请点击</a></h1>
+    
   </body>
 </html>

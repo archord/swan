@@ -17,14 +17,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.ApplicationAware;
 
 /**
  * from MultipleCommonFileUploadAction
  *
  * @author xy
  */
-public class DatabaseManage extends ActionSupport implements ApplicationAware {
+public class DatabaseManage extends ActionSupport{
 
   private static final Log log = LogFactory.getLog(DatabaseManage.class);
 
@@ -33,7 +32,6 @@ public class DatabaseManage extends ActionSupport implements ApplicationAware {
 
   @Resource
   private DataBackupService dataBackupService;
-  private Map<String, Object> appMap = null;
 
   private String echo = "";
 
@@ -70,11 +68,6 @@ public class DatabaseManage extends ActionSupport implements ApplicationAware {
    */
   public String getEcho() {
     return echo;
-  }
-
-  @Override
-  public void setApplication(Map<String, Object> map) {
-    this.appMap = map;
   }
 
   /**

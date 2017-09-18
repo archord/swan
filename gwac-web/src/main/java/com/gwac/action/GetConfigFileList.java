@@ -1,19 +1,16 @@
 package com.gwac.action;
 
 import com.gwac.dao.ConfigFileDao;
-import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.ConfigFile;
-import com.gwac.model.UploadFileUnstore;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class GetConfigFileList extends ActionSupport implements SessionAware {
+public class GetConfigFileList extends ActionSupport {
 
   private static final long serialVersionUID = 5078264279068543593L;
   private static final Log log = LogFactory.getLog(GetConfigFileList.class);
@@ -42,7 +39,6 @@ public class GetConfigFileList extends ActionSupport implements SessionAware {
   // All Records
   private Integer records = 0;
   private boolean loadonce = false;
-  private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
   @Resource
   private ConfigFileDao cfDao = null;
@@ -214,11 +210,6 @@ public class GetConfigFileList extends ActionSupport implements SessionAware {
 
   public void setTotalrows(Integer totalrows) {
     this.totalrows = totalrows;
-  }
-
-  @Override
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
 }

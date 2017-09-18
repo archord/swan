@@ -2,9 +2,6 @@ package com.gwac.action;
 
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.model.OtLevel2;
-import com.gwac.model4.DataTableColumn;
-import com.gwac.model4.DataTableOrder;
-import com.gwac.model4.DataTableSearch;
 import com.gwac.model4.OtLevel2QueryParameter;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.SUCCESS;

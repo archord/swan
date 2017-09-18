@@ -8,10 +8,9 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class GetUploadFileRecordList extends ActionSupport implements SessionAware {
+public class GetUploadFileRecordList extends ActionSupport {
 
   private static final long serialVersionUID = 5078264279068543593L;
   private static final Log log = LogFactory.getLog(GetUploadFileRecordList.class);
@@ -40,7 +39,6 @@ public class GetUploadFileRecordList extends ActionSupport implements SessionAwa
   // All Records
   private Integer records = 0;
   private boolean loadonce = false;
-  private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
   @Resource
   private UploadFileRecordDao ufrDao = null;
@@ -214,8 +212,5 @@ public class GetUploadFileRecordList extends ActionSupport implements SessionAwa
     this.totalrows = totalrows;
   }
 
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
-  }
 
 }

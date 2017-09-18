@@ -10,10 +10,9 @@ import com.gwac.model.DataProcessMachine;
 import com.gwac.service.DataProcessMachineService;
 import com.opensymphony.xwork2.ActionSupport;
 import javax.annotation.Resource;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class GetDpmList extends ActionSupport implements SessionAware {
+public class GetDpmList extends ActionSupport{
 
   private static final long serialVersionUID = 5078264279068543593L;
   private static final Log log = LogFactory.getLog(GetDpmList.class);
@@ -42,7 +41,6 @@ public class GetDpmList extends ActionSupport implements SessionAware {
   // All Records
   private Integer records = 0;
   private boolean loadonce = false;
-  private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
   @Resource
   private DataProcessMachineService dpmService = null;
@@ -222,7 +220,4 @@ public class GetDpmList extends ActionSupport implements SessionAware {
     this.totalrows = totalrows;
   }
 
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
-  }
 }

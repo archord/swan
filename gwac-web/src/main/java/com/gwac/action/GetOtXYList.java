@@ -15,16 +15,14 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Actions({
   @Action(value = "/get-ot-xy-list", results = {
     @Result(name = "success", type = "json")})})
-public class GetOtXYList extends ActionSupport implements SessionAware {
+public class GetOtXYList extends ActionSupport {
 
   private static final long serialVersionUID = 5078264279068585793L;
   private static final Log log = LogFactory.getLog(GetOtXYList.class);
-  private Map<String, Object> session;
   private List<OtObserveRecord> otLv1;
   private List<OtLevel2> otLv2;
   private List<OtLevel2> otLv2Cur;
@@ -60,10 +58,6 @@ public class GetOtXYList extends ActionSupport implements SessionAware {
     dpms = dpmDao.getAllDpms();
     setMasterUsage();
     return SUCCESS;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   public void setMasterUsage() {

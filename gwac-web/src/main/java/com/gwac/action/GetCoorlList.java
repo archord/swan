@@ -10,16 +10,14 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Actions({
   @Action(value = "/get-coor-list", results = {
     @Result(name = "success", type = "json")})})
-public class GetCoorlList extends ActionSupport implements SessionAware {
+public class GetCoorlList extends ActionSupport {
 
   private static final long serialVersionUID = 5078264279068585793L;
   private static final Log log = LogFactory.getLog(GetCoorlList.class);
-  private Map<String, Object> session;
 
   private List<CoordinateShow> objs;
   @Resource
@@ -46,10 +44,6 @@ public class GetCoorlList extends ActionSupport implements SessionAware {
     }
     log.debug(getObjs().size());
     return SUCCESS;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   /**

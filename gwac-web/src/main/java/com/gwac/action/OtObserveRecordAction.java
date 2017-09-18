@@ -27,10 +27,9 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class OtObserveRecordAction extends ActionSupport implements SessionAware {
+public class OtObserveRecordAction extends ActionSupport{
 
   private static final long serialVersionUID = 5078264277068533593L;
   private static final Log log = LogFactory.getLog(OtObserveRecordAction.class);
@@ -59,7 +58,6 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
   // All Records
   private Integer records = 0;
   private boolean loadonce = false;
-  private Map<String, Object> session;
   @Resource
   private OtObserveRecordDAO otorDao;
   @Resource
@@ -205,10 +203,6 @@ public class OtObserveRecordAction extends ActionSupport implements SessionAware
 
   public void setLoadonce(boolean loadonce) {
     this.loadonce = loadonce;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   public void setTotalrows(Integer totalrows) {

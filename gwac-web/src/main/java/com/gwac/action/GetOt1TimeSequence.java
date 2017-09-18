@@ -1,13 +1,8 @@
 package com.gwac.action;
 
-import com.gwac.dao.DataProcessMachineDAO;
-import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.model.DataProcessMachine;
-import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
 import com.opensymphony.xwork2.ActionSupport;
-import java.io.File;
 import java.util.*;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;

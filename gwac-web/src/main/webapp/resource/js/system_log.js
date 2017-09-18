@@ -3,26 +3,71 @@ $(function() {
   var ot2ListTable;
   var ot2QueryInterval;
 
-  loadOT2List();
+  loadQueryParmeter();
+  loadSystemLogList();
+
+  function loadQueryParmeter() {
+    var option = {
+      maxHeight: 200,
+      nonSelectedText: '请选择',
+      includeSelectAllOption: true,
+      allSelectedText: '已全选',
+      selectAllText: '全选'
+    };
+    loadLogCodeIPs();
+    $('#log_code').multiselect(option);
+    //$('#log_ip').multiselect(option);
+
+    $("#sysLogQueryBtn").click(sysLogQueryBtnClick);
+    $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
+  }
 
   function setAutoRefresh() {
     if ($('#ot2ListTableAutoRefresh').is(':checked')) {
-      ot2QueryInterval = setInterval(ot2QueryBtnClick, 15000);
+      ot2QueryInterval = setInterval(sysLogQueryBtnClick, 15000);
     } else {
       clearInterval(ot2QueryInterval);
     }
   }
 
-  function ot2QueryBtnClick() {
-    var formData = $("#ot2QueryAction").serialize();
-    if (formData === 'autoRefresh=on' || formData === '') {
-      formData = "ot2qp.otName=";
-    }
-    var queryUrl = $("#ot2QueryAction").attr('action') + "?timestamp=" + new Date().getTime() + "&" + formData;
+  function sysLogQueryBtnClick() {
+    var formData = $("#sysLogQueryAction").serialize();
+    var queryUrl = $("#sysLogQueryAction").attr('action') + "?timestamp=" + new Date().getTime() + "&" + formData;
     ot2ListTable.ajax.url(queryUrl).load();
   }
 
-  function loadOT2List() {
+  function loadLogCodeIPs() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var queryUrl = gwacRootURL + "/get-sys-log-codeip-json.action";
+    $.ajax({
+      type: "get",
+      url: queryUrl,
+      data: 'p1=1',
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+        logCodes = eval(data.logCodes);
+        msgIps = eval(data.msgIps);
+        console.log(logCodes);
+        console.log(msgIps);
+        $.each(logCodes, function(i, item) {
+          $('#log_code').append($('<option>', {
+            value: item.log_code,
+            text: item.log_code
+          }));
+        });
+        $.each(msgIps, function(i, item) {
+          $('#log_ip').append($('<option>', {
+            value: item.msg_ip,
+            text: item.msg_ip
+          }));
+        });
+      }
+    });
+  }
+
+  function loadSystemLogList() {
     var gwacRootURL = $("#gwacRootURL").val();
     var queryUrl = gwacRootURL + "/get-system-log-list.action";
     ot2ListTable = $('#ot-list-table').DataTable({
@@ -54,13 +99,13 @@ $(function() {
           "targets": 0,
           "render": formateRowNumber,
           "width": "1%"
-        },{
+        }, {
           "targets": 1,
           "width": "12%"
-        },{
+        }, {
           "targets": 3,
           "width": "2%"
-        },{
+        }, {
           "targets": 4,
           "width": "6%"
         }],

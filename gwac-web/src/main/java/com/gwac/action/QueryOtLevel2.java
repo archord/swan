@@ -16,7 +16,7 @@ import org.apache.struts2.interceptor.SessionAware;
  * @author xy
  */
 @Result(name = "success", type = "json")
-public class QueryOtLevel2 extends ActionSupport implements SessionAware {
+public class QueryOtLevel2 extends ActionSupport {
 
   private static final long serialVersionUID = 5078264279538543593L;
   private static final Log log = LogFactory.getLog(QueryOtLevel2.class);
@@ -45,7 +45,6 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
   // All Records
   private Integer records = 0;
   private boolean loadonce = false;
-  private Map<String, Object> session;
   @Resource
   private OtLevel2Dao obDao = null;
 
@@ -210,10 +209,6 @@ public class QueryOtLevel2 extends ActionSupport implements SessionAware {
 
   public void setTotalrows(Integer totalrows) {
     this.totalrows = totalrows;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   /**

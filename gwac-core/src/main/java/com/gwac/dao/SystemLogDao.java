@@ -14,9 +14,13 @@ import java.util.List;
  */
 public interface SystemLogDao extends BaseHibernateDao<SystemLog> {
   
+  public String getLogCodes();
+  
+  public String getMsgIPs();
+  
   public void removeOldRecord(int day);
 
-  public String findRecord(int start, int length);
+  public String findRecord(int start, int length, String dateStart, String dateEnd, String logCode, String msgIp);
   
   public void removeOldRecord(int day, String codes);
 }

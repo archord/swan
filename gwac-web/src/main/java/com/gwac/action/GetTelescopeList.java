@@ -10,10 +10,9 @@ import com.gwac.model.Telescope;
 import com.gwac.service.TelescopeService;
 import com.opensymphony.xwork2.ActionSupport;
 import javax.annotation.Resource;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Result(name = "success", type = "json")
-public class GetTelescopeList extends ActionSupport implements SessionAware {
+public class GetTelescopeList extends ActionSupport {
 
   private static final long serialVersionUID = 5078264279068543593L;
   private static final Log log = LogFactory.getLog(GetTelescopeList.class);
@@ -42,7 +41,6 @@ public class GetTelescopeList extends ActionSupport implements SessionAware {
   // All Records
   private Integer records = 0;
   private boolean loadonce = false;
-  private Map<String, Object> session;
 //  private List<DataProcessMachine> dpmList;
   @Resource
   private TelescopeService tspService = null;
@@ -226,10 +224,6 @@ public class GetTelescopeList extends ActionSupport implements SessionAware {
 
   public void setTotalrows(Integer totalrows) {
     this.totalrows = totalrows;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
 

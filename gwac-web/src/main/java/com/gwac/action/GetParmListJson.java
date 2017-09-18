@@ -1,12 +1,9 @@
 package com.gwac.action;
 
 import com.gwac.dao.ImageStatusParameterDao;
-import com.gwac.model.ImageStatusParameter;
 import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

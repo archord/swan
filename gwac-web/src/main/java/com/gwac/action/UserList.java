@@ -32,7 +32,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import javax.annotation.Resource;
 
 @Result(name = "success", type = "json")
-public class UserList extends ActionSupport implements SessionAware {
+public class UserList extends ActionSupport {
 
   private static final long serialVersionUID = 5078264277068533593L;
   private static final Log log = LogFactory.getLog(UserList.class);
@@ -73,7 +73,6 @@ public class UserList extends ActionSupport implements SessionAware {
   private Integer records = 0;
 
   private boolean loadonce = false;
-  private Map<String, Object> session;
   private List<UserInfo> myCustomers;
   @Resource
   private UserInfoService userService;
@@ -249,10 +248,6 @@ public class UserList extends ActionSupport implements SessionAware {
 
   public void setLoadonce(boolean loadonce) {
     this.loadonce = loadonce;
-  }
-
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   public void setTotalrows(Integer totalrows) {
