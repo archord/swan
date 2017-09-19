@@ -14,10 +14,6 @@
     <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/resource/jquery-ui-1.12.1/jquery-ui.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.css">
-    <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
-    <script src="<%=request.getContextPath()%>/resource/jquery-ui-1.12.1/jquery-ui.min.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
     <style type="text/css"> 
       html, body {
         padding: 0;
@@ -50,19 +46,39 @@
         text-align: center;
         border:0;
       }
-      .manual_container_tel{
+      .manual_container1{
         border: 3px solid #c5c5c5;
         margin: 0 0 10px 0;
         padding: 5px;
+        text-align: left;
+        //min-width: 430px;
       }
-      .manual_container{
+      .manual_container1 span{  
+        white-space: nowrap;  /*强制span不换行*/
+        display: inline-block;  /*将span当做块级元素对待*/
+        overflow: hidden;  /*超出宽度部分隐藏*/
+        text-overflow: ellipsis;  /*超出部分以点号代替*/
+        line-height: 0.9;  /*数字与之前的文字对齐*/
+      }
+      .manual_container1 input{  
+        margin: 2px;
+      }
+      .manual_container_title{
+        text-align: center;
+        font-size: 16px;
+        background-color: #eee;
+        margin:  -5px 0px 5px 0px;
+      }
+      .manual_container2{
         border: 3px solid #c5c5c5;
-        min-height: 500px;
+        min-height: 343px;
         padding: 5px;
+        margin-bottom: 10px;
       }
-      .manual_container_col{padding: 5px}
+      .manual_container1_col{padding: 5px}
       .background {fill: #000;}
       line {stroke: #000;}
+      
     </style>  
   </head>
   <body>
@@ -85,6 +101,11 @@
       </div>
     </div>
 
+    <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/date/My97DatePicker/WdatePicker.js"></script>
+    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
     <script>
       $(function() {
         $("#tabs").tabs({
@@ -96,7 +117,7 @@
             });
           }
         });
-        $('#tabs').tabs({active: 0});
+        $('#tabs').tabs({active: 1});
       });
     </script>
 

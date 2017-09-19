@@ -22,14 +22,12 @@
   <div id="ot-list">
     <table id="ot-list-table" class="display" cellspacing="0" width="100%">
       <thead><tr><th>ID</th><th>生成时间</th><th>望远镜(GID-UID)</th><th>观测类型</th><th>天区(GID-FID)</th>
-          <th>RA</th><th>DEC</th><th>历元</th>
-          <th>图像类型</th><th>曝光时间</th><th>延迟时间</th><th>总帧数</th><th>优先级</th><th>开始时间</th><th>结束时间</th>
-          <th>ObjID</th><th>目标RA</th><th>目标DEC</th><th>目标历元</th><th>位置误差</th><th>分组ID</th><th>计划类型</th></tr></thead>
+          <th title="历元">位置(RA-DEC)</th><th>图像类型</th><th>曝光(延迟)时间</th><th>总帧数</th><th>优先级</th><th>起止时间</th>
+          <th>ObjID</th><th title="目标历元">目标位置(RA-DEC-ERR)</th><th>分组ID</th><th>计划类型</th></tr></thead>
 
       <tfoot><tr><th>ID</th><th>生成时间</th><th>望远镜(GID-UID)</th><th>观测类型</th><th>天区(GID-FID)</th>
-          <th>RA</th><th>DEC</th><th>历元</th>
-          <th>图像类型</th><th>曝光时间</th><th>延迟时间</th><th>总帧数</th><th>优先级</th><th>开始时间</th><th>结束时间</th>
-          <th>ObjID</th><th>目标RA</th><th>目标DEC</th><th>目标历元</th><th>位置误差</th><th>分组ID</th><th>计划类型</th></tr></tfoot>
+          <th title="历元">位置(RA-DEC)</th><th>图像类型</th><th>曝光(延迟)时间</th><th>总帧数</th><th>优先级</th><th>起止时间</th>
+          <th>ObjID</th><th title="目标历元">目标位置(RA-DEC-ERR)</th><th>分组ID</th><th>计划类型</th></tr></tfoot>
     </table>
   </div>  
 </div>
