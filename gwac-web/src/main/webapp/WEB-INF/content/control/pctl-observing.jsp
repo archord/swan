@@ -78,11 +78,14 @@
       .manual_container1_col{padding: 5px}
       .background {fill: #000;}
       line {stroke: #000;}
-      
+
     </style>  
   </head>
   <body>
 
+    <div style="display: none;">
+      <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
+    </div>      
     <div id="tabs" style="width:98%; height:100%;margin:0 auto;border:0;">
       <ul style="margin:12px;">
         <li><a href="#tabs-2">常规模式</a></li>
@@ -105,7 +108,8 @@
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/jquery-ui-1.12.1/jquery-ui.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/date/My97DatePicker/WdatePicker.js"></script>
-    <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
+    <script src="<%=request.getContextPath()%>/resource/js/pctl_observing.js"></script>
     <script>
       $(function() {
         $("#tabs").tabs({

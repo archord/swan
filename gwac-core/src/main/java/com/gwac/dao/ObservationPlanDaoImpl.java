@@ -7,11 +7,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.ObservationPlan;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author msw
  */
+@Repository(value = "observationPlanDao")
 public class ObservationPlanDaoImpl extends BaseHibernateDaoImpl<ObservationPlan> implements ObservationPlanDao {
     
 }

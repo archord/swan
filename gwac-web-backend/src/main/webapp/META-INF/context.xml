@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/gwbackend" cookies="false">
+<Context antiJARLocking="true" cookies="false" path="/gwac">
   <!--关闭session持久化，重启之后依然可用，对于序列化的对象-->
-  <Manager pathname="" />
+  <Manager pathname=""/>
 </Context>

@@ -513,7 +513,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
   public Boolean chechGuideStatus(ImageStatusParameter isp) {
 
     Boolean flag = false;
-    if (isp.getAstroFlag() <= 1 && isp.getAstroFlag() >= -1) {
+    if (isp.getAstroFlag() <= 1 && isp.getAstroFlag() >= -2) {
       if (isp.getMountDec() != null && isp.getMountRa() != null
               && isp.getImgCenterDec() != null && isp.getImgCenterRa() != null
               && isp.getMountDec() >= -90 && isp.getMountDec() <= 90

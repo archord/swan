@@ -46,7 +46,7 @@ public class ObservationPlan implements java.io.Serializable {
   private Date endTime;
   private Integer pairId;
   
-  public boolean isValid(){
+  public boolean checkValid(){
     return true;
   }
 
@@ -341,7 +341,7 @@ public class ObservationPlan implements java.io.Serializable {
     this.priority = priority;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
+//  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "begin_time", length = 29)
   public Date getBeginTime() {
     return this.beginTime;
@@ -351,7 +351,7 @@ public class ObservationPlan implements java.io.Serializable {
     this.beginTime = beginTime;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
+//  @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "end_time", length = 29)
   public Date getEndTime() {
     return this.endTime;

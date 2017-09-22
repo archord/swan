@@ -16,7 +16,7 @@
             观测计划</div>
         </div>
       </div>
-      <form action="observationPlanAction">
+      <form action="/gwac/observationPlanUpload.action" id="genObsPlanForm">
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12">
             <select height="30" name="unitId">
@@ -41,22 +41,26 @@
               <option value="manual">手动型</option>
             </select>
             <select height="30" name="imgType">
-              <option>图像类型</option>
-              <option>本底</option>
-              <option>暗场</option>
-              <option>平场</option>
-              <option>常规观测</option>
+              <option value="">图像类型</option>
+              <option value="bias">本底</option>
+              <option value="dark">暗场</option>
+              <option value="flat">平场</option>
+              <option value="light">常规观测</option>
+              <option value="focus">调焦</option>
             </select>
           </div>
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12">
             <table>
-              <tr><td>赤经：</td><td><input name="ra" value="60.0" style="width:60px;"/>秒</td><td>赤纬：</td><td><input name="dec" value="60.0" style="width:60px;"/>秒</td></tr>
-              <tr><td>曝光时间：</td><td><input name="expusoreDuring" value="10" style="width:60px;"/>秒</td><td>曝光间隔：</td><td><input name="delay" value="5" style="width:60px;"/>秒</td></tr>
-              <tr><td>观测帧数：</td><td><input name="frameCount" style="width:60px;"/>帧</td><td>优先级：</td><td><input name="priority" style="width:60px;"/></td></tr>
+              <tr><td>赤经：</td><td><input name="ra" value="60.0" style="width:60px;"/>秒</td>
+                <td>赤纬：</td><td><input name="dec" value="60.0" style="width:60px;"/>秒</td></tr>
+              <tr><td>曝光时间：</td><td><input name="expusoreDuring" value="10" style="width:60px;"/>秒</td>
+                <td>曝光间隔：</td><td><input name="delay" value="5" style="width:60px;"/>秒</td></tr>
+              <tr><td>观测帧数：</td><td><input name="frameCount" style="width:60px;"/>帧</td>
+                <td>优先级：</td><td><input name="priority" style="width:60px;"/></td></tr>
               <tr><td>开始时间：</td><td><input name="beginTime" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td>
-                <td colspan="2" rowspan="2" style="text-align: right"><button type="button">生成观测计划</button></td></tr>
+                <td colspan="2" rowspan="2" style="text-align: right"><button type="button" id="genObsPlanBtn">生成观测计划</button></td></tr>
               <tr><td>结束时间：</td><td><input name="endTime" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td></tr>
             </table>
           </div>

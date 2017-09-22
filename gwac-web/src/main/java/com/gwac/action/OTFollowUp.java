@@ -1,7 +1,6 @@
 package com.gwac.action;
 
 import com.gwac.activemq.OTFollowMessageCreator;
-import com.gwac.activemq.OTListMessageCreator;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UserInfoDAO;
@@ -9,8 +8,6 @@ import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
 import com.gwac.model4.OtLevel2FollowParameter;
 import com.gwac.model.UserInfo;
-import static com.opensymphony.xwork2.Action.ERROR;
-import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
