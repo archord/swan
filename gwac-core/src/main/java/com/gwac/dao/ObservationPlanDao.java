@@ -14,4 +14,5 @@ import com.gwac.model.ObservationPlan;
  */
 public interface ObservationPlanDao extends BaseHibernateDao<ObservationPlan>{
     public String findRecord(int start, int length);
+    public String getAllUnObservated();
 }

@@ -1,43 +1,13 @@
 
 $(function() {
-  var gwacRootURL = $("#gwacRootURL").val();
   var obsPlanTable;
 
-  initPage();
   loadObsPlanList();
-
-  function initPage() {
-    $("#genObsPlanBtn").click(ot2QueryBtnClick);
-  }
-
-  function ot2QueryBtnClick() {
-    var formData = $("#genObsPlanForm").serialize() + "&opSn=0&groupId=1&gridId=0&fieldId=0&pairId=0&epoch=2000&opTime="
-            + encodeURI(new Date().Format("yyyy-MM-dd hh:mm:ss"));
-    var formUrl = $("#genObsPlanForm").attr('action');
-    if (formData !== '') {
-      var queryUrl = formUrl + "?timestamp=" + new Date().getTime() + "&" + formData;
-      console.log(queryUrl);
-      $.ajax({
-        type: "post",
-        url: formUrl + "?timestamp=" + new Date().getTime(),
-        data: formData,
-        async: false,
-        success: function(data) {
-          console.log(data);
-        }
-      });
-    } else {
-      console.log("please select valid observation plan parameters!");
-    }
-  }
-
 
   function loadObsPlanList() {
     var gwacRootURL = $("#gwacRootURL").val();
     var queryUrl = gwacRootURL + "/get-observation-plan-list.action";
-    console.log(queryUrl);
     obsPlanTable = $('#obs-plan-table').DataTable({
-      serverSide: true,
       "deferRender": true,
       "processing": true,
       "searching": false,
@@ -48,9 +18,6 @@ $(function() {
         url: queryUrl,
         dataSrc: function(json) {
           return eval(json.dataStr);
-        },
-        data: function(d) {
-          return reConstructParameter(d);
         },
         type: 'GET'
       },

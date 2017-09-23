@@ -40,12 +40,8 @@ public class GetObservationPlanList extends ActionSupport {
 //  @Transactional(readOnly=true)
   public String execute() {
     
-    log.debug("draw="+draw);
-    log.debug("start="+start);
-    log.debug("length="+length);
 
-    dataStr = dao.findRecord(start, length);
-    System.out.println(dataStr);
+    dataStr = dao.getAllUnObservated();
     if (dataStr == null) {
       dataStr = "[]";
     }

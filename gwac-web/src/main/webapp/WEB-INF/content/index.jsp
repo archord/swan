@@ -44,7 +44,8 @@
       <div class="menu-trigger"></div>
       <div id="main_content" cssClass="ym-wbox">
         <div id='grid-fixed'>
-          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observing.action" target="_blank" ><p>GWAC观测控制</p></a>     </div>
+          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p>观测计划列表</p></a>     </div>
+          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p>手动控制</p></a>     </div>
           <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-telescope-monitor.action" target="_blank" ><p>望远镜监控</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>

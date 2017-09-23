@@ -46,11 +46,11 @@ $(function() {
       async: false,
       dataType: 'json',
       success: function(data) {
-        console.log(data);
+//        console.log(data);
         logCodes = eval(data.logCodes);
         msgIps = eval(data.msgIps);
-        console.log(logCodes);
-        console.log(msgIps);
+//        console.log(logCodes);
+//        console.log(msgIps);
         $.each(logCodes, function(i, item) {
           $('#log_code').append($('<option>', {
             value: item.log_code,
