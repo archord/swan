@@ -16,7 +16,7 @@
             观测计划</div>
         </div>
       </div>
-      <form action="/gwac/observationPlanUpload.action" id="genObsPlanForm">
+      <form action="/gwebend/observationPlanUpload.action" id="genObsPlanForm">
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12">
             <select height="30" name="unitId">

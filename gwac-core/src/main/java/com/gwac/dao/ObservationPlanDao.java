@@ -13,5 +13,5 @@ import com.gwac.model.ObservationPlan;
  * @author msw
  */
 public interface ObservationPlanDao extends BaseHibernateDao<ObservationPlan>{
-    
+    public String findRecord(int start, int length);
 }

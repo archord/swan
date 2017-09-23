@@ -78,7 +78,9 @@
       .manual_container1_col{padding: 5px}
       .background {fill: #000;}
       line {stroke: #000;}
-
+      #ot-list th{
+        text-align: center;
+      }
     </style>  
   </head>
   <body>
@@ -107,6 +109,7 @@
     <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/date/My97DatePicker/WdatePicker.js"></script>
     <script src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/js/pctl_observing.js"></script>
@@ -121,7 +124,7 @@
             });
           }
         });
-        $('#tabs').tabs({active: 1});
+        $('#tabs').tabs({active: 0});
       });
     </script>
 
