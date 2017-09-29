@@ -37,29 +37,20 @@
         overflow:auto;  
         white-space: nowrap;
       }  
-      select {
-        width: 100px;
-        border: 1px solid #555;
-        padding: 0.5em;
-        font-size: 15px;
-        line-height: 1.2em;
-        background: #fff;
-        -webkit-appearance: none;
-        -webkit-box-shadow: 1px 1px 1px #fff;
-        -webkit-border-radius: 0.5em;
-      }
       .tab_container{
         width:99%; 
         height: 93%;
         text-align: center;
         border:0;
       }
+      .manual_container1_col{padding: 5px; text-align: center}
       .manual_container1{
         border: 3px solid #c5c5c5;
-        margin: 0 0 10px 0;
+        margin: 100px auto;
         padding: 5px;
         text-align: left;
-        width: 430px;
+        width: 800px;
+        font-size: 20px;
       }
       .manual_container1 span{  
         white-space: nowrap;  /*强制span不换行*/
@@ -70,10 +61,21 @@
       }
       .manual_container1 input{  
         margin: 2px;
+        width: 200px;
+      }
+      .manual_container1 select {
+        width: 200px;
+        background: #fff;
+        margin: 2px;
+      }
+      .manual_container1 .timeinput{  
+        margin: 2px;
+        font-size: 20px;
+        width: 200px;
       }
       .manual_container_title{
         text-align: center;
-        font-size: 16px;
+        font-size: 26px;
         background-color: #eee;
         margin:  -5px 0px 5px 0px;
       }
@@ -83,7 +85,6 @@
         padding: 5px;
         margin-bottom: 10px;
       }
-      .manual_container1_col{padding: 5px}
       .background {fill: #000;}
       line {stroke: #000;}
     </style>  
@@ -102,64 +103,88 @@
               <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 " >
                   <div class="manual_container_title">
-                    观测计划</div>
+                    手动生成观测计划</div>
                 </div>
               </div>
               <form action="/gwebend/observationPlanUpload.action" id="genObsPlanForm">
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input name="localTime" id="localTime" style="width:160px;"/><br/>
-                    <input name="utcTime" id="utcTime" style="width:160px;"/><br/>
-                    <input name="julDay" id="julDay" style="width:160px;"/><br/>
-                    <input name="siderealTime" id="siderealTime" style="width:160px;"/><br/>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-12 col-sm-12 col-md-12">
-                    <select height="30" name="unitId">
-                      <option value="000">转台选择</option>
-                      <option value="001">转台01</option>
-                      <option value="002">转台02</option>
-                      <option value="003">转台03</option>
-                      <option value="004">转台04</option>
-                      <option value="005">转台05</option>
-                      <option value="006">转台06</option>
-                      <option value="007">转台07</option>
-                      <option value="008">转台08</option>
-                    </select>
-                    <select height="30" name="obsType">
-                      <option value="">观测类型</option>
-                      <option value="monitor">监测型</option>
-                      <option value="template">模板观测型</option>
-                      <option value="patrol">巡视型</option>
-                      <option value="synchronize">同步型</option>
-                      <option value="ToO_auto">自动触发型</option>
-                      <option value="ToO_manual">手动触发型</option>
-                      <option value="manual">手动型</option>
-                    </select>
-                    <select height="30" name="imgType">
-                      <option value="">图像类型</option>
-                      <option value="bias">本底</option>
-                      <option value="dark">暗场</option>
-                      <option value="flat">平场</option>
-                      <option value="light">常规观测</option>
-                      <option value="focus">调焦</option>
-                    </select>
+                    <table>
+                    </table>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
                     <table>
-                      <tr><td>赤经：</td><td><input name="ra" value="60.0" style="width:60px;"/>秒</td>
-                        <td>赤纬：</td><td><input name="dec" value="60.0" style="width:60px;"/>秒</td></tr>
-                      <tr><td>曝光时间：</td><td><input name="expusoreDuring" value="10" style="width:60px;"/>秒</td>
-                        <td>曝光间隔：</td><td><input name="delay" value="5" style="width:60px;"/>秒</td></tr>
-                      <tr><td>观测帧数：</td><td><input name="frameCount" style="width:60px;"/>帧</td>
-                        <td>优先级：</td><td><input name="priority" style="width:60px;"/></td></tr>
-                      <tr><td>开始时间：</td><td><input name="beginTime" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td>
-                        <td colspan="2" rowspan="2" style="text-align: right"><button type="button" id="genObsPlanBtn">生成观测计划</button></td></tr>
-                      <tr><td>结束时间：</td><td><input name="endTime" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td></tr>
+                      <tr><td width="150px">本地时间：</td><td width="250px"><input name="localTime" id="localTime" class="timeinput"/></td>
+                        <td width="150px">UTC时间：</td><td><input name="utcTime" id="utcTime" class="timeinput"/></td></tr>
+                      <tr><td>本地恒星时：</td><td><input name="siderealTime" id="siderealTime" class="timeinput"/></td>
+                        <td>儒略日：</td><td><input name="julDay" id="julDay" class="timeinput"/></td></tr>
+                      <tr><td>望远镜单元：</td><td>
+                          <select height="30" name="unitId">
+                            <option value="000">未选择</option>
+                            <option value="001">单元01</option>
+                            <option value="002">单元02</option>
+                            <option value="003">单元03</option>
+                            <option value="004">单元04</option>
+                            <option value="005">单元05</option>
+                            <option value="006">单元06</option>
+                            <option value="007">单元07</option>
+                            <option value="008">单元08</option>
+                          </select></td>
+                        <td>转台：</td><td>
+                          <select height="30" name="unitId">
+                            <option value="000">未选择</option>
+                            <option value="001">转台01</option>
+                            <option value="002">转台02</option>
+                            <option value="003">转台03</option>
+                            <option value="004">转台04</option>
+                            <option value="005">转台05</option>
+                            <option value="006">转台06</option>
+                            <option value="007">转台07</option>
+                            <option value="008">转台08</option>
+                          </select></td></tr>
+                      <tr><td>观测类型：</td><td>
+                          <select height="30" name="obsType">
+                            <option value="">未选择</option>
+                            <option value="monitor">监测型</option>
+                            <option value="template">模板观测型</option>
+                            <option value="patrol">巡视型</option>
+                            <option value="synchronize">同步型</option>
+                            <option value="ToO_auto">自动触发型</option>
+                            <option value="ToO_manual">手动触发型</option>
+                            <option value="manual">手动型</option>
+                          </select></td>
+                        <td>图像类型：</td><td>
+                          <select height="30" name="imgType">
+                            <option value="">未选择</option>
+                            <option value="bias">本底</option>
+                            <option value="dark">暗场</option>
+                            <option value="flat">平场</option>
+                            <option value="light">常规观测</option>
+                            <option value="focus">调焦</option>
+                          </select></td></tr>
+                      <tr><td>天区分区方式：</td><td>
+                          <select height="30" name="gridId">
+                            <option value="">未选择</option>
+                            <option value="01">G01</option>
+                          </select></td>
+                        <td>观测天区：</td><td>
+                          <select height="30" name="fieldId">
+                            <option value="">未选择</option>
+                            <option value="bias">F01</option>
+                          </select></td></tr>
+                      <tr><td>赤经(时分秒)：</td><td><input name="ra" value="60.0"/></td>
+                        <td>赤纬(度分秒)：</td><td><input name="dec" value="60.0"/></td></tr>
+                      <tr><td>曝光时间(秒)：</td><td><input name="expusoreDuring" value="10"/></td>
+                        <td>曝光间隔(秒)：</td><td><input name="delay" value="5"/></td></tr>
+                      <tr><td>观测帧数(帧)：</td><td><input name="frameCount"/></td>
+                        <td>优先级：</td><td><input name="priority"/></td></tr>
+                      <tr><td>开始时间：</td><td><input name="beginTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td>
+                        <td>结束时间：</td><td><input name="endTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td></tr>
+
                     </table>
+                    <button type="button" id="genObsPlanBtn">生成观测计划</button>
                   </div>
                 </div>
               </form>

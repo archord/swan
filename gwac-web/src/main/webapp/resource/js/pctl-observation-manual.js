@@ -147,7 +147,7 @@ $(function() {
     jd = JulDay(utDay, utMonth, utYear, UT)
     $("#localTime").val(writeDateTime(year, month, day, hours, minutes, seconds));
     $("#utcTime").val(writeDateTime(year, month, utDay, utHours, utMinutes, seconds));
-    $("#julDay").val("" + Math.round(100000 * jd) / 100000);
+    $("#julDay").val(" " + (Math.round(100000 * jd) / 100000).toFixed(5));
 
     longit = 117.5745;
     jd = JulDay(day, month, year, UT);
