@@ -16,8 +16,11 @@ import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
@@ -32,7 +35,7 @@ import org.apache.struts2.convention.annotation.Result;
 public class CommonLog extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(CommonLog.class);
-  
+
   @Resource
   private SystemLogDao sysLogDao;
 
@@ -45,15 +48,11 @@ public class CommonLog extends ActionSupport {
 
   private String echo = "";
 
-  @Action(value = "commonLog", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
-    @Result(location = "manage/result.jsp", name = ERROR)})
-  public String upload() {
+  @Action(value = "commonLog")
+  public void upload() {
 
-    String result = SUCCESS;
     echo = "";
-    
+
     String ip = ServletActionContext.getRequest().getRemoteAddr();
     Date tdate = CommonFunction.stringToDate(msgDate.replace('T', ' '), "yyyy-MM-dd HH:mm:ss.SSS");
     SystemLog sysLog = new SystemLog();
@@ -61,35 +60,41 @@ public class CommonLog extends ActionSupport {
     sysLog.setLogContent(msgContent);
     sysLog.setMsgIP(ip);
     sysLog.setMsgSource(msgSource);
-    
+
     if ("logchb".equals(logType)) {
       sysLog.setLogCode(msgCode);
-      if(msgType.equals("error")){
+      if (msgType.equals("error")) {
         sysLog.setLogType('1');
-      }else if(msgType.equals("state")){
+      } else if (msgType.equals("state")) {
         sysLog.setLogType('2');
-      }else{
+      } else {
         sysLog.setLogType('3');
       }
       echo += "success receive logs.";
     } else if ("loglxm".equals(logType)) {
-        sysLog.setLogType('4');
+      sysLog.setLogType('4');
       echo += "success receive logs.";
     } else {
-        sysLog.setLogType('0');
+      sysLog.setLogType('0');
       echo += "unrecognize logType:" + logType;
     }
     sysLogDao.save(sysLog);
 
     log.debug(echo);
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", echo);
-
-    return result;
+    sendResultMsg(echo);
   }
 
-  public String display() {
-    return NONE;
+  public void sendResultMsg(String msg) {
+
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out;
+    try {
+      out = response.getWriter();
+      out.print(msg);
+    } catch (IOException ex) {
+      log.error("response error: ", ex);
+    }
   }
 
   /**

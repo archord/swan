@@ -15,6 +15,8 @@
         var winHeight = $(window).height();
         var imgWidth = winWidth / 9 - (15);
         var imgHeight = imgWidth;
+        var allImgUpdate;
+        var centerImgUpdate;
         $('.imgStyle').each(function() {
           $(this).css("width", imgWidth);
           $(this).css("height", imgHeight);
@@ -25,11 +27,34 @@
         $('#imgCenter').css('height', centerWidth + 'px');
         $('#imgCenter').css('border-radius', '12px');
 
+//        updateImage();
+        allImgUpdate = setInterval(updateImage, 15000);
+        centerImgUpdate = setInterval(updateCenterImage, 1000);
+
+        $('img').hover(overImg, outImg)
+
 //        $(".imgStyle").error(function() {
 //          $(this).unbind("error").attr("src", "/images/realTimeOtDistribution/GWAC_ccdimg_sub.jpg");
 //        });
 
         var dataurl = "<%=request.getContextPath()%>/get-dpm-monitor-image-time.action";
+
+        function overImg() {
+          clearInterval(allImgUpdate);
+          clearInterval(centerImgUpdate);
+          ///images/realTimeOtDistribution/G001_ccdimg_sub.jpg
+          var imgUrl = $(this).attr('src');
+          var startIdx = imgUrl.indexOf('G');
+          var idx = parseInt(imgUrl.substring(startIdx+1, startIdx+4))-1;
+          updateCenterImageNumber(idx);
+          console.log($(this).attr('src'));
+          console.log(idx);
+        }
+
+        function outImg() {
+          allImgUpdate = setInterval(updateImage, 15000);
+          centerImgUpdate = setInterval(updateCenterImage, 1000);
+        }
 
         function onImageReceived(result) {
           var dpms = result.dpms;
@@ -52,17 +77,19 @@
         }
 
         function updateCenterImage() {
-          var origSrc = "/images/realTimeOtDistribution/G" + pad((centerImgIdx + 1), 3) + "_ccdimg.jpg?timestamp=" + new Date().getTime();
-          var cenSrc = $("#img" + (centerImgIdx + 1)).attr("src");
-          var cenSpan = $("#span" + (centerImgIdx + 1)).html();
+          updateCenterImageNumber(centerImgIdx);
+          centerImgIdx = (centerImgIdx + 1) % totalImgNum;
+        }
+        
+
+        function updateCenterImageNumber(idx) {
+          var origSrc = "/images/realTimeOtDistribution/G" + pad((idx + 1), 3) + "_ccdimg.jpg?timestamp=" + new Date().getTime();
+          var cenSrc = $("#img" + (idx + 1)).attr("src");
+          var cenSpan = $("#span" + (idx + 1)).html();
           $('#imgCenter').attr("src", cenSrc);
           $('#imgCenterUrl').attr("href", origSrc);
           $("#centerSpan").html(cenSpan);
-          centerImgIdx = (centerImgIdx + 1) % totalImgNum;
         }
-//        updateImage();
-        setInterval(updateImage, 15000);
-        setInterval(updateCenterImage, 1000);
 
         function shijian()
         {
