@@ -19,5 +19,6 @@
   </head>
   <body>
     <h1>GWAC信息展示平台——日志收集</h1>
+    <h1 style="color: red"><a href="${pageContext.request.contextPath}/gwac/pgwac-system-log.action">日志列表页面</a></h1>
   </body>
 </html>
