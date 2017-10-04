@@ -9,7 +9,7 @@
     <property name="locations">
       <list>
         <value>classpath:database-postgres-test.properties</value>
-        <value>classpath:database-mysql-ot2search-bj.properties</value>
+        <value>classpath:database-mysql-ot2search-xl.properties</value>
         <value>classpath:systemconfig.properties</value>
       </list>
     </property>
