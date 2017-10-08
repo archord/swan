@@ -127,7 +127,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setDpmId(dpmId);
         otLv2.setDateStr(fileDate);
         otLv2.setAllFileCutted(false);
-        otLv2.setSkyId(ff2.getFieldId().shortValue());
+        otLv2.setSkyId(ff2.getSkyId().shortValue());
         otLv2.setDataProduceMethod('1');    //星表匹配一级OT
         otLv2.setMag(otc.getMagAper());
 
@@ -157,7 +157,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setDpmId(dpmId);
         oor.setRequestCut(false);
         oor.setSuccessCut(false);
-        oor.setSkyId(ff2.getFieldId().shortValue());
+        oor.setSkyId(ff2.getSkyId().shortValue());
         oor.setDataProduceMethod('1');    //星表匹配一级OT
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配

@@ -18,8 +18,7 @@ import org.hibernate.annotations.Parameter;
 public class FileNumber implements java.io.Serializable {
 
   private long fnId;
-  private Integer gridId;
-  private Integer fieldId;
+  private Integer skyId;
   private Integer camId;
   private String dateStr;
   private Integer ffNumber;
@@ -31,10 +30,9 @@ public class FileNumber implements java.io.Serializable {
     this.fnId = fnId;
   }
 
-  public FileNumber(long fnId, Integer gridId, Integer fieldId, Integer camId, String dateStr, Integer ffNumber) {
+  public FileNumber(long fnId, Integer skyId, Integer camId, String dateStr, Integer ffNumber) {
     this.fnId = fnId;
-    this.gridId = gridId;
-    this.fieldId = fieldId;
+    this.skyId = skyId;
     this.camId = camId;
     this.dateStr = dateStr;
     this.ffNumber = ffNumber;
@@ -54,22 +52,13 @@ public class FileNumber implements java.io.Serializable {
     this.fnId = fnId;
   }
 
-  @Column(name = "grid_id")
-  public Integer getGridId() {
-    return this.gridId;
+  @Column(name = "sky_id")
+  public Integer getSkyId() {
+    return this.skyId;
   }
 
-  public void setGridId(Integer gridId) {
-    this.gridId = gridId;
-  }
-
-  @Column(name = "field_id")
-  public Integer getFieldId() {
-    return this.fieldId;
-  }
-
-  public void setFieldId(Integer fieldId) {
-    this.fieldId = fieldId;
+  public void setSkyId(Integer skyId) {
+    this.skyId = skyId;
   }
 
   @Column(name = "cam_id")

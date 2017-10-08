@@ -9,13 +9,8 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.activemq.RegOrigImageMessageCreator;
-import com.gwac.dao.ObjectTypeDao;
-import com.gwac.model.ObjectType;
 import com.gwac.util.CommonFunction;
-import static com.opensymphony.xwork2.Action.ERROR;
-import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -55,25 +49,13 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
   @Resource(name = "regOrigImageDest")
   private Destination msgDest;
 
-  @Resource
-  private ObjectTypeDao objTypeDao;
-
   private Map<String, Object> appMap = null;
   private String dateStr = null;
-  private ObjectType groupType = null;
-  private ObjectType unitType = null;
-  private ObjectType ffovCameraType = null;
-  private ObjectType jfovCameraType = null;
-  private ObjectType computerType = null;
-  private ObjectType gridType = null;
 
   private String echo = "";
 
-  @Action(value = "regOrigImg", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
-    @Result(location = "manage/result.jsp", name = ERROR)})
-  public String upload() {
+  @Action(value = "regOrigImg")
+  public void upload() {
 
     String result = SUCCESS;
     echo = "";
@@ -95,7 +77,6 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
       echo = "all parameter cannot be empty.";
       log.warn(echo);
     } else {
-      initObjType();
       MessageCreator tmc = new RegOrigImageMessageCreator(groupId, unitId, camId, gridId, fieldId, imgName, imgPath, genTime, dateStr);
       jmsTemplate.send(msgDest, tmc);
       echo = "receive parameter success.";
@@ -103,7 +84,6 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
     }
 
     sendResultMsg(echo);
-    return null;
   }
 
   public void sendResultMsg(String msg) {
@@ -125,40 +105,6 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
       dateStr = CommonFunction.getUniqueDateStr();
       appMap.put("datestr", dateStr);
     }
-    groupType = (ObjectType) appMap.get("group");
-    if (groupType == null) {
-      groupType = objTypeDao.getByName("group");
-      appMap.put("group", groupType);
-    }
-    unitType = (ObjectType) appMap.get("unit");
-    if (unitType == null) {
-      unitType = objTypeDao.getByName("unit");
-      appMap.put("unit", unitType);
-    }
-    ffovCameraType = (ObjectType) appMap.get("FFoV");
-    if (ffovCameraType == null) {
-      ffovCameraType = objTypeDao.getByName("FFoV");
-      appMap.put("FFoV", ffovCameraType);
-    }
-    jfovCameraType = (ObjectType) appMap.get("JFoV");
-    if (jfovCameraType == null) {
-      jfovCameraType = objTypeDao.getByName("JFoV");
-      appMap.put("JFoV", jfovCameraType);
-    }
-    computerType = (ObjectType) appMap.get("computer");
-    if (computerType == null) {
-      computerType = objTypeDao.getByName("computer");
-      appMap.put("computer", computerType);
-    }
-    gridType = (ObjectType) appMap.get("grid");
-    if (gridType == null) {
-      gridType = objTypeDao.getByName("grid");
-      appMap.put("grid", gridType);
-    }
-  }
-
-  public String display() {
-    return NONE;
   }
 
   /**

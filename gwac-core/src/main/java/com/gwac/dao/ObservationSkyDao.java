@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ObservationSkyDao extends BaseHibernateDao<ObservationSky> {
 
-  public ObservationSky getByName(String name, int gridId);
+  public ObservationSky getByName(String name, String gridId);
 
   public List<String> getAllSkyName();
 }

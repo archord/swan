@@ -8,6 +8,7 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.DataProcessMachineDAO;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -34,7 +35,7 @@ public class DpmIsAlive extends ActionSupport {
   private static final Log log = LogFactory.getLog(DpmIsAlive.class);
 
   @Resource
-  private DataProcessMachineDAO dpmDao;
+  private CameraDao cameraDao;
 
   protected String dpm = "";
   private String echo = "";
@@ -51,7 +52,11 @@ public class DpmIsAlive extends ActionSupport {
       result = ERROR;
       echo += "Error, dpm(name) is empty.\n";
     } else {
-      dpmDao.updateLastActiveTime(dpm);
+      String camera = dpm;
+      if (dpm.length() == 4) {
+        camera = dpm.substring(1);
+      }
+      cameraDao.updateLastActiveTime(camera);
       echo += "success\n";
     }
 

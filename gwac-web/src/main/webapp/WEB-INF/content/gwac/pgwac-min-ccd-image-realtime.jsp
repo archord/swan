@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title>Mini-GWAC CCD图像实时预览</title>
+    <title>GWAC CCD图像实时预览</title>
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/plot/jquery.js"></script>
     <script type="text/javascript">
 

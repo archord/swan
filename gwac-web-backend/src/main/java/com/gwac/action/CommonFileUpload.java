@@ -9,9 +9,11 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.activemq.OTListMessageCreator;
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.Camera;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.UploadFileUnstore;
@@ -57,6 +59,8 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
   private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im"}));
 
+  @Resource
+  private CameraDao cameraDao;
   @Resource
   private FitsFileCutDAO ffcDao;
   @Resource
@@ -357,6 +361,9 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         } catch (IOException ex) {
           log.error("delete or move file errror ", ex);
         }
+
+        String cameraName = tfilename.substring(1, tfilename.indexOf("_"));
+        cameraDao.updateMonitorImageTime(cameraName);
       }
     }
   }

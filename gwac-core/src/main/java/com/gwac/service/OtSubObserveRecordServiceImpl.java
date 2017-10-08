@@ -161,7 +161,7 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setDpmId(dpmId);
         otLv2.setDateStr(fileDate);
         otLv2.setAllFileCutted(true);
-        otLv2.setSkyId(ff2.getFieldId().shortValue());
+        otLv2.setSkyId(ff2.getSkyId().shortValue());
         otLv2.setDataProduceMethod('8');    //星表匹配一级OT
         otLv2.setXtemp(otc.getX());
         otLv2.setYtemp(otc.getY());
@@ -197,7 +197,7 @@ public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setDpmId(dpmId);
         oor.setRequestCut(true);
         oor.setSuccessCut(true);
-        oor.setSkyId(ff2.getFieldId().shortValue());
+        oor.setSkyId(ff2.getSkyId().shortValue());
         oor.setDataProduceMethod('8');    //星表匹配一级OT
         oor.setFfcId(ffc.getFfcId());
 

@@ -28,12 +28,11 @@ public class FileNumberDaoImpl extends BaseHibernateDaoImpl<FileNumber> implemen
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select * from file_number where grid_id=? and field_id=? and cam_id=? and date_str=?";
+    String sql = "select * from file_number where sky_id=? and and cam_id=? and date_str=?";
     Query q = session.createSQLQuery(sql).addEntity(FileNumber.class);
-    q.setInteger(0, fnum.getGridId());
-    q.setInteger(1, fnum.getFieldId());
-    q.setInteger(2, fnum.getCamId());
-    q.setString(3, fnum.getDateStr());
+    q.setInteger(0, fnum.getSkyId());
+    q.setInteger(1, fnum.getCamId());
+    q.setString(2, fnum.getDateStr());
     List rstList = q.list();
     if (rstList.isEmpty()) {
       fnum.setFfNumber(number);

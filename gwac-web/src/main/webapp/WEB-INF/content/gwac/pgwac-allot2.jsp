@@ -61,18 +61,26 @@
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>CCD</h4>
             <select name="ot2qp.telscope" id="ot2Ccd" multiple="multiple" class="ot2QueryParameter">
-              <option value="1">M01</option>
-              <option value="2">M02</option>
-              <option value="3">M03</option>
-              <option value="4">M04</option>
-              <option value="5">M05</option>
-              <option value="6">M06</option>
-              <option value="7">M07</option>
-              <option value="8">M08</option>
-              <option value="9">M09</option>
-              <option value="10">M10</option>
-              <option value="11">M11</option>
-              <option value="12">M12</option>
+              <option value="18">G01</option>
+              <option value="19">G02</option>
+              <option value="20">G03</option>
+              <option value="21">G04</option>
+              <option value="10">M05</option>
+              <option value="22">G06</option>
+              <option value="23">G07</option>
+              <option value="24">G08</option>
+              <option value="25">G09</option>
+              <option value="11">M10</option>
+              <option value="26">G11</option>
+              <option value="27">G12</option>
+              <option value="28">G13</option>
+              <option value="29">G14</option>
+              <option value="12">M15</option>
+              <option value="30">G16</option>
+              <option value="31">G17</option>
+              <option value="32">G18</option>
+              <option value="33">G19</option>
+              <option value="13">M20</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
