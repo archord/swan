@@ -318,16 +318,18 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         continue;
       }
       log.debug("receive file " + tfilename);
-      File destFile = new File(path, tfilename);
-      //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-      try {
-        if (destFile.exists()) {
-          log.warn(destFile + " already exist, delete it.");
-          FileUtils.forceDelete(destFile);
+      if ('a' != fileType) {
+        File destFile = new File(path, tfilename);
+        //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+        try {
+          if (destFile.exists()) {
+            log.warn(destFile + " already exist, delete it.");
+            FileUtils.forceDelete(destFile);
+          }
+          FileUtils.moveFile(file, destFile);
+        } catch (IOException ex) {
+          log.error("delete or move file errror ", ex);
         }
-        FileUtils.moveFile(file, destFile);
-      } catch (IOException ex) {
-        log.error("delete or move file errror ", ex);
       }
 
       UploadFileUnstore obj = new UploadFileUnstore();
@@ -352,9 +354,10 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           if (preFile.exists()) {
             FileUtils.forceDelete(preFile);
           }
-          if (destFile.exists()) {
-            FileUtils.copyFile(destFile, preFile);
-          }
+//          if (destFile.exists()) {
+//            FileUtils.copyFile(destFile, preFile);
+//          }
+          FileUtils.moveFile(file, preFile);
           int toWidth = 400;
           int toHeight = 400;
           getThumbnail(tpath, tname, tnameSub, toWidth, toHeight);

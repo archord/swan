@@ -9,6 +9,7 @@
     <script type="text/javascript">
 
       $(function() {
+        var cameras = {};
         var totalImgNum = 25;
         var centerImgIdx = 0;
         var winWidth = $(window).width();
@@ -27,17 +28,14 @@
         $('#imgCenter').css('height', centerWidth + 'px');
         $('#imgCenter').css('border-radius', '12px');
 
-//        updateImage();
+        var dataurl = "<%=request.getContextPath()%>/get-camera-monitor-image-time.action";
+        $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
+        
         allImgUpdate = setInterval(updateImage, 15000);
         centerImgUpdate = setInterval(updateCenterImage, 1000);
 
         $('img').hover(overImg, outImg)
 
-//        $(".imgStyle").error(function() {
-//          $(this).unbind("error").attr("src", "/images/realTimeOtDistribution/GWAC_ccdimg_sub.jpg");
-//        });
-
-        var dataurl = "<%=request.getContextPath()%>/get-dpm-monitor-image-time.action";
 
         function overImg() {
           clearInterval(allImgUpdate);
@@ -45,10 +43,10 @@
           ///images/realTimeOtDistribution/G001_ccdimg_sub.jpg
           var imgUrl = $(this).attr('src');
           var startIdx = imgUrl.indexOf('G');
-          var idx = parseInt(imgUrl.substring(startIdx+1, startIdx+4))-1;
+          var idx = parseInt(imgUrl.substring(startIdx + 1, startIdx + 4)) - 1;
           updateCenterImageNumber(idx);
-          console.log($(this).attr('src'));
-          console.log(idx);
+          //console.log($(this).attr('src'));
+          //console.log(idx);
         }
 
         function outImg() {
@@ -57,9 +55,9 @@
         }
 
         function onImageReceived(result) {
-          var dpms = result.dpms;
-          for (var i = 0; i < dpms.length; i++) {
-            $("#span" + (i + 1)).html(dpms[i].name + " (" + dpms[i].curProcessNumber + ")");
+          var tcameras = result.cameras;
+          for (var i = 0; i < tcameras.length; i++) {
+            cameras[tcameras[i].name] = tcameras[i].monitorImageTime;
           }
         }
 
@@ -74,20 +72,26 @@
             var src = "/images/realTimeOtDistribution/G" + pad(i, 3) + "_ccdimg_sub.jpg?timestamp=" + new Date().getTime();
             $("#img" + i).attr("src", src);
           }
+          $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
         }
 
         function updateCenterImage() {
           updateCenterImageNumber(centerImgIdx);
           centerImgIdx = (centerImgIdx + 1) % totalImgNum;
         }
-        
+
 
         function updateCenterImageNumber(idx) {
-          var origSrc = "/images/realTimeOtDistribution/G" + pad((idx + 1), 3) + "_ccdimg.jpg?timestamp=" + new Date().getTime();
+          console.log(cameras);
+          var cameraId = pad((idx + 1), 3);
+          var origSrc = "/images/realTimeOtDistribution/G" + cameraId + "_ccdimg.jpg?timestamp=" + new Date().getTime();
           var cenSrc = $("#img" + (idx + 1)).attr("src");
           var cenSpan = $("#span" + (idx + 1)).html();
           $('#imgCenter').attr("src", cenSrc);
           $('#imgCenterUrl').attr("href", origSrc);
+          if (Object.getOwnPropertyNames(cameras).length !== 0) {
+            cenSpan = cenSpan +"&nbsp;&nbsp;(" + cameras[cameraId] + ")";
+          }
           $("#centerSpan").html(cenSpan);
         }
 
@@ -130,7 +134,11 @@
         <td><div align="center" class="style6"><span id="span1">G001</span> </div></td>
         <td><div align="center" class="style6"><span id="span2">G002</span> </div></td>
         <td><div align="center" class="style6"><span id="span3">G003</span> </div></td>
-        <td colspan="3"><div align="center" class="style6"><span id="centerSpan">G00N</span> </div></td>
+        <td colspan="3">
+          <div align="center" class="style6">
+            <span id="centerSpan">G00N</span>
+          </div>
+        </td>
         <td><div align="center" class="style6"><span id="span4">G004</span></div></td>
         <td><div align="center" class="style6"><span id="span5">G005</span></div></td>
         <td><div align="center" class="style6"><span id="span6">G006</span></div></td>
