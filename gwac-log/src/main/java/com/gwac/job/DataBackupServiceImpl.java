@@ -4,14 +4,7 @@
  */
 package com.gwac.job;
 
-import com.gwac.dao.CcdPixFilterDao;
-import com.gwac.dao.ConfigFileDao;
-import com.gwac.dao.DataProcessMachineDAO;
-import com.gwac.dao.FitsFileCutDAO;
-import com.gwac.dao.ImageStatusParameterDao;
-import com.gwac.dao.OtLevel2Dao;
-import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.dao.SystemLogDao;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,21 +28,7 @@ public class DataBackupServiceImpl implements BaseService {
   private Boolean isTestServer;
 
   @Resource
-  private OtLevel2Dao otlv2Dao;
-  @Resource
-  private FitsFileCutDAO ffcDao;
-  @Resource
-  private OtObserveRecordDAO oorDao;
-  @Resource
-  private ConfigFileDao cfDao;
-  @Resource
-  private ImageStatusParameterDao ispDao;
-  @Resource
-  private DataProcessMachineDAO dpmDao;
-  @Resource
-  private UploadFileUnstoreDao ufuDao;
-  @Resource
-  private CcdPixFilterDao cpfDao;
+  private SystemLogDao sysLogDao;
 
   @Override
   public void startJob() {
@@ -70,15 +49,26 @@ public class DataBackupServiceImpl implements BaseService {
     }
 
     long startTime = System.nanoTime();
-    try {//JDBCConnectionException or some other exception
-      otlv2Dao.moveDataToHisTable();
-      ffcDao.moveDataToHisTable();
-      oorDao.moveDataToHisTable();
-      cfDao.moveDataToHisTable();
-      ispDao.moveDataToHisTable();
-      dpmDao.everyDayInit();
-      ufuDao.removeAll();
-      cpfDao.removeAll();
+    try {
+      int day = 7;
+      int day2 = 1;
+      /**
+      code  数量
+      108	1873833
+      400	1449034
+      2089	73079
+      314	14528
+      111	9955
+      2110	9954
+      2091	9726
+      163	8354
+      164	4060
+      167	3612
+      2002	3553
+      * **/
+      String codes = "2012,400,108,2089,314";
+      sysLogDao.removeOldRecord(day);
+      sysLogDao.removeOldRecord(day2, codes);
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {

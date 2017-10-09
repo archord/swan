@@ -33,6 +33,97 @@ import org.apache.struts2.convention.annotation.Result;
  */
 public class RegTemplateAction extends ActionSupport {
 
+  private static final Log log = LogFactory.getLog(RegTemplateAction.class);
+
+  private String tmptName;
+  private Integer groupId;
+  private Integer unitId;
+  private Integer camId;
+  private Integer gridId;
+  private Integer fieldId;
+  private Float centerRa;
+  private Float centerDec;
+  private Float topLeftRa;
+  private Float topLeftDec;
+  private Float topRightRa;
+  private Float topRightDec;
+  private Float bottomRightRa;
+  private Float bottomRightDec;
+  private Float bottomLeftRa;
+  private Float bottomLeftDec;
+  private String genTime;
+  private String storePath;
+  private Integer starNum;
+  private Float fwhm;
+  @Resource
+  private SkyRegionTemplateDao srTmptDao;
+
+  private String echo = "";
+
+  @Action(value = "regTemplateImg", results = {
+    @Result(location = "manage/result.jsp", name = SUCCESS),
+    @Result(location = "manage/result.jsp", name = INPUT),
+    @Result(location = "manage/result.jsp", name = ERROR)})
+  public String action1() {
+
+    String result = SUCCESS;
+    echo = "";
+    if (tmptName != null) {
+      SkyRegionTemplate obj = new SkyRegionTemplate();
+      obj.setBottomLeftDec(bottomLeftDec);
+      obj.setBottomLeftRa(bottomLeftRa);
+      obj.setBottomRightDec(bottomRightDec);
+      obj.setBottomRightRa(bottomRightRa);
+      obj.setCamId(camId);
+      obj.setCenterDec(centerDec);
+      obj.setCenterRa(centerRa);
+      obj.setFieldId(fieldId);
+      obj.setFwhm(fwhm);
+      if (genTime != null && !genTime.isEmpty()) {
+        genTime = genTime.replace("T", " ");
+        try {
+          obj.setGenTime(CommonFunction.stringToDate(genTime, "yyyy-MM-dd HH:mm:ss"));
+        } catch (Exception e) {
+          log.warn("parse datatime error");
+        }
+      }
+      obj.setGridId(gridId);
+      obj.setGroupId(groupId);
+      obj.setStarNum(starNum);
+      obj.setStorePath(storePath);
+      obj.setTmptName(tmptName);
+      obj.setTopLeftDec(topLeftDec);
+      obj.setTopLeftRa(topLeftRa);
+      obj.setTopRightDec(topRightDec);
+      obj.setTopRightRa(topRightRa);
+      obj.setUnitId(unitId);
+      srTmptDao.save(obj);
+      echo = "regist template success!";
+      log.debug(obj.toString());
+    } else {
+      echo = "regist template failure!";
+      log.error("tmplate is null");
+    }
+
+    sendResultMsg(echo);
+
+    return null;
+  }
+
+  public void sendResultMsg(String msg) {
+
+    HttpServletResponse response = ServletActionContext.getResponse();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out;
+    try {
+      out = response.getWriter();
+      out.print(msg);
+    } catch (IOException ex) {
+      log.error("response error: ", ex);
+    }
+  }
+
+
   /**
    * @param tmptName the tmptName to set
    */
@@ -179,95 +270,4 @@ public class RegTemplateAction extends ActionSupport {
   public void setSrTmptDao(SkyRegionTemplateDao srTmptDao) {
     this.srTmptDao = srTmptDao;
   }
-
-  private static final Log log = LogFactory.getLog(RegTemplateAction.class);
-
-  private String tmptName;
-  private Integer groupId;
-  private Integer unitId;
-  private Integer camId;
-  private Integer gridId;
-  private Integer fieldId;
-  private Float centerRa;
-  private Float centerDec;
-  private Float topLeftRa;
-  private Float topLeftDec;
-  private Float topRightRa;
-  private Float topRightDec;
-  private Float bottomRightRa;
-  private Float bottomRightDec;
-  private Float bottomLeftRa;
-  private Float bottomLeftDec;
-  private String genTime;
-  private String storePath;
-  private Integer starNum;
-  private Float fwhm;
-  @Resource
-  private SkyRegionTemplateDao srTmptDao;
-
-  private String echo = "";
-
-  @Action(value = "regTemplateImg", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
-    @Result(location = "manage/result.jsp", name = ERROR)})
-  public String action1() {
-
-    String result = SUCCESS;
-    echo = "";
-    if (tmptName != null) {
-      SkyRegionTemplate obj = new SkyRegionTemplate();
-      obj.setBottomLeftDec(bottomLeftDec);
-      obj.setBottomLeftRa(bottomLeftRa);
-      obj.setBottomRightDec(bottomRightDec);
-      obj.setBottomRightRa(bottomRightRa);
-      obj.setCamId(camId);
-      obj.setCenterDec(centerDec);
-      obj.setCenterRa(centerRa);
-      obj.setFieldId(fieldId);
-      obj.setFwhm(fwhm);
-      if (genTime != null && !genTime.isEmpty()) {
-        genTime = genTime.replace("T", " ");
-        try {
-          obj.setGenTime(CommonFunction.stringToDate(genTime, "yyyy-MM-dd HH:mm:ss"));
-        } catch (Exception e) {
-          log.warn("parse datatime error");
-        }
-      }
-      obj.setGridId(gridId);
-      obj.setGroupId(groupId);
-      obj.setStarNum(starNum);
-      obj.setStorePath(storePath);
-      obj.setTmptName(tmptName);
-      obj.setTopLeftDec(topLeftDec);
-      obj.setTopLeftRa(topLeftRa);
-      obj.setTopRightDec(topRightDec);
-      obj.setTopRightRa(topRightRa);
-      obj.setUnitId(unitId);
-      srTmptDao.save(obj);
-      echo = "regist template success!";
-      log.debug(obj.toString());
-    } else {
-      echo = "regist template failure!";
-      log.error("tmplate is null");
-    }
-
-    sendResultMsg(echo);
-
-    return null;
-  }
-
-  public void sendResultMsg(String msg) {
-
-    HttpServletResponse response = ServletActionContext.getResponse();
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out;
-    try {
-      out = response.getWriter();
-      out.print(msg);
-    } catch (IOException ex) {
-      log.error("response error: ", ex);
-    }
-  }
-
 }
