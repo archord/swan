@@ -1,6 +1,6 @@
 package com.gwac.activemq;
 
-import com.gwac.service.Ot2CheckService;
+import com.gwac.service2.Ot2CheckService;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 

@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package com.gwac.dao;
+package com.gwac.service2;
 
 import com.gwac.model.OtLevel2;
-import com.gwac.model2.MergedOther;
-import java.util.List;
+import com.gwac.model2.Cvs;
 
 /**
  *
  * @author xy
  */
-public interface MergedOtherDao extends BaseHibernateDao<MergedOther> {
-  
-  public List<MergedOther> queryByOt2(OtLevel2 ot2, float searchRadius, float mag);
+public interface Ot2CheckService {
+
+  public void startJob();
+  public void searchOT2(Long otId);
+
 }

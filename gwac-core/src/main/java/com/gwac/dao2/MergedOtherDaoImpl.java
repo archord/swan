@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.dao;
+
+package com.gwac.dao2;
 
 import com.gwac.model.OtLevel2;
-import com.gwac.model2.Cvs;
+import com.gwac.model2.MergedOther;
 import com.gwac.util.SearchBoxSphere;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
@@ -19,17 +19,17 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository(value="cvsQueryDao")
-public class CVSQueryDaoImpl extends MysqlHibernateDaoImpl<Cvs> implements CVSQueryDao {
+@Repository(value="mergedOtherDao")
+public class MergedOtherDaoImpl extends MysqlHibernateDaoImpl<MergedOther> implements MergedOtherDao {
   
   @Override
-  public List<Cvs> queryByOt2(OtLevel2 ot2, float searchRadius, float mag) {
+  public List<MergedOther> queryByOt2(OtLevel2 ot2, float searchRadius, float mag) {
 
     SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();
-      String sql = "select * from cvs where mag < " + mag + " and ";
+      String sql = "select * from merged_other where mag < " + mag + " and ";
       if (tflag == 1) {
         sql += "RAdeg between " + sbs.getMinRa() + " and " + sbs.getMaxRa() + " and ";
         sql += "DEdeg between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
@@ -38,10 +38,9 @@ public class CVSQueryDaoImpl extends MysqlHibernateDaoImpl<Cvs> implements CVSQu
         sql += "DEdeg between " + sbs.getMinDec() + " and " + sbs.getMaxDec() + " ";
       }
 
-      Query q = session.createSQLQuery(sql).addEntity(Cvs.class);
+      Query q = session.createSQLQuery(sql).addEntity(MergedOther.class);
       return q.list();
     }
     return new ArrayList();
   }
-
 }

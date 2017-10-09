@@ -1,5 +1,6 @@
-package com.gwac.dao;
+package com.gwac.dao2;
 
+import com.gwac.dao.BaseHibernateDao;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -14,22 +15,23 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional("transactionManager2")
-public abstract class MysqlHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
+@Transactional("transactionManager3")
+public abstract class MysqlUsnoHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
 
-  private static final Log log = LogFactory.getLog(MysqlHibernateDaoImpl.class);
+  private static final Log log = LogFactory.getLog(MysqlUsnoHibernateDaoImpl.class);
   public static final int SORT_ASC = 1;
   public static final int SORT_DESC = 2;
   private Class<T> clazz;
   
-  @Resource(name = "sessionFactoryMysql")
+  @Resource(name = "sessionFactoryMysqlUson")
   private SessionFactory sessionFactory;
 
-  public MysqlHibernateDaoImpl() {
+
+  public MysqlUsnoHibernateDaoImpl() {
     ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
     clazz = (Class<T>) pt.getActualTypeArguments()[0];
   }
-
+  
   public Number count() {
     return (Number) getCurrentSession().createCriteria(clazz).setProjection(Projections.rowCount()).uniqueResult();
   }
@@ -122,12 +124,9 @@ public abstract class MysqlHibernateDaoImpl<T extends Serializable> implements B
   public void deleteAll(String tableName) {
     getCurrentSession().createSQLQuery("delete * from " + tableName).executeUpdate();
   }
-
+  
   public final Session getCurrentSession() {
     return sessionFactory.getCurrentSession();
   }
 
-  public void setSessionFactory(SessionFactory sessionFactory) {
-    this.sessionFactory = sessionFactory;
-  }
 }

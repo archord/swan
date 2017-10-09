@@ -6,12 +6,11 @@
 package com.gwac.job;
 
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
-import com.gwac.dao.FitsFileDAO;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.model.DataProcessMachine;
-import com.gwac.model.FitsFile;
+import com.gwac.model.FitsFile2;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
@@ -34,7 +33,7 @@ public class FitsFileCutServiceImpl implements BaseService {
   private static boolean running = true;
   
   @Resource
-  private FitsFileDAO ffDao;
+  private FitsFile2DAO ff2Dao;
   @Resource
   private FitsFileCutDAO ffcDao;
   @Resource
@@ -102,7 +101,7 @@ public class FitsFileCutServiceImpl implements BaseService {
 
       for (int i = otlv2.getLastFfNumber() + 1; i <= otlv2.getLastFfNumber() + 2; i++) {
         String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
-        FitsFile tff = ffDao.getByName(ffName);
+        FitsFile2 tff = ff2Dao.getByName(ffName);
         if (tff == null) {
           log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
           continue;
@@ -158,7 +157,7 @@ public class FitsFileCutServiceImpl implements BaseService {
       int oorIdx = 0;
       for (int i = cuttedFfNumber + 1; i <= otlv2.getLastFfNumber(); i++) {
         String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
-        FitsFile tff = ffDao.getByName(ffName);
+        FitsFile2 tff = ff2Dao.getByName(ffName);
         if (tff == null) {
           log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
           continue;

@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.service2;
 
-import com.gwac.dao.CVSQueryDao;
+import com.gwac.dao2.CVSQueryDao;
 import com.gwac.dao.CcdPixFilterDao;
-import com.gwac.dao.MergedOtherDao;
-import com.gwac.dao.MinorPlanetDao;
+import com.gwac.dao2.MergedOtherDao;
+import com.gwac.dao2.MinorPlanetDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtLevel2MatchDao;
 import com.gwac.dao.MatchTableDao;
 import com.gwac.dao.OtTmplWrongDao;
-import com.gwac.dao.Rc3Dao;
-import com.gwac.dao.UsnoCatalogDao;
+import com.gwac.dao2.Rc3Dao;
+import com.gwac.dao2.UsnoCatalogDao;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2Match;
 import com.gwac.model.MatchTable;

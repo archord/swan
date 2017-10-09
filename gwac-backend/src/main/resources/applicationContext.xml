@@ -21,7 +21,7 @@
   
   <util:properties id="syscfg" location="classpath:systemconfig.properties"/>  
   <context:annotation-config />  
-  <context:component-scan base-package="com.gwac.dao,com.gwac.job,com.gwac.service,com.gwac.activemq"/>  
+  <context:component-scan base-package="com.gwac.dao,com.gwac.dao2,com.gwac.job,com.gwac.service,com.gwac.service2,com.gwac.activemq"/>  
   
   <import resource="com/gwac/bean/ActivemqDestination.xml"/>
   <import resource="com/gwac/bean/ActivemqConsumer.xml"/>
