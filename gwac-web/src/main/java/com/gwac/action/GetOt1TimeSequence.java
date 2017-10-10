@@ -10,17 +10,15 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 @Actions({
   @Action(value = "/get-ot1-timesequence-list", results = {
     @Result(name = "success", type = "json")})})
-public class GetOt1TimeSequence extends ActionSupport implements SessionAware {
+public class GetOt1TimeSequence extends ActionSupport {
 
   private static final long serialVersionUID = 5078264279068585793L;
   private static final Log log = LogFactory.getLog(GetOt1TimeSequence.class);
 
-  private Map<String, Object> session;
   @Resource
   private OtObserveRecordDAO oorDao = null;
 
@@ -60,11 +58,6 @@ public class GetOt1TimeSequence extends ActionSupport implements SessionAware {
 
     }
     return SUCCESS;
-  }
-
-  @Override
-  public void setSession(Map<String, Object> session) {
-    this.session = session;
   }
 
   /**

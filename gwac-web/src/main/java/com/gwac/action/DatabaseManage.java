@@ -11,10 +11,14 @@ package com.gwac.action;
 import com.gwac.service.DataBackupService;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 
@@ -54,13 +58,7 @@ public class DatabaseManage extends ActionSupport{
       echo = "wrong operation!";
     }
 
-    ActionContext ctx = ActionContext.getContext();
-    ctx.getSession().put("echo", echo);
     return "json";
-  }
-
-  public String display() {
-    return NONE;
   }
 
   /**

@@ -28,6 +28,24 @@ public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> 
     Query q = session.createSQLQuery(sql);
     return q.list();
   }
+  
+  @Override
+  public List<String> getAllSkyName(String gridId) {
+
+    String sql = "SELECT sky_name FROM observation_sky where grid_id='"+gridId+"' order by sky_name asc";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    return q.list();
+  }
+  
+  @Override
+  public List<String> getAllGridId() {
+
+    String sql = "SELECT distinct grid_id FROM observation_sky order by grid_id asc";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    return q.list();
+  }
 
   @Override
   public ObservationSky getByName(String name, String gridId) {

@@ -24,11 +24,11 @@ public class ObservationPlan implements java.io.Serializable {
   private Long opSn;
   private Date opTime;
   private String opType;
-  private Integer groupId;
-  private Integer unitId;
+  private String groupId;
+  private String unitId;
   private String obsType;
-  private Integer gridId;
-  private Integer fieldId;
+  private String gridId;
+  private String fieldId;
   private String objId;
   private Float ra;
   private Float dec;
@@ -109,7 +109,7 @@ public class ObservationPlan implements java.io.Serializable {
     this.opId = opId;
   }
 
-  public ObservationPlan(long opId, Long opSn, Date opTime, String opType, Integer groupId, Integer unitId, String obsType, Integer gridId, Integer fieldId, String objId, Float ra, Float dec, Integer epoch, Float objRa, Float objDec, Integer objEpoch, Float objError, String imgType, Integer expusoreDuring, Integer delay, Integer frameCount, Integer priority, Date beginTime, Date endTime, Integer pairId) {
+  public ObservationPlan(long opId, Long opSn, Date opTime, String opType, String groupId, String unitId, String obsType, String gridId, String fieldId, String objId, Float ra, Float dec, Integer epoch, Float objRa, Float objDec, Integer objEpoch, Float objError, String imgType, Integer expusoreDuring, Integer delay, Integer frameCount, Integer priority, Date beginTime, Date endTime, Integer pairId) {
     this.opId = opId;
     this.opSn = opSn;
     this.opTime = opTime;
@@ -180,20 +180,20 @@ public class ObservationPlan implements java.io.Serializable {
   }
 
   @Column(name = "group_id")
-  public Integer getGroupId() {
+  public String getGroupId() {
     return this.groupId;
   }
 
-  public void setGroupId(Integer groupId) {
+  public void setGroupId(String groupId) {
     this.groupId = groupId;
   }
 
   @Column(name = "unit_id")
-  public Integer getUnitId() {
+  public String getUnitId() {
     return this.unitId;
   }
 
-  public void setUnitId(Integer unitId) {
+  public void setUnitId(String unitId) {
     this.unitId = unitId;
   }
 
@@ -207,20 +207,20 @@ public class ObservationPlan implements java.io.Serializable {
   }
 
   @Column(name = "grid_id")
-  public Integer getGridId() {
+  public String getGridId() {
     return this.gridId;
   }
 
-  public void setGridId(Integer gridId) {
+  public void setGridId(String gridId) {
     this.gridId = gridId;
   }
 
   @Column(name = "field_id")
-  public Integer getFieldId() {
+  public String getFieldId() {
     return this.fieldId;
   }
 
-  public void setFieldId(Integer fieldId) {
+  public void setFieldId(String fieldId) {
     this.fieldId = fieldId;
   }
 

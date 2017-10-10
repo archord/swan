@@ -32,7 +32,7 @@
         $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
         
         allImgUpdate = setInterval(updateImage, 15000);
-        centerImgUpdate = setInterval(updateCenterImage, 1000);
+        centerImgUpdate = setInterval(updateCenterImage, 2000);
 
         $('img').hover(overImg, outImg)
 
@@ -82,7 +82,6 @@
 
 
         function updateCenterImageNumber(idx) {
-          console.log(cameras);
           var cameraId = pad((idx + 1), 3);
           var origSrc = "/images/realTimeOtDistribution/G" + cameraId + "_ccdimg.jpg?timestamp=" + new Date().getTime();
           var cenSrc = $("#img" + (idx + 1)).attr("src");

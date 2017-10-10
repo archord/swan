@@ -1,15 +1,212 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var obsPlanTable;
 
   initPage();
-  var uTime = setInterval(getDateTime, 1000);
 
   function initPage() {
     $("#genObsPlanBtn").click(ot2QueryBtnClick);
+    var uTime = setInterval(getDateTime, 1000);
+    $("#rah").change(check24);
+    $("#ram").change(check60);
+    $("#ras").change(check60);
+    $("#decd").change(check90);
+    $("#decm").change(check60);
+    $("#decs").change(check60);
+    setGroupIds()
   }
 
+  function setGroupIds() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var groupIdsUrl = gwacRootURL + "/get-group-ids.action";
+    $.ajax({
+      type: "get",
+      url: groupIdsUrl,
+      data: 'p1=1',
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+        var groupIds = data.groupIds;
+        $.each(groupIds, function(i, item) {
+          if (item.ottName !== "未分类")
+            $('#gridId').append($('<option>', {
+              value: item,
+              text: item
+            }));
+        });
+      }
+    });
+    $('#gridId').change(setFieldIds);
+  }
+
+  function setFieldIds() {
+    var fieldIdsUrl = gwacRootURL + "/get-field-ids.action";
+    var groupId = $('#gridId').val();
+    $("#fieldId").empty();
+    $('#fieldId').append($('<option>', {value: "", text: "未选择"}));
+    $.ajax({
+      type: "get",
+      url: fieldIdsUrl,
+      data: 'groupId=' + groupId,
+      async: false,
+      dataType: 'json',
+      success: function(data) {
+        var fieldIds = data.fieldIds;
+        $.each(fieldIds, function(i, item) {
+          if (item.ottName !== "未分类")
+            $('#fieldId').append($('<option>', {
+              value: item,
+              text: item
+            }));
+        });
+      }
+    });
+  }
+
+  function ot2QueryBtnClick() {
+    var groupId = $("#groupId").val();
+    var unitId = $("#unitId").val();
+    var obsType = $("#obsType").val();
+    var imgType = $("#imgType").val();
+    var gridId = $("#gridId").val();
+    var fieldId = $("#fieldId").val();
+    var rah = $("#rah").val();
+    var ram = $("#ram").val();
+    var ras = $("#ras").val();
+    var decd = $("#decd").val();
+    var decm = $("#decm").val();
+    var decs = $("#decs").val();
+    var expusoreDuring = $("#expusoreDuring").val();
+    var delay = $("#delay").val();
+    var frameCount = $("#frameCount").val();
+    var priority = $("#priority").val();
+    if (groupId === "") {
+      alert("请选择望远镜组")
+      return;
+    }
+    if (unitId === "") {
+      alert("请选择转台")
+      return;
+    }
+    if (obsType === "") {
+      alert("请选择观测类型")
+      return;
+    }
+    if (imgType === "") {
+      alert("请选择图像类型")
+      return;
+    }
+    if ((gridId === "" || fieldId === "") &&
+            ((rah === "" || rah === "0") && (ram === "" || ram === "0") && (ras === "" || ras === "0") &&
+                    (decd === "" || decd === "0") && (decm === "" || decm === "0") && (decs === "" || decs === "0"))) {
+      alert("请选择观测天区或填写观测坐标")
+      return;
+    }
+    if (expusoreDuring === "") {
+      alert("请填写曝光时间")
+      return;
+    }
+    if (delay === "") {
+      alert("请填写曝光延迟")
+      return;
+    }
+
+    var formData = $("#genObsPlanForm").serialize() + "&opSn=0&pairId=0&epoch=2000&opTime="
+            + encodeURI(new Date().Format("yyyy-MM-dd hh:mm:ss"));
+    var formUrl = $("#genObsPlanForm").attr('action');
+    if (formData !== '') {
+      var queryUrl = formUrl + "?timestamp=" + new Date().getTime() + "&" + formData;
+      console.log(queryUrl);
+      $.ajax({
+        type: "post",
+        url: formUrl,
+        data: formData,
+        async: true,
+        success: function(data) {
+          console.log(data);
+          alert("成功生成观测计划！");
+        }
+      });
+    } else {
+      var msg = "please select valid observation plan parameters!";
+      console.log(msg);
+      alert(msg);
+    }
+  }
+
+  function updateRa() {
+    var rah = $("#rah").val();
+    var ram = $("#ram").val();
+    var ras = $("#ras").val();
+    var ra = 0;
+    if (rah !== "") {
+      ra = ra + parseFloat(rah);
+    }
+    if (ram !== "") {
+      ra = ra + parseFloat(ram) / 60;
+    }
+    if (ras !== "") {
+      ra = ra + parseFloat(ras) / 3600;
+    }
+    ra = ra * 15;
+    $("#ra").val(ra.toFixed(4))
+  }
+  function updateDec() {
+    var decd = $("#decd").val();
+    var decm = $("#decm").val();
+    var decs = $("#decs").val();
+    var dec = 0;
+    if (decd !== "") {
+      dec = dec + parseFloat(decd);
+    }
+    if (decm !== "") {
+      dec = dec + parseFloat(decm) / 60;
+    }
+    if (decs !== "") {
+      dec = dec + parseFloat(decs) / 3600;
+    }
+    $("#dec").val(dec.toFixed(4))
+  }
+
+  function check24() {
+    var tval = $(this).val();
+    if (tval !== "") {
+      var t = parseInt(tval);
+      if (t < 0 || t > 24) {
+        alert("数值异常");
+        $(this).focus();
+      } else {
+        updateRa();
+        updateDec();
+      }
+    }
+  }
+  function check90() {
+    var tval = $(this).val();
+    if (tval !== "") {
+      var t = parseInt(tval);
+      if (t < -90 || t > 90) {
+        alert("数值异常");
+        $(this).focus();
+      } else {
+        updateRa();
+        updateDec();
+      }
+    }
+  }
+  function check60() {
+    var tval = $(this).val();
+    if (tval !== "") {
+      var t = parseInt(tval);
+      if (t < 0 || t > 59) {
+        alert("数值异常");
+        $(this).focus();
+      } else {
+        updateRa();
+        updateDec();
+      }
+    }
+  }
 
   function calculate() {
 
@@ -147,33 +344,12 @@ $(function() {
     jd = JulDay(utDay, utMonth, utYear, UT)
     $("#localTime").val(writeDateTime(year, month, day, hours, minutes, seconds));
     $("#utcTime").val(writeDateTime(year, month, utDay, utHours, utMinutes, seconds));
-    $("#julDay").val(" " + (Math.round(100000 * jd) / 100000).toFixed(5));
+    $("#julDay").val("" + (Math.round(100000 * jd) / 100000).toFixed(5));
 
     longit = 117.5745;
     jd = JulDay(day, month, year, UT);
 
     $("#siderealTime").val(LM_Sidereal_Time(jd, longit));
-  }
-
-  function ot2QueryBtnClick() {
-    var formData = $("#genObsPlanForm").serialize() + "&opSn=0&groupId=1&gridId=0&fieldId=0&pairId=0&epoch=2000&opTime="
-            + encodeURI(new Date().Format("yyyy-MM-dd hh:mm:ss"));
-    var formUrl = $("#genObsPlanForm").attr('action');
-    if (formData !== '') {
-      var queryUrl = formUrl + "?timestamp=" + new Date().getTime() + "&" + formData;
-      console.log(queryUrl);
-      $.ajax({
-        type: "post",
-        url: formUrl + "?timestamp=" + new Date().getTime(),
-        data: formData,
-        async: false,
-        success: function(data) {
-          console.log(data);
-        }
-      });
-    } else {
-      console.log("please select valid observation plan parameters!");
-    }
   }
 
 
@@ -216,7 +392,7 @@ $(function() {
 
   function writeDateTime(y, m, d, h, minute, s) {
 
-    var str = " " + y + "-";
+    var str = "" + y + "-";
     if (m < 10)
       str = str + "0" + m;
     else
@@ -297,7 +473,7 @@ $(function() {
       str = str + ":0" + secs;
     else
       str = str + ":" + secs;
-    return " " + str;
+    return "" + str;
 
   }
 

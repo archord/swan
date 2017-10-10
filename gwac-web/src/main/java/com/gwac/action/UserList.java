@@ -23,10 +23,8 @@ import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.SessionAware;
 
 import com.gwac.model.UserInfo;
-import com.gwac.dao.CustomerDAO;
 import com.gwac.service.UserInfoService;
 import com.opensymphony.xwork2.ActionSupport;
 import javax.annotation.Resource;

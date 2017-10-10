@@ -37,11 +37,11 @@ public class ObservationPlanUpload extends ActionSupport {
   private Long opSn;
   private String opTime;
   private String opType;
-  private Integer groupId;
-  private Integer unitId;
+  private String groupId;
+  private String unitId;
   private String obsType;
-  private Integer gridId;
-  private Integer fieldId;
+  private String gridId;
+  private String fieldId;
   private String objId;
   private Float ra;
   private Float dec;
@@ -88,14 +88,19 @@ public class ObservationPlanUpload extends ActionSupport {
     obsPlan.setPriority(priority);
     obsPlan.setRa(ra);
     obsPlan.setUnitId(unitId);
-    
-    Date tdate = CommonFunction.stringToDate(beginTime, "yyyy-MM-dd HH:mm:ss");
-    obsPlan.setBeginTime(tdate);
-    tdate = CommonFunction.stringToDate(endTime, "yyyy-MM-dd HH:mm:ss");
-    obsPlan.setEndTime(tdate);
-    tdate = CommonFunction.stringToDate(opTime, "yyyy-MM-dd HH:mm:ss");
-    obsPlan.setOpTime(tdate);
 
+    if (null != beginTime && !beginTime.isEmpty()) {
+      Date tdate = CommonFunction.stringToDate(beginTime, "yyyy-MM-dd HH:mm:ss");
+      obsPlan.setBeginTime(tdate);
+    }
+    if (null != endTime && !endTime.isEmpty()) {
+      Date tdate = CommonFunction.stringToDate(endTime, "yyyy-MM-dd HH:mm:ss");
+      obsPlan.setEndTime(tdate);
+    }
+    if (null != opTime && !opTime.isEmpty()) {
+      Date tdate = CommonFunction.stringToDate(opTime, "yyyy-MM-dd HH:mm:ss");
+      obsPlan.setOpTime(tdate);
+    }
     //必须设置传输机器名称
     if (null == obsPlan || !obsPlan.checkValid()) {
       echo = echo + "Error, observationPlan is inValid.\n";
@@ -209,14 +214,14 @@ public class ObservationPlanUpload extends ActionSupport {
   /**
    * @param groupId the groupId to set
    */
-  public void setGroupId(Integer groupId) {
+  public void setGroupId(String groupId) {
     this.groupId = groupId;
   }
 
   /**
    * @param unitId the unitId to set
    */
-  public void setUnitId(Integer unitId) {
+  public void setUnitId(String unitId) {
     this.unitId = unitId;
   }
 
@@ -230,14 +235,14 @@ public class ObservationPlanUpload extends ActionSupport {
   /**
    * @param gridId the gridId to set
    */
-  public void setGridId(Integer gridId) {
+  public void setGridId(String gridId) {
     this.gridId = gridId;
   }
 
   /**
    * @param fieldId the fieldId to set
    */
-  public void setFieldId(Integer fieldId) {
+  public void setFieldId(String fieldId) {
     this.fieldId = fieldId;
   }
 

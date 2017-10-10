@@ -33,7 +33,6 @@ $(function() {
         {"data": "delay"},
         {"data": "frame_count"},
         {"data": "priority"},
-        {"data": "begin_time"},
         {"data": "obj_id"},
         {"data": "obj_ra"},
         {"data": "pair_id"},
@@ -59,10 +58,6 @@ $(function() {
           "targets": 8,
           "data": "expusore-delay",
           "render": formateExpusore
-        }, {
-          "targets": 11,
-          "data": "start-end-time",
-          "render": formateStartEndTime
         }, {
           "targets": 13,
           "data": "position(ra,dec)",
@@ -102,7 +97,7 @@ $(function() {
   }
   function formatePosition(data, type, full, meta) {
     meta.title = full.epoch;
-    return "(" + full.ra + "," + full.dec + ")";
+    return "(" + full.ra.toFixed(3) + "," + full.dec.toFixed(3) + ")";
   }
   function formateExpusore(data, type, full, meta) {
     return full.expusore_during + "(" + full.delay + ")";

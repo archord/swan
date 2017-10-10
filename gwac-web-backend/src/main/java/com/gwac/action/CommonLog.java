@@ -106,10 +106,6 @@ public class CommonLog extends ActionSupport {
     }
   }
 
-  public String display() {
-    return NONE;
-  }
-
   /**
    * @return the echo
    */
