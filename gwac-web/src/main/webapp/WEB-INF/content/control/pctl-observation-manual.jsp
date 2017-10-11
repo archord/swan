@@ -172,7 +172,6 @@
                         <td>观测天区：</td><td>
                           <select height="30" name="fieldId" id="fieldId">
                             <option value="">未选择</option>
-                            <option value="bias">F01</option>
                           </select></td></tr>
                       <tr><td>赤经(度)：</td>
                         <td><input name="ra" id="ra" style="text-align: right;" value="0"/></td>
