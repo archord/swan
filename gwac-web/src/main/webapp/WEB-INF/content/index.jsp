@@ -45,19 +45,20 @@
       <div id="main_content" cssClass="ym-wbox">
         <div id='grid-fixed'>
           <div class='mason-block x5'><a href="<%=request.getContextPath()%>/control/pctl-system-init.action" target="_blank" ><p>系统初始化</p></a>     </div>
-          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p>观测计划列表</p></a>     </div>
-          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p>生成观测计划</p></a>     </div>
-          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-debug.action" target="_blank" ><p>观测调试</p></a>     </div>
-          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-telescope-monitor.action" target="_blank" ><p class="multiline">望远镜监控</p></a>     
+          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p class="multiline1">观测计划列表</p></a>     
+            <a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p class="multiline">生成观测计划</p></a>
+            <a href="<%=request.getContextPath()%>/control/pctl-observation-debug.action" target="_blank" ><p class="multiline">观测调试</p></a>
+          </div>
+          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-telescope-monitor.action" target="_blank" ><p class="multiline1">望远镜监控</p></a>     
             <a href="<%=request.getContextPath()%>/control/pctl-mount-monitor.action" target="_blank" ><p class="multiline">转台状态</p></a>  
           </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-image-realtime.action" target="_blank" ><p>图像预览</p></a>     </div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay.action" target="_blank" ><p class="multiline">OT2分布XY</p></a>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay.action" target="_blank" ><p class="multiline1">OT2分布XY</p></a>
             <a href="<%=request.getContextPath()%>/gwac/pgwac-ot-realtimedisplay-sphere-d3.action" target="_blank" ><p class="multiline">OT2分布3D</p></a>
             <a href="<%=request.getContextPath()%>/gwac/pgwac-ot-timesequence-sphere.action" target="_blank" ><p class="multiline">OT1分布3D</p></a></div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-mot-timesequence-sphere.action" target="_blank" ><p class="multiline">移动展示</p></a>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-mot-timesequence-sphere.action" target="_blank" ><p class="multiline1">移动展示</p></a>
             <a href="<%=request.getContextPath()%>/gwac/pgwac-mot-timesequence-sphere-debug.action" target="_blank" ><p class="multiline">移动展示调试</p></a>
             <a href="<%=request.getContextPath()%>/gwac/pgwac-sphere-distribution.action" target="_blank" ><p class="multiline">模板分布</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot.action" target="_blank" ><p>OT2查询</p></a></div>

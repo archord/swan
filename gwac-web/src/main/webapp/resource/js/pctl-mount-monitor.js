@@ -8,14 +8,14 @@ $(function() {
 
   function sysLogQueryBtnClick() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-ot-type-json.action?timestamp=" + new Date().getTime();
+    var queryUrl = gwacRootURL + "/get-mount-list-json.action?timestamp=" + new Date().getTime();
     ot2ListTable.ajax.url(queryUrl).load();
   }
 
 
   function loadSystemLogList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-ot-type-json.action";
+    var queryUrl = gwacRootURL + "/get-mount-list-json.action";
     ot2ListTable = $('#mount-list-table').DataTable({
       serverSide: false,
       "deferRender": true,
@@ -26,7 +26,7 @@ $(function() {
       "scrollX": true,
       "ajax": {
         url: queryUrl,
-        dataSrc:  'mounts',
+        dataSrc: 'mounts',
         type: 'GET'
       },
       "columns": [
@@ -44,6 +44,9 @@ $(function() {
           "targets": 0,
           "render": formateRowNumber,
           "width": "1%"
+        }, {
+          "targets": 3,
+          "render": formateStatus
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -74,6 +77,17 @@ $(function() {
 
   function formateRowNumber(data, type, full, meta) {
     return meta.row + 1;
+  }
+  function formateStatus(data, type, full, meta) {
+    var t = "未知状态";
+    if (data === 0) {
+      t = "下线";
+    } else if (data === 1) {
+      t = "正常";
+    } else if (data === 2) {
+      t = "故障";
+    }
+    return t;
   }
 
 });

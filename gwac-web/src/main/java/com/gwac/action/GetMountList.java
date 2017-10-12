@@ -29,7 +29,7 @@ public class GetMountList extends ActionSupport {
   private List<Mount> mounts;
 
   @Actions({
-    @Action(value = "/get-ot-type-json", results = {
+    @Action(value = "/get-mount-list-json", results = {
       @Result(name = "json", type = "json")})
   })
   @SuppressWarnings("unchecked")

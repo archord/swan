@@ -62,9 +62,16 @@ div#grid-fixed div a p{
 div#grid-fixed div a p.multiline{
   padding: 0;
   margin: 0;
-  height: 27px;
+  height: 20px;
   width: 100%;
-  font-size: 90%;
+  font-size: 85%;
+}
+div#grid-fixed div a p.multiline1{
+  padding: 0;
+  margin: 8px 0 0 0;
+  height: 20px;
+  width: 100%;
+  font-size: 85%;
 }
 div#grid-fixed div a:hover, a:focus{
   background-color: #2979ff;

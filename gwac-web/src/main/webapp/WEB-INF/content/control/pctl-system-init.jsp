@@ -20,8 +20,6 @@
     <meta http-equiv="description" content="GWAC观测手动控制页面" />
     <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
     <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resource/flatui/css/flat-ui.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/flatui/css/demo.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/css/gwac-ui.css" rel="stylesheet">
@@ -92,28 +90,19 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                  <div id="mount-list-container">
-                    <label class="checkbox" for="checkbox1">
-                      <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">全选
-                    </label>
-
-                    <label class="checkbox" for="checkbox1">
-                      <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">
-                      Unchecked
-                    </label>
-                    <label class="checkbox" for="checkbox2">
-                      <input type="checkbox" checked="checked" value="" id="checkbox2" data-toggle="checkbox" checked="">
-                      Checked
-                    </label>
-                    <label class="checkbox" for="checkbox3">
-                      <input type="checkbox" value="" id="checkbox3" data-toggle="checkbox" disabled="">
-                      Disabled unchecked
-                    </label>
-                    <label class="checkbox" for="checkbox4">
-                      <input type="checkbox" checked="checked" value="" id="checkbox4" data-toggle="checkbox" disabled="" checked="">
-                      Disabled checked
-                    </label>
+                <div class="col-xs-12 col-sm-12 col-md-12 " >
+                  <div id="mount-control">
+                      <input type="checkbox" value="" id="checkallmount">全选
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div id="mount-list-container1">
+                  </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div id="mount-list-container2">
                   </div>
                 </div>
               </div>
@@ -138,10 +127,7 @@
 
     <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/jquery.jplayer.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/flatui/js/flat-ui.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/pctl-system-init.js"></script>
 
 
