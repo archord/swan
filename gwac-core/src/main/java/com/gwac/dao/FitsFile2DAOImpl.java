@@ -49,13 +49,11 @@ public class FitsFile2DAOImpl extends BaseHibernateDaoImpl<FitsFile2> implements
   public FitsFile2Show getShowByName(String ffName) {
 
     Session session = getCurrentSession();
-    String sql = "select ff2.*, oi1.obj_name group_name, oi2.obj_name unit_name, oi3.obj_name cam_name, oi4.obj_name grid_name, os.sky_name field_name "
+    String sql = "select ff2.*, mt.group_id group_name, mt.unit_id unit_name, cm.name cam_name, os.grid_id grid_name, os.sky_name field_name "
             + "from fits_file2 ff2 "
-            + "INNER JOIN object_identity oi1 ON oi1.obj_id=ff2.group_id "
-            + "INNER JOIN object_identity oi2 ON oi2.obj_id=ff2.unit_id "
-            + "INNER JOIN object_identity oi3 ON oi3.obj_id=ff2.cam_id "
-            + "INNER JOIN object_identity oi4 ON oi4.obj_id=ff2.grid_id "
-            + "INNER JOIN observation_sky os ON os.sky_id=ff2.field_id "
+            + "INNER JOIN mount mt ON mt.mount_id=ff2.mount_id "
+            + "INNER JOIN camera cm ON cm.camera_id=ff2.cam_id "
+            + "INNER JOIN observation_sky os ON os.sky_id=ff2.sky_id "
             + "WHERE ff2.img_name=?";
     Query q = session.createSQLQuery(sql).addEntity(FitsFile2Show.class);
     q.setString(0, ffName);

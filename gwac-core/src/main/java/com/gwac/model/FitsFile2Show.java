@@ -22,11 +22,9 @@ public class FitsFile2Show implements java.io.Serializable {
 
   private long ffId;
   private Integer ffNumber;
-  private Integer groupId;
-  private Integer unitId;
+  private Integer mountId;
   private Integer camId;
-  private Short gridId;
-  private Integer fieldId;
+  private Integer skyId;
   private String imgName;
   private String imgPath;
   private Date genTime;
@@ -43,24 +41,7 @@ public class FitsFile2Show implements java.io.Serializable {
     this.ffId = ffId;
   }
 
-  public FitsFile2Show(long ffId, Integer ffNumber, Integer groupId, Integer unitId, Integer camId, Short gridId, Integer fieldId, String imgName, String imgPath, Date genTime) {
-    this.ffId = ffId;
-    this.ffNumber = ffNumber;
-    this.groupId = groupId;
-    this.unitId = unitId;
-    this.camId = camId;
-    this.gridId = gridId;
-    this.fieldId = fieldId;
-    this.imgName = imgName;
-    this.imgPath = imgPath;
-    this.genTime = genTime;
-  }
-
-  @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
-    @Parameter(name = "max_lo", value = "49"),
-    @Parameter(name = "sequence", value = "ff_id_seq2")})
   @Id
-  @GeneratedValue(generator = "generator")
   @Column(name = "ff_id", unique = true, nullable = false)
   public long getFfId() {
     return this.ffId;
@@ -79,22 +60,13 @@ public class FitsFile2Show implements java.io.Serializable {
     this.ffNumber = ffNumber;
   }
 
-  @Column(name = "group_id")
-  public Integer getGroupId() {
-    return this.groupId;
+  @Column(name = "mount_id")
+  public Integer getMountId() {
+    return this.mountId;
   }
 
-  public void setGroupId(Integer groupId) {
-    this.groupId = groupId;
-  }
-
-  @Column(name = "unit_id")
-  public Integer getUnitId() {
-    return this.unitId;
-  }
-
-  public void setUnitId(Integer unitId) {
-    this.unitId = unitId;
+  public void setMountId(Integer mountId) {
+    this.mountId = mountId;
   }
 
   @Column(name = "cam_id")
@@ -106,22 +78,13 @@ public class FitsFile2Show implements java.io.Serializable {
     this.camId = camId;
   }
 
-  @Column(name = "grid_id")
-  public Short getGridId() {
-    return this.gridId;
+  @Column(name = "sky_id")
+  public Integer getSkyId() {
+    return this.skyId;
   }
 
-  public void setGridId(Short gridId) {
-    this.gridId = gridId;
-  }
-
-  @Column(name = "field_id")
-  public Integer getFieldId() {
-    return this.fieldId;
-  }
-
-  public void setFieldId(Integer fieldId) {
-    this.fieldId = fieldId;
+  public void setSkyId(Integer skyId) {
+    this.skyId = skyId;
   }
 
   @Column(name = "img_name")

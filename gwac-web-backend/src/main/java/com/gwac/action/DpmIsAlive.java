@@ -9,7 +9,6 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.CameraDao;
-import com.gwac.dao.DataProcessMachineDAO;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;

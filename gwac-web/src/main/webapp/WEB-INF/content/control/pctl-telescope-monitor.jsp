@@ -9,7 +9,7 @@
 <html class="ocks-org do-not-copy">
   <head>
     <meta charset="utf-8">
-    <title>GWAC望远镜监控页面</title>
+    <title>GWA系统初始化页面</title>
     <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
     <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
     <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/resource/js/d3/d3.min.js"></script>

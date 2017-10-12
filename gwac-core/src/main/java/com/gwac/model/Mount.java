@@ -1,7 +1,6 @@
 package com.gwac.model;
 // Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +23,11 @@ public class Mount implements java.io.Serializable {
   private String groupId;
   private Integer status;
   private String comment;
+  private String opSn;
+  private String skyName;
+  private Float ra;
+  private Float dec;
+  private String obsType;
 
   public Mount() {
   }
@@ -111,6 +115,81 @@ public class Mount implements java.io.Serializable {
    */
   public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  /**
+   * @return the opSn
+   */
+  @Column(name = "op_sn")
+  public String getOpSn() {
+    return opSn;
+  }
+
+  /**
+   * @param opSn the opSn to set
+   */
+  public void setOpSn(String opSn) {
+    this.opSn = opSn;
+  }
+
+  /**
+   * @return the skyName
+   */
+  @Column(name = "sky_name")
+  public String getSkyName() {
+    return skyName;
+  }
+
+  /**
+   * @param skyName the skyName to set
+   */
+  public void setSkyName(String skyName) {
+    this.skyName = skyName;
+  }
+
+  /**
+   * @return the ra
+   */
+  @Column(name = "ra")
+  public Float getRa() {
+    return ra;
+  }
+
+  /**
+   * @param ra the ra to set
+   */
+  public void setRa(Float ra) {
+    this.ra = ra;
+  }
+
+  /**
+   * @return the dec
+   */
+  @Column(name = "dec")
+  public Float getDec() {
+    return dec;
+  }
+
+  /**
+   * @param dec the dec to set
+   */
+  public void setDec(Float dec) {
+    this.dec = dec;
+  }
+
+  /**
+   * @return the obsType
+   */
+  @Column(name = "obs_type")
+  public String getObsType() {
+    return obsType;
+  }
+
+  /**
+   * @param obsType the obsType to set
+   */
+  public void setObsType(String obsType) {
+    this.obsType = obsType;
   }
 
 }

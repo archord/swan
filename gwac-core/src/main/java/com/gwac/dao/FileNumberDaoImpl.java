@@ -28,7 +28,7 @@ public class FileNumberDaoImpl extends BaseHibernateDaoImpl<FileNumber> implemen
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select * from file_number where sky_id=? and and cam_id=? and date_str=?";
+    String sql = "select * from file_number where sky_id=? and cam_id=? and date_str=?";
     Query q = session.createSQLQuery(sql).addEntity(FileNumber.class);
     q.setInteger(0, fnum.getSkyId());
     q.setInteger(1, fnum.getCamId());

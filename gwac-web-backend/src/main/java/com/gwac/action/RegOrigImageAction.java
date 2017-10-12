@@ -77,6 +77,7 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
       echo = "all parameter cannot be empty.";
       log.warn(echo);
     } else {
+      initObjType();
       MessageCreator tmc = new RegOrigImageMessageCreator(groupId, unitId, camId, gridId, fieldId, imgName, imgPath, genTime, dateStr);
       jmsTemplate.send(msgDest, tmc);
       echo = "receive parameter success.";

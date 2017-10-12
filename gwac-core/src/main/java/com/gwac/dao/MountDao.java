@@ -12,6 +12,6 @@ import java.util.List;
  * @author xy
  */
 public interface MountDao extends BaseHibernateDao<Mount> {
-  
+  public List<Mount> getAll();
   public Mount getByGroupUnitId(String groupId, String unitId);
 }

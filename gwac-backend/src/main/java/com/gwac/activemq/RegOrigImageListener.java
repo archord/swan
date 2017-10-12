@@ -1,10 +1,6 @@
 package com.gwac.activemq;
 
-import com.gwac.model.UploadFileUnstore;
-import com.gwac.service.OtObserveRecordService;
 import com.gwac.service.RegOrigImageService;
-import java.text.DecimalFormat;
-import java.util.Date;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 
