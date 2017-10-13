@@ -4,10 +4,11 @@
  */
 package com.gwac.job;
 
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.ImageStatusParameterDao;
-import com.gwac.dao.ObjectIdentityDao;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.Camera;
 import com.gwac.model.FitsFile2Show;
 import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.UploadFileUnstore;
@@ -50,7 +51,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
   @Resource
   private FitsFile2DAO ff2Dao;
   @Resource
-  private ObjectIdentityDao objIdDao;
+  private CameraDao cameraDao;
   @Resource
   private ImageStatusParameterDao ispDao;
   @Value("#{syscfg.gwacDataRootDirectory}")
@@ -520,8 +521,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
               && isp.getMountRa() >= 0 && isp.getMountRa() <= 360
               && isp.getImgCenterDec() >= -90 && isp.getImgCenterDec() <= 90
               && isp.getImgCenterRa() >= 0 && isp.getImgCenterRa() <= 360) {
-        String typeName = objIdDao.getObjTypeName(isp.getDpmId());
-        if (typeName.equalsIgnoreCase("FFoV")) {
+        Camera tcam = cameraDao.getById(isp.getDpmId());
+        if (tcam.getCameraType().equalsIgnoreCase("FFoV")) {
           flag = true;
         }
       } else {
