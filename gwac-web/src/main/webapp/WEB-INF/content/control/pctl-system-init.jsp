@@ -10,7 +10,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex">
-    <title>GWAC观测-设备调试</title>
+    <title>GWAC-系统初始化</title>
     <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="pragma" content="no-cache" />
@@ -43,7 +43,17 @@
         margin: 0 0 10px 0;
         padding: 5px;
         text-align: left;
+        font-size: 16px;
         //min-width: 430px;
+      }
+      .manual_container1 select{
+        font-size: 14px;
+      }
+      #setMountButton{
+        font-size: 14px;
+        margin: 0px;
+        padding: 0px 5px;
+        border: 1px;
       }
       .manual_container1 span{  
         white-space: nowrap;  /*强制span不换行*/
@@ -57,7 +67,7 @@
       }
       .manual_container_title{
         text-align: center;
-        font-size: 16px;
+        font-size: 18px;
         background-color: #eee;
         margin:  -5px 0px 5px 0px;
       }
@@ -89,23 +99,32 @@
                     转台初始化</div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 " >
-                  <div id="mount-control">
-                      <input type="checkbox" value="" id="checkallmount">全选
+              <form action="" id="mountListForm">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12 " >
+                    <div id="mount-control">
+                      <input type="checkbox" id="checkallmount">全选&nbsp;&nbsp;
+                      <select name="mountStatus" id="imgType">
+                        <option value="0">未选择</option>
+                        <option value="1" selected>正常</option>
+                        <option value="2">故障</option>
+                        <option value="3">下线</option>
+                      </select>&nbsp;&nbsp;
+                      <button type="button" id="setMountButton">设置</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                  <div id="mount-list-container1">
+                <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div id="mount-list-container1">
+                    </div>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div id="mount-list-container2">
+                    </div>
                   </div>
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                  <div id="mount-list-container2">
-                  </div>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-8 manual_container1_col">

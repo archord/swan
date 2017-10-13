@@ -80,7 +80,7 @@ $(function() {
   }
   function formateStatus(data, type, full, meta) {
     var t = "未知状态";
-    if (data === 0) {
+    if (data === 3) {
       t = "下线";
     } else if (data === 1) {
       t = "正常";

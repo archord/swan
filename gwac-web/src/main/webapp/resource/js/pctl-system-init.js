@@ -1,7 +1,27 @@
 
 $(function() {
 
+  initPage();
   loadMountList();
+
+  function updateMountStatus() {
+
+    var gwacRootURL = $("#gwacRootURL").val();
+    var queryUrl = gwacRootURL + "/get-mount-list-json.action";
+    var formData = $("#mountListForm").serialize();
+    console.log(formData);
+  }
+
+  function initPage() {
+    $("#setMountButton").click(updateMountStatus);
+    $("#checkallmount").change(function() {
+      if ($('#checkallmount').is(':checked')) {
+        $("input[name='mountControl']").prop('checked', true);
+      } else {
+        $("input[name='mountControl']").prop('checked', false);
+      }
+    });
+  }
 
   function loadMountList() {
     var gwacRootURL = $("#gwacRootURL").val();
@@ -30,15 +50,6 @@ $(function() {
           mcon.append("转台" + item.unitId);
           mcon.append("<br/>");
         });
-        $("#checkallmount").change(function() {
-          console.log($('input[name="mountControl"]'));
-          console.log($("input[type='checkbox']").val());
-          if ($('#checkallmount').is(':checked')) {
-            $("input[name='mountControl']").prop('checked', true);
-          } else {
-            $("input[name='mountControl']").prop('checked', false);
-          }
-        })
       }
     });
   }
