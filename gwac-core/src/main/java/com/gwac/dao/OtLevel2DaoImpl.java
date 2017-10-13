@@ -260,6 +260,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return q.list();
   }
 
+  @Override
   public List<OtLevel2> getNCurOccurLv2OTByDate(String dateStr) {
     Session session = getCurrentSession();
     String sql = "select ol2.* "

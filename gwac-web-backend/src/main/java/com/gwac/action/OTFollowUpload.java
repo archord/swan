@@ -12,6 +12,7 @@ import com.gwac.dao.FollowUpFitsfileDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.OtLevel2;
 import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
@@ -120,8 +121,8 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
     }
 
     if (flag) {
-      String ot2FfName = ot2Dao.getOT2FitsFileName(ot2name, false);
-      if (null != ot2FfName) {
+      OtLevel2 tot2 = ot2Dao.getOtLevel2ByName(ot2name, true);
+      if (null != tot2) {
 
         String dateStr = (String) appmap.get("datestr");
         if (null == dateStr) {
@@ -135,9 +136,9 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
         rootPath = getText("gwacDataRootDirectory");
         destPath = rootPath;
         if (destPath.charAt(destPath.length() - 1) != '/') {
-          destPath += "/" + dateStr + "/" + ot2FfName.substring(0, ot2FfName.indexOf("_")) + "/";
+          destPath += "/" + dateStr + "/" + tot2.getIdentify() + "/";
         } else {
-          destPath += dateStr + "/" + ot2FfName.substring(0, ot2FfName.indexOf("_")) + "/";
+          destPath += dateStr + "/" + tot2.getIdentify() + "/";
         }
 
         File destDir = new File(destPath);

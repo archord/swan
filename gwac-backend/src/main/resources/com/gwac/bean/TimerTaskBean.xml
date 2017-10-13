@@ -157,7 +157,7 @@
     <property name="triggers">
       <list>
         <ref bean="imageStatusParmTrigger" />
-        <ref bean="addMissedCutImageTrigger" />
+        <!--<ref bean="addMissedCutImageTrigger" />-->
         <ref bean="moveDataToHisTrigger" />
         <ref bean="foTrigger" />
         <ref bean="otTmplTrigger" />
