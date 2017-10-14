@@ -81,11 +81,15 @@ $(function() {
   function formateStatus(data, type, full, meta) {
     var t = "未知状态";
     if (data === 3) {
-      t = "下线";
+      t = "正常";
     } else if (data === 1) {
       t = "正常";
     } else if (data === 2) {
+      t = "下线";
+    } else if (data === 4) {
       t = "故障";
+    } else if (data === 5) {
+      t = "损坏";
     }
     return t;
   }

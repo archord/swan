@@ -51,19 +51,19 @@
       for (r = 0; r < rowNum; r++) {
         for (c = 0; c < colNum; c++) {
           var idx = r * colNum + c + 1;
-          this.tels.push({gx: c * this.grid1W, gy: r * this.grid1H, idx: this.pad0(idx, 2)});
-          this.mCams.push({gx: c * this.grid1W, gy: r * this.grid1H, idx: this.pad0(idx, 2) + '5'});
-          this.mCCDs.push({gx: c * this.grid1W, gy: r * this.grid1H, idx: this.pad0(idx, 2) + '5'});
+          this.tels.push({gx: c * this.grid1W, gy: r * this.grid1H, idx: idx});
+          this.mCams.push({gx: c * this.grid1W, gy: r * this.grid1H, idx: idx * 5});
+          this.mCCDs.push({gx: c * this.grid1W, gy: r * this.grid1H, idx: idx * 5});
         }
       }
       for (r = 0; r < rowNum; r++) {
         for (c = 0; c < colNum; c++) {
           for (k = 0; k < 4; k++) {
-            var idx = r * colNum + c + 1;
+            var idx = (r * colNum + c) * 5 + k + 1;
             var gx = k % 2 + c * 2;
             var gy = Math.floor(k / 2) + r * 2;
-            this.gCams.push({gx: gx * this.grid2W, gy: gy * this.grid2H, idx: this.pad0(idx, 2) + (k + 1)});
-            this.gCCDs.push({gx: gx * this.grid2W, gy: gy * this.grid2H, idx: this.pad0(idx, 2) + (k + 1)});
+            this.gCams.push({gx: gx * this.grid2W, gy: gy * this.grid2H, idx: idx});
+            this.gCCDs.push({gx: gx * this.grid2W, gy: gy * this.grid2H, idx: idx});
           }
         }
       }
@@ -74,97 +74,11 @@
               .append("g")
               .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
       /**
-       var background = this.svg.append("rect")
-       .attr("class", "background")
-       .attr("width", this.grid1W * 5)
-       .attr("height", this.grid1H * 2);
-       */
-    },
-    submitStatus: function() {
-      var colors = ["#FFF", "#ABABAB", "#00EE00", "#EEAD0E", "#CD2626"]; //白，灰，绿，橙，红
-      var tccd = $("#ccdsSelect").val();
-      var tmount = $("#mountsSelect").val();
-      var status = $("#setStatus").val();
-      var formData = $("#updateSystemInitStatusAction").serialize();
-      var url = $("#updateSystemInitStatusAction").attr('action');
-      console.log(tccd);
-      console.log(tmount);
-      console.log(status);
-      console.log(formData);
-
-      $.ajax({
-        type: "get",
-        url: url,
-        data: formData,
-        async: false,
-        dataType: 'json',
-        success: function(data) {
-          console.log(data);
-        }
-      });
-
-      if (tccd !== null) {
-        $.each(tccd, function(i, item) {
-          d3.select("#ccd" + item).style('fill', colors[status - 1]);
-        });
-      }
-      if (tmount !== null) {
-        $.each(tmount, function(i, item) {
-          d3.select("#mount" + item).style('fill', colors[status - 1]);
-        });
-      }
-    },
-    selectMount: function() {
-      var allmount = new Array();
-      $("#mountsSelect option").each(function() {
-        var txt = $(this).val();
-        if (txt !== '') {
-          allmount.push(txt);
-        }
-      });
-      $.each(allmount, function(i, item) {
-        d3.select("#mount" + item).style('stroke-width', '1');
-      });
-      var tmount = $("#mountsSelect").val();
-      if (tmount !== null) {
-        $.each(tmount, function(i, item) {
-          d3.select("#mount" + item).style('stroke-width', '3');
-        });
-      }
-    },
-    selectCcd: function() {
-      var allccd = new Array();
-      $("#ccdsSelect option").each(function() {
-        var txt = $(this).val();
-        if (txt !== '') {
-          allccd.push(txt);
-        }
-      });
-      $.each(allccd, function(i, item) {
-        d3.select("#ccd" + item).style('stroke-width', '1');
-      });
-      var tccd = $("#ccdsSelect").val();
-      if (tccd !== null) {
-        $.each(tccd, function(i, item) {
-          d3.select("#ccd" + item).style('stroke-width', '3');
-        });
-      }
-    },
-    initSelect: function() {
-      var option = {
-        maxHeight: 200,
-        nonSelectedText: '请选择',
-        includeSelectAllOption: true,
-        allSelectedText: '已全选',
-        selectAllText: '全选'
-      };
-      option.nonSelectedText = '转台选择';
-      $('#mountsSelect').multiselect(option);
-      option.nonSelectedText = 'CCD选择';
-      $('#ccdsSelect').multiselect(option);
-      $('#mountsSelect').change(this.selectMount);
-      $('#ccdsSelect').change(this.selectCcd);
-      $('#setStatusBtn').click(this.submitStatus);
+      var background = this.svg.append("rect")
+              .attr("class", "background")
+              .attr("width", this.grid1W * 5)
+              .attr("height", this.grid1H * 2);
+              */
     },
     drawAll: function() {
       this.init();
@@ -174,34 +88,7 @@
       this.drawMCCD();
       this.drawGCCD();
       this.addEvents();
-//      this.randomEffects();
-    },
-    initEffects: function() {
-
-      var colors = ["#FFF", "#ABABAB", "#00EE00", "#EEAD0E", "#CD2626"]; //白，灰，绿，橙，红
-      var tmonitor = this;
-      var gwacObj = tmonitor.svg.selectAll(".gwac");
-      gwacObj.style("fill", "#ABABAB"); //"#00EE00"
-
-      var url = $("#gwacRootURL").val() + "get-system-init-status.action?timestamp=" + new Date().getTime();
-      $.ajax({
-        type: "get",
-        url: url,
-        data: "p1=1",
-        async: false,
-        dataType: 'json',
-        success: function(data) {
-          var tdata = eval(data);
-          var ccdStatus = eval(tdata.ccdStatus);
-          var mountStatus = eval(tdata.mountStatus);
-          $.each(ccdStatus, function(i, item) {
-            d3.select("#ccd" + item.name).style('fill', colors[item.status - 1]);
-          });
-          $.each(mountStatus, function(i, item) {
-            d3.select("#mount" + item.name).style('fill', colors[item.status - 1]);
-          });
-        }
-      });
+      this.randomEffects();
     },
     randomEffects: function() {
       var tmonitor = this;
@@ -227,9 +114,7 @@
       var tmonitor = this;
       var initStyle = "stroke:rgb(0,0,0);stroke-width:1;fill:#fff;";
       var gwacObj = tmonitor.svg.selectAll(".gwac");
-      var showLabel = tmonitor.svg.selectAll(".showlabel");
-      gwacObj.attr("style", initStyle).on('mouseover', tmonitor.mover1).on('mouseout', tmonitor.mout1);
-      showLabel.on('mouseover', tmonitor.mover2);
+      gwacObj.attr("style", initStyle).on('mouseover', tmonitor.mover4).on('mouseout', tmonitor.mout2);
       gwacObj.on('click', tmonitor.clickEvent);
     },
     drawTelescope: function() {
@@ -246,10 +131,7 @@
               .attr("width", tmonitor.grid1W)
               .attr("height", tmonitor.grid1H)
               .attr("value", function(d) {
-                return "mount" + d.idx;
-              })
-              .attr("id", function(d) {
-                return "mount" + d.idx;
+                return d.idx;
               });
     },
     drawMCCD: function() {
@@ -269,14 +151,10 @@
               .attr("width", mccdWidth)
               .attr("height", mccdWidth)
               .attr("value", function(d) {
-                return "ccd" + d.idx;
-              })
-              .attr("id", function(d) {
-                return "ccd" + d.idx;
+                return d.idx;
               });
 
       var teleLabel = teleg.append("text")
-              .attr("class", "mlabel showlabel")
               .attr("x", function(d) {
                 return d.gx + tmonitor.grid1W / 2.0;
               })
@@ -286,11 +164,8 @@
               .attr("style", "fill:#000;font-size:12px")
               .attr("text-anchor", "middle")
               .attr("alignment-baseline", "middle")
-              .attr("value", function(d) {
-                return d.idx;
-              })
               .text(function(d) {
-                return d.idx;
+                return "M" + tmonitor.pad0(d.idx, 2);
               });
     },
     drawMCamera: function() {
@@ -309,10 +184,7 @@
                 return camRadius;
               })
               .attr("value", function(d) {
-                return "cam" + d.idx;
-              })
-              .attr("id", function(d) {
-                return "cam" + d.idx;
+                return d.idx;
               });
     },
     drawGCCD: function() {
@@ -332,15 +204,11 @@
               .attr("width", gccdWidth)
               .attr("height", gccdWidth)
               .attr("value", function(d) {
-                return "ccd" + d.idx;
-              })
-              .attr("id", function(d) {
-                return "ccd" + d.idx;
+                return d.idx;
               });
 
 
       var teleLabel = teleg.append("text")
-              .attr("class", "glabel showlabel")
               .attr("x", function(d) {
                 return d.gx + tmonitor.grid2W / 2.0;
               })
@@ -350,11 +218,8 @@
               .attr("style", "fill:#000;font-size:14px")
               .attr("text-anchor", "middle")
               .attr("alignment-baseline", "middle")
-              .attr("value", function(d) {
-                return d.idx;
-              })
               .text(function(d) {
-                return d.idx;
+                return "G" + tmonitor.pad0(d.idx, 2);
               });
     },
     drawGCamera: function() {
@@ -373,36 +238,21 @@
                 return camRadius;
               })
               .attr("value", function(d) {
-                return "cam" + d.idx;
-              })
-              .attr("id", function(d) {
-                return "cam" + d.idx;
+                return d.idx;
               });
     },
-    mover1: function() {
+    mover4: function() {
       d3.select(this).style('stroke-width', '3');
     },
-    mout1: function() {
+    mout2: function() {
       d3.select(this).style('stroke-width', '1');
     },
-    mover2: function() {
-      var ccdId = "#ccd" + d3.select(this).attr("value");
-      d3.select(ccdId).style('stroke-width', '3');
-//      setTimeout(function() {
-//        d3.select(ccdId).style('stroke-width', '3');
-//      }, 50);
-    },
-    mout2: function() {
-      var ccdId = "#ccd" + d3.select(this).attr("value");
-//      console.log("out" + ccdId);
-      d3.select(ccdId).style('stroke-width', '1');
-    },
-    clickEvent: function() {
+    clickEvent:function() {
       var tval = d3.select(this).attr("value");
       console.log(tval);
     },
     pad0: function(num, size) {
-      var s = "000" + num;
+      var s = "00" + num;
       return s.substr(s.length - size);
     }
   };

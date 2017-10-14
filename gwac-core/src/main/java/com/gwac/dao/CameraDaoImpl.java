@@ -22,6 +22,27 @@ public class CameraDaoImpl extends BaseHibernateDaoImpl<Camera> implements Camer
   private static final Log log = LogFactory.getLog(CameraDaoImpl.class);
 
   @Override
+  public void updateStatus(String ccds, String status) {
+    Session session = getCurrentSession();
+    String sql = "update camera set status="+status+" where name in("+ccds+")";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public String getCamersStatus() {
+    Session session = getCurrentSession();
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT name, status) r)))  "
+            + "FROM( "
+            + "SELECT name, status "
+            + "FROM camera  "
+            + "where camera_id<51 "
+            + "ORDER BY camera_id "
+            + ")as obj;";
+    Query q = session.createSQLQuery(sql);
+    return (String) q.list().get(0);
+  }
+
+  @Override
   public List<Camera> getAllCameras() {
     Session session = getCurrentSession();
     String sql = "select * from camera order by camera_id;";
@@ -76,7 +97,6 @@ public class CameraDaoImpl extends BaseHibernateDaoImpl<Camera> implements Camer
       return null;
     }
   }
-
 
   @Override
   public void updateFirstRecordNumber(String dpmName, int number) {

@@ -22,6 +22,27 @@ public class MountDaoImpl extends BaseHibernateDaoImpl<Mount> implements MountDa
   private static final Log log = LogFactory.getLog(MountDaoImpl.class);
 
   @Override
+  public void updateStatus(String mounts, String status) {
+    Session session = getCurrentSession();
+    String sql = "update mount set status="+status+" where name in("+mounts+")";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public String getMountsStatus() {
+    Session session = getCurrentSession();
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT name, status) r)))  "
+            + "FROM( "
+            + "SELECT name, status "
+            + "FROM mount "
+            + "where mount_id<51 "
+            + "ORDER BY mount_id "
+            + ")as obj";
+    Query q = session.createSQLQuery(sql);
+    return (String) q.list().get(0);
+  }
+
+  @Override
   public List<Mount> getAll() {
     Session session = getCurrentSession();
     String sql = "select * from mount order by mount_id";
@@ -32,7 +53,7 @@ public class MountDaoImpl extends BaseHibernateDaoImpl<Mount> implements MountDa
   @Override
   public Mount getByGroupUnitId(String groupId, String unitId) {
     Session session = getCurrentSession();
-    String sql = "select * from mount where group_id='" + groupId + "' and unit_id='" + unitId+"'";
+    String sql = "select * from mount where group_id='" + groupId + "' and unit_id='" + unitId + "'";
     Query q = session.createSQLQuery(sql).addEntity(Mount.class);
 
     if (!q.list().isEmpty()) {

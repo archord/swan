@@ -12,6 +12,10 @@ import java.util.List;
  * @author xy
  */
 public interface CameraDao extends BaseHibernateDao<Camera> {
+  
+  public void updateStatus(String ccds, String status);
+  
+  public String getCamersStatus();
 
   public List<Camera> getAllCameras();
 
