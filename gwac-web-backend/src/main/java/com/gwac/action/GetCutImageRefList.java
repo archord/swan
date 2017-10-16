@@ -10,11 +10,7 @@ package com.gwac.action;
  */
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFileCutRefDAO;
-import com.gwac.dao.ObjectIdentityDao;
-import com.gwac.dao.ObjectTypeDao;
 import com.gwac.model.Camera;
-import com.gwac.model.ObjectIdentity;
-import com.gwac.model.ObjectType;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -95,18 +91,22 @@ public class GetCutImageRefList extends ActionSupport {
       try {
         String content = "";
         Camera tcamera = camDao.getByName(cameraName);
-        content = ffcrDao.getUnCuttedStarList(tcamera.getCameraId(), 6);
-        if (!content.isEmpty()) {
-          fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + "_ref.lst";
-          File file = new File(destPath, fileName);
-          if (!file.exists()) {
-            file.createNewFile();
-            log.debug("create ref cut image list file " + file);
+        if (tcamera != null) {
+          content = ffcrDao.getUnCuttedStarList(tcamera.getCameraId(), 6);
+          if (!content.isEmpty()) {
+            fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + "_ref.lst";
+            File file = new File(destPath, fileName);
+            if (!file.exists()) {
+              file.createNewFile();
+              log.debug("create ref cut image list file " + file);
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
           }
-          FileWriter fw = new FileWriter(file.getAbsoluteFile());
-          BufferedWriter bw = new BufferedWriter(fw);
-          bw.write(content);
-          bw.close();
+        } else {
+          log.warn("cannot find camera: " + cameraName);
         }
         if (content.isEmpty()) {
           fileName = "empty.lst";

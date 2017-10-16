@@ -10,11 +10,7 @@ package com.gwac.action;
  */
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFileCutDAO;
-import com.gwac.dao.ObjectIdentityDao;
-import com.gwac.dao.ObjectTypeDao;
 import com.gwac.model.Camera;
-import com.gwac.model.ObjectIdentity;
-import com.gwac.model.ObjectType;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -25,7 +21,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
@@ -43,8 +38,8 @@ import org.springframework.beans.factory.annotation.Value;
  */
 //@InterceptorRef("jsonValidationWorkflowStack")
 //加了这句化，文件传不上来
-public class GetCutImageList extends ActionSupport{
-
+public class GetCutImageList extends ActionSupport {
+  
   private static final Log log = LogFactory.getLog(GetCutImageList.class);
   private String cameraName;
   @Resource
@@ -54,16 +49,16 @@ public class GetCutImageList extends ActionSupport{
   @Value("#{syscfg.gwacDataRootDirectoryWebmap}")
   private String rootWebDir;
   private String echo = "";
-
+  
   @Resource
   private CameraDao camDao;
-
+  
   @Action(value = "getCutImageList", results = {
     @Result(location = "forward.jsp", name = SUCCESS),
     @Result(location = "forward.jsp", name = INPUT),
     @Result(location = "forward.jsp", name = ERROR)})
   public String upload() {
-
+    
     boolean flag = true;
     String result = SUCCESS;
     echo = "";
@@ -73,7 +68,7 @@ public class GetCutImageList extends ActionSupport{
       echo = echo + "Must set machine name(cameraName).\n";
       flag = false;
     }
-
+    
     if (flag) {
       String rootPath = getText("gwacDataRootDirectory");
       String destPath = rootPath;
@@ -87,24 +82,28 @@ public class GetCutImageList extends ActionSupport{
         tmpDir.mkdirs();
         log.debug("create dir " + tmpDir);
       }
-
+      
       cameraName = cameraName.trim();
-
+      
       try {
         String content = "";
         Camera tcamera = camDao.getByName(cameraName);
-        content = ffcDao.getUnCuttedStarList(tcamera.getCameraId(), 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
-        if (!content.isEmpty()) {
-          fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
-          File file = new File(destPath, fileName);
-          if (!file.exists()) {
-            file.createNewFile();
-            log.debug("create cut image list file " + file);
+        if (tcamera != null) {
+          content = ffcDao.getUnCuttedStarList(tcamera.getCameraId(), 6, Short.MAX_VALUE); //Short.MAX_VALUE, 最初取值为6，即最多只裁剪优先级编号小于6的切图
+          if (!content.isEmpty()) {
+            fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
+            File file = new File(destPath, fileName);
+            if (!file.exists()) {
+              file.createNewFile();
+              log.debug("create cut image list file " + file);
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
           }
-          FileWriter fw = new FileWriter(file.getAbsoluteFile());
-          BufferedWriter bw = new BufferedWriter(fw);
-          bw.write(content);
-          bw.close();
+        } else {
+          log.warn("cannot find camera: " + cameraName);
         }
         if (content.isEmpty()) {
           fileName = "empty.lst";
@@ -125,9 +124,9 @@ public class GetCutImageList extends ActionSupport{
     returnFile(imgList);
     return null;
   }
-
+  
   public void returnFile(String fpath) {
-
+    
     HttpServletResponse response = ServletActionContext.getResponse();
     response.setContentType("text/html;charset=UTF-8");
     try {
@@ -136,11 +135,11 @@ public class GetCutImageList extends ActionSupport{
       log.error("response error: ", ex);
     }
   }
-
+  
   public String display() {
     return NONE;
   }
-
+  
   public InputStream getFileInputStream() {
     return fileInputStream;
   }
