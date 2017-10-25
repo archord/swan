@@ -12,6 +12,7 @@ import com.gwac.activemq.OTListMessageCreator;
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.Camera;
 import com.gwac.model.FitsFileCut;
@@ -67,6 +68,8 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private FitsFileCutRefDAO ffcrDao;
   @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
   @Resource
   private JmsTemplate jmsTemplate;
   @Resource(name = "otlistDest")
@@ -306,6 +309,19 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           log.error("delete or move file errror ", ex);
         }
       }
+
+      if (fnames.size() > 0) {
+        String ip = ServletActionContext.getRequest().getRemoteAddr();
+        String unitId = ip.substring(ip.lastIndexOf('.'));
+        String lastName = fnames.get(0).trim();
+        if ("ot2im".equals(fileType)) {//交叉证认OT2切图，和图像相减OT2切图
+          ssmDao.updateImgCut(unitId, lastName);
+        } else if ("ot2ims".equals(fileType)) { //M170117_C00033_0139_sub.jpg 交叉证认OT2切图与模板切图相减后的图像
+          ssmDao.updateImgCutSub(unitId, lastName);
+        } else if ("ot2imr".equals(fileType)) {//交叉证认OT2模板切图
+          ssmDao.updateImgCutRef(unitId, lastName);
+        }
+      }
     }
   }
 
@@ -342,9 +358,15 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         obj.setSendTime(sendTimeObj);
       }
       ufuDao.save(obj);
-      if ('1' == fileType || '8' == fileType) {
+      String unitId = tfilename.substring(1, tfilename.indexOf("_"));
+      if ('1' == fileType) {
         MessageCreator tmc = new OTListMessageCreator(obj);
         jmsTemplate.send(otlistDest, tmc);
+        ssmDao.updateOt1List(unitId, tfilename);
+      } else if ('8' == fileType) {
+        MessageCreator tmc = new OTListMessageCreator(obj);
+        jmsTemplate.send(otlistDest, tmc);
+        ssmDao.updateOt1ListSub(unitId, tfilename);
       } else if ('a' == fileType) {
         String tpath = rootPath + getText("gwacMonitorimageDirectory");
         String tname = tfilename.substring(0, tfilename.indexOf("_")) + "_ccdimg.jpg";
@@ -365,8 +387,8 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           log.error("delete or move file errror ", ex);
         }
 
-        String cameraName = tfilename.substring(1, tfilename.indexOf("_"));
-        cameraDao.updateMonitorImageTime(cameraName);
+        cameraDao.updateMonitorImageTime(unitId);
+        ssmDao.updateThumbnail(unitId, tfilename);
       }
     }
   }

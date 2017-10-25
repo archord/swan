@@ -179,7 +179,7 @@
 
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "get-ot-xy-list.action?dateStr=";
+        var url = "";
         var tmonitor = $.tmonitor("#monitor-center", root, url);
         tmonitor.initSelect();
         tmonitor.drawAll();

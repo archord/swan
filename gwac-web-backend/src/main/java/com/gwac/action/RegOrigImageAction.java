@@ -9,6 +9,7 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.activemq.RegOrigImageMessageCreator;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
@@ -46,6 +47,8 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
 
   @Resource
   private JmsTemplate jmsTemplate;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
   @Resource(name = "regOrigImageDest")
   private Destination msgDest;
 
@@ -82,6 +85,8 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
       jmsTemplate.send(msgDest, tmc);
       echo = "receive parameter success.";
       log.debug(echo);
+      
+      ssmDao.updateImgRegister(unitId, imgName);
     }
 
     sendResultMsg(echo);

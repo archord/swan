@@ -10,6 +10,7 @@ package com.gwac.action;
  */
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.model.Camera;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
@@ -44,6 +45,8 @@ public class GetCutImageList extends ActionSupport {
   private String cameraName;
   @Resource
   private FitsFileCutDAO ffcDao;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
   private InputStream fileInputStream;
   private String fileName;
   @Value("#{syscfg.gwacDataRootDirectoryWebmap}")
@@ -101,6 +104,8 @@ public class GetCutImageList extends ActionSupport {
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(content);
             bw.close();
+            
+            ssmDao.updateImgCutRequest(cameraName, fileName);
           }
         } else {
           log.warn("cannot find camera: " + cameraName);

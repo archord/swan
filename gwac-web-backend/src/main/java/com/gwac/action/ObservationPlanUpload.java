@@ -9,6 +9,7 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.ObservationPlanDao;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.model.ObservationPlan;
 import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
@@ -33,6 +34,8 @@ public class ObservationPlanUpload extends ActionSupport {
 
   @Resource
   private ObservationPlanDao obsPlanDao;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
 
   private Long opSn;
   private String opTime;
@@ -108,6 +111,7 @@ public class ObservationPlanUpload extends ActionSupport {
       obsPlanDao.save(obsPlan);
       echo = "upload observation success!";
     }
+    ssmDao.updateObservationPlan(unitId, opSn);
     log.debug(echo);
     sendResultMsg(echo);
   }

@@ -9,6 +9,7 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.model.OtLevel2;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
@@ -45,6 +46,8 @@ public class OTLookBack extends ActionSupport {
 
   @Resource
   private OtLevel2Dao ot2Dao;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
 
   @Action(value = "otLookBack", results = {
     @Result(location = "manage/result.jsp", name = SUCCESS),
@@ -83,6 +86,10 @@ public class OTLookBack extends ActionSupport {
         }
       }
       echo = "lookback success.\n";
+
+      String ip = ServletActionContext.getRequest().getRemoteAddr();
+      String unitId = ip.substring(ip.lastIndexOf('.'));
+      ssmDao.updateOt2LookBack(unitId, ot2name);
     }
 
     log.debug(getEcho());

@@ -72,7 +72,7 @@
     <div id="monitor-header">GWAC望远镜监控页面</div>
     <div id="monitor-center"></div>
     <div id="monitor-footer">
-      <p>每个设备的状态用背景颜色标示：白（未开机）、<span style="background-color: #00EE00">绿（正常）</span>、
+      <p>每个设备的状态用背景颜色标示：白（上线）、<span style="background-color: #00EE00">绿（正常）</span>、
         <span style="background-color: #EEAD0E">橙（有故障）</span>、
         <span style="background-color: #CD2626">红（损坏）</span>、
         <span style="background-color: #ABABAB">灰（下线）</span></p>

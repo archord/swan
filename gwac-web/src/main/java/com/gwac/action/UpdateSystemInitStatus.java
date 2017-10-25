@@ -3,6 +3,7 @@ package com.gwac.action;
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.MountDao;
 import com.gwac.dao.MultimediaResourceDao;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.model.MultimediaResource;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class UpdateSystemInitStatus extends ActionSupport {
   private MountDao mountDao;
   @Resource
   private CameraDao cameraDao;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
   /**
    * 返回结果
    */
@@ -62,6 +65,7 @@ public class UpdateSystemInitStatus extends ActionSupport {
       }
       String tstr = sb.toString();
       cameraDao.updateStatus(tstr.substring(0,tstr.length()-1), status);
+      ssmDao.updateCameraStatus(tstr.substring(0,tstr.length()-1), status);
     }
     sendResultMsg("{rst:\"success\"");
   }
