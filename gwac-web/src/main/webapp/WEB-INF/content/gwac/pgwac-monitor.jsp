@@ -68,6 +68,7 @@
         var url = "";
         var tmonitor = $.tmonitor("#monitor-center", root, url);
         tmonitor.drawAll();
+        tmonitor.updateStatus();
 //        setInterval(function() {
 //          tmonitor.randomEffects();
 //        }, 2000);
@@ -75,6 +76,9 @@
     </script>
   </head>
   <body>
+    <div style="display: none;">
+      <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
+    </div>   
     <div id="monitor-center"></div>
     <div id="monitor-footer">
       <p>每个设备的状态用背景颜色标示：
