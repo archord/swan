@@ -44,13 +44,16 @@
       <div class="menu-trigger"></div>
       <div id="main_content" cssClass="ym-wbox">
         <div id='grid-fixed'>
-          <div class='mason-block x5'><a href="<%=request.getContextPath()%>/control/pctl-system-init.action" target="_blank" ><p>系统初始化</p></a>     </div>
+          <div class='mason-block x5'><a href="<%=request.getContextPath()%>/control/pctl-system-init.action" target="_blank" ><p class="multiline1">望远镜初始化</p></a>
+            <a href="<%=request.getContextPath()%>/control/pctl-telescope-monitor.action" target="_blank" ><p class="multiline">望远镜监控</p></a>
+            <a href="<%=request.getContextPath()%>/gwac/pgwac-monitor.action" target="_blank" ><p class="multiline">参数监控</p></a>
+          </div>
           <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p class="multiline1">观测计划列表</p></a>     
             <a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p class="multiline">生成观测计划</p></a>
             <a href="<%=request.getContextPath()%>/control/pctl-observation-debug.action" target="_blank" ><p class="multiline">观测调试</p></a>
           </div>
-          <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-telescope-monitor.action" target="_blank" ><p class="multiline1">望远镜监控</p></a>     
-            <a href="<%=request.getContextPath()%>/control/pctl-mount-monitor.action" target="_blank" ><p class="multiline">转台状态</p></a>  
+          <div class='mason-block x4'></a>     
+            <a href="<%=request.getContextPath()%>/control/pctl-mount-monitor.action" target="_blank" ><p>转台状态</p></a>
           </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>
@@ -63,11 +66,10 @@
             <a href="<%=request.getContextPath()%>/gwac/pgwac-sphere-distribution.action" target="_blank" ><p class="multiline">模板分布</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot.action" target="_blank" ><p>OT2查询</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/manage/pfile-upload.action" target="_blank" ><p>上传文件</p></a></div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-monitor.action" target="_blank" ><p>状态监控</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-light-curve.action" target="_blank" ><p>小行星光变</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>观测策略</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
-          <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-parm-monitor.action" target="_blank" ><p>监控信息</p></a></div>
+          <div class='mason-block'><a href="<%=request.getContextPath()%>/gwac/pgwac-parm-monitor.action" target="_blank" ><p>图像参数曲线</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>
