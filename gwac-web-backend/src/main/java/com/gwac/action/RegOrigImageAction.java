@@ -86,7 +86,7 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
       echo = "receive parameter success.";
       log.debug(echo);
       
-      ssmDao.updateImgRegister(unitId, imgName);
+      ssmDao.updateImgRegister(camId, imgName);
     }
 
     sendResultMsg(echo);

@@ -7,6 +7,7 @@ package com.gwac.job;
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.ImageStatusParameterDao;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.Camera;
 import com.gwac.model.FitsFile2Show;
@@ -54,6 +55,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
   private CameraDao cameraDao;
   @Resource
   private ImageStatusParameterDao ispDao;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
   @Value("#{syscfg.gwacServerBeijing}")
@@ -418,6 +421,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
               isp.setSendSuccess(false);
               isps.put(isp, ff2);
               ispDao.save(isp);
+              String unitId = imageName.substring(1, imageName.indexOf("_"));
+              ssmDao.updateImgParm(unitId, isp);
             } else {
               //imageTime != null && ccdId != -1 && prcNum
               log.error("imageTime != null && ccdId != -1 && prcNum");

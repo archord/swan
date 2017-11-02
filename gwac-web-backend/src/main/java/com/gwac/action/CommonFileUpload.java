@@ -312,7 +312,10 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
 
       if (fnames.size() > 0) {
         String ip = ServletActionContext.getRequest().getRemoteAddr();
-        String unitId = ip.substring(ip.lastIndexOf('.'));
+        String unitId = ip.substring(ip.lastIndexOf('.') + 1);
+        if (unitId.length() < 3) {
+          unitId = "0" + unitId;
+        }
         String lastName = fnames.get(0).trim();
         if ("ot2im".equals(fileType)) {//交叉证认OT2切图，和图像相减OT2切图
           ssmDao.updateImgCut(unitId, lastName);
@@ -389,6 +392,8 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
 
         cameraDao.updateMonitorImageTime(unitId);
         ssmDao.updateThumbnail(unitId, tfilename);
+      } else if ('7' == fileType) {
+        ssmDao.updateImgParmFile(unitId, tfilename);
       }
     }
   }

@@ -88,7 +88,10 @@ public class OTLookBack extends ActionSupport {
       echo = "lookback success.\n";
 
       String ip = ServletActionContext.getRequest().getRemoteAddr();
-      String unitId = ip.substring(ip.lastIndexOf('.'));
+      String unitId = ip.substring(ip.lastIndexOf('.')+1);
+      if(unitId.length()<3){
+        unitId = "0" + unitId;
+      }
       ssmDao.updateOt2LookBack(unitId, ot2name);
     }
 

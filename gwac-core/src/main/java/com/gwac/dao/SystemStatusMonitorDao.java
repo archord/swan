@@ -4,6 +4,7 @@
 
 package com.gwac.dao;
 
+import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.SystemStatusMonitor;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface SystemStatusMonitorDao  extends BaseHibernateDao<SystemStatusMo
   public void updateOt2LookBackSub(String id, String ot2Name);
   public void updateThumbnail(String id, String thumbnailName);
   public void updateLog(String id, String logContent);
-  public void updateImgParm(String id, long imgParmId);
+  public void updateImgParm(String id, ImageStatusParameter isp);
   public void updateProcessMachine(String id, int status, float storage, float cpu);
   public void updateCaptureMachine(String id, int status, float storage, float cpu);
   
