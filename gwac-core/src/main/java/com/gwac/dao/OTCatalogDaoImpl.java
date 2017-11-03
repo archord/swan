@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository(value="otCatalogDao")
+@Repository(value = "otCatalogDao")
 public class OTCatalogDaoImpl implements OTCatalogDao {
 
   private static final Log log = LogFactory.getLog(OTCatalogDaoImpl.class);
@@ -122,23 +122,87 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         OTCatalog ot = new OTCatalog();
 
         // add values from csv to car object  
-        ot.setRaD(Float.parseFloat(strs[0]));
-        ot.setDecD(Float.parseFloat(strs[1]));
-        ot.setX(Float.parseFloat(strs[2]));
-        ot.setY(Float.parseFloat(strs[3]));
-        ot.setXTemp(Float.parseFloat(strs[4]));
-        ot.setYTemp(Float.parseFloat(strs[5]));
-        ot.setDateUt(df.parse(strs[6].replace('T', ' ')));
-        ot.setImageName(strs[7]);
-        ot.setFlux(Float.parseFloat(strs[8]));
-        ot.setFlag(Boolean.parseBoolean(strs[9]));
+        try {
+          ot.setRaD(Float.parseFloat(strs[0]));
+        } catch (NumberFormatException e) {
+          log.error("parse rad error:" + path, e);
+        }
+        try {
+          ot.setDecD(Float.parseFloat(strs[1]));
+        } catch (NumberFormatException e) {
+          log.error("parse decd error:" + path, e);
+        }
+        try {
+          ot.setX(Float.parseFloat(strs[2]));
+        } catch (NumberFormatException e) {
+          log.error("parse x error:" + path, e);
+        }
+        try {
+          ot.setY(Float.parseFloat(strs[3]));
+        } catch (NumberFormatException e) {
+          log.error("parse y error:" + path, e);
+        }
+        try {
+          ot.setXTemp(Float.parseFloat(strs[4]));
+        } catch (NumberFormatException e) {
+          log.error("parse xtemp error:" + path, e);
+        }
+        try {
+          ot.setYTemp(Float.parseFloat(strs[5]));
+        } catch (NumberFormatException e) {
+          log.error("parse ytemp error:" + path, e);
+        }
+        try {
+          ot.setDateUt(df.parse(strs[6].replace('T', ' ')));
+        } catch (NumberFormatException e) {
+          log.error("parse dateut error:" + path, e);
+        }
+        try {
+          ot.setImageName(strs[7]);
+        } catch (NumberFormatException e) {
+          log.error("parse imagename error:" + path, e);
+        }
+        try {
+          ot.setFlux(Float.parseFloat(strs[8]));
+        } catch (NumberFormatException e) {
+          log.error("parse flux error:" + path, e);
+        }
+        try {
+          ot.setFlag(Boolean.parseBoolean(strs[9]));
+        } catch (NumberFormatException e) {
+          log.error("parse flag error:" + path, e);
+        }
+        try {
 //        ot.setFlagChb(Float.parseFloat(strs[10]));
-        ot.setBackground(Float.parseFloat(strs[10]));
-        ot.setThreshold(Float.parseFloat(strs[11]));
-        ot.setMagAper(Float.parseFloat(strs[12]));
-        ot.setMagerrAper(Float.parseFloat(strs[13]));
-        ot.setEllipticity(Float.parseFloat(strs[14]));
-        ot.setClassStar(Float.parseFloat(strs[15]));
+          ot.setBackground(Float.parseFloat(strs[10]));
+        } catch (NumberFormatException e) {
+          log.error("parse background error:" + path, e);
+        }
+        try {
+          ot.setThreshold(Float.parseFloat(strs[11]));
+        } catch (NumberFormatException e) {
+          log.error("parse threshold error:" + path, e);
+        }
+        try {
+          ot.setMagAper(Float.parseFloat(strs[12]));
+        } catch (NumberFormatException e) {
+          log.error("parse magaper error:" + path, e);
+        }
+        try {
+          ot.setMagerrAper(Float.parseFloat(strs[13]));
+        } catch (NumberFormatException e) {
+          log.error("parse magerraper error:" + path, e);
+        }
+        try {
+          ot.setEllipticity(Float.parseFloat(strs[14]));
+        } catch (NumberFormatException e) {
+          log.error("parse ellipticity error:" + path, e);
+        }
+        try {
+          ot.setClassStar(Float.parseFloat(strs[15]));
+        } catch (NumberFormatException e) {
+          log.error("parse class star error:" + path, e);
+        }
 //        ot.setOtFlag(Boolean.parseBoolean(strs[17]));
 
         otList.add(ot);
@@ -147,8 +211,6 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     } catch (FileNotFoundException e) {
       log.error("parse file error:" + path, e);
     } catch (IOException e) {
-      log.error("parse file error:" + path, e);
-    } catch (ParseException e) {
       log.error("parse file error:" + path, e);
     } catch (Exception e) {
       log.error("parse file error:" + path, e);
@@ -166,7 +228,8 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
   }
 
   @Override
-  public List<OTCatalog> getOT1VarCatalog(String path) {
+  public List<OTCatalog> getOT1VarCatalog(String path
+  ) {
     BufferedReader br = null;
     String line = "";
     String splitBy = " +";
@@ -233,7 +296,8 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
   }
 
   @Override
-  public List<OTCatalog> getOT1CutCatalog(String path) {
+  public List<OTCatalog> getOT1CutCatalog(String path
+  ) {
     BufferedReader br = null;
     String line = "";
     String splitBy = " +";

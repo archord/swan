@@ -44,7 +44,6 @@
         padding: 5px;
         text-align: left;
         font-size: 16px;
-        //min-width: 430px;
       }
       .manual_container1 select{
         font-size: 14px;
