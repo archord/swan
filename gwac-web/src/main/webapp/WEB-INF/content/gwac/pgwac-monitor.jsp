@@ -69,9 +69,9 @@
         var tmonitor = $.tmonitor("#monitor-center", root, url);
         tmonitor.drawAll();
         tmonitor.updateStatus();
-//        setInterval(function() {
-//          tmonitor.randomEffects();
-//        }, 2000);
+        setInterval(function() {
+          tmonitor.updateStatus();
+        }, 15*1000);
       });
     </script>
   </head>
