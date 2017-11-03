@@ -125,23 +125,43 @@
       this.realW = w1 * this.colNum;
       this.realH = w1 * this.rowNum;
 
+      var tyInterval = 0;
       for (var r = 0; r < this.rowNum; r++) {
         var unitId = parseInt(r / 5) + 1;
         var camNum = r % 5 + 1;
         var tlable = this.pad0(unitId, 2) + camNum;
+        if (r % 5 === 0) {
+          tyInterval = parseInt((r + 1) / 5 + 0.5) * this.space * 2;
+        }
+        var py = r * this.grid1H + tyInterval;
+        var txInterval = 0;
         for (var c = 0; c < this.colNum; c++) {
+          if (c % 5 === 0) {
+            txInterval = parseInt((c + 1) / 5 + 0.5) * this.space * 2;
+          }
           var id = "O" + tlable + "_" + (c + 1);
-          this.showObjs.push({px: c * this.grid1W, py: r * this.grid1H, gx: c, gy: r, id: id, width: this.grid1W, height: this.grid1H});
+          var px = c * this.grid1W + txInterval;
+          this.showObjs.push({px: px, py: py, gx: c, gy: r, id: id, width: this.grid1W, height: this.grid1H});
         }
       }
+      var txInterval = 0;
       for (var c = 0; c < this.colNum; c++) {
-        this.xLabel.push({px: c * this.grid1W, py: 0, label: c + 1, id: c, width: this.grid1W, height: this.grid1H});
+        if (c % 5 === 0) {
+          txInterval = parseInt((c + 1) / 5 + 0.5) * this.space * 2;
+        }
+        var px = c * this.grid1W + txInterval;
+        this.xLabel.push({px: px, py: 0, label: c + 1, id: c, width: this.grid1W, height: this.grid1H});
       }
+      tyInterval = 0;
       for (var r = 0; r < this.rowNum; r++) {
+        if (r % 5 === 0) {
+          tyInterval = parseInt((r + 1) / 5 + 0.5) * this.space * 2;
+        }
+        var py = r * this.grid1H + tyInterval;
         var unitId = parseInt(r / 5) + 1;
         var camNum = r % 5 + 1;
         var tlable = this.pad0(unitId, 2) + camNum;
-        this.yLabel.push({px: 0, py: r * this.grid1H, label: tlable, width: this.grid1W, height: this.grid1H});
+        this.yLabel.push({px: 0, py: py, label: tlable, width: this.grid1W, height: this.grid1H});
       }
 
       this.svg = d3.select(this.placeholder).append("svg")
@@ -350,12 +370,15 @@
       return s.substr(s.length - size);
     },
     fillColorIdx: function(d, timeName) {
-      var idx = 3;
+      var idx = 4;
       var ttime = d[timeName];
       if (ttime !== null) {
         ttime = new Date(ttime.replace('T', ' '));
         var now = new Date();
-        if (now - ttime < 6000) {
+        var timeDiff = now - ttime;
+        if (timeDiff > 60 * 1000 && timeDiff < 600 * 1000) {
+          idx = 3;
+        } else if (timeDiff < 60 * 1000) {
           idx = 2;
         }
       }
