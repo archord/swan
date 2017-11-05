@@ -90,7 +90,7 @@
         {label: "图像参数上传", min: 0, max: 0, time: "imgParmTime", title: function(d) {
             return d.imgParmName + "(" + d.imgParmTime + ")";
           }, fillColorIdx: this.fillColorIdx},
-        {label: "交叉证认切OT1列表上传", min: 0, max: 0, time: "ot1ListTime", title: function(d) {
+        {label: "交叉证认OT1列表上传", min: 0, max: 0, time: "ot1ListTime", title: function(d) {
             return d.ot1ListName + "(" + d.ot1ListTime + ")";
           }, fillColorIdx: this.fillColorIdx},
         {label: "OT2切图请求", min: 0, max: 0, time: "imgCutRequestTime", title: function(d) {
@@ -105,7 +105,7 @@
         {label: "交叉证认OT2回看", min: 0, max: 0, time: "lookBackOt2Time", title: function(d) {
             return d.lookBackOt2Name + "(" + d.lookBackOt2Time + ")";
           }, fillColorIdx: this.fillColorIdx},
-        {label: "图像相减切OT1列表上传", min: 0, max: 0, time: "ot1ListTimeSub", title: function(d) {
+        {label: "图像相减OT1列表上传", min: 0, max: 0, time: "ot1ListTimeSub", title: function(d) {
             return d.ot1ListNameSub + "(" + d.ot1ListTimeSub + ")";
           }, fillColorIdx: this.fillColorIdx},
         {label: "图像相减切图上传", min: 0, max: 0, time: "imgCutFileTimeSub", title: function(d) {

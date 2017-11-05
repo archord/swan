@@ -320,7 +320,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         if ("ot2im".equals(fileType)) {//交叉证认OT2切图，和图像相减OT2切图
           ssmDao.updateImgCut(unitId, lastName);
         } else if ("ot2ims".equals(fileType)) { //M170117_C00033_0139_sub.jpg 交叉证认OT2切图与模板切图相减后的图像
-          ssmDao.updateImgCutSub(unitId, lastName);
+//          ssmDao.updateImgCutSub(unitId, lastName);
         } else if ("ot2imr".equals(fileType)) {//交叉证认OT2模板切图
           ssmDao.updateImgCutRef(unitId, lastName);
         }
@@ -394,6 +394,8 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         ssmDao.updateThumbnail(unitId, tfilename);
       } else if ('7' == fileType) {
         ssmDao.updateImgParmFile(unitId, tfilename);
+      } else if ('4' == fileType) {
+        ssmDao.updateImgCutSub(unitId, tfilename);
       }
     }
   }
