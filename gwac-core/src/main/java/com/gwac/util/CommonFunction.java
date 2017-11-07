@@ -112,6 +112,17 @@ public class CommonFunction {
     return formatter.format(date);
   }
 
+  public static Date stringToDate(String dateStr) {
+    try {
+      String formater = "yyyy-MM-dd HH:mm:ss";
+      SimpleDateFormat sdf = new SimpleDateFormat(formater);
+      return sdf.parse(dateStr);
+    } catch (ParseException ex) {
+      log.error("string to date error.", ex);
+    }
+    return null;
+  }
+  
   /**
    *
    * @param dateStr
@@ -125,7 +136,6 @@ public class CommonFunction {
     } catch (ParseException ex) {
       log.error("string to date error.", ex);
     }
-//    return new Date();
     return null;
   }
 
