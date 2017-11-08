@@ -277,7 +277,11 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
               String dateStr = tfilename.substring(tfilename.indexOf("ref_") + 4, tfilename.indexOf(".jpg"));
               // && dateStr.length() == 15
               if (dateStr != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmssSSS");
+                String formateStr = "yyyyMMdd HHmmssSSS";
+                if(dateStr.length()>formateStr.length()){
+                  dateStr = dateStr.substring(0, formateStr.length());
+                }
+                SimpleDateFormat sdf = new SimpleDateFormat(formateStr);
                 Date genDate = sdf.parse(dateStr.replace('T', ' '));
 
                 FitsFileCutRef ffcr = new FitsFileCutRef();
