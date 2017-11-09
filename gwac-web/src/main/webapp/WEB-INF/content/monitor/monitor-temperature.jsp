@@ -44,6 +44,10 @@
         width: 100%; 
         height: 700px;
       }
+      .legendLabel{
+        text-align: left;
+        font-size: 14px;
+      }
     </style>
 
   </head>
@@ -57,19 +61,37 @@
       <div class="row ">
         <div class="col-xs-2 col-sm-2 col-md-1 ">
           <div class="row star-list-left">
-            <select name="formqp.starList" id="starList" class="form-control select select-primary" data-toggle="select" size="12">
-              <option value="fwhm" selected>半高全宽</option>
-              <option value="obj_num">星的数目</option>
-              <option value="bg_bright">背景亮度</option>
-              <option value="avg_limit">极限星等</option>
-              <option value="s2n">亮星星等差</option>
-              <option value="xshift">图像偏移量X</option>
-              <option value="yshift">图像偏移量Y</option>
-              <option value="xrms">图像对齐精度X</option>
-              <option value="yrms">图像对齐精度Y</option>
-              <option value="proc_time">数据处理时间</option>
-              <option value="temperature_actual">实际温度</option>
-              <option value="temperature_set">设定温度</option>
+            <select name="formqp.dayList" id="dayList" class="form-control select select-primary" data-toggle="select" size="8">
+              <option value="1" selected>1天</option>
+              <option value="2">2天</option>
+              <option value="3">3天</option>
+              <option value="7">1周</option>
+              <option value="30">1月</option>
+              <option value="180">6月</option>
+              <option value="365">1年</option>
+              <option value="3650">所有</option>
+            </select><br/>
+            <select name="formqp.ccdList" id="ccdList" class="form-control select select-primary" data-toggle="select" size="8">
+              <option value="011">011</option>
+              <option value="012">012</option>
+              <option value="013">013</option>
+              <option value="014">014</option>
+              <option value="015">015</option>
+              <option value="021">021</option>
+              <option value="022">022</option>
+              <option value="023">023</option>
+              <option value="024">024</option>
+              <option value="025">025</option>
+              <option value="031">031</option>
+              <option value="032">032</option>
+              <option value="033">033</option>
+              <option value="034">034</option>
+              <option value="035">035</option>
+              <option value="041">041</option>
+              <option value="042">042</option>
+              <option value="043">043</option>
+              <option value="044" selected>044</option>
+              <option value="045">045</option>
             </select>
           </div>
         </div>
@@ -78,7 +100,7 @@
 
             <div id="star-light-curve-show">
               <div id="star-light-curve-title">
-                <span>X轴为时间，单位(分钟)，开始于<span id="startDay">0</span>(UTC)</span>
+                <span>X轴为时间，单位(天)，开始于<span id="startDay">0</span>(UTC)</span>
               </div>
               <div id="star-light-curve"></div>
             </div>
@@ -95,6 +117,6 @@
     <script src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.errorbars.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.navigate.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.crosshair.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/parm_monitor.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/monitor_temperature.js"></script>
   </body>
 </html>

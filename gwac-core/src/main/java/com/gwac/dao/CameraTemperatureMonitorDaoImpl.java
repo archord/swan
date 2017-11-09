@@ -23,6 +23,49 @@ public class CameraTemperatureMonitorDaoImpl extends BaseHibernateDaoImpl<Camera
   private static final Log log = LogFactory.getLog(CameraTemperatureMonitorDaoImpl.class);
 
   @Override
+  public String getRecords(String camera, int days) {
+    Session session = getCurrentSession();
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT cam_name, voltage, current, hot_end_temperature, cold_end_temperature, coolset, time) r))) "
+            + "FROM( "
+            + "SELECT cam.name as cam_name, cvm.voltage, cvm.current, cvm.hot_end_temperature, cvm.cold_end_temperature, cvm.coolset, cvm.time "
+            + "FROM camera_temperature_monitor cvm "
+            + "inner join camera cam on cam.camera_id=cvm.cam_id "
+            + "where cvm.time>(LOCALTIMESTAMP-interval '" + days + " day') and cam.name='"+camera+"' "
+            + "order by cvm.time)as moor ";
+    
+    log.debug(sql);
+    Query q = session.createSQLQuery(sql);
+    
+    String rst = "";
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
+  @Override
+  public String getRecords(int days) {
+    Session session = getCurrentSession();
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT cam_name, par_detail) r))) "
+            + "FROM( "
+            + "SELECT cam.name as cam_name, JSON_AGG((SELECT r FROM (SELECT voltage, current, hot_end_temperature, cold_end_temperature, coolset, time) r)) as par_detail ) "
+            + "FROM camera_temperature_monitor cvm "
+            + "inner join camera cam on cam.camera_id=cvm.cam_id "
+            + "where cvm.time>(LOCALTIMESTAMP-interval '" + days + " day') "
+            + "GROUP BY cam.name "
+            + "order by cam.name)as moor ";
+    
+    log.debug(sql);
+    Query q = session.createSQLQuery(sql);
+    
+    String rst = "";
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+  
+  @Override
   public List<CameraTemperatureMonitor> getRecords(int camId, Date start, Date end) {
     Session session = getCurrentSession();
     String sql = "select * from camera_tempreture_monitor where cam_id=? and time between ? and ?;";

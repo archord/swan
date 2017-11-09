@@ -13,5 +13,7 @@ import java.util.List;
  * @author xy
  */
 public interface CameraVacuumMonitorDao extends BaseHibernateDao<CameraVacuumMonitor> {
+  public String getRecords(int days);
+  public String getRecords(String camera, int days);
   public List<CameraVacuumMonitor> getRecords(int camId, Date start, Date end);
 }

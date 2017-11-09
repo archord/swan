@@ -3,6 +3,9 @@ $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
   var parmUrl = gwacRootURL + "/get-parm-list-json.action";
 
+  var parmType = "";
+  var formatedCCDList = [];
+
   var otCurve;
   var plotOption = {
     legend: {show: true},
@@ -19,24 +22,40 @@ $(function() {
     crosshair: {mode: "xy"}
   };
 
-  var parmProperty = [
-    {name: 'fwhm', min: 1, max: 3, note: '', unit: ''},
-    {name: 'obj_num', min: 1000, max: 200000, note: '', unit: ''},
-    {name: 'bg_bright', min: 1000, max: 10000, note: '', unit: ''},
-    {name: 'avg_limit', min: 8, max: 17, note: '', unit: ''},
-    {name: 's2n', min: -3, max: 3, note: '', unit: ''},
-    {name: 'posshift', min: -10, max: 10, note: '', unit: ''},
-    {name: 'posrms', min: -10, max: 10, note: '', unit: ''},
-    {name: 'proc_time', min: 0, max: 20, note: '', unit: ''},
-    {name: 'temperature_actual', min: 0, max: 10, note: '', unit: ''}
-  ];
+  var parmProperty = {
+    fwhm: {name: 'fwhm', min: 0, max: 10, note: '', unit: ''},
+    obj_num: {name: 'obj_num', min: 1000, max: 200000, note: '', unit: ''},
+    bg_bright: {name: 'bg_bright', min: 1000, max: 20000, note: '', unit: ''},
+    avg_limit: {name: 'avg_limit', min: 5, max: 20, note: '', unit: ''},
+    s2n: {name: 's2n', min: -3, max: 3, note: '', unit: ''},
+    xshift: {name: 'xshift', min: -20, max: 20, note: '', unit: ''},
+    yshift: {name: 'yshift', min: -20, max: 20, note: '', unit: ''},
+    xrms: {name: 'xrms', min: 0, max: 3, note: '', unit: ''},
+    yrms: {name: 'yrms', min: 0, max: 3, note: '', unit: ''},
+    proc_time: {name: 'proc_time', min: 0, max: 20, note: '', unit: ''},
+    temperature_actual: {name: 'temperature_actual', min: -50, max: 10, note: '', unit: ''},
+    temperature_set: {name: 'temperature_set', min: -50, max: 10, note: '', unit: ''}
+  };
 
   initStarCurveShow();
+  loadStarRecords();
   $('#starList').change(loadStarRecords);
+  $('#mountList').change(changeMount);
+  $('#ccdList').change(changeCCDs);
+
+  function changeMount() {
+    $("#ccdList option:selected").prop("selected", false);
+    starCurveShow();
+  }
+
+  function changeCCDs() {
+    $("#mountList option:selected").prop("selected", false);
+    starCurveShow();
+  }
 
   function loadStarRecords() {
     var queryUrl = parmUrl;
-    var parmType = $('#starList').val();
+    parmType = $('#starList').val();
     $.ajax({
       type: "get",
       url: queryUrl,
@@ -44,7 +63,8 @@ $(function() {
       async: false,
       dataType: 'json',
       success: function(data) {
-        starCurveShow(data, parmType);
+        formateRawData(data, parmType);
+        starCurveShow();
       }
     });
   }
@@ -65,11 +85,12 @@ $(function() {
     });
   }
 
-//星表匹配
-  function starCurveShow(data, parmType) {
-    var ccdList = eval(data.parStr);
+  function formateRawData(data, parmType) {
+
     var minDate = data.minDate;
     var minDateMinute = Date.parse(minDate) / 60000;
+    var ccdList = eval(data.parStr);
+
     $('#startDay').html(minDate);
 
     if (typeof (ccdList) === "undefined")
@@ -82,41 +103,59 @@ $(function() {
       });
     });
 
-    $.each(ccdList, function(i, item) {
-      $.each(item.par_detail, function(j, item2) {
-        if (j > 0 && j < item.par_detail.length - 1) {
-          var before = Math.abs(item.par_detail[j - 1][parmType]);
-          var after = Math.abs(item.par_detail[j + 1][parmType]);
-          var cur = Math.abs(item2[parmType]);
-          if (cur > 10*(before + after)) {
-            console.log(before + "," + cur + "," + after);
-            item2[parmType] = (before + after) / 2;
-          }
-        }
-      });
-    });
+//    formatedCCDList = [];
+    while (formatedCCDList.pop()) {
+    }
 
-    var otCurveShow = [];
     $.each(ccdList, function(i, item) {
       var ccdID = 'CCD' + padZero(parseInt(item.dpm_id), 2);
       var parmList = sortJson(item.par_detail, 'time_obs_ut', true);
 
       var coorShow = [];
-      $.each(parmList, function(j, item) {
-        var minute = item['dateObj'] - minDateMinute;
-        coorShow[j] = [minute, item[parmType]];
+      $.each(parmList, function(j, item2) {
+        var minute = item2['dateObj'] - minDateMinute;
+        coorShow.push([minute, item2[parmType]]);
       });
-      otCurveShow[i] = {
+      formatedCCDList.push({
+        ccdId: item.dpm_id,
         label: ccdID,
         data: coorShow,
         points: {radius: 1}
-      };
+      });
     });
+  }
 
-    otCurve = $.plot("#star-light-curve", otCurveShow, plotOption);
-    otCurve.setData(otCurveShow);
+//星表匹配
+  function starCurveShow() {
+
+    var tmount = $('#mountList').val();
+    var tccds = $('#ccdList').val();
+
+    var showCCDs = [];
+    if (tmount === null && tccds === null) {
+      showCCDs = formatedCCDList;
+    } else if (tmount !== null) {
+      $.each(formatedCCDList, function(i, item) {
+        if (tmount === item.ccdId.substring(0, 2)) {
+          showCCDs.push(item);
+        }
+      });
+    } else if (tmount === null && tccds !== null) {
+      $.each(formatedCCDList, function(i, item) {
+        if (tccds.indexOf(item.ccdId) > -1) {
+          showCCDs.push(item);
+        }
+      });
+    }
+
+    plotOption.yaxis = {
+      min: parmProperty[parmType].min,
+      max: parmProperty[parmType].max,
+      show: true
+    }
+    otCurve = $.plot("#star-light-curve", showCCDs, plotOption);
+    otCurve.setData(showCCDs);
     otCurve.draw();
-
   }
 
   function padZero(num, size) {

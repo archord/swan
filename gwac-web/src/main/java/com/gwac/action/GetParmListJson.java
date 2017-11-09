@@ -32,7 +32,7 @@ public class GetParmListJson extends ActionSupport {
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
 
-    System.out.println("queryParm=" + queryParm);
+    log.debug("queryParm=" + queryParm);
     ArrayList<String> queryParms = new ArrayList();
     queryParms.add("fwhm");
     queryParms.add("obj_num");

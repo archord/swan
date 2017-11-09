@@ -70,6 +70,36 @@
               <option value="proc_time">数据处理时间</option>
               <option value="temperature_actual">实际温度</option>
               <option value="temperature_set">设定温度</option>
+            </select><br/>
+            <!--多条曲线过滤显示，请参考:http://www.flotcharts.org/flot/examples/series-toggle/index.html-->
+            <select name="formqp.mountList" id="mountList" class="form-control select select-primary" data-toggle="select" size="5">
+              <option value="01">转台1</option>
+              <option value="02">转台2</option>
+              <option value="03">转台3</option>
+              <option value="04">转台4</option>
+              <option value="05">转台5</option>
+            </select><br/>
+            <select name="formqp.ccdList" id="ccdList" class="form-control select select-primary" data-toggle="select" size="8"  multiple="multiple">
+              <option value="011">011</option>
+              <option value="012">012</option>
+              <option value="013">013</option>
+              <option value="014">014</option>
+              <option value="015">015</option>
+              <option value="021">021</option>
+              <option value="022">022</option>
+              <option value="023">023</option>
+              <option value="024">024</option>
+              <option value="025">025</option>
+              <option value="031">031</option>
+              <option value="032">032</option>
+              <option value="033">033</option>
+              <option value="034">034</option>
+              <option value="035">035</option>
+              <option value="041">041</option>
+              <option value="042">042</option>
+              <option value="043">043</option>
+              <option value="044">044</option>
+              <option value="045">045</option>
             </select>
           </div>
         </div>
@@ -95,6 +125,6 @@
     <script src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.errorbars.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.navigate.min.js"></script>
     <script src="<%=request.getContextPath()%>/resource/js/plot/jquery.flot.crosshair.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/parm_monitor.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/monitor_parm.js"></script>
   </body>
 </html>
