@@ -5,6 +5,7 @@
  */
 package com.gwac.service2;
 
+import com.gwac.dao.CameraDao;
 import com.gwac.dao2.CVSQueryDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao2.MergedOtherDao;
@@ -15,6 +16,7 @@ import com.gwac.dao.MatchTableDao;
 import com.gwac.dao.OtTmplWrongDao;
 import com.gwac.dao2.Rc3Dao;
 import com.gwac.dao2.UsnoCatalogDao;
+import com.gwac.model.Camera;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtLevel2Match;
 import com.gwac.model.MatchTable;
@@ -29,10 +31,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,34 +53,81 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private Boolean isBeiJingServer;
   @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
+
+  //Mini-GWAC查询参数
   @Value("#{syscfg.mingwacMergedSearchbox}")
-  private float mergedSearchbox;
+  private float mergedSearchboxM;
   @Value("#{syscfg.mingwacCvsSearchbox}")
-  private float cvsSearchbox;
+  private float cvsSearchboxM;
   @Value("#{syscfg.mingwacRc3Searchbox}")
-  private float rc3Searchbox;
+  private float rc3SearchboxM;
   @Value("#{syscfg.mingwacMinorplanetSearchbox}")
-  private float minorPlanetSearchbox;
+  private float minorPlanetSearchboxM;
   @Value("#{syscfg.mingwacOt2hisSearchbox}")
-  private float ot2Searchbox;
+  private float ot2SearchboxM;
   @Value("#{syscfg.mingwacUsnoSearchbox}")
-  private float usnoSearchbox;
+  private float usnoSearchboxM;
   @Value("#{syscfg.mingwacUsnoSearchbox2}")
-  private float usnoSearchbox2;
+  private float usnoSearchbox2M;
   @Value("#{syscfg.mingwacMergedMag}")
-  private float mergedMag;
+  private float mergedMagM;
   @Value("#{syscfg.mingwacCvsMag}")
-  private float cvsMag;
+  private float cvsMagM;
   @Value("#{syscfg.mingwacRc3Minmag}")
-  private float rc3MinMag;
+  private float rc3MinMagM;
   @Value("#{syscfg.mingwacRc3Maxmag}")
-  private float rc3MaxMag;
+  private float rc3MaxMagM;
   @Value("#{syscfg.mingwacMinorplanetMag}")
-  private float minorPlanetMag;
+  private float minorPlanetMagM;
   @Value("#{syscfg.mingwacUsnoMag}")
-  private float usnoMag;
+  private float usnoMagM;
   @Value("#{syscfg.mingwacUsnoMag2}")
-  private float usnoMag2;
+  private float usnoMag2M;
+
+  //GWAC查询参数
+  @Value("#{syscfg.gwacMergedSearchbox}")
+  private float mergedSearchboxG;
+  @Value("#{syscfg.gwacCvsSearchbox}")
+  private float cvsSearchboxG;
+  @Value("#{syscfg.gwacRc3Searchbox}")
+  private float rc3SearchboxG;
+  @Value("#{syscfg.gwacMinorplanetSearchbox}")
+  private float minorPlanetSearchboxG;
+  @Value("#{syscfg.gwacOt2hisSearchbox}")
+  private float ot2SearchboxG;
+  @Value("#{syscfg.gwacUsnoSearchbox}")
+  private float usnoSearchboxG;
+  @Value("#{syscfg.gwacUsnoSearchbox2}")
+  private float usnoSearchbox2G;
+  @Value("#{syscfg.gwacMergedMag}")
+  private float mergedMagG;
+  @Value("#{syscfg.gwacCvsMag}")
+  private float cvsMagG;
+  @Value("#{syscfg.gwacRc3Minmag}")
+  private float rc3MinMagG;
+  @Value("#{syscfg.gwacRc3Maxmag}")
+  private float rc3MaxMagG;
+  @Value("#{syscfg.gwacMinorplanetMag}")
+  private float minorPlanetMagG;
+  @Value("#{syscfg.gwacUsnoMag}")
+  private float usnoMagG;
+  @Value("#{syscfg.gwacUsnoMag2}")
+  private float usnoMag2G;
+
+  float mergedSearchbox = (float) 0.0;
+  float cvsSearchbox = (float) 0.0;
+  float rc3Searchbox = (float) 0.0;
+  float minorPlanetSearchbox = (float) 0.0;
+  float ot2Searchbox = (float) 0.0;
+  float usnoSearchbox = (float) 0.0;
+  float usnoSearchbox2 = (float) 0.0;
+  float mergedMag = (float) 0.0;
+  float cvsMag = (float) 0.0;
+  float rc3MinMag = (float) 0.0;
+  float rc3MaxMag = (float) 0.0;
+  float minorPlanetMag = (float) 0.0;
+  float usnoMag = (float) 0.0;
+  float usnoMag2 = (float) 0.0;
 
   @Resource
   private OtLevel2Dao ot2Dao;
@@ -92,7 +139,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   private OtLevel2MatchDao ot2mDao;
   @Resource
   private OtTmplWrongDao ottwdao;
-  
+  @Resource
+  private CameraDao cameraDao;
+
   @Resource
   private CVSQueryDao cvsDao;
   @Resource
@@ -156,6 +205,39 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       return;
     }
     log.debug("search ot2: " + ot2.getName());
+
+    Camera tcamera = cameraDao.getById(ot2.getDpmId());
+    if (tcamera == null || tcamera.getCameraType().equals("JFoV")) {
+      mergedSearchbox = mergedSearchboxG;
+      cvsSearchbox = cvsSearchboxG;
+      rc3Searchbox = rc3SearchboxG;
+      minorPlanetSearchbox = minorPlanetSearchboxG;
+      ot2Searchbox = ot2SearchboxG;
+      usnoSearchbox = usnoSearchboxG;
+      usnoSearchbox2 = usnoSearchbox2G;
+      mergedMag = mergedMagG;
+      cvsMag = cvsMagG;
+      rc3MinMag = rc3MinMagG;
+      rc3MaxMag = rc3MaxMagG;
+      minorPlanetMag = minorPlanetMagG;
+      usnoMag = usnoMagG;
+      usnoMag2 = usnoMag2G;
+    } else {
+      mergedSearchbox = mergedSearchboxM;
+      cvsSearchbox = cvsSearchboxM;
+      rc3Searchbox = rc3SearchboxM;
+      minorPlanetSearchbox = minorPlanetSearchboxM;
+      ot2Searchbox = ot2SearchboxM;
+      usnoSearchbox = usnoSearchboxM;
+      usnoSearchbox2 = usnoSearchbox2M;
+      mergedMag = mergedMagM;
+      cvsMag = cvsMagM;
+      rc3MinMag = rc3MinMagM;
+      rc3MaxMag = rc3MaxMagM;
+      minorPlanetMag = minorPlanetMagM;
+      usnoMag = usnoMagM;
+      usnoMag2 = usnoMag2M;
+    }
 
     boolean mysqlCheck = true;
     Boolean flag = false;
