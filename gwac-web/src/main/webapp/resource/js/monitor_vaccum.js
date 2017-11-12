@@ -34,7 +34,7 @@ $(function() {
   ];
 
   initStarCurveShow();
-  loadRecords();
+//  loadRecords();
   $('#dayList').change(loadRecords);
   $('#ccdList').change(loadRecords);
 

@@ -38,7 +38,7 @@ $(function() {
   };
 
   initStarCurveShow();
-  loadStarRecords();
+//  loadStarRecords();
   $('#starList').change(loadStarRecords);
   $('#mountList').change(changeMount);
   $('#ccdList').change(changeCCDs);
@@ -148,10 +148,12 @@ $(function() {
       });
     }
 
-    plotOption.yaxis = {
-      min: parmProperty[parmType].min,
-      max: parmProperty[parmType].max,
-      show: true
+    if ("bg_bright" !== parmType && "obj_num" !== parmType) {
+      plotOption.yaxis = {
+        min: parmProperty[parmType].min,
+        max: parmProperty[parmType].max,
+        show: true
+      };
     }
     otCurve = $.plot("#star-light-curve", showCCDs, plotOption);
     otCurve.setData(showCCDs);
