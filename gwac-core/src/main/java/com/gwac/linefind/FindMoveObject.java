@@ -58,26 +58,26 @@ public class FindMoveObject {
   float rhoErrorTimes;
   int validLineMinPoint;
 
-  public FindMoveObject() {
+  public FindMoveObject(LineParameterConfig parm) {
 
-    this.imgWidth = LineParameterConfig.imgWidth;
-    this.imgHeight = LineParameterConfig.imgHeight;
-    this.imgXCenter = LineParameterConfig.imgWidth / 2;
-    this.imgYCenter = LineParameterConfig.imgHeight / 2;
+    this.imgWidth = parm.imgWidth;
+    this.imgHeight = parm.imgHeight;
+    this.imgXCenter = parm.imgWidth / 2;
+    this.imgYCenter = parm.imgHeight / 2;
 
     this.maxTheta = Math.PI;
-    this.maxHoughFrameNunmber = LineParameterConfig.maxHoughFrameNunmber;
-    this.objInitMinPoint = LineParameterConfig.objInitMinPoint;
-    this.maxDistance = LineParameterConfig.maxDistance;
-    this.maxRho = Math.sqrt(Math.pow(LineParameterConfig.imgWidth, 2) + Math.pow(LineParameterConfig.imgHeight, 2));
+    this.maxHoughFrameNunmber = parm.maxHoughFrameNunmber;
+    this.objInitMinPoint = parm.objInitMinPoint;
+    this.maxDistance = parm.maxDistance;
+    this.maxRho = Math.sqrt(Math.pow(parm.imgWidth, 2) + Math.pow(parm.imgHeight, 2));
     this.halfRho = this.maxRho / 2;
-    this.thetaSize = LineParameterConfig.thetaSize;
-    this.rhoSize = LineParameterConfig.rhoSize;
-    this.thetaStep = this.maxTheta / LineParameterConfig.thetaSize;
-    this.rhoStep = this.maxRho / LineParameterConfig.rhoSize;
+    this.thetaSize = parm.thetaSize;
+    this.rhoSize = parm.rhoSize;
+    this.thetaStep = this.maxTheta / parm.thetaSize;
+    this.rhoStep = this.maxRho / parm.rhoSize;
 
-    this.rhoErrorTimes = LineParameterConfig.rhoErrorTimes;
-    this.validLineMinPoint = LineParameterConfig.validLineMinPoint;
+    this.rhoErrorTimes = parm.rhoErrorTimes;
+    this.validLineMinPoint = parm.validLineMinPoint;
 
     initialise();
   }

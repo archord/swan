@@ -90,12 +90,14 @@ public class ResultCompare {
   public void drawPoint(String fName, List<List<OtObserveRecord>> objs1, List<List<OtObserveRecord>> objs2) {
 
     int shift = 5;
+    int imgWidthM = 3056;
+    int imgHeightM = 3056;
 
-    BufferedImage image = new BufferedImage(LineParameterConfig.imgWidth + shift, LineParameterConfig.imgHeight + shift, BufferedImage.TYPE_INT_ARGB);
+    BufferedImage image = new BufferedImage(imgWidthM + shift, imgHeightM + shift, BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2d = image.createGraphics();
     BasicStroke bs = new BasicStroke(2);
     g2d.setBackground(Color.WHITE);
-    g2d.fillRect(0, 0, LineParameterConfig.imgWidth + shift, LineParameterConfig.imgHeight + shift);
+    g2d.fillRect(0, 0, imgWidthM + shift, imgHeightM + shift);
     g2d.setStroke(bs);
     int pointSize2 = 4;
 

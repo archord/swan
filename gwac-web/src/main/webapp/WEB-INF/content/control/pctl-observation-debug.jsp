@@ -36,18 +36,7 @@
         height: 98%;
         overflow:auto;  
         white-space: nowrap;
-      }  
-      select {
-        width: 100px;
-        border: 1px solid #555;
-        padding: 0.5em;
-        font-size: 15px;
-        line-height: 1.2em;
-        background: #fff;
-        -webkit-appearance: none;
-        -webkit-box-shadow: 1px 1px 1px #fff;
-        -webkit-border-radius: 0.5em;
-      }
+      } 
       .tab_container{
         width:99%; 
         height: 93%;
@@ -58,8 +47,20 @@
         border: 3px solid #c5c5c5;
         margin: 0 0 10px 0;
         padding: 5px;
+        text-align: center;
+        width: 100%;
+      }
+      .tel-center-div{
+        margin: 0 auto;
+        width: 450px;
         text-align: left;
-        //min-width: 430px;
+        height: 150px;
+      }
+      .cam-center-div{
+        margin: 0 auto;
+        width: 680px;
+        text-align: left;
+        height: 150px;
       }
       .manual_container1 span{  
         white-space: nowrap;  /*强制span不换行*/
@@ -70,6 +71,13 @@
       }
       .manual_container1 input{  
         margin: 2px;
+        width: 100px;
+      }
+      .manual_container1 select {
+        width: 100px;
+        background: #fff;
+        margin: 2px;
+        height: 28px;
       }
       .manual_container_title{
         text-align: center;
@@ -97,289 +105,215 @@
 
       <div class="tab_container">
         <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-4 manual_container1_col">
+          <div class="col-xs-12 col-sm-12 col-md-5 manual_container1_col">
             <div class="manual_container1">
               <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 " >
                   <div class="manual_container_title">
-                    观测计划</div>
+                    转台操作</div>
                 </div>
               </div>
               <form action="/gwebend/observationPlanUpload.action" id="genObsPlanForm">
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
-                    <select height="30" name="unitId">
-                      <option value="000">转台选择</option>
-                      <option value="001">转台01</option>
-                      <option value="002">转台02</option>
-                      <option value="003">转台03</option>
-                      <option value="004">转台04</option>
-                      <option value="005">转台05</option>
-                      <option value="006">转台06</option>
-                      <option value="007">转台07</option>
-                      <option value="008">转台08</option>
-                    </select>
-                    <select height="30" name="obsType">
-                      <option value="">观测类型</option>
-                      <option value="monitor">监测型</option>
-                      <option value="template">模板观测型</option>
-                      <option value="patrol">巡视型</option>
-                      <option value="synchronize">同步型</option>
-                      <option value="ToO_auto">自动触发型</option>
-                      <option value="ToO_manual">手动触发型</option>
-                      <option value="manual">手动型</option>
-                    </select>
-                    <select height="30" name="imgType">
-                      <option value="">图像类型</option>
-                      <option value="bias">本底</option>
-                      <option value="dark">暗场</option>
-                      <option value="flat">平场</option>
-                      <option value="light">常规观测</option>
-                      <option value="focus">调焦</option>
-                    </select>
-                  </div>
+                    <div class="tel-center-div">
+                      <table>
+                        <tr><td width="80px">操作指令：</td><td  width="150px">
+                            <select height="30" name="obsType" id="obsType">
+                              <option value="" selected>未选择</option>
+                              <option value="find_home">搜索零点</option>
+                              <option value="home_sync">修正零点</option>
+                              <option value="slewto">指向赤道坐标</option>
+                              <option value="guide">导星</option>
+                              <option value="park">复位</option>
+                              <option value="abort_slew">终止指向</option>
+                            </select></td><td></td><td></td></tr>
+                        <tr><td width="80px">望远镜组：</td><td width="150px">
+                            <select height="30" name="groupId" id="groupId">
+                              <option value="">未选择</option>
+                              <option value="001" selected>组001</option>
+                            </select></td>
+                          <td width="80px">单元(转台)：</td><td>
+                            <select height="30" name="unitId" id="unitId">
+                              <option value="">未选择</option>
+                              <option value="001">转台01</option>
+                              <option value="002">转台02</option>
+                              <option value="003">转台03</option>
+                              <option value="004">转台04</option>
+                              <option value="005">转台05</option>
+                              <option value="006">转台06</option>
+                              <option value="007">转台07</option>
+                              <option value="008">转台08</option>
+                              <option value="009">转台09</option>
+                              <option value="010">转台10</option>
+                            </select></td></tr>
+                        <tr><td>赤经(度)：</td>
+                          <td><input name="ra" id="ra" style="text-align: right;" value="0"/></td>
+                          <td>赤纬(度)：</td>
+                          <td><input name="dec" id="dec" style="text-align: right;" value="0"/></td></tr>
+                        <tr><td>赤经(时)：</td>
+                          <td>
+                            <input name="rah" id="rah" style="width:24px;text-align: right;" value="0"/>:
+                            <input name="ram" id="ram" style="width:24px;text-align: right;" value="0"/>:
+                            <input name="ras" id="ras" style="width:24px;text-align: right;" value="0"/></td>
+                          <td>赤纬(度)：</td>
+                          <td>
+                            <input name="decd" id="decd" style="width:24px;text-align: right;" value="0"/>:
+                            <input name="decm" id="decm" style="width:24px;text-align: right;" value="0"/>:
+                            <input name="decs" id="decs" style="width:24px;text-align: right;" value="0"/></td></tr>
+                        <tr><td colspan="4" style="text-align:center;"><button type="button" id="genObsPlanBtn">执行</button></td></tr>
+                      </table>
+
+                    </div></div>
                 </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-7 manual_container1_col">
+            <div class="manual_container1">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 " >
+                  <div class="manual_container_title">
+                    相机操作</div>
+                </div>
+              </div>
+              <form action="/gwebend/observationPlanUpload.action" id="genObsPlanForm">
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
-                    <table>
-                      <tr><td>赤经：</td><td><input name="ra" value="60.0" style="width:60px;"/>秒</td>
-                        <td>赤纬：</td><td><input name="dec" value="60.0" style="width:60px;"/>秒</td></tr>
-                      <tr><td>曝光时间：</td><td><input name="expusoreDuring" value="10" style="width:60px;"/>秒</td>
-                        <td>曝光间隔：</td><td><input name="delay" value="5" style="width:60px;"/>秒</td></tr>
-                      <tr><td>观测帧数：</td><td><input name="frameCount" style="width:60px;"/>帧</td>
-                        <td>优先级：</td><td><input name="priority" style="width:60px;"/></td></tr>
-                      <tr><td>开始时间：</td><td><input name="beginTime" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td>
-                        <td colspan="2" rowspan="2" style="text-align: right"><button type="button" id="genObsPlanBtn">生成观测计划</button></td></tr>
-                      <tr><td>结束时间：</td><td><input name="endTime" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td></tr>
-                    </table>
+                    <div class="cam-center-div">
+                      <table>
+                        <tr><td>操作指令：</td><td>
+                            <select height="30" name="obsType" id="obsType">
+                              <option value="" selected>未选择</option>
+                              <option value="focus">调焦</option>
+                              <option value="focus_sync">修正调焦零点</option>
+                              <option value="mcover">开关镜盖</option>
+                              <option value="take_image">启动曝光</option>
+                              <option value="abort_image">终止曝光</option>
+                            </select></td>
+                            <td>镜盖开关：</td><td>
+                            <select height="30" name="obsType" id="obsType">
+                              <option value="open">开</option>
+                              <option value="close">关</option>
+                            </select></td>
+                        </tr>
+                        <tr><td width="95px">望远镜组：</td><td width="120px">
+                            <select height="30" name="groupId" id="groupId">
+                              <option value="">未选择</option>
+                              <option value="001" selected>组001</option>
+                            </select></td>
+                          <td width="80px">单元(转台)：</td><td  width="120px">
+                            <select height="30" name="unitId" id="unitId">
+                              <option value="">未选择</option>
+                              <option value="001">转台01</option>
+                              <option value="002">转台02</option>
+                              <option value="003">转台03</option>
+                              <option value="004">转台04</option>
+                              <option value="005">转台05</option>
+                              <option value="006">转台06</option>
+                              <option value="007">转台07</option>
+                              <option value="008">转台08</option>
+                              <option value="009">转台09</option>
+                              <option value="010">转台10</option>
+                            </select></td>
+                          <td width="95px">相机：</td><td  width="120px">
+                            <select height="30" name="ccds" id="ccdsSelect">
+                              <option value="011">011</option>
+                              <option value="012">012</option>
+                              <option value="013">013</option>
+                              <option value="014">014</option>
+                              <option value="015">015</option>
+                              <option value="021">021</option>
+                              <option value="022">022</option>
+                              <option value="023">023</option>
+                              <option value="024">024</option>
+                              <option value="025">025</option>
+                              <option value="031">031</option>
+                              <option value="032">032</option>
+                              <option value="033">033</option>
+                              <option value="034">034</option>
+                              <option value="035">035</option>
+                              <option value="041">041</option>
+                              <option value="042">042</option>
+                              <option value="043">043</option>
+                              <option value="044">044</option>
+                              <option value="045">045</option>
+                              <option value="051">051</option>
+                              <option value="052">052</option>
+                              <option value="053">053</option>
+                              <option value="054">054</option>
+                              <option value="055">055</option>
+                              <option value="061">061</option>
+                              <option value="062">062</option>
+                              <option value="063">063</option>
+                              <option value="064">064</option>
+                              <option value="065">065</option>
+                              <option value="071">071</option>
+                              <option value="072">072</option>
+                              <option value="073">073</option>
+                              <option value="074">074</option>
+                              <option value="075">075</option>
+                              <option value="081">081</option>
+                              <option value="082">082</option>
+                              <option value="083">083</option>
+                              <option value="084">084</option>
+                              <option value="085">085</option>
+                              <option value="091">091</option>
+                              <option value="092">092</option>
+                              <option value="093">093</option>
+                              <option value="094">094</option>
+                              <option value="095">095</option>
+                              <option value="101">101</option>
+                              <option value="102">102</option>
+                              <option value="103">103</option>
+                              <option value="104">104</option>
+                              <option value="105">105</option>
+                            </select></td></tr>
+                        <tr><td>目标ID：</td>
+                          <td><input name="dec" id="dec" style="text-align: right;" value="0"/></td>
+                          <td>图像类型：</td>
+                          <td><select height="30" name="imgType" id="imgType">
+                              <option value="">未选择</option>
+                              <option value="bias">本底</option>
+                              <option value="dark">暗场</option>
+                              <option value="flat">平场</option>
+                              <option value="light" selected>常规观测</option>
+                              <option value="focus">调焦</option>
+                            </select></td>
+                          <td>曝光时间(秒):</td>
+                          <td><input name="expusoreDuring" id="expusoreDuring" style="text-align: right;" value="10"/></td></tr>
+                        <tr><td>曝光间隔(秒)：</td>
+                          <td><input name="dec" id="delay" style="text-align: right;" value="5"/></td>
+                          <td>观测帧数：</td>
+                          <td><input name="frameCount" id="frameCount"style="text-align: right;" /></td>
+                          <td>滤光片:</td>
+                          <td><input name="filter" id="expusoreDuring" style="text-align: right;" value=""/></td></tr>
+                        <tr><td colspan="6" style="text-align:center;"><button type="button" id="genObsPlanBtn">执行</button></td></tr>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </form>
             </div>
-            <div class="manual_container1">
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 " >
-                  <div class="manual_container_title">
-                    转台</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                  <select height="30">
-                    <option value="000">转台选择</option>
-                    <option value="001">转台01</option>
-                    <option value="002">转台02</option>
-                    <option value="003">转台03</option>
-                    <option value="004">转台04</option>
-                    <option value="005">转台05</option>
-                    <option value="006">转台06</option>
-                    <option value="007">转台07</option>
-                    <option value="008">转台08</option>
-                  </select>
-                  <select height="30">
-                    <option>初始化</option>
-                    <option>复位</option>
-                    <option>跟踪</option>
-                    <option>暂停</option>
-                    <option>旋转</option>
-                    <option>停止</option>
-                  </select></div>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                  <div>
-                    赤经<input name="ra" value="60.0" style="width:60px;"/>度，赤经<input name="ra" value="60.0" style="width:60px;"/>度，
-                    <button type="button">执行</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="manual_container1">
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 " >
-                  <div class="manual_container_title">
-                    CCD</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12"><select height="30">
-                    <option value="000">CCD选择</option>
-                    <option value="001">CCD01</option>
-                    <option value="002">CCD02</option>
-                    <option value="003">CCD03</option>
-                    <option value="004">CCD04</option>
-                    <option value="005">CCD05</option>
-                    <option value="006">CCD06</option>
-                    <option value="007">CCD07</option>
-                    <option value="008">CCD08</option>
-                    <option value="009">CCD09</option>
-                    <option value="010">CCD10</option>
-                    <option value="011">CCD11</option>
-                    <option value="012">CCD12</option>
-                    <option value="013">CCD13</option>
-                    <option value="014">CCD14</option>
-                    <option value="015">CCD15</option>
-                    <option value="016">CCD16</option>
-                    <option value="017">CCD17</option>
-                    <option value="018">CCD18</option>
-                    <option value="019">CCD19</option>
-                    <option value="020">CCD20</option>
-                    <option value="00">CCD21</option>
-                    <option value="00">CCD22</option>
-                    <option value="00">CCD23</option>
-                    <option value="00">CCD24</option>
-                    <option value="00">CCD25</option>
-                    <option value="00">CCD26</option>
-                    <option value="00">CCD27</option>
-                    <option value="00">CCD28</option>
-                    <option value="00">CCD29</option>
-                    <option value="00">CCD30</option>
-                    <option value="00">CCD31</option>
-                    <option value="00">CCD32</option>
-                    <option value="00">CCD33</option>
-                    <option value="00">CCD34</option>
-                    <option value="00">CCD35</option>
-                    <option value="00">CCD36</option>
-                    <option value="00">CCD37</option>
-                    <option value="00">CCD38</option>
-                    <option value="00">CCD39</option>
-                    <option value="00">CCD40</option>
-                  </select>
-                  <select height="30"><option>初始化</option>
-                    <option>本底</option>
-                    <option>暗场</option>
-                    <option>平场</option>
-                    <option>常规观测</option>
-                    <option>停止</option>
-                  </select></div>
-              </div>
-
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                  <table>
-                    <tr><td>曝光时间：</td><td><input name="ra" value="10" style="width:60px;"/>秒</td><td>曝光间隔：</td><td><input name="ra" value="5" style="width:60px;"/>秒</td></tr>
-                    <tr><td>观测帧数：</td><td><input name="frameCount" style="width:60px;"/>帧</td><td>优先级：</td><td><input name="priority" style="width:60px;"/></td></tr>
-                    <tr><td>开始时间：</td><td><input name="ra" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td>
-                      <td colspan="2" rowspan="2" style="text-align: right"><button type="button">执行</button></td></tr>
-                    <tr><td>结束时间：</td><td><input name="ra" style="width:160px;" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" /></td></tr>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div class="manual_container1">
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 " >
-                  <div class="manual_container_title">
-                    镜头</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12"> 
-                  <select height="30">
-                    <option value="000">镜头选择</option>
-                    <option value="001">望远镜01</option>
-                    <option value="002">望远镜02</option>
-                    <option value="003">望远镜03</option>
-                    <option value="004">望远镜04</option>
-                    <option value="005">望远镜05</option>
-                    <option value="006">望远镜06</option>
-                    <option value="007">望远镜07</option>
-                    <option value="008">望远镜08</option>
-                    <option value="009">望远镜09</option>
-                    <option value="010">望远镜10</option>
-                    <option value="011">望远镜11</option>
-                    <option value="012">望远镜12</option>
-                    <option value="013">望远镜13</option>
-                    <option value="014">望远镜14</option>
-                    <option value="015">望远镜15</option>
-                    <option value="016">望远镜16</option>
-                    <option value="017">望远镜17</option>
-                    <option value="018">望远镜18</option>
-                    <option value="019">望远镜19</option>
-                    <option value="020">望远镜20</option>
-                    <option value="01">望远镜21</option>
-                    <option value="01">望远镜22</option>
-                    <option value="01">望远镜23</option>
-                    <option value="01">望远镜24</option>
-                    <option value="01">望远镜25</option>
-                    <option value="01">望远镜26</option>
-                    <option value="01">望远镜27</option>
-                    <option value="01">望远镜28</option>
-                    <option value="01">望远镜29</option>
-                    <option value="01">望远镜30</option>
-                    <option value="01">望远镜31</option>
-                    <option value="01">望远镜32</option>
-                    <option value="01">望远镜33</option>
-                    <option value="01">望远镜34</option>
-                    <option value="01">望远镜35</option>
-                    <option value="01">望远镜36</option>
-                    <option value="01">望远镜37</option>
-                    <option value="01">望远镜38</option>
-                    <option value="01">望远镜39</option>
-                    <option value="01">望远镜40</option>
-                  </select>
-                  <select height="30"><option>初始化</option>
-                    <option>自动调焦</option>
-                    <option>手动调焦</option>
-                    <option>停止</option>
-                  </select></div>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                  <div>
-                    调 焦 量：<input name="ra" value="-60.0" style="width:60px;"/>  <button type="button">执行</button>
-                  </div></div>
-              </div>
-            </div>
-            <div class="manual_container1">
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 " >
-                  <div class="manual_container_title">
-                    望远镜</div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-6">
-                  <select height="30">
-                    <option value="000">望远镜选择</option>
-                    <option value="001">望远镜01</option>
-                    <option value="002">望远镜02</option>
-                    <option value="003">望远镜03</option>
-                    <option value="004">望远镜04</option>
-                    <option value="005">望远镜05</option>
-                    <option value="006">望远镜06</option>
-                    <option value="007">望远镜07</option>
-                    <option value="008">望远镜08</option>
-                  </select>
-                  <select height="30"><option>初始化</option>
-                    <option>开始</option>
-                    <option>暂停</option>
-                    <option>停止</option>
-                  </select>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-6">
-                  <button type="button">执行</button>
-                </div>
-              </div>
-            </div>
           </div>
-          <div class="col-xs-12 col-sm-12 col-md-8 manual_container1_col">
-            <div class="manual_container2">
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 manual_container1_col">
+            <div class="manual_container1">
               <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 " >
                   <div class="manual_container_title">
-                    位置偏移曲线
-                  </div>
+                    操作历史</div>
                 </div>
               </div>
-            </div>
+              <form action="/gwebend/observationPlanUpload.action" id="genObsPlanForm">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-12 col-md-12">
 
-            <div class="manual_container2">
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 " >
-                  <div class="manual_container_title">
-                    FWHM变化曲线
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </form>
+            </div></div>
         </div>
       </div>
 

@@ -174,9 +174,9 @@
                             <option value="">未选择</option>
                           </select></td></tr>
                       <tr><td>赤经(度)：</td>
-                        <td><input name="ra" id="ra" style="text-align: right;" value="0"/></td>
+                        <td><input name="ra" id="ra" style="text-align: right;width: 200px;" value="0"/></td>
                         <td>赤纬(度)：</td>
-                        <td><input name="dec" id="dec" style="text-align: right;" value="0"/></td></tr>
+                        <td><input name="dec" id="dec" style="text-align: right;width: 200px;" value="0"/></td></tr>
                       <tr><td>赤经(时分秒)：</td>
                         <td>
                           <input name="rah" id="rah" style="width:40px;text-align: right;" value="0"/>时

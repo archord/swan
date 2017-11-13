@@ -15,6 +15,7 @@
     <script type="text/javascript">
       var theight  =$(document).height();
       var config = {
+        container: "celestial-map",
         width:theight,
         projection: "airy",
         transform: "equatorial",
@@ -27,7 +28,6 @@
         fullwidth: false,
         controls: true,
         lang: "en",
-        container: "celestial-map",
         datapath: "<%=request.getContextPath()%>/resource/celestial-d3/data",
         stars: {show: false},
         constellations: {
@@ -58,6 +58,7 @@
       Celestial.display(config);
       //Celestial.rotate({center:[117.58, 40.39]});
     </script>
+    <div id="celestial-map" style="width:600px"></div>
     <footer>
       <p><a href="https://github.com/ofrohn/d3-celestial"><b>D3-Celestial</b></a> released under <a href="http://opensource.org/licenses/BSD-3-Clause">BSD license</a>. Copyright 2015-17 <a href="http://armchairastronautics.blogspot.com/" rel="author">Olaf Frohn</a>.
       </p></footer>

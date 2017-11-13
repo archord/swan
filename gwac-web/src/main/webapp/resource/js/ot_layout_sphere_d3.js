@@ -5,10 +5,11 @@
     return (typeof thing == 'function') ? (thing.call(ctx)) : thing;
   }
 
-  function Gwac(placeholder, root, url) {
+  function Gwac(placeholder, root, url, curl) {
     this.placeholder = placeholder;
     this.rootUrl = root;
     this.url = root + "/" + url;
+    this.curl = root + "/" + curl;
     this.pingsUrl = this.rootUrl + "/resource/images/pings.png";
   }
 
@@ -26,11 +27,12 @@
     horizon: {data: {type: "LineString", coordinates: []}, class: "horizon"},
     ot1Data: {type: "Point", class: "ot1", radius: 1, stars: []},
     ot1Data2: {data: {type: "MultiPoint", coordinates: []}, class: "ot1", radius: 1},
-    ot2Data: {type: "Point", class: "ot2", radius: 2, stars: []},
+    ot2Data: {type: "Point", class: "ot2", radius: 2, stars: [], data: {type: "MultiPoint", coordinates: []}},
     ot2mchData: {type: "Point", class: "ot2mch", radius: 2, stars: []},
     ot2curData: {type: "Point", class: "ot2cur", radius: 3, stars: []},
     ot2newData: {type: "Point", class: "ot2new", radius: 3, stars: []},
     varstarData: {type: "Point", class: "varstar", radius: 3, stars: []},
+    constellationLines: {data: {}, class: "constellation"},
     reqData: {},
     ot1: [],
     ot2: [],
@@ -84,6 +86,7 @@
                 svg.append("path").datum(gwac.sphere.data).attr("class", gwac.sphere.class).attr("d", path);
                 svg.append("path").datum(gwac.equator.data).attr("class", gwac.equator.class).attr("d", path);
                 svg.append("path").datum(gwac.primemeridian.data).attr("class", gwac.primemeridian.class).attr("d", path);
+                svg.append("path").datum(gwac.constellationLines.data).attr("class", gwac.constellationLines.class).attr("d", path);
 
 //                for (var i = 0; i < gwac.reqData.otLv1.length; i++) {
 //                  var tstar = gwac.reqData.otLv1[i];
@@ -102,6 +105,7 @@
                 }
                 var ot1node = svg.append("path").datum(gwac.ot1Data2.data).attr("class", gwac.ot1Data2.class).attr("d", path);
 
+                gwac.ot2Data.data.coordinates=[];
                 for (var i = 0; i < gwac.reqData.otLv2.length; i++) {
                   var tstar = gwac.reqData.otLv2[i];
                   var mName = tstar.dpmId < 10 ? "M0" + tstar.dpmId : "M" + tstar.dpmId;
@@ -110,6 +114,7 @@
                   tnode.attr("value", tstar.name);
                   tnode.on("click", gwac.clickStar);
                   tnode.on("mouseover", gwac.clickStar);
+                  gwac.ot2Data.data.coordinates.push(tstar);
                 }
                 for (var i = 0; i < gwac.reqData.otLv2Mch.length; i++) {
                   var tstar = gwac.reqData.otLv2Mch[i];
@@ -119,6 +124,7 @@
                   tnode.attr("value", tstar.name);
                   tnode.on("click", gwac.clickStar);
                   tnode.on("mouseover", gwac.clickStar);
+                  gwac.ot2Data.data.coordinates.push(tstar);
                 }
                 for (var i = 0; i < gwac.reqData.otLv2Cur.length; i++) {
                   var tstar = gwac.reqData.otLv2Cur[i];
@@ -133,9 +139,7 @@
               });
 
       svg.call(zoom).call(zoom.event);
-
-//      gwac.zoomBounds(projection, zoom, path, gwac.getBounds());
-      gwac.zoomBounds(projection, zoom, path, gwac.ot1Data2.data);
+      gwac.zoomBounds(gwac.ot2Data.data);
       svg.transition().ease("quad-in-out")
               .duration(2000)
               .call(zoom.projection(projection).event);
@@ -177,11 +181,17 @@
       var ot2Name = $(this).attr("value");
       console.log(ot2Name);
       openDialog(ot2Name);
+    },
+    getConstellations: function() {
+      gwac = this;
+      d3.json(gwac.curl, function(errors, reqData) {
+        gwac.constellationLines.data = reqData;
+      });
     }
   };
 
-  $.gwac = function(placeholder, root, url) {
-    var gwac = new Gwac(placeholder, root, url);
+  $.gwac = function(placeholder, root, url, curl) {
+    var gwac = new Gwac(placeholder, root, url, curl);
     return gwac;
   };
 

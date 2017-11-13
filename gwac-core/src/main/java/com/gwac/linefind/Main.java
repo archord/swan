@@ -59,7 +59,14 @@ public class Main {
 
   public void processOneDay(List<OtObserveRecord> oors, String dateStr, int dpmId, int skyId) {
 
-    FindMoveObject fmo = new FindMoveObject();
+    int imgWidthG = 4196;
+    int imgHeightG = 4136;
+    int imgWidthM = 3056;
+    int imgHeightM = 3056;
+
+    LineParameterConfig parmG = new LineParameterConfig(imgWidthG, imgHeightG);
+    LineParameterConfig parmM = new LineParameterConfig(imgWidthM, imgHeightM);
+    FindMoveObject fmo = new FindMoveObject(parmM);
 
     int lastFrameNumber = 0;
     List<OtObserveRecord> singleFrame = new ArrayList<>();
