@@ -13,6 +13,7 @@ import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.linefind.FindMoveObject;
 import com.gwac.linefind.HoughtPoint;
 import com.gwac.linefind.LineObject;
+import com.gwac.linefind.LineParameterConfig;
 import com.gwac.model.Camera;
 import com.gwac.model.MoveObject;
 import com.gwac.model.MoveObjectRecord;
@@ -92,17 +93,17 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     List<String> dateStrs = otlv2Dao.getAllDateStr(history);
     List<ObservationSky> skys = observationSkyDao.findAll();
-    List<Camera> dpms = camDao.findAll();
+    List<Camera> tcams = camDao.findAll();
     log.debug("total days: " + dateStrs.size());
 
     for (String dateStr : dateStrs) {
-      for (Camera dpm : dpms) {
+      for (Camera tcam : tcams) {
         for (ObservationSky sky : skys) {
-          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getCameraId(), sky.getSkyId(), history);
+          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, tcam.getCameraId(), sky.getSkyId(), history);
           int ot1num = oors.size();
           if (ot1num > 0) {
-            log.debug("day=" + dateStr + ", camera=" + dpm.getCameraId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
-            processOneDay(oors, dateStr, dpm.getCameraId(), sky.getSkyId());
+            log.debug("day=" + dateStr + ", camera=" + tcam.getCameraId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
+            processOneDay(oors, dateStr, tcam, sky.getSkyId());
           }
         }
       }
@@ -115,10 +116,12 @@ public class FindMoveObjectServiceImpl implements BaseService {
     String dateStr = "160928";
     int dpmId = 6;
     int skyId = 11;
+    Camera tcamera = new Camera();
+    tcamera.setCameraId(dpmId);
 
     List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpmId, skyId, history);
     System.out.println("size:" + oors.size());
-    processOneDay(oors, dateStr, dpmId, skyId);
+    processOneDay(oors, dateStr, tcamera, skyId);
   }
 
   /**
@@ -132,26 +135,38 @@ public class FindMoveObjectServiceImpl implements BaseService {
 //    List<String> dateStrs = new ArrayList();
 //    dateStrs.add("161128");
     List<ObservationSky> skys = observationSkyDao.findAll();
-    List<Camera> dpms = camDao.findAll();
+    List<Camera> tcams = camDao.findAll();
     log.debug("total days: " + dateStrs.size());
 
     for (String dateStr : dateStrs) {
-      for (Camera dpm : dpms) {
+      for (Camera tcam : tcams) {
         for (ObservationSky sky : skys) {
-          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getCameraId(), sky.getSkyId(), history);
+          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, tcam.getCameraId(), sky.getSkyId(), history);
           int ot1num = oors.size();
           if (ot1num > 0) {
-            log.debug("day=" + dateStr + ", camera=" + dpm.getCameraId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
-            processOneDay(oors, dateStr, dpm.getCameraId(), sky.getSkyId());
+            log.debug("day=" + dateStr + ", camera=" + tcam.getCameraId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
+            processOneDay(oors, dateStr, tcam, sky.getSkyId());
           }
         }
       }
     }
   }
 
-  public void processOneDay(List<OtObserveRecord> oors, String dateStr, int dpmId, int skyId) {
+  public void processOneDay(List<OtObserveRecord> oors, String dateStr, Camera cam, int skyId) {
 
-    FindMoveObject fmo = new FindMoveObject();
+    int imgWidthG = 4196;
+    int imgHeightG = 4136;
+    int imgWidthM = 3056;
+    int imgHeightM = 3056;
+
+    LineParameterConfig parmG = new LineParameterConfig(imgWidthG, imgHeightG);
+    LineParameterConfig parmM = new LineParameterConfig(imgWidthM, imgHeightM);
+    FindMoveObject fmo;
+    if(cam.getCameraType().equals("JFoV")){
+      fmo = new FindMoveObject(parmG);
+    }else{
+      fmo = new FindMoveObject(parmM);
+    }
 
     int lastFrameNumber = 0;
     List<OtObserveRecord> singleFrame = new ArrayList<>();
@@ -170,10 +185,10 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     for (LineObject obj : fmo.mvObjs) {
       if (obj.pointNumber >= validLineMinPoint && obj.isValidLine()) {
-        saveLineObject(obj, dateStr, dpmId, skyId);
+        saveLineObject(obj, dateStr, cam.getCameraId(), skyId);
       }
     }
-    log.debug(dateStr + "-" + dpmId + "-" + skyId + ", mvObjs:" + fmo.mvObjs.size());
+    log.debug(dateStr + "-" + cam.getCameraId() + "-" + skyId + ", mvObjs:" + fmo.mvObjs.size());
 
   }
 

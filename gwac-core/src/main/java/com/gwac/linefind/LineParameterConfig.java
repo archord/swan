@@ -27,8 +27,8 @@ public class LineParameterConfig {
   /**
    * image
    */
-  public static final int imgWidth = 3072;
-  public static final int imgHeight = 3072;
+  public int imgWidth = 3056;
+  public int imgHeight = 3056;
   /**
    * hough
    */
@@ -49,4 +49,9 @@ public class LineParameterConfig {
   public static final int maxSecnod = 150;
   public static final float maxDistance = 100;
   public static final float rhoErrorTimes = (float) 0.2;
+  
+  public LineParameterConfig(int imgWidth, int imgHeight){
+    this.imgWidth = imgWidth;
+    this.imgHeight = imgHeight;
+  }
 }
