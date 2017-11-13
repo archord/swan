@@ -84,6 +84,7 @@
                 svg.append("path").datum(gwac.sphere.data).attr("class", gwac.sphere.class).attr("d", path);
                 svg.append("path").datum(gwac.equator.data).attr("class", gwac.equator.class).attr("d", path);
                 svg.append("path").datum(gwac.primemeridian.data).attr("class", gwac.primemeridian.class).attr("d", path);
+                svg.append("path").datum(gwac.reqData).attr("class", gwac.graticule.class).attr("d", path);
 
 //                svg.append("path").datum({type: "Point", coordinates: [tstar.raD, tstar.decD]}).attr("class", gwac.ot1Data.class).attr("d", path);
 //.attr("d", path.pointRadius(10))

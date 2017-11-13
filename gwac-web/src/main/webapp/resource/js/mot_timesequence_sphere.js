@@ -5,10 +5,11 @@
     return (typeof thing === 'function') ? (thing.call(ctx)) : thing;
   }
 
-  function Gwac(placeholder, root, url) {
+  function Gwac(placeholder, root, url, curl) {
     this.placeholder = placeholder;
     this.rootUrl = root;
     this.url = root + "/" + url;
+    this.curl = root + "/" + curl;
     this.pingsUrl = this.rootUrl + "/resource/images/pings.png";
   }
 
@@ -49,6 +50,7 @@
     motLineData: {data: {type: "LineString", coordinates: []}, class: "motLine"},
     motPointData: {data: {type: "MultiPoint", coordinates: []}, class: "motPoint", radius: 3},
     ot1Data: {data: {type: "MultiPoint", coordinates: []}, class: "ot1", radius: 1},
+    constellationLines: {data: {}, class: "constellation"},
     ot1: [],
     mot: [],
     ot1Obj: [],
@@ -184,6 +186,7 @@
                 svg.append("path").datum(gwac.sphere.data).attr("class", gwac.sphere.class).attr("d", path);
                 svg.append("path").datum(gwac.equator.data).attr("class", gwac.equator.class).attr("d", path);
                 svg.append("path").datum(gwac.primemeridian.data).attr("class", gwac.primemeridian.class).attr("d", path);
+                svg.append("path").datum(gwac.constellationLines.data).attr("class", gwac.constellationLines.class).attr("d", path);
 //                svg.append("path").datum(gwac.singleLineStringExample.data).attr("class", gwac.primemeridian.class).attr("d", path);
 
                 $.each(gwac.labelPoint.data.coordinates, function(i, item) {
@@ -390,11 +393,17 @@
       console.log("startFrame:" + gwac.startFrame);
       console.log("currentFrame:" + gwac.currentFrame);
       console.log("totalFrame:" + gwac.totalFrame);
+    },
+    getConstellations: function() {
+      gwac = this;
+      d3.json(gwac.curl, function(errors, reqData) {
+        gwac.constellationLines.data = reqData;
+      });
     }
   };
 
-  $.gwac = function(placeholder, root, url) {
-    var gwac = new Gwac(placeholder, root, url);
+  $.gwac = function(placeholder, root, url, curl) {
+    var gwac = new Gwac(placeholder, root, url, curl);
     return gwac;
   };
 

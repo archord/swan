@@ -18,11 +18,13 @@
       $(function() {
         var root = "<%=request.getContextPath()%>";
         var url = "get-ot-xy-list.action?dateStr=";
+        var curl = "resource/celestial-d3/data/constellations.lines.json";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
         $("#sphereDisplay").height(mainHeight - headerHeight - 10);
 
-        var gwac = $.gwac("#sphereDisplay", root, url);
+        var gwac = $.gwac("#sphereDisplay", root, url, curl);
+        gwac.getConstellations();
         d3.json(gwac.url, function(errors, reqData) {
           gwac.parseData(reqData);
           gwac.draw();
@@ -55,7 +57,7 @@
       #toolbar input{width: 14px;height: 14px;padding: 0;margin:0 5px 0 0;vertical-align: bottom;position: relative;top: -1px;*overflow: hidden; cursor: pointer;}
 
       /*.graticule {fill: none;stroke: #636B62;stroke-width: .5px;stroke-dasharray: 2,2;}*/
-      .graticule{stroke: #a9a9a9;stroke-width: 0.5px;}
+      .graticule{stroke: #888888;stroke-width: 0.3px;}
       .sphere{stroke: #636B62;stroke-width: 1.5px;}
       .equator {stroke: #636B62;stroke-width: 1.5px;}
       .primemeridian {stroke: #636B62;stroke-width: 1.5px;}
@@ -67,6 +69,7 @@
       .ot2mch:hover{stroke: red;stroke-width: 2px;fill: #FFFF99;z-index: 1000}
       .ot2cur{stroke: #FF33CC;stroke-width: 1px;fill: #FF33CC;}
       .ot2cur:hover{stroke: red;stroke-width: 2px;fill: #FF33CC;z-index: 1000}
+      .constellation{stroke: #999999;stroke-width: 0.5px;}
     </style>
 
   </head>

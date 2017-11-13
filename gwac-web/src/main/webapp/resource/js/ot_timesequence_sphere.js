@@ -5,10 +5,11 @@
     return (typeof thing == 'function') ? (thing.call(ctx)) : thing;
   }
 
-  function Gwac(placeholder, root, url) {
+  function Gwac(placeholder, root, url, curl) {
     this.placeholder = placeholder;
     this.rootUrl = root;
     this.url = root + "/" + url;
+    this.curl = root + "/" + curl;
     this.pingsUrl = this.rootUrl + "/resource/images/pings.png";
   }
 
@@ -36,6 +37,7 @@
     ot1Data: {type: "Point", class: "ot1", radius: 1, stars: []},
     ot1Data2: {data: {type: "MultiPoint", coordinates: []}, class: "ot1", radius: 1},
     ot2TimeSequence: {},
+    constellationLines: {data: {}, class: "constellation"},
     ot1: [],
     ot2: [],
     ot2mch: [],
@@ -121,6 +123,7 @@
                 svg.append("path").datum(gwac.sphere.data).attr("class", gwac.sphere.class).attr("d", path);
                 svg.append("path").datum(gwac.equator.data).attr("class", gwac.equator.class).attr("d", path);
                 svg.append("path").datum(gwac.primemeridian.data).attr("class", gwac.primemeridian.class).attr("d", path);
+                svg.append("path").datum(gwac.constellationLines.data).attr("class", gwac.constellationLines.class).attr("d", path);
 
                 gwac.drawOt1(svg, path);
                 $.each(gwac.labelPoint.data.coordinates, function(i, item) {
@@ -172,7 +175,6 @@
 
       var b = gwac.path.bounds(data);
       var k = Math.min(1000, .45 / Math.max(Math.max(Math.abs(b[1][0]), Math.abs(b[0][0])) / width, Math.max(Math.abs(b[1][1]), Math.abs(b[0][1])) / height));
-      console.log(b);
       gwac.projection.clipExtent(clip)
               .scale(k)
               .translate([width / 2, height / 2]);
@@ -204,11 +206,17 @@
       console.log("startFrame:" + gwac.startFrame);
       console.log("currentFrame:" + gwac.currentFrame);
       console.log("totalFrame:" + gwac.totalFrame);
+    },
+    getConstellations: function() {
+      gwac = this;
+      d3.json(gwac.curl, function(errors, reqData) {
+        gwac.constellationLines.data = reqData;
+      });
     }
   };
 
-  $.gwac = function(placeholder, root, url) {
-    var gwac = new Gwac(placeholder, root, url);
+  $.gwac = function(placeholder, root, url, curl) {
+    var gwac = new Gwac(placeholder, root, url, curl);
     return gwac;
   };
 

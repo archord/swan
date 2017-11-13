@@ -18,11 +18,13 @@
       $(function() {
         var root = "<%=request.getContextPath()%>";
         var url = "get-ot1-timesequence-list.action";
+        var curl = "resource/celestial-d3/data/constellations.lines.json";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
         $("#sphereDisplay").height(mainHeight - headerHeight - 10);
 
-        var gwac = $.gwac("#sphereDisplay", root, url);
+        var gwac = $.gwac("#sphereDisplay", root, url, curl);
+        gwac.getConstellations();
         d3.json(gwac.url, function(errors, reqData) {
           gwac.parseData(reqData);
           gwac.draw();
@@ -81,7 +83,7 @@
 
 
       /*.graticule {fill: none;stroke: #636B62;stroke-width: .5px;stroke-dasharray: 2,2;}*/
-      .graticule{stroke: #a9a9a9;stroke-width: 0.5px;}
+      .graticule{stroke: #888888;stroke-width: 0.3px;}
       .sphere{stroke: #636B62;stroke-width: 1.5px;}
       .equator {stroke: #636B62;stroke-width: 1.5px;}
       .primemeridian {stroke: #636B62;stroke-width: 1.5px;}
@@ -90,6 +92,7 @@
       .ot2{stroke: #993399;stroke-width: 3px;fill: #993399;}
       .ot2mch{stroke: #FFFF99;stroke-width: 3px;fill: #FFFF99;}
       .ot2cur{stroke: #FF33CC;stroke-width: 5px;fill: #FF33CC;}
+      .constellation{stroke: #999999;stroke-width: 0.5px;}
 
     </style>
 
