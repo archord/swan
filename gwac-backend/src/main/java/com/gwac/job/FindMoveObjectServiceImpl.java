@@ -4,18 +4,16 @@
  */
 package com.gwac.job;
 
-import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.MoveObjectDao;
 import com.gwac.dao.MoveObjectRecordDao;
 import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.linefind.DrawObject;
-import com.gwac.linefind.HoughFrame;
 import com.gwac.linefind.FindMoveObject;
 import com.gwac.linefind.HoughtPoint;
 import com.gwac.linefind.LineObject;
-import com.gwac.model.DataProcessMachine;
+import com.gwac.model.Camera;
 import com.gwac.model.MoveObject;
 import com.gwac.model.MoveObjectRecord;
 import com.gwac.model.ObservationSky;
@@ -50,7 +48,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
   @Resource
   private ObservationSkyDao observationSkyDao;
   @Resource
-  private DataProcessMachineDAO dpmDao;
+  private CameraDao camDao;
 
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
@@ -94,17 +92,17 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     List<String> dateStrs = otlv2Dao.getAllDateStr(history);
     List<ObservationSky> skys = observationSkyDao.findAll();
-    List<DataProcessMachine> dpms = dpmDao.findAll();
+    List<Camera> dpms = camDao.findAll();
     log.debug("total days: " + dateStrs.size());
 
     for (String dateStr : dateStrs) {
-      for (DataProcessMachine dpm : dpms) {
+      for (Camera dpm : dpms) {
         for (ObservationSky sky : skys) {
-          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId(), history);
+          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getCameraId(), sky.getSkyId(), history);
           int ot1num = oors.size();
           if (ot1num > 0) {
-            log.debug("day=" + dateStr + ", dmp=" + dpm.getDpmId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
-            processOneDay(oors, dateStr, dpm.getDpmId(), sky.getSkyId());
+            log.debug("day=" + dateStr + ", camera=" + dpm.getCameraId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
+            processOneDay(oors, dateStr, dpm.getCameraId(), sky.getSkyId());
           }
         }
       }
@@ -134,17 +132,17 @@ public class FindMoveObjectServiceImpl implements BaseService {
 //    List<String> dateStrs = new ArrayList();
 //    dateStrs.add("161128");
     List<ObservationSky> skys = observationSkyDao.findAll();
-    List<DataProcessMachine> dpms = dpmDao.findAll();
+    List<Camera> dpms = camDao.findAll();
     log.debug("total days: " + dateStrs.size());
 
     for (String dateStr : dateStrs) {
-      for (DataProcessMachine dpm : dpms) {
+      for (Camera dpm : dpms) {
         for (ObservationSky sky : skys) {
-          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getDpmId(), sky.getSkyId(), history);
+          List<OtObserveRecord> oors = oorDao.getOt1ByDateDpmSkyId(dateStr, dpm.getCameraId(), sky.getSkyId(), history);
           int ot1num = oors.size();
           if (ot1num > 0) {
-            log.debug("day=" + dateStr + ", dmp=" + dpm.getDpmId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
-            processOneDay(oors, dateStr, dpm.getDpmId(), sky.getSkyId());
+            log.debug("day=" + dateStr + ", camera=" + dpm.getCameraId() + ", sky=" + sky.getSkyId() + ", ot1num=" + ot1num);
+            processOneDay(oors, dateStr, dpm.getCameraId(), sky.getSkyId());
           }
         }
       }
