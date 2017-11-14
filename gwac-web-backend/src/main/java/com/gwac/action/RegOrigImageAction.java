@@ -75,7 +75,8 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
     if (groupId == null || groupId.isEmpty() || unitId == null || unitId.isEmpty()
             || camId == null || camId.isEmpty() || gridId == null || gridId.isEmpty()
             || fieldId == null || fieldId.isEmpty() || imgName == null || imgName.isEmpty()
-            || imgPath == null || imgPath.isEmpty() || genTime == null || genTime.isEmpty()) {
+            || imgPath == null || imgPath.isEmpty() || genTime == null || genTime.isEmpty() 
+            || gridId.equals("undefined") || fieldId.equals("undefined")) {
 //      echo = "all parameter cannot be empty, and genTime must formated as 'yyyy-MM-ddTHH:mm:ss.SSSSSS'.";
       echo = "all parameter cannot be empty.";
       log.warn(echo);
