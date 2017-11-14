@@ -196,7 +196,7 @@
       #tooltip{position:absolute;z-index:10;visibility:hidden;color:white;}
       #header{width: 100%;height: 40px;font-size: 28px;text-align: center; color: white;padding-top: 5px;}
       #sphereDisplay{margin: auto;width:100%;height: 90%;}
-      #toolbar {position: absolute;bottom: auto;right: 10px;top: 45px;left: auto;width: 160px;z-index: 10;text-align: left;color: white;font-size: 14px;}
+      #toolbar {position: absolute;bottom: auto;right: 10px;top: 45px;left: auto;width: 180px;z-index: 10;text-align: left;color: white;font-size: 14px;}
       #toolbar label{display: block; margin: 3px 0; padding-left: 15px; text-indent: -15px; cursor: pointer;}
       #toolbar input[type='checkbox']{width: 14px;height: 14px;padding: 0;margin:0 5px 0 0;vertical-align: bottom;position: relative;top: -1px;*overflow: hidden; cursor: pointer;}
       .ot1-input{width: 80px;height: 20px; padding:0;margin:0 0 0 10px;border:none;background-color: transparent;outline: none;color:#fff;}
@@ -247,7 +247,7 @@
       <div id="toolbar">
         <table style="border:0">
           <tr><td colspan="2"><input type="checkbox" checked="" id="dynamicDrawOt1"><span id="playot2">播放</span></td></tr>
-          <tr><td>播放速度:</td><td><input type="text" id="playSpeed" class="ot1-input" value="400"/></td></tr>
+          <tr><td width="70px">播放速度:</td><td><input type="text" id="playSpeed" class="ot1-input" value="400"/></td></tr>
           <tr><td>每次间隔:</td><td><input type="text" id="playInterval" class="ot1-input" value="1"/></td></tr>
           <tr><td>开始帧:</td><td><input type="text" id="startFrame" class="ot1-input" value="1"/></td></tr>
           <tr><td>当前帧:</td><td><input type="text" id="currentFrame" class="ot1-input" value="1"/></td></tr>

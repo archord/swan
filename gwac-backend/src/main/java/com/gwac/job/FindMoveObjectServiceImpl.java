@@ -80,8 +80,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     long startTime = System.nanoTime();
 
-//    processToday();
-    processHisAllDay();
+    processToday();
+//    processHisAllDay();
 
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");

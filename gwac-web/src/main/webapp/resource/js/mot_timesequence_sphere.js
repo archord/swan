@@ -377,7 +377,7 @@
           if (objs.length > 0) {
             $.each(objs, function(i, item) {
               $('#obsCcd').append($('<option>', {
-                value: item.dpmId,
+                value: item.cameraId,
                 text: item.name,
                 style: "background-color:#000"
               }));

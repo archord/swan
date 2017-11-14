@@ -207,7 +207,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     log.debug("search ot2: " + ot2.getName());
 
     Camera tcamera = cameraDao.getById(ot2.getDpmId());
-    if (tcamera == null || tcamera.getCameraType().equals("JFoV")) {
+    if (tcamera.getCameraType().equals("JFoV")) {
       mergedSearchbox = mergedSearchboxG;
       cvsSearchbox = cvsSearchboxG;
       rc3Searchbox = rc3SearchboxG;

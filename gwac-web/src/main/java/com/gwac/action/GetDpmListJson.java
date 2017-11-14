@@ -1,8 +1,7 @@
 package com.gwac.action;
 
-import com.gwac.dao.DataProcessMachineDAO;
-import com.gwac.dao.ObservationSkyDao;
-import com.gwac.model.DataProcessMachine;
+import com.gwac.dao.CameraDao;
+import com.gwac.model.Camera;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.List;
 import javax.annotation.Resource;
@@ -21,8 +20,8 @@ public class GetDpmListJson extends ActionSupport {
   private static final Log log = LogFactory.getLog(GetDpmListJson.class);
 
   @Resource
-  private DataProcessMachineDAO dao;
-  private List<DataProcessMachine> objs;
+  private CameraDao dao;
+  private List<Camera> objs;
 
   @Actions({
     @Action(value = "/get-dpm-list-json", results = {
@@ -31,14 +30,14 @@ public class GetDpmListJson extends ActionSupport {
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
 
-    objs = dao.getAllDpms();
+    objs = dao.getAllCameras();
     return "json";
   }
 
   /**
    * @return the objs
    */
-  public List<DataProcessMachine> getObjs() {
+  public List<Camera> getObjs() {
     return objs;
   }
 
