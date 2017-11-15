@@ -106,7 +106,7 @@
   <!-- 13点40 -->
   <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="findMoveObjectJob" />
-    <property name="cronExpression" value="0 40 13 * * ?"/> <!-- 40 13 -->
+    <property name="cronExpression" value="0 20 16 * * ?"/> <!-- 40 13 -->
   </bean>
 
   <!-- Simple Trigger, run every 15 seconds -->
@@ -145,7 +145,7 @@
   <!-- 秒，分，时，月的某天，月，星期的某天，年；其中年不是必须的，也就是说任何一个表达式最少需要六项 -->
   <bean id="moveDataToHisTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="moveDataToHisJob" />
-    <property name="cronExpression" value="0 50 16 * * ?"/> <!-- 50 16 -->
+    <property name="cronExpression" value="0 17 16 * * ?"/> <!-- 50 16 -->
   </bean>
   
   <bean id="otTmplTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">

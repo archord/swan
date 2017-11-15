@@ -80,8 +80,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     long startTime = System.nanoTime();
 
-    processToday();
-//    processHisAllDay();
+//    processToday();
+    processHisAllDay();
 
     long endTime = System.nanoTime();
     log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
@@ -162,9 +162,9 @@ public class FindMoveObjectServiceImpl implements BaseService {
     LineParameterConfig parmG = new LineParameterConfig(imgWidthG, imgHeightG);
     LineParameterConfig parmM = new LineParameterConfig(imgWidthM, imgHeightM);
     FindMoveObject fmo;
-    if(cam.getCameraType().equals("JFoV")){
+    if (cam.getCameraType().equals("JFoV")) {
       fmo = new FindMoveObject(parmG);
-    }else{
+    } else {
       fmo = new FindMoveObject(parmM);
     }
 
@@ -236,12 +236,14 @@ public class FindMoveObjectServiceImpl implements BaseService {
     mObj.setTdecPolyn2((float) obj.tyCoeff[2]);
 
     moveObjectDao.save(mObj);
+    List<MoveObjectRecord> mors = new ArrayList();
     for (HoughtPoint hp : obj.pointList) {
       MoveObjectRecord mor = new MoveObjectRecord();
       mor.setMovId(mObj.getMovId());
       mor.setOorId(hp.getOorId());
-      moveObjectRecordDao.save(mor);
+      mors.add(mor);
     }
+    moveObjectRecordDao.save(mors);
 
   }
 

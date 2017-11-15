@@ -13,5 +13,6 @@ import java.util.List;
  * @author xy
  */
 public interface MoveObjectRecordDao extends BaseHibernateDao<MoveObjectRecord> {
-  
+
+  public void save(List<MoveObjectRecord> mor);
 }
