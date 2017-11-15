@@ -700,9 +700,20 @@ public class LineObject {
   public void findFirstAndLastPoint() {
 
     getDelta();
-    sort(pointList, new CompareMethod1());
+    //快速排序的递归实现在数据量大时会报堆栈溢出错误StackOverflowError，这里的排序主要是为了得到最大值和最小值。
+    //解决方案：去掉快排，而直接循环找最大值最小值即可。
+//    sort(pointList, new CompareMethod1()); 
     firstPoint = pointList.get(0);
-    lastPoint = pointList.get(this.pointNumber - 1);
+    lastPoint = pointList.get(0);
+    PointCompare pcmp = new CompareMethod1();
+    for (HoughtPoint tpoint : pointList) {
+      if (pcmp.compare(tpoint, firstPoint) < 0) {
+        firstPoint = tpoint;
+      }
+      if (pcmp.compare(lastPoint, tpoint) < 0) {
+        lastPoint = tpoint;
+      }
+    }
     this.firstFrameNumber = firstPoint.getFrameNumber();
   }
 
@@ -842,7 +853,13 @@ public class LineObject {
     }
   }
 
-  //添加对List对象进行排序的功能，参考了Java中的Java.util.Collections类的sort()函数
+  /**
+   * 添加对List对象进行排序的功能，参考了Java中的Java.util.Collections类的sort()函数
+   * 采用递归排序，在数据量大的时候会报堆栈溢出错误StackOverflowError
+   *
+   * @param list
+   * @param pcmp
+   */
   public void sort(List<HoughtPoint> list, PointCompare pcmp) {
     Object[] t = list.toArray();//将列表转换为数组
     quickSort(t, 0, t.length, pcmp); //对数组进行排序
