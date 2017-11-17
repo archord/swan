@@ -298,14 +298,14 @@
       var fName = $(this).attr("file_name");
       var x = $(this).attr("x");
       var y = $(this).attr("y");
-      var rootUrl = $("#gwacRootURL").val();
+//      var rootUrl = $("#gwacRootURL").val();
 //      var rootUrl = "http://10.0.10.236";
-//      var rootUrl = "http://190.168.1.25";
+      var rootUrl = "http://172.28.8.8";
 // G042_mon_objt_171116T14073_ccdimg.jpg
-      var otImgUrl = rootUrl + "/images/thumbnail/" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
+      var otImgUrl = rootUrl + "/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
 //      console.log(otImgUrl + ", " + x + ", " + y);
       console.log(fName + ", " + x + ", " + y);
-      $("#otCoordinate").html(fName.substring(0, 26) + "(" + parseFloat(x).toFixed(2) + ", " + parseFloat(y).toFixed(2) + ")");
+      $("#otCoordinate").html("<a target=\"_blank\" href=\"" + otImgUrl + "\">" + fName.substring(0, 29) + "</a>(" + parseFloat(x).toFixed(2) + ", " + parseFloat(y).toFixed(2) + ")");
 
       var img = document.getElementById('otImgShow');
       $("#otImgShow").attr("src", otImgUrl);
@@ -313,12 +313,13 @@
 //      shiftzoom.source(img, otImgUrl, false);
       $("#otImgShow").load(function() {
         shiftzoom.add(img, {showcoords: true, relativecoords: true, zoom: 100});
+        $("#otImgShow_tumb").attr("src", otImgUrl);
       });
       setTimeout(function() {
         var img = document.getElementById('otImgShow');
         var imgHeight = shiftzoom.get(img, 'maxheight');
         shiftzoom.zooming(img, 100);
-        shiftzoom.moveto(img, parseInt(x), parseInt(imgHeight - y));
+        shiftzoom.moveto(img, parseInt(x), parseInt(y));
       }, 1000);
     },
     changeView: function(gwac) {
