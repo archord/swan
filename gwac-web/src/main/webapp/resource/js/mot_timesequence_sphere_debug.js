@@ -301,7 +301,8 @@
       var rootUrl = $("#gwacRootURL").val();
 //      var rootUrl = "http://10.0.10.236";
 //      var rootUrl = "http://190.168.1.25";
-      var otImgUrl = rootUrl + "/images/thumbnail/" + fName.substring(6, 12) + "/" + fName.substring(0, 1) + fName.substring(3, 5) + "/" + fName.substring(0, 26) + "_ccdimg.jpg";
+// G042_mon_objt_171116T14073_ccdimg.jpg
+      var otImgUrl = rootUrl + "/images/thumbnail/" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
 //      console.log(otImgUrl + ", " + x + ", " + y);
       console.log(fName + ", " + x + ", " + y);
       $("#otCoordinate").html(fName.substring(0, 26) + "(" + parseFloat(x).toFixed(2) + ", " + parseFloat(y).toFixed(2) + ")");
