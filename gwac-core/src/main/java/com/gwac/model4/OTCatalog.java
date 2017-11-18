@@ -19,6 +19,7 @@ public class OTCatalog {
   private Float XTemp;
   private Float YTemp;
   private Date dateUt;
+  private Integer timeSubSecond;
   private String imageName;
   private Float flux;
   private Boolean flag;
@@ -355,5 +356,19 @@ public class OTCatalog {
    */
   public void setCutImageName(String cutImageName) {
     this.cutImageName = cutImageName;
+  }
+
+  /**
+   * @return the timeSubSecond
+   */
+  public Integer getTimeSubSecond() {
+    return timeSubSecond;
+  }
+
+  /**
+   * @param timeSubSecond the timeSubSecond to set
+   */
+  public void setTimeSubSecond(Integer timeSubSecond) {
+    this.timeSubSecond = timeSubSecond;
   }
 }

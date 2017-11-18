@@ -11,8 +11,6 @@ import com.gwac.dao.MountDao;
 import com.gwac.dao.ObservationSkyDao;
 import com.gwac.model.FileNumber;
 import com.gwac.model.FitsFile2;
-import com.gwac.model.ObjectIdentity;
-import com.gwac.model.ObjectType;
 import com.gwac.model.ObservationSky;
 import com.gwac.util.CommonFunction;
 import java.util.Date;
@@ -64,9 +62,15 @@ public final class RegOrigImageServiceImpl implements RegOrigImageService {
       ObservationSky tsky = obsSkyDao.getByName(fieldId, gridId);
 
       String tDateStr = genTime;
-      String tDateFormate = "yyyy-MM-dd HH:mm:ss.SSS";
-      if (genTime.length() > tDateFormate.length()) {
-        tDateStr = genTime.substring(0, tDateFormate.length());
+      Integer subSecond = 0;
+      String tDateFormate = "yyyy-MM-dd HH:mm:ss";
+      int tSecIdx = tDateStr.indexOf('.');
+      if (tSecIdx > -1) {
+        String tSubSecond = tDateStr.substring(tSecIdx + 1);
+        if (tSubSecond.length() > 0) {
+          subSecond = Integer.parseInt(tSubSecond);
+        }
+        tDateStr = tDateStr.substring(0, tSecIdx);
       }
       tDateStr = tDateStr.replace('T', ' ');
       Date ffDate = CommonFunction.stringToDate(tDateStr, tDateFormate);
@@ -85,8 +89,9 @@ public final class RegOrigImageServiceImpl implements RegOrigImageService {
       ff2.setGenTime(ffDate);
       ff2.setImgName(imgName);
       ff2.setImgPath(imgPath);
+      ff2.setTimeSubSecond(subSecond);
       ff2Dao.save(ff2);
-      
+
       log.debug("register " + imgName + " success.");
     }
   }

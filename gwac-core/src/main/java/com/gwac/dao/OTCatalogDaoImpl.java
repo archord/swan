@@ -153,7 +153,18 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
           log.error("parse ytemp error:" + path, e);
         }
         try {
-          ot.setDateUt(df.parse(strs[6].replace('T', ' ')));
+          String tdate = strs[6];
+          Integer subSecond = 0;
+          int tSecIdx = tdate.indexOf('.');
+          if (tSecIdx > -1) {
+            String tSubSecond = tdate.substring(tSecIdx + 1);
+            if (tSubSecond.length() > 0) {
+              subSecond = Integer.parseInt(tSubSecond);
+            }
+            tdate = tdate.substring(0, tSecIdx);
+          }
+          ot.setDateUt(df.parse(tdate.replace('T', ' ')));
+          ot.setTimeSubSecond(subSecond);
         } catch (NumberFormatException e) {
           log.error("parse dateut error:" + path, e);
         }

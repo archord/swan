@@ -104,7 +104,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
 
     if (!ufus.isEmpty()) {
       Map<ImageStatusParameter, FitsFile2Show> isps = new HashMap<>();
-      DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+      DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       DateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");
 
       for (UploadFileUnstore ufu : ufus) {
@@ -121,21 +121,31 @@ public class ImageStatusParmServiceImpl implements BaseService {
             int ccdId = -1;
             int prcNum = -1;
             Date imageTime = null;
+            Integer subSecond = 0;
 
             Properties cfile = new Properties();
             cfile.load(input);
 
             String dateObsUT = cfile.getProperty("DateObsUT");
+            //10:53:49.522836
             String timeObsUT = cfile.getProperty("TimeObsUT");
             String imageName = cfile.getProperty("Image");
 
             if (StringUtils.isNotBlank(dateObsUT) && StringUtils.isNotBlank(timeObsUT)) {
               try {
+                int tSecIdx = timeObsUT.indexOf('.');
+                if (tSecIdx > -1) {
+                  String tSubSecond = timeObsUT.substring(tSecIdx + 1);
+                  if (tSubSecond.length() > 0) {
+                    subSecond = Integer.parseInt(tSubSecond);
+                  }
+                  timeObsUT = timeObsUT.substring(0, tSecIdx);
+                }
                 imageTime = df.parse(dateObsUT.trim() + " " + timeObsUT.trim());
               } catch (ParseException ex) {
                 log.error("parse image status file: " + ufu.getFileName()
                         + ", error imageTime: " + dateObsUT.trim() + " " + timeObsUT.trim(), ex);
-              } catch (Exception e) {
+              } catch (NumberFormatException e) {
                 log.error("error imageTime: ", e);
               }
             }
@@ -154,7 +164,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
             //时间，机器编号，图像编号，任何一个不正常，该条记录没有意义
             if (imageTime != null && ccdId != -1 && prcNum != -1) {
               ImageStatusParameter isp = new ImageStatusParameter();
-
+              isp.setTimeSubSecond(subSecond);
               isp.setTimeObsUt(imageTime);
               isp.setDpmId(ccdId);
               isp.setPrcNum(prcNum);

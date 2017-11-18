@@ -159,6 +159,7 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setSuccessCut(false);
         oor.setSkyId(ff2.getSkyId().shortValue());
         oor.setDataProduceMethod('1');    //星表匹配一级OT
+        oor.setTimeSubSecond(otc.getTimeSubSecond());
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较

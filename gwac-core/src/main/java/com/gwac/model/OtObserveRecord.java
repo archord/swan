@@ -51,6 +51,7 @@ public class OtObserveRecord implements java.io.Serializable {
   private Float distance;
   private Float deltamag;
   private Character dataProduceMethod;
+  private Integer timeSubSecond;
 
   public OtObserveRecord() {
   }
@@ -392,5 +393,20 @@ public class OtObserveRecord implements java.io.Serializable {
   public String toString() {
     return String.format("%f\t%f\t%f\t%f\t%s\t%f\t%d\t0\t%d",
             this.x, this.y, this.raD, this.decD, this.dateStr, this.magAper, this.ffNumber, this.oorId);
+  }
+
+  /**
+   * @return the timeSubSecond
+   */
+  @Column(name = "time_sub_second")
+  public Integer getTimeSubSecond() {
+    return timeSubSecond;
+  }
+
+  /**
+   * @param timeSubSecond the timeSubSecond to set
+   */
+  public void setTimeSubSecond(Integer timeSubSecond) {
+    this.timeSubSecond = timeSubSecond;
   }
 }
