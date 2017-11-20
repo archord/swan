@@ -59,7 +59,7 @@ public class LoginFilter implements Filter {
       if (tuser != null) {
         if (tuser.getLoginName().equals("moveobject")) {
           String downloadPage = "/gwac/pgwac-mot-download.action";
-          if (uri.equals("/downloadmot.action") || uri.equals("/user-logout.action")) {
+          if (uri.equals("/downloadmot.action") || uri.equals("/user-logout.action") || uri.equals("/get-datestr-list-json.action")) {
             chain.doFilter(request, response);
           } else if (!uri.equals(downloadPage)) {
             httpResp.sendRedirect(ctxPath + downloadPage);
