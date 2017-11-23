@@ -33,6 +33,7 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   public List<OtObserveRecord> getOt1ByDate(String dateStr);
   
   public List<String> getAllDateStr();
+  public List<String> getAllDateStr(boolean history);
 
   public void moveDataToHisTable();
 

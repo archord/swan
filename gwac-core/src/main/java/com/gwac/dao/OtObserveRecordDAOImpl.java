@@ -30,6 +30,44 @@ import org.springframework.stereotype.Repository;
 public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord> implements OtObserveRecordDAO {
 
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
+  
+  
+  @Override
+  public List<String> getAllDateStr(boolean history) {
+
+    List<String> result = new ArrayList<>();
+    String sql = "select distinct date_str from ot_observe_record;";
+    if (history) {
+      sql = "select distinct date_str from ot_observe_record_his where date_str>'161003' order by date_str;";
+    }
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      String his = (String) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
+
+  @Override
+  public List<String> getAllDateStr() {
+
+    List<String> result = new ArrayList<>();
+    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null order by date_str;";
+//    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null and date_str<'141027' order by date_str;";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      String his = (String) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
 
   @Override
   public String getMagCurveByTypeIdStarId(int typeId, long starId, int dataProduceMethod) {
@@ -168,24 +206,6 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     String sql = "select * from ot_observe_record_his where ot_id=0 and date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
-  }
-
-  @Override
-  public List<String> getAllDateStr() {
-
-    List<String> result = new ArrayList<>();
-    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null order by date_str;";
-//    String sql = "select distinct date_str from ot_observe_record_his where ot_id is not null and date_str<'141027' order by date_str;";
-
-    Session session = getCurrentSession();
-    Query q = session.createSQLQuery(sql);
-    List list = q.list();
-    Iterator iter = list.iterator();
-    while (iter.hasNext()) {
-      String his = (String) iter.next();
-      result.add(his);
-    }
-    return result;
   }
 
   @Override

@@ -8,7 +8,6 @@ import com.gwac.dao.CameraDao;
 import com.gwac.dao.MoveObjectDao;
 import com.gwac.dao.MoveObjectRecordDao;
 import com.gwac.dao.ObservationSkyDao;
-import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.linefind.FindMoveObject;
 import com.gwac.linefind.HoughtPoint;
@@ -38,8 +37,6 @@ public class FindMoveObjectServiceImpl implements BaseService {
   private static final Log log = LogFactory.getLog(FindMoveObjectServiceImpl.class);
   private static boolean running = true;
 
-  @Resource
-  private OtLevel2Dao otlv2Dao;
   @Resource
   private OtObserveRecordDAO oorDao;
   @Resource(name = "moveObjectDao")
@@ -91,7 +88,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     boolean history = false;
 
-    List<String> dateStrs = otlv2Dao.getAllDateStr(history);
+    List<String> dateStrs = oorDao.getAllDateStr(history);
     List<ObservationSky> skys = observationSkyDao.findAll();
     List<Camera> tcams = camDao.findAll();
     log.debug("total days: " + dateStrs.size());
@@ -131,7 +128,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
     boolean history = true;
 
-    List<String> dateStrs = otlv2Dao.getAllDateStr(history);
+    List<String> dateStrs = oorDao.getAllDateStr(history);
 //    List<String> dateStrs = new ArrayList();
 //    dateStrs.add("161128");
     List<ObservationSky> skys = observationSkyDao.findAll();

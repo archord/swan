@@ -4,6 +4,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.ObservationSky;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Repository;
 public class ObservationSkyDaoImpl extends BaseHibernateDaoImpl<ObservationSky> implements ObservationSkyDao {
 
   private static final Log log = LogFactory.getLog(ObservationSkyDaoImpl.class);
-
+  
   @Override
   public List<String> getAllSkyName() {
 
