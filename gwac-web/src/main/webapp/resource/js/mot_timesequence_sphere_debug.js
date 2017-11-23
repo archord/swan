@@ -256,6 +256,7 @@
                         .attr("d", gwac.path.pointRadius(3));
                 tnode.append("title").text(item2.file_name);
                 tnode.attr("file_name", item2.file_name);
+                tnode.attr("mov_id", item1.mov_id);
                 tnode.attr("x", item2.x);
                 tnode.attr("y", item2.y);
                 tnode.on("mouseover", gwac.clickStar);
@@ -298,13 +299,14 @@
       var fName = $(this).attr("file_name");
       var x = $(this).attr("x");
       var y = $(this).attr("y");
-//      var rootUrl = $("#gwacRootURL").val();
+      var movId = $(this).attr("mov_id");
+      var rootUrl = $("#gwacRootURL").val();
 //      var rootUrl = "http://10.0.10.236";
-      var rootUrl = "http://172.28.8.8";
+//      var rootUrl = "http://172.28.8.8";
 // G042_mon_objt_171116T14073_ccdimg.jpg
       var otImgUrl = rootUrl + "/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
 //      console.log(otImgUrl + ", " + x + ", " + y);
-      console.log(fName + ", " + x + ", " + y);
+      console.log("id=" + movId + ", " + fName + ", " + x + ", " + y);
       $("#otCoordinate").html("<a target=\"_blank\" href=\"" + otImgUrl + "\">" + fName.substring(0, 29) + "</a>(" + parseFloat(x).toFixed(2) + ", " + parseFloat(y).toFixed(2) + ")");
 
       var img = document.getElementById('otImgShow');

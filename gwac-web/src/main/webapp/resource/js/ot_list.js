@@ -339,7 +339,11 @@ $(function() {
     } else if (data === 5) {
       result = 'FSUB';
     } else if (data === 6) {
-      result = 'FMCH'; //图像匹配失败
+      result = 'FRMS'; //图像匹配失败
+    } else if (data === 7) {
+      result = 'FWHM'; //图像匹配失败
+    } else if (data === 8) {
+      result = 'FMCH'; //图像匹配，未匹配到任何目标
     }
     return result;
   }

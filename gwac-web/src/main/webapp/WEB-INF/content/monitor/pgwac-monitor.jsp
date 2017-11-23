@@ -83,9 +83,9 @@
     <div id="monitor-footer">
       <p>每个设备的状态用背景颜色标示：
         <span style="background-color: #FFF;color:#000;">白（上线）</span>、
-        <span style="background-color: #00EE00">绿（正常）</span>、
-        <span style="background-color: #EEAD0E">橙（有故障）</span>、
-        <span style="background-color: #CD2626">红（损坏）</span>、
+        <span style="background-color: #00EE00">绿（正常，1分钟以内）</span>、
+        <span style="background-color: #EEAD0E">橙（有故障，1分钟到10分钟）</span>、
+        <span style="background-color: #CD2626">红（损坏，大于10分钟）</span>、
         <span style="background-color: #ABABAB">灰（下线）</span></p>
     </div>
   </body>
