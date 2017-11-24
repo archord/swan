@@ -23,6 +23,32 @@ import org.springframework.stereotype.Repository;
 public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implements MoveObjectDao {
 
   @Override
+  public Map<String, Float[]> getMotFitsList(int motId) {
+
+    String sql = " SELECT ff.img_name, oor.x, oor.y "
+            + " FROM ot_observe_record_his oor "
+            + " INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
+            + " INNER JOIN move_object mo ON mo.mov_id = mor.mov_id "
+            + " INNER JOIN fits_file2 ff ON ff.ff_id = oor.ff_id "
+            + " WHERE mo.mov_id=" + motId
+            + " ORDER BY ff.img_name";
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    Map<String, Float[]> rst = new HashMap();
+    Iterator iter = q.list().iterator();
+    while (iter.hasNext()) {
+      Object row[] = (Object[]) iter.next();
+      Float[] coor = new Float[2];
+      String imgName = (String) row[0];
+      coor[0] = (Float) row[1];
+      coor[1] = (Float) row[2];
+      rst.put(imgName, coor);
+    }
+    return rst;
+  }
+
+  @Override
   public List<String> getAllDateStr() {
 
     String sql = "select distinct date_str from move_object order by date_str desc;";

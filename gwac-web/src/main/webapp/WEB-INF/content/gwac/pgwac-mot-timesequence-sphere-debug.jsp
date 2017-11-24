@@ -282,7 +282,7 @@
 
     <div id="dragDiv" style="position: absolute; top:150px;left:300px; width:410px; height:422px;padding-top: 6px;background: black; display: none;">
       <div style="background: #999999;width:400px; height:22px;text-align: center;margin:0px 5px 0px 5px;">
-        <span id="otCoordinate" style="font-size: 14px; text-decoration: none;font-style: normal;color: white;font-family:'Times New Roman',Georgia,Serif;" title="点击灰色栏拖动">坐标信息</span>
+        <span id="otCoordinate" style="font-size: 14px; text-decoration: none;font-style: normal;color: white;font-family:'Times New Roman',Georgia,Serif;">坐标信息</span>
         <div id="closeButton">
           <img id="closeDragDiv" src="${pageContext.request.contextPath}/resource/images/close3.png" style="width:21px; height:21px;" title="点击关闭"/></div>
         <div id="nextButton" title="下一幅图"></div>

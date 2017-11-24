@@ -10,7 +10,6 @@ package com.gwac.action;
  */
 import com.gwac.dao.MoveObjectDao;
 import static com.opensymphony.xwork2.Action.NONE;
-import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

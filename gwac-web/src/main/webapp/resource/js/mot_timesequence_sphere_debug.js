@@ -294,7 +294,7 @@
         }
       }
     },
-    clickStar: function() {
+    clickStar2: function() {
       $("#dragDiv").show();
       var fName = $(this).attr("file_name");
       var x = $(this).attr("x");
@@ -323,6 +323,25 @@
         shiftzoom.zooming(img, 100);
         shiftzoom.moveto(img, parseInt(x), parseInt(y));
       }, 1000);
+    },
+    clickStar: function() {
+      $("#dragDiv").show();
+      var fName = $(this).attr("file_name");
+      var x = $(this).attr("x");
+      var y = $(this).attr("y");
+      var movId = $(this).attr("mov_id");
+      var rootUrl = $("#gwacRootURL").val();
+//      var rootUrl = "http://10.0.10.236:9995";
+      var subImgListUrl = rootUrl + "/getMotSubImageList.action?cropW=400&cropH=400&labelW=0&cmodel=0&motId="+movId;
+      var fullImgUrl = rootUrl + "/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
+      var subImgUrl = rootUrl + "/getSubImage.action?imgPath=/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg"
+      + "&centerX=" + x + "&centerY=" + y + "&cropW=400&cropH=400&labelW=0";
+      console.log(subImgListUrl);
+      console.log("id=" + movId + ", " + fName + ", " + x + ", " + y);
+      $("#otCoordinate").html("<a target=\"_blank\" href=\"" + fullImgUrl + "\" href=\"点击打开大图\">" + fName.substring(0, 29) 
+              + "</a>&nbsp;&nbsp;<a target=\"_blank\" href=\"" + subImgListUrl + "\" href=\"点击下载切图\">(" 
+              + parseFloat(x).toFixed(2) + ", " + parseFloat(y).toFixed(2) + ")</a>");
+      $("#otImgShow").attr("src", subImgUrl);
     },
     changeView: function(gwac) {
       var tdata = {type: "MultiPoint", coordinates: []};

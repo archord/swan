@@ -4,6 +4,9 @@
  */
 package com.gwac.util;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -295,5 +298,33 @@ public class CommonFunction {
   public static double getLineDistance(double x1, double y1, double x2, double y2) {
     double tmp = (Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     return Math.sqrt(tmp);
+  }
+  
+  /**
+   * 没考虑切图超过边界的情况。
+   * @param src
+   * @param cx
+   * @param cy
+   * @param w
+   * @param h
+   * @param labelW
+   * @return 
+   */
+  public static BufferedImage getSubImage(BufferedImage src, double cx, double cy, int w, int h, int labelW) {
+    int imw = src.getWidth();
+    int imh = src.getHeight();
+    int cxi = (int) Math.round(cx);
+    int cyi = (int) Math.round(cy);
+    int tx = cxi - w / 2;
+    int ty = cyi - h / 2;
+    BufferedImage cropImg = src.getSubimage(tx, ty, w, h);
+    BufferedImage result = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+    Graphics tg = result.getGraphics();
+    tg.drawImage(cropImg, 0, 0, null);
+    if (labelW > 0) {
+      tg.setColor(new Color(0, 255, 0));
+      tg.drawRect(w / 2 - labelW / 2, h / 2 - labelW / 2, labelW, labelW);
+    }
+    return result;
   }
 }

@@ -8,21 +8,16 @@ package com.gwac.action;
  *
  * @author xy
  */
-import static com.opensymphony.xwork2.Action.NONE;
+import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import javax.imageio.ImageIO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +53,7 @@ public class GetSubImage extends ActionSupport {
   private float centerY;
   private int cropW;
   private int cropH;
-  private int labelW;
+  private int labelW;//是否在移动目标的位置画个正方形：=0不画；大于0画一个边长为labelW的正方形。
 
   @Override
   public String execute() {
@@ -66,36 +61,29 @@ public class GetSubImage extends ActionSupport {
     contentType = "image/jpeg";
     fileName = "empty.jpg";
 
-    log.debug(imgPath);
-    log.debug(centerX);
-    log.debug(centerY);
-    log.debug(cropW);
-    log.debug(cropH);
-    log.debug(labelW);
-
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     //必须OT名称
     if (null != imgPath && !imgPath.isEmpty() && centerX > 0 && centerY > 0 && cropW > 0 && cropH > 0) {
       String dataRootDir = getText("gwacDataRootDirectory");
       String tImgPath = imgPath.trim();
       //images/thumbnail/20171122/G044/G044_mon_objt_171122T14122837.jpg
-      if (tImgPath.charAt(0) == '/') {
-        //remove "/images"
-        tImgPath = tImgPath.substring(7);
-      } else {
-        //remove "images"
-        tImgPath = tImgPath.substring(6);
+      if (tImgPath.contains("images")) {
+        if (tImgPath.charAt(0) == '/') {
+          //remove "/images"
+          tImgPath = tImgPath.substring(7);
+        } else {
+          //remove "images"
+          tImgPath = tImgPath.substring(6);
+        }
       }
       tImgPath = dataRootDir + tImgPath;
       fileName = tImgPath.substring(tImgPath.lastIndexOf('/') + 1);
 
       try {
-        log.debug(tImgPath);
-        log.debug(fileName);
         File fullImg = new File(tImgPath);
         if (fullImg.exists()) {
           BufferedImage im = ImageIO.read(fullImg);
-          BufferedImage timg = getSubImage(im, centerX, centerY, cropW, cropH, labelW);
+          BufferedImage timg = CommonFunction.getSubImage(im, centerX, centerY, cropW, cropH, labelW);
           ImageIO.write(timg, "jpg", baos);
         } else {
           fileName = "GWAC_ccdimg_sub.jpg";
@@ -110,24 +98,6 @@ public class GetSubImage extends ActionSupport {
     inputStream = new ByteArrayInputStream(baos.toByteArray());
 
     return "download";
-  }
-
-  public BufferedImage getSubImage(BufferedImage src, double cx, double cy, int w, int h, int labelW) {
-    int imw = src.getWidth();
-    int imh = src.getHeight();
-    int cxi = (int) Math.round(cx);
-    int cyi = (int) Math.round(cy);
-    int tx = cxi - w / 2;
-    int ty = cyi - h / 2;
-    BufferedImage cropImg = src.getSubimage(tx, ty, w, h);
-    BufferedImage result = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
-    Graphics tg = result.getGraphics();
-    tg.drawImage(cropImg, 0, 0, null);
-    if (labelW > 0) {
-      tg.setColor(new Color(0, 255, 0));
-      tg.drawRect(w / 2 - labelW / 2, h / 2 - labelW / 2, labelW, labelW);
-    }
-    return result;
   }
 
   /**
