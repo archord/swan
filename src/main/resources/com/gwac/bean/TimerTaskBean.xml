@@ -97,7 +97,7 @@
     <property name="startDelay" value="5000" />   
   </bean>
     
-<!--  <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+  <!--  <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="findMoveObjectJob" />
     <property name="repeatInterval" value="15000000000" />  
     <property name="startDelay" value="5000" />   
@@ -163,7 +163,7 @@
         <ref bean="otTmplTrigger" />
         <ref bean="findMoveObjectTrigger" />
         
-        <!--<ref bean="ot2CheckTrigger" />-->
+        <ref bean="ot2CheckTrigger" />
         
         <!--<ref bean="fileTransferTrigger" />-->
         <!--<ref bean="dataSyncTrigger" />-->
