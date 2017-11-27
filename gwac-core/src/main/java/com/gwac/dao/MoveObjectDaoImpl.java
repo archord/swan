@@ -61,9 +61,15 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
   @Override
   public Map<Long, String> getMoveObjsInfoByDate(String dateStr, char moveType, int minFrameNumber) {
     Session session = getCurrentSession();
-    String sql = "SELECT moor.mov_id, text(ARRAY_AGG((SELECT r FROM (SELECT ra_d, dec_d, date_ut, x_temp, y_temp, dpm_id, ff_number) r))) as mov_detail  "
+    String sql = "SELECT moor.mov_id, text(ARRAY_AGG((SELECT r FROM (SELECT date_ut, ra_d, dec_d, x_temp, y_temp, dpm_id, ff_number) r))) as mov_detail  "
             + "FROM (  "
-            + "SELECT mo.mov_id, oor.ra_d, oor.dec_d, oor.date_ut, oor.dpm_id, oor.x_temp, oor.y_temp, oor.ff_number "
+            + "SELECT mo.mov_id, "
+            + "to_char(oor.ra_d, '999.99999') as ra_d, "
+            + "to_char(oor.dec_d, '99.99999') as dec_d, "
+            + "to_char(oor.date_ut, 'YYYY MM DD HH24 MI SS') || '.' || to_char(oor.time_sub_second, 'FM999999') as date_ut, "
+            + "oor.dpm_id, "
+            + "to_char(oor.x_temp, '9999.99') as x_temp, "
+            + "to_char(oor.y_temp, '9999.99') as y_temp, oor.ff_number  "
             + "FROM ot_observe_record_his oor  "
             + "INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
             + "INNER JOIN move_object mo ON mo.mov_id = mor.mov_id and mo.mov_type='" + moveType + "' and total_frame_number>" + minFrameNumber + "  "

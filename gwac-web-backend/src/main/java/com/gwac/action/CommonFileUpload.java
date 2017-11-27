@@ -389,7 +389,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           int toHeight = 400;
           getThumbnail(tpath, tname, tnameSub, toWidth, toHeight);
         } catch (IOException ex) {
-          log.error("delete or move file errror ", ex);
+          log.error("create thumbnail errror "+tfilename, ex);
         }
 
         cameraDao.updateMonitorImageTime(unitId);
@@ -416,7 +416,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         log.error("image " + src + " does not exist.");
       }
     } catch (IOException e) {
-      log.error("create thumbnail error:", e);
+      log.error("create thumbnail error "+src, e);
     }
   }
 

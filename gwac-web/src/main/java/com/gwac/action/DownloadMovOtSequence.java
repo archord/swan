@@ -79,6 +79,7 @@ public class DownloadMovOtSequence extends ActionSupport {
               String records = entry.getValue();
               records = records.substring(3, records.length() - 3).replace(")\",\"(", "\n");
               records = records.replace("\\\"", "");
+              records = records.replace(",", " ");
               zos.putNextEntry(new ZipEntry(fname));
               zos.write(records.getBytes());
               zos.closeEntry();
