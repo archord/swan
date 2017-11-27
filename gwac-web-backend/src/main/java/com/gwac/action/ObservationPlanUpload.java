@@ -31,6 +31,7 @@ import org.apache.struts2.convention.annotation.Action;
 public class ObservationPlanUpload extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(ObservationPlanUpload.class);
+  private static final String dateFormateString = "yyyy-MM-dd HH:mm:ss.SSS";
 
   @Resource
   private ObservationPlanDao obsPlanDao;
@@ -46,21 +47,21 @@ public class ObservationPlanUpload extends ActionSupport {
   private String gridId;
   private String fieldId;
   private String objId;
-  private Float ra;
-  private Float dec;
-  private Integer epoch;
-  private Float objRa;
-  private Float objDec;
-  private Integer objEpoch;
-  private Float objError;
+  private String ra;
+  private String dec;
+  private String epoch;
+  private String objRa;
+  private String objDec;
+  private String objEpoch;
+  private String objError;
   private String imgType;
-  private Integer expusoreDuring;
-  private Integer delay;
-  private Integer frameCount;
-  private Integer priority;
+  private String expusoreDuring;
+  private String delay;
+  private String frameCount;
+  private String priority;
   private String beginTime;
   private String endTime;
-  private Integer pairId;
+  private String pairId;
   private String echo = "";
 
   @Action(value = "observationPlanUpload")
@@ -70,42 +71,76 @@ public class ObservationPlanUpload extends ActionSupport {
     log.debug("observationPlan:" + getObsPlanString());
 
     ObservationPlan obsPlan = new ObservationPlan();
-    obsPlan.setDec(dec);
-    obsPlan.setDelay(delay);
-    obsPlan.setEpoch(epoch);
-    obsPlan.setExpusoreDuring(expusoreDuring);
+    if (null != ra && !ra.isEmpty()) {
+      obsPlan.setRa(Float.parseFloat(ra));
+    }
+    if (null != dec && !dec.isEmpty()) {
+      obsPlan.setDec(Float.parseFloat(dec));
+    }
+    if (null != delay && !delay.isEmpty()) {
+      obsPlan.setDelay(Integer.parseInt(delay));
+    }
+    if (null != epoch && !epoch.isEmpty()) {
+      obsPlan.setEpoch(Integer.parseInt(epoch));
+    }
+    if (null != expusoreDuring && !expusoreDuring.isEmpty()) {
+      obsPlan.setExpusoreDuring(Integer.parseInt(expusoreDuring));
+    }
+    if (null != frameCount && !frameCount.isEmpty()) {
+      obsPlan.setFrameCount(Integer.parseInt(frameCount));
+    }
+    if (null != objDec && !objDec.isEmpty()) {
+      obsPlan.setObjDec(Float.parseFloat(objDec));
+    }
+    if (null != objEpoch && !objEpoch.isEmpty()) {
+      obsPlan.setObjEpoch(Integer.parseInt(objEpoch));
+    }
+    if (null != objRa && !objRa.isEmpty()) {
+      obsPlan.setObjRa(Float.parseFloat(objRa));
+    }
+    if (null != pairId && !pairId.isEmpty()) {
+      obsPlan.setPairId(Integer.parseInt(pairId));
+    }
+    if (null != priority && !priority.isEmpty()) {
+      obsPlan.setPriority(Integer.parseInt(priority));
+    }
     obsPlan.setFieldId(fieldId);
-    obsPlan.setFrameCount(frameCount);
     obsPlan.setGridId(gridId);
     obsPlan.setGroupId(groupId);
     obsPlan.setImgType(imgType);
-    obsPlan.setObjDec(objDec);
-    obsPlan.setObjEpoch(objEpoch);
     obsPlan.setObjError(objError);
     obsPlan.setObjId(objId);
-    obsPlan.setObjRa(objRa);
     obsPlan.setObsType(obsType);
     obsPlan.setOpSn(opSn);
     obsPlan.setOpType(opType); //???
-    obsPlan.setPairId(pairId);
-    obsPlan.setPriority(priority);
-    obsPlan.setRa(ra);
     obsPlan.setUnitId(unitId);
 
     if (null != beginTime && !beginTime.isEmpty()) {
-      Date tdate = CommonFunction.stringToDate(beginTime, "yyyy-MM-dd HH:mm:ss");
+      beginTime = beginTime.replace("T", " ");
+      if (beginTime.length() > dateFormateString.length()) {
+        beginTime = beginTime.substring(0, dateFormateString.length());
+      }
+      Date tdate = CommonFunction.stringToDate(beginTime, dateFormateString);
       obsPlan.setBeginTime(tdate);
     }
     if (null != endTime && !endTime.isEmpty()) {
+      endTime = endTime.replace("T", " ");
+      if (endTime.length() > dateFormateString.length()) {
+        endTime = endTime.substring(0, dateFormateString.length());
+      }
       Date tdate = CommonFunction.stringToDate(endTime, "yyyy-MM-dd HH:mm:ss");
       obsPlan.setEndTime(tdate);
     }
     if (null != opTime && !opTime.isEmpty()) {
+      opTime = opTime.replace("T", " ");
+      if (opTime.length() > dateFormateString.length()) {
+        opTime = opTime.substring(0, dateFormateString.length());
+      }
       Date tdate = CommonFunction.stringToDate(opTime, "yyyy-MM-dd HH:mm:ss");
       obsPlan.setOpTime(tdate);
     }
     //必须设置传输机器名称
-    if (null == obsPlan || !obsPlan.checkValid()) {
+    if (!obsPlan.checkValid() || opTime == null) {
       echo = echo + "Error, observationPlan is inValid.\n";
     } else {
       obsPlanDao.save(obsPlan);
@@ -260,49 +295,49 @@ public class ObservationPlanUpload extends ActionSupport {
   /**
    * @param ra the ra to set
    */
-  public void setRa(Float ra) {
+  public void setRa(String ra) {
     this.ra = ra;
   }
 
   /**
    * @param dec the dec to set
    */
-  public void setDec(Float dec) {
+  public void setDec(String dec) {
     this.dec = dec;
   }
 
   /**
    * @param epoch the epoch to set
    */
-  public void setEpoch(Integer epoch) {
+  public void setEpoch(String epoch) {
     this.epoch = epoch;
   }
 
   /**
    * @param objRa the objRa to set
    */
-  public void setObjRa(Float objRa) {
+  public void setObjRa(String objRa) {
     this.objRa = objRa;
   }
 
   /**
    * @param objDec the objDec to set
    */
-  public void setObjDec(Float objDec) {
+  public void setObjDec(String objDec) {
     this.objDec = objDec;
   }
 
   /**
    * @param objEpoch the objEpoch to set
    */
-  public void setObjEpoch(Integer objEpoch) {
+  public void setObjEpoch(String objEpoch) {
     this.objEpoch = objEpoch;
   }
 
   /**
    * @param objError the objError to set
    */
-  public void setObjError(Float objError) {
+  public void setObjError(String objError) {
     this.objError = objError;
   }
 
@@ -316,35 +351,35 @@ public class ObservationPlanUpload extends ActionSupport {
   /**
    * @param expusoreDuring the expusoreDuring to set
    */
-  public void setExpusoreDuring(Integer expusoreDuring) {
+  public void setExpusoreDuring(String expusoreDuring) {
     this.expusoreDuring = expusoreDuring;
   }
 
   /**
    * @param delay the delay to set
    */
-  public void setDelay(Integer delay) {
+  public void setDelay(String delay) {
     this.delay = delay;
   }
 
   /**
    * @param frameCount the frameCount to set
    */
-  public void setFrameCount(Integer frameCount) {
+  public void setFrameCount(String frameCount) {
     this.frameCount = frameCount;
   }
 
   /**
    * @param priority the priority to set
    */
-  public void setPriority(Integer priority) {
+  public void setPriority(String priority) {
     this.priority = priority;
   }
 
   /**
    * @param pairId the pairId to set
    */
-  public void setPairId(Integer pairId) {
+  public void setPairId(String pairId) {
     this.pairId = pairId;
   }
 

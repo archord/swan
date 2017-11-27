@@ -36,7 +36,7 @@ public class ObservationPlan implements java.io.Serializable {
   private Float objRa;
   private Float objDec;
   private Integer objEpoch;
-  private Float objError;
+  private String objError;
   private String imgType;
   private Integer expusoreDuring;
   private Integer delay;
@@ -45,9 +45,13 @@ public class ObservationPlan implements java.io.Serializable {
   private Date beginTime;
   private Date endTime;
   private Integer pairId;
-  
-  public boolean checkValid(){
-    return true;
+
+  public boolean checkValid() {
+    if (opTime == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   @Override
@@ -109,7 +113,7 @@ public class ObservationPlan implements java.io.Serializable {
     this.opId = opId;
   }
 
-  public ObservationPlan(long opId, Long opSn, Date opTime, String opType, String groupId, String unitId, String obsType, String gridId, String fieldId, String objId, Float ra, Float dec, Integer epoch, Float objRa, Float objDec, Integer objEpoch, Float objError, String imgType, Integer expusoreDuring, Integer delay, Integer frameCount, Integer priority, Date beginTime, Date endTime, Integer pairId) {
+  public ObservationPlan(long opId, Long opSn, Date opTime, String opType, String groupId, String unitId, String obsType, String gridId, String fieldId, String objId, Float ra, Float dec, Integer epoch, Float objRa, Float objDec, Integer objEpoch, String objError, String imgType, Integer expusoreDuring, Integer delay, Integer frameCount, Integer priority, Date beginTime, Date endTime, Integer pairId) {
     this.opId = opId;
     this.opSn = opSn;
     this.opTime = opTime;
@@ -288,11 +292,11 @@ public class ObservationPlan implements java.io.Serializable {
   }
 
   @Column(name = "obj_error", precision = 8, scale = 8)
-  public Float getObjError() {
+  public String getObjError() {
     return this.objError;
   }
 
-  public void setObjError(Float objError) {
+  public void setObjError(String objError) {
     this.objError = objError;
   }
 
