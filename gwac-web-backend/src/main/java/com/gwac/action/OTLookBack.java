@@ -8,22 +8,36 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.activemq.OTFollowMessageCreator;
+import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.SystemStatusMonitorDao;
+import com.gwac.dao.UserInfoDAO;
+import com.gwac.model.ApplicationParameters;
+import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
-import static com.opensymphony.xwork2.Action.ERROR;
-import static com.opensymphony.xwork2.Action.INPUT;
-import static com.opensymphony.xwork2.Action.SUCCESS;
+import com.gwac.model4.OtLevel2FollowParameter;
+import com.gwac.model.UserInfo;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Map;
 import javax.annotation.Resource;
+import javax.jms.Destination;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
+import static com.opensymphony.xwork2.Action.ERROR;
+import static com.opensymphony.xwork2.Action.INPUT;
+import static com.opensymphony.xwork2.Action.SUCCESS;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* curl command example: */
@@ -31,12 +45,7 @@ import org.apache.struts2.convention.annotation.Result;
 /**
  * @author xy
  */
-//@InterceptorRef("jsonValidationWorkflowStack")
-//加了这句化，文件传不上来
-//@ParentPackage(value="struts-default")
-//@Controller()
-//@Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class OTLookBack extends ActionSupport {
+public class OTLookBack extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(OTLookBack.class);
 
@@ -44,24 +53,35 @@ public class OTLookBack extends ActionSupport {
   private Short flag; //图像相减有目标1，图像相减没有目标2, 0代表没处理或处理报错
   private String echo = "";
 
+  private Map<String, Object> appMap;
+
   @Resource
   private OtLevel2Dao ot2Dao;
   @Resource
+  private FollowUpObservationDao foDao;
+  @Resource
+  private UserInfoDAO userDao;
+  @Resource
+  private JmsTemplate jmsTemplate;
+  @Resource
+  private Destination otFollowDest;
+  @Resource
   private SystemStatusMonitorDao ssmDao;
 
-  @Action(value = "otLookBack", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
-    @Result(location = "manage/result.jsp", name = ERROR)})
-  public String upload() {
+  @Action(value = "otLookBack")
+  public void upload() {
 
-    String result = SUCCESS;
     setEcho("");
 
     //必须设置望远镜名称
     if (null == ot2name || ot2name.isEmpty()) {
       setEcho(getEcho() + "Error, must set ot2name.\n");
     } else {
+      ApplicationParameters appParam = (ApplicationParameters) appMap.get("appParam");
+      if (flag == 1 && appParam != null && appParam.isAutoFollowUp()) {
+        autoFollowUp();
+      }
+
       OtLevel2 ot2 = new OtLevel2();
       ot2.setName(ot2name.trim());
       ot2.setLookBackResult(flag);
@@ -88,8 +108,8 @@ public class OTLookBack extends ActionSupport {
       echo = "lookback success.\n";
 
       String ip = ServletActionContext.getRequest().getRemoteAddr();
-      String unitId = ip.substring(ip.lastIndexOf('.')+1);
-      if(unitId.length()<3){
+      String unitId = ip.substring(ip.lastIndexOf('.') + 1);
+      if (unitId.length() < 3) {
         unitId = "0" + unitId;
       }
       ssmDao.updateOt2LookBack(unitId, ot2name);
@@ -97,8 +117,6 @@ public class OTLookBack extends ActionSupport {
 
     log.debug(getEcho());
     sendResultMsg(echo);
-
-    return null;
   }
 
   public void sendResultMsg(String msg) {
@@ -111,6 +129,56 @@ public class OTLookBack extends ActionSupport {
       out.print(msg);
     } catch (IOException ex) {
       log.error("response error: ", ex);
+    }
+  }
+
+  public void autoFollowUp() {
+
+    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+
+//    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
+//            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
+    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)) {
+      ot2.setFoCount((short) (ot2.getFoCount() + 1));
+      ot2Dao.updateFoCount(ot2);
+
+      OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
+      ot2fp.setFollowName(String.format("%s_%03d", ot2name, ot2.getFoCount()));
+      ot2fp.setDec(ot2.getDec());
+      ot2fp.setRa(ot2.getRa());
+      ot2fp.setExpTime((short) 20);
+      ot2fp.setFilter("R");
+      ot2fp.setFrameCount(5);
+      ot2fp.setTelescope((short) 1);
+      ot2fp.setPriority(20);
+      ot2fp.setOtName(ot2name);
+      ot2fp.setUserName("gwac");
+
+      UserInfo user = userDao.getUserByLoginName("gwac");
+      FollowUpObservation fo = new FollowUpObservation();
+      fo.setBackImageCount(0);
+      fo.setDec(ot2fp.getDec());
+      fo.setEpoch(ot2fp.getEpoch());
+      fo.setExposeDuration((short) ot2fp.getExpTime());
+      fo.setFilter(ot2fp.getFilter());
+      fo.setFoName(ot2fp.getFollowName());
+      fo.setFoObjCount((short) 0);
+      fo.setFrameCount((short) ot2fp.getFrameCount());
+      fo.setImageType(ot2fp.getImageType());
+      fo.setOtId(ot2.getOtId());
+      fo.setPriority((short) ot2fp.getPriority());
+      fo.setRa(ot2fp.getRa());
+      if (user != null) {
+        fo.setUserId(user.getUiId());
+      }
+      fo.setTriggerTime(new Date());
+      fo.setTriggerType("AUTO"); //MANUAL AUTO
+      fo.setTelescopeId(ot2fp.getTelescope());
+      foDao.save(fo);
+
+      MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
+      jmsTemplate.send(otFollowDest, tmc);
+      log.debug(ot2fp.getTriggerMsg());
     }
   }
 
@@ -140,6 +208,46 @@ public class OTLookBack extends ActionSupport {
    */
   public void setEcho(String echo) {
     this.echo = echo;
+  }
+
+  /**
+   * @param ot2Dao the ot2Dao to set
+   */
+  public void setOt2Dao(OtLevel2Dao ot2Dao) {
+    this.ot2Dao = ot2Dao;
+  }
+
+  /**
+   * @param foDao the foDao to set
+   */
+  public void setFoDao(FollowUpObservationDao foDao) {
+    this.foDao = foDao;
+  }
+
+  /**
+   * @param jmsTemplate the jmsTemplate to set
+   */
+  public void setJmsTemplate(JmsTemplate jmsTemplate) {
+    this.jmsTemplate = jmsTemplate;
+  }
+
+  /**
+   * @param otFollowDest the otFollowDest to set
+   */
+  public void setOtFollowDest(Destination otFollowDest) {
+    this.otFollowDest = otFollowDest;
+  }
+
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appMap = map;
+  }
+
+  /**
+   * @param userDao the userDao to set
+   */
+  public void setUserDao(UserInfoDAO userDao) {
+    this.userDao = userDao;
   }
 
 }
