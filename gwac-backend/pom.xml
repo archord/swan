@@ -36,6 +36,11 @@
       <artifactId>gwac-core</artifactId>  
       <version>beta-1.0</version>
     </dependency>
+    <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.1.2</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
     <dependency>
       <groupId>org.apache.commons</groupId>

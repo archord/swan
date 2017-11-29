@@ -31,7 +31,8 @@ import org.apache.struts2.convention.annotation.Action;
 public class ObservationPlanUpload extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(ObservationPlanUpload.class);
-  private static final String dateFormateString = "yyyy-MM-dd HH:mm:ss.SSS";
+  private static final String dateFormateString1 = "yyyy-MM-dd HH:mm:ss.SSS";
+  private static final String dateFormateString2 = "yyyy-MM-dd HH:mm:ss";
 
   @Resource
   private ObservationPlanDao obsPlanDao;
@@ -117,26 +118,41 @@ public class ObservationPlanUpload extends ActionSupport {
 
     if (null != beginTime && !beginTime.isEmpty()) {
       beginTime = beginTime.replace("T", " ");
-      if (beginTime.length() > dateFormateString.length()) {
-        beginTime = beginTime.substring(0, dateFormateString.length());
+      Date tdate = null;
+      if (beginTime.length() > dateFormateString1.length()) {
+        beginTime = beginTime.substring(0, dateFormateString1.length());
+        tdate = CommonFunction.stringToDate(beginTime, dateFormateString1);
+      } else if (beginTime.length() > dateFormateString2.length()) {
+        tdate = CommonFunction.stringToDate(beginTime, dateFormateString1);
+      } else {
+        tdate = CommonFunction.stringToDate(beginTime, dateFormateString2);
       }
-      Date tdate = CommonFunction.stringToDate(beginTime, dateFormateString);
       obsPlan.setBeginTime(tdate);
     }
     if (null != endTime && !endTime.isEmpty()) {
       endTime = endTime.replace("T", " ");
-      if (endTime.length() > dateFormateString.length()) {
-        endTime = endTime.substring(0, dateFormateString.length());
+      Date tdate = null;
+      if (endTime.length() > dateFormateString1.length()) {
+        endTime = endTime.substring(0, dateFormateString1.length());
+        tdate = CommonFunction.stringToDate(endTime, dateFormateString1);
+      } else if (endTime.length() > dateFormateString2.length()) {
+        tdate = CommonFunction.stringToDate(endTime, dateFormateString1);
+      } else {
+        tdate = CommonFunction.stringToDate(endTime, dateFormateString2);
       }
-      Date tdate = CommonFunction.stringToDate(endTime, "yyyy-MM-dd HH:mm:ss");
       obsPlan.setEndTime(tdate);
     }
     if (null != opTime && !opTime.isEmpty()) {
       opTime = opTime.replace("T", " ");
-      if (opTime.length() > dateFormateString.length()) {
-        opTime = opTime.substring(0, dateFormateString.length());
+      Date tdate = null;
+      if (opTime.length() > dateFormateString1.length()) {
+        opTime = opTime.substring(0, dateFormateString1.length());
+        tdate = CommonFunction.stringToDate(opTime, dateFormateString1);
+      } else if (opTime.length() > dateFormateString2.length()) {
+        tdate = CommonFunction.stringToDate(opTime, dateFormateString1);
+      } else {
+        tdate = CommonFunction.stringToDate(opTime, dateFormateString2);
       }
-      Date tdate = CommonFunction.stringToDate(opTime, "yyyy-MM-dd HH:mm:ss");
       obsPlan.setOpTime(tdate);
     }
     //必须设置传输机器名称

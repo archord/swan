@@ -60,7 +60,11 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
           obj.setEllipticity(Float.parseFloat(strs[9]));
           obj.setClassStar(Float.parseFloat(strs[10]));
           obj.setFwhm(Float.parseFloat(strs[11]));
-          obj.setFlag(Short.parseShort(strs[12]));
+          try {
+            obj.setFlag(Short.parseShort(strs[12]));
+          } catch (NumberFormatException e) {
+            log.error("prase flag=" + strs[12], e);
+          }
           obj.setB2(Float.parseFloat(strs[13]));
           obj.setR2(Float.parseFloat(strs[14]));
           obj.setI(Float.parseFloat(strs[15]));
