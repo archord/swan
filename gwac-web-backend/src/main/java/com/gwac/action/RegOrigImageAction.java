@@ -60,33 +60,26 @@ public class RegOrigImageAction extends ActionSupport implements ApplicationAwar
   @Action(value = "regOrigImg")
   public void upload() {
 
-    String result = SUCCESS;
     echo = "";
-    log.debug("groupId:" + groupId);
-    log.debug("unitId:" + unitId);
-    log.debug("camId:" + camId);
-    log.debug("gridId:" + gridId);
-    log.debug("fieldId:" + fieldId);
-    log.debug("imgName:" + imgName);
-    log.debug("imgPath:" + imgPath);
-    log.debug("genTime:" + genTime);
 
     // || genTime.length() != "yyyy-MM-ddTHH:mm:ss.SSSSSS".length()
     if (groupId == null || groupId.isEmpty() || unitId == null || unitId.isEmpty()
             || camId == null || camId.isEmpty() || gridId == null || gridId.isEmpty()
             || fieldId == null || fieldId.isEmpty() || imgName == null || imgName.isEmpty()
-            || imgPath == null || imgPath.isEmpty() || genTime == null || genTime.isEmpty() 
+            || imgPath == null || imgPath.isEmpty() || genTime == null || genTime.isEmpty()
             || gridId.equals("undefined") || fieldId.equals("undefined")) {
 //      echo = "all parameter cannot be empty, and genTime must formated as 'yyyy-MM-ddTHH:mm:ss.SSSSSS'.";
       echo = "all parameter cannot be empty.";
       log.warn(echo);
+      log.warn("groupId:" + groupId + ", unitId:" + unitId + ", camId:" + camId + ", gridId:" + gridId + 
+              ", fieldId:" + fieldId + ", imgName:" + imgName + ", imgPath:" + imgPath + ", genTime:" + genTime);
     } else {
       initObjType();
       MessageCreator tmc = new RegOrigImageMessageCreator(groupId, unitId, camId, gridId, fieldId, imgName, imgPath, genTime, dateStr);
       jmsTemplate.send(msgDest, tmc);
       echo = "receive parameter success.";
       log.debug(echo);
-      
+
       ssmDao.updateImgRegister(camId, imgName);
     }
 

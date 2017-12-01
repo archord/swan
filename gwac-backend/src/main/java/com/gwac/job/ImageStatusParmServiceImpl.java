@@ -540,11 +540,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
         if (tcam.getCameraType().equalsIgnoreCase("FFoV")) {
           flag = true;
         }
-      } else {
-        log.error("wrong guide parameter, skip!");
       }
-    } else {
-      log.error("wrong guide parameter, skip!");
     }
     return flag;
   }
@@ -552,8 +548,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
   public Boolean chechFocusStatus(ImageStatusParameter isp) {
 
     Boolean flag = false;
-    if (isp.getAstroFlag() <= 1 && isp.getAstroFlag() >= -1) {
-
+    if (isp.getAstroFlag() <= 1 && isp.getAstroFlag() >= -2) {
       if (isp.getXrms() != null && isp.getYrms() != null && isp.getAvgEllipticity() != null
               && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
               && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
@@ -578,8 +573,6 @@ public class ImageStatusParmServiceImpl implements BaseService {
 //                && isp.getBgBright() < 10000 && isp.getBgBright() > 1000;
 //        flag = s1 || s2;
       }
-    } else {
-      log.error("wrong focus parameter, skip!");
     }
     return flag;
   }
