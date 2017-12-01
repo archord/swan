@@ -38,7 +38,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     List<String> result = new ArrayList<>();
     String sql = "select distinct date_str from ot_observe_record;";
     if (history) {
-      sql = "select distinct date_str from ot_observe_record_his where date_str>'161003' order by date_str;";
+      sql = "select distinct date_str from ot_observe_record_his where date_str>'171126' order by date_str;";
     }
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);
