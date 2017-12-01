@@ -39,6 +39,14 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-c3p0</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-pool</artifactId>
     </dependency>
@@ -87,7 +95,6 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
-    <!-- Spring AOP + AspectJ -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
@@ -102,7 +109,6 @@
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
     </dependency>
-    <!--QuartzJobBean in spring-context-support.jar-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
@@ -123,14 +129,10 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
     </dependency>
-    
-    <!-- slf4j-log4j -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
     </dependency>
-    
-    <!--struts2-jquery-->
     <dependency>
       <groupId>com.jgeppert.struts2.jquery</groupId>
       <artifactId>struts2-jquery-plugin</artifactId>
@@ -191,7 +193,6 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <!--provided ��JDK ���������ṩ-->
       <scope>provided</scope>
     </dependency>
     <dependency>
