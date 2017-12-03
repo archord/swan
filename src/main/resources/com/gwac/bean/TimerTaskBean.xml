@@ -181,8 +181,8 @@
         <!--<ref bean="ot2CheckTrigger" />-->
         
         <!--<ref bean="fileTransferTrigger" />-->
-        <ref bean="dataSyncTrigger" />
-        <ref bean="monitorImageSyncTrigger" />
+        <!--<ref bean="dataSyncTrigger" />-->
+        <!--<ref bean="monitorImageSyncTrigger" />-->
         
         <!--<ref bean="importMoveObjectTrigger" />-->
       </list>
