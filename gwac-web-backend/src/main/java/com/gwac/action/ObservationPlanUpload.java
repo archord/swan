@@ -39,7 +39,7 @@ public class ObservationPlanUpload extends ActionSupport {
   @Resource
   private SystemStatusMonitorDao ssmDao;
 
-  private Long opSn;
+  private String opSn;
   private String opTime;
   private String opType;
   private String groupId;
@@ -72,6 +72,9 @@ public class ObservationPlanUpload extends ActionSupport {
     log.debug("observationPlan:" + getObsPlanString());
 
     ObservationPlan obsPlan = new ObservationPlan();
+    if (null != opSn && !opSn.isEmpty()) {
+      obsPlan.setOpSn(Long.parseLong(opSn));
+    }
     if (null != ra && !ra.isEmpty()) {
       obsPlan.setRa(Float.parseFloat(ra));
     }
@@ -112,7 +115,6 @@ public class ObservationPlanUpload extends ActionSupport {
     obsPlan.setObjError(objError);
     obsPlan.setObjId(objId);
     obsPlan.setObsType(obsType);
-    obsPlan.setOpSn(opSn);
     obsPlan.setOpType(opType); //???
     obsPlan.setUnitId(unitId);
 
@@ -162,7 +164,7 @@ public class ObservationPlanUpload extends ActionSupport {
       obsPlanDao.save(obsPlan);
       echo = "upload observation success!";
     }
-    ssmDao.updateObservationPlan(unitId, opSn);
+    ssmDao.updateObservationPlan(unitId, Long.parseLong(opSn));
     log.debug(echo);
     sendResultMsg(echo);
   }
@@ -248,7 +250,7 @@ public class ObservationPlanUpload extends ActionSupport {
   /**
    * @param opSn the opSn to set
    */
-  public void setOpSn(Long opSn) {
+  public void setOpSn(String opSn) {
     this.opSn = opSn;
   }
 
