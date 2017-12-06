@@ -344,6 +344,8 @@ $(function() {
       result = 'FWHM'; //图像匹配失败
     } else if (data === 8) {
       result = 'FMCH'; //图像匹配，未匹配到任何目标
+    } else if (data === 9) {
+      result = 'FHOT'; //图像匹配，未匹配到任何目标
     }
     return result;
   }

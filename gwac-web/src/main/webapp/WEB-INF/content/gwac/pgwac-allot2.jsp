@@ -92,7 +92,10 @@
               <option value="3">FNBG</option>
               <option value="4">FOBJ</option>
               <option value="5">FSUB</option>
-              <option value="6">FMCH</option>
+              <option value="6">FRMS</option>
+              <option value="7">FWHM</option>
+              <option value="8">FMCH</option>
+              <option value="9">FHOT</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
