@@ -387,7 +387,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
 //          FileUtils.moveFile(file, preFile);
           int toWidth = 400;
           int toHeight = 400;
-          getThumbnail(tpath, tname, tnameSub, toWidth, toHeight);
+          getThumbnail(tpath, tname, tnameSub, tfilename, toWidth, toHeight);
         } catch (IOException ex) {
           log.error("create thumbnail errror "+tfilename, ex);
         }
@@ -402,7 +402,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     }
   }
 
-  public void getThumbnail(String path, String src, String dest, int toWidth, int toHeight) {
+  public void getThumbnail(String path, String src, String dest, String fullName, int toWidth, int toHeight) {
 
     BufferedImage result = null;
     try {
@@ -416,7 +416,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         log.error("image " + src + " does not exist.");
       }
     } catch (IOException e) {
-      log.error("create thumbnail error "+src, e);
+      log.error("create thumbnail error "+fullName, e);
     }
   }
 
