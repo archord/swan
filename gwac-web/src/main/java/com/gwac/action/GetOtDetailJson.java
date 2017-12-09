@@ -55,7 +55,8 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
   private List<FitsFileCut> ffcList;
   private FitsFileCutRef ffcRef;
   private String otOpticalVaration;
-  private String otPositionVaration;
+  private String otxyVaration;
+  private String otxyTempVaration;
   private String dataRootWebMap;
   private UserInfo userInfo;
   private List<OtType> otTypes;
@@ -87,11 +88,13 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
       }
       String tmp[] = otorDao.getOtOpticalVaration(ot2, queryHis).split("=");
       otOpticalVaration = tmp[0];
-      otPositionVaration = tmp[1];
+      otxyVaration = tmp[1];
+      otxyTempVaration = tmp[2];
     } else {
       ffcList = new ArrayList();
       otOpticalVaration = "[]";
-      otPositionVaration = "[]";
+      otxyVaration = "[]";
+      otxyTempVaration = "[]";
     }
 
     return "json";
@@ -130,13 +133,6 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
    */
   public void setQueryHis(Boolean queryHis) {
     this.queryHis = queryHis;
-  }
-
-  /**
-   * @return the otPositionVaration
-   */
-  public String getOtPositionVaration() {
-    return otPositionVaration;
   }
 
   /**
@@ -184,6 +180,20 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
    */
   public List<OtType> getOtTypes() {
     return otTypes;
+  }
+
+  /**
+   * @return the otxyVaration
+   */
+  public String getOtxyVaration() {
+    return otxyVaration;
+  }
+
+  /**
+   * @return the otxyTempVaration
+   */
+  public String getOtxyTempVaration() {
+    return otxyTempVaration;
   }
 
 }

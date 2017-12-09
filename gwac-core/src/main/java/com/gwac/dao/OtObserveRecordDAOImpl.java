@@ -226,23 +226,8 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   @Override
   public String getOtOpticalVaration(OtLevel2 ot2, Boolean queryHis) {
     Session session = getCurrentSession();
-    String sql1 = "select oor.date_ut, oor.mag_aper ";
-    if (ot2.getDataProduceMethod() == '8') {
-      sql1 += ", oor.x, oor.y, oor.oor_id ";
-    } else {
-      sql1 += ", oor.x_temp, oor.y_temp, oor.oor_id ";
-    }
-    sql1 += " from ot_observe_record oor ";
-    sql1 += " where oor.ot_id=" + ot2.getOtId();
-
-    String sql2 = "select oorh.date_ut, oorh.mag_aper ";
-    if (ot2.getDataProduceMethod() == '8') {
-      sql2 += ", oorh.x, oorh.y, oorh.oor_id ";
-    } else {
-      sql2 += ", oorh.x_temp, oorh.y_temp, oorh.oor_id ";
-    }
-    sql2 += " from ot_observe_record_his oorh ";
-    sql2 += " where oorh.ot_id=" + ot2.getOtId();
+    String sql1 = "select oor.date_ut, oor.mag_aper , oor.x, oor.y, oor.x_temp, oor.y_temp, oor.oor_id  from ot_observe_record oor  where oor.ot_id=" + ot2.getOtId();
+    String sql2 = "select oorh.date_ut, oorh.mag_aper , oorh.x, oorh.y, oorh.x_temp, oorh.y_temp, oorh.oor_id  from ot_observe_record_his oorh  where oorh.ot_id=" + ot2.getOtId();
 
     String unionSql = "";
     if (queryHis) {
@@ -266,8 +251,10 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
 
     StringBuilder sb = new StringBuilder();
     StringBuilder sb2 = new StringBuilder();
+    StringBuilder sb3 = new StringBuilder();
     int i = 0;
     float x0 = 0, y0 = 0, xn, yn;
+    float xt0 = 0, yt0 = 0, xtn, ytn;
     while (itor.hasNext()) {
       Object[] row = (Object[]) itor.next();
       try {
@@ -287,6 +274,8 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         if (i == 0) {
           x0 = (Float) row[2];
           y0 = (Float) row[3];
+          xt0 = (Float) row[4];
+          yt0 = (Float) row[5];
           i++;
         }
         xn = (Float) row[2];
@@ -296,12 +285,21 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
         sb2.append(",");
         sb2.append(yn - y0);
         sb2.append("],");
+        
+        xtn = (Float) row[4];
+        ytn = (Float) row[5];
+        sb3.append("[");
+        sb3.append(xtn - xt0);
+        sb3.append(",");
+        sb3.append(ytn - yt0);
+        sb3.append("],");
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
     String tStr = sb.toString();
     String tStr2 = sb2.toString();
+    String tStr3 = sb3.toString();
     if (tStr.isEmpty()) {
       tStr = "[]";
     } else {
@@ -312,7 +310,12 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     } else {
       tStr2 = "[" + tStr2 + "]";
     }
-    return tStr + "=" + tStr2;
+    if (tStr3.isEmpty()) {
+      tStr3 = "[]";
+    } else {
+      tStr3 = "[" + tStr3 + "]";
+    }
+    return tStr + "=" + tStr2 + "=" + tStr3;
   }
 
   /**

@@ -51,7 +51,8 @@ $(function() {
     cutImgShow(data);
     otSkyCoordinateShow(data);
     otCurveShow(data);
-    otPositionShow(data);
+    otxyPositionShow(data);
+    otxytempPositionShow(data);
   }
 
   function initLoginInfo(data) {
@@ -512,8 +513,8 @@ $(function() {
     });
   }
 
-  function otPositionShow(data) {
-    var otPositionVaration = eval(data.otPositionVaration);
+  function otxyPositionShow(data) {
+    var otPositionVaration = eval(data.otxyVaration);
     if (typeof (otPositionVaration) === "undefined")
     {
       return;
@@ -539,7 +540,37 @@ $(function() {
     option1.lines.show = false;
     option1.yaxis.transform = formate3;
     option1.yaxis.inverseTransform = formate3;
-    otPosition = $.plot("#ot-position-curve", positionData, option1);
+    otxyPosition = $.plot("#ot-xy-curve", positionData, option1);
+  }
+  
+  function otxytempPositionShow(data) {
+    var otPositionVaration = eval(data.otxyTempVaration);
+    if (typeof (otPositionVaration) === "undefined")
+    {
+      return;
+    }
+    var firstPostion = [];
+    var lastPostion = [];
+    firstPostion[0] = otPositionVaration[0];
+    lastPostion[0] = otPositionVaration[otPositionVaration.length - 1];
+    var positionData = [{
+        data: otPositionVaration,
+        color: '#0099CC',
+        points: {radius: 1} //fillColor: '#77b7c5'
+      }, {
+        data: firstPostion,
+        color: '#FF6666',
+        points: {radius: 3, fill: true, fillColor: "#FF6666"} //fillColor: '#77b7c5'
+      }, {
+        data: lastPostion,
+        color: '#FF6666',
+        points: {radius: 3} //fillColor: '#77b7c5'
+      }
+    ];
+    option1.lines.show = false;
+    option1.yaxis.transform = formate3;
+    option1.yaxis.inverseTransform = formate3;
+    otxytempPosition = $.plot("#ot-xytemp-curve", positionData, option1);
   }
 
   function loadOT2FollowupObjects() {

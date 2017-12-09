@@ -104,10 +104,18 @@
               <div id="ot-curve"></div>
             </div>
             <div id="ot-position-show">
-              <div id="ot-position-show-title">
-                <span>OT坐标变化（与首帧差值，单位/像素，xy轴分别为模板XY坐标）</span>
+              <div id="ot-xy-show">
+                <div id="ot-xy-show-title">
+                  <span>OT坐标变化（与首帧差值，单位/像素，xy轴分别为XY坐标）</span>
+                </div>
+                <div id="ot-xy-curve"></div>
               </div>
-              <div id="ot-position-curve"></div>
+              <div id="ot-xytemp-show">
+                <div id="ot-xytemp-show-title">
+                  <span>OT坐标变化（与首帧差值，单位/像素，xy轴分别为模板XY坐标）</span>
+                </div>
+                <div id="ot-xytemp-curve"></div>
+              </div>
             </div>
           </div>
         </div>
