@@ -58,8 +58,6 @@ public final class RegOrigImageServiceImpl implements RegOrigImageService {
     } else if (tmount == null) {
       log.error("can not find groupId: " + groupId + ", unitId: " + unitId);
     } else {
-//        camId = imgName.substring(0, 1) + camId;
-      ObservationSky tsky = obsSkyDao.getByName(fieldId, gridId);
 
       String tDateStr = genTime;
       Integer subSecond = 0;
@@ -75,21 +73,27 @@ public final class RegOrigImageServiceImpl implements RegOrigImageService {
       tDateStr = tDateStr.replace('T', ' ');
       Date ffDate = CommonFunction.stringToDate(tDateStr, tDateFormate);
 
-      FileNumber fnum = new FileNumber();
-      fnum.setCamId(tcamera.getCameraId());
-      fnum.setSkyId(tsky.getSkyId());
-      fnum.setDateStr(dateStr);
-      int ffNumber = fnumDao.getNextNumber(fnum);
-
       FitsFile2 ff2 = new FitsFile2();
       ff2.setCamId(tcamera.getCameraId());
-      ff2.setFfNumber(ffNumber);
       ff2.setMountId(tmount.getMountId());
-      ff2.setSkyId(tsky.getSkyId());
       ff2.setGenTime(ffDate);
       ff2.setImgName(imgName);
       ff2.setImgPath(imgPath);
       ff2.setTimeSubSecond(subSecond);
+      if (null != fieldId && !fieldId.isEmpty() && !fieldId.equalsIgnoreCase("undefined")
+              && null != gridId && !gridId.isEmpty() && !gridId.equalsIgnoreCase("undefined")) {
+        ObservationSky tsky = obsSkyDao.getByName(fieldId, gridId);
+        FileNumber fnum = new FileNumber();
+        fnum.setCamId(tcamera.getCameraId());
+        fnum.setSkyId(tsky.getSkyId());
+        fnum.setDateStr(dateStr);
+        int ffNumber = fnumDao.getNextNumber(fnum);
+        ff2.setFfNumber(ffNumber);
+        ff2.setSkyId(tsky.getSkyId());
+      } else {
+        ff2.setFfNumber(0);
+        ff2.setSkyId(0);
+      }
       ff2Dao.save(ff2);
 
       log.debug("register " + imgName + " success.");
