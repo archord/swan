@@ -18,7 +18,6 @@ import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
 import com.gwac.model4.OtLevel2FollowParameter;
 import com.gwac.model.UserInfo;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,13 +30,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import static com.opensymphony.xwork2.Action.ERROR;
-import static com.opensymphony.xwork2.Action.INPUT;
-import static com.opensymphony.xwork2.Action.SUCCESS;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
 /* curl command example: */
@@ -133,6 +128,8 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
   }
 
   public void autoFollowUp() {
+
+    log.debug("start auto follow up, ot2name=" + ot2name);
 
     OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
 

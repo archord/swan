@@ -12,6 +12,7 @@ import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.dao.WebGlobalParameterDao;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,6 +51,8 @@ public class DataBackupServiceImpl implements BaseService {
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private CcdPixFilterDao cpfDao;
+  @Resource
+  private WebGlobalParameterDao webGlobalParameterDao;
 
   @Override
   public void startJob() {
@@ -79,6 +82,7 @@ public class DataBackupServiceImpl implements BaseService {
       dpmDao.everyDayInit();
       ufuDao.removeAll();
       cpfDao.removeAll();
+      webGlobalParameterDao.everyDayInit();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {

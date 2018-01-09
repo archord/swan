@@ -52,17 +52,17 @@ $(function() {
 
   function getAutoFollowUp() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var setParameterUrl = "get-app-parameter.action"
+    var setParameterUrl = "get-app-parameter2.action"
     var url = gwacRootURL + "/" + setParameterUrl;
     $.ajax({
       type: "get",
       url: url,
-      data: "app=1",
+      data: "parmName=AutoFollowUp",
       async: true,
       dataType: 'json',
       success: function(data) {
         console.log(data);
-        if (data.autoFollowUp) {
+        if (data.AutoFollowUp==='true') {
           $("#autoFollowUp").attr("checked", "true");
         } else {
           $("#autoFollowUp").removeAttr("checked");
@@ -73,13 +73,13 @@ $(function() {
 
   function setAutoFollowUp(val) {
     var gwacRootURL = $("#gwacRootURL").val();
-    var setParameterUrl = "set-app-parameter.action"
+    var setParameterUrl = "set-app-parameter2.action"
     var url = gwacRootURL + "/" + setParameterUrl;
     console.log(url);
     $.ajax({
       type: "get",
       url: url,
-      data: "autoFollowUp=" + val,
+      data: "parmName=AutoFollowUp&parmValue=" + val,
       async: true,
       dataType: 'json',
       success: function(data) {
