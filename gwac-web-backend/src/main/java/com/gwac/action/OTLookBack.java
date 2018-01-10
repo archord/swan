@@ -13,6 +13,7 @@ import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UserInfoDAO;
+import com.gwac.dao.WebGlobalParameterDao;
 import com.gwac.model.ApplicationParameters;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
@@ -22,6 +23,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -41,15 +43,15 @@ import org.springframework.jms.core.MessageCreator;
  * @author xy
  */
 public class OTLookBack extends ActionSupport implements ApplicationAware {
-
+  
   private static final Log log = LogFactory.getLog(OTLookBack.class);
-
+  
   private String ot2name;
   private Short flag; //图像相减有目标1，图像相减没有目标2, 0代表没处理或处理报错
   private String echo = "";
-
+  
   private Map<String, Object> appMap;
-
+  
   @Resource
   private OtLevel2Dao ot2Dao;
   @Resource
@@ -62,21 +64,34 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
   private Destination otFollowDest;
   @Resource
   private SystemStatusMonitorDao ssmDao;
-
+  @Resource
+  private WebGlobalParameterDao webGlobalParameterDao;
+  
   @Action(value = "otLookBack")
   public void upload() {
-
+    
     setEcho("");
 
     //必须设置望远镜名称
     if (null == ot2name || ot2name.isEmpty()) {
       setEcho(getEcho() + "Error, must set ot2name.\n");
     } else {
-      ApplicationParameters appParam = (ApplicationParameters) appMap.get("appParam");
-      if (flag == 1 && appParam != null && appParam.isAutoFollowUp()) {
+      
+      String parmName = "AutoFollowUp";
+      Map appParams = (Map) appMap.get("appParams");
+      if (appParams == null) {
+        appParams = new HashMap();
+      }
+      if (!appParams.containsKey(parmName)) {
+        String tval = webGlobalParameterDao.getValueByName(parmName);
+        appParams.put(parmName, tval);
+        appMap.put("appParam", appParams);
+      }
+      String parmValue = (String) appParams.get(parmName);
+      if (flag == 1 && parmValue.equalsIgnoreCase("true")) {
         autoFollowUp();
       }
-
+      
       OtLevel2 ot2 = new OtLevel2();
       ot2.setName(ot2name.trim());
       ot2.setLookBackResult(flag);
@@ -101,7 +116,7 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
         }
       }
       echo = "lookback success.\n";
-
+      
       String ip = ServletActionContext.getRequest().getRemoteAddr();
       String unitId = ip.substring(ip.lastIndexOf('.') + 1);
       if (unitId.length() < 3) {
@@ -109,13 +124,13 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
       }
       ssmDao.updateOt2LookBack(unitId, ot2name);
     }
-
+    
     log.debug(getEcho());
     sendResultMsg(echo);
   }
-
+  
   public void sendResultMsg(String msg) {
-
+    
     HttpServletResponse response = ServletActionContext.getResponse();
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out;
@@ -126,11 +141,11 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
       log.error("response error: ", ex);
     }
   }
-
+  
   public void autoFollowUp() {
-
+    
     log.debug("start auto follow up, ot2name=" + ot2name);
-
+    
     OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
 
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
@@ -138,7 +153,7 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
     if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)) {
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
       ot2Dao.updateFoCount(ot2);
-
+      
       OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
       ot2fp.setFollowName(String.format("%s_%03d", ot2name, ot2.getFoCount()));
       ot2fp.setDec(ot2.getDec());
@@ -150,7 +165,7 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
       ot2fp.setPriority(20);
       ot2fp.setOtName(ot2name);
       ot2fp.setUserName("gwac");
-
+      
       UserInfo user = userDao.getUserByLoginName("gwac");
       FollowUpObservation fo = new FollowUpObservation();
       fo.setBackImageCount(0);
@@ -172,7 +187,7 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
       fo.setTriggerType("AUTO"); //MANUAL AUTO
       fo.setTelescopeId(ot2fp.getTelescope());
       foDao.save(fo);
-
+      
       MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
       jmsTemplate.send(otFollowDest, tmc);
       log.debug(ot2fp.getTriggerMsg());
@@ -234,7 +249,7 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
   public void setOtFollowDest(Destination otFollowDest) {
     this.otFollowDest = otFollowDest;
   }
-
+  
   @Override
   public void setApplication(Map<String, Object> map) {
     this.appMap = map;
@@ -246,5 +261,5 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
   public void setUserDao(UserInfoDAO userDao) {
     this.userDao = userDao;
   }
-
+  
 }
