@@ -14,7 +14,6 @@ import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UserInfoDAO;
 import com.gwac.dao.WebGlobalParameterDao;
-import com.gwac.model.ApplicationParameters;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
 import com.gwac.model4.OtLevel2FollowParameter;
@@ -23,7 +22,6 @@ import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -32,7 +30,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.interceptor.ApplicationAware;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
@@ -42,7 +39,7 @@ import org.springframework.jms.core.MessageCreator;
 /**
  * @author xy
  */
-public class OTLookBack extends ActionSupport implements ApplicationAware {
+public class OTLookBack extends ActionSupport{
   
   private static final Log log = LogFactory.getLog(OTLookBack.class);
   
@@ -76,18 +73,7 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
     if (null == ot2name || ot2name.isEmpty()) {
       setEcho(getEcho() + "Error, must set ot2name.\n");
     } else {
-      
-      String parmName = "AutoFollowUp";
-      Map appParams = (Map) appMap.get("appParams");
-      if (appParams == null) {
-        appParams = new HashMap();
-      }
-      if (!appParams.containsKey(parmName)) {
-        String tval = webGlobalParameterDao.getValueByName(parmName);
-        appParams.put(parmName, tval);
-        appMap.put("appParam", appParams);
-      }
-      String parmValue = (String) appParams.get(parmName);
+      String parmValue = webGlobalParameterDao.getValueByName("AutoFollowUp");
       if (flag == 1 && parmValue.equalsIgnoreCase("true")) {
         autoFollowUp();
       }
@@ -248,11 +234,6 @@ public class OTLookBack extends ActionSupport implements ApplicationAware {
    */
   public void setOtFollowDest(Destination otFollowDest) {
     this.otFollowDest = otFollowDest;
-  }
-  
-  @Override
-  public void setApplication(Map<String, Object> map) {
-    this.appMap = map;
   }
 
   /**
