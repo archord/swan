@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.gwac.dao;
 
 import com.gwac.model.ObservationPlan;
@@ -12,7 +11,11 @@ import com.gwac.model.ObservationPlan;
  *
  * @author msw
  */
-public interface ObservationPlanDao extends BaseHibernateDao<ObservationPlan>{
-    public String findRecord(int start, int length);
-    public String getAllUnObservated();
+public interface ObservationPlanDao extends BaseHibernateDao<ObservationPlan> {
+
+  public String findRecord(int start, int length, String unitId, char executeStatus);
+
+  public Long findRecordCount(String unitId, char executeStatus);
+
+  public String getAllUnObservated();
 }

@@ -25,6 +25,8 @@ public class GetObservationPlanList extends ActionSupport {
   private int draw;
   private int start;
   private int length;
+  private String unitId;
+  private char executeStatus;
 
   /**
    * search result
@@ -39,13 +41,12 @@ public class GetObservationPlanList extends ActionSupport {
   @SuppressWarnings("unchecked")
 //  @Transactional(readOnly=true)
   public String execute() {
-    
-
-    dataStr = dao.getAllUnObservated();
+        
+    dataStr = dao.findRecord(start, length, unitId, executeStatus);
     if (dataStr == null) {
       dataStr = "[]";
     }
-    recordsTotal = dao.count().intValue();
+    recordsTotal = dao.findRecordCount(unitId, executeStatus).intValue();
     recordsFiltered = recordsTotal;
 
     return SUCCESS;
@@ -112,6 +113,20 @@ public class GetObservationPlanList extends ActionSupport {
    */
   public int getLength() {
     return length;
+  }
+
+  /**
+   * @param unitId the unitId to set
+   */
+  public void setUnitId(String unitId) {
+    this.unitId = unitId;
+  }
+
+  /**
+   * @param executeStatus the executeStatus to set
+   */
+  public void setExecuteStatus(char executeStatus) {
+    this.executeStatus = executeStatus;
   }
 
 }
