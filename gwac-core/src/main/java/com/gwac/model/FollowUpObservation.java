@@ -38,6 +38,10 @@ public class FollowUpObservation implements java.io.Serializable {
   private Short foObjCount;
   private String triggerType;
   private Short telescopeId;
+  private Date beginTime;
+  private Date endTime;
+  private char executeStatus;
+  private String processResult;
 
   public FollowUpObservation() {
   }
@@ -238,6 +242,68 @@ public class FollowUpObservation implements java.io.Serializable {
    */
   public void setTelescopeId(Short telescopeId) {
     this.telescopeId = telescopeId;
+  }
+
+  /**
+   * @return the beginTime
+   */
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "begin_time", length = 29)
+  public Date getBeginTime() {
+    return beginTime;
+  }
+
+  /**
+   * @param beginTime the beginTime to set
+   */
+  public void setBeginTime(Date beginTime) {
+    this.beginTime = beginTime;
+  }
+
+  /**
+   * @return the endTime
+   */
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "end_time", length = 29)
+  public Date getEndTime() {
+    return endTime;
+  }
+
+  /**
+   * @param endTime the endTime to set
+   */
+  public void setEndTime(Date endTime) {
+    this.endTime = endTime;
+  }
+
+  /**
+   * @return the executeStatus
+   */
+  @Column(name = "execute_status")
+  public char getExecuteStatus() {
+    return executeStatus;
+  }
+
+  /**
+   * @param executeStatus the executeStatus to set
+   */
+  public void setExecuteStatus(char executeStatus) {
+    this.executeStatus = executeStatus;
+  }
+
+  /**
+   * @return the processResult
+   */
+  @Column(name = "process_result")
+  public String getProcessResult() {
+    return processResult;
+  }
+
+  /**
+   * @param processResult the processResult to set
+   */
+  public void setProcessResult(String processResult) {
+    this.processResult = processResult;
   }
 
 }

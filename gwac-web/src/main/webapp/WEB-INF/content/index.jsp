@@ -48,11 +48,14 @@
             <a href="<%=request.getContextPath()%>/monitor/pctl-telescope-monitor.action" target="_blank" ><p class="multiline">望远镜监控</p></a>
             <a href="<%=request.getContextPath()%>/monitor/pgwac-monitor.action" target="_blank" ><p class="multiline">参数监控</p></a>
           </div>
+          <div class='mason-block x5'>
+            <a href="<%=request.getContextPath()%>/followup/followup-manage.action" target="_blank" ><p>后随观测</p></a>
+          </div>
           <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p class="multiline1">观测计划列表</p></a>     
             <a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p class="multiline">生成观测计划</p></a>
             <a href="<%=request.getContextPath()%>/control/pctl-observation-debug.action" target="_blank" ><p class="multiline">观测调试</p></a>
           </div>
-          <div class='mason-block x4'></a>     
+          <div class='mason-block x4'>
             <a href="<%=request.getContextPath()%>/monitor/pctl-mount-monitor.action" target="_blank" ><p>转台状态</p></a>
           </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表</p></a>     </div>

@@ -24,7 +24,9 @@ public class OTFollowMessageCreator implements MessageCreator {
 
     String followPlan = ot2fp.getTriggerMsg();
     Short tspId = ot2fp.getTelescope();
+    String followName = ot2fp.getFollowName();
     MapMessage message = session.createMapMessage();
+    message.setString("followName", followName);
     message.setString("followPlan", followPlan);
     message.setShort("tspId", tspId);
     log.debug("send to tspId " + tspId + ", followPlan message: " + followPlan);

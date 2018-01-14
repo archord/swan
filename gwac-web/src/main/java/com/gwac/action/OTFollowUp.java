@@ -79,6 +79,9 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         fo.setTriggerTime(new Date());
         fo.setTriggerType("MANUAL"); //MANUAL AUTO
         fo.setTelescopeId(ot2fp.getTelescope());
+        fo.setBeginTime(fo.getTriggerTime());
+        fo.setExecuteStatus('0');
+        fo.setProcessResult("unprocess");
         foDao.save(fo);
 
         MessageCreator tmc = new OTFollowMessageCreator(ot2fp);

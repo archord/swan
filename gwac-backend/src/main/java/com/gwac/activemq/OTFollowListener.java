@@ -1,8 +1,10 @@
 package com.gwac.activemq;
 
+import com.gwac.dao.FollowUpObservationDao;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import javax.annotation.Resource;
 import javax.jms.JMSException;
 
 import javax.jms.MapMessage;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class OTFollowListener implements MessageListener {
 
   private static final Log log = LogFactory.getLog(OTFollowListener.class);
-  
+
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
   @Value("#{syscfg.gwacServerTest}")
@@ -30,28 +32,37 @@ public class OTFollowListener implements MessageListener {
   private String server30IP;
   @Value("#{syscfg.gwacFollow30ServerPort}")
   private int server30Port;
+  
+  @Resource
+  private FollowUpObservationDao dao = null;
 
   @Override
   public void onMessage(Message message) {
     try {
+      
       MapMessage map = (MapMessage) message;
+      String followName = map.getString("followName");
       String followPlan = map.getString("followPlan");
       Short tspId = map.getShort("tspId");
+      log.debug("receive followName=" + followName);
       log.debug("receive followPlan=" + followPlan);
       log.debug("receive tspId=" + tspId);
+      
+      char executeStatus = '1';
+      dao.updateExecuteStatus(followName, executeStatus);
 
-      if (!isBeiJingServer&&!isTestServer) {
+      if (!isBeiJingServer && !isTestServer) {
         Socket socket = null;
         DataOutputStream out = null;
         String tIP;
         int tPort;
-        if(tspId==1){
+        if (tspId == 1) {
           tIP = serverIP;
           tPort = serverPort;
-        }else if(tspId==2){
+        } else if (tspId == 2) {
           tIP = server30IP;
           tPort = server30Port;
-        }else{
+        } else {
           log.debug("telescope error: tspId=" + tspId);
           return;
         }
