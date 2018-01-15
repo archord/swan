@@ -195,7 +195,7 @@ $(function() {
     var gwacRootURL = $("#gwacRootURL").val();
     var url = gwacRootURL + "/followup/followup-add.action";
     console.log(url);
-    openwindow(url, '_blank', 800, 350, 800, 350);
+    openwindow(url, '_blank', 830, 460, 830, 460);
   }
 
   function editFollowUpObs(data) {

@@ -47,6 +47,8 @@
           <input type="button" value="修改" class="btn btn-primary" id="editFuObsBtn"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="删除" class="btn btn-primary" id="delFuObsBtn"/>
+          <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <input type="button" value="配置默认后随参数" class="btn btn-primary" id="delFuObsBtn"/>
         </form>
       </div>
       <div id="ot-list">

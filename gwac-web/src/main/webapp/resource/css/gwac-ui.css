@@ -418,7 +418,7 @@
 #ot-list a.importantRC3:visited{
   color: #ffaad5;
 }
-.ot-list-top, .ot-list-body{
+.ot-list-top, .ot-list-body, .followup-form{
   /*background-color: #1bc5a3;*/
   font-size: 14px;
   margin: 5px 15px;
@@ -431,7 +431,7 @@
   border-bottom: 2px dashed #1abc9c;
 }
 
-.ot-list-top h4{
+.ot-list-top h4, .followup-form h4{
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: bold;
   white-space: nowrap;
