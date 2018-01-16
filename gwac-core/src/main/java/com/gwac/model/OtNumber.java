@@ -25,21 +25,15 @@ public class OtNumber implements java.io.Serializable {
   private Integer subNumber;
   private Integer jfwvNumber;
   private Integer jfovSubNumber;
+  private Integer followupNumber;
 
   public OtNumber() {
-  }
-
-  public OtNumber(long otnId) {
-    this.otnId = otnId;
-  }
-
-  public OtNumber(long otnId, String date, Integer number, Character otLevel, Integer varNumber, Integer subNumber) {
-    this.otnId = otnId;
-    this.date = date;
-    this.number = number;
-    this.otLevel = otLevel;
-    this.varNumber = varNumber;
-    this.subNumber = subNumber;
+    this.number = 0;
+    this.varNumber = 0;
+    this.subNumber = 0;
+    this.jfwvNumber = 0;
+    this.jfovSubNumber = 0;
+    this.followupNumber = 0;
   }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -142,6 +136,21 @@ public class OtNumber implements java.io.Serializable {
    */
   public void setJfovSubNumber(Integer jfovSubNumber) {
     this.jfovSubNumber = jfovSubNumber;
+  }
+
+  /**
+   * @return the followupNumber 
+   */
+  @Column(name = "followup_number")
+  public Integer getFollowupNumber() {
+    return followupNumber;
+  }
+
+  /**
+   * @param followupNumber the followupNumber to set
+   */
+  public void setFollowupNumber(Integer followupNumber) {
+    this.followupNumber = followupNumber;
   }
 
 }

@@ -26,20 +26,19 @@ public class OtLevel2FollowParameter {
   private String epoch;
   private String imageType;
   private Short telescope;
-  
-  public OtLevel2FollowParameter(){
-    this.triggerType="2";
-    this.epoch="2000";
-    this.imageType="LIGHT";
-    this.begineTime="-1";
-    this.endTime="-1";
-    this.priority = 10;
+  private String comment;
+
+  public OtLevel2FollowParameter() {
+    this.epoch = "2000";
+    this.imageType = "LIGHT";
+    this.begineTime = "-1";
+    this.endTime = "-1";
+    this.priority = 20;
   }
-  
-  
+
   //"append_plan mini-GWAC 2\n";
   //"append_object M151013_C00001 12.1 13.1 2000 LIGHT 2 10 R 10 -1 -1 M151013_C00001_001
-  public String getTriggerMsg(){
+  public String getTriggerMsg() {
     StringBuilder sb = new StringBuilder();
     sb.append("append_plan "); //append_plan update_object
     sb.append(userName);
@@ -49,7 +48,7 @@ public class OtLevel2FollowParameter {
     sb.append("append_object ");
     sb.append(otName);
     sb.append(" ");
-    sb.append(ra/15); //度转换为小时
+    sb.append(ra / 15); //度转换为小时
     sb.append(" ");
     sb.append(dec);
     sb.append(" ");
@@ -60,7 +59,7 @@ public class OtLevel2FollowParameter {
     sb.append(expTime);
     sb.append(" ");
     sb.append(frameCount);
-    sb.append(" "); 
+    sb.append(" ");
     sb.append(filter);
     sb.append(" ");
     sb.append(getPriority());
@@ -73,30 +72,30 @@ public class OtLevel2FollowParameter {
     sb.append("\n");
     return sb.toString();
   }
-  
+
   @Override
-  public String toString(){
-      return "userName=" + userName + ""
-              + "\n triggerType=" + triggerType
-              + "\n otName=" + otName
-              + "\n ra=" + ra
-              + "\n dec=" + dec
-              + "\n epoch=" + epoch
-              + "\n imageType=" + imageType
-              + "\n expTime=" + expTime
-              + "\n frameCount=" + frameCount
-              + "\n filter=" + filter
-              + "\n begineTime=" + begineTime
-              + "\n endTime=" + endTime
-              + "\n followName=" + followName
-              + "\n telescope=" + getTelescope();
+  public String toString() {
+    return "userName=" + userName + ""
+            + "\n triggerType=" + triggerType
+            + "\n otName=" + otName
+            + "\n ra=" + ra
+            + "\n dec=" + dec
+            + "\n epoch=" + epoch
+            + "\n imageType=" + imageType
+            + "\n expTime=" + expTime
+            + "\n frameCount=" + frameCount
+            + "\n filter=" + filter
+            + "\n begineTime=" + begineTime
+            + "\n endTime=" + endTime
+            + "\n followName=" + followName
+            + "\n telescope=" + getTelescope();
   }
-  
-  public Boolean isEmpty(){
-    
+
+  public Boolean isEmpty() {
+
     if (false) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
@@ -140,7 +139,11 @@ public class OtLevel2FollowParameter {
    * @param otName the otName to set
    */
   public void setOtName(String otName) {
-    this.otName = otName;
+    if (otName != null) {
+      this.otName = otName.trim();
+    } else {
+      this.otName = "";
+    }
   }
 
   /**
@@ -309,6 +312,20 @@ public class OtLevel2FollowParameter {
    */
   public void setTelescope(Short telescope) {
     this.telescope = telescope;
+  }
+
+  /**
+   * @return the comment
+   */
+  public String getComment() {
+    return comment;
+  }
+
+  /**
+   * @param comment the comment to set
+   */
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
 }

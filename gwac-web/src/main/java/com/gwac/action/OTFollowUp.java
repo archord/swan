@@ -3,11 +3,13 @@ package com.gwac.action;
 import com.gwac.activemq.OTFollowMessageCreator;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.UserInfoDAO;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
 import com.gwac.model4.OtLevel2FollowParameter;
 import com.gwac.model.UserInfo;
+import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
@@ -43,63 +45,84 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
   @Resource
   private OtLevel2Dao ot2Dao;
   @Resource
-  private UserInfoDAO userDao;
+  private OtNumberDao otnDao;
+  
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource(name="otFollowDest")
+  @Resource(name = "otFollowDest")
   private Destination otFollowDest;
 
   @SuppressWarnings("unchecked")
   public String execute() {
 
     if (ot2fp != null) {
-      
-      UserInfo user = userDao.getUserByLoginName(ot2fp.getUserName());
-      if (user != null) {
-        OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName(), false);
+      log.debug(ot2fp.toString());
+      UserInfo tuser = (UserInfo) session.get("userInfo");
+
+      OtLevel2 ot2 = null;
+      if (!ot2fp.getOtName().isEmpty()) {
+        ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName(), false);
         ot2.setFoCount((short) (ot2.getFoCount() + 1));
-//      ot2Dao.update(ot2);
         ot2Dao.updateFoCount(ot2);
         ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
-
-        FollowUpObservation fo = new FollowUpObservation();
-        fo.setBackImageCount(0);
-        fo.setDec(ot2fp.getDec());
-        fo.setEpoch(ot2fp.getEpoch());
-        fo.setExposeDuration((short) ot2fp.getExpTime());
-        fo.setFilter(ot2fp.getFilter());
-        fo.setFoName(ot2fp.getFollowName());
-        fo.setFoObjCount((short) 0);
-        fo.setFrameCount((short) ot2fp.getFrameCount());
-        fo.setImageType(ot2fp.getImageType());
-        fo.setOtId(ot2.getOtId());
-        fo.setPriority((short) ot2fp.getPriority());
-        fo.setRa(ot2fp.getRa());
-        fo.setUserId(user.getUiId());
-        fo.setTriggerTime(new Date());
-        fo.setTriggerType("MANUAL"); //MANUAL AUTO
-        fo.setTelescopeId(ot2fp.getTelescope());
-        fo.setBeginTime(fo.getTriggerTime());
-        fo.setExecuteStatus('0');
-        fo.setProcessResult("unprocess");
-        foDao.save(fo);
-
-        MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
-        jmsTemplate.send(otFollowDest, tmc);
-        log.debug(getOt2fp().getTriggerMsg());
-        setResult("success!");
-      } else {
-        setResult("cannot followup, please login!");
+      }else{
+        String dateStr = CommonFunction.getUniqueDateStr().substring(2);
+        int followNum = otnDao.getFollowupNumberByDate(dateStr);
+        String tName = String.format("F%s_X%05d", dateStr, followNum);
+        ot2fp.setFollowName(tName);
       }
+
+      FollowUpObservation fo = new FollowUpObservation();
+      fo.setBackImageCount(0);
+      fo.setRa(ot2fp.getRa());
+      fo.setDec(ot2fp.getDec());
+      fo.setEpoch(ot2fp.getEpoch());
+      fo.setExposeDuration((short) ot2fp.getExpTime());
+      fo.setFilter(ot2fp.getFilter());
+      fo.setFoName(ot2fp.getFollowName());
+      fo.setFoObjCount((short) 0);
+      fo.setFrameCount((short) ot2fp.getFrameCount());
+      fo.setImageType(ot2fp.getImageType());
+      if (ot2 != null) {
+        fo.setOtId(ot2.getOtId());
+      }
+      fo.setPriority((short) ot2fp.getPriority());
+      fo.setUserId(tuser.getUiId());
+      fo.setTriggerTime(new Date());
+      fo.setTriggerType(ot2fp.getTriggerType()); //MANUAL AUTO
+      if (!ot2fp.getBegineTime().isEmpty()) {
+        Date tdate = CommonFunction.stringToDate(ot2fp.getBegineTime(), "yyyy-MM-dd HH:mm:ss");
+        fo.setBeginTime(tdate);
+      } else {
+        fo.setBeginTime(fo.getTriggerTime());
+      }
+      if (!ot2fp.getEndTime().isEmpty()) {
+        Date tdate = CommonFunction.stringToDate(ot2fp.getEndTime(), "yyyy-MM-dd HH:mm:ss");
+        fo.setEndTime(tdate);
+      }
+      fo.setTelescopeId(ot2fp.getTelescope());
+      fo.setExecuteStatus('0');
+      fo.setProcessResult("UP");
+      if(!ot2fp.getComment().isEmpty()){
+        fo.setComment(ot2fp.getComment());
+      }
+
+      foDao.save(fo);
+
+      MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
+      jmsTemplate.send(otFollowDest, tmc);
+      log.debug(ot2fp.getTriggerMsg());
+      setResult("success!");
+    } else {
+      setResult("error!");
     }
 
     return SUCCESS;
   }
 
-
   @Override
   public void setSession(Map<String, Object> map) {
-    this.session = session;
+    this.session = map;
   }
 
   /**

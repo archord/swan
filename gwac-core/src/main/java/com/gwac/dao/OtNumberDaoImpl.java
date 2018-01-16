@@ -27,27 +27,16 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select * from ot_number where date='" + date + "'";
-    Query q = session.createSQLQuery(sql).addEntity(OtNumber.class);
+    String sql = "with updated_rows as (update ot_number set number=number+1 where date='" + date + "' returning *) select number from updated_rows ";
+    Query q = session.createSQLQuery(sql);
     List rstList = q.list();
     if (rstList.isEmpty()) {
       OtNumber otn = new OtNumber();
       otn.setDate(date);
       otn.setNumber(number);
-      otn.setVarNumber(0);
-      otn.setSubNumber(0);
-      otn.setJfovSubNumber(0);
-      otn.setJfwvNumber(0);
       super.save(otn);
     } else {
-      OtNumber otn = (OtNumber) rstList.get(0);
-      try {
-        number = otn.getNumber() + 1;
-        otn.setNumber(number);
-        super.update(otn);
-      } catch (ClassCastException cce) {
-        log.error(cce);
-      }
+      number = (Integer) rstList.get(0);
     }
 
     return number;
@@ -58,27 +47,16 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select * from ot_number where date='" + date + "'";
-    Query q = session.createSQLQuery(sql).addEntity(OtNumber.class);
+    String sql = "with updated_rows as (update ot_number set sub_number=sub_number+1 where date='" + date + "' returning *) select sub_number from updated_rows ";
+    Query q = session.createSQLQuery(sql);
     List rstList = q.list();
     if (rstList.isEmpty()) {
       OtNumber otn = new OtNumber();
       otn.setDate(date);
-      otn.setNumber(0);
-      otn.setVarNumber(0);
       otn.setSubNumber(number);
-      otn.setJfovSubNumber(0);
-      otn.setJfwvNumber(0);
       super.save(otn);
     } else {
-      OtNumber otn = (OtNumber) rstList.get(0);
-      try {
-        number = otn.getSubNumber() + 1;
-        otn.setSubNumber(number);
-        super.update(otn);
-      } catch (ClassCastException cce) {
-        log.error(cce);
-      }
+      number = (Integer) rstList.get(0);
     }
 
     return number;
@@ -89,57 +67,57 @@ public class OtNumberDaoImpl extends BaseHibernateDaoImpl<OtNumber> implements O
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select * from ot_number where date='" + date + "'";
-    Query q = session.createSQLQuery(sql).addEntity(OtNumber.class);
+    String sql = "with updated_rows as (update ot_number set jfov_number=jfov_number+1 where date='" + date + "' returning *) select jfov_number from updated_rows ";
+    Query q = session.createSQLQuery(sql);
     List rstList = q.list();
     if (rstList.isEmpty()) {
       OtNumber otn = new OtNumber();
       otn.setDate(date);
-      otn.setNumber(0);
-      otn.setVarNumber(0);
-      otn.setSubNumber(0);
-      otn.setJfovSubNumber(0);
       otn.setJfwvNumber(number);
       super.save(otn);
     } else {
-      OtNumber otn = (OtNumber) rstList.get(0);
-      try {
-        number = otn.getJfwvNumber() + 1;
-        otn.setJfwvNumber(number);
-        super.update(otn);
-      } catch (ClassCastException cce) {
-        log.error(cce);
-      }
+      number = (Integer) rstList.get(0);
     }
 
     return number;
   }
 
+  @Override
   public int getJfovSubNumberByDate(String date) {
 
     int number = 1;
     Session session = getCurrentSession();
-    String sql = "select * from ot_number where date='" + date + "'";
-    Query q = session.createSQLQuery(sql).addEntity(OtNumber.class);
+    String sql = "with updated_rows as (update ot_number set jfov_sub_number=jfov_sub_number+1 where date='" + date + "' returning *) select jfov_sub_number from updated_rows ";
+    Query q = session.createSQLQuery(sql);
     List rstList = q.list();
     if (rstList.isEmpty()) {
       OtNumber otn = new OtNumber();
       otn.setDate(date);
-      otn.setNumber(0);
-      otn.setVarNumber(0);
-      otn.setSubNumber(0);
       otn.setJfovSubNumber(number);
-      otn.setJfwvNumber(0);
       super.save(otn);
     } else {
-      OtNumber otn = (OtNumber) rstList.get(0);
-      try {
-        number = otn.getJfovSubNumber() + 1;
-        otn.setJfovSubNumber(number);
-        super.update(otn);
-      } catch (ClassCastException cce) {
-        log.error(cce);
-      }
+      number = (Integer) rstList.get(0);
+    }
+
+    return number;
+  }
+  
+
+  @Override
+  public int getFollowupNumberByDate(String date) {
+
+    int number = 1;
+    Session session = getCurrentSession();
+    String sql = "with updated_rows as (update ot_number set followup_number=followup_number+1 where date='" + date + "' returning *) select followup_number from updated_rows ";
+    Query q = session.createSQLQuery(sql);
+    List rstList = q.list();
+    if (rstList.isEmpty()) {
+      OtNumber otn = new OtNumber();
+      otn.setDate(date);
+      otn.setFollowupNumber(number);
+      super.save(otn);
+    } else {
+      number = (Integer) rstList.get(0);
     }
 
     return number;

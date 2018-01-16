@@ -110,7 +110,7 @@
                     手动生成观测计划</div>
                 </div>
               </div>
-              <form action="/gwebend/observationPlanUpload.action" id="genObsPlanForm">
+              <form action="${pageContext.request.contextPath}/gwebend/observationPlanUpload.action" id="genObsPlanForm">
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
                     <table>

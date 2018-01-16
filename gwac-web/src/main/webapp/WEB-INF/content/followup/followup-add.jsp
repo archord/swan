@@ -110,7 +110,7 @@
                     增加后随观测任务</div>
                 </div>
               </div>
-              <form action="/gwebend/observationPlanUpload.action" id="genObsPlanForm">
+              <form action="${pageContext.request.contextPath}/otFollowUp.action" id="genObsPlanForm">
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
                     <table>
@@ -125,12 +125,23 @@
                       <tr><td>本地恒星时：</td><td><input id="siderealTime" class="timeinput"/></td>
                         <td>儒略日：</td><td><input id="julDay" class="timeinput"/></td></tr>
 
-                      <tr><td>后随名称：</td><td><input name="followName" id="followName"/></td>
-                        <td>OT名称：</td><td><input name="otName" id="otName"/></td></tr>
+                      <tr><td>OT名称：</td><td><input name="ot2fp.otName" id="otName" title="非OT2后随时，可以为空"/></td>
+                        <td>优先级：</td><td>
+                          <select height="30" name="ot2fp.priority" id="priority">
+                            <option value="10">10</option>
+                            <option value="20" selected="selected">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                            <option value="60">60</option>
+                            <option value="70">70</option>
+                            <option value="80">80</option>
+                            <option value="90">90</option>
+                          </select></td></tr>
                       <tr><td>赤经(度)：</td>
-                        <td><input name="ra" id="ra" style="text-align: right;width: 200px;" value="0"/></td>
+                        <td><input name="ot2fp.ra" id="ra" style="text-align: right;width: 200px;" value="0"/></td>
                         <td>赤纬(度)：</td>
-                        <td><input name="dec" id="dec" style="text-align: right;width: 200px;" value="0"/></td></tr>
+                        <td><input name="ot2fp.dec" id="dec" style="text-align: right;width: 200px;" value="0"/></td></tr>
                       <tr><td>赤经(时分秒)：</td>
                         <td>
                           <input id="rah" style="width:40px;text-align: right;" value="0"/>时
@@ -142,31 +153,25 @@
                           <input id="decm" style="width:40px;text-align: right;" value="0"/>分
                           <input id="decs" style="width:40px;text-align: right;" value="0"/>秒</td></tr>
                       <tr><td>望远镜：</td><td>
-                          <select height="30" name="telescope" id="telescope">
+                          <select height="30" name="ot2fp.telescope" id="telescope">
                             <option value="1" selected>60公分</option>
                             <option value="2">30公分</option>
                           </select></td>
                         <td>滤光片：</td><td>
-                          <select height="30" name="filter" id="filter">
+                          <select height="30" name="ot2fp.filter" id="filter">
                           </select></td></tr>
-                      <tr><td>曝光时间：</td><td><input name="expTime" id="expTime" /></td>
-                        <td>帧数：</td><td><input name="frameCount" id="frameCount"/></td></tr>
-                      <tr><td>优先级：</td><td>
-                          <select height="30" name="priority" id="priority">
-                            <option value="10">10</option>
-                            <option value="20" selected="selected">20</option>
-                            <option value="30">30</option>
-                            <option value="40">40</option>
-                            <option value="50">50</option>
-                            <option value="60">60</option>
-                            <option value="70">70</option>
-                            <option value="80">80</option>
-                            <option value="90">90</option>
-                          </select></td>
-                        <td> </td><td> </td></tr>
-                      <tr><td>开始时间：</td><td><input name="begineTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td>
-                        <td>结束时间：</td><td><input name="endTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td></tr>
-                      <tr><td colspan="4" style="text-align:center;"><button type="button" id="genObsPlanBtn">增加后随任务</button></td></tr>
+                      <tr><td>曝光时间：</td><td><input name="ot2fp.expTime" id="expTime" /></td>
+                        <td>帧数：</td><td><input name="ot2fp.frameCount" id="frameCount"/></td></tr>
+                      <tr><td>开始时间：</td><td><input name="ot2fp.begineTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td>
+                        <td>结束时间：</td><td><input name="ot2fp.endTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td></tr>
+                      <tr><td>备注：</td>
+                        <td colspan="3">
+                          <textarea name="ot2fp.comment"  rows="2"  style="width: 600px;margin: 2px;"></textarea>
+                        </td></tr>
+                      <tr><td colspan="4" style="text-align:center;">
+                          <input type="hidden" name="ot2fp.triggerType" value="TIMING"/>
+                          <button type="button" id="genObsPlanBtn">增加后随任务</button>
+                        </td></tr>
                     </table>
                   </div>
                 </div>

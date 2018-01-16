@@ -42,6 +42,7 @@ public class FollowUpObservation implements java.io.Serializable {
   private Date endTime;
   private char executeStatus;
   private String processResult;
+  private String comment;
 
   public FollowUpObservation() {
   }
@@ -304,6 +305,21 @@ public class FollowUpObservation implements java.io.Serializable {
    */
   public void setProcessResult(String processResult) {
     this.processResult = processResult;
+  }
+
+  /**
+   * @return the comment
+   */
+  @Column(name = "comment")
+  public String getComment() {
+    return comment;
+  }
+
+  /**
+   * @param comment the comment to set
+   */
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
 }

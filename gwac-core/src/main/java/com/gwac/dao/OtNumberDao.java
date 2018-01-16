@@ -15,4 +15,5 @@ public interface OtNumberDao extends BaseHibernateDao<OtNumber>{
   public int getSubNumberByDate(String date);
   public int getJfovNumberByDate(String date);
   public int getJfovSubNumberByDate(String date);
+  public int getFollowupNumberByDate(String date);
 }

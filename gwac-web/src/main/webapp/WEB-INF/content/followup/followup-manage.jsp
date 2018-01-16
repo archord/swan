@@ -42,21 +42,29 @@
             <option value="1">已执行任务</option>
           </select>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <select id="executeStatus" name="executeStatus" style="font-size: 14px; height: 30px;">
+            <option value="a">分类</option>
+            <option value="0" selected="selected">NewOT</option>
+            <option value="1">MiniOT</option>
+            <option value="2">GWACOT</option>
+            <option value="3">CheckOT</option>
+          </select>
+          <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="增加" class="btn btn-primary" id="addFuObsBtn"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <input type="button" value="修改" class="btn btn-primary" id="editFuObsBtn"/>
+          <input type="button" value="修改" class="btn btn-primary" id="editFuObsBtn" title="在选择多个时，默认只修改第一个的信息"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <input type="button" value="删除" class="btn btn-primary" id="delFuObsBtn"/>
+          <input type="button" value="删除" class="btn btn-primary" id="delFuObsBtn" title="在选择多个时，多个都删除"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="配置默认后随参数" class="btn btn-primary" id="delFuObsBtn"/>
         </form>
       </div>
       <div id="ot-list">
         <table id="obs-plan-table" class="display" cellspacing="0" width="100%">
-          <thead><tr><th></th><th>开始时间</th><th>名称</th><th>OT2</th><th>望远镜</th><th title="(RA-DEC)J2000">位置</th><th>曝光时间</th><th>帧数</th>
+          <thead><tr><th></th><th>开始时间</th><th>后随名称</th><th>OT2</th><th>望远镜</th><th title="(RA-DEC)J2000">位置</th><th>曝光时间</th><th>帧数</th>
               <th>滤光片</th><th>优先级</th><th>触发类型</th><th>观测者</th><th>状态</th><th>结果</th><th>登记时间</th></tr></thead>
 
-          <tfoot><tr><th></th><th>开始时间</th><th>名称</th><th>OT2</th><th>望远镜</th><th title="(RA-DEC)J2000">位置</th><th>曝光时间</th><th>帧数</th>
+          <tfoot><tr><th></th><th>开始时间</th><th>后随名称</th><th>OT2</th><th>望远镜</th><th title="(RA-DEC)J2000">位置</th><th>曝光时间</th><th>帧数</th>
               <th>滤光片</th><th>优先级</th><th>触发类型</th><th>观测者</th><th>状态</th><th>结果</th><th>登记时间</th></tr></tfoot>
         </table>
       </div>  

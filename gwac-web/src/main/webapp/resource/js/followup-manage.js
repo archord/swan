@@ -54,6 +54,10 @@ $(function() {
           "data": "ID?",
           "render": formateRowNumber
         }, {
+          "targets": 1,
+          "data": "startTime",
+          "render": formateTime
+        }, {
           "targets": 3,
           "data": "ot2_name",
           "render": formateOt2
@@ -69,6 +73,10 @@ $(function() {
           "targets": 12,
           "data": "executeStatus",
           "render": formateExecuteStatus
+        }, {
+          "targets": 14,
+          "data": "triggerTime",
+          "render": formateTime
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -140,19 +148,14 @@ $(function() {
   function formateExpusore(data, type, full, meta) {
     return full.expusore_during + "(" + full.delay + ")";
   }
-  function formateStartEndTime(data, type, full, meta) {
-    var endTime = full.end_time;
-    var beginTime = full.begin_time;
-    if (beginTime === null) {
-      beginTime = '_';
-    }
-    if (endTime !== null & endTime !== undefined && endTime.length > 0) {
-      //endTime = endTime.substring(endTime.indexOf(" "));
-      endTime = endTime
+  function formateTime(data, type, full, meta) {
+    var tstr = "";
+    if (data !== null & data !== undefined && data.length > 0) {
+      tstr = data.substring(0, data.indexOf("."));
     } else {
-      endTime = '_';
+      tstr = '_';
     }
-    return beginTime + "至" + endTime;
+    return tstr;
   }
   //.toFixed(3)
   function formateObjPosition(data, type, full, meta) {
@@ -195,7 +198,7 @@ $(function() {
     var gwacRootURL = $("#gwacRootURL").val();
     var url = gwacRootURL + "/followup/followup-add.action";
     console.log(url);
-    openwindow(url, '_blank', 830, 460, 830, 460);
+    openwindow(url, '_blank', 830, 490, 830, 490);
   }
 
   function editFollowUpObs(data) {
