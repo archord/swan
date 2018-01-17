@@ -1,6 +1,5 @@
 
 $(function() {
-  var gwacRootURL = $("#gwacRootURL").val();
 
   initPage();
 
@@ -14,7 +13,7 @@ $(function() {
     $("#decm").change(check60);
     $("#decs").change(check60);
     setGroupIds();
-    
+
     setFilter60();
     $("#telescope").change(function() {
       if ($("#telescope").val() === '2') {
@@ -23,6 +22,46 @@ $(function() {
         setFilter60();
       }
     });
+
+    initEditPage();
+  }
+
+  function initEditPage() {
+    var path = window.location.href;
+    console.log(path);
+    if (path.indexOf("foId") > 0) {
+      $("#manual_container_title").html("修改后随观测任务");
+      var foId = getUrlVars()["foId"];
+      var gwacRootURL = $("#gwacRootURL").val();
+      var turl = gwacRootURL + "/get-followup-observation.action";
+      $.ajax({
+        type: "get",
+        url: turl,
+        data: 'foId='+foId,
+        async: false,
+        dataType: 'json',
+        success: function(data) {
+          var tObj = eval(data.dataStr)[0];
+//          $("#otName").val(tObj.otName);
+          $("#otName").val(tObj.fo_name.substring(0, 14));
+          $("#foName").val(tObj.fo_name);
+          $("#priority").val(tObj.priority);
+          $("#ra").val(tObj.ra);
+          $("#dec").val(tObj.dec);
+          $("#telescope").val(tObj.telescope_id);
+          $("#filter").val(tObj.filter);
+          $("#expTime").val(tObj.expose_duration);
+          $("#frameCount").val(tObj.frame_count);
+          $("#begineTime").val(tObj.begin_time);
+          $("#endTime").val(tObj.end_time);
+          $("#comment").val(tObj.comment);
+          $("#triggerType").val(tObj.trigger_type);
+          $("#imageType").val(tObj.image_type);
+          $("#foId").val(tObj.fo_id);
+          $("#epoch").val(tObj.epoch);
+        }
+      });
+    }
   }
 
   function setGroupIds() {
@@ -49,6 +88,7 @@ $(function() {
   }
 
   function setFieldIds() {
+    var gwacRootURL = $("#gwacRootURL").val();
     var fieldIdsUrl = gwacRootURL + "/get-field-ids.action";
     var groupId = $('#gridId').val();
     $("#fieldId").empty();
@@ -73,50 +113,14 @@ $(function() {
   }
 
   function ot2QueryBtnClick() {
-    var groupId = $("#groupId").val();
-    var unitId = $("#unitId").val();
-    var obsType = $("#obsType").val();
-    var imgType = $("#imgType").val();
-    var gridId = $("#gridId").val();
-    var fieldId = $("#fieldId").val();
-    var rah = $("#rah").val();
-    var ram = $("#ram").val();
-    var ras = $("#ras").val();
-    var decd = $("#decd").val();
-    var decm = $("#decm").val();
-    var decs = $("#decs").val();
-    var expusoreDuring = $("#expusoreDuring").val();
-    var delay = $("#delay").val();
+    var expTime = $("#expTime").val();
     var frameCount = $("#frameCount").val();
-    var priority = $("#priority").val();
-    if (groupId === "") {
-      alert("请选择望远镜组")
+    if (expTime === "") {
+      alert("请填写曝光时间");
       return;
     }
-    if (unitId === "") {
-      alert("请选择转台")
-      return;
-    }
-    if (obsType === "") {
-      alert("请选择观测类型")
-      return;
-    }
-    if (imgType === "") {
-      alert("请选择图像类型")
-      return;
-    }
-    if ((gridId === "" || fieldId === "") &&
-            ((rah === "" || rah === "0") && (ram === "" || ram === "0") && (ras === "" || ras === "0") &&
-                    (decd === "" || decd === "0") && (decm === "" || decm === "0") && (decs === "" || decs === "0"))) {
-      alert("请选择观测天区或填写观测坐标")
-      return;
-    }
-    if (expusoreDuring === "") {
-      alert("请填写曝光时间")
-      return;
-    }
-    if (delay === "") {
-      alert("请填写曝光延迟")
+    if (frameCount === "") {
+      alert("请填写帧数");
       return;
     }
 
@@ -133,11 +137,11 @@ $(function() {
         async: true,
         success: function(data) {
           console.log(data);
-          alert("成功生成观测计划！");
+          alert("成功添加后随任务！");
         }
       });
     } else {
-      var msg = "please select valid observation plan parameters!";
+      var msg = "请选择合理的后随参数!";
       console.log(msg);
       alert(msg);
     }
@@ -585,8 +589,8 @@ $(function() {
       X = X + 1.0;
     return X;
   }
-  
-  
+
+
   function setFilter60() {
     var filter60 = ["Lum", "Green", "R", "Blue", "V", "I", "B", "Red", "U", "null"];
     $('#filter').find('option').remove();
@@ -599,7 +603,7 @@ $(function() {
     $("#filter").val('R');
     $("#filter").change();
   }
-  
+
   function setFilter30() {
     var filter30 = ["null", "R", "B", "I", "U", "V"];
     $('#filter').find('option').remove();
@@ -613,5 +617,17 @@ $(function() {
     $("#filter").change();
   }
 
+  function getUrlVars()
+  {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < hashes.length; i++)
+    {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  }
 });
 

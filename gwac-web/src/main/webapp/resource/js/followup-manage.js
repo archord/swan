@@ -5,11 +5,47 @@ $(function() {
   loadObsPlanList();
   $('#executeStatus').change(onTelescopeChange);
   $('#addFuObsBtn').click(addFollowUpObs);
+  $('#editFuObsBtn').click(editFollowUpObs);
+  $('#delFuObsBtn').click(addFollowUpObs);
 
   function onTelescopeChange() {
     var formData = $("#getUnDonePlanForm").serialize();
     var queryUrl = $("#getUnDonePlanForm").attr('action') + "?timestamp=" + new Date().getTime() + "&" + formData;
     obsPlanTable.ajax.url(queryUrl).load();
+  }
+
+  function addFollowUpObs() {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var url = gwacRootURL + "/followup/followup-add.action";
+    console.log(url);
+    openwindow(url, '_blank', 830, 520, 830, 520);
+  }
+
+  function editFollowUpObs() {
+    var opIds = [];
+    $('input[name="opIds"]').each(function() {
+      if ($(this).is(':checked')) {
+        opIds.push($(this).val());
+      }
+    });
+    if (opIds.length !== 1) {
+      alert("请选择一个任务，且只能选择一个后随任务！")
+    } else {
+      var gwacRootURL = $("#gwacRootURL").val();
+      var url = gwacRootURL + "/followup/followup-add.action?foId=" + opIds[0];
+      console.log(url);
+      openwindow(url, '_blank', 830, 520, 830, 520);
+    }
+  }
+
+  function delFollowUpObs() {
+    var opIds = [];
+    $('input[name="opIds"]').each(function() {
+      if ($(this).is(':checked')) {
+        opIds.push($(this).val());
+      }
+    });
+    console.log(opIds);
   }
 
   function loadObsPlanList() {
@@ -100,7 +136,7 @@ $(function() {
 
   function formateRowNumber(data, type, full, meta) {
 //    return "<span>" +(meta.row + 1)+"<input type='checkbox'/></span>";
-    return "<span><input type='checkbox' value='" + data + "'/></span>";
+    return "<span><input name='opIds' type='checkbox' value='" + data + "'/></span>";
   }
 
   function formateRaDec(data, type, full, meta) {
@@ -192,25 +228,6 @@ $(function() {
       if (new RegExp("(" + k + ")").test(fmt))
         fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
-  }
-
-  function addFollowUpObs() {
-    var gwacRootURL = $("#gwacRootURL").val();
-    var url = gwacRootURL + "/followup/followup-add.action";
-    console.log(url);
-    openwindow(url, '_blank', 830, 490, 830, 490);
-  }
-
-  function editFollowUpObs(data) {
-    var gwacRootURL = $("#gwacRootURL").val();
-    var url = gwacRootURL + "/followup/followup-add.action";
-    openwindow(url, '_blank', 1050, 600, 1050, 600);
-  }
-
-  function deleteFollowUpObs(data) {
-    var gwacRootURL = $("#gwacRootURL").val();
-    var url = gwacRootURL + "/followup/followup-add.action";
-    openwindow(url, '_blank', 600, 300, 600, 300);
   }
 
   function openwindow(url, name, width, height, iWidth, iHeight)

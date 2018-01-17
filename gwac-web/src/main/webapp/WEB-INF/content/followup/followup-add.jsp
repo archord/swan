@@ -106,7 +106,7 @@
             <div class="manual_container1">
               <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 " >
-                  <div class="manual_container_title">
+                  <div class="manual_container_title" id="manual_container_title">
                     增加后随观测任务</div>
                 </div>
               </div>
@@ -154,7 +154,7 @@
                           <input id="decs" style="width:40px;text-align: right;" value="0"/>秒</td></tr>
                       <tr><td>望远镜：</td><td>
                           <select height="30" name="ot2fp.telescope" id="telescope">
-                            <option value="1" selected>60公分</option>
+                            <option value="1">60公分</option>
                             <option value="2">30公分</option>
                           </select></td>
                         <td>滤光片：</td><td>
@@ -162,15 +162,32 @@
                           </select></td></tr>
                       <tr><td>曝光时间：</td><td><input name="ot2fp.expTime" id="expTime" /></td>
                         <td>帧数：</td><td><input name="ot2fp.frameCount" id="frameCount"/></td></tr>
-                      <tr><td>开始时间：</td><td><input name="ot2fp.begineTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td>
-                        <td>结束时间：</td><td><input name="ot2fp.endTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td></tr>
+                      <tr><td>开始时间：</td><td><input name="ot2fp.begineTime" id="begineTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td>
+                        <td>结束时间：</td><td><input name="ot2fp.endTime" id="endTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td></tr>
+                      <tr><td>图像类型：</td><td>
+                          <select height="30" name="ot2fp.imageType" id="imageType">
+                            <option value="BIAS">BIAS</option>
+                            <option value="DARK">DARK</option>
+                            <option value="FLAT">FLAT</option>
+                            <option value="LIGHT" selected="selected">LIGHT</option>
+                            <option value="FOCUS">FOCUS</option>
+                          </select></td>
+                        <td>触发类型：</td><td>
+                          <select height="30" name="ot2fp.triggerType" id="triggerType">
+                            <option value="AUTO">AUTO</option>
+                            <option value="MANUAL">MANUAL</option>
+                            <option value="PLANNING"  selected="selected">PLANNING</option>
+                          </select></td></tr>
                       <tr><td>备注：</td>
                         <td colspan="3">
                           <textarea name="ot2fp.comment"  rows="2"  style="width: 600px;margin: 2px;"></textarea>
                         </td></tr>
                       <tr><td colspan="4" style="text-align:center;">
-                          <input type="hidden" name="ot2fp.triggerType" value="TIMING"/>
-                          <button type="button" id="genObsPlanBtn">增加后随任务</button>
+                          <input type="hidden" name="ot2fp.foName" id="foName" value=""/>
+                          <input type="hidden" name="ot2fp.foId" id="foId" value=""/>
+                          <input type="hidden" name="ot2fp.epoch" id="epoch" value="2000"/>
+                          <input type="hidden" name="ot2fp.triggerType" value="PLANNING"/>
+                          <button type="button" id="genObsPlanBtn">提交</button>
                         </td></tr>
                     </table>
                   </div>

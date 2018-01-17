@@ -4,7 +4,6 @@ import com.gwac.activemq.OTFollowMessageCreator;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
-import com.gwac.dao.UserInfoDAO;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
 import com.gwac.model4.OtLevel2FollowParameter;
@@ -39,6 +38,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
 
   private String result = "";
   private OtLevel2FollowParameter ot2fp;
+  private Integer foId;
 
   @Resource
   private FollowUpObservationDao foDao;
@@ -46,7 +46,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
   private OtLevel2Dao ot2Dao;
   @Resource
   private OtNumberDao otnDao;
-  
+
   @Resource
   private JmsTemplate jmsTemplate;
   @Resource(name = "otFollowDest")
@@ -65,7 +65,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         ot2.setFoCount((short) (ot2.getFoCount() + 1));
         ot2Dao.updateFoCount(ot2);
         ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
-      }else{
+      } else {
         String dateStr = CommonFunction.getUniqueDateStr().substring(2);
         int followNum = otnDao.getFollowupNumberByDate(dateStr);
         String tName = String.format("F%s_X%05d", dateStr, followNum);
@@ -102,19 +102,29 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       }
       fo.setTelescopeId(ot2fp.getTelescope());
       fo.setExecuteStatus('0');
-      fo.setProcessResult("UP");
-      if(!ot2fp.getComment().isEmpty()){
+      fo.setProcessResult("");
+      if (!ot2fp.getComment().isEmpty()) {
         fo.setComment(ot2fp.getComment());
       }
 
-      foDao.save(fo);
+      if (foId != null) {
+        fo.setFoId(foId);
+        foDao.update(fo);
+      } else {
+        foDao.save(fo);
+      }
 
-      MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
-      jmsTemplate.send(otFollowDest, tmc);
-      log.debug(ot2fp.getTriggerMsg());
-      setResult("success!");
+      try {
+        MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
+        jmsTemplate.send(otFollowDest, tmc);
+        log.debug(ot2fp.getTriggerMsg());
+        setResult("success!");
+      } catch (Exception e) {
+        setResult("send followup message error!");
+        log.error("send followup message error:", e);
+      }
     } else {
-      setResult("error!");
+      setResult("parameter error!");
     }
 
     return SUCCESS;
@@ -151,6 +161,13 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
    */
   public void setOt2fp(OtLevel2FollowParameter ot2fp) {
     this.ot2fp = ot2fp;
+  }
+
+  /**
+   * @param foId the foId to set
+   */
+  public void setFoId(Integer foId) {
+    this.foId = foId;
   }
 
 }

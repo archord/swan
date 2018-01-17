@@ -52,9 +52,9 @@
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="增加" class="btn btn-primary" id="addFuObsBtn"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <input type="button" value="修改" class="btn btn-primary" id="editFuObsBtn" title="在选择多个时，默认只修改第一个的信息"/>
+          <input type="button" value="修改" class="btn btn-primary" id="editFuObsBtn"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <input type="button" value="删除" class="btn btn-primary" id="delFuObsBtn" title="在选择多个时，多个都删除"/>
+          <input type="button" value="删除" class="btn btn-primary" id="delFuObsBtn"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="配置默认后随参数" class="btn btn-primary" id="delFuObsBtn"/>
         </form>
