@@ -13,6 +13,8 @@ import com.gwac.model.Telescope;
  */
 public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObservation> {
   
+  public String getById(int foId);
+  
   public void updateExecuteStatus(String followName, char executeStatus);
 
   public String findRecord(int start, int length, char executeStatus);

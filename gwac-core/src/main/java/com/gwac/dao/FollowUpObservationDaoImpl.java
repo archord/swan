@@ -17,7 +17,24 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObservation> implements FollowUpObservationDao {
-  
+
+  @Override
+  public String getById(int foId) {
+
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT tmp1.*) r))) from("
+            + "SELECT fuo.*, ui.name user_name FROM follow_up_observation fuo "
+            + "inner join user_info ui on ui.ui_id=fuo.user_id "
+            + "where fuo.fo_id=" + foId
+            + " )as tmp1";
+    System.out.println(sql);
+    String rst = "";
+    Query q = this.getCurrentSession().createSQLQuery(sql);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
   @Override
   public void updateExecuteStatus(String followName, char executeStatus) {
     Session session = getCurrentSession();
