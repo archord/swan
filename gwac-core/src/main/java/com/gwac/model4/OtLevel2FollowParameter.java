@@ -31,8 +31,6 @@ public class OtLevel2FollowParameter {
   public OtLevel2FollowParameter() {
     this.epoch = "2000";
     this.imageType = "LIGHT";
-    this.begineTime = "-1";
-    this.endTime = "-1";
     this.priority = 20;
   }
 

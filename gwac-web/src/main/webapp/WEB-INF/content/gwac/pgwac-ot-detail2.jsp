@@ -74,7 +74,7 @@
                   </select>
                 </td>
                 <td>
-                  <input type="hidden" name="ot2fp.triggerType" value="INSTANT"/>
+                  <input type="hidden" name="ot2fp.triggerType" value="1"/>
                   <input type="button" value="后随" class="btn btn-primary" id="followBtn"/>
                 </td>
               </tr>

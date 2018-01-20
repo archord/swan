@@ -98,17 +98,17 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       fo.setTriggerType(ot2fp.getTriggerType()); //0:AUTO; 1:MANUAL, 2:PLANNING
       fo.setTelescopeId(ot2fp.getTelescope());
       fo.setProcessResult('0');
-      if (!ot2fp.getComment().isEmpty()) {
+      if (ot2fp.getComment()!=null&&!ot2fp.getComment().isEmpty()) {
         fo.setComment(ot2fp.getComment());
       }
 
-      if (!ot2fp.getBegineTime().isEmpty()) {
+      if (ot2fp.getBegineTime()!=null&&!ot2fp.getBegineTime().isEmpty()) {
         Date tdate = CommonFunction.stringToDate(ot2fp.getBegineTime(), "yyyy-MM-dd HH:mm:ss");
         fo.setBeginTime(tdate);
       } else {
         fo.setBeginTime(fo.getTriggerTime());
       }
-      if (!ot2fp.getEndTime().isEmpty()) {
+      if (ot2fp.getEndTime()!=null&&!ot2fp.getEndTime().isEmpty()) {
         Date tdate = CommonFunction.stringToDate(ot2fp.getEndTime(), "yyyy-MM-dd HH:mm:ss");
         fo.setEndTime(tdate);
       }
