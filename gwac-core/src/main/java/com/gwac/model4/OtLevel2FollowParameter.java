@@ -22,7 +22,7 @@ public class OtLevel2FollowParameter {
   private String begineTime;
   private String endTime;
   private String followName;
-  private String triggerType;
+  private char triggerType;
   private String epoch;
   private String imageType;
   private Short telescope;
@@ -117,14 +117,14 @@ public class OtLevel2FollowParameter {
   /**
    * @return the triggerType
    */
-  public String getTriggerType() {
+  public char getTriggerType() {
     return triggerType;
   }
 
   /**
    * @param triggerType the triggerType to set
    */
-  public void setTriggerType(String triggerType) {
+  public void setTriggerType(char triggerType) {
     this.triggerType = triggerType;
   }
 

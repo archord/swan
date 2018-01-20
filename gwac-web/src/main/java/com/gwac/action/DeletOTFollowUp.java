@@ -1,14 +1,6 @@
 package com.gwac.action;
 
-import com.gwac.activemq.OTFollowMessageCreator;
 import com.gwac.dao.FollowUpObservationDao;
-import com.gwac.dao.OtLevel2Dao;
-import com.gwac.dao.OtNumberDao;
-import com.gwac.model.FollowUpObservation;
-import com.gwac.model.OtLevel2;
-import com.gwac.model4.OtLevel2FollowParameter;
-import com.gwac.model.UserInfo;
-import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
@@ -20,7 +12,6 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.SessionAware;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 
 /**
  * 目前已经被GetOtLevel2List取代

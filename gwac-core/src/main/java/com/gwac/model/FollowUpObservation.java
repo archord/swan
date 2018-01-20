@@ -36,7 +36,7 @@ public class FollowUpObservation implements java.io.Serializable {
   private Integer backImageCount;
   private String foParmFile;
   private Short foObjCount;
-  private String triggerType;
+  private char triggerType;
   private Short telescopeId;
   private Date beginTime;
   private Date endTime;
@@ -45,30 +45,6 @@ public class FollowUpObservation implements java.io.Serializable {
   private String comment;
 
   public FollowUpObservation() {
-  }
-
-  public FollowUpObservation(long foId) {
-    this.foId = foId;
-  }
-
-  public FollowUpObservation(long foId, String foName, Long otId, Integer userId, Float ra, Float dec, String epoch, String imageType, Short exposeDuration, Short frameCount, String filter, Short priority, Date triggerTime, Integer backImageCount, String foParmFile, Short foObjCount, String triggerType) {
-    this.foId = foId;
-    this.foName = foName;
-    this.otId = otId;
-    this.userId = userId;
-    this.ra = ra;
-    this.dec = dec;
-    this.epoch = epoch;
-    this.imageType = imageType;
-    this.exposeDuration = exposeDuration;
-    this.frameCount = frameCount;
-    this.filter = filter;
-    this.priority = priority;
-    this.triggerTime = triggerTime;
-    this.backImageCount = backImageCount;
-    this.foParmFile = foParmFile;
-    this.foObjCount = foObjCount;
-    this.triggerType = triggerType;
   }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -221,12 +197,12 @@ public class FollowUpObservation implements java.io.Serializable {
     this.foObjCount = foObjCount;
   }
 
-  @Column(name = "trigger_type", length = 10)
-  public String getTriggerType() {
+  @Column(name = "trigger_type", length = 1)
+  public char getTriggerType() {
     return this.triggerType;
   }
 
-  public void setTriggerType(String triggerType) {
+  public void setTriggerType(char triggerType) {
     this.triggerType = triggerType;
   }
 

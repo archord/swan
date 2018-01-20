@@ -36,10 +36,16 @@
       <div style="width:100%; text-align: center; margin-top: 20px;">
         <form action="${pageContext.request.contextPath}/get-fllowup-list.action" id="getUnDonePlanForm" method="post">
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <select id="triggerType" name="triggerType" style="font-size: 14px; height: 30px;">
+            <option value="a" selected="selected">全部</option>
+            <option value="0">AUTO</option>
+            <option value="1">MANUAL</option>
+            <option value="2">PLANNING</option>
+          </select>
           <select id="executeStatus" name="executeStatus" style="font-size: 14px; height: 30px;">
-            <option value="a">全部任务</option>
-            <option value="0" selected="selected">未执行任务</option>
-            <option value="1">已执行任务</option>
+            <option value="a">全部</option>
+            <option value="0">未执行任务</option>
+            <option value="1" selected="selected">已执行任务</option>
             <option value="2">过时</option>
             <option value="3">删除</option>
           </select>
@@ -58,7 +64,7 @@
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="删除" class="btn btn-primary" id="delFuObsBtn"/>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <input type="button" value="配置默认后随参数" class="btn btn-primary" id="delFuObsBtn"/>
+          <input type="button" value="配置默认后随参数" class="btn btn-primary" id="folowupParmSetBtn"/>
         </form>
       </div>
       <div id="ot-list">

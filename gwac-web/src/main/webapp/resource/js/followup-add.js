@@ -12,7 +12,6 @@ $(function() {
     $("#decd").change(check90);
     $("#decm").change(check60);
     $("#decs").change(check60);
-    setGroupIds();
 
     setFilter60();
     $("#telescope").change(function() {
@@ -65,54 +64,6 @@ $(function() {
         }
       });
     }
-  }
-
-  function setGroupIds() {
-    var gwacRootURL = $("#gwacRootURL").val();
-    var groupIdsUrl = gwacRootURL + "/get-group-ids.action";
-    $.ajax({
-      type: "get",
-      url: groupIdsUrl,
-      data: 'p1=1',
-      async: false,
-      dataType: 'json',
-      success: function(data) {
-        var groupIds = data.groupIds;
-        $.each(groupIds, function(i, item) {
-          if (item.ottName !== "未分类")
-            $('#gridId').append($('<option>', {
-              value: item,
-              text: item
-            }));
-        });
-      }
-    });
-    $('#gridId').change(setFieldIds);
-  }
-
-  function setFieldIds() {
-    var gwacRootURL = $("#gwacRootURL").val();
-    var fieldIdsUrl = gwacRootURL + "/get-field-ids.action";
-    var groupId = $('#gridId').val();
-    $("#fieldId").empty();
-    $('#fieldId').append($('<option>', {value: "", text: "未选择"}));
-    $.ajax({
-      type: "get",
-      url: fieldIdsUrl,
-      data: 'groupId=' + groupId,
-      async: false,
-      dataType: 'json',
-      success: function(data) {
-        var fieldIds = data.fieldIds;
-        $.each(fieldIds, function(i, item) {
-          if (item.ottName !== "未分类")
-            $('#fieldId').append($('<option>', {
-              value: item,
-              text: item
-            }));
-        });
-      }
-    });
   }
 
   function ot2QueryBtnClick() {

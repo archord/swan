@@ -94,7 +94,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         fo.setUserId(tuser.getUiId());
       }
       fo.setTriggerTime(new Date());
-      fo.setTriggerType(ot2fp.getTriggerType()); //MANUAL AUTO
+      fo.setTriggerType(ot2fp.getTriggerType()); //0:AUTO; 1:MANUAL, 2:PLANNING
       fo.setTelescopeId(ot2fp.getTelescope());
       fo.setProcessResult("");
       if (!ot2fp.getComment().isEmpty()) {

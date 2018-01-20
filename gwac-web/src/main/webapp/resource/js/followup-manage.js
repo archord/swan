@@ -7,6 +7,7 @@ $(function() {
   $('#addFuObsBtn').click(addFollowUpObs);
   $('#editFuObsBtn').click(editFollowUpObs);
   $('#delFuObsBtn').click(delFollowUpObs);
+  $('#folowupParmSetBtn').click(folowupParmSet);
 
   function onTelescopeChange() {
     var formData = $("#getUnDonePlanForm").serialize();
@@ -63,8 +64,13 @@ $(function() {
     }
   }
 
+  function folowupParmSet() {
+    var url = $("#gwacRootURL").val() + "/followup/followup-parm.action";
+    openwindow(url, '_blank', 830, 250, 830, 250);
+  }
+
   function loadObsPlanList() {
-    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?executeStatus=0&timestamp=" + new Date().getTime() 
+    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?executeStatus=1&timestamp=" + new Date().getTime()
     obsPlanTable = $('#obs-plan-table').DataTable({
       serverSide: true,
       "deferRender": true,
@@ -121,6 +127,10 @@ $(function() {
           "data": "position(ra,dec)",
           "render": formatePosition
         }, {
+          "targets": 10,
+          "data": "triggerType",
+          "render": formateTriggerType
+        }, {
           "targets": 12,
           "data": "executeStatus",
           "render": formateExecuteStatus
@@ -176,6 +186,17 @@ $(function() {
     var name = "60公分";
     if (full.telescope_id === 2) {
       name = "30公分";
+    }
+    return name;
+  }
+  function formateTriggerType(data, type, full, meta) {
+    var name = "未知";
+    if (data === '0') {
+      name = "AUTO";
+    } else if (data === '1') {
+      name = "MANUAL";
+    } else if (data === '2') {
+      name = "PLANNING";
     }
     return name;
   }

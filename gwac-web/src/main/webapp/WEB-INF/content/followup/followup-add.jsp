@@ -10,7 +10,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex">
-    <title>GWAC观测-增加后随观测任务</title>
+    <title>GWAC观测-管理后随观测任务</title>
     <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="pragma" content="no-cache" />
@@ -174,9 +174,9 @@
                           </select></td>
                         <td>触发类型：</td><td>
                           <select height="30" name="ot2fp.triggerType" id="triggerType">
-                            <option value="AUTO">AUTO</option>
-                            <option value="MANUAL">MANUAL</option>
-                            <option value="PLANNING"  selected="selected">PLANNING</option>
+                            <option value="0">AUTO</option>
+                            <option value="1">MANUAL</option>
+                            <option value="2"  selected="selected">PLANNING</option>
                           </select></td></tr>
                       <tr><td>备注：</td>
                         <td colspan="3">

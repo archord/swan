@@ -139,16 +139,23 @@ public class OTLookBack extends ActionSupport {
     if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)) {
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
       ot2Dao.updateFoCount(ot2);
+      
+      
+      String filter = webGlobalParameterDao.getValueByName("Filter");
+      String frameCount = webGlobalParameterDao.getValueByName("FrameCount");
+      String exposeDuration = webGlobalParameterDao.getValueByName("ExposeDuration");
+      String telescope = webGlobalParameterDao.getValueByName("Telescope");
+      String priority = webGlobalParameterDao.getValueByName("Priority");
 
       OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
       ot2fp.setFollowName(String.format("%s_%03d", ot2name, ot2.getFoCount()));
       ot2fp.setDec(ot2.getDec());
       ot2fp.setRa(ot2.getRa());
-      ot2fp.setExpTime((short) 20);
-      ot2fp.setFilter("R");
-      ot2fp.setFrameCount(5);
-      ot2fp.setTelescope((short) 1);
-      ot2fp.setPriority(20);
+      ot2fp.setExpTime(Short.parseShort(exposeDuration));
+      ot2fp.setFilter(filter);
+      ot2fp.setFrameCount(Integer.parseInt(frameCount));
+      ot2fp.setTelescope(Short.parseShort(telescope));
+      ot2fp.setPriority(Integer.parseInt(priority));
       ot2fp.setOtName(ot2name);
       ot2fp.setUserName("gwac");
 
@@ -170,7 +177,7 @@ public class OTLookBack extends ActionSupport {
         fo.setUserId(user.getUiId());
       }
       fo.setTriggerTime(new Date());
-      fo.setTriggerType("AUTO"); //MANUAL AUTO
+      fo.setTriggerType('0'); //0:AUTO; 1:MANUAL, 2:PLANNING
       fo.setTelescopeId(ot2fp.getTelescope());
       fo.setBeginTime(fo.getTriggerTime());
       fo.setExecuteStatus('1');
