@@ -135,6 +135,10 @@ $(function() {
           "data": "executeStatus",
           "render": formateExecuteStatus
         }, {
+          "targets": 13,
+          "data": "executeStatus",
+          "render": formateProcessResult
+        }, {
           "targets": 14,
           "data": "triggerTime",
           "render": formateTime
@@ -197,6 +201,19 @@ $(function() {
       name = "MANUAL";
     } else if (data === '2') {
       name = "PLANNING";
+    }
+    return name;
+  }
+  function formateProcessResult(data, type, full, meta) {
+    var name = "未处理";
+    if (data === '0') {
+      name = "未处理";
+    } else if (data === '1') {
+      name = "MINIOT";
+    } else if (data === '2') {
+      name = "CATAS";
+    } else if (data === '3') {
+      name = "NEWOT";
     }
     return name;
   }
