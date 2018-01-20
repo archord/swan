@@ -28,7 +28,6 @@ $(function() {
 
   function initEditPage() {
     var path = window.location.href;
-    console.log(path);
     if (path.indexOf("foId") > 0) {
       $("#manual_container_title").html("修改后随观测任务");
       var foId = getUrlVars()["foId"];
@@ -37,13 +36,16 @@ $(function() {
       $.ajax({
         type: "get",
         url: turl,
-        data: 'foId='+foId,
+        data: 'foId=' + foId,
         async: false,
         dataType: 'json',
         success: function(data) {
           var tObj = eval(data.dataStr)[0];
+          console.log(tObj);
 //          $("#otName").val(tObj.otName);
-          $("#otName").val(tObj.fo_name.substring(0, 14));
+          if (tObj.fo_name.trim().length === 18) {
+            $("#otName").val(tObj.fo_name.substring(0, 14));
+          }
           $("#foName").val(tObj.fo_name);
           $("#priority").val(tObj.priority);
           $("#ra").val(tObj.ra);
@@ -59,6 +61,7 @@ $(function() {
           $("#imageType").val(tObj.image_type);
           $("#foId").val(tObj.fo_id);
           $("#epoch").val(tObj.epoch);
+          $("#comment").val(tObj.comment);
         }
       });
     }
@@ -124,20 +127,18 @@ $(function() {
       return;
     }
 
-    var formData = $("#genObsPlanForm").serialize() + "&opSn=0&pairId=0&epoch=2000&opTime="
-            + encodeURI(new Date().Format("yyyy-MM-dd hh:mm:ss"));
+    var formData = $("#genObsPlanForm").serialize();
     var formUrl = $("#genObsPlanForm").attr('action');
     if (formData !== '') {
-      var queryUrl = formUrl + "?timestamp=" + new Date().getTime() + "&" + formData;
-      console.log(queryUrl);
+      var queryUrl = formUrl;
       $.ajax({
         type: "post",
-        url: formUrl,
+        url: queryUrl,
         data: formData,
         async: true,
         success: function(data) {
           console.log(data);
-          alert("成功添加后随任务！");
+          alert("提交成功！");
         }
       });
     } else {

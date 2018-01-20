@@ -180,13 +180,12 @@
                           </select></td></tr>
                       <tr><td>备注：</td>
                         <td colspan="3">
-                          <textarea name="ot2fp.comment"  rows="2"  style="width: 600px;margin: 2px;"></textarea>
+                          <textarea name="ot2fp.comment" id="comment"  rows="2"  style="width: 600px;margin: 2px;"></textarea>
                         </td></tr>
                       <tr><td colspan="4" style="text-align:center;">
                           <input type="hidden" name="ot2fp.foName" id="foName" value=""/>
-                          <input type="hidden" name="ot2fp.foId" id="foId" value=""/>
+                          <input type="hidden" name="foId" id="foId" value=""/>
                           <input type="hidden" name="ot2fp.epoch" id="epoch" value="2000"/>
-                          <input type="hidden" name="ot2fp.triggerType" value="PLANNING"/>
                           <button type="button" id="genObsPlanBtn">提交</button>
                         </td></tr>
                     </table>

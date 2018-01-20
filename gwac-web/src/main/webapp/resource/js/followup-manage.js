@@ -6,7 +6,7 @@ $(function() {
   $('#executeStatus').change(onTelescopeChange);
   $('#addFuObsBtn').click(addFollowUpObs);
   $('#editFuObsBtn').click(editFollowUpObs);
-  $('#delFuObsBtn').click(addFollowUpObs);
+  $('#delFuObsBtn').click(delFollowUpObs);
 
   function onTelescopeChange() {
     var formData = $("#getUnDonePlanForm").serialize();
@@ -45,11 +45,26 @@ $(function() {
         opIds.push($(this).val());
       }
     });
-    console.log(opIds);
+    if (opIds.length === 0) {
+      alert("请至少选择一个任务！")
+    } else {
+      var url = $("#gwacRootURL").val() + "/followup/deleteOtFollowUp.action?foIds=" + opIds;
+      console.log(url);
+      $.ajax({
+        type: "get",
+        url: url,
+        data: "p1=1",
+        async: true,
+        success: function(data) {
+          console.log(data);
+          alert("删除成功！");
+        }
+      });
+    }
   }
 
   function loadObsPlanList() {
-    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?executeStatus=0";
+    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?executeStatus=0&timestamp=" + new Date().getTime() 
     obsPlanTable = $('#obs-plan-table').DataTable({
       serverSide: true,
       "deferRender": true,
@@ -147,7 +162,7 @@ $(function() {
   /*full: json对象；meta：表格元素*/
   function formateOt2(data, type, full, meta) {
     var content = "";
-    if (full.fo_name.length === 20) {//fo_name后面有两个空格
+    if (full.fo_name.trim().length === 18) {//fo_name在数据库中定长为20
       var name = full.fo_name.substring(0, 14);
       var gwacRootURL = $("#gwacRootURL").val();
       var searchUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=" + name;
@@ -174,6 +189,8 @@ $(function() {
       name = "过时";
     } else if (data === '3') {
       name = "删除";
+    } else if (data === '4') {
+      name = "已发送";
     }
     return name;
   }

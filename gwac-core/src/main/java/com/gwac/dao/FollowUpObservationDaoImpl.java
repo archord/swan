@@ -19,6 +19,12 @@ import org.springframework.stereotype.Repository;
 public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObservation> implements FollowUpObservationDao {
 
   @Override
+  public void deleteByIds(String foIds) {
+    String sql = "update follow_up_observation set execute_status='3' where fo_id in(" + foIds + ")"; //execute_status='3'代表被删除
+    this.getCurrentSession().createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
   public String getById(int foId) {
 
     String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT tmp1.*) r))) from("

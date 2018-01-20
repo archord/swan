@@ -173,8 +173,8 @@ public class OTLookBack extends ActionSupport {
       fo.setTriggerType("AUTO"); //MANUAL AUTO
       fo.setTelescopeId(ot2fp.getTelescope());
       fo.setBeginTime(fo.getTriggerTime());
-      fo.setExecuteStatus('0');
-      fo.setProcessResult("unprocess");
+      fo.setExecuteStatus('1');
+      fo.setProcessResult("");
       foDao.save(fo);
 
       MessageCreator tmc = new OTFollowMessageCreator(ot2fp);

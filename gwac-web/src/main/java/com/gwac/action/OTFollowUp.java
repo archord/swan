@@ -58,6 +58,9 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
     if (ot2fp != null) {
       log.debug(ot2fp.toString());
       UserInfo tuser = (UserInfo) session.get("userInfo");
+      if (null != tuser) {
+        ot2fp.setUserName(tuser.getLoginName());
+      }
 
       OtLevel2 ot2 = null;
       if (!ot2fp.getOtName().isEmpty()) {
@@ -87,9 +90,17 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         fo.setOtId(ot2.getOtId());
       }
       fo.setPriority((short) ot2fp.getPriority());
-      fo.setUserId(tuser.getUiId());
+      if (null != tuser) {
+        fo.setUserId(tuser.getUiId());
+      }
       fo.setTriggerTime(new Date());
       fo.setTriggerType(ot2fp.getTriggerType()); //MANUAL AUTO
+      fo.setTelescopeId(ot2fp.getTelescope());
+      fo.setProcessResult("");
+      if (!ot2fp.getComment().isEmpty()) {
+        fo.setComment(ot2fp.getComment());
+      }
+
       if (!ot2fp.getBegineTime().isEmpty()) {
         Date tdate = CommonFunction.stringToDate(ot2fp.getBegineTime(), "yyyy-MM-dd HH:mm:ss");
         fo.setBeginTime(tdate);
@@ -100,28 +111,29 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         Date tdate = CommonFunction.stringToDate(ot2fp.getEndTime(), "yyyy-MM-dd HH:mm:ss");
         fo.setEndTime(tdate);
       }
-      fo.setTelescopeId(ot2fp.getTelescope());
-      fo.setExecuteStatus('0');
-      fo.setProcessResult("");
-      if (!ot2fp.getComment().isEmpty()) {
-        fo.setComment(ot2fp.getComment());
+
+      long tsecond = (fo.getBeginTime().getTime() - new Date().getTime()) / 1000;
+      if (tsecond < 60) {
+        try {
+          MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
+          jmsTemplate.send(otFollowDest, tmc);
+          log.debug(ot2fp.getTriggerMsg());
+          setResult("success!");
+        } catch (Exception e) {
+          setResult("send followup message error!");
+          log.error("send followup message error:", e);
+        }
+        fo.setExecuteStatus('1');
+      } else {
+        fo.setExecuteStatus('0');
       }
 
       if (foId != null) {
+        System.out.println("foId=" + foId);
         fo.setFoId(foId);
         foDao.update(fo);
       } else {
         foDao.save(fo);
-      }
-
-      try {
-        MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
-        jmsTemplate.send(otFollowDest, tmc);
-        log.debug(ot2fp.getTriggerMsg());
-        setResult("success!");
-      } catch (Exception e) {
-        setResult("send followup message error!");
-        log.error("send followup message error:", e);
       }
     } else {
       setResult("parameter error!");
