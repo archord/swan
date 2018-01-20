@@ -73,6 +73,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         int followNum = otnDao.getFollowupNumberByDate(dateStr);
         String tName = String.format("F%s_X%05d", dateStr, followNum);
         ot2fp.setFollowName(tName);
+        ot2fp.setOtName("null"); //用于发送后随计划时填充字段
       }
 
       FollowUpObservation fo = new FollowUpObservation();
@@ -96,7 +97,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       fo.setTriggerTime(new Date());
       fo.setTriggerType(ot2fp.getTriggerType()); //0:AUTO; 1:MANUAL, 2:PLANNING
       fo.setTelescopeId(ot2fp.getTelescope());
-      fo.setProcessResult("");
+      fo.setProcessResult('0');
       if (!ot2fp.getComment().isEmpty()) {
         fo.setComment(ot2fp.getComment());
       }

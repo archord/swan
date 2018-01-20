@@ -18,6 +18,8 @@ public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObserva
   public String getById(int foId);
   
   public void updateExecuteStatus(String followName, char executeStatus);
+  
+  public void updateProcessResult(String followName, char result);
 
   public String findRecord(int start, int length, char executeStatus);
   

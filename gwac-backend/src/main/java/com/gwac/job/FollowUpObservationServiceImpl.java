@@ -101,22 +101,25 @@ public class FollowUpObservationServiceImpl implements BaseService {
     if (!ufus.isEmpty()) {
       for (UploadFileUnstore obj : ufus) {
         parseFollowUpInfo(obj.getUfuId(), obj.getStorePath(), obj.getFileName());
-        ufuDao.updateProcessDoneTime(obj.getUfuId());
+//        ufuDao.updateProcessDoneTime(obj.getUfuId());
       }
     }
   }
 
   public void parseFollowUpInfo(long ufuId, String storePath, String fileName) {
 
-    String ot2Name = fileName.substring(0, 14);
-    String foName = fileName.substring(0, 18);
-//    String foName = fileName.substring(0, 14) + "_001";
-
-    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name, false);
-    if (ot2 == null) {
-      log.error("can not find OtLevel2:" + ot2Name);
-      return;
+    String foName, ot2Name;
+    long ot2Id = 0;
+    if (fileName.charAt(0) == 'F' && fileName.charAt(8) == 'X') {
+      foName = fileName.substring(0, 14);
+      ot2Name = null;
+    } else {
+      foName = fileName.substring(0, 18);
+      ot2Name = fileName.substring(0, 14);
+      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name, false);
+      ot2Id = ot2.getOtId();
     }
+
     FollowUpObservation fo = foDao.getByName(foName);
     if (fo == null) {
       log.error("can not find FollowUpObservation:" + foName);
@@ -178,29 +181,32 @@ public class FollowUpObservationServiceImpl implements BaseService {
       }
 
       for (FollowUpCatalog obj : checkObjs) {
-        saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), checkId);
+        saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), checkId);
       }
 
       if (miniotObjs.size() > 0) {
+        foDao.updateProcessResult(foName, '1'); //MINIOT:1, CATAS:2, NEWOT:3
         for (FollowUpCatalog obj : miniotObjs) {
-          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), miniotId);
+          saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), miniotId);
         }
       } else if (catasObjs.size() > 0) {
+        foDao.updateProcessResult(foName, '2');
         for (FollowUpCatalog obj : catasObjs) {
-          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), catasId);
+          saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), catasId);
         }
       } else if (newotObjs.size() > 0) {
+        foDao.updateProcessResult(foName, '3');
         for (FollowUpCatalog obj : newotObjs) {
-          saveFollowUpCatalog(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+          saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
         }
         /*//只有一个NewOT时，才存储
          if (newotObjs.size() == 1) {
          for (FollowUpCatalog obj : newotObjs) {
-         saveFollowUpCatalogNewOt(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+         saveFollowUpCatalogNewOt(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
          }
          } else {
          for (FollowUpCatalog obj : newotObjs) {
-         saveNewOtRecord(obj, ot2.getOtId(), fo.getFoId(), fuf.getFufId(), newotId);
+         saveNewOtRecord(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
          }
          }*/
       }
@@ -361,6 +367,5 @@ public class FollowUpObservationServiceImpl implements BaseService {
     fur.setFufId(fufId);
     frDao.save(fur);
   }
-
 
 }

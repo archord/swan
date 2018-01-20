@@ -49,6 +49,13 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
   }
 
   @Override
+  public void updateProcessResult(String followName, char result) {
+    Session session = getCurrentSession();
+    String sql = "update follow_up_observation set process_result='" + result + "' where fo_name='" + followName + "' ";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
   public String findRecord(int start, int length, char executeStatus) {
 
     String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT tmp1.*) r))) from("

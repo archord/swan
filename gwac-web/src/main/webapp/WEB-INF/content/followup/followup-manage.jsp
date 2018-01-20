@@ -50,12 +50,11 @@
             <option value="3">删除</option>
           </select>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <select id="executeStatus" name="executeStatus" style="font-size: 14px; height: 30px;">
-            <option value="a">分类</option>
-            <option value="0" selected="selected">NewOT</option>
-            <option value="1">MiniOT</option>
-            <option value="2">GWACOT</option>
-            <option value="3">CheckOT</option>
+          <select id="processResult" name="processResult" style="font-size: 14px; height: 30px;">
+            <option value="0" selected="selected">未处理</option>
+            <option value="1">MINIOT</option>
+            <option value="2">CATAS</option>
+            <option value="3">NEWOT</option>
           </select>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="增加" class="btn btn-primary" id="addFuObsBtn"/>

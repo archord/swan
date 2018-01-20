@@ -96,12 +96,6 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
       flag = false;
     }
 
-    //必须设置后随OT的名称
-    if (null == ot2name || ot2name.isEmpty()) {
-      setEcho(echo + "Error, must set ot2name.\n");
-      flag = false;
-    }
-
     //必须设置后随名称
     if (null == followname || followname.isEmpty()) {
       setEcho(echo + "Error, must set followname.\n");
@@ -121,39 +115,34 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
     }
 
     if (flag) {
-      OtLevel2 tot2 = ot2Dao.getOtLevel2ByName(ot2name, true);
-      if (null != tot2) {
 
-        String dateStr = (String) appmap.get("datestr");
-        if (null == dateStr) {
-          dateStr = CommonFunction.getUniqueDateStr();
-          appmap.put("datestr", dateStr);
-          log.debug("has not dateStr:" + dateStr);
-        } else {
-          log.debug("has dateStr:" + dateStr);
-        }
-
-        rootPath = getText("gwacDataRootDirectory");
-        destPath = rootPath;
-        if (destPath.charAt(destPath.length() - 1) != '/') {
-          destPath += "/" + dateStr + "/" + tot2.getIdentify() + "/";
-        } else {
-          destPath += dateStr + "/" + tot2.getIdentify() + "/";
-        }
-
-        File destDir = new File(destPath);
-        if (!destDir.exists()) {
-          destDir.mkdirs();
-          log.debug("create dir " + destDir);
-        }
-
-        receiveFollowObjectList();
-        receiveOTFollowImg();
-
-        setEcho(echo + "Success!\n");
+      String dateStr = (String) appmap.get("datestr");
+      if (null == dateStr) {
+        dateStr = CommonFunction.getUniqueDateStr();
+        appmap.put("datestr", dateStr);
+        log.debug("has not dateStr:" + dateStr);
       } else {
-        setEcho(echo + "Error, ot2 name not exist, or ot2 is a history ot!\n");
+        log.debug("has dateStr:" + dateStr);
       }
+
+      rootPath = getText("gwacDataRootDirectory");
+      destPath = rootPath;
+      if (destPath.charAt(destPath.length() - 1) != '/') {
+        destPath += "/" + dateStr + "/";
+      } else {
+        destPath += dateStr + "/";
+      }
+
+      File destDir = new File(destPath);
+      if (!destDir.exists()) {
+        destDir.mkdirs();
+        log.debug("create dir " + destDir);
+      }
+
+      receiveFollowObjectList();
+      receiveOTFollowImg();
+
+      setEcho(echo + "Success!\n");
     } else {
       result = ERROR;
     }
