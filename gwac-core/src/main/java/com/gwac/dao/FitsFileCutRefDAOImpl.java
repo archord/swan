@@ -59,7 +59,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
   public void updateByName(FitsFileCutRef ffcr) {
 
     Session session = getCurrentSession();
-    String sql = "update fits_file_cut_ref set success_cut=true, generate_time='"
+    String sql = "update fits_file_cut_ref set success_cut=true, upload_time=now(), generate_time='"
             + CommonFunction.getDateTimeString(ffcr.getGenerateTime(), "yyyyMMdd HHmmss")
             + "', file_name='"
             + ffcr.getFileName()
@@ -79,7 +79,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
     
     String sql = "with updated_rows as "
             + "(update fits_file_cut_ref ffc1 "
-            + "set request_cut=true "
+            + "set request_cut=true, request_time=now() "
             + "from (select ffcr_id from fits_file_cut_ref ffcr0 "
             + "inner join image_status_parameter isp0 on isp0.ff_id=ffcr0.ff_id  "
             + "where ffcr0.request_cut=false and ffcr0.dpm_id=" + dpmId + " order by ffcr0.ffcr_id asc limit " + size + ") ffc2 "

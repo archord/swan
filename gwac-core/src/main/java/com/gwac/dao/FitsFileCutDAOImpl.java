@@ -95,7 +95,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
   public void uploadSuccessCutByName(String fileName) {
 
     Session session = getCurrentSession();
-    String sql = "update fits_file_cut set success_cut=true where file_name='" + fileName + "'";
+    String sql = "update fits_file_cut set success_cut=true, upload_time=now() where file_name='" + fileName + "'";
     session.createSQLQuery(sql).executeUpdate();
   }
 
@@ -113,7 +113,7 @@ public class FitsFileCutDAOImpl extends BaseHibernateDaoImpl<FitsFileCut> implem
     //对每个ot2，裁剪所有生成的切图文件
     String sql = "with updated_rows as "
             + "(update fits_file_cut ffc1 "
-            + "set request_cut=true "
+            + "set request_cut=true, request_time=now() "
             + "from (select ffc_id from fits_file_cut where request_cut=false and dpm_id=" + dpmId + " and priority<" + maxPriority + " order by priority asc limit " + size + ") ffc2 "
             + "where ffc1.ffc_id=ffc2.ffc_id returning *) "
             + "select ff.img_name ffname, ffc.img_x, ffc.img_y, ffc.file_name ffcname, ff.img_path "

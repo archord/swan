@@ -11,6 +11,7 @@ import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.OTCatalogDao;
 import com.gwac.dao.ObservationSkyDao;
+import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.OtObserveRecordDAO;
@@ -19,6 +20,7 @@ import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FitsFile2;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
+import com.gwac.model.Ot2StreamNodeTime;
 import com.gwac.model4.OTCatalog;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
@@ -64,6 +66,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private OtTypeDao ottDao;
+  @Resource
+  private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
 
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
@@ -227,6 +231,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setFollowUpResult((short) 0);
 
             otLv2Dao.save(tOtLv2);
+                        
+            Ot2StreamNodeTime ot2SNT= new Ot2StreamNodeTime();
+            ot2SNT.setOtId(tOtLv2.getOtId());
+            ot2SNT.setOorId1(oor1.getOorId());
+            ot2SNT.setOorId2(oor.getOorId());
+            ot2StreamNodeTimeDao.save(ot2SNT);
 
             MessageCreator tmc = new OTCheckMessageCreator(tOtLv2);
             jmsTemplate.send(otCheckDest, tmc);

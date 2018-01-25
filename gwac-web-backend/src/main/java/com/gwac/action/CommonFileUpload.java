@@ -14,7 +14,6 @@ import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UploadFileUnstoreDao;
-import com.gwac.model.Camera;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.UploadFileUnstore;

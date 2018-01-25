@@ -10,6 +10,7 @@ package com.gwac.action;
  */
 import com.gwac.activemq.OTFollowMessageCreator;
 import com.gwac.dao.FollowUpObservationDao;
+import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UserInfoDAO;
@@ -63,6 +64,8 @@ public class OTLookBack extends ActionSupport {
   private SystemStatusMonitorDao ssmDao;
   @Resource
   private WebGlobalParameterDao webGlobalParameterDao;
+  @Resource
+  private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
 
   @Action(value = "otLookBack")
   public void upload() {
@@ -109,6 +112,7 @@ public class OTLookBack extends ActionSupport {
         unitId = "0" + unitId;
       }
       ssmDao.updateOt2LookBack(unitId, ot2name);
+      ot2StreamNodeTimeDao.updateLookBackTime(ot2name);
     }
 
     log.debug(getEcho());
@@ -137,9 +141,10 @@ public class OTLookBack extends ActionSupport {
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
 //            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
     if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)) {
+      ot2StreamNodeTimeDao.updateLookBackTime(ot2.getOtId());
+      
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
       ot2Dao.updateFoCount(ot2);
-      
       
       String filter = webGlobalParameterDao.getValueByName("Filter");
       String frameCount = webGlobalParameterDao.getValueByName("FrameCount");

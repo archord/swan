@@ -9,6 +9,7 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.dao.FollowUpFitsfileDao;
+import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
@@ -75,6 +76,8 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private FollowUpFitsfileDao fufDao;
+  @Resource
+  private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
 
   private String echo = "";
 
@@ -145,6 +148,10 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
       setEcho(echo + "Success!\n");
     } else {
       result = ERROR;
+    }
+    
+    if(ot2name!=null&&!ot2name.isEmpty()&&!"null".equals(ot2name)){
+      ot2StreamNodeTimeDao.updateLookUpResultTime(ot2name);
     }
 
     log.debug(echo);
