@@ -27,7 +27,7 @@
     <script>
       $(function() {
         $('#backupDataButton').click(clickBackup);
-        $('#delDataButton').click(clickDelete);
+//        $('#delDataButton').click(clickDelete);
         function clickDelete() {
           var queryUrl = "<%=request.getContextPath()%>/databaseManage.action";
           var formData = "operation=delete";
@@ -69,7 +69,7 @@
       <div class="row ot-list-top">
         <div class="col-xs-2 col-sm-2 col-md-2 "></div>
         <div class="col-xs-2 col-sm-2 col-md-1 ">
-          <input type="button" value="删除数据" class="btn btn-primary" id="delDataButton"/>
+          <!--<input type="button" value="删除数据" class="btn btn-primary" id="delDataButton"/>-->
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6 " style="text-align: left">
           测试数据，多次重复测试时，需要删除已经入库的测试数据，手动点击备份。
