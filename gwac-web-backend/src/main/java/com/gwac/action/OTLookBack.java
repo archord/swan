@@ -141,7 +141,7 @@ public class OTLookBack extends ActionSupport {
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
 //            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
     if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)) {
-      ot2StreamNodeTimeDao.updateLookBackTime(ot2.getOtId());
+      ot2StreamNodeTimeDao.updateLookUpTime(ot2.getOtId());
       
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
       ot2Dao.updateFoCount(ot2);
