@@ -7,12 +7,15 @@
 package com.gwac.dao;
 
 import com.gwac.model.Ot2StreamNodeTime;
+import java.util.Date;
 
 /**
  *
  * @author msw
  */
 public interface Ot2StreamNodeTimeDao extends BaseHibernateDao<Ot2StreamNodeTime> {
+  public Date getMinDate();
+  public String getJson();
   public void updateLookBackTime(long otId);
   public void updateLookUpTime(long otId);
   public void updateLookBackTime(String otName);

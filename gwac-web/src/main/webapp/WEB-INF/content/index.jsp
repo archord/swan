@@ -51,6 +51,9 @@
           <div class='mason-block x5'>
             <a href="<%=request.getContextPath()%>/followup/followup-manage.action" target="_blank" ><p>后随观测</p></a>
           </div>
+          <div class='mason-block x5'>
+            <a href="<%=request.getContextPath()%>/monitor/pgwac-ot2time-monitor.action" target="_blank" ><p>OT2时间统计</p></a>
+          </div>
           <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p class="multiline1">观测计划列表</p></a>     
             <a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p class="multiline">生成观测计划</p></a>
             <a href="<%=request.getContextPath()%>/control/pctl-observation-debug.action" target="_blank" ><p class="multiline">观测调试</p></a>

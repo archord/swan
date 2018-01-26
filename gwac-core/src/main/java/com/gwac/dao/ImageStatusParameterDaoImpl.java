@@ -93,6 +93,7 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     return rst;
   }
 
+  @Override
   public Date getMinDate() {
     Session session = getCurrentSession();
     String sql = "SELECT min(time_obs_ut) from image_status_parameter ";

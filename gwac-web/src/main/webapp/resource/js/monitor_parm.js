@@ -127,6 +127,11 @@ $(function() {
 
 //星表匹配
   function starCurveShow() {
+    
+    if(formatedCCDList[0] === null){
+      console.log("请先点击参数列表，加载数据！");
+      return;
+    }
 
     var tmount = $('#mountList').val();
     var tccds = $('#ccdList').val();
