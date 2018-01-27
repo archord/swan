@@ -9,6 +9,7 @@ import com.gwac.dao.ConfigFileDao;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
+import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
@@ -53,6 +54,8 @@ public class DataBackupServiceImpl implements BaseService {
   private CcdPixFilterDao cpfDao;
   @Resource
   private WebGlobalParameterDao webGlobalParameterDao;
+  @Resource
+  private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
 
   @Override
   public void startJob() {
@@ -83,6 +86,7 @@ public class DataBackupServiceImpl implements BaseService {
       ufuDao.removeAll();
       cpfDao.removeAll();
       webGlobalParameterDao.everyDayInit();
+      ot2StreamNodeTimeDao.removeAll();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {

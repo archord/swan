@@ -20,6 +20,13 @@ import org.springframework.stereotype.Repository;
 public class Ot2StreamNodeTimeDaoImpl extends BaseHibernateDaoImpl<Ot2StreamNodeTime> implements Ot2StreamNodeTimeDao {
   
   @Override
+  public void removeAll() {
+    Session session = getCurrentSession();
+    String sql = "delete from ot2_stream_node_time";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
   public Date getMinDate() {
     Session session = getCurrentSession();
     String sql = "SELECT min(found_time_utc) + INTERVAL '8 hour' from ot_level2 ";
