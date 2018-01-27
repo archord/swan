@@ -22,7 +22,7 @@ public class Ot2StreamNodeTimeDaoImpl extends BaseHibernateDaoImpl<Ot2StreamNode
   @Override
   public Date getMinDate() {
     Session session = getCurrentSession();
-    String sql = "SELECT min(found_time_utc) from ot_level2 ";
+    String sql = "SELECT min(found_time_utc) + INTERVAL '8 hour' from ot_level2 ";
     Date rst = null;
     Query q = session.createSQLQuery(sql);
     if (q.list().size() > 0) {

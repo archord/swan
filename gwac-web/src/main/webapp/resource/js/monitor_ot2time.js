@@ -1,11 +1,9 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-//  var parmUrl = gwacRootURL + "/get-ot2-streamnode-list-json.action";
-  var parmUrl = gwacRootURL + "/get-ot2-streamnode-list.json";
+  var parmUrl = gwacRootURL + "/get-ot2-streamnode-list-json.action";
 
-  var parmType = "";
-  var formatedCCDList = [];
+  var ccdList = [];
 
   var otCurve;
   var plotOption = {
@@ -40,7 +38,8 @@ $(function() {
 
   initStarCurveShow();
   loadStarRecords();
-  $('#starList').change(loadStarRecords);
+  starCurveShow();
+  $('#starList').change(starCurveShow);
   $('#mountList').change(changeMount);
   $('#ccdList').change(changeCCDs);
 
@@ -77,7 +76,7 @@ $(function() {
       if (item) {
         var x = item.datapoint[0].toFixed(4);
         var y = item.datapoint[1].toFixed(2);
-        $("#tooltip").html(item.series.label + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
+        $("#tooltip").html(item.series.label + "," + item.series.data[item.dataIndex][2] + ",(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
       } else {
         $("#tooltip").hide();
       }
@@ -87,8 +86,8 @@ $(function() {
   function formateRawData(data) {
 
     var minDate = data.minDate;
-    var minDateMinute = Date.parse(minDate) / 60000;
-    var ccdList = eval(data.parStr);
+    var minDateHour = Date.parse(minDate) / 3600000;
+    ccdList = eval(data.parStr);
 
     $('#startDay').html(minDate);
 
@@ -158,47 +157,51 @@ $(function() {
         }
       });
     });
+
+    $.each(ccdList, function(i, item) {
+      $.each(item.ot2_list, function(j, item2) {
+        item2['tidx'] = item2['ot11_gen_obj'] / 3600000 - minDateHour;
+
+        item2['T00'] = (item2['ot2_gen_obj'] - item2['ot11_gen_obj']) / 1000;
+        item2['T01'] = (item2['ot11_up_obj'] - item2['ot11_gen_obj']) / 1000;
+        item2['T02'] = (item2['ot11_done_obj'] - item2['ot11_up_obj']) / 1000;
+        item2['T03'] = (item2['ot12_up_obj'] - item2['ot12_gen_obj']) / 1000;
+        item2['T04'] = (item2['ot12_done_obj'] - item2['ot12_up_obj']) / 1000;
+
+        item2['T10'] = (item2['ot2_lb_obj'] - item2['ot2_gen_obj']) / 1000;
+        item2['T11'] = (item2['ffc1_req_obj'] - item2['ffc1_gen_obj']) / 1000;
+        item2['T12'] = (item2['ffc1_up_obj'] - item2['ffc1_req_obj']) / 1000;
+        item2['T13'] = (item2['ffc2_req_obj'] - item2['ffc2_gen_obj']) / 1000;
+        item2['T14'] = (item2['ffc2_up_obj'] - item2['ffc2_req_obj']) / 1000;
+        item2['T15'] = (item2['ffcr_req_obj'] - item2['ffcr_gen_obj']) / 1000;
+        item2['T16'] = (item2['ffcr_up_obj'] - item2['ffcr_req_obj']) / 1000;
+
+        item2['T20'] = (item2['ot2_lur_obj'] - item2['ot2_lb_obj']) / 1000;
+        item2['T21'] = (item2['ot2_lur_obj'] - item2['ot2_lu_obj']) / 1000;
+      });
+    });
     console.log(ccdList);
   }
 
-  function formateRawData2(data, parmType) {
+  function getShowDate(ot2list, parmType) {
 
-    var minDate = data.minDate;
-    var minDateMinute = Date.parse(minDate) / 60000;
-    var ccdList = eval(data.parStr);
+    var ccdID = 'CCD' + padZero(parseInt(ot2list.ccd_name), 2);
+//      var parmList = sortJson(item.ot2_list, 'ot11_gen', true);
 
-    $('#startDay').html(minDate);
-
-    if (typeof (ccdList) === "undefined")
-    {
-      ccdList = [];
-    }
-    $.each(ccdList, function(i, item) {
-      $.each(item.ot2_list, function(j, item2) {
-        item2['dateObj'] = Date.parse(item2['time_obs_ut']) / 60000;
-      });
+    var coorShow = [];
+    $.each(ot2list.ot2_list, function(j, item2) {
+      if (parmType === "T20" || parmType === "T21") {
+        if (NaN === item2[parmType]) {
+          return;
+        }
+      }
+      coorShow.push([item2["tidx"], item2[parmType], item2["ot2_name"]]);
     });
-
-//    formatedCCDList = [];
-    while (formatedCCDList.pop()) {
-    }
-
-    $.each(ccdList, function(i, item) {
-      var ccdID = 'CCD' + padZero(parseInt(item.dpm_id), 2);
-      var parmList = sortJson(item.par_detail, 'time_obs_ut', true);
-
-      var coorShow = [];
-      $.each(parmList, function(j, item2) {
-        var minute = item2['dateObj'] - minDateMinute;
-        coorShow.push([minute, item2[parmType]]);
-      });
-      formatedCCDList.push({
-        ccdId: item.dpm_id,
-        label: ccdID,
-        data: coorShow,
-        points: {radius: 1}
-      });
-    });
+    return {
+      label: ccdID,
+      data: coorShow,
+      points: {radius: 1}
+    };
   }
 
 //星表匹配
@@ -206,33 +209,28 @@ $(function() {
 
     var tmount = $('#mountList').val();
     var tccds = $('#ccdList').val();
+    var parmType = $('#starList').val();
 
     var showCCDs = [];
     if (tmount === null && tccds === null) {
-      showCCDs = formatedCCDList;
+      $.each(ccdList, function(i, item) {
+        showCCDs.push(getShowDate(item, parmType));
+      });
     } else if (tmount !== null) {
-      $.each(formatedCCDList, function(i, item) {
-        if (tmount === item.ccdId.substring(0, 2)) {
-          showCCDs.push(item);
+      $.each(ccdList, function(i, item) {
+        if (tmount === item.ccd_name.substring(0, 2)) {
+          showCCDs.push(getShowDate(item, parmType));
         }
       });
     } else if (tmount === null && tccds !== null) {
-      $.each(formatedCCDList, function(i, item) {
-        if (tccds.indexOf(item.ccdId) > -1) {
-          showCCDs.push(item);
+      $.each(ccdList, function(i, item) {
+        if (tccds.indexOf(item.ccd_name) > -1) {
+          showCCDs.push(getShowDate(item, parmType));
         }
       });
     }
-
-    if ("bg_bright" !== parmType && "obj_num" !== parmType) {
-      plotOption.yaxis = {
-        min: parmProperty[parmType].min,
-        max: parmProperty[parmType].max,
-        show: true
-      };
-    }
     otCurve = $.plot("#star-light-curve", showCCDs, plotOption);
-    otCurve.setData(showCCDs);
+//    otCurve.setData(showCCDs);
     otCurve.draw();
   }
 
