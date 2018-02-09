@@ -8,6 +8,7 @@ import com.gwac.model.FitsFile2;
 import com.gwac.model.FitsFile2Show;
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
@@ -23,6 +24,39 @@ public class FitsFile2DAOImpl extends BaseHibernateDaoImpl<FitsFile2> implements
 
   private static final Log log = LogFactory.getLog(FitsFile2DAOImpl.class);
 
+  @Override
+  public FitsFile2 getByOt2ForCut(long ot2Id, int ffNum) {
+
+    Session session = getCurrentSession();
+    String sql = "select ff2.* "
+            + "from fits_file2 ff2 "
+            + "INNER JOIN ot_level2 ot2 on ot2.dpm_id=ff2.cam_id and ot2.sky_id=ff2.sky_id and ff2.gen_time+ INTERVAL '1 minute'>=ot2.found_time_utc "
+            + "WHERE ot2.ot_id=" + ot2Id + " and ff2.ff_number=" + ffNum + " "
+            + "ORDER BY ff_number";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFile2.class);
+
+    if (!q.list().isEmpty()) {
+      return (FitsFile2) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public List<FitsFile2> getByOt2ForCut(long ot2Id) {
+
+    Session session = getCurrentSession();
+    String sql = "select ff2.* "
+            + "from fits_file2 ff2 "
+            + "INNER JOIN ot_level2 ot2 on ot2.dpm_id=ff2.cam_id and ot2.sky_id=ff2.sky_id and ff2.gen_time+ INTERVAL '1 minute'>=ot2.found_time_utc and ff2.ff_number<ot2.first_ff_number+3 and ff2.ff_number>ot2.first_ff_number-2 "
+            + "where ot2.ot_id=" + ot2Id + " "
+            + "ORDER BY ff_number";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFile2.class);
+
+    return q.list();
+  }
+
+  @Override
   public boolean exist(String ffName) {
 
     Session session = getCurrentSession();

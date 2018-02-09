@@ -5,7 +5,6 @@
  */
 package com.gwac.job;
 
-import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.OtLevel2Dao;
@@ -31,15 +30,13 @@ public class FitsFileCutServiceImpl implements BaseService {
 
   private static final Log log = LogFactory.getLog(FitsFileCutServiceImpl.class);
   private static boolean running = true;
-  
+
   @Resource
   private FitsFile2DAO ff2Dao;
   @Resource
   private FitsFileCutDAO ffcDao;
   @Resource
   private OtLevel2Dao otlv2Dao;
-  @Resource
-  private DataProcessMachineDAO dpmDao;
   @Resource
   private OtObserveRecordDAO oorDao;
 
@@ -58,7 +55,7 @@ public class FitsFileCutServiceImpl implements BaseService {
     if (isTestServer) {
       return;
     }
-    
+
     if (running == true) {
       log.debug("start job...");
       running = false;
@@ -100,10 +97,9 @@ public class FitsFileCutServiceImpl implements BaseService {
       OtObserveRecord lastRecord = oors.get(0);
 
       for (int i = otlv2.getLastFfNumber() + 1; i <= otlv2.getLastFfNumber() + 2; i++) {
-        String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
-        FitsFile2 tff = ff2Dao.getByName(ffName);
+        FitsFile2 tff = ff2Dao.getByOt2ForCut(otlv2.getOtId(), i);
         if (tff == null) {
-          log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
+          log.warn("can't find orig fits file of " + otlv2.getName() + " in number " + i + ", is the sky region name correct ?");
           continue;
         }
 
@@ -156,10 +152,9 @@ public class FitsFileCutServiceImpl implements BaseService {
 
       int oorIdx = 0;
       for (int i = cuttedFfNumber + 1; i <= otlv2.getLastFfNumber(); i++) {
-        String ffName = String.format("%s_%04d.fit", otlv2.getIdentify(), i);
-        FitsFile2 tff = ff2Dao.getByName(ffName);
+        FitsFile2 tff = ff2Dao.getByOt2ForCut(otlv2.getOtId(), i);
         if (tff == null) {
-          log.warn("can't find orig fits file " + ffName + ", is the sky region name correct?");
+          log.warn("can't find orig fits file of " + otlv2.getName() + " in number " + i + ", is the sky region name correct ?");
           continue;
         }
         while (oorIdx < oors.size() && oors.get(oorIdx).getFfNumber() <= i) {
