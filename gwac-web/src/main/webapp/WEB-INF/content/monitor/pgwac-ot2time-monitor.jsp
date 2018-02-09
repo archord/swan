@@ -31,7 +31,6 @@
 
       #star-light-curve-show{
         width: 100%;
-        height: 800px;
         margin-top: 10px
       }
 
@@ -43,6 +42,11 @@
       #star-light-curve{
         width: 100%; 
         height: 700px;
+      }
+      #curve-commment{
+        width: 100%;
+        text-align: left;
+        padding:  0 30px;
       }
     </style>
 
@@ -57,19 +61,21 @@
       <div class="row ">
         <div class="col-xs-2 col-sm-2 col-md-1 ">
           <div class="row star-list-left">
-            <select name="formqp.starList" id="starList" class="form-control select select-primary" data-toggle="select" size="12">
-              <option value="fwhm" selected>半高全宽</option>
-              <option value="obj_num">星的数目</option>
-              <option value="bg_bright">背景亮度</option>
-              <option value="avg_limit">极限星等</option>
-              <option value="s2n">亮星星等差</option>
-              <option value="xshift">图像偏移量X</option>
-              <option value="yshift">图像偏移量Y</option>
-              <option value="xrms">图像对齐精度X</option>
-              <option value="yrms">图像对齐精度Y</option>
-              <option value="proc_time">数据处理时间</option>
-              <option value="temperature_actual">实际温度</option>
-              <option value="temperature_set">设定温度</option>
+            <select name="formqp.starList" id="starList" class="form-control select select-primary" data-toggle="select" size="13">
+              <option value="T00" title="OT2产生时间" selected>T00 OT2产生</option>
+              <option value="T01" title="OT1列表1上传时间">T01</option>
+              <option value="T02" title="OT1列表1处理时间">T02</option>
+              <option value="T03" title="OT1列表2上传时间">T03</option>
+              <option value="T04" title="OT1列表2处理时间">T04</option>
+              <option value="T10" title="OT2回看时间">T10 OT2回看</option>
+              <option value="T11" title="切图1请求时间">T11</option>
+              <option value="T12" title="切图1上传时间">T12</option>
+              <option value="T13" title="切图2请求时间">T13</option>
+              <option value="T14" title="切图2上传时间">T14</option>
+              <option value="T15" title="模板请求时间">T15</option>
+              <option value="T16" title="模板上传时间">T16</option>
+              <option value="T20" title="OT2后随时间">T20 OT2后随</option>
+              <option value="T21" title="后随处理时间">T21</option>
             </select><br/>
             <!--多条曲线过滤显示，请参考:http://www.flotcharts.org/flot/examples/series-toggle/index.html-->
             <select name="formqp.mountList" id="mountList" class="form-control select select-primary" data-toggle="select" size="5">
@@ -105,12 +111,32 @@
         </div>
         <div class="col-xs-10 col-sm-10 col-md-11 ">
           <div class="row star-list-main">  
-
             <div id="star-light-curve-show">
               <div id="star-light-curve-title">
-                <span>X轴为时间，单位(分钟)，开始于<span id="startDay">0</span>(UTC)</span>
+                <span>处理消耗时间随时间的变化统计（X轴(OT2产生时间）/小时，Y轴（处理过程消耗时间）/秒，X轴开始于<span id="startDay">0</span>[Local])</span>
               </div>
               <div id="star-light-curve"></div>
+            </div>
+          </div>
+          <div class="row star-list-main">  
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <div id="curve-commment">
+                <h4>说明：各个部分的时间采集于不同的机器，Web服务器、数据库和数据处理机的时间或许存在差异。</h4>
+                T00：OT2产生时间，从OT2被探测到的第一幅图像到OT2生成<br/>
+                T01：OT1列表1上传时间，从OT2被探测到的第一幅图像到其OT1列表完成上传<br/>
+                T02：OT1列表1处理时间，OT2的第一幅图像的OT1列表处理时间<br/>
+                T03：OT1列表2上传时间，从OT2被探测到的第二幅图像到其OT1列表完成上传<br/>
+                T04：OT1列表2处理时间，OT2的第二幅图像的OT1列表处理时间<br/>
+                T10：OT2回看时间，从OT2生成到OT2完成回看<br/>
+                T11：切图1请求时间，从切图1产生到被请求切图<br/>
+                T12：切图1上传时间，从切图1被请求切图到切图上传成功<br/>
+                T13：切图2请求时间，从切图2产生到被请求切图<br/>
+                T14：切图2上传时间，从切图2被请求切图到切图上传成功<br/>
+                T15：模板请求时间，从模板切图产生到被请求切图<br/>
+                T16：模板上传时间，从模板切图被请求切图到切图上传成功<br/>
+                T20：OT2后随时间，从OT2回看完成到后随结果上传数据库<br/>
+                T21：后随处理时间，从OT2触发后随到后随结果上传数据库<br/>
+              </div>
             </div>
           </div>
         </div>

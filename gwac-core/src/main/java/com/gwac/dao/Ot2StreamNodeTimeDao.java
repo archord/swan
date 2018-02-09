@@ -14,6 +14,7 @@ import java.util.Date;
  * @author msw
  */
 public interface Ot2StreamNodeTimeDao extends BaseHibernateDao<Ot2StreamNodeTime> {
+  public void removeAll();
   public Date getMinDate();
   public String getJson();
   public void updateLookBackTime(long otId);
