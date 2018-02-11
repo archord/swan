@@ -25,7 +25,15 @@
     <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/mason/app.js"></script>
     <script src="${pageContext.request.contextPath}/resource/mason/mason.js"></script>
-
+    <script type="text/javascript">
+      function redirectToZabbix(){
+        var curUrl = window.location.href;
+        var rootUrl = curUrl.substring(0, curUrl.lastIndexOf(":"));
+        var zabbixUrl = encodeURI(rootUrl + ":8088/zabbix/index.php?name=gwac&password=gwac1234&autologin=1&enter=Sign in");
+        window.open(zabbixUrl, "_blank");
+        return false;
+      }
+    </script>
   </head>
   <body>
     <!-- Navigation -->
@@ -53,6 +61,9 @@
           </div>
           <div class='mason-block x5'>
             <a href="<%=request.getContextPath()%>/monitor/pgwac-ot2time-monitor.action" target="_blank" ><p>OT2时间统计</p></a>
+          </div>
+          <div class='mason-block x5'>
+            <a  href="javascript:void(0)" onclick="redirectToZabbix();"><p>服务器资源监控</p></a>
           </div>
           <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p class="multiline1">观测计划列表</p></a>     
             <a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p class="multiline">生成观测计划</p></a>
