@@ -490,7 +490,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
       try {
         out.write(tmsg.getBytes());
         out.flush();
-        log.debug("start send focus, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+        log.debug("start send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
       } catch (IOException ex) {
         log.error("send fwhm, send message error.", ex);
       }
@@ -599,7 +599,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
   public String getFWHMMessage(ImageStatusParameter isp, FitsFile2Show ff2) {
 
     StringBuilder sb = new StringBuilder();
-    sb.append("focus Group_ID=");
+    sb.append("fwhm Group_ID=");
     sb.append(ff2.getGroupName());
     sb.append(", Unit_ID=");
     sb.append(ff2.getUnitName());
