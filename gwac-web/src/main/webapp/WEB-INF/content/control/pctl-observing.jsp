@@ -51,7 +51,7 @@
         margin: 0 0 10px 0;
         padding: 5px;
         text-align: left;
-        //min-width: 430px;
+        /*min-width: 430px;*/
       }
       .manual_container1 span{  
         white-space: nowrap;  /*强制span不换行*/
