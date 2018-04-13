@@ -28,7 +28,7 @@ public class ImageRecordDaoImpl extends BaseHibernateDaoImpl<ImageRecord> implem
             + "SELECT img.img_id, img.img_name, img.img_type, ds.ds_path, ds.ds_dir_name "
             + "FROM image_record img "
             + "inner join data_set ds on ds.ds_id=img.ds_id "
-            + "where img.ds_id=" + dsId + " "
+            + "where img.img_type=-1 and img.ds_id=" + dsId + " "
             + ")as moor ";
 
     log.debug(sql);

@@ -23,11 +23,13 @@ public class DataSetDaoImpl extends BaseHibernateDaoImpl<DataSet> implements Dat
   @Override
   public String getRecords(int dvId, int defaultType) {
     Session session = getCurrentSession();
-    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT ds_id, ds_path, ds_dir_name) r))) "
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT ds_id, ds_path, ds_dir_name, ds_img_num, left_img_num) r))) "
             + "FROM( "
-            + "SELECT ds_id, ds_path, ds_dir_name "
+            + "SELECT ds.ds_id, ds.ds_path, ds.ds_dir_name, ds.ds_img_num,  count(img.img_id) left_img_num "
             + "FROM data_set ds "
-            + "where ds.dv_id="+dvId +" and ds.ds_default_type="+defaultType+" "
+            + "left join image_record img on ds.ds_id=img.ds_id and img.img_type>-1"
+            + "where ds.ds_img_num>0 and ds.dv_id="+dvId +" and ds.ds_default_type="+defaultType+" "
+            + "group by ds.ds_id "
             + ")as moor ";
     
     log.debug(sql);

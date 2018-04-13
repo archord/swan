@@ -44,13 +44,13 @@ $(function () {
       async: false,
       dataType: 'json',
       success: function (data) {
-        //console.log(data)
         var objs = eval(data.parStr);
+        //console.log(objs)
         if (objs !== null && objs.length > 0) {
           $.each(objs, function (i, item) {
             $('#dataDir').append($('<option>', {
               value: item.ds_id,
-              text: item.ds_dir_name
+              text: item.ds_dir_name+"("+item.ds_img_num+":"+item.left_img_num+")"
             }));
           });
         }
@@ -61,7 +61,7 @@ $(function () {
     var gwacRootURL = $("#gwacRootURL").val();
     var dsId = $("#dataDir").val();
     var queryUrl = gwacRootURL + "/get-image-list.action?dsId=" + dsId;
-
+    //console.log(queryUrl);
     $.ajax({
       type: "get",
       url: queryUrl,
@@ -69,7 +69,7 @@ $(function () {
       dataType: 'json',
       success: function (data) {
         imgList = eval(data.parStr);
-        console.log(imgList);
+        //console.log(imgList);
         showImage(0);
       }
     });
@@ -107,12 +107,13 @@ $(function () {
         alert("already the last one");
       } else {
         var timg = imgList[imgListIdx];
-        var turl = gwacRootURL + "/" + timg.ds_path + "/" + timg.ds_dir_name + "/" + timg.img_name;
+        //
+        var turl = gwacRootURL + "/" + timg.ds_path.substring(16) + "/" + timg.ds_dir_name + "/" + timg.img_name;
         curImgId = timg.img_id;
         imgType = parseInt(timg.img_type);
-        console.log(turl);
+        //console.log(turl);
         $('#obj-image').attr("src", turl);
-        $('#image-title').html(timg.img_name);
+        $('#image-title').html(imgListIdx+" : " +timg.img_name);
         if (imgType === -1) {
           imgType = 0;
         }
