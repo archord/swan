@@ -5,7 +5,7 @@
 $(function () {
   function loadDataVersionList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-data-version-list.action";
+    var queryUrl = gwacRootURL + "/get-data-version-list.action" + "?timestamp=" + new Date().getTime();
     $.ajax({
       type: "get",
       url: queryUrl,
@@ -29,7 +29,7 @@ $(function () {
     var gwacRootURL = $("#gwacRootURL").val();
     var dvId = $("#dataVersion").val();
     var defaultType = $("#defaultType").val();
-    var queryUrl = gwacRootURL + "/get-data-set-list.action?dvId=" + dvId + "&defaultType=" + defaultType;
+    var queryUrl = gwacRootURL + "/get-data-set-list.action?dvId=" + dvId + "&defaultType=" + defaultType + "&timestamp=" + new Date().getTime();
 
     $('#dataDir')
             .find('option')
@@ -60,8 +60,8 @@ $(function () {
   function loadImageList() {
     var gwacRootURL = $("#gwacRootURL").val();
     var dsId = $("#dataDir").val();
-    var queryUrl = gwacRootURL + "/get-image-list.action?dsId=" + dsId;
-    //console.log(queryUrl);
+    var queryUrl = gwacRootURL + "/get-image-list.action?dsId=" + dsId + "&timestamp=" + new Date().getTime();
+    console.log(queryUrl);
     $.ajax({
       type: "get",
       url: queryUrl,
