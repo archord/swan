@@ -68,6 +68,7 @@ $(function () {
       async: false,
       dataType: 'json',
       success: function (data) {
+        imgListIdx = 0;
         imgList = eval(data.parStr);
         //console.log(imgList);
         showImage(0);
