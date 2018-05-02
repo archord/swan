@@ -381,9 +381,8 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
             FileUtils.forceDelete(preFile);
           }
           if (destFile.exists()) {
-            FileUtils.copyFile(destFile, preFile);
+            FileUtils.moveFile(destFile, preFile);
           }
-//          FileUtils.moveFile(file, preFile);
           int toWidth = 400;
           int toHeight = 400;
           getThumbnail(tpath, tname, tnameSub, tfilename, toWidth, toHeight);
