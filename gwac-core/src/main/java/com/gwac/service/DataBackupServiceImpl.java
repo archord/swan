@@ -3,9 +3,9 @@
  */
 package com.gwac.service;
 
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.ConfigFileDao;
-import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
@@ -14,7 +14,6 @@ import com.gwac.dao.UploadFileUnstoreDao;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,7 +37,7 @@ public class DataBackupServiceImpl implements DataBackupService {
   @Resource
   private ImageStatusParameterDao ispDao;
   @Resource
-  private DataProcessMachineDAO dpmDao;
+  private CameraDao camDao;
   @Resource
   private UploadFileUnstoreDao ufuDao;
   @Resource
@@ -52,7 +51,7 @@ public class DataBackupServiceImpl implements DataBackupService {
       oorDao.moveDataToHisTable();
       cfDao.moveDataToHisTable();
       ispDao.moveDataToHisTable();
-      dpmDao.everyDayInit();
+      camDao.everyDayInit();
       ufuDao.removeAll();
       cpfDao.removeAll();
     } catch (Exception ex) {
@@ -80,7 +79,7 @@ public class DataBackupServiceImpl implements DataBackupService {
       cfDao.deleteAll("config_file");
       otlv2Dao.deleteAll("system_log");
       ispDao.deleteAll("image_status_parameter");
-      dpmDao.everyDayInit();
+      camDao.everyDayInit();
       ufuDao.removeAll();
       cpfDao.removeAll();
     } catch (Exception ex) {

@@ -360,7 +360,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Session session = getCurrentSession();
     String sql = "select oor.* "
             + "from ot_observe_record oor "
-            + "inner join data_process_machine dpm on oor.dpm_id = dpm.dpm_id and oor.ff_number>dpm.cur_process_number-" + n + " "
+            + "inner join camera dpm on oor.dpm_id = dpm.camera_id and oor.ff_number>dpm.cur_process_number-" + n + " "
             + "where oor.ot_id=0 and oor.data_produce_method='1';";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();

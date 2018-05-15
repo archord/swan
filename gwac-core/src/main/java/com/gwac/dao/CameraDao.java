@@ -25,7 +25,7 @@ public interface CameraDao extends BaseHibernateDao<Camera> {
 
   public Camera getByName(String name);
 
-  public void updateByName(Camera dpm);
+  public void updateCurProcessNumber(Camera cam);
 
   public Camera getById(long id);
   

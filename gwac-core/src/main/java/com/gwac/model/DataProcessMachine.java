@@ -20,37 +20,108 @@ import javax.persistence.TemporalType;
 )
 public class DataProcessMachine implements java.io.Serializable {
 
+  /**
+   * @return the totalBackupImage
+   */
+  public Integer getTotalBackupImage() {
+    return totalBackupImage;
+  }
+
+  /**
+   * @param totalBackupImage the totalBackupImage to set
+   */
+  public void setTotalBackupImage(Integer totalBackupImage) {
+    this.totalBackupImage = totalBackupImage;
+  }
+
+  /**
+   * @return the lastBackupImageName
+   */
+  public String getLastBackupImageName() {
+    return lastBackupImageName;
+  }
+
+  /**
+   * @param lastBackupImageName the lastBackupImageName to set
+   */
+  public void setLastBackupImageName(String lastBackupImageName) {
+    this.lastBackupImageName = lastBackupImageName;
+  }
+
+  /**
+   * @return the userName
+   */
+  public String getUserName() {
+    return userName;
+  }
+
+  /**
+   * @param userName the userName to set
+   */
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  /**
+   * @return the password
+   */
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * @param password the password to set
+   */
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  /**
+   * @return the status
+   */
+  public Integer getStatus() {
+    return status;
+  }
+
+  /**
+   * @param status the status to set
+   */
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
+
+  /**
+   * @return the sshPort
+   */
+  public Integer getSshPort() {
+    return sshPort;
+  }
+
+  /**
+   * @param sshPort the sshPort to set
+   */
+  public void setSshPort(Integer sshPort) {
+    this.sshPort = sshPort;
+  }
+
   private short dpmId;
   private String name;
   private String ip;
-  private Short tspId;
-  private Integer curProcessNumber;
   private Float totalStorageSize;
   private Float usedStorageSize;
-  private Date monitorImageTime;
   private Date lastActiveTime;
-  private Short curSkyId;
-  private Integer firstRecordNumber;
+  private Integer totalBackupImage;
+  private String lastBackupImageName;
+  private String userName;
+  private String password;
+  private Integer status;
+  private Integer sshPort;
 
   public DataProcessMachine() {
   }
 
   public DataProcessMachine(short dpmId) {
     this.dpmId = dpmId;
-  }
-
-  public DataProcessMachine(short dpmId, String name, String ip, Short tspId, Integer curProcessNumber, Float totalStorageSize, Float usedStorageSize, Date monitorImageTime, Date lastActiveTime, Short curSkyId, Integer firstRecordNumber) {
-    this.dpmId = dpmId;
-    this.name = name;
-    this.ip = ip;
-    this.tspId = tspId;
-    this.curProcessNumber = curProcessNumber;
-    this.totalStorageSize = totalStorageSize;
-    this.usedStorageSize = usedStorageSize;
-    this.monitorImageTime = monitorImageTime;
-    this.lastActiveTime = lastActiveTime;
-    this.curSkyId = curSkyId;
-    this.firstRecordNumber = firstRecordNumber;
   }
 
   @Id
@@ -83,24 +154,6 @@ public class DataProcessMachine implements java.io.Serializable {
     this.ip = ip;
   }
 
-  @Column(name = "tsp_id")
-  public Short getTspId() {
-    return this.tspId;
-  }
-
-  public void setTspId(Short tspId) {
-    this.tspId = tspId;
-  }
-
-  @Column(name = "cur_process_number")
-  public Integer getCurProcessNumber() {
-    return this.curProcessNumber;
-  }
-
-  public void setCurProcessNumber(Integer curProcessNumber) {
-    this.curProcessNumber = curProcessNumber;
-  }
-
   @Column(name = "total_storage_size", precision = 8, scale = 8)
   public Float getTotalStorageSize() {
     return this.totalStorageSize;
@@ -119,15 +172,6 @@ public class DataProcessMachine implements java.io.Serializable {
     this.usedStorageSize = usedStorageSize;
   }
 
-  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "monitor_image_time", length = 29)
-  public Date getMonitorImageTime() {
-    return this.monitorImageTime;
-  }
-
-  public void setMonitorImageTime(Date monitorImageTime) {
-    this.monitorImageTime = monitorImageTime;
-  }
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "last_active_time", length = 29)
@@ -139,22 +183,6 @@ public class DataProcessMachine implements java.io.Serializable {
     this.lastActiveTime = lastActiveTime;
   }
 
-  @Column(name = "cur_sky_id")
-  public Short getCurSkyId() {
-    return this.curSkyId;
-  }
 
-  public void setCurSkyId(Short curSkyId) {
-    this.curSkyId = curSkyId;
-  }
-
-  @Column(name = "first_record_number")
-  public Integer getFirstRecordNumber() {
-    return this.firstRecordNumber;
-  }
-
-  public void setFirstRecordNumber(Integer firstRecordNumber) {
-    this.firstRecordNumber = firstRecordNumber;
-  }
 
 }

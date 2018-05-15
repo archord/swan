@@ -32,6 +32,11 @@
   
   <dependencies>
     <dependency>
+      <groupId>com.hierynomus</groupId>
+      <artifactId>sshj</artifactId>
+      <version>0.24.0</version>
+    </dependency>
+    <dependency>
       <groupId>com.gwac</groupId>
       <artifactId>gwac-core</artifactId>  
       <version>beta-1.0</version>
@@ -199,7 +204,7 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-    <properties>
-        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
-    </properties>
+  <properties>
+    <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+  </properties>
 </project>

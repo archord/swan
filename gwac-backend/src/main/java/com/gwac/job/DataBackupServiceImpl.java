@@ -4,6 +4,7 @@
  */
 package com.gwac.job;
 
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.ConfigFileDao;
 import com.gwac.dao.DataProcessMachineDAO;
@@ -47,7 +48,7 @@ public class DataBackupServiceImpl implements BaseService {
   @Resource
   private ImageStatusParameterDao ispDao;
   @Resource
-  private DataProcessMachineDAO dpmDao;
+  private CameraDao camDao;
   @Resource
   private UploadFileUnstoreDao ufuDao;
   @Resource
@@ -82,7 +83,7 @@ public class DataBackupServiceImpl implements BaseService {
       oorDao.moveDataToHisTable();
       cfDao.moveDataToHisTable();
       ispDao.moveDataToHisTable();
-      dpmDao.everyDayInit();
+      camDao.everyDayInit();
       ufuDao.removeAll();
       cpfDao.removeAll();
       webGlobalParameterDao.everyDayInit();

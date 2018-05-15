@@ -55,7 +55,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "select ot2.* "
             + "from ot_level2 ot2 "
             + "inner join ot_type ott on ott.ott_id=ot2.ot_type and ott.ot_class='1' "
-            + "inner join data_process_machine dpm on ot2.dpm_id=dpm.dpm_id and ot2.last_ff_number+" + successiveImageNumber + "<dpm.cur_process_number "
+            + "inner join camera dpm on ot2.dpm_id=dpm.camera_id and ot2.last_ff_number+" + successiveImageNumber + "<dpm.cur_process_number "
             + "where ot2.data_produce_method='1';";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
@@ -214,7 +214,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
-            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
+            + "inner join camera dpm on ol2.dpm_id = dpm.camera_id and ol2.last_ff_number=dpm.cur_process_number "
             + "where ol2.is_match!=2 and ol2.data_produce_method='1'";  //ol2.first_n_mark=false and 
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
@@ -225,7 +225,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2 ol2 "
-            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number "
+            + "inner join camera dpm on ol2.dpm_id = dpm.camera_id and ol2.last_ff_number!=dpm.cur_process_number "
             + "where ol2.is_match!=2 and ol2.data_produce_method='1'";  //ol2.first_n_mark=false and 
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
@@ -254,7 +254,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2_his ol2 "
-            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number=dpm.cur_process_number "
+            + "inner join camera dpm on ol2.dpm_id = dpm.camera_id and ol2.last_ff_number=dpm.cur_process_number "
             + "where ol2.first_n_mark=false and ol2.data_produce_method='1' and ol2.date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();
@@ -265,7 +265,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     Session session = getCurrentSession();
     String sql = "select ol2.* "
             + "from ot_level2_his ol2 "
-            + "inner join data_process_machine dpm on ol2.dpm_id = dpm.dpm_id and ol2.last_ff_number!=dpm.cur_process_number "
+            + "inner join camera dpm on ol2.dpm_id = dpm.camera_id and ol2.last_ff_number!=dpm.cur_process_number "
             + "where ol2.first_n_mark=false and ol2.date_str='" + dateStr + "'";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     return q.list();

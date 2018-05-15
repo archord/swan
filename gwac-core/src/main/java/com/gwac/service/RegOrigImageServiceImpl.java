@@ -90,6 +90,9 @@ public final class RegOrigImageServiceImpl implements RegOrigImageService {
         int ffNumber = fnumDao.getNextNumber(fnum);
         ff2.setFfNumber(ffNumber);
         ff2.setSkyId(tsky.getSkyId());
+        
+        tcamera.setCurProcessNumber(ffNumber);
+        cameraDao.updateCurProcessNumber(tcamera);
       } else {
         ff2.setFfNumber(0);
         ff2.setSkyId(0);
