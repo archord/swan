@@ -61,7 +61,8 @@ $(function () {
           "width": "1%"
         }, {
           "targets": 1,
-          "width": "20%"
+          "width": "20%",
+          "render": formateFileName
         }, {
           "targets": 3,
           "width": "20%"

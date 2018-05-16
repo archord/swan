@@ -1,58 +1,67 @@
 <%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/struts-tags" %>
-<%@ taglib prefix="sj" uri="/struts-jquery-tags"%> 
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
-<style>
-  table tr td{
-    margin: 2px;
-    padding: 2px;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+    <title>GWAC系统文件上传页面</title>
+    <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="keywords" content="国家天文台，svom, gwac，望远镜阵列" />
+    <meta http-equiv="description" content="GWAC系统文件上传页面" />
+    <link type="image/x-icon" rel="shortcut icon" href="${pageContext.request.contextPath}/resource/sysimg/favicon.ico"/>
+    <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resource/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resource/css/gwac-ui.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div style="display: none;">
+        <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
+      </div>      
 
-<div class="ui-widget-content ui-corner-all " style="margin:0px;width:100%;">
-  <p style="margin:0px; padding: 5px; "><b>curl后台上传文件示例：</b><br/>
-    curl uploadUrl -F dpmName=machineName -F currentDirectory=dirName 
-    -F configFile=@configFileName <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    -F fileUpload=@filename1 
-    -F fileUpload=@filenameN <br/>
-    <b>参数说明：</b><br/>
-    <b>currentDirectory:&nbsp;存储文件夹名，</b> 
-    为参数，后面的值没有“@”。每天观测传输的所有文件都存放在这个文件夹中，必须填写，建议使用当前日期命名。<br/>
-    <b>dpmName:&nbsp;数据处理机名称，</b> 
-    为参数，后面的值没有“@”。存储文件夹名的子目录，存储每个机器所传输的文件，必须填写。<br/>
-    <b>configFile:&nbsp;参数配置文件，</b> 
-    <a href="/svom/files/data-upload-config.properties" target="_blank" style="color:red" title="点击下载">
-      示例文件</a>，为文件，后面的值有“@”，以“.properties”结尾。后面传输的文件必须在这里说明，
-      其中包含OT列表文件名(OTList)，
-    切图文件文件名列表(cutImage)，星表文件文件名(starList)，原始图像文件名(origImage)。<br/>
-    <b>fileUpload:&nbsp;文件n，</b> 
-    后面的值有“@”。待上传的所有文件都以该参赛进行传递。单次传送总文件大小不超过1ooMB。<br/>
-    <b>url: 传输地址，</b>
-    默认为：<%=request.getContextPath()%>/uploadAction.action
-  </p>
-  <br/>
-</div>
+      <div class="row ot-list-top">
+        <form action="${pageContext.request.contextPath}/manualFileUpload.action" id="uploadFileAction" method="post" enctype="multipart/form-data">
+          <div class="col-xs-4 col-sm-4 col-md-4 ">
+            <input type="file" name="fileUpload" id="fileUpload"class="Wdate">
+          </div>
+          <div class="col-xs-4 col-sm-4 col-md-6 ">
+            <span>
+              注释&nbsp;<input name="comments" id="comments" type="text"  class="Wdate" style="width: 300px;height:30px"/>
+            </span>
+          </div>
+          <div class="col-xs-4 col-sm-4 col-md-2 ">
+            <input type="button" value="上传" class="btn btn-primary" id="uploadFileBtn"/>
+          </div>
+        </form>
+      </div>
+      <div class="row ot-list-top">
+        <div class="col-xs-12 col-sm-12 col-md-12 ">
+          <span id="uploadResult"></span>
+        </div>
+      </div>
 
-<div id="result" class="result ui-widget-content ui-corner-all" style="color: red; font-size: 14px; width:100%;margin-left: 0px;">
-  数据处理机名称，配置文件和文件n为必选项！
-</div>
+      <div class="row ot-list-body">
+        <div id="ot-list">
+          <table id="ot-list-table" class="display" cellspacing="0" width="100%">
+            <thead><tr><th>ID</th><th>文件名</th><th>注释</th><th>日期</th></tr></thead>
+            <tfoot><tr><th>ID</th><th>文件名</th><th>注释</th><th>日期</th></tr></tfoot>
+          </table>
+        </div>                                   
+      </div>
+    </div>
 
-<div class="ui-widget-content ui-corner-all " style="font-size: 14px; width:100%;margin-left: 0px;">
-  <!--  namespace="/" -->
-  <s:form id="uploadform" action="uploadAction" method="POST" enctype="multipart/form-data">
-    <s:textfield label="数据处理机名称" name="dpmName"/>
-    <s:textfield label="存储文件夹名" name="currentDirectory"/>
-    <s:file label="参数配置文件" name="configFile"/>
-    <s:file label="文件1" name="fileUpload"/>
-    <s:file label="文件2" name="fileUpload"/>
-    <s:file label="文件3" name="fileUpload"/>
-    <!--s:submit value="上传" name="submit"/-->
-    <sj:submit
-      targets="result" button="true" validate="true"
-      validateFunction="customeValidation"
-      onBeforeTopics="removeErrors"
-      onSuccessTopics="removeErrors" value="上传" indicator="indicator" />
-  </s:form>
+    <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/manual_upload.js"></script>
 
-</div>
-<img id="indicator" src="gwac_images/indicator.gif" alt="Loading..." style="display:none"/>
+  </body>
+</html>

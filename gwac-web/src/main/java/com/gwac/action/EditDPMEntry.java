@@ -39,7 +39,6 @@ public class EditDPMEntry extends ActionSupport {
     DataProcessMachine dpm = new DataProcessMachine();
     dpm.setName(name);
     dpm.setIp(ip);
-    dpm.setTspId(getTspId());
 
     if (oper.equalsIgnoreCase("add")) {
       log.debug("Add DataProcessMachine");
