@@ -41,7 +41,7 @@
           </div>
         </form>
       </div>
-      <div class="row ot-list-top">
+      <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 ">
           <span id="uploadResult"></span>
         </div>
