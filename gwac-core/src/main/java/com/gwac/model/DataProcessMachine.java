@@ -20,90 +20,6 @@ import javax.persistence.TemporalType;
 )
 public class DataProcessMachine implements java.io.Serializable {
 
-  /**
-   * @return the totalBackupImage
-   */
-  public Integer getTotalBackupImage() {
-    return totalBackupImage;
-  }
-
-  /**
-   * @param totalBackupImage the totalBackupImage to set
-   */
-  public void setTotalBackupImage(Integer totalBackupImage) {
-    this.totalBackupImage = totalBackupImage;
-  }
-
-  /**
-   * @return the lastBackupImageName
-   */
-  public String getLastBackupImageName() {
-    return lastBackupImageName;
-  }
-
-  /**
-   * @param lastBackupImageName the lastBackupImageName to set
-   */
-  public void setLastBackupImageName(String lastBackupImageName) {
-    this.lastBackupImageName = lastBackupImageName;
-  }
-
-  /**
-   * @return the userName
-   */
-  public String getUserName() {
-    return userName;
-  }
-
-  /**
-   * @param userName the userName to set
-   */
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  /**
-   * @return the password
-   */
-  public String getPassword() {
-    return password;
-  }
-
-  /**
-   * @param password the password to set
-   */
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  /**
-   * @return the status
-   */
-  public Integer getStatus() {
-    return status;
-  }
-
-  /**
-   * @param status the status to set
-   */
-  public void setStatus(Integer status) {
-    this.status = status;
-  }
-
-  /**
-   * @return the sshPort
-   */
-  public Integer getSshPort() {
-    return sshPort;
-  }
-
-  /**
-   * @param sshPort the sshPort to set
-   */
-  public void setSshPort(Integer sshPort) {
-    this.sshPort = sshPort;
-  }
-
   private short dpmId;
   private String name;
   private String ip;
@@ -183,6 +99,96 @@ public class DataProcessMachine implements java.io.Serializable {
     this.lastActiveTime = lastActiveTime;
   }
 
+
+  /**
+   * @return the totalBackupImage
+   */
+  @Column(name = "total_backup_image")
+  public Integer getTotalBackupImage() {
+    return totalBackupImage;
+  }
+
+  /**
+   * @param totalBackupImage the totalBackupImage to set
+   */
+  public void setTotalBackupImage(Integer totalBackupImage) {
+    this.totalBackupImage = totalBackupImage;
+  }
+
+  /**
+   * @return the lastBackupImageName
+   */
+  @Column(name = "last_backup_image_name")
+  public String getLastBackupImageName() {
+    return lastBackupImageName;
+  }
+
+  /**
+   * @param lastBackupImageName the lastBackupImageName to set
+   */
+  public void setLastBackupImageName(String lastBackupImageName) {
+    this.lastBackupImageName = lastBackupImageName;
+  }
+
+  /**
+   * @return the userName
+   */
+  @Column(name = "user_name")
+  public String getUserName() {
+    return userName;
+  }
+
+  /**
+   * @param userName the userName to set
+   */
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  /**
+   * @return the password
+   */
+  @Column(name = "password")
+  public String getPassword() {
+    return password;
+  }
+
+  /**
+   * @param password the password to set
+   */
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  /**
+   * @return the status
+   */
+  @Column(name = "status")
+  public Integer getStatus() {
+    return status;
+  }
+
+  /**
+   * @param status the status to set
+   */
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
+
+  /**
+   * @return the sshPort
+   */
+  @Column(name = "ssh_port")
+  public Integer getSshPort() {
+    return sshPort;
+  }
+
+  /**
+   * @param sshPort the sshPort to set
+   */
+  public void setSshPort(Integer sshPort) {
+    this.sshPort = sshPort;
+  }
 
 
 }

@@ -36,11 +36,11 @@ public class ManualUploadFile implements java.io.Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "muf_seq")
   @SequenceGenerator(name = "muf_seq", sequenceName = "muf_id_seq")
   @Column(name = "muf_id", unique = true, nullable = false)
-  public int getmufId() {
+  public int getMufId() {
     return this.mufId;
   }
 
-  public void setmufId(int mufId) {
+  public void setMufId(int mufId) {
     this.mufId = mufId;
   }
 

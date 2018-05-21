@@ -40,7 +40,6 @@ import org.apache.struts2.convention.annotation.Result;
 public class ManualFileUpload extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(ManualFileUpload.class);
-  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im"}));
 
   @Resource
   private ManualUploadFileDao mufDao;

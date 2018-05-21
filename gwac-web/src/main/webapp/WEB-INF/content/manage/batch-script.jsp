@@ -19,6 +19,26 @@
     <link href="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resource/css/gwac-ui.css" rel="stylesheet">
+
+    <style type="text/css"> 
+      #ttAddTable{
+        margin: auto; 
+      }
+      #ttAddTable tr{
+        height:30px;
+      }
+      #ttAddTable td{
+        text-align: left;
+      }
+      .input2{
+        width:180px;
+        height: 26px;
+        padding: 1px;
+      }
+      #ttAddTable textarea{
+        width:480px;
+      }
+    </style>
   </head>
   <body>
     <div class="container-fluid">
@@ -26,40 +46,66 @@
         <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
       </div>      
 
-      <div class="row">
+      <div class="row" style="margin-top:20px">
         <div class="col-xs-12 col-sm-12 col-md-12">
 
-          <form action="${pageContext.request.contextPath}/gwebend/observationPlanUpload.action" id="genObsPlanForm">
-            <table>
+          <form action="${pageContext.request.contextPath}/addTimingTask.action" id="addTTForm"  method="post" enctype="multipart/form-data">
+            <table id="ttAddTable">
               <tr><td>名称：</td>
-                <td><input name="ttName" id="ttName" class="timeinput"/></td>
+                <td><input name="ttName" id="ttName" class="input2"/></td>
                 <td>执行命令：</td>
-                <td><input name="ra" id="ra" style="text-align: right;width: 200px;" value="0"/></td></tr>
+                <td><input name="ttCommand" id="ttCommand" class='input2'/></td></tr>
               <tr><td>执行机器：</td><td>
-                  <select height="30" name="unitId" id="unitId">
-                    <option value="">未选择</option>
-                    <option value="001">转台01</option>
-                    <option value="002">转台02</option>
+                  <select height="30" name="dpmName" id="dpmName" multiple="multiple">
+                    <option value="011">011</option>
+                    <option value="012">012</option>
+                    <option value="013">013</option>
+                    <option value="014">014</option>
+                    <option value="015">015</option>
+                    <option value="021">021</option>
+                    <option value="022">022</option>
+                    <option value="023">023</option>
+                    <option value="024">024</option>
+                    <option value="025">025</option>
+                    <option value="031">031</option>
+                    <option value="032">032</option>
+                    <option value="033">033</option>
+                    <option value="034">034</option>
+                    <option value="035">035</option>
+                    <option value="041">041</option>
+                    <option value="042">042</option>
+                    <option value="043">043</option>
+                    <option value="044">044</option>
+                    <option value="045">045</option>
                   </select></td>
-                  <td>执行方式：</td><td>
-                  <select height="30" name="groupId" id="groupId">
+                <td>执行方式：</td><td>
+                  <select height="30" name="type" id="type" class="dropdown-toggle btn btn-default">
                     <option value="1" selected>单次立即执行</option>
                     <option value="2">单次定时执行</option>
                     <option value="3">多次定时执行</option>
                   </select></td></tr>
-              <tr><td>执行路径：</td>
-                <td><input type="file" name="fileUpload" id="fileUpload"class="Wdate"></td>
-                <td>执行文件：</td>
-                <td><input name="dec" id="dec" style="text-align: right;width: 200px;" value="0"/></td></tr>
-              <tr><td width="150px">开始日期：</td><td width="250px"><input name="localTime" id="localTime" class="timeinput"/></td>
-                <td width="150px">结束日期：</td><td><input name="utcTime" id="utcTime" class="timeinput"/></td></tr>
-              <tr><td width="150px">开始时间：</td><td width="250px"><input name="localTime" id="localTime" class="timeinput"/></td>
-                <td width="150px">结束时间：</td><td><input name="utcTime" id="utcTime" class="timeinput"/></td></tr>
+              <tr><td>执行文件：</td>
+                <td><input type="file" name="ttFileName" id="ttFileName"></td>
+                <td>执行路径：</td>
+                <td><input name="executePath" id="executePath"  class='input2'/></td></tr>
+              <tr><td width="100px">开始日期：</td>
+                <td width="200px"><input name="planStartDate" id="planStartDate" onclick="WdatePicker()" class="Wdate, input2"/></td>
+                <td width="100px">结束日期：</td>
+                <td width="200px"><input name="planEndDate" id="planEndDate" onclick="WdatePicker()" class="Wdate, input2"/></td></tr>
+              <tr><td>开始时间：</td>
+                <td><input name="planStartTime" id="planStartTime" onclick="WdatePicker({dateFmt:'HH:mm:ss'})" class="Wdate, input2"/></td>
+                <td>结束时间：</td>
+                <td><input name="planEndTime" id="planEndTime" onclick="WdatePicker({dateFmt:'HH:mm:ss'})" class="Wdate, input2"/></td></tr>
               <tr><td>注释：</td>
-                <td colspan="3"><input name="ra" id="ra" style="text-align: right;width: 200px;" value="0"/></td></tr>
-              <tr><td colspan="4" style="text-align:center;"><button type="button" id="genObsPlanBtn">添加任务</button></td></tr>
+                <td colspan="3"><textarea rows="2" cols="60" name='comments'></textarea></td></tr>
+              <tr><td colspan="4" style="text-align:center;"><button type="button" id="addTTBtn">添加任务</button></td></tr>
             </table>
           </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 ">
+          <span id="uploadResult"></span>
         </div>
       </div>
       <div class="row">
@@ -82,7 +128,8 @@
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resource/js/manual_upload.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/date/My97DatePicker/WdatePicker.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/batch_script.js"></script>
 
   </body>
 </html>
