@@ -24,7 +24,7 @@ $(function () {
       contentType: false,
     }).success(function (data) {
       $("#uploadResult").text(data);
-//      reloadUploadFileList();
+      reloadUploadFileList();
     }).error(function () {
       $("#uploadResult").text("upload error");
     });
@@ -32,14 +32,14 @@ $(function () {
 
   function reloadUploadFileList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-manual-file-list.action?timestamp=" + new Date().getTime();
+    var queryUrl = gwacRootURL + "/get-timing-task-list.action?timestamp=" + new Date().getTime();
     ot2ListTable.ajax.url(queryUrl).load();
   }
 
 
   function loadUploadFileList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-manual-file-list.action";
+    var queryUrl = gwacRootURL + "/get-timing-task-list.action";
     ot2ListTable = $('#ot-list-table').DataTable({
       serverSide: true,
       "deferRender": true,
@@ -59,10 +59,14 @@ $(function () {
         type: 'GET'
       },
       "columns": [
-        {"data": "muf_id"},
-        {"data": "name"},
-        {"data": "comments"},
-        {"data": "time"}
+        {"data": "tt_id"},
+        {"data": "tt_name"},
+        {"data": "tt_command"},
+        {"data": "dpm_name"},
+        {"data": "type"},
+        {"data": "status"},
+        {"data": "plan_start_time"},
+        {"data": "comments"}
       ],
       "columnDefs": [{
           "targets": 0,
@@ -70,11 +74,24 @@ $(function () {
           "width": "1%"
         }, {
           "targets": 1,
-          "width": "20%",
-          "render": formateFileName
+          "width": "10%"
+        }, {
+          "targets": 2,
+          "render": formateCommand,
+          "width": "30%"
         }, {
           "targets": 3,
-          "width": "20%"
+          "width": "10%"
+        }, {
+          "targets": 4,
+          "width": "5%"
+        }, {
+          "targets": 5,
+          "width": "5%"
+        }, {
+          "targets": 6,
+          "render": formateDateTime,
+          "width": "10%"
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -96,11 +113,22 @@ $(function () {
     });
   }
 
-  /*full: json对象；meta：表格元素*/
-  function formateFileName(data, type, full, meta) {
-    var gwacRootURL = $("#gwacRootURL").val();
-    var url = "/images/manual_upload/" + data;
-    return "<a href='" + url + "' target='_blank' title='点击下载文件'>" + data + "</a>";
+  /*full: json对象；meta：表格元素*/ 
+  function formateCommand(data, type, full, meta) {
+    return "<span title='"+full.execute_path+":"+full.tt_file_name+"'>" + data + "</span>";
+  }
+  function formateDateTime(data, type, full, meta) {
+    var sdate = full.plan_start_date;
+    var edate = full.plan_end_date;
+    var stime = full.plan_start_time;
+    var etime = full.plan_end_time;
+    var retime = full.real_end_time;
+    var tstr = "StartDate: "+ sdate + "&#13;"
+      + "EndDate: "+ edate + "&#13;"
+      + "StartTime: "+ stime + "&#13;"
+      + "EndTime: "+ etime + "&#13;"
+      + "RealEndTime: "+ retime + "&#13;";
+    return "<span title='"+tstr+"'>" + data + "</span>";
   }
 
   function reConstructParameter(data) {

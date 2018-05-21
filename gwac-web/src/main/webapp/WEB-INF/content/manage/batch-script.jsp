@@ -117,8 +117,8 @@
       <div class="row ot-list-body">
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
-            <thead><tr><th>ID</th><th>文件名</th><th>注释</th><th>日期</th></tr></thead>
-            <tfoot><tr><th>ID</th><th>文件名</th><th>注释</th><th>日期</th></tr></tfoot>
+            <thead><tr><th>ID</th><th>任务名</th><th>命令</th><th>目标机器</th><th>类型</th><th>状态</th><th>起止时间</th><th>注释</th></tr></thead>
+            <tfoot><tr><th>ID</th><th>任务名</th><th>命令</th><th>目标机器</th><th>状态</th><th>起止时间</th><th>注释</th></tr></tfoot>
           </table>
         </div>                                   
       </div>

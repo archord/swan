@@ -19,9 +19,10 @@ public class TimingTaskDaoImpl extends BaseHibernateDaoImpl<TimingTask> implemen
   
   @Override
   public String findRecord(int start, int length) {
-    Session session = getCurrentSession();
-    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT muf_id, name, ui_id, status, comments, time) r))) "
-            + "from(select * from manual_upload_file ORDER BY time desc OFFSET " 
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (select tmp1.*) r))) "
+            + "from(select tt.*, dpm.name dpm_name from timing_task tt "
+            + "inner join data_process_machine dpm on tt.dpm_id=dpm.dpm_id"
+            + " ORDER BY tt.tt_id desc OFFSET " 
             + start + " LIMIT " + length + " )as tmp1";
     
     //log.debug(sql);
