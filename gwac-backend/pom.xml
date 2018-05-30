@@ -32,11 +32,6 @@
   
   <dependencies>
     <dependency>
-      <groupId>com.hierynomus</groupId>
-      <artifactId>sshj</artifactId>
-      <version>0.24.0</version>
-    </dependency>
-    <dependency>
       <groupId>com.gwac</groupId>
       <artifactId>gwac-core</artifactId>  
       <version>beta-1.0</version>

@@ -4,7 +4,7 @@
   <session-factory>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.password">catauseradmin</property>
-    <property name="hibernate.connection.url">jdbc:mysql://190.168.1.41:3306/catalogue</property>
+    <property name="hibernate.connection.url">jdbc:mysql://172.28.8.100:3306/catalogue</property>
     <property name="hibernate.connection.username">catauser</property>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <mapping class="com.gwac.model2.MergedOther"/>
