@@ -52,11 +52,15 @@
           <form action="${pageContext.request.contextPath}/addTimingTask.action" id="addTTForm"  method="post" enctype="multipart/form-data">
             <table id="ttAddTable">
               <tr><td>名称：</td>
-                <td><input name="ttName" id="ttName" class="input2"/></td>
+                <td><input name="ttName" id="ttName" class="input2"/>
+                  <input type="hidden" name="actionType" id='actionType' value="addTTForm"/>
+                  <input type="hidden" name="ttId" id="ttId" value="-1"/>
+                </td>
                 <td>执行命令：</td>
                 <td><input name="ttCommand" id="ttCommand" class='input2'/></td></tr>
               <tr><td>执行机器：</td><td>
-                  <select height="30" name="dpmName" id="dpmName" multiple="multiple">
+                  <select height="30" name="dpmName" id="dpmName" class="dropdown-toggle btn btn-default">
+                    <option value="All">All</option>
                     <option value="011">011</option>
                     <option value="012">012</option>
                     <option value="013">013</option>
@@ -80,7 +84,7 @@
                   </select></td>
                 <td>执行方式：</td><td>
                   <select height="30" name="type" id="type" class="dropdown-toggle btn btn-default">
-                    <option value="1" selected>单次立即执行</option>
+                    <option value="1">单次立即执行</option>
                     <option value="2">单次定时执行</option>
                     <option value="3">多次定时执行</option>
                   </select></td></tr>
@@ -97,8 +101,8 @@
                 <td>结束时间：</td>
                 <td><input name="planEndTime" id="planEndTime" onclick="WdatePicker({dateFmt:'HH:mm:ss'})" class="Wdate, input2"/></td></tr>
               <tr><td>注释：</td>
-                <td colspan="3"><textarea rows="2" cols="60" name='comments'></textarea></td></tr>
-              <tr><td colspan="4" style="text-align:center;"><button type="button" id="addTTBtn">添加任务</button></td></tr>
+                <td colspan="3"><textarea rows="2" cols="60" name='comments' id='comments'></textarea></td></tr>
+              <tr><td colspan="4" style="text-align:center;"><button type="button" id="addTTBtn">提交</button></td></tr>
             </table>
           </form>
         </div>
@@ -117,8 +121,8 @@
       <div class="row ot-list-body">
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
-            <thead><tr><th>ID</th><th>任务名</th><th>命令</th><th>目标机器</th><th>类型</th><th>状态</th><th>起止时间</th><th>注释</th></tr></thead>
-            <tfoot><tr><th>ID</th><th>任务名</th><th>命令</th><th>目标机器</th><th>状态</th><th>起止时间</th><th>注释</th></tr></tfoot>
+            <thead><tr><th>ID</th><th>任务名</th><th>命令</th><th>目标机器</th><th>类型</th><th>状态</th><th>起止时间</th><th>注释</th><th>修改</th><th>删除</th></tr></thead>
+            <tfoot><tr><th>ID</th><th>任务名</th><th>命令</th><th>目标机器</th><th>状态</th><th>起止时间</th><th>注释</th><th>修改</th><th>删除</th></tr></tfoot>
           </table>
         </div>                                   
       </div>

@@ -82,7 +82,7 @@
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-mot-timesequence-sphere.action" target="_blank" ><p class="multiline1">移动展示</p></a>
             <a href="<%=request.getContextPath()%>/gwac/pgwac-mot-timesequence-sphere-debug.action" target="_blank" ><p class="multiline">移动展示调试</p></a>
             <a href="<%=request.getContextPath()%>/gwac/pgwac-sphere-distribution.action" target="_blank" ><p class="multiline">模板分布</p></a></div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/manage/pfile-upload.action" target="_blank" ><p>上传文件</p></a></div>
+          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/manage/pfile-upload.action" target="_blank" ><p>文件上传下载</p></a></div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-light-curve.action" target="_blank" ><p>小行星光变</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/Mini_GWAC_Survey/survey_plan_db.php" target="_blank" ><p>观测策略</p></a></div>
           <div class='mason-block x2'><a href="http://190.168.1.45/GWACOC/gcn_trigger.php" target="_blank" ><p>GCN trigger</p></a></div>
@@ -90,7 +90,6 @@
             <a href="<%=request.getContextPath()%>/monitor/monitor-vaccum.action" target="_blank" ><p class="multiline">真空度曲线</p></a>
             <a href="<%=request.getContextPath()%>/monitor/monitor-temperature.action" target="_blank" ><p class="multiline">温度曲线</p></a>
           </div>
-          <div class='mason-block'><a href="<%=request.getContextPath()%>/manage/pfile-upload.action" target="_blank" ><p>文件上传下载</p></a></div>
           <div class='mason-block'><a href="/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>

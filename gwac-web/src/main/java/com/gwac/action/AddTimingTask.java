@@ -39,13 +39,27 @@ import org.apache.struts2.convention.annotation.Result;
  */
 public class AddTimingTask extends ActionSupport {
 
+  /**
+   * @param ttId the ttId to set
+   */
+  public void setTtId(long ttId) {
+    this.ttId = ttId;
+  }
+
+  /**
+   * @param actionType the actionType to set
+   */
+  public void setActionType(String actionType) {
+    this.actionType = actionType;
+  }
+
   private static final Log log = LogFactory.getLog(AddTimingTask.class);
 
   @Resource
   private TimingTaskDao dao;
-  @Resource
-  private DataProcessMachineDAO dpmDao;
 
+  private long ttId;
+  private String actionType;
   private String ttName;
   private String ttCommand;
   private String dpmName;
@@ -75,103 +89,131 @@ public class AddTimingTask extends ActionSupport {
     boolean flag = true;
     echo = "";
 
-    //必须传输数据文件
-    //Error, must transform data file
-    if (ttName.isEmpty() || ttCommand.isEmpty()) {
-      echo = echo + "Error, must set ttName and ttCommand.\n";
-      flag = false;
-    }
-
-    TimingTask tt = new TimingTask();
-    tt.setTtName(ttName);
-    tt.setTtCommand(ttCommand);
-    tt.setStatus('1');
-    tt.setComments(comments);
-    tt.setType(type);
-    tt.setExecutePath(executePath);
-    if (dpmName!=null && !dpmName.isEmpty()) {
-      DataProcessMachine dpm = dpmDao.getDpmByName(dpmName);
-      tt.setDpmId(dpm.getDpmId());
-    }else{
-      dpmName="";
-    }
-    if (!planStartTime.isEmpty()) {
-      Date tdate = CommonFunction.stringToDate(planStartTime, "HH:mm:ss");
-      tt.setPlanStartTime(tdate);
-    }
-    if (!planEndTime.isEmpty()) {
-      Date tdate = CommonFunction.stringToDate(planEndTime, "HH:mm:ss");
-      tt.setPlanEndTime(tdate);
-    }
-    if (!planStartDate.isEmpty()) {
-      Date tdate = CommonFunction.stringToDate(planStartDate, "yyyy-MM-dd");
-      tt.setPlanStartDate(tdate);
-    }
-    if (!planEndDate.isEmpty()) {
-      Date tdate = CommonFunction.stringToDate(planEndDate, "yyyy-MM-dd");
-      tt.setPlanEndDate(tdate);
-    }
-    if (ttFileName.size() > 0) {
-      tt.setTtFileName(ttFileNameFileName.get(0));
-    }
-    System.out.println(tt.toString());
-    dao.save(tt);
-
-    //计算数据文件大小
-    long fileTotalSize = 0;
-    for (File file : ttFileName) {
-      fileTotalSize += file.length();
-    }
-    int i = 0;
-    if (fileTotalSize * 1.0 / 1048576 > 10.0) {
-      echo = echo + "total file size is " + fileTotalSize * 1.0 / 1048576 + " beyond 10MB, total file " + ttFileName.size();
-      for (File file : ttFileName) {
-        log.warn(ttFileNameFileName.get(i++).trim() + ": " + file.length() * 1.0 / 1048576 + "MB");
+    if (actionType.equals("deleteTTForm")) {
+      if (ttId > -1) {
+        dao.deleteById(ttId);
       }
-      flag = false;
-    }
-    log.debug("fileTotalSize:" + fileTotalSize * 1.0 / 1048576 + "MB");
+      echo = "delete success!";
+    } else {
 
-    if (flag) {
-      try {
-        String rootPath = getText("gwacDataRootDirectory");
-        String scriptDir = getText("gwacBatchScript");
-        if (rootPath.charAt(rootPath.length() - 1) != '/') {
-          rootPath += "/";
+      //必须传输数据文件
+      //Error, must transform data file
+      if (ttName.isEmpty() || ttCommand.isEmpty()) {
+        echo = echo + "Error, must set ttName and ttCommand.\n";
+        flag = false;
+      } else {
+
+        TimingTask tt = new TimingTask();
+        tt.setTtName(ttName);
+        tt.setTtCommand(ttCommand);
+        tt.setStatus('1');
+        tt.setComments(comments);
+        tt.setType(type);
+        tt.setExecutePath(executePath);
+        tt.setDpmName(dpmName);
+        if (!planStartTime.isEmpty()) {
+          Date tdate = CommonFunction.stringToDate(planStartTime, "HH:mm:ss");
+          tt.setPlanStartTime(tdate);
         }
-        String storePath = rootPath + scriptDir;
-        i = 0;
-        for (File file : ttFileName) {
-          String tfilename = ttFileNameFileName.get(i++).trim();
-          if (tfilename.isEmpty()) {
-            continue;
-          }
-          log.debug("receive file " + tfilename);
-          File destFile = new File(storePath, tfilename);
-          //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
-          try {
-            if (destFile.exists()) {
-              log.warn(destFile + " already exist, delete it.");
-              FileUtils.forceDelete(destFile);
+        if (!planEndTime.isEmpty()) {
+          Date tdate = CommonFunction.stringToDate(planEndTime, "HH:mm:ss");
+          tt.setPlanEndTime(tdate);
+        }
+        if (!planStartDate.isEmpty()) {
+          Date tdate = CommonFunction.stringToDate(planStartDate, "yyyy-MM-dd");
+          tt.setPlanStartDate(tdate);
+        }
+        if (!planEndDate.isEmpty()) {
+          Date tdate = CommonFunction.stringToDate(planEndDate, "yyyy-MM-dd");
+          tt.setPlanEndDate(tdate);
+        }
+        if (ttFileName.size() > 0) {
+          tt.setTtFileName(ttFileNameFileName.get(0));
+        }
+        //log.debug(tt.toString());
+        if (actionType.equals("updateTTForm")) {
+          if (ttId > -1) {
+            if (ttFileName.isEmpty()) {
+              TimingTask tt2 = dao.getById(ttId);
+              tt2.setComments(tt.getComments());
+              tt2.setDpmName(tt.getDpmName());
+              tt2.setExecutePath(tt.getExecutePath());
+              tt2.setPlanEndDate(tt.getPlanEndDate());
+              tt2.setPlanEndTime(tt.getPlanEndTime());
+              tt2.setPlanStartDate(tt.getPlanStartTime());
+              tt2.setPlanStartTime(tt.getPlanStartTime());
+              tt2.setRealEndTime(tt.getRealEndTime());
+              tt2.setTtCommand(tt.getTtCommand());
+              tt2.setTtName(tt.getTtName());
+              tt2.setType(tt.getType());
+              dao.update(tt2);
+            } else {
+              tt.setTtId(ttId);
+              dao.update(tt);
             }
-            FileUtils.moveFile(file, destFile);
+          } else {
+            echo = "update failure, ttId=" + ttId;
+          }
+        } else {
+          dao.save(tt);
+        }
 
-            echo = "add task success";
-          } catch (IOException ex) {
+        //计算数据文件大小
+        long fileTotalSize = 0;
+        for (File file : ttFileName) {
+          fileTotalSize += file.length();
+        }
+        int i = 0;
+        if (fileTotalSize * 1.0 / 1048576 > 10.0) {
+          echo = echo + "total file size is " + fileTotalSize * 1.0 / 1048576 + " beyond 10MB, total file " + ttFileName.size();
+          for (File file : ttFileName) {
+            log.warn(ttFileNameFileName.get(i++).trim() + ": " + file.length() * 1.0 / 1048576 + "MB");
+          }
+          flag = false;
+        }
+        log.debug("fileTotalSize:" + fileTotalSize * 1.0 / 1048576 + "MB");
+
+        if (flag) {
+          try {
+            String rootPath = getText("gwacDataRootDirectory");
+            String scriptDir = getText("gwacBatchScript");
+            if (rootPath.charAt(rootPath.length() - 1) != '/') {
+              rootPath += "/";
+            }
+            String storePath = rootPath + scriptDir;
+            i = 0;
+            for (File file : ttFileName) {
+              String tfilename = ttFileNameFileName.get(i++).trim();
+              if (tfilename.isEmpty()) {
+                continue;
+              }
+              log.debug("receive file " + tfilename);
+              File destFile = new File(storePath, tfilename);
+              //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+              try {
+                if (destFile.exists()) {
+                  log.warn(destFile + " already exist, delete it.");
+                  FileUtils.forceDelete(destFile);
+                }
+                FileUtils.moveFile(file, destFile);
+
+                echo = "add task success";
+              } catch (IOException ex) {
+                log.error("delete or move file errror ", ex);
+                echo = "add task failure";
+              }
+            }
+            endTime = System.nanoTime();
+          } catch (Exception ex) {
             log.error("delete or move file errror ", ex);
             echo = "add task failure";
           }
         }
-        endTime = System.nanoTime();
-      } catch (Exception ex) {
-        log.error("delete or move file errror ", ex);
-        echo = "add task failure";
       }
+
+      double time1 = 1.0 * (endTime - startTime) / 1e9;
+      log.debug("upload " + ttFileName.size() + " files, total time: " + time1 + "s, ");
     }
-
-    double time1 = 1.0 * (endTime - startTime) / 1e9;
-    log.debug("upload " + ttFileName.size() + " files, total time: " + time1 + "s, ");
-
     log.debug(echo);
     sendResultMsg(echo);
     return null;

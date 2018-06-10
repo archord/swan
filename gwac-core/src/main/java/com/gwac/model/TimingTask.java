@@ -5,9 +5,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -20,10 +18,10 @@ import org.hibernate.annotations.Parameter;
 )
 public class TimingTask implements java.io.Serializable {
 
-  private int ttId;
+  private long ttId;
   private String ttName;
   private String ttCommand;
-  private Short dpmId;
+  private String dpmName;
   private Date planStartTime;
   private Date planEndTime;
   private Date realEndTime;
@@ -44,7 +42,7 @@ public class TimingTask implements java.io.Serializable {
 
   @Override
   public String toString() {
-    return "ttName=" + ttName + "\nttCommand=" + ttCommand + "\ndpmId=" + dpmId 
+    return "ttName=" + ttName + "\nttCommand=" + ttCommand + "\ndpmName=" + dpmName 
             + "\nplanStartTime=" + planStartTime.toString()
             + "\nplanEndTime=" + planEndTime.toString() + "\nstatus=" + status 
             + "\ncomments=" + comments + "\nttFileName=" + ttFileName
@@ -58,11 +56,11 @@ public class TimingTask implements java.io.Serializable {
      @Id 
   @GeneratedValue(generator = "generator")
   @Column(name = "tt_id", unique = true, nullable = false)
-  public int getTtId() {
+  public long getTtId() {
     return this.ttId;
   }
 
-  public void setTtId(int ttId) {
+  public void setTtId(long ttId) {
     this.ttId = ttId;
   }
 
@@ -97,18 +95,18 @@ public class TimingTask implements java.io.Serializable {
   }
 
   /**
-   * @return the dpmId
+   * @return the dpmName
    */
-  @Column(name = "dpm_id")
-  public Short getDpmId() {
-    return dpmId;
+  @Column(name = "dpm_Name")
+  public String getDpmName() {
+    return dpmName;
   }
 
   /**
-   * @param dpmId the dpmId to set
+   * @param dpmName the dpmName to set
    */
-  public void setDpmId(Short dpmId) {
-    this.dpmId = dpmId;
+  public void setDpmName(String dpmName) {
+    this.dpmName = dpmName;
   }
 
   /**
