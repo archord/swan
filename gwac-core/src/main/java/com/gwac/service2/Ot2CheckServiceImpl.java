@@ -562,6 +562,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
+  //有两个亮于13星等的星
   public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog2(OtLevel2 ot2) {
 
     float tmag2 = 9;
