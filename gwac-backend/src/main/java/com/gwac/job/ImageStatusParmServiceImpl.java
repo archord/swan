@@ -5,11 +5,13 @@
 package com.gwac.job;
 
 import com.gwac.dao.CameraDao;
+import com.gwac.dao.FeedbackFocusDao;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.Camera;
+import com.gwac.model.FeedbackFocus;
 import com.gwac.model.FitsFile2Show;
 import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.UploadFileUnstore;
@@ -57,6 +59,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
   private ImageStatusParameterDao ispDao;
   @Resource
   private SystemStatusMonitorDao ssmDao;
+  @Resource
+  private FeedbackFocusDao fbfDao;
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
   @Value("#{syscfg.gwacServerBeijing}")
@@ -470,6 +474,10 @@ public class ImageStatusParmServiceImpl implements BaseService {
             if (tisp.getSendSuccess()) {
               ispDao.update(tisp);
             }
+            FeedbackFocus  fbf = new FeedbackFocus();
+            fbf.setFbfId(tisp.getIspId());
+            fbf.setSendTimeUtc(new Date());
+            fbfDao.save(fbf);
           }
           try {
             out.close();
@@ -607,6 +615,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
     sb.append(ff2.getCamName());
     sb.append(", Value=");
     sb.append(isp.getFwhm());
+//    sb.append(", Isp_ID=");
+//    sb.append(isp.getIspId());
     sb.append("\n");
     return sb.toString();
   }

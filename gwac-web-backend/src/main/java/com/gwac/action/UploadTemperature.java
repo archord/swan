@@ -36,13 +36,12 @@ public class UploadTemperature extends ActionSupport {
   private String groupId;
   private String unitId;
   private String camId;
-  private Boolean online;
-  private Float voltage;
-  private Float current;
-  private Float thot;
+  private String utc;
   private Float coolget;
   private Float coolset;
-  private String time;
+  private Float thot;
+  private Float voltage;
+  private Float current;
 
   @Resource
   private CameraDao camDao;
@@ -57,13 +56,12 @@ public class UploadTemperature extends ActionSupport {
     log.debug("groupId:" + groupId);
     log.debug("unitId:" + unitId);
     log.debug("camId:" + camId);
-    log.debug("online:" + online);
     log.debug("voltage:" + voltage);
     log.debug("current:" + current);
     log.debug("hotEndTemperature:" + thot);
     log.debug("coldEndTemperature:" + coolget);
     log.debug("coolset:" + coolset);
-    log.debug("time:" + time);
+    log.debug("time:" + utc);
 
     if (groupId == null || groupId.isEmpty() || unitId == null || unitId.isEmpty()
             || camId == null || camId.isEmpty()) {
@@ -76,15 +74,15 @@ public class UploadTemperature extends ActionSupport {
         log.debug("cameraId:"+tcam.getCameraId());
         obj.setCamId(tcam.getCameraId());
         obj.setCurrent(current);
-        obj.setOnline(online);
+        obj.setOnline(false);
         obj.setHotEndTemperature(thot);
         obj.setColdEndTemperature(coolget);
         obj.setCoolset(coolset);
         obj.setVoltage(voltage);
-        if (null == time) {
+        if (null == utc) {
           obj.setTime(new Date());
         } else {
-          obj.setTime(CommonFunction.stringToDate(time.replace("T", " ")));
+          obj.setTime(CommonFunction.stringToDate(utc.replace("T", " ")));
         }
         ctmDao.save(obj);
         echo = "receive parameter success.";
@@ -140,13 +138,6 @@ public class UploadTemperature extends ActionSupport {
   }
 
   /**
-   * @param online the online to set
-   */
-  public void setOnline(Boolean online) {
-    this.online = online;
-  }
-
-  /**
    * @param voltage the voltage to set
    */
   public void setVoltage(Float voltage) {
@@ -161,10 +152,10 @@ public class UploadTemperature extends ActionSupport {
   }
 
   /**
-   * @param time the time to set
+   * @param utc the time to set
    */
-  public void setTime(String time) {
-    this.time = time;
+  public void setTime(String utc) {
+    this.utc = utc;
   }
 
   /**

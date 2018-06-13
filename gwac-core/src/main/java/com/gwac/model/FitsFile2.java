@@ -48,10 +48,10 @@ public class FitsFile2 implements java.io.Serializable {
     this.genTime = genTime;
   }
 
+  @Id
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
     @Parameter(name = "max_lo", value = "49"),
     @Parameter(name = "sequence", value = "ff_id_seq2")})
-  @Id
   @GeneratedValue(generator = "generator")
   @Column(name = "ff_id", unique = true, nullable = false)
   public long getFfId() {

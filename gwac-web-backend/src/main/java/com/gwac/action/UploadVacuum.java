@@ -36,11 +36,10 @@ public class UploadVacuum extends ActionSupport {
   private String groupId;
   private String unitId;
   private String camId;
-  private Boolean online;
   private Float voltage;
   private Float current;
   private Float pressure;
-  private String time;
+  private String utc;
 
   @Resource
   private CameraDao camDao;
@@ -55,11 +54,10 @@ public class UploadVacuum extends ActionSupport {
     log.debug("groupId:" + groupId);
     log.debug("unitId:" + unitId);
     log.debug("camId:" + camId);
-    log.debug("online:" + online);
     log.debug("voltage:" + voltage);
     log.debug("current:" + current);
     log.debug("pressure:" + pressure);
-    log.debug("time:" + time);
+    log.debug("time:" + utc);
 
     if (groupId == null || groupId.isEmpty() || unitId == null || unitId.isEmpty()
             || camId == null || camId.isEmpty()) {
@@ -71,13 +69,13 @@ public class UploadVacuum extends ActionSupport {
         CameraVacuumMonitor obj = new CameraVacuumMonitor();
         obj.setCamId(tcam.getCameraId());
         obj.setCurrent(current);
-        obj.setOnline(online);
+        obj.setOnline(false);
         obj.setPressure(pressure);
         obj.setVoltage(voltage);
-        if (null == time) {
+        if (null == utc) {
           obj.setTime(new Date());
         } else {
-          obj.setTime(CommonFunction.stringToDate(time.replace("T", " ")));
+          obj.setTime(CommonFunction.stringToDate(utc.replace("T", " ")));
         }
         cvmDao.save(obj);
         echo = "receive parameter success.";
@@ -133,13 +131,6 @@ public class UploadVacuum extends ActionSupport {
   }
 
   /**
-   * @param online the online to set
-   */
-  public void setOnline(Boolean online) {
-    this.online = online;
-  }
-
-  /**
    * @param voltage the voltage to set
    */
   public void setVoltage(Float voltage) {
@@ -161,10 +152,10 @@ public class UploadVacuum extends ActionSupport {
   }
 
   /**
-   * @param time the time to set
+   * @param utc the time to set
    */
-  public void setTime(String time) {
-    this.time = time;
+  public void setTime(String utc) {
+    this.utc = utc;
   }
 
 

@@ -1,6 +1,7 @@
 package com.gwac.model;
 // Generated 2015-10-2 9:40:37 by Hibernate Tools 3.6.0
 
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,17 +18,81 @@ import javax.persistence.Table;
 )
 public class Mount implements java.io.Serializable {
 
+  /**
+   * @return the timeUtc
+   */
+  @Column(name = "time_utc")
+  public Date getTimeUtc() {
+    return timeUtc;
+  }
+
+  /**
+   * @param timeUtc the timeUtc to set
+   */
+  public void setTimeUtc(Date timeUtc) {
+    this.timeUtc = timeUtc;
+  }
+
+  /**
+   * @return the errcode
+   */
+  @Column(name = "errcode")
+  public Short getErrcode() {
+    return errcode;
+  }
+
+  /**
+   * @param errcode the errcode to set
+   */
+  public void setErrcode(Short errcode) {
+    this.errcode = errcode;
+  }
+
+  /**
+   * @return the objRa
+   */
+  @Column(name = "obj_ra")
+  public Float getObjRa() {
+    return objRa;
+  }
+
+  /**
+   * @param objRa the objRa to set
+   */
+  public void setObjRa(Float objRa) {
+    this.objRa = objRa;
+  }
+
+  /**
+   * @return the objDec
+   */
+  @Column(name = "obj_dec")
+  public Float getObjDec() {
+    return objDec;
+  }
+
+  /**
+   * @param objDec the objDec to set
+   */
+  public void setObjDec(Float objDec) {
+    this.objDec = objDec;
+  }
+
   private int mountId;
   private String name;
   private String unitId;
   private String groupId;
   private Integer status;
   private String comment;
-  private String opSn;
+  private Long opSn;
   private String skyName;
   private Float ra;
   private Float dec;
   private String obsType;
+  private Date timeUtc;
+  private Short errcode;
+  private Float objRa;
+  private Float objDec;
 
   public Mount() {
   }
@@ -121,14 +186,14 @@ public class Mount implements java.io.Serializable {
    * @return the opSn
    */
   @Column(name = "op_sn")
-  public String getOpSn() {
+  public Long getOpSn() {
     return opSn;
   }
 
   /**
    * @param opSn the opSn to set
    */
-  public void setOpSn(String opSn) {
+  public void setOpSn(Long opSn) {
     this.opSn = opSn;
   }
 

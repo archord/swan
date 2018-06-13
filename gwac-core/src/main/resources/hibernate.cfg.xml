@@ -76,5 +76,9 @@
     <mapping class="com.gwac.model.ObjectRelation"/>
     <mapping class="com.gwac.model.CoordinateShow"/>
     <mapping class="com.gwac.model.OtNumber"/>
+    <mapping class="com.gwac.model.CameraMonitor"/>
+    <mapping class="com.gwac.model.FeedbackFocus"/>
+    <mapping class="com.gwac.model.MountMonitor"/>
+    <mapping class="com.gwac.model.ObsCtlSysMonitor"/>
   </session-factory>
 </hibernate-configuration>
