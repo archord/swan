@@ -16,3 +16,16 @@ curl  http://url/gwac/gwacFileReceive.action \
 
 curl  http://url:8077/gwac/gwacFileReceive.action -F fileUpload=@gwac-20150201.sql
 curl  http://url:8077/gwac/realTimeOtDstImageUpload.action -F fileUpload=@gwac-20150201.sql
+
+
+curl http://10.36.1.77:8080/gwebend/uploadFocusStatus.action -F fbfId=4242975 -F focus=98 -F cameraId=001
+
+curl http://10.36.1.77:8080/gwebend/uploadMountStatus.action -F groupId=001 -F unitId=003 -F utc=2018-06-14T08:11:30 -F state=1 -F errcode=123 -F ra=60.1 -F dec=60.2 -F objRa=60.3 -F objDec=60.4
+
+curl http://10.36.1.77:8080/gwebend/uploadCameraStatus.action  -F groupId=001 -F unitId=003 -F camId=032 -F utc=2018-06-14T08:11:30 -F mcState=1 -F focus=123 -F coolget=-60 -F filter=R -F state=2 -F errcode=5 -F imgType=obj -F objName=G180614_C00012 -F frmNo=120 -F fileName='abc.fit'
+
+curl http://10.36.1.77:8080/gwebend/uploadObsCtlSysStatus.action  -F groupId=001 -F unitId=003 -F utc=2018-06-14T08:11:30 -F state=1 -F opSn=128 -F opTime=2018-06-14T08:19:30  -F mountStatus=12 -F cameraStatus=23
+
+curl http://10.36.1.77:8080/gwebend/uploadTemperature.action -F groupId=001 -F unitId=003 -F camId=032 -F utc=2018-06-14T08:11:30 -F coolget=-58 -F coolset=-60 -F thot=-20 -F voltage=11.9 -F current=10.1
+
+curl http://10.36.1.77:8080/gwebend/uploadVacuum.action  -F groupId=001 -F unitId=003 -F camId=032 -F utc=2018-06-14T08:11:30 -F pressure=38 -F voltage=11.9 -F current=10.1

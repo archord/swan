@@ -8,13 +8,8 @@ package com.gwac.action;
  *
  * @author xy
  */
-import com.gwac.dao.CameraDao;
-import com.gwac.dao.CameraMonitorDao;
 import com.gwac.dao.FeedbackFocusDao;
-import com.gwac.model.Camera;
-import com.gwac.model.CameraMonitor;
 import com.gwac.model.FeedbackFocus;
-import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,7 +38,7 @@ public class UploadFeedbackFocus extends ActionSupport {
   private FeedbackFocusDao fbfDao;
   private String echo = "";
 
-  @Action(value = "uploadCameraInfo")
+  @Action(value = "uploadFocusStatus")
   public void upload() {
 
     echo = "";

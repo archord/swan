@@ -8,11 +8,13 @@ package com.gwac.dao;
 import com.gwac.model.FeedbackFocus;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author msw
  */
+@Repository
 public class FeedbackFocusDaoImpl extends BaseHibernateDaoImpl<FeedbackFocus> implements FeedbackFocusDao {
 
   @Override

@@ -53,7 +53,7 @@ public class UploadCameraMonitor extends ActionSupport {
   private CameraMonitorDao cmDao;
   private String echo = "";
 
-  @Action(value = "uploadCameraInfo")
+  @Action(value = "uploadCameraStatus")
   public void upload() {
 
     echo = "";

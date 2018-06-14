@@ -6,11 +6,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.CameraMonitor;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author msw
  */
+@Repository
 public class CameraMonitorDaoImpl extends BaseHibernateDaoImpl<CameraMonitor> implements CameraMonitorDao {
   
 }

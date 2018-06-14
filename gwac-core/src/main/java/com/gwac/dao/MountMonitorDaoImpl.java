@@ -6,11 +6,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.MountMonitor;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author msw
  */
+@Repository
 public class MountMonitorDaoImpl extends BaseHibernateDaoImpl<MountMonitor> implements MountMonitorDao {
   
 }

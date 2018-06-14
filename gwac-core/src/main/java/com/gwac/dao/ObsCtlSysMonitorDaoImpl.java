@@ -6,11 +6,13 @@
 package com.gwac.dao;
 
 import com.gwac.model.ObsCtlSysMonitor;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author msw
  */
+@Repository
 public class ObsCtlSysMonitorDaoImpl extends BaseHibernateDaoImpl<ObsCtlSysMonitor> implements ObsCtlSysMonitorDao {
   
 }
