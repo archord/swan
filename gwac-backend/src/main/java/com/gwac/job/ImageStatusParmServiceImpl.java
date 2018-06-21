@@ -59,8 +59,6 @@ public class ImageStatusParmServiceImpl implements BaseService {
   private ImageStatusParameterDao ispDao;
   @Resource
   private SystemStatusMonitorDao ssmDao;
-  @Resource
-  private FeedbackFocusDao fbfDao;
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
   @Value("#{syscfg.gwacServerBeijing}")
@@ -474,10 +472,6 @@ public class ImageStatusParmServiceImpl implements BaseService {
             if (tisp.getSendSuccess()) {
               ispDao.update(tisp);
             }
-            FeedbackFocus  fbf = new FeedbackFocus();
-            fbf.setFbfId(tisp.getIspId());
-            fbf.setSendTimeUtc(new Date());
-            fbfDao.save(fbf);
           }
           try {
             out.close();

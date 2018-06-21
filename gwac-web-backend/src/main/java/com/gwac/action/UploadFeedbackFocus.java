@@ -8,7 +8,9 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.FeedbackFocusDao;
+import com.gwac.model.Camera;
 import com.gwac.model.FeedbackFocus;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.IOException;
@@ -30,10 +32,11 @@ public class UploadFeedbackFocus extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(UploadFeedbackFocus.class);
 
-  private Long fbfId;
   private Integer focus;
   private String cameraId;
 
+  @Resource
+  private CameraDao cameraDao;
   @Resource
   private FeedbackFocusDao fbfDao;
   private String echo = "";
@@ -42,24 +45,27 @@ public class UploadFeedbackFocus extends ActionSupport {
   public void upload() {
 
     echo = "";
-    log.debug("fbfId:" + fbfId);
     log.debug("focus:" + focus);
     log.debug("cameraId:" + cameraId);
 
-    if (cameraId == null || cameraId.isEmpty() || fbfId == 0) {
+    if (cameraId == null || cameraId.isEmpty()) {
       echo = "cameraId and ispId cannot be empty.";
       log.warn(echo);
     } else {
-      FeedbackFocus tff = fbfDao.getByFbfId(fbfId);
-      if (tff != null) {
+
+      Camera tcamera = cameraDao.getByName(cameraId);
+      if (tcamera != null) {
+        FeedbackFocus tff = new FeedbackFocus();
+        tff.setCameraId(tcamera.getCameraId());
         tff.setFocus(focus);
         tff.setRecvTimeUtc(new Date());
         fbfDao.update(tff);
         echo = "receive parameter success.";
+        log.debug(echo);
       } else {
-        echo = "can not find fbfId: " + fbfId;
+        echo = "cannot find camera cameraName=" + cameraId;
+        log.debug(echo);
       }
-      log.debug(echo);
     }
 
     sendResultMsg(echo);
@@ -83,14 +89,6 @@ public class UploadFeedbackFocus extends ActionSupport {
    */
   public String getEcho() {
     return echo;
-  }
-
-
-  /**
-   * @param fbfId the fbfId to set
-   */
-  public void setFbfId(Long fbfId) {
-    this.fbfId = fbfId;
   }
 
   /**

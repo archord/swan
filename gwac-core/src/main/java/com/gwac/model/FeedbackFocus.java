@@ -33,14 +33,13 @@ public class FeedbackFocus implements Serializable {
   @GeneratedValue(generator = "generator")
   @Column(name = "fbf_id", unique = true, nullable = false)
   private Long fbfId;
-  @Column(name = "send_time_utc")
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date sendTimeUtc;
   @Column(name = "focus")
   private Integer focus;
   @Column(name = "recv_time_utc")
   @Temporal(TemporalType.TIMESTAMP)
   private Date recvTimeUtc;
+  @Column(name = "camera_id")
+  private Integer cameraId;
 
   public FeedbackFocus() {
   }
@@ -55,14 +54,6 @@ public class FeedbackFocus implements Serializable {
 
   public void setFbfId(Long fbfId) {
     this.fbfId = fbfId;
-  }
-
-  public Date getSendTimeUtc() {
-    return sendTimeUtc;
-  }
-
-  public void setSendTimeUtc(Date sendTimeUtc) {
-    this.sendTimeUtc = sendTimeUtc;
   }
 
   public Integer getFocus() {
@@ -88,6 +79,20 @@ public class FeedbackFocus implements Serializable {
     return hash;
   }
 
+
+  /**
+   * @return the cameraId
+   */
+  public Integer getCameraId() {
+    return cameraId;
+  }
+
+  /**
+   * @param cameraId the cameraId to set
+   */
+  public void setCameraId(Integer cameraId) {
+    this.cameraId = cameraId;
+  }
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
