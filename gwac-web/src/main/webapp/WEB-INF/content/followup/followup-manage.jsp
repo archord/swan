@@ -51,7 +51,8 @@
           </select>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <select id="processResult" name="processResult" style="font-size: 14px; height: 30px;">
-            <option value="0" selected="selected">未处理</option>
+            <option value="a" selected="selected">全部</option>
+            <option value="0">未处理</option>
             <option value="1">MINIOT</option>
             <option value="2">CATAS</option>
             <option value="3">NEWOT</option>

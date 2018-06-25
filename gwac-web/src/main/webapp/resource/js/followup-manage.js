@@ -4,6 +4,8 @@ $(function () {
 
   loadObsPlanList();
   $('#executeStatus').change(onTelescopeChange);
+  $('#triggerType').change(onTelescopeChange);
+  $('#processResult').change(onTelescopeChange);
   $('#addFuObsBtn').click(addFollowUpObs);
   $('#editFuObsBtn').click(editFollowUpObs);
   $('#delFuObsBtn').click(delFollowUpObs);
@@ -70,7 +72,8 @@ $(function () {
   }
 
   function loadObsPlanList() {
-    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?executeStatus=a&timestamp=" + new Date().getTime()
+    var formData = $("#getUnDonePlanForm").serialize();
+    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?timestamp=" + new Date().getTime() + "&" + formData;
     obsPlanTable = $('#obs-plan-table').DataTable({
       serverSide: true,
       "deferRender": true,

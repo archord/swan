@@ -18,6 +18,20 @@ import org.apache.struts2.convention.annotation.Result;
   @Result(name = "success", type = "json")})
 public class GetFollowUpObservationList extends ActionSupport {
 
+  /**
+   * @param triggerType the triggerType to set
+   */
+  public void setTriggerType(char triggerType) {
+    this.triggerType = triggerType;
+  }
+
+  /**
+   * @param processResult the processResult to set
+   */
+  public void setProcessResult(char processResult) {
+    this.processResult = processResult;
+  }
+
   private static final long serialVersionUID = 5073694279068591293L;
   private static final Log log = LogFactory.getLog(GetFollowUpObservationList.class);
 
@@ -28,6 +42,8 @@ public class GetFollowUpObservationList extends ActionSupport {
   private int start;
   private int length;
   private char executeStatus;
+  private char triggerType;
+  private char processResult;
 
   /**
    * search result
@@ -43,11 +59,11 @@ public class GetFollowUpObservationList extends ActionSupport {
 //  @Transactional(readOnly=true)
   public String execute() {
         
-    dataStr = dao.findRecord(start, length, executeStatus);
+    dataStr = dao.findRecord(start, length, executeStatus, triggerType, processResult);
     if (dataStr == null) {
       dataStr = "[]";
     }
-    recordsTotal = dao.findRecordCount(executeStatus).intValue();
+    recordsTotal = dao.findRecordCount(executeStatus, triggerType, processResult).intValue();
     recordsFiltered = recordsTotal;
 
     return SUCCESS;

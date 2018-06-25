@@ -77,11 +77,53 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
   }
 
   @Override
+  public String findRecord(int start, int length, char executeStatus, char triggerType, char processResult) {
+
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT tmp1.*) r))) from("
+            + "SELECT fuo.*, ui.name user_name FROM follow_up_observation fuo "
+            + "inner join user_info ui on ui.ui_id=fuo.user_id "
+            + "where 1=1 ";
+    if (executeStatus != 'a') {
+      sql += "and execute_status='" + executeStatus + "' ";
+    }
+    if (triggerType != 'a') {
+      sql += "and trigger_type='" + triggerType + "' ";
+    }
+    if (processResult != 'a') {
+      sql += "and process_result='" + processResult + "' ";
+    }
+    sql += "ORDER BY fuo.trigger_time desc OFFSET " + start + " LIMIT " + length + " )as tmp1";
+
+    String rst = "";
+    Query q = this.getCurrentSession().createSQLQuery(sql);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
+  @Override
   public Long findRecordCount(char executeStatus) {
 
     String sql = "SELECT count(*) FROM follow_up_observation where 1=1 ";
     if (executeStatus != 'a') {
       sql += "and execute_status='" + executeStatus + "' ";
+    }
+    Query q = this.getCurrentSession().createSQLQuery(sql);
+    return ((BigInteger) q.list().get(0)).longValue();
+  }
+  
+  public Long findRecordCount(char executeStatus, char triggerType, char processResult){
+    
+    String sql = "SELECT count(*) FROM follow_up_observation where 1=1 ";
+    if (executeStatus != 'a') {
+      sql += "and execute_status='" + executeStatus + "' ";
+    }
+    if (triggerType != 'a') {
+      sql += "and trigger_type='" + triggerType + "' ";
+    }
+    if (processResult != 'a') {
+      sql += "and process_result='" + processResult + "' ";
     }
     Query q = this.getCurrentSession().createSQLQuery(sql);
     return ((BigInteger) q.list().get(0)).longValue();

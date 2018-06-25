@@ -23,7 +23,11 @@ public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObserva
 
   public String findRecord(int start, int length, char executeStatus);
   
+  public String findRecord(int start, int length, char executeStatus, char triggerType, char processResult);
+  
   public Long findRecordCount(char executeStatus);
+  
+  public Long findRecordCount(char executeStatus, char triggerType, char processResult);
 
   public FollowUpObservation getByName(String name);
 }
