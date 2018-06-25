@@ -43,9 +43,9 @@
             <option value="2">PLANNING</option>
           </select>
           <select id="executeStatus" name="executeStatus" style="font-size: 14px; height: 30px;">
-            <option value="a">全部</option>
+            <option value="a" selected="selected">全部</option>
             <option value="0">未执行任务</option>
-            <option value="1" selected="selected">已执行任务</option>
+            <option value="1">已执行任务</option>
             <option value="2">过时</option>
             <option value="3">删除</option>
           </select>

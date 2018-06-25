@@ -40,12 +40,12 @@ $(function() {
         dataType: 'json',
         success: function(data) {
           var tObj = eval(data.dataStr)[0];
-          console.log(tObj);
+          //console.log(tObj);
 //          $("#otName").val(tObj.otName);
-          if (tObj.fo_name.trim().length === 18) {
+          if (tObj.fo_name.trim().length === 18 &&tObj.fo_name[7]==='_') {
             $("#otName").val(tObj.fo_name.substring(0, 14));
           }
-          $("#foName").val(tObj.fo_name);
+          $("#followName").val(tObj.fo_name);
           $("#priority").val(tObj.priority);
           $("#ra").val(tObj.ra);
           $("#dec").val(tObj.dec);

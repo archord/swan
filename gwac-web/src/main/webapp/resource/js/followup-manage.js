@@ -1,5 +1,5 @@
 
-$(function() {
+$(function () {
   var obsPlanTable;
 
   loadObsPlanList();
@@ -18,13 +18,13 @@ $(function() {
   function addFollowUpObs() {
     var gwacRootURL = $("#gwacRootURL").val();
     var url = gwacRootURL + "/followup/followup-add.action";
-    console.log(url);
-    openwindow(url, '_blank', 830, 520, 830, 520);
+    //console.log(url);
+    openwindow(url, '_blank', 830, 570, 830, 570);
   }
 
   function editFollowUpObs() {
     var opIds = [];
-    $('input[name="opIds"]').each(function() {
+    $('input[name="opIds"]').each(function () {
       if ($(this).is(':checked')) {
         opIds.push($(this).val());
       }
@@ -34,14 +34,14 @@ $(function() {
     } else {
       var gwacRootURL = $("#gwacRootURL").val();
       var url = gwacRootURL + "/followup/followup-add.action?foId=" + opIds[0];
-      console.log(url);
-      openwindow(url, '_blank', 830, 520, 830, 520);
+      //console.log(url);
+      openwindow(url, '_blank', 830, 570, 830, 570);
     }
   }
 
   function delFollowUpObs() {
     var opIds = [];
-    $('input[name="opIds"]').each(function() {
+    $('input[name="opIds"]').each(function () {
       if ($(this).is(':checked')) {
         opIds.push($(this).val());
       }
@@ -56,7 +56,7 @@ $(function() {
         url: url,
         data: "p1=1",
         async: true,
-        success: function(data) {
+        success: function (data) {
           console.log(data);
           alert("删除成功！");
         }
@@ -70,7 +70,7 @@ $(function() {
   }
 
   function loadObsPlanList() {
-    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?executeStatus=1&timestamp=" + new Date().getTime()
+    var queryUrl = $("#getUnDonePlanForm").attr('action') + "?executeStatus=a&timestamp=" + new Date().getTime()
     obsPlanTable = $('#obs-plan-table').DataTable({
       serverSide: true,
       "deferRender": true,
@@ -81,17 +81,17 @@ $(function() {
       "scrollX": true,
       "ajax": {
         url: queryUrl,
-        dataSrc: function(json) {
+        dataSrc: function (json) {
           return eval(json.dataStr);
         },
-        data: function(d) {
+        data: function (d) {
           return reConstructParameter(d);
         },
         type: 'GET'
       },
       "columns": [
         {"data": "fo_id"},
-        {"data": "trigger_time"}, //begin_time
+        {"data": "begin_time"}, //begin_time trigger_time
         {"data": "fo_name"},
         {"data": "ot_id"},
         {"data": "telescope_id"},
@@ -112,7 +112,7 @@ $(function() {
           "render": formateRowNumber
         }, {
           "targets": 1,
-          "data": "startTime",
+          "data": "begin_time",
           "render": formateTime
         }, {
           "targets": 3,
@@ -242,11 +242,15 @@ $(function() {
   function formateTime(data, type, full, meta) {
     var tstr = "";
     if (data !== null & data !== undefined && data.length > 0) {
-      tstr = data.substring(0, data.indexOf("."));
+      if (data.indexOf(".") > -1) {
+        tstr = data.substring(0, data.indexOf("."));
+      }else{
+        tstr = data;
+      }
     } else {
       tstr = '_';
     }
-    return tstr;
+    return "<span title='结束时间：" + full.end_time + "'>" + tstr + "</span>";
   }
   //.toFixed(3)
   function formateObjPosition(data, type, full, meta) {
@@ -267,7 +271,7 @@ $(function() {
     return parms;
   }
 
-  Date.prototype.Format = function(fmt) { //author: meizz 
+  Date.prototype.Format = function (fmt) { //author: meizz 
     var o = {
       "M+": this.getMonth() + 1, //月份 
       "d+": this.getDate(), //日 

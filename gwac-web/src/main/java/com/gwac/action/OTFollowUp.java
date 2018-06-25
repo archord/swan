@@ -63,17 +63,25 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       }
 
       OtLevel2 ot2 = null;
-      if (!ot2fp.getOtName().isEmpty()) {
-        ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName(), false);
-        ot2.setFoCount((short) (ot2.getFoCount() + 1));
-        ot2Dao.updateFoCount(ot2);
-        ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
-      } else {
+      if (!ot2fp.getOtName().trim().isEmpty()) {
+        ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName().trim(), true);
+        if (null != ot2 && ot2fp.getFollowName().trim().isEmpty()) {
+          ot2.setFoCount((short) (ot2.getFoCount() + 1));
+          ot2Dao.updateFoCount(ot2);
+          ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
+          ot2fp.setRa(ot2.getRa());
+          ot2fp.setDec(ot2.getDec());
+          foId = null; //更改后随名称后，自动由更新改为增加
+        }
+      }
+      
+      if (ot2fp.getFollowName().trim().isEmpty()) {
         String dateStr = CommonFunction.getUniqueDateStr().substring(2);
         int followNum = otnDao.getFollowupNumberByDate(dateStr);
         String tName = String.format("F%s_X%05d", dateStr, followNum);
         ot2fp.setFollowName(tName);
         ot2fp.setOtName("null"); //用于发送后随计划时填充字段
+        foId = null;  //更改后随名称后，自动由更新改为增加
       }
 
       FollowUpObservation fo = new FollowUpObservation();
@@ -83,7 +91,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       fo.setEpoch(ot2fp.getEpoch());
       fo.setExposeDuration((short) ot2fp.getExpTime());
       fo.setFilter(ot2fp.getFilter());
-      fo.setFoName(ot2fp.getFollowName());
+      fo.setFoName(ot2fp.getFollowName().trim());
       fo.setFoObjCount((short) 0);
       fo.setFrameCount((short) ot2fp.getFrameCount());
       fo.setImageType(ot2fp.getImageType());
@@ -98,17 +106,17 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       fo.setTriggerType(ot2fp.getTriggerType()); //0:AUTO; 1:MANUAL, 2:PLANNING
       fo.setTelescopeId(ot2fp.getTelescope());
       fo.setProcessResult('0');
-      if (ot2fp.getComment()!=null&&!ot2fp.getComment().isEmpty()) {
+      if (ot2fp.getComment() != null && !ot2fp.getComment().isEmpty()) {
         fo.setComment(ot2fp.getComment());
       }
 
-      if (ot2fp.getBegineTime()!=null&&!ot2fp.getBegineTime().isEmpty()) {
+      if (ot2fp.getBegineTime() != null && !ot2fp.getBegineTime().isEmpty()) {
         Date tdate = CommonFunction.stringToDate(ot2fp.getBegineTime(), "yyyy-MM-dd HH:mm:ss");
         fo.setBeginTime(tdate);
       } else {
         fo.setBeginTime(fo.getTriggerTime());
       }
-      if (ot2fp.getEndTime()!=null&&!ot2fp.getEndTime().isEmpty()) {
+      if (ot2fp.getEndTime() != null && !ot2fp.getEndTime().isEmpty()) {
         Date tdate = CommonFunction.stringToDate(ot2fp.getEndTime(), "yyyy-MM-dd HH:mm:ss");
         fo.setEndTime(tdate);
       }
@@ -130,7 +138,6 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       }
 
       if (foId != null) {
-        System.out.println("foId=" + foId);
         fo.setFoId(foId);
         foDao.update(fo);
       } else {

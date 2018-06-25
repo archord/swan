@@ -124,20 +124,10 @@
                         <td width="150px">UTC时间：</td><td><input id="utcTime" class="timeinput"/></td></tr>
                       <tr><td>本地恒星时：</td><td><input id="siderealTime" class="timeinput"/></td>
                         <td>儒略日：</td><td><input id="julDay" class="timeinput"/></td></tr>
-
-                      <tr><td>OT名称：</td><td><input name="ot2fp.otName" id="otName" title="非OT2后随时，可以为空"/></td>
-                        <td>优先级：</td><td>
-                          <select height="30" name="ot2fp.priority" id="priority">
-                            <option value="10">10</option>
-                            <option value="20" selected="selected">20</option>
-                            <option value="30">30</option>
-                            <option value="40">40</option>
-                            <option value="50">50</option>
-                            <option value="60">60</option>
-                            <option value="70">70</option>
-                            <option value="80">80</option>
-                            <option value="90">90</option>
-                          </select></td></tr>
+                      <tr><td>后随名称：</td><td><input name="ot2fp.followName" id="followName" title="如果该字段为空，则系统自动生成后随名称；
+如果该字段不为空，则用该字段作为后随名称；
+如果是OT2后随，则该字段为空,设置OT2名称；"/></td>
+                        <td>OT2名称：</td><td><input name="ot2fp.otName" id="otName" title="非OT2后随时，可以为空"/></td></tr>
                       <tr><td>赤经(度)：</td>
                         <td><input name="ot2fp.ra" id="ra" style="text-align: right;width: 200px;" value="0"/></td>
                         <td>赤纬(度)：</td>
@@ -162,7 +152,8 @@
                           </select></td></tr>
                       <tr><td>曝光时间：</td><td><input name="ot2fp.expTime" id="expTime" /></td>
                         <td>帧数：</td><td><input name="ot2fp.frameCount" id="frameCount"/></td></tr>
-                      <tr><td>开始时间：</td><td><input name="ot2fp.begineTime" id="begineTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td>
+                      <tr><td>开始时间：</td><td><input name="ot2fp.begineTime" id="begineTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" 
+                                                   title="如果开始时间与当前时间小于1分钟，则直接将观测计划发送给后随望远镜"/></td>
                         <td>结束时间：</td><td><input name="ot2fp.endTime" id="endTime" class="timeinput" onclick="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate timeinput" /></td></tr>
                       <tr><td>图像类型：</td><td>
                           <select height="30" name="ot2fp.imageType" id="imageType">
@@ -178,6 +169,19 @@
                             <option value="1">MANUAL</option>
                             <option value="2"  selected="selected">PLANNING</option>
                           </select></td></tr>
+                      <tr>
+                        <td>优先级：</td><td>
+                          <select height="30" name="ot2fp.priority" id="priority">
+                            <option value="10">10</option>
+                            <option value="20" selected="selected">20</option>
+                            <option value="30">30</option>
+                            <option value="40">40</option>
+                            <option value="50">50</option>
+                            <option value="60">60</option>
+                            <option value="70">70</option>
+                            <option value="80">80</option>
+                            <option value="90">90</option>
+                          </select></td><td></td><td></td></tr>
                       <tr><td>备注：</td>
                         <td colspan="3">
                           <textarea name="ot2fp.comment" id="comment"  rows="2"  style="width: 600px;margin: 2px;"></textarea>
