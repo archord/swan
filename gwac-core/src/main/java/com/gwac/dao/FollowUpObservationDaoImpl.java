@@ -5,8 +5,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.FollowUpObservation;
-import com.gwac.model.Telescope;
 import java.math.BigInteger;
+import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -17,6 +17,26 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObservation> implements FollowUpObservationDao {
+
+  @Override
+  public List<FollowUpObservation> getUnTriggeredByTime(int seconds) {
+
+    String sql = "SELECT * "
+            + "from follow_up_observation "
+            + "where trigger_type='2' and EXTRACT(EPOCH FROM begin_time-now())>0 and EXTRACT(EPOCH FROM begin_time-now())<" + seconds;
+
+    Query q = getCurrentSession().createSQLQuery(sql).addEntity(FollowUpObservation.class);
+    return q.list();
+  }
+
+  @Override
+  public void updateLatePlan() {
+
+    String sql = "update follow_up_observation set execute_status='2' "
+            + "where trigger_type='2' and execute_status='0' and EXTRACT(EPOCH FROM begin_time-now())<0";
+
+    getCurrentSession().createSQLQuery(sql).executeUpdate();
+  }
 
   @Override
   public void deleteByIds(String foIds) {
@@ -112,9 +132,10 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
     Query q = this.getCurrentSession().createSQLQuery(sql);
     return ((BigInteger) q.list().get(0)).longValue();
   }
-  
-  public Long findRecordCount(char executeStatus, char triggerType, char processResult){
-    
+
+  @Override
+  public Long findRecordCount(char executeStatus, char triggerType, char processResult) {
+
     String sql = "SELECT count(*) FROM follow_up_observation where 1=1 ";
     if (executeStatus != 'a') {
       sql += "and execute_status='" + executeStatus + "' ";

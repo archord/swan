@@ -5,7 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.FollowUpObservation;
-import com.gwac.model.Telescope;
+import java.util.List;
 
 /**
  *
@@ -30,4 +30,8 @@ public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObserva
   public Long findRecordCount(char executeStatus, char triggerType, char processResult);
 
   public FollowUpObservation getByName(String name);
+  
+  public List<FollowUpObservation> getUnTriggeredByTime(int seconds);
+  
+  public void updateLatePlan();
 }

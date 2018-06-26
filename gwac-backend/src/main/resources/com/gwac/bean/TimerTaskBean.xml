@@ -34,9 +34,16 @@
     <property name="concurrent" value="false" />
   </bean> 
   
-  <bean id="foJob" 
+  <bean id="followUpRecordJob" 
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
-    <property name="targetObject" ref="followUpObsService" /> 
+    <property name="targetObject" ref="followUpRecordService" /> 
+    <property name="targetMethod" value="startJob" /> 
+    <property name="concurrent" value="false" />
+  </bean> 
+  
+  <bean id="followUpObservationJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="fuoTriggerService" /> 
     <property name="targetMethod" value="startJob" /> 
     <property name="concurrent" value="false" />
   </bean> 
@@ -90,11 +97,18 @@
     <property name="startDelay" value="10000" />   
   </bean>
   
-  <bean id="foTrigger" 
+  <bean id="followUpRecordTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-    <property name="jobDetail" ref="foJob" />
+    <property name="jobDetail" ref="followUpRecordJob" />
     <property name="repeatInterval" value="15000" />  
     <property name="startDelay" value="5000" />   
+  </bean>
+  
+  <bean id="followUpObservationTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="followUpObservationJob" />
+    <property name="repeatInterval" value="120000" />  
+    <property name="startDelay" value="10000" />   
   </bean>
     
 <!--  <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -159,7 +173,8 @@
         <ref bean="imageStatusParmTrigger" />
         <ref bean="addMissedCutImageTrigger" />
         <ref bean="moveDataToHisTrigger" />
-        <ref bean="foTrigger" />
+        <ref bean="followUpRecordTrigger" />
+        <ref bean="followUpObservationTrigger" />
         <ref bean="otTmplTrigger" />
         <ref bean="findMoveObjectTrigger" />
         

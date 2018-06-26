@@ -32,10 +32,10 @@ import org.springframework.stereotype.Service;
  *
  * @author xy
  */
-@Service(value = "followUpObsService")
-public class FollowUpObservationServiceImpl implements BaseService {
+@Service(value = "followUpRecordService")
+public class FollowUpRecordServiceImpl implements BaseService {
 
-  private static final Log log = LogFactory.getLog(FollowUpObservationServiceImpl.class);
+  private static final Log log = LogFactory.getLog(FollowUpRecordServiceImpl.class);
   private static boolean running = true;
 
   @Resource
