@@ -129,9 +129,9 @@
 如果是OT2后随，则该字段为空,设置OT2名称；"/></td>
                         <td>OT2名称：</td><td><input name="ot2fp.otName" id="otName" title="非OT2后随时，可以为空"/></td></tr>
                       <tr><td>赤经(度)：</td>
-                        <td><input name="ot2fp.ra" id="ra" style="text-align: right;width: 200px;" value="0"/></td>
+                        <td><input name="ot2fp.ra" id="ra" style="text-align: right;width: 200px;" value="-99"/></td>
                         <td>赤纬(度)：</td>
-                        <td><input name="ot2fp.dec" id="dec" style="text-align: right;width: 200px;" value="0"/></td></tr>
+                        <td><input name="ot2fp.dec" id="dec" style="text-align: right;width: 200px;" value="-99"/></td></tr>
                       <tr><td>赤经(时分秒)：</td>
                         <td>
                           <input id="rah" style="width:40px;text-align: right;" value="0"/>时

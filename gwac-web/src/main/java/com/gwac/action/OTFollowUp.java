@@ -69,12 +69,14 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
           ot2.setFoCount((short) (ot2.getFoCount() + 1));
           ot2Dao.updateFoCount(ot2);
           ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
-          ot2fp.setRa(ot2.getRa());
-          ot2fp.setDec(ot2.getDec());
+          if (Math.abs(ot2fp.getRa() + 99) < 0.00001 && Math.abs(ot2fp.getDec() + 99) < 0.00001) {
+            ot2fp.setRa(ot2.getRa());
+            ot2fp.setDec(ot2.getDec());
+          }
           foId = null; //更改后随名称后，自动由更新改为增加
         }
       }
-      
+
       if (ot2fp.getFollowName().trim().isEmpty()) {
         String dateStr = CommonFunction.getUniqueDateStr().substring(2);
         int followNum = otnDao.getFollowupNumberByDate(dateStr);

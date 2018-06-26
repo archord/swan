@@ -90,6 +90,7 @@
             <a href="<%=request.getContextPath()%>/monitor/monitor-vaccum.action" target="_blank" ><p class="multiline">真空度曲线</p></a>
             <a href="<%=request.getContextPath()%>/monitor/monitor-temperature.action" target="_blank" ><p class="multiline">温度曲线</p></a>
           </div>
+          <div class='mason-block'><a href="/monitor/monitor-focus.action" target="_blank" ><p>调焦值曲线</p></a></div>
           <div class='mason-block'><a href="/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>

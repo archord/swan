@@ -13,4 +13,5 @@ import com.gwac.model.FeedbackFocus;
  */
 public interface FeedbackFocusDao extends BaseHibernateDao<FeedbackFocus> {
   public FeedbackFocus getByFbfId(Long ispId);
+  public String getRecords(String camera, int days);
 }
