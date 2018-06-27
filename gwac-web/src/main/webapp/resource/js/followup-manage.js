@@ -118,6 +118,10 @@ $(function () {
           "data": "begin_time",
           "render": formateTime
         }, {
+          "targets": 2,
+          "data": "fo_name",
+          "render": formateFollowName
+        }, {
           "targets": 3,
           "data": "ot2_name",
           "render": formateOt2
@@ -179,12 +183,18 @@ $(function () {
   /*full: json对象；meta：表格元素*/
   function formateOt2(data, type, full, meta) {
     var content = "";
-    if (full.fo_name.trim().length === 18) {//fo_name在数据库中定长为20
+    if (full.fo_name.trim().length === 18 && full.fo_name[7] === '_') {//fo_name在数据库中定长为20, G180620_C00678_001
       var name = full.fo_name.substring(0, 14);
       var gwacRootURL = $("#gwacRootURL").val();
       var searchUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=" + name;
       content = "<a href='" + searchUrl + "' title='点击打开OT2详细页面' target='_blank'>" + name + "</a>";
     }
+    return content;
+  }
+  function formateFollowName(data, type, full, meta) {
+    var gwacRootURL = $("#gwacRootURL").val();
+    var searchUrl = gwacRootURL + "/followup/followup-detail.action?foName=" + data;
+    var content = "<a href='" + searchUrl + "' title='点击打开后随详细页面' target='_blank'>" + data + "</a>";
     return content;
   }
 
@@ -247,7 +257,7 @@ $(function () {
     if (data !== null & data !== undefined && data.length > 0) {
       if (data.indexOf(".") > -1) {
         tstr = data.substring(0, data.indexOf("."));
-      }else{
+      } else {
         tstr = data;
       }
     } else {
