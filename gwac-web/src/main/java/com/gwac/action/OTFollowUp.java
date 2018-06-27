@@ -117,10 +117,13 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         fo.setBeginTime(tdate);
       } else {
         fo.setBeginTime(fo.getTriggerTime());
+        ot2fp.setBegineTime("-1");
       }
       if (ot2fp.getEndTime() != null && !ot2fp.getEndTime().isEmpty()) {
         Date tdate = CommonFunction.stringToDate(ot2fp.getEndTime(), "yyyy-MM-dd HH:mm:ss");
         fo.setEndTime(tdate);
+      }else{
+        ot2fp.setEndTime("-1");
       }
 
       long tsecond = (fo.getBeginTime().getTime() - new Date().getTime()) / 1000;

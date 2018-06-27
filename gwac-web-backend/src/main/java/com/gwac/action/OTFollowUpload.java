@@ -221,7 +221,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
 
   public void receiveOTFollowImg() {
 
-    if (null != getFitsname() && null != getFitsnameFileName() && !fitsnameFileName.trim().isEmpty()) {
+    if (null != fitsname && null != getFitsnameFileName() && !fitsnameFileName.trim().isEmpty()) {
       String fitsNamePath = destPath + getText("gwacDataOtfollowimgDirectory");
       File fitsNameDir = new File(fitsNamePath);
       if (!fitsNameDir.exists()) {
@@ -244,7 +244,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
             log.warn(fitsNameFile + " already exist, delete it.");
             FileUtils.forceDelete(fitsNameFile);
           }
-          FileUtils.moveFile(getFitsname(), fitsNameFile);
+          FileUtils.moveFile(fitsname, fitsNameFile);
           obj2.setUploadSuccess(true);
           fufDao.updateIsUpload(finalName);
         } else {

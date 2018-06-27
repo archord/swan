@@ -94,13 +94,13 @@ public class FollowUpObservationTriggerServiceImpl implements BaseService {
       if (fuo.getBeginTime() != null) {
         ot2fp.setBegineTime(CommonFunction.getDateTimeString2(fuo.getBeginTime()));
       } else {
-        ot2fp.setBegineTime(CommonFunction.getDateTimeString2(new Date()));
+        ot2fp.setBegineTime("-1");
       }
       ot2fp.setDec(fuo.getDec());
       if (fuo.getEndTime() != null) {
         ot2fp.setEndTime(CommonFunction.getDateTimeString2(fuo.getEndTime()));
       } else {
-        ot2fp.setEndTime("null");
+        ot2fp.setEndTime("-1");
       }
       ot2fp.setEpoch(fuo.getEpoch());
       ot2fp.setExpTime(fuo.getExposeDuration());
