@@ -25,6 +25,11 @@
     <property name="destination" ref="regOrigImageDest" />
     <property name="messageListener" ref="regOrigImageListener" />
   </bean>
+  <bean id="followUpCatalogConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="jmsFactory"/>
+    <property name="destination" ref="followUpCatalogDest" />
+    <property name="messageListener" ref="followUpCatalogListener" />
+  </bean>
  
   
 </beans>

@@ -109,13 +109,20 @@ public class FollowUpRecordServiceImpl implements BaseService {
   public void parseFollowUpInfo(long ufuId, String storePath, String fileName) {
 
     String foName, ot2Name;
-    long ot2Id = 0;
     if (fileName.charAt(0) == 'F' && fileName.charAt(8) == 'X') {
       foName = fileName.substring(0, 14);
       ot2Name = null;
     } else {
       foName = fileName.substring(0, 18);
       ot2Name = fileName.substring(0, 14);
+    }
+    parseFollowUpInfo(ufuId, storePath, fileName, foName, ot2Name);
+  }
+
+  public void parseFollowUpInfo(long ufuId, String storePath, String fileName, String foName, String ot2Name) {
+
+    long ot2Id = 0;
+    if (ot2Name != null && !ot2Name.trim().isEmpty()) {
       OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name, false);
       ot2Id = ot2.getOtId();
     }
@@ -127,21 +134,23 @@ public class FollowUpRecordServiceImpl implements BaseService {
     }
     List<FollowUpCatalog> objs = otcDao.getFollowUpCatalog(rootPath + "/" + storePath + "/" + fileName);
 
-    FollowUpFitsfile fuf = new FollowUpFitsfile();
     if (objs.size() > 0) { //解析并存储FollUpFits文件
+
       FollowUpCatalog tfr = objs.get(0);
-      String ffName = tfr.getFfName().replaceFirst(ot2Name, foName);
-      String ffPath = storePath.replace("otfollowlist", "otfollowimg");
-      fuf.setFfName(ffName);
-      fuf.setFfPath(ffPath);
-      fuf.setFoId(fo.getFoId());
-      File tfile = new File(rootPath + "/" + ffPath + "/" + ffName);
-      if (tfile.exists()) {
-        fuf.setIsUpload(true);
-      } else {
-        fuf.setIsUpload(false);
+      FollowUpFitsfile fuf = fufDao.getByName(tfr.getFfName());
+      if (fuf == null) {
+        fuf = new FollowUpFitsfile();
+        fuf.setFfName(tfr.getFfName());
+        fuf.setFfPath(storePath);
+        fuf.setFoId(fo.getFoId());
+        File tfile = new File(rootPath + "/" + storePath + "/" + tfr.getFfName());
+        if (tfile.exists()) {
+          fuf.setIsUpload(true);
+        } else {
+          fuf.setIsUpload(false);
+        }
+        fufDao.save(fuf);
       }
-      fufDao.save(fuf);
 
       short checkId = 0;
       short miniotId = 0;

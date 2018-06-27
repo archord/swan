@@ -173,7 +173,7 @@
         <ref bean="imageStatusParmTrigger" />
         <ref bean="addMissedCutImageTrigger" />
         <ref bean="moveDataToHisTrigger" />
-        <ref bean="followUpRecordTrigger" />
+        <!--<ref bean="followUpRecordTrigger" />-->
         <ref bean="followUpObservationTrigger" />
         <ref bean="otTmplTrigger" />
         <ref bean="findMoveObjectTrigger" />

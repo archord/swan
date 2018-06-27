@@ -8,12 +8,14 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.activemq.FollowUpCatalogMessageCreator;
 import com.gwac.dao.FollowUpFitsfileDao;
+import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.Ot2StreamNodeTimeDao;
-import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
-import com.gwac.model.OtLevel2;
+import com.gwac.model.FollowUpFitsfile;
+import com.gwac.model.FollowUpObservation;
 import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
@@ -27,6 +29,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Map;
 import javax.annotation.Resource;
+import javax.jms.Destination;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
@@ -35,14 +38,16 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.interceptor.ApplicationAware;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
-/* curl command example: */
-/* curl http://localhost/otFollowUpload.action */
-/* -F tspname=F01 */
-/* -F ot2name=M151017_C00020 */
-/* -F objlist=@M2_04_150827_1_060060_0160.fit.skyOT */
-/* -F fitsname=@M2_04_150827_1_060060_0160.fit */
+ /* curl command example: */
+ /* curl http://localhost/otFollowUpload.action */
+ /* -F tspname=F01 */
+ /* -F ot2name=M151017_C00020 */
+ /* -F objlist=@M2_04_150827_1_060060_0160.fit.skyOT */
+ /* -F fitsname=@M2_04_150827_1_060060_0160.fit */
 /**
  * @author xy
  */
@@ -69,8 +74,6 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   private String destPath;
 
   @Resource
-  private OtLevel2Dao ot2Dao;
-  @Resource
   private UploadFileRecordDao ufrDao;
   @Resource
   private UploadFileUnstoreDao ufuDao;
@@ -78,12 +81,21 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   private FollowUpFitsfileDao fufDao;
   @Resource
   private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
+  @Resource
+  private FollowUpObservationDao foDao;
+
+  @Resource
+  private JmsTemplate jmsTemplate;
+  @Resource(name = "followUpCatalogDest")
+  private Destination followUpCatalogDest;
 
   private String echo = "";
 
   @Action(value = "otFollowUpload", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
+    @Result(location = "manage/result.jsp", name = SUCCESS)
+    ,
+    @Result(location = "manage/result.jsp", name = INPUT)
+    ,
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() {
 
@@ -129,11 +141,12 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
       }
 
       rootPath = getText("gwacDataRootDirectory");
+      String followupPath = getText("gwacFollowupFits");
       destPath = rootPath;
       if (destPath.charAt(destPath.length() - 1) != '/') {
-        destPath += "/" + dateStr + "/";
+        destPath += "/" + followupPath + "/" + dateStr + "/" + followname + "/";
       } else {
-        destPath += dateStr + "/";
+        destPath += followupPath + "/" + dateStr + "/" + followname + "/";
       }
 
       File destDir = new File(destPath);
@@ -149,8 +162,8 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
     } else {
       result = ERROR;
     }
-    
-    if(ot2name!=null&&!ot2name.isEmpty()&&!"null".equals(ot2name)){
+
+    if (ot2name != null && !ot2name.isEmpty() && !"null".equals(ot2name)) {
       ot2StreamNodeTimeDao.updateLookUpResultTime(ot2name);
     }
 
@@ -175,45 +188,32 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
 
   public void receiveFollowObjectList() {
 
-    String otFollowListPath = destPath + getText("gwacDataOtfollowlistDirectory");
-    File otFollowListDir = new File(otFollowListPath);
-    if (!otFollowListDir.exists()) {
-      otFollowListDir.mkdir();
-      log.debug("create dir " + otFollowListDir);
-    }
-
-    String finalName = objlistFileName.replaceFirst(ot2name, followname);
+    String otFollowListPath = destPath;
+    String finalName = objlistFileName;
     UploadFileUnstore obj = new UploadFileUnstore();
     obj.setStorePath(otFollowListPath.substring(rootPath.length() + 1));
     obj.setFileName(finalName);
     obj.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj.setUploadDate(new Date());
 
-    UploadFileRecord obj2 = new UploadFileRecord();
-    obj2.setStorePath(otFollowListPath.substring(rootPath.length() + 1));
-    obj2.setFileName(finalName);
-    obj2.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
-    obj2.setUploadDate(new Date());
-
     try {
       if (objlist.exists()) {
         File otFollowListFile = new File(otFollowListPath + "/", finalName);
         log.debug("receive otfollowlist file " + otFollowListFile);
         obj.setUploadSuccess(Boolean.TRUE);
-        obj2.setUploadSuccess(Boolean.TRUE);
         if (otFollowListFile.exists()) {
           log.warn(otFollowListFile + " already exist, delete it.");
           FileUtils.forceDelete(otFollowListFile);
           FileUtils.moveFile(objlist, otFollowListFile);
         } else {
           FileUtils.moveFile(objlist, otFollowListFile);
-          ufuDao.save(obj);
         }
+        MessageCreator tmc = new FollowUpCatalogMessageCreator(obj, followname, ot2name);
+        jmsTemplate.send(followUpCatalogDest, tmc);
       } else {
         obj.setUploadSuccess(Boolean.FALSE);
-        obj2.setUploadSuccess(Boolean.FALSE);
       }
-      ufrDao.save(obj2);
+      ufuDao.save(obj);
     } catch (IOException ex) {
       log.error("receive otfollowlist " + objlistFileName + " error!", ex);
     }
@@ -222,19 +222,16 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   public void receiveOTFollowImg() {
 
     if (null != fitsname && null != getFitsnameFileName() && !fitsnameFileName.trim().isEmpty()) {
-      String fitsNamePath = destPath + getText("gwacDataOtfollowimgDirectory");
-      File fitsNameDir = new File(fitsNamePath);
-      if (!fitsNameDir.exists()) {
-        fitsNameDir.mkdir();
-        log.debug("create dir " + fitsNameDir);
-      }
+      String fitsNamePath = destPath;
+      String finalName = fitsnameFileName;
 
-      String finalName = fitsnameFileName.replaceFirst(ot2name, followname);
-      UploadFileRecord obj2 = new UploadFileRecord();
-      obj2.setStorePath(fitsNamePath.substring(rootPath.length() + 1));
-      obj2.setFileName(finalName);
-      obj2.setFileType('A');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
-      obj2.setUploadDate(new Date());
+      FollowUpObservation fo = foDao.getByName(followname.trim());
+      FollowUpFitsfile fuf = new FollowUpFitsfile();
+      fuf.setFfName(finalName);
+      fuf.setFfPath(fitsNamePath);
+      fuf.setFoId(fo.getFoId());
+      fuf.setIsUpload(Boolean.TRUE);
+      fufDao.save(fuf);
 
       try {
         if (fitsname.exists()) {
@@ -245,12 +242,9 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
             FileUtils.forceDelete(fitsNameFile);
           }
           FileUtils.moveFile(fitsname, fitsNameFile);
-          obj2.setUploadSuccess(true);
-          fufDao.updateIsUpload(finalName);
-        } else {
-          obj2.setUploadSuccess(false);
+        }else{
+          log.error("upload file is empty: "+finalName);
         }
-        ufrDao.save(obj2);
       } catch (IOException ex) {
         log.error("receive otfollowimg " + fitsnameFileName + " error!", ex);
       }

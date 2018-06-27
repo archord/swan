@@ -33,5 +33,8 @@
   <bean id="regOrigImageDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
     <constructor-arg value="REG_ORIG_IMAGE_LIST" />
   </bean>
+  <bean id="followUpCatalogDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+    <constructor-arg value="FOLLOW_UP_CATALOG" />
+  </bean>
       
 </beans>
