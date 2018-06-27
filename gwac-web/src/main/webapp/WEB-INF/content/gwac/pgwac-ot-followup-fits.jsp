@@ -69,7 +69,7 @@
     </div>
     <script type="text/javascript">
 
-      $(function() {
+      $(function () {
         var drawRadius = 20;
         var count = 1;
         var curNum = 1;
@@ -146,7 +146,7 @@
             var records = curFits.records;
             var totalx = 0.0, totaly = 0.0;
             var size = records.length;
-            $.each(records, function(i, item) {
+            $.each(records, function (i, item) {
               if (i > 5) {
                 return;
               }
@@ -156,7 +156,7 @@
               var texty = item.y + drawRadius + 5;
               var fuoTypeName = "ERROR";
 
-              $.each(fuots, function(i, tfuot) {
+              $.each(fuots, function (i, tfuot) {
                 if (item.fuoTypeId === tfuot.fuoTypeId) {
                   fuoTypeName = tfuot.fuoTypeName;
                 }
@@ -164,17 +164,21 @@
               if (fuoTypeName !== 'CHECK') {
                 totalx += circlex;
                 totaly += circley;
-              }else{
+              } else {
                 size = size - 1;
               }
 
               var fuoName = fuoTypeName;
-              $.each(fuoList, function(i, tfuo) {
+              $.each(fuoList, function (i, tfuo) {
                 if (item.fuoId === tfuo.fuoId) {
                   fuoName = tfuo.fuoName;
                 }
               });
-              JS9.AddRegions({shape: 'circle', x: circlex, y: circley, radius: drawRadius});
+              var tcircle = JS9.AddRegions({shape: 'circle', x: circlex, y: circley, radius: drawRadius, changeable: false}, {rtn: "object"});
+              tcircle.fuoName = fuoName;
+              tcircle.on('mouseover', function (e) {
+                console.log('mouseover: '+this.fuoName);
+              });
               JS9.AddRegions({shape: 'text', x: textx, y: texty, text: fuoName});
             });
             JS9.SetPan(totalx / size, totaly / size);
