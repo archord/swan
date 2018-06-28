@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> implements FollowUpObjectDao {
-  
+
   @Override
   public int countTypeNumberByFoId(FollowUpObject obj) {
     Session session = getCurrentSession();
@@ -24,7 +24,6 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
     Query q = session.createSQLQuery(sql);
     return ((BigInteger) q.list().get(0)).intValue();
   }
-
 
   @Override
   public int countTypeNumberByOtId(FollowUpObject obj) {
@@ -47,9 +46,10 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
 
   /**
    * 需要按照后随结果类型fuo_type_id排序，将CHECK类型的排在前面
+   *
    * @param otId
    * @param queryHis
-   * @return 
+   * @return
    */
   @Override
   public List<FollowUpObject> getByOtId(long otId, Boolean queryHis) {
@@ -57,6 +57,31 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
     String sql1 = "select * from follow_up_object where ot_id=" + otId;
 
     String sql2 = "select * from follow_up_object_his where ot_id=" + otId;
+
+    String unionSql;
+    if (queryHis) {
+      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by fuo_type_id, fuo_name";
+    } else {
+      unionSql = sql1 + " order by fuo_type_id, fuo_name";
+    }
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql).addEntity(FollowUpObject.class);
+    return q.list();
+  }
+
+  @Override
+  public List<FollowUpObject> getByFoName(String foName, Boolean queryHis) {
+
+    String sql1 = "select * "
+            + "from follow_up_object fuo "
+            + "INNER JOIN follow_up_observation fobs on fobs.fo_id=fuo.fo_id "
+            + "where fobs.fo_name='" + foName + "' ";
+
+    String sql2 = "select * "
+            + "from follow_up_object_his fuo "
+            + "INNER JOIN follow_up_observation fobs on fobs.fo_id=fuo.fo_id "
+            + "where fobs.fo_name='" + foName + "' ";
 
     String unionSql;
     if (queryHis) {

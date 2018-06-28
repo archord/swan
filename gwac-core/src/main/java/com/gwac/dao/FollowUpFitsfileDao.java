@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface FollowUpFitsfileDao extends BaseHibernateDao<FollowUpFitsfile> {
   
+  public List<FollowUpFitsfile> getByFoName(String foName);
+  
   public List<FollowUpFitsfile> getByOtId(long otId);
 
   public FollowUpFitsfile getByName(String ffName);

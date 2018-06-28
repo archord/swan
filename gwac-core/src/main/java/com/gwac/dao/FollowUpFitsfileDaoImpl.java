@@ -43,6 +43,20 @@ public class FollowUpFitsfileDaoImpl extends BaseHibernateDaoImpl<FollowUpFitsfi
 
     return q.list();
   }
+  
+
+  @Override
+  public List<FollowUpFitsfile> getByFoName(String foName) {
+
+    Session session = getCurrentSession();
+    String sql = "select fuf.* "
+            + " from follow_up_fitsfile fuf "
+            + " inner join follow_up_observation fuo on fuo.fo_id=fuf.fo_id and fuo.fo_name='" + foName + "' "
+            + " where fuf.is_upload=true;";
+    Query q = session.createSQLQuery(sql).addEntity(FollowUpFitsfile.class);
+
+    return q.list();
+  }
 
   /**
    *

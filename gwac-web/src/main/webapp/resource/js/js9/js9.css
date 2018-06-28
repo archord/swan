@@ -5,8 +5,7 @@
  */
 
 /* high-level divs used by Web designers */
-div.JS9
-{
+div.JS9 {
     /* relative pos top/left for container, Flanagan's JavaScript, p 357 */
     position: relative;
     top:  0px;
@@ -16,8 +15,7 @@ div.JS9
 }
 
 /* plugin divs */
-div.JS9Panner, div.JS9Magnifier, div.JS9Menubar, div.JS9Console, div.JS9Info
-{
+div.JS9Panner, div.JS9Magnifier, div.JS9Menubar, div.JS9Console, div.JS9Info {
     /* relative pos top/left for container, Flanagan's JavaScript, p 357 */
     position: relative;
     top:  0px;
@@ -27,8 +25,7 @@ div.JS9Panner, div.JS9Magnifier, div.JS9Menubar, div.JS9Console, div.JS9Info
 }
 
 /* containers used internally to place content inside high-level divs */
-div.JS9Container
-{
+div.JS9Container {
     /* absolute pos top/left for positioning, Flanagan's JavaScript, p 357 */
     position: absolute;
     top:  0px;
@@ -38,24 +35,26 @@ div.JS9Container
 }
 
 /* containers used internally to wrap around div plugin content */
-div.JS9PluginContainer
-{
+div.JS9PluginContainer {
     /* background: #E9E9E9; */
     background: transparent;
     position: relative;
-    display: inline-block;
+    display: block;
     outline: none;
 }
 
 /* this is the plugin div itself */
-div.JS9Plugin
-{
+div.JS9Plugin {
     background: #E9E9E9;
 }
 
+/* tell plugin div to scroll on overflow */
+div.JS9PluginScrolling {
+    overflow: auto;
+}
+
 /* commands and buttons on top of plugins */
-div.JS9PluginToolbar-div
-{
+div.JS9PluginToolbar-div {
     /* absolute positioning places the toolbar on the dhtml title bar */
     position:absolute;
     display:inline-block;
@@ -66,19 +65,17 @@ div.JS9PluginToolbar-div
     left: 10px;
 }
 
-div.JS9PluginToolbar-light
-{
+div.JS9PluginToolbar-light {
     /* absolute positioning places the toolbar on the dhtml title bar */
     position:absolute;
     display:inline-block;
     top: 0px;
-    right: 40px;
+    right: 48px;
     overflow: auto;
     text-align: center;
 }
 
-div.JS9MenubarContainer
-{
+div.JS9MenubarContainer, div.JS9MenubarContainer-classic {
     /* absolute pos top/left for positioning, Flanagan's JavaScript, p 357 */
     /* why is this relative?? absolute positions the menu under the canvas!! */
     position: relative;
@@ -87,13 +84,32 @@ div.JS9MenubarContainer
     top: 0px;
     left: 0px;
     /* height: 25px; */
-    background: lightgrey;
-    text-align: center;
-    padding: 2px 10px;
+    text-align: left;
+    padding: 2px 6px;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #ebebeb, color-stop(1.0, #d5d5d5)));
+    background: -webkit-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: -moz-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: -ms-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: -o-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: linear-gradient(top, #ebebeb, #d5d5d5);
+    color: #4d494d;
 }
 
-div.JS9ConsoleContainer
-{
+div.JS9MenubarContainer-flat, div.JS9MenubarContainer-border {
+    /* absolute pos top/left for positioning, Flanagan's JavaScript, p 357 */
+    /* why is this relative?? absolute positions the menu under the canvas!! */
+    position: relative;
+    /* sigh ... why does this make the menubar too short?? */
+    display: block;
+    top: 0px;
+    left: 0px;
+    /* height: 25px; */
+    text-align: left;
+    padding: 2px 10px;
+    background-color: lightblue;
+}
+
+div.JS9ConsoleContainer {
     /* absolute pos top/left for positioning, Flanagan's JavaScript, p 357 */
     /* why is this relative?? absolute positions make it tiny!! */
     position: relative;
@@ -109,8 +125,7 @@ div.JS9ConsoleContainer
 }
 
 /* canvas elements */
-canvas.JS9Image, canvas.JS9Panner, canvas.JS9Magnifier, canvas.JS9Info
-{
+canvas.JS9Image, canvas.JS9Panner, canvas.JS9Magnifier, canvas.JS9Info {
     /* absolute positioning of canvas is required to overlay/align with 
        graphics canvas (which is positioned relative) */
     position:absolute;
@@ -120,8 +135,7 @@ canvas.JS9Image, canvas.JS9Panner, canvas.JS9Magnifier, canvas.JS9Info
 }
 
 /* canvas element for transparent layers */
-canvas.JS9Layer
-{
+canvas.JS9Layer {
     /* absolute positioning of canvas is required to overlay/align with 
        graphics canvas (which is positioned relative) */
     position:absolute;
@@ -130,27 +144,9 @@ canvas.JS9Layer
     background-color: transparent;
 }
 
-/* printing support */
-@media print {
-  body * {
-    visibility:hidden;
-  }
-  div.PrintJS9, div.PrintJS9 * {
-    visibility:visible;
-  }
-  div.PrintJS9 {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    margin: 0;
-  }
-}
-
 /* message display */
-div.JS9Message
-{
+div.JS9Message {
+    width: 100%;
     padding-top: 10px;
     padding-left: 10px;
     font-family: Helvetica, sans-serif;
@@ -158,26 +154,86 @@ div.JS9Message
     font-weight: 300;
 }
 
-.JS9Button
-{
+/* div enclosing progress bar in message area */
+div.JS9Progress {
+    display: none;
+}
+
+.JS9Button, .JS9Button-classic {
     font: normal 12px Arial;
-    padding: 2px;
-    margin: 2px;
+    background: #F6F6F6;
+    border:  black 2px;
+    border-radius: 4px;
+    padding: 3px 6px 3px 6px;
+    margin: 6px 4px 6px 4px;
+    outline: none;
 }
 
-/* ipad button font is too large */
-@media all and (device-width: 768px) and (device-height: 1024px) {
-.JS9Button
-{
-    font: normal 10px Arial;
-    padding: 2px;
-    margin: 2px;
-}
+.JS9Button:hover, .JS9Button-classic:hover {
+    background-color: #C0C0C0;
 }
 
-/* the commands inside a console */
-.JS9CmdForm
-{
+/* prevent firefox from adding extra button padding */
+.JS9Button::-moz-focus-inner, .JS9Button-classic::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+.JS9Button-flat {
+  color: #fff;
+  background-color: #6496c8;
+  text-shadow: -1px 1px #417cb8;
+  border: none;
+  padding-top: 4px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  padding-left: 6px;
+  margin:  4px;
+  outline: none;
+}
+
+.JS9Button-flat:hover, .JS9Button-flat.hover {
+  background-color: #346392;
+  text-shadow: -1px 1px #27496d;
+}
+
+.JS9Button-flat:active, .JS9Button-flat.active {
+  background-color: #27496d;
+  text-shadow: -1px 1px #193047;
+}
+
+.JS9Button-flat::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+.JS9Button-border {
+  color: #6496c8;
+  background: #fff;
+  border: solid 2px #6496c8;
+  padding: 3px 6px 3px 6px;
+  margin: 6px 4px 6px 4px;
+  outline: none;
+}
+
+.JS9Button-border:hover, .JS9Button-border.hover {
+  border-color: #346392;
+  color: #346392;
+}
+
+.JS9Button-border:active, .JS9Button-border.active {
+  border-color: #27496d;
+  color: #27496d;
+}/* the commands inside a console */
+
+.JS9Highlight {
+  border-top: solid 0px #00FF00;
+  border-right: solid 2px #00FF00;
+  border-bottom: solid 2px #00FF00;
+  border-left: solid 0px #00FF00;
+}
+
+.JS9CmdForm {
     border: 0px;
     padding: 1px;
     font-size: 12px;
@@ -185,19 +241,16 @@ div.JS9Message
     width:100%;
 }
 
-.JS9CmdTable
-{
+.JS9CmdTable {
     vertical-align:top;
     width:100%;
 }
 
-.JS9CmdTd 
-{
+.JS9CmdTd  {
     width:100%;
 }
 
-.JS9CmdIn, .JS9CmdOut
-{
+.JS9CmdIn, .JS9CmdOut {
     border: 0px;
     padding-top: 0px;
     padding-left: 4px;
@@ -209,12 +262,11 @@ div.JS9Message
 }
 
 /* get rid of blue border for input in Safari, Chrome */
-input:focus.JS9CmdIn{
+input:focus.JS9CmdIn {
     outline: none;
 }
 
-.JS9CmdError
-{
+.JS9CmdError {
     border: 0px;
     padding-top: 2px;
     padding-left: 4px;
@@ -225,8 +277,7 @@ input:focus.JS9CmdIn{
     color: red;
 }
 
-.JS9CmdWarning
-{
+.JS9CmdWarning {
     border: 0px;
     padding-top: 2px;
     padding-left: 4px;
@@ -237,8 +288,7 @@ input:focus.JS9CmdIn{
     color: yellow;
 }
 
-.JS9CmdInfo
-{
+.JS9CmdInfo {
     border: 0px;
     padding-top: 2px;
     padding-left: 4px;
@@ -249,87 +299,151 @@ input:focus.JS9CmdIn{
     color: #3333FF;
 }
 
-.JS9CmdPrompt
-{ 
+.JS9CmdPrompt { 
     color: #777;
     font-size: 12px;
     font-family: monospace;
     white-space:nowrap;
 }
 
-.JS9AnalysisText
-{
+.JS9AnalysisText {
     padding-left: 10px;
 }
 
-.JS9Plot
-{
+/* NB: dimensions are tied to JS9.lightOpts.dhtml.plotWin in js9.js */
+.JS9Plot {
     width:  800px;
     height: 400px;
     margin: 10px;
 }
 
+.JS9Tooltip{
+    position: relative;
+    z-index: 999;
+    background: #E9E9E9;
+    padding: 10px;
+    border: 0px;
+    font-family: Helvetica, sans-serif;
+    font-size: 10pt;
+    display: none;
+}
+
 /* context menu overrides */
-.context-menu-list 
-{
+.context-menu-list  {
     border: 1px solid black;
+    font-family: Helvetica, sans-serif;
+    font-size: 12px;
+    background-color: #E9E9E9;
 }
 
-.context-menu-item.icon-sun
-{
-   background-image: url(images/sun.png);
+/* jqueryContextMenu v2.2 */
+.context-menu-icon-sun:before {
+   content: url(images/sun.png);
 }
 
-.context-menu-separator
-{
+.context-menu-item {
+    background-color: #E9E9E9;
+}
+
+.context-menu-item.context-menu-disabled {
+    color: #AAA;
+    cursor: default; 
+    background-color: #E9E9E9;
+}
+
+.context-menu-separator {
     border-bottom: 1px solid #AAA;
 }
 
-.context-menu-input > label > input[type="text"]
-{
-   width: 85%;
+.context-menu-input > label {
+   margin-left: 18px;
+}
+
+.context-menu-input > label > input[type="text"] {
+   width: 80%;
+   padding: 2px;
+}
+
+/* jqueryContextMenu pre-v2.2 */
+.pre-v2.2-context-menu-item.icon-sun {
+   background-image: url(images/sun.png);
+}
+
+/* jqueryContextMenu pre-v2.2 */
+.pre-v2.2-context-menu-input > label > span {
+    margin-left: 0px;
+}
+
+/* jqueryContextMenu pre-v2.2 */
+.pre-v2.2-context-menu-submenu:after {
+    content: "\2192";
+    color: black;
+    position: absolute;
+    right: 5px;
 }
 
 /* dhtml window overrides */
-.dhtmlwindow
-{
+.dhtmlwindow {
     border: 1px solid grey;
     padding: 0px;
 }
 
-.drag-handle
-{
+.drag-controls {
+    padding: 2px;
+}
+
+.drag-handle {
     /* height: 25px; */
     height: 30px;
-    background: lightgrey;
     text-align: left;
     color: black;
     font-size: 14px;
     font-weight: normal;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #ebebeb, color-stop(1.0, #d5d5d5)));
+    background: -webkit-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: -moz-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: -ms-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: -o-linear-gradient(top, #ebebeb, #d5d5d5);
+    background: linear-gradient(top, #ebebeb, #d5d5d5);
+    color: #4d494d;
 }
 
-.drag-contentarea
-{
+.drag-contentarea {
     background: #E9E9E9;
     border-width: 0px;
     padding: 0px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
 }
 
 .indentmenu{
-    font: normal 12px Arial;
+    font: normal 11px Arial;
+    margin-left: 4px;
 }
 
 .indentmenu ul{
     border-top: 0px;
-    background: black url(./images/indentbg_grey.png) center center repeat-x;
+    background: #A9A9A9;
 }
 
 .indentmenu ul li a{
-    border-right: 3px solid #E9E9E9;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-left: 0px;
+    border-right: 6px solid #E9E9E9;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.indentmenu ul li a:hover,
+.indentmenu ul li a.hover {
+    background-color: #808080;
 }
 
 .indentmenu ul li a.selected{
-    background: black url(./images/indentbg2_grey.png) center center repeat-x;
+    padding-top: 5px; /* don't shift text down 1px */
+    padding-bottom: 5px;
+    background: #696969;
 }
 
 /* 3d surface plot bug */
@@ -338,29 +452,74 @@ canvas.surfacePlotCanvas {
 }
 
 /* js9 info */
-.js9InfoTable
-{
-    border: 0px;
+.js9InfoTable {
     margin: 0px;
     padding: 8px;
-    font-size: 12px;
-    font-family: monospace;
-    border-spacing: 4px;
+    font: normal 12px Arial;
+    border-collapse: separate;
+    border-spacing: 2px 4px;
 }
 
-.js9InfoTable input,  .js9InfoTable textarea{
-    font-size: 12px;
-    font-family: monospace;
+.js9InfoTable input{
     overflow-x: hidden;
+    padding: 2px 0px 1px 2px;
+    margin: 0px;
 }
 
-/* js9Analysis forms */
-.js9AnalysisForm
-{
+.js9InfoTable .column0{
+    background: transparent;
+    border: none;
+    width: 50px;
+}
+
+.js9InfoTable .input1{
+    width: 115px;
+}
+
+.js9InfoTable .input2{
+    width: 240px;
+    font-size: 12px;
+    font-family: monospace;
+}
+
+.js9InfoTable textarea{
+    overflow-x: hidden;
+    padding: 2px 0px 1px 2px;
+    margin: 0px;
+    border: none;
+}
+
+.js9InfoTable .text2{
+    width: 242px;
+    font-size: 12px;
+    font-family: monospace;
+}
+
+.js9InfoTable td{
+    padding: 2px 0px 1px 2px;
+    margin: 0px;
+}
+
+/* regularize textarea and input text (e.g. binning.js, contour.js) */
+.js9Form textarea, .js9Form input[type=text]{
+    display: block;
+    margin: 0px;
+    box-sizing: border-box;
+    border: 0px solid transparent;
+    padding: 2px;
+}
+
+/* js9Analysis forms (e.g. parameter dialog boxes) */
+.js9AnalysisForm {
     border: solid grey 1px;
     margin: 8px;
     padding: 8px;
     background: #E9E9E9;
+}
+
+/* larger text for some analysis dialog boxes (loadproxy, loadcors) */
+.js9LargeInputText {
+    font-size: 11pt;
 }
 
 .JS9Archive-form {
@@ -368,8 +527,7 @@ canvas.surfacePlotCanvas {
     padding: 8px;
 }
 
-.linegroup
-{
+.linegroup {
     float: left;
     position: relative;
     top: 0px;
@@ -380,133 +538,123 @@ canvas.surfacePlotCanvas {
     margin: 0 0 1.25em 0;
 }
 
-.column_A
-{
+.column_A {
     position: absolute;
     top: 0;
     left: 0;
     width: 300px;
 }
 
-.column_B
-{
+.column_B {
     position: absolute;
     top: 0;
     left: 300px;
     width: 100px;
 }
 
-.text_B
-{
+.text_B {
     width: 100px;
 }
 
-.column_C
-{
+.column_C {
     position: absolute;
     top: 0;
     left: 450px;
     width: 340px;
 }
 
-.column_R1
-{
+.column_R1 {
     position: absolute;
     top: 0;
     left: 0;
     width: 140px;
 }
 
-.column_R2
-{
+.column_R2 {
     position: absolute;
     top: 0;
     left: 150px;
     width: 100px;
 }
 
-.column_R2l
-{
+.column_R2l {
     position: absolute;
     top: 0;
     left: 150px;
     width: 250px;
 }
 
-.column_R2L
-{
+.column_R2L {
     position: absolute;
     top: 0;
     left: 150px;
     width: 400px;
 }
 
-.column_R3
-{
+.column_R3 {
     position: absolute;
     top: 0;
     left: 300px;
     width: 100px;
 }
 
-.column_R3l
-{
+.column_R3l {
     position: absolute;
     top: 0;
     left: 300px;
     width: 150px;
 }
 
-.column_R3L
-{
+.column_R3L {
     position: absolute;
     top: 0;
     left: 300px;
     width: 300px;
 }
 
-.column_R4
-{
+.column_R4 {
     position: absolute;
     top: 0;
     left: 450px;
     width: 100px;
 }
 
-.column_R5
-{
+.column_R4l {
+    position: absolute;
+    top: 0;
+    left: 450px;
+    width: 250px;
+}
+
+.column_R5 {
     position: absolute;
     top: 0;
     left: 600px;
     width: 200px;
 }
 
-.text_R
-{
+.text_R {
     width: 100%;
+    font: normal 12px Arial
 }
 
-.nodisplay
-{
+.nodisplay {
   display: none;
 }
 
-.control
-{
+.control {
     border: transparent 1px;
     padding: 2px;
 } 
 
-.js9HelpText
-{
+.js9HelpText {
     border: solid grey 1px;
     margin: 8px;
     padding: 8px;
     background: #E9E9E9;
 }
 
-.hline0
-{
+.hline0 {
     display: block;
     height: 1px;
     border: 0;
@@ -516,7 +664,6 @@ canvas.surfacePlotCanvas {
 }
 
 /* to make wait cursor override other element cursors (e.g. fabric.js canvas) */
-body.waiting, body.waiting *
-{ 
+body.waiting, body.waiting * { 
     cursor: wait !important;
 }
