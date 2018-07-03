@@ -365,22 +365,22 @@ input:focus.JS9CmdIn {
 }
 
 /* jqueryContextMenu pre-v2.2 */
-.pre-v2.2-context-menu-item.icon-sun {
+/*.pre-v2.2-context-menu-item.icon-sun {
    background-image: url(images/sun.png);
-}
+}*/
 
 /* jqueryContextMenu pre-v2.2 */
-.pre-v2.2-context-menu-input > label > span {
+/*.pre-v2.2-context-menu-input > label > span {
     margin-left: 0px;
-}
+}*/
 
 /* jqueryContextMenu pre-v2.2 */
-.pre-v2.2-context-menu-submenu:after {
+/*.pre-v2.2-context-menu-submenu:after {
     content: "\2192";
     color: black;
     position: absolute;
     right: 5px;
-}
+}*/
 
 /* dhtml window overrides */
 .dhtmlwindow {

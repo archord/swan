@@ -53,6 +53,12 @@ public class UploadFeedbackFocus extends ActionSupport {
       log.warn(echo);
     } else {
 
+      if (focus > 5000) {
+        focus = 5000;
+      } else if (focus < -5000) {
+        focus = -5000;
+      }
+
       Camera tcamera = cameraDao.getByName(cameraId);
       if (tcamera != null) {
         FeedbackFocus tff = new FeedbackFocus();
