@@ -179,7 +179,7 @@
     updateStatus: function() {
       var tmonitor = this;
       var colors = ["#FFF", "#ABABAB", "#00EE00", "#EEAD0E", "#CD2626"]; //白，灰，绿，橙，红
-      var url = $("#gwacRootURL").val() + "get-system-status.action?timestamp=" + new Date().getTime();
+      var url = $("#gwacRootURL").val() + "/get-system-status.action?timestamp=" + new Date().getTime();
 
       $.ajax({
         type: "get",

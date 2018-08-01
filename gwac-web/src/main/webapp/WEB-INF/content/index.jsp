@@ -26,10 +26,14 @@
     <script src="${pageContext.request.contextPath}/resource/mason/app.js"></script>
     <script src="${pageContext.request.contextPath}/resource/mason/mason.js"></script>
     <script type="text/javascript">
+      function getRootPath(){
+        var curPageUrl = window.document.location.href;
+        var tsplit = curPageUrl.split("//");
+        var rootPath = tsplit[0] + "//" + tsplit[1].split("/")[0];
+        return rootPath;
+      }
       function redirectToZabbix(){
-        var curUrl = window.location.href;
-        var rootUrl = curUrl.substring(0, curUrl.lastIndexOf(":"));
-        var zabbixUrl = encodeURI(rootUrl + ":8088/zabbix/index.php?name=gwac&password=gwac1234&autologin=1&enter=Sign in");
+        var zabbixUrl = encodeURI(getRootPath()+":8088/zabbix/index.php?name=gwac&password=gwac1234&autologin=1&enter=Sign in");
         window.open(zabbixUrl, "_blank");
         return false;
       }
@@ -90,9 +94,9 @@
             <a href="<%=request.getContextPath()%>/monitor/monitor-vaccum.action" target="_blank" ><p class="multiline">真空度曲线</p></a>
             <a href="<%=request.getContextPath()%>/monitor/monitor-temperature.action" target="_blank" ><p class="multiline">温度曲线</p></a>
           </div>
-          <div class='mason-block'><a href="/monitor/monitor-focus.action" target="_blank" ><p>调焦值曲线</p></a></div>
-          <div class='mason-block'><a href="/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
-          <div class='mason-block'><a href="<%=request.getContextPath()%>/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
+          <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/monitor-focus.action" target="_blank" ><p>调焦值曲线</p></a></div>
+          <div class='mason-block'><a href="<%=request.getContextPath()%>/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
+          <div class='mason-block'><a href="/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>
         </div>

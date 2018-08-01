@@ -6,17 +6,20 @@ $(function () {
   
   $("#uploadFileBtn").click(function () {
     var formData = new FormData($('#uploadFileAction')[0]);
+    $("#uploadFileBtn").attr("disabled",true);
     $.ajax({
       type: 'post',
       url: $("#uploadFileAction").attr('action'),
       data: formData,
       cache: false,
       processData: false,
-      contentType: false,
+      contentType: false
     }).success(function (data) {
+      $("#uploadFileBtn").attr("disabled",false);
       $("#uploadResult").text(data);
       reloadUploadFileList();
     }).error(function () {
+      $("#uploadFileBtn").attr("disabled",false);
       $("#uploadResult").text("upload error");
     });
   });
