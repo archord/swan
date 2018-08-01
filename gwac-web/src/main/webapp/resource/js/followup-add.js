@@ -31,7 +31,7 @@ $(function() {
       $("#manual_container_title").html("修改后随观测任务");
       var foId = getUrlVars()["foId"];
       var gwacRootURL = $("#gwacRootURL").val();
-      var turl = gwacRootURL + "/get-followup-observation.action";
+      var turl = gwacRootURL + "/gction/get-followup-observation.action";
       $.ajax({
         type: "get",
         url: turl,

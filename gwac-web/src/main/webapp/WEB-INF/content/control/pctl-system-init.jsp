@@ -87,7 +87,7 @@
     </div>      
     <div id="monitor-header">GWAC望远镜初始化</div>
     <div id="system-init">
-      <form action="${pageContext.request.contextPath}/update-system-init-status.action" id="updateSystemInitStatusAction">
+      <form action="${pageContext.request.contextPath}/gction/update-system-init-status.action" id="updateSystemInitStatusAction">
         <select name="mounts" id="mountsSelect" multiple="multiple" class="ot2QueryParameter">
           <option value="01">转台01</option>
           <option value="02">转台02</option>

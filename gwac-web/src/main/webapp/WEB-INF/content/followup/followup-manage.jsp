@@ -34,7 +34,7 @@
         <span style="font-size: 18px">后随观测任务列表</span>
       </div>
       <div style="width:100%; text-align: center; margin-top: 20px;">
-        <form action="${pageContext.request.contextPath}/get-fllowup-list.action" id="getUnDonePlanForm" method="post">
+        <form action="${pageContext.request.contextPath}/gction/get-fllowup-list.action" id="getUnDonePlanForm" method="post">
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <select id="triggerType" name="triggerType" style="font-size: 14px; height: 30px;">
             <option value="a" selected="selected">全部</option>

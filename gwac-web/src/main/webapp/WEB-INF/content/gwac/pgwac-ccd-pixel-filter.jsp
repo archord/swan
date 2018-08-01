@@ -26,7 +26,7 @@
         <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
       </div>      
       <div class="row ot-list-top">
-        <form action="${pageContext.request.contextPath}/ccd-pixel-filter-add.action" id="ccdFilterAction" method="post">
+        <form action="${pageContext.request.contextPath}/gction/ccd-pixel-filter-add.action" id="ccdFilterAction" method="post">
           <div class="col-xs-4 col-sm-4 col-md-2 ">
             <h4>CDD</h4>
             <select name="ccdFilter.dpmId" >

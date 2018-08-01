@@ -183,7 +183,7 @@
       var gwacObj = tmonitor.svg.selectAll(".gwac");
       gwacObj.style("fill", "#ABABAB"); //"#00EE00"
 
-      var url = $("#gwacRootURL").val() + "get-system-init-status.action?timestamp=" + new Date().getTime();
+      var url = $("#gwacRootURL").val() + "gction/get-system-init-status.action?timestamp=" + new Date().getTime();
       $.ajax({
         type: "get",
         url: url,

@@ -23,14 +23,14 @@ $(function () {
 
   function reloadUploadFileList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-manual-file-list.action?timestamp=" + new Date().getTime();
+    var queryUrl = gwacRootURL + "/gction/get-manual-file-list.action?timestamp=" + new Date().getTime();
     ot2ListTable.ajax.url(queryUrl).load();
   }
 
 
   function loadUploadFileList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-manual-file-list.action";
+    var queryUrl = gwacRootURL + "/gction/get-manual-file-list.action";
     ot2ListTable = $('#ot-list-table').DataTable({
       serverSide: true,
       "deferRender": true,
