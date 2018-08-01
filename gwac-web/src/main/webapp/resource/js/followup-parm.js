@@ -16,7 +16,7 @@ $(function() {
     });
 
     var gwacRootURL = $("#gwacRootURL").val();
-    var turl = gwacRootURL + "/followUpParmGet.action";
+    var turl = gwacRootURL + "/gction/followUpParmGet.action";
     $.ajax({
       type: "get",
       url: turl,

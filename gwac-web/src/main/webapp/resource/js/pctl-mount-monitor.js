@@ -8,14 +8,14 @@ $(function() {
 
   function sysLogQueryBtnClick() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-mount-list-json.action?timestamp=" + new Date().getTime();
+    var queryUrl = gwacRootURL + "/gction/get-mount-list-json.action?timestamp=" + new Date().getTime();
     ot2ListTable.ajax.url(queryUrl).load();
   }
 
 
   function loadSystemLogList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-mount-list-json.action";
+    var queryUrl = gwacRootURL + "/gction/get-mount-list-json.action";
     ot2ListTable = $('#mount-list-table').DataTable({
       serverSide: false,
       "deferRender": true,

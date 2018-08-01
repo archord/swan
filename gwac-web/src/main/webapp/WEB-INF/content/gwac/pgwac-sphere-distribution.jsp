@@ -17,7 +17,7 @@
 
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "get-coor-list.action";
+        var url = "gction/get-coor-list.action";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
         $("#sphereDisplay").height(mainHeight - headerHeight - 10);

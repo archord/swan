@@ -29,7 +29,7 @@
         $('#backupDataButton').click(clickBackup);
 //        $('#delDataButton').click(clickDelete);
         function clickDelete() {
-          var queryUrl = "<%=request.getContextPath()%>/databaseManage.action";
+          var queryUrl = "<%=request.getContextPath()%>/gction/databaseManage.action";
           var formData = "operation=delete";
           $.post(queryUrl, formData,
                   function(data) {
@@ -38,7 +38,7 @@
                   }, "json");
         }
         function clickBackup() {
-          var queryUrl = "<%=request.getContextPath()%>/databaseManage.action";
+          var queryUrl = "<%=request.getContextPath()%>/gction/databaseManage.action";
           var formData = "operation=backup&dateStr=" + $("#dateStr").val();
           $.post(queryUrl, formData,
                   function(data) {

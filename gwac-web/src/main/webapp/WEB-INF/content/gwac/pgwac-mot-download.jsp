@@ -31,13 +31,13 @@
         function motDownloadClick() {
           var dateStr = $("#dateStr").val();
           if (dateStr !== '0') {
-            var downloadUrl = "<%=request.getContextPath()%>/downloadmot.action?dateStr=" + dateStr;
+            var downloadUrl = "<%=request.getContextPath()%>/gction/downloadmot.action?dateStr=" + dateStr;
             window.open(downloadUrl, '_blank');
           }
         }
 
         function loadDateStrList() {
-          var queryUrl = "<%=request.getContextPath()%>/get-datestr-list-json.action";
+          var queryUrl = "<%=request.getContextPath()%>/gction/get-datestr-list-json.action";
           $.ajax({
             type: "get",
             url: queryUrl,
@@ -75,7 +75,7 @@
             <input type="button" value="下载" class="btn btn-primary" id="motDownloadButton"/>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
-            <a href="${pageContext.request.contextPath}/user-logout.action" title="点击注销">注销</a>
+            <a href="${pageContext.request.contextPath}/gction/user-logout.action" title="点击注销">注销</a>
           </div>
         </form>
       </div>

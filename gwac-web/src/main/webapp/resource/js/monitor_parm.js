@@ -1,7 +1,7 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var parmUrl = gwacRootURL + "/get-parm-list-json.action";
+  var parmUrl = gwacRootURL + "/gction/get-parm-list-json.action";
 
   var parmType = "";
   var formatedCCDList = [];

@@ -23,7 +23,7 @@ $(function() {
 
   function loadCcdFilterList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/ccd-pixel-filter-list.action"; //CcdPixelFilterList
+    var queryUrl = gwacRootURL + "/gction/ccd-pixel-filter-list.action"; //CcdPixelFilterList
     var ccdFilterTable = $('#ccd-filter-table').DataTable({
       "deferRender": true,
       "processing": true,
@@ -80,7 +80,7 @@ $(function() {
 
   function loadOT2Type() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-ot-type-json.action";
+    var queryUrl = gwacRootURL + "/gction/get-ot-type-json.action";
     $.ajax({
       type: "get",
       url: queryUrl,
@@ -116,7 +116,7 @@ $(function() {
 function deleteCcdFilter(id) {
 
   var gwacRootURL = $("#gwacRootURL").val();
-  var queryUrl = gwacRootURL + "/ccd-pixel-filter-delete.action?cpfId=" + id;
+  var queryUrl = gwacRootURL + "/gction/ccd-pixel-filter-delete.action?cpfId=" + id;
   $.get(queryUrl, function(data) {
     console.log(data);
     setTimeout(function() {

@@ -49,7 +49,7 @@
       <div class="row" style="margin-top:20px">
         <div class="col-xs-12 col-sm-12 col-md-12">
 
-          <form action="${pageContext.request.contextPath}/addTimingTask.action" id="addTTForm"  method="post" enctype="multipart/form-data">
+          <form action="${pageContext.request.contextPath}/gction/addTimingTask.action" id="addTTForm"  method="post" enctype="multipart/form-data">
             <table id="ttAddTable">
               <tr><td>名称：</td>
                 <td><input name="ttName" id="ttName" class="input2"/>

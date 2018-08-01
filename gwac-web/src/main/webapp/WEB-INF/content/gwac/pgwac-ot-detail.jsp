@@ -186,7 +186,7 @@
 
 
         function openDialog() {
-            openwindow("show-fits-list.action?otName=<s:property value="otName"/>&queryHis=<s:property value="queryHis"/>",
+            openwindow("gction/show-fits-list.action?otName=<s:property value="otName"/>&queryHis=<s:property value="queryHis"/>",
                     '_blank', 1050, 600, 1050, 600);
             return false;
         }
@@ -207,7 +207,7 @@
             if (window.confirm('确定发送后随信息？')) {
                 var formData = $("#otFollowUp").serialize();
                 console.log(formData);
-                $.post("otFollowUp.action", formData,
+                $.post("gction/otFollowUp.action", formData,
                         function(data) {
                             console.log(data);
                             alert(data.result);

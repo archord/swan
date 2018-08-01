@@ -7,7 +7,7 @@
     <filter-class>com.gwac.servlet.LoginFilter</filter-class>
     <init-param>
       <param-name>exception-list</param-name>
-      <param-value>/login.jsp,/logout.jsp,/register.jsp,/error.jsp,/404.jsp,/user-login.action</param-value>
+      <param-value>/login.jsp,/logout.jsp,/register.jsp,/error.jsp,/404.jsp,/gction/user-login.action</param-value>
     </init-param>
     <init-param>
       <param-name>login-url</param-name>

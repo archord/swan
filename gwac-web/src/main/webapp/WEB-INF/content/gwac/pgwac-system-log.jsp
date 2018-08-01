@@ -27,7 +27,7 @@
       </div>      
       
       <div class="row ot-list-top">
-        <form action="${pageContext.request.contextPath}/get-system-log-list.action" id="sysLogQueryAction" method="post">
+        <form action="${pageContext.request.contextPath}/gction/get-system-log-list.action" id="sysLogQueryAction" method="post">
           <div class="col-xs-4 col-sm-4 col-md-3 ">
             <h4>开始时间</h4>
             <input name="dateStart" id="date_start" type="text" onclick="WdatePicker({doubleCalendar:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" style="width: 200px;height:30px"/>

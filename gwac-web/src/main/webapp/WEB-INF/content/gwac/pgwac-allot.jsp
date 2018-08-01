@@ -298,7 +298,7 @@
 
       function ot2InfoDownload(otName, options, rowObject) {
         var gwacRootURL = "${pageContext.request.contextPath}";
-        var downloadUrl = gwacRootURL + "/downloadot2.action?otName=" + otName;
+        var downloadUrl = gwacRootURL + "/gction/downloadot2.action?otName=" + otName;
         var resultStr;
         if (otName.charAt(8) === 'C') {
           resultStr = "<a href='" + downloadUrl + "' target='_blank' title='点击下载OT详细信息'>下载</a>";
@@ -331,7 +331,7 @@
       function loadOT2Type() {
         var gwacRootURL = "${pageContext.request.contextPath}";
         console.log(gwacRootURL);
-        var queryUrl = gwacRootURL + "/get-ot-type-json.action";
+        var queryUrl = gwacRootURL + "/gction/get-ot-type-json.action";
         $.ajax({
           type: "get",
           url: queryUrl,
