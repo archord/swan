@@ -110,7 +110,7 @@
                     增加后随观测任务</div>
                 </div>
               </div>
-              <form action="${pageContext.request.contextPath}/gction/otFollowUp.action" id="genObsPlanForm">
+              <form action="${pageContext.request.contextPath}/otFollowUp.action" id="genObsPlanForm">
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
                     <table>

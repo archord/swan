@@ -1,7 +1,7 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var parmUrl = gwacRootURL + "/gction/get-ot2-streamnode-list-json.action";
+  var parmUrl = gwacRootURL + "/get-ot2-streamnode-list-json.action";
 
   var ccdList = [];
 

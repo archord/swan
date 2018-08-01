@@ -31,7 +31,7 @@
     </div>      
     <div id="tabs-monitor-table-div" style="width:100%; height:100%;margin:0 auto;border:0;">
       <div style="width:100%; text-align: center; margin-top: 20px;">
-        <form action="${pageContext.request.contextPath}/gction/get-observation-plan-list.action" id="getUnDonePlanForm" method="post">
+        <form action="${pageContext.request.contextPath}/get-observation-plan-list.action" id="getUnDonePlanForm" method="post">
           <span style="font-size: 18px">GWAC待执行观测计划列表&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <select id="unitId" name="unitId" height="30">
             <option value="">全部望远镜</option>
@@ -60,7 +60,7 @@
     </div>
     <div id="tabs-monitor-table-div2" style="width:100%; height:100%;margin:0 auto;border:0;">
       <div style="width:100%; text-align: center;">
-        <form action="${pageContext.request.contextPath}/gction/get-observation-plan-list.action" id="getDonePlanForm" method="post">
+        <form action="${pageContext.request.contextPath}/get-observation-plan-list.action" id="getDonePlanForm" method="post">
           <span style="font-size: 18px">GWAC已执行观测计划列表&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <select id="unitId2" name="unitId" height="30">
             <option value="">全部望远镜</option>

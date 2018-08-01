@@ -30,7 +30,7 @@
       <div style="display: none;">
         <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
       </div>      
-      <form action="${pageContext.request.contextPath}/gction/get-ot-level2-list2.action" id="ot2QueryAction" method="post">
+      <form action="${pageContext.request.contextPath}/get-ot-level2-list2.action" id="ot2QueryAction" method="post">
         <div class="row followup-form">
           <div class="col-xs-6 col-sm-3 col-md-3 ">
             <h4>后随名称</h4>

@@ -56,7 +56,7 @@
           ot2Label[m] = [];
           ot2curLabel[m] = [];
         }
-        var dataurl = "<%=request.getContextPath()%>/gction/get-ot-xy-list.action";
+        var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action";
         function onDataReceived(result) {
           
           if (ot2curInterval !== null) {
@@ -234,7 +234,7 @@
         }
 
         function openDialog(otName) {
-          openwindow("gction/get-ot-image-list.action?otName=" + otName, '_blank', 800, 500, 800, 500);
+          openwindow("get-ot-image-list.action?otName=" + otName, '_blank', 800, 500, 800, 500);
           return false;
         }
         function openwindow(url, name, width, height, iWidth, iHeight)

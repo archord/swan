@@ -18,7 +18,7 @@
     <script>
       $(function() {
         var root = "${pageContext.request.contextPath}";
-        var url = "gction/get-mov-ot-sequence-list.action?dateStr=";
+        var url = "get-mov-ot-sequence-list.action?dateStr=";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();
         $("#sphereDisplay").height(mainHeight - headerHeight - 10);

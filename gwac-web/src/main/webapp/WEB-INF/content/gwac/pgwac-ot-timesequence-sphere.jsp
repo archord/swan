@@ -17,7 +17,7 @@
 
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "gction/get-ot1-timesequence-list.action";
+        var url = "get-ot1-timesequence-list.action";
         var curl = "resource/celestial-d3/data/constellations.lines.json";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();

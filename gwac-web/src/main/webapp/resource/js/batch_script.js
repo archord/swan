@@ -4,7 +4,7 @@ var ot2ListTable;
 
 function reloadUploadFileList() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var queryUrl = gwacRootURL + "/gction/get-timing-task-list.action?timestamp=" + new Date().getTime();
+  var queryUrl = gwacRootURL + "/get-timing-task-list.action?timestamp=" + new Date().getTime();
   ot2ListTable.ajax.url(queryUrl).load();
 }
 
@@ -89,7 +89,7 @@ $(function () {
 
   function loadUploadFileList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/gction/get-timing-task-list.action";
+    var queryUrl = gwacRootURL + "/get-timing-task-list.action";
     ot2ListTable = $('#ot-list-table').DataTable({
       serverSide: true,
       "deferRender": true,

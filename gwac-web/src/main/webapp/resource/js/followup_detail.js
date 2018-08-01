@@ -55,79 +55,6 @@ $(function() {
     otxytempPositionShow(data);
   }
 
-
-    bootbox.setLocale("zh_CN");
-    $("#user-login").click(function() {
-      bootbox.confirm({
-        title: '用户登录',
-        className: 'login-field-dialog',
-        message: "<div id='login-field' style='width:300px;margin:auto'>\
-                <div><label id='login-error-info' style='color:red;display:none;'>用户名或密码错误！</label></div>\
-                <form id='loginForm' method='post'>\
-                <div>用户名:\
-                <input type='text' class='form-control required' name='loginName' id='loginName' minlength='2' maxlength='20'/></div>\
-                <div>密&nbsp;&nbsp;&nbsp;&nbsp;码:\
-                <input type='password' class='form-control required' name='loginPass' id='loginPass' minlength='6' maxlength='20'/></div></form></div>",
-        callback: function(result) {
-          if (result) {
-            if ($("#loginForm").valid()) {
-              var gwacRootURL = $("#gwacRootURL").val();
-              var loginUrl = gwacRootURL + "/gction/user-login.action";
-              var formData = $("#loginForm").serialize();
-              $.post(loginUrl, formData,
-                      function(data) {
-                        console.log(data);
-                        if (data.flag === '1') {
-                          var user = data.userInfo;
-                          if (user !== null) {
-                            $('#userName').val(user.loginName);
-                            $('#user-login-div').hide();
-                            $('#user-logout-div').show();
-                            $('#user-welcome-username').html(user.name);
-                          }
-                          bootbox.hideAll();
-                        } else {
-                          $("#login-error-info").show();
-                        }
-                      }, "json");
-            }
-            return false;
-          } else {
-            return true;
-          }
-        }});
-      $("#loginForm").validate();
-    });
-
-    $("#user-logout").click(function() {
-      bootbox.confirm({
-        className: 'login-field-dialog',
-        message: "是否注销",
-        callback: function(result) {
-          if (result) {
-            var gwacRootURL = $("#gwacRootURL").val();
-            var userName = $("#userName").val();
-            var logoutUrl = gwacRootURL + "/gction/user-logout.action?userName=" + userName;
-            $.get(logoutUrl,
-                    function(data) {
-                      console.log(data);
-                      if (data.flag === '1') {
-                        $('#userName').val('mini-GWAC');
-                        $('#user-login-div').show();
-                        $('#user-logout-div').hide();
-                        bootbox.hideAll();
-//                        alert('注销成功！');
-                      } else {
-                        alert('注销失败！');
-                      }
-                    }, "json");
-          }
-          return false;
-        }});
-      $("#loginForm").validate();
-    });
-  }
-
   function initFollowUpInfo(data) {
     var ot2 = data.ot2;
     $("#otId").val(ot2.otId);
@@ -152,7 +79,7 @@ $(function() {
         callback: function(result) {
           if (result) {
             var gwacRootURL = $("#gwacRootURL").val();
-            var fuUrl = gwacRootURL + "/gction/otFollowUp.action";
+            var fuUrl = gwacRootURL + "/otFollowUp.action";
             var formData = $("#otFollowUp").serialize();
 //            console.log(formData);
             $.post(fuUrl, formData,
@@ -212,7 +139,7 @@ $(function() {
       var gwacRootURL = $("#gwacRootURL").val();
       var otTypeId = $("#ot2Classify").val();
       var otId = $("#otId").val();
-      var url = gwacRootURL + "/gction/ot-classify.action";
+      var url = gwacRootURL + "/ot-classify.action";
       var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
       $.post(url, formData,
               function(data) {
@@ -304,7 +231,7 @@ $(function() {
       }
 
       //添加OT2信息下载链接
-      var downloadUrl = gwacRootURL + "/gction/downloadot2.action?otName=" + ot2.name;
+      var downloadUrl = gwacRootURL + "/downloadot2.action?otName=" + ot2.name;
       var downloadOT2Info = "<div id='download-ot2-info'><a href='" + downloadUrl + "' target='_blank' title='点击下载OT详细信息'>下载详细</a></div>";
       $("#cut-image-show").append(downloadOT2Info);
     }
@@ -383,7 +310,7 @@ $(function() {
     $("#showOt2Fits").click(function() {
       var gwacRootURL = $("#gwacRootURL").val();
       var otName = $("#otName").val();
-      var url = gwacRootURL + "/gction/show-fits-list.action?otName=" + otName;
+      var url = gwacRootURL + "/show-fits-list.action?otName=" + otName;
       openwindow(url, '_blank', 1050, 600, 1050, 600);
       return false;
     });
@@ -544,7 +471,7 @@ $(function() {
   function loadOT2FollowupObjects() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/gction/get-ot-followup-object-list.action?otName=" + otName;
+    var queryUrl = gwacRootURL + "/get-ot-followup-object-list.action?otName=" + otName;
     $('#ot2-followup-object-table').DataTable({
       "deferRender": true,
       "processing": true,
@@ -601,7 +528,7 @@ $(function() {
   function loadOT2Match() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/gction/get-ot-match-list.action?otName=" + otName;
+    var queryUrl = gwacRootURL + "/get-ot-match-list.action?otName=" + otName;
     $('#ot2-match-table').DataTable({
       "deferRender": true,
       "processing": true,
@@ -668,7 +595,7 @@ $(function() {
   function loadOT2Record() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/gction/ot-observe-record.action?otName=" + otName;
+    var queryUrl = gwacRootURL + "/ot-observe-record.action?otName=" + otName;
     $('#ot2-record-table').DataTable({
       "deferRender": true,
       "processing": true,

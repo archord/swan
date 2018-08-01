@@ -7,7 +7,7 @@ $(function() {
   function updateMountStatus() {
 
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/gction/get-mount-list-json.action";
+    var queryUrl = gwacRootURL + "/get-mount-list-json.action";
     var formData = $("#mountListForm").serialize();
     console.log(formData);
   }
@@ -25,7 +25,7 @@ $(function() {
 
   function loadMountList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/gction/get-mount-list-json.action";
+    var queryUrl = gwacRootURL + "/get-mount-list-json.action";
     $.ajax({
       type: "get",
       url: queryUrl,

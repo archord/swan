@@ -27,7 +27,7 @@
       </div>      
 
       <div class="row ot-list-top">
-        <form action="${pageContext.request.contextPath}/gction/manualFileUpload.action" id="uploadFileAction" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/manualFileUpload.action" id="uploadFileAction" method="post" enctype="multipart/form-data">
           <div class="col-xs-4 col-sm-4 col-md-4 ">
             <input type="file" name="fileUpload" id="fileUpload"class="Wdate">
           </div>

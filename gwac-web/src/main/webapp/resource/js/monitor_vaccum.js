@@ -1,7 +1,7 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var parmUrl = gwacRootURL + "/gction/get-vaccum-list.action";
+  var parmUrl = gwacRootURL + "/get-vaccum-list.action";
 
   var otCurve;
   var plotOption = {

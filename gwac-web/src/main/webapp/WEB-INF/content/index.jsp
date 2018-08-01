@@ -94,7 +94,7 @@
           <div class='mason-block'><a href="/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>
-          <div class='mason-block x3'><a href="<%=request.getContextPath()%>/gction/user-logout.action" ><p>退出</p></a>             </div>
+          <div class='mason-block x3'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>
         </div>
         <div id='mason-fillers'>
           <div class='mason-fill-filler' style="margin: 5px;"></div>

@@ -29,14 +29,14 @@ $(function() {
   function getOt2Detail() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var url = gwacRootURL + "/gction/get-ot-detail-json.action?otName=" + otName;
+    var url = gwacRootURL + "/get-ot-detail-json.action?otName=" + otName;
     $.get(url, ot2Show, "json");
   }
 
   function getOt2FollowupDetail() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var url = gwacRootURL + "/gction/get-ot-followup-object-magpos.action?otName=" + otName;
+    var url = gwacRootURL + "/get-ot-followup-object-magpos.action?otName=" + otName;
     $.get(url, ot2ShowFollowup, "json");
   }
 
@@ -80,7 +80,7 @@ $(function() {
           if (result) {
             if ($("#loginForm").valid()) {
               var gwacRootURL = $("#gwacRootURL").val();
-              var loginUrl = gwacRootURL + "/gction/user-login.action";
+              var loginUrl = gwacRootURL + "/user-login.action";
               var formData = $("#loginForm").serialize();
               $.post(loginUrl, formData,
                       function(data) {
@@ -115,7 +115,7 @@ $(function() {
           if (result) {
             var gwacRootURL = $("#gwacRootURL").val();
             var userName = $("#userName").val();
-            var logoutUrl = gwacRootURL + "/gction/user-logout.action?userName=" + userName;
+            var logoutUrl = gwacRootURL + "/user-logout.action?userName=" + userName;
             $.get(logoutUrl,
                     function(data) {
                       console.log(data);
@@ -160,7 +160,7 @@ $(function() {
         callback: function(result) {
           if (result) {
             var gwacRootURL = $("#gwacRootURL").val();
-            var fuUrl = gwacRootURL + "/gction/otFollowUp.action";
+            var fuUrl = gwacRootURL + "/otFollowUp.action";
             var formData = $("#otFollowUp").serialize();
 //            console.log(formData);
             $.post(fuUrl, formData,
@@ -220,7 +220,7 @@ $(function() {
       var gwacRootURL = $("#gwacRootURL").val();
       var otTypeId = $("#ot2Classify").val();
       var otId = $("#otId").val();
-      var url = gwacRootURL + "/gction/ot-classify.action";
+      var url = gwacRootURL + "/ot-classify.action";
       var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
 //      console.log(formData);
 //      console.log(url);
@@ -239,7 +239,7 @@ $(function() {
 //      var gwacRootURL = $("#gwacRootURL").val();
 //      var otTypeId = $("#ot2Classify").val();
 //      var otId = $("#otId").val();
-//      var url = gwacRootURL + "/gction/ot-classify.action";
+//      var url = gwacRootURL + "/ot-classify.action";
 //      var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
 ////      console.log(formData);
 //      $.post(url, formData,
@@ -336,7 +336,7 @@ $(function() {
       }
 
       //添加OT2信息下载链接
-      var downloadUrl = gwacRootURL + "/gction/downloadot2.action?otName=" + ot2.name;
+      var downloadUrl = gwacRootURL + "/downloadot2.action?otName=" + ot2.name;
       var downloadOT2Info = "<div id='download-ot2-info'><a href='" + downloadUrl + "' target='_blank' title='点击下载OT详细信息'>下载详细</a></div>";
       $("#cut-image-show").append(downloadOT2Info);
     }
@@ -415,7 +415,7 @@ $(function() {
     $("#showOt2Fits").click(function() {
       var gwacRootURL = $("#gwacRootURL").val();
       var otName = $("#otName").val();
-      var url = gwacRootURL + "/gction/show-fits-list.action?otName=" + otName;
+      var url = gwacRootURL + "/show-fits-list.action?otName=" + otName;
       openwindow(url, '_blank', 1050, 600, 1050, 600);
       return false;
     });
@@ -576,7 +576,7 @@ $(function() {
   function loadOT2FollowupObjects() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/gction/get-ot-followup-object-list.action?otName=" + otName;
+    var queryUrl = gwacRootURL + "/get-ot-followup-object-list.action?otName=" + otName;
     $('#ot2-followup-object-table').DataTable({
       "deferRender": true,
       "processing": true,
@@ -633,7 +633,7 @@ $(function() {
   function loadOT2Match() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/gction/get-ot-match-list.action?otName=" + otName;
+    var queryUrl = gwacRootURL + "/get-ot-match-list.action?otName=" + otName;
     $('#ot2-match-table').DataTable({
       "deferRender": true,
       "processing": true,
@@ -700,7 +700,7 @@ $(function() {
   function loadOT2Record() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/gction/ot-observe-record.action?otName=" + otName;
+    var queryUrl = gwacRootURL + "/ot-observe-record.action?otName=" + otName;
     $('#ot2-record-table').DataTable({
       "deferRender": true,
       "processing": true,

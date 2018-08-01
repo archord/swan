@@ -90,7 +90,7 @@
         function getFollowupFitsList() {
           var gwacRootURL = $("#gwacRootURL").val();
           var otName = getUrlParameter("otName");
-          var url = gwacRootURL + "/gction/get-followup-fits-list.action?otName=" + otName;
+          var url = gwacRootURL + "/get-followup-fits-list.action?otName=" + otName;
           $.get(url, showFitsList, "json");
         }
 

@@ -18,7 +18,7 @@ $(function() {
 
   function setGroupIds() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var groupIdsUrl = gwacRootURL + "/gction/get-group-ids.action";
+    var groupIdsUrl = gwacRootURL + "/get-group-ids.action";
     $.ajax({
       type: "get",
       url: groupIdsUrl,
@@ -40,7 +40,7 @@ $(function() {
   }
 
   function setFieldIds() {
-    var fieldIdsUrl = gwacRootURL + "/gction/get-field-ids.action";
+    var fieldIdsUrl = gwacRootURL + "/get-field-ids.action";
     var groupId = $('#gridId').val();
     $("#fieldId").empty();
     $('#fieldId').append($('<option>', {value: "", text: "未选择"}));

@@ -28,7 +28,7 @@
         if(dateStr===curDate){
           dateStr="";
         }
-        var dataurl = "<%=request.getContextPath()%>/gction/get-ot-xy-list.action?dateStr=" + dateStr;
+        var dataurl = "<%=request.getContextPath()%>/get-ot-xy-list.action?dateStr=" + dateStr;
         //$.ajax({url: dataurl, type: "GET", dataType: "json", success: onDataReceived, error:aa});
         $.ajax({url: dataurl, type: "GET", success: onDataReceived, error:errorLog});
       }

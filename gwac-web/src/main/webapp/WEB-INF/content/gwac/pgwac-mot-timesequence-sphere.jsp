@@ -16,7 +16,7 @@
     <script>
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "gction/get-mov-ot-sequence-list.action?dateStr=";
+        var url = "get-mov-ot-sequence-list.action?dateStr=";
         var curl = "resource/celestial-d3/data/constellations.lines.json";
         var mainHeight = $("#main").height();
         var headerHeight = $("#header").height();

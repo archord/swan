@@ -38,7 +38,7 @@ $(function() {
 
   function loadLogCodeIPs() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/gction/get-sys-log-codeip-json.action";
+    var queryUrl = gwacRootURL + "/get-sys-log-codeip-json.action";
     $.ajax({
       type: "get",
       url: queryUrl,
@@ -69,7 +69,7 @@ $(function() {
 
   function loadSystemLogList() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/gction/get-system-log-list.action";
+    var queryUrl = gwacRootURL + "/get-system-log-list.action";
     ot2ListTable = $('#ot-list-table').DataTable({
       serverSide: true,
       "deferRender": true,

@@ -1,7 +1,7 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var baseUrl = gwacRootURL + "/gction/get-ot-history-detail-json.action?otName=";
+  var baseUrl = gwacRootURL + "/get-ot-history-detail-json.action?otName=";
 
   getOt2Detail();
 
@@ -13,7 +13,7 @@ $(function() {
   function getOt2Detail() {
     var gwacRootURL = $("#gwacRootURL").val();
     var otName = getUrlParameter("otName");
-    var url = gwacRootURL + "/gction/get-ot-history-detail-json.action?otName=" + otName;
+    var url = gwacRootURL + "/get-ot-history-detail-json.action?otName=" + otName;
     $.get(url, ot2Show, "json");
   }
 
@@ -45,7 +45,7 @@ $(function() {
       var gwacRootURL = $("#gwacRootURL").val();
       var otTypeId = $("#ot2Classify").val();
       var otId = $("#otId").val();
-      var url = gwacRootURL + "/gction/ot-classify.action";
+      var url = gwacRootURL + "/ot-classify.action";
       var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
 
       $.post(url, formData,
@@ -137,7 +137,7 @@ $(function() {
       }
 
       //添加OT2信息下载链接
-      var downloadUrl = gwacRootURL + "/gction/downloadot2.action?otName=" + ot2.name;
+      var downloadUrl = gwacRootURL + "/downloadot2.action?otName=" + ot2.name;
       var downloadOT2Info = "<div id='download-ot2-info'><a href='" + downloadUrl + "' target='_blank' title='点击下载OT详细信息'>下载详细</a></div>";
       $("#cut-image-show").append(downloadOT2Info);
     }
@@ -216,7 +216,7 @@ $(function() {
     $("#showOt2Fits").click(function() {
       var gwacRootURL = $("#gwacRootURL").val();
       var otName = getUrlParameter("otName");
-      var url = gwacRootURL + "/gction/show-fits-list.action?otName=" + otName;
+      var url = gwacRootURL + "/show-fits-list.action?otName=" + otName;
       openwindow(url, '_blank', 1050, 600, 1050, 600);
       return false;
     });

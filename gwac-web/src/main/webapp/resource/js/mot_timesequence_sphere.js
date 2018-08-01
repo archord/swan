@@ -14,10 +14,10 @@
   }
 
   Gwac.prototype = {
-    getSkyListJsonUrl: "/gction/get-sky-list-json.action",
-    getDpmListJsonUrl: "/gction/get-dpm-list-json.action",
-    getDateStrListJsonUrl: "/gction/get-datestr-list-json.action",
-    getMovOtListUrl: "/gction/get-mov-ot-sequence-list.action?dateStr=151218",
+    getSkyListJsonUrl: "/get-sky-list-json.action",
+    getDpmListJsonUrl: "/get-dpm-list-json.action",
+    getDateStrListJsonUrl: "/get-datestr-list-json.action",
+    getMovOtListUrl: "/get-mov-ot-sequence-list.action?dateStr=151218",
     firstFrame: 1,
     lastFrame: 1,
     firsDate: 1,

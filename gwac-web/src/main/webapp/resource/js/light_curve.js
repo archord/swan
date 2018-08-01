@@ -1,9 +1,9 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var starTypes = gwacRootURL + "/gction/get-star-type-json.action";
-  var starList = gwacRootURL + "/gction/get-star-list-json.action";
-  var starRecords = gwacRootURL + "/gction/get-star-records-json.action";
+  var starTypes = gwacRootURL + "/get-star-type-json.action";
+  var starList = gwacRootURL + "/get-star-list-json.action";
+  var starRecords = gwacRootURL + "/get-star-records-json.action";
 
   var otCurve, otCurve2;
   var plotOption = {

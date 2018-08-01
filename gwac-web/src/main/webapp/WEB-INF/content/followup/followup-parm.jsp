@@ -110,7 +110,7 @@
                     设置默认后随参数</div>
                 </div>
               </div>
-              <form action="${pageContext.request.contextPath}/gction/followUpParmSet.action" id="followUpParmSet">
+              <form action="${pageContext.request.contextPath}/followUpParmSet.action" id="followUpParmSet">
                 <div class="row">
                   <div class="col-xs-12 col-sm-12 col-md-12">
                     <table>

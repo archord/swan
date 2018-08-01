@@ -1,7 +1,7 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var parmUrl = gwacRootURL + "/gction/get-focus-list.action";
+  var parmUrl = gwacRootURL + "/get-focus-list.action";
 
   var otCurve;
   var plotOption = {
