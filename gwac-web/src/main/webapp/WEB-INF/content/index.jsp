@@ -29,7 +29,12 @@
       function getRootPath(){
         var curPageUrl = window.document.location.href;
         var tsplit = curPageUrl.split("//");
-        var rootPath = tsplit[0] + "//" + tsplit[1].split("/")[0];
+        var rootPath = tsplit[0] + "//";
+        if(tsplit[1].indexOf(":")>-1){
+          rootPath = rootPath + tsplit[1].split(":")[0];
+        }else{
+          rootPath = rootPath + tsplit[1].split(":")[0];
+        }
         return rootPath;
       }
       function redirectToZabbix(){
