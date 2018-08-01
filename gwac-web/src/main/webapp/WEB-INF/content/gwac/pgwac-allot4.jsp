@@ -27,7 +27,7 @@
         <input type="hidden" id="otName" value="<%=request.getParameter("otName")%>"/>
       </div>      
       <div class="row ot-list-top">
-        <form action="${pageContext.request.contextPath}/get-ot-level2-list4.action" id="ot2QueryAction" method="post">
+        <form action="${pageContext.request.contextPath}/gction/get-ot-level2-list4.action" id="ot2QueryAction" method="post">
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>处理方式</h4>
             <select name="ot2qp.processType" id="ot2ProcessType" multiple="multiple" class="ot2QueryParameter">

@@ -13,10 +13,10 @@
   }
 
   Gwac.prototype = {
-    getSkyListJsonUrl: "/get-sky-list-json.action",
-    getDpmListJsonUrl: "/get-dpm-list-json.action",
-    getDateStrListJsonUrl: "/get-datestr-list-json.action",
-    getMovOtListUrl: "/get-mov-ot-sequence-list.action?dateStr=151218",
+    getSkyListJsonUrl: "/gction/get-sky-list-json.action",
+    getDpmListJsonUrl: "/gction/get-dpm-list-json.action",
+    getDateStrListJsonUrl: "/gction/get-datestr-list-json.action",
+    getMovOtListUrl: "/gction/get-mov-ot-sequence-list.action?dateStr=151218",
     firstFrame: 1,
     lastFrame: 1,
     firsDate: 1,
@@ -332,9 +332,9 @@
       var movId = $(this).attr("mov_id");
       var rootUrl = $("#gwacRootURL").val();
 //      var rootUrl = "http://10.0.10.236:9995";
-      var subImgListUrl = rootUrl + "/getMotSubImageList.action?cropW=400&cropH=400&labelW=0&cmodel=0&motId="+movId;
+      var subImgListUrl = rootUrl + "/gction/getMotSubImageList.action?cropW=400&cropH=400&labelW=0&cmodel=0&motId="+movId;
       var fullImgUrl = rootUrl + "/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
-      var subImgUrl = rootUrl + "/getSubImage.action?imgPath=/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg"
+      var subImgUrl = rootUrl + "/gction/getSubImage.action?imgPath=/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg"
       + "&centerX=" + x + "&centerY=" + y + "&cropW=400&cropH=400&labelW=0";
       console.log(subImgListUrl);
       console.log("id=" + movId + ", " + fName + ", " + x + ", " + y);

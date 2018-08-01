@@ -59,7 +59,7 @@
 
       $(function() {
         var root = "<%=request.getContextPath()%>";
-        var url = "get-ot-xy-list.action?dateStr=";
+        var url = "gction/get-ot-xy-list.action?dateStr=";
         var tmonitor = $.tmonitor("#monitor-center", root, url);
         tmonitor.drawAll();
         setInterval(function() {

@@ -20,7 +20,7 @@
           $(this).css("height", imgHeight);
         });
 
-        var dataurl = "<%=request.getContextPath()%>/get-dpm-monitor-image-time.action";
+        var dataurl = "<%=request.getContextPath()%>/gction/get-dpm-monitor-image-time.action";
 
         function onImageReceived(result) {
           var dpms = result.dpms;

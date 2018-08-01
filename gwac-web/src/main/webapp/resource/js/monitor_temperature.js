@@ -1,7 +1,7 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-  var parmUrl = gwacRootURL + "/get-temperature-list.action";
+  var parmUrl = gwacRootURL + "/gction/get-temperature-list.action";
 
   var otCurve;
   var plotOption = {

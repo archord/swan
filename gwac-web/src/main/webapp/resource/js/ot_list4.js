@@ -1,7 +1,7 @@
 
 $(function() {
   var gwacRootURL = $("#gwacRootURL").val();
-//  var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
+//  var baseUrl = gwacRootURL + "/gction/get-ot-detail.action?queryHis=false&otName=";
   var baseUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=";
   var ot2arr;
   var ot2ListTable;
@@ -105,7 +105,7 @@ $(function() {
 
   function loadOT2Type() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-ot-type-json.action";
+    var queryUrl = gwacRootURL + "/gction/get-ot-type-json.action";
     $.ajax({
       type: "get",
       url: queryUrl,
@@ -127,7 +127,7 @@ $(function() {
 
   function loadOT2Alarm() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-ot-alarm.action";
+    var queryUrl = gwacRootURL + "/gction/get-ot-alarm.action";
     $.ajax({
       type: "get",
       url: queryUrl,
@@ -158,7 +158,7 @@ $(function() {
 
   function loadOT2List() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-ot-level2-list4.action?ot2qp.otName=";
+    var queryUrl = gwacRootURL + "/gction/get-ot-level2-list4.action?ot2qp.otName=";
     ot2ListTable = $('#ot-list-table').DataTable({
       serverSide: true,
       "deferRender": true,

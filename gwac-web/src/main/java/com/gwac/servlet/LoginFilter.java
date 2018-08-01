@@ -49,10 +49,11 @@ public class LoginFilter implements Filter {
 
     String requestUri = httpReq.getRequestURI();
     String ctxPath = httpReq.getContextPath(); // 项目名/gwac
-    String uri = requestUri.substring(ctxPath.length()); //页面名
+//    String uri = requestUri.substring(ctxPath.length()); //页面名
+    String uri = requestUri.substring(requestUri.lastIndexOf('/')); //页面名
 
     log.debug(uri);
-    if (exceptionList.indexOf(uri) >= 0) {
+    if (exceptionList.contains(uri)) {
       chain.doFilter(request, response);
     } else {
       UserInfo tuser = (UserInfo) session.getAttribute("userInfo");

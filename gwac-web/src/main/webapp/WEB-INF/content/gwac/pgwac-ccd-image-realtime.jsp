@@ -28,7 +28,7 @@
         $('#imgCenter').css('height', centerWidth + 'px');
         $('#imgCenter').css('border-radius', '12px');
 
-        var dataurl = "<%=request.getContextPath()%>/get-camera-monitor-image-time.action";
+        var dataurl = "<%=request.getContextPath()%>/gction/get-camera-monitor-image-time.action";
         $.ajax({url: dataurl, type: "GET", dataType: "json", success: onImageReceived});
 
         allImgUpdate = setInterval(updateImage, 15000);
