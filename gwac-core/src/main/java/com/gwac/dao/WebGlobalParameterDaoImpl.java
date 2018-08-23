@@ -30,6 +30,14 @@ public class WebGlobalParameterDaoImpl extends BaseHibernateDaoImpl<WebGlobalPar
     return (String) q.list().get(0);
   }
 
+  @Override
+  public String getValueByName(String tag, String name) {
+    Session session = getCurrentSession();
+    String sql = "SELECT value from web_global_parameter where name='" + name + "' and tag='"+tag+"'";
+    Query q = session.createSQLQuery(sql);
+    return (String) q.list().get(0);
+  }
+
 
   @Override
   public void everyDayInit() {

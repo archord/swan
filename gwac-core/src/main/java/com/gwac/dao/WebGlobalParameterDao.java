@@ -15,5 +15,7 @@ public interface WebGlobalParameterDao extends BaseHibernateDao<WebGlobalParamet
 
   public String getValueByName(String name);
   
+  public String getValueByName(String tag, String name);
+  
   public void everyDayInit();
 }
