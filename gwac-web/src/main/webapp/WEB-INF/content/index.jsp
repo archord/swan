@@ -33,7 +33,7 @@
         if(tsplit[1].indexOf(":")>-1){
           rootPath = rootPath + tsplit[1].split(":")[0];
         }else{
-          rootPath = rootPath + tsplit[1].split(":")[0];
+          rootPath = rootPath + tsplit[1].split("/")[0];
         }
         return rootPath;
       }
