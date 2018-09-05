@@ -23,7 +23,7 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
 
     String sql = "SELECT * "
             + "from follow_up_observation "
-            + "where trigger_type='2' and EXTRACT(EPOCH FROM begin_time-now())>0 and EXTRACT(EPOCH FROM begin_time-now())<" + seconds;
+            + "where EXTRACT(EPOCH FROM begin_time-now())>0 and EXTRACT(EPOCH FROM begin_time-now())<" + seconds;
 
     Query q = getCurrentSession().createSQLQuery(sql).addEntity(FollowUpObservation.class);
     return q.list();
@@ -33,7 +33,7 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
   public void updateLatePlan() {
 
     String sql = "update follow_up_observation set execute_status='2' "
-            + "where trigger_type='2' and execute_status='0' and EXTRACT(EPOCH FROM begin_time-now())<0";
+            + "where execute_status='0' and EXTRACT(EPOCH FROM begin_time-now())<0";
 
     getCurrentSession().createSQLQuery(sql).executeUpdate();
   }

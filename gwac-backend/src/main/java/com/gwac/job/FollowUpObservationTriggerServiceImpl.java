@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 @Service(value = "fuoTriggerService")
 public class FollowUpObservationTriggerServiceImpl implements BaseService {
 
-  private static final Log log = LogFactory.getLog(FollowUpRecordServiceImpl.class);
+  private static final Log log = LogFactory.getLog(FollowUpObservationTriggerServiceImpl.class);
   private static boolean running = true;
 
   @Resource
@@ -89,6 +89,7 @@ public class FollowUpObservationTriggerServiceImpl implements BaseService {
     fuoDao.updateLatePlan();
 
     List<FollowUpObservation> fuos = fuoDao.getUnTriggeredByTime(gwacFollowTriggerPreSendTime);
+    log.debug("trigger followup :"+fuos.size());
     for (FollowUpObservation fuo : fuos) {
       OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
       if (fuo.getBeginTime() != null) {
