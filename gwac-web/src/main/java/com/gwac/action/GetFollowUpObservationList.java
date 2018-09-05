@@ -58,7 +58,14 @@ public class GetFollowUpObservationList extends ActionSupport {
   @SuppressWarnings("unchecked")
 //  @Transactional(readOnly=true)
   public String execute() {
-        
+
+    if (start < 0) {
+      start = 0;
+    }
+    if (length < 0) {
+      length = 5;
+    }
+
     dataStr = dao.findRecord(start, length, executeStatus, triggerType, processResult);
     if (dataStr == null) {
       dataStr = "[]";
@@ -131,6 +138,7 @@ public class GetFollowUpObservationList extends ActionSupport {
   public int getLength() {
     return length;
   }
+
   /**
    * @param executeStatus the executeStatus to set
    */
