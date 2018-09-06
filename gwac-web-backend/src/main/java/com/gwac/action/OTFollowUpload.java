@@ -190,10 +190,23 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
     String otFollowListPath = destPath;
     String finalName = objlistFileName;
     UploadFileUnstore obj = new UploadFileUnstore();
-    obj.setStorePath(otFollowListPath.substring(rootPath.length() + 1, otFollowListPath.length()-1));
+    obj.setStorePath(otFollowListPath.substring(rootPath.length() + 1, otFollowListPath.length() - 1));
     obj.setFileName(finalName);
     obj.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj.setUploadDate(new Date());
+
+    if ((null == fitsname || null == fitsnameFileName|| fitsnameFileName.trim().isEmpty()) && 
+            null != objlistFileName && !objlistFileName.trim().isEmpty()) {
+      String fitsNamePath = destPath;
+      String finalFitsName = objlistFileName.substring(0, objlistFileName.indexOf("_otfinalres"))+".fit";
+      FollowUpObservation fo = foDao.getByName(finalFitsName.trim());
+      FollowUpFitsfile fuf = new FollowUpFitsfile();
+      fuf.setFfName(finalFitsName);
+      fuf.setFfPath(fitsNamePath.substring(rootPath.length() + 1, fitsNamePath.length() - 1));
+      fuf.setFoId(fo.getFoId());
+      fuf.setIsUpload(Boolean.FALSE);
+      fufDao.save(fuf);
+    }
 
     try {
       if (objlist.exists()) {
@@ -227,7 +240,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
       FollowUpObservation fo = foDao.getByName(followname.trim());
       FollowUpFitsfile fuf = new FollowUpFitsfile();
       fuf.setFfName(finalName);
-      fuf.setFfPath(fitsNamePath.substring(rootPath.length() + 1, fitsNamePath.length()-1));
+      fuf.setFfPath(fitsNamePath.substring(rootPath.length() + 1, fitsNamePath.length() - 1));
       fuf.setFoId(fo.getFoId());
       fuf.setIsUpload(Boolean.TRUE);
       fufDao.save(fuf);
@@ -241,8 +254,8 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
             FileUtils.forceDelete(fitsNameFile);
           }
           FileUtils.moveFile(fitsname, fitsNameFile);
-        }else{
-          log.error("upload file is empty: "+finalName);
+        } else {
+          log.error("upload file is empty: " + finalName);
         }
       } catch (IOException ex) {
         log.error("receive otfollowimg " + fitsnameFileName + " error!", ex);

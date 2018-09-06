@@ -139,6 +139,7 @@ public class FollowUpRecordServiceImpl implements BaseService {
       FollowUpCatalog tfr = objs.get(0);
       FollowUpFitsfile fuf = fufDao.getByName(tfr.getFfName());
       if (fuf == null) {
+        /**
         fuf = new FollowUpFitsfile();
         fuf.setFfName(tfr.getFfName());
         fuf.setFfPath(storePath);
@@ -150,6 +151,9 @@ public class FollowUpRecordServiceImpl implements BaseService {
           fuf.setIsUpload(false);
         }
         fufDao.save(fuf);
+        * **/
+        log.error("hibernate cache problem, can not find FollowUpFitsfile "+ tfr.getFfName());
+        return;
       }
 
       short checkId = 0;
