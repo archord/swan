@@ -77,8 +77,8 @@
             </div>
         </div>
         <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9prefs.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9support.min.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9.min.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9support.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/resource/js/js9/js9plugins.js"></script>
         <script type="text/javascript">
 
@@ -215,6 +215,7 @@
                         fuoName = tfuo.fuoName;
                       }
                     });
+                    console.log("draw region: x=" + circlex + ",y=" + circley);
                     var tcircle = JS9.AddRegions({shape: 'circle', x: circlex, y: circley, radius: drawRadius, changeable: false}, {rtn: "object"});
                     tcircle.fuoName = fuoName;
                     tcircle.on('mouseover', function (e) {
@@ -223,8 +224,8 @@
                     });
                     JS9.AddRegions({shape: 'text', x: textx, y: texty, text: fuoName});
                   });
-                  JS9.SetPan(totalx / size, totaly / size);
                   console.log("circlex=" + totalx / size + ",circley=" + totaly / size);
+                  JS9.SetPan(totalx / size, totaly / size);
                 } else {
                   setTimeout(setJs9Parameter, 100);
                 }
