@@ -16,7 +16,6 @@ import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.FollowUpFitsfile;
 import com.gwac.model.FollowUpObservation;
-import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
@@ -191,7 +190,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
     String otFollowListPath = destPath;
     String finalName = objlistFileName;
     UploadFileUnstore obj = new UploadFileUnstore();
-    obj.setStorePath(otFollowListPath.substring(rootPath.length() + 1));
+    obj.setStorePath(otFollowListPath.substring(rootPath.length() + 1, otFollowListPath.length()-1));
     obj.setFileName(finalName);
     obj.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj.setUploadDate(new Date());
@@ -228,7 +227,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
       FollowUpObservation fo = foDao.getByName(followname.trim());
       FollowUpFitsfile fuf = new FollowUpFitsfile();
       fuf.setFfName(finalName);
-      fuf.setFfPath(fitsNamePath.substring(rootPath.length() + 1));
+      fuf.setFfPath(fitsNamePath.substring(rootPath.length() + 1, fitsNamePath.length()-1));
       fuf.setFoId(fo.getFoId());
       fuf.setIsUpload(Boolean.TRUE);
       fufDao.save(fuf);

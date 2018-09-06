@@ -66,7 +66,7 @@ public class ShowFollowupFitsList extends ActionSupport {
       fuos = fuoDao.getByOtId(ot2.getOtId(), queryHis);
       for (FollowUpFitsfile tfuf : fufs) {
         Map<String, Object> fufMap = new HashMap<>();
-        fufMap.put("path", dataRootWebMap + "/" + tfuf.getFfPath() + "/");
+        fufMap.put("path", dataRootWebMap + "/" + tfuf.getFfPath());
         fufMap.put("fileName", tfuf.getFfName());
         List<FollowUpRecord> furs = furDao.getByFufId(tfuf.getFufId(), queryHis);
         fufMap.put("records", furs);

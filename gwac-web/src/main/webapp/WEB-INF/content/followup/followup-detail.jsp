@@ -115,7 +115,8 @@
                 fuoList = data.fuos;
                 endNum = fitsList.length;
                 if (endNum > 0) {
-                  showFits('start');
+//                  showFits('start');
+                  preLoadJs9Fits();
                 }
               }
 
@@ -142,7 +143,11 @@
                   }
                 }
                 curFits = fitsList[curNum - 1];
-                url = curFits.path + curFits.fileName;
+                if (curFits.path[curFits.path.length - 1] === '/') {
+                  url = curFits.path + curFits.fileName;
+                } else {
+                  url = curFits.path + '/' + curFits.fileName;
+                }
                 $("#title").html(curFits.fileName);
                 $("#imageNumber span").html(curNum);
                 curFitsName = curFits.fileName;
@@ -151,11 +156,24 @@
                 return false;
               }
 
-              function setJs9Fits(url) {
+              function preLoadJs9Fits() {
+                if (endNum === 0 || fitsList.length === 0) {
+                  return false;
+                }
+                curFits = fitsList[0];
+                $("#title").html(curFits.fileName);
+                $("#imageNumber span").html(1);
+                var url = curFits.path + curFits.fileName;
                 var option = {zoom: 'toFit', colormap: 'grey', contrast: 4.0, bias: 0.4, scale: "log"};
                 JS9.Preload(url, option);
-//                JS9.load(url, option);
-//                JS9.Preload(url);
+                setJs9Parameter();
+              }
+
+              function setJs9Fits(url) {
+                console.log("load image: " + url);
+                var option = {zoom: 'toFit', colormap: 'grey', contrast: 4.0, bias: 0.4, scale: "log"};
+                JS9.Load(url, option);
+                //                JS9.Load(url);
                 setJs9Parameter();
               }
 
