@@ -154,8 +154,8 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
         log.debug("create dir " + destDir);
       }
 
-      receiveFollowObjectList();
       receiveOTFollowImg();
+      receiveFollowObjectList();
 
       setEcho(echo + "Success!\n");
     } else {

@@ -160,10 +160,15 @@
                 if (endNum === 0 || fitsList.length === 0) {
                   return false;
                 }
+                var url = "";
                 curFits = fitsList[0];
+                if (curFits.path[curFits.path.length - 1] === '/') {
+                  url = curFits.path + curFits.fileName;
+                } else {
+                  url = curFits.path + '/' + curFits.fileName;
+                }
                 $("#title").html(curFits.fileName);
                 $("#imageNumber span").html(1);
-                var url = curFits.path + curFits.fileName;
                 var option = {zoom: 'toFit', colormap: 'grey', contrast: 4.0, bias: 0.4, scale: "log"};
                 JS9.Preload(url, option);
                 setJs9Parameter();

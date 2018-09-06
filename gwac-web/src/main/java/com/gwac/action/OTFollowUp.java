@@ -65,7 +65,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       OtLevel2 ot2 = null;
       if (!ot2fp.getOtName().trim().isEmpty()) {
         ot2 = ot2Dao.getOtLevel2ByName(ot2fp.getOtName().trim(), true);
-        if (null != ot2 && ot2fp.getFollowName().trim().isEmpty()) {
+        if (null != ot2 && (null==ot2fp.getFollowName() || ot2fp.getFollowName().trim().isEmpty())) {
           ot2.setFoCount((short) (ot2.getFoCount() + 1));
           ot2Dao.updateFoCount(ot2);
           ot2fp.setFollowName(String.format("%s_%03d", ot2fp.getOtName(), ot2.getFoCount()));
