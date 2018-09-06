@@ -170,8 +170,15 @@
               <select name="ot2qp.lookBackResult" id="lookBackResult">
                 <option value="">All</option>
                 <option value="0">未处理</option>
-                <option value="1">OT</option>
-                <option value="2">FOT</option>
+              <option value="1">OT</option>
+              <option value="2">FOT</option>
+              <option value="3">FNBG</option>
+              <option value="4">FOBJ</option>
+              <option value="5">FSUB</option>
+              <option value="6">FRMS</option>
+              <option value="7">FWHM</option>
+              <option value="8">FMCH</option>
+              <option value="9">FHOT</option>
               </select></td>
           </tr>
           <tr style="height:20px;"><td colspan="6" style="text-align: center;">
