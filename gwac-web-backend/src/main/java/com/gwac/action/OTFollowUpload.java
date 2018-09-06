@@ -228,7 +228,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
       FollowUpObservation fo = foDao.getByName(followname.trim());
       FollowUpFitsfile fuf = new FollowUpFitsfile();
       fuf.setFfName(finalName);
-      fuf.setFfPath(fitsNamePath);
+      fuf.setFfPath(fitsNamePath.substring(rootPath.length() + 1));
       fuf.setFoId(fo.getFoId());
       fuf.setIsUpload(Boolean.TRUE);
       fufDao.save(fuf);

@@ -90,5 +90,6 @@ public class FollowUpFitsfileDaoImpl extends BaseHibernateDaoImpl<FollowUpFitsfi
       obj.setFufId(ffId.longValue());
       super.update(obj);
     }
+    session.flush();
   }
 }
