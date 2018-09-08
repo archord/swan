@@ -60,6 +60,7 @@
             <select name="formqp.starList" id="starList" class="form-control select select-primary" data-toggle="select" size="12">
               <option value="fwhm" selected>半高全宽</option>
               <option value="obj_num">星的数目</option>
+              <option value="ot1_num">OT1数目</option>
               <option value="bg_bright">背景亮度</option>
               <option value="avg_limit">极限星等</option>
               <option value="s2n">亮星星等差</option>
