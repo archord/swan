@@ -25,6 +25,7 @@ $(function() {
   var parmProperty = {
     fwhm: {name: 'fwhm', min: 0, max: 10, note: '', unit: ''},
     obj_num: {name: 'obj_num', min: 1000, max: 200000, note: '', unit: ''},
+    ot1_num: {name: 'ot1_num', min: 0, max: 1000, note: '', unit: ''},
     bg_bright: {name: 'bg_bright', min: 1000, max: 20000, note: '', unit: ''},
     avg_limit: {name: 'avg_limit', min: 5, max: 20, note: '', unit: ''},
     s2n: {name: 's2n', min: -3, max: 3, note: '', unit: ''},
