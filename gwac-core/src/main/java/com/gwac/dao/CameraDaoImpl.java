@@ -24,7 +24,7 @@ public class CameraDaoImpl extends BaseHibernateDaoImpl<Camera> implements Camer
   @Override
   public void updateStatus(String ccds, String status) {
     Session session = getCurrentSession();
-    String sql = "update camera set status="+status+" where name in("+ccds+")";
+    String sql = "update camera set status=" + status + " where name in(" + ccds + ")";
     session.createSQLQuery(sql).executeUpdate();
   }
 
@@ -67,7 +67,8 @@ public class CameraDaoImpl extends BaseHibernateDaoImpl<Camera> implements Camer
   @Override
   public void updateCurProcessNumber(Camera cam) {
     Session session = getCurrentSession();
-    String sql = "update camera set cur_process_number="+cam.getCurProcessNumber();
+    String sql = "update camera set cur_process_number="
+            + cam.getCurProcessNumber() + " where camera_id=" + cam.getCameraId();
     session.createSQLQuery(sql).executeUpdate();
   }
 
