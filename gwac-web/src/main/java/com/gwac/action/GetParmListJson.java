@@ -36,6 +36,7 @@ public class GetParmListJson extends ActionSupport {
     ArrayList<String> queryParms = new ArrayList();
     queryParms.add("fwhm");
     queryParms.add("obj_num");
+    queryParms.add("ot1_num");
     queryParms.add("bg_bright");
     queryParms.add("avg_limit");
     queryParms.add("s2n");
