@@ -1,6 +1,7 @@
 package com.gwac.action;
 
 import com.gwac.dao.SystemStatusMonitorDao;
+import com.gwac.linefind.CommonFunction;
 import com.gwac.model.SystemStatusMonitor;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
@@ -20,6 +21,7 @@ public class GetSystemStatusList extends ActionSupport {
   private static final Log log = LogFactory.getLog(GetSystemStatusList.class);
 
   private List<SystemStatusMonitor> datas;
+  private String nowDateStr;
   @Resource
   private SystemStatusMonitorDao ssmDao = null;
 
@@ -29,6 +31,7 @@ public class GetSystemStatusList extends ActionSupport {
     log.debug("get SystemStatusMonitor");
 
     datas = ssmDao.getAllStatus();
+    nowDateStr = CommonFunction.getDateTimeString2(new Date());
 
     return SUCCESS;
   }
@@ -38,6 +41,13 @@ public class GetSystemStatusList extends ActionSupport {
    */
   public List<SystemStatusMonitor> getDatas() {
     return datas;
+  }
+
+  /**
+   * @return the nowDateStr
+   */
+  public String getNowDateStr() {
+    return nowDateStr;
   }
 
 }

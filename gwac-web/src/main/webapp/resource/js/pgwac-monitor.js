@@ -188,6 +188,8 @@
         dataType: 'json',
         success: function(data) {
           var objs = data.datas;
+          var nowDateStr = data.nowDateStr;
+          var nowDateTime = new Date(nowDateStr);
           $.each(objs, function(i, item) {
             var cameraStatus = parseInt(item.cameraStatus);
             if (item.cameraStatus !== 3) {
@@ -200,7 +202,7 @@
                 if (c < tmonitor.showParms.length) {
                   var id = "#O" + item.identity + "_" + (c + 1);
                   var tobj = d3.select(id);
-                  var colorIdx = tmonitor.showParms[c].fillColorIdx(item, tmonitor.showParms[c].time);
+                  var colorIdx = tmonitor.showParms[c].fillColorIdx(item, tmonitor.showParms[c].time, nowDateTime);
                   tobj.style("fill", colors[colorIdx]);
                   if (c < tmonitor.showParms.length) {
                     tobj.append("svg:title").text(tmonitor.showParms[c].title(item));
@@ -369,12 +371,13 @@
       var s = "000" + num;
       return s.substr(s.length - size);
     },
-    fillColorIdx: function(d, timeName) {
+    fillColorIdx: function(d, timeName, nowDateTime) {
       var idx = 4;
       var ttime = d[timeName];
       if (ttime !== null) {
         ttime = new Date(ttime.replace('T', ' '));
-        var now = new Date();
+        //var now = new Date();
+        var now = nowDateTime;
         var timeDiff = now - ttime;
         if (timeDiff > 60 * 1000 && timeDiff < 600 * 1000) {
           idx = 3;
