@@ -6,6 +6,7 @@ package com.gwac.service;
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.ConfigFileDao;
+import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.OtLevel2Dao;
@@ -42,10 +43,13 @@ public class DataBackupServiceImpl implements DataBackupService {
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private CcdPixFilterDao cpfDao;
+  @Resource
+  private FitsFile2DAO ff2Dao;
 
   @Override
   public void backupData() {
     try {
+      ff2Dao.moveDataToHisTable();
       otlv2Dao.moveDataToHisTable();
       ffcDao.moveDataToHisTable();
       oorDao.moveDataToHisTable();
@@ -71,6 +75,7 @@ public class DataBackupServiceImpl implements DataBackupService {
 //      otlv2Dao.deleteAll("move_object_record");
 //      otlv2Dao.deleteAll("observation_sky");
       
+      ff2Dao.deleteAll("fits_file2");
       otlv2Dao.deleteAll("ot_level2");
       oorDao.deleteAll("ot_observe_record");
 //      otlv2Dao.deleteAll("fits_file2");

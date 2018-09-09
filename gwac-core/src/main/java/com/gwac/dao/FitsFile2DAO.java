@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface FitsFile2DAO extends BaseHibernateDao<FitsFile2> {
 
+  public void moveDataToHisTable();
+  
   public FitsFile2 getByOt2ForCut(long ot2Id, int ffNum);
 
   public List<FitsFile2> getByOt2ForCut(long ot2Id);

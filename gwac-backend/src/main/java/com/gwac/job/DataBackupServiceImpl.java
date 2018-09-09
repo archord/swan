@@ -8,6 +8,7 @@ import com.gwac.dao.CameraDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.ConfigFileDao;
 import com.gwac.dao.DataProcessMachineDAO;
+import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.Ot2StreamNodeTimeDao;
@@ -57,6 +58,8 @@ public class DataBackupServiceImpl implements BaseService {
   private WebGlobalParameterDao webGlobalParameterDao;
   @Resource
   private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
+  @Resource
+  private FitsFile2DAO ff2Dao;
 
   @Override
   public void startJob() {
@@ -78,6 +81,7 @@ public class DataBackupServiceImpl implements BaseService {
 
     long startTime = System.nanoTime();
     try {//JDBCConnectionException or some other exception
+      ff2Dao.moveDataToHisTable();
       otlv2Dao.moveDataToHisTable();
       ffcDao.moveDataToHisTable();
       oorDao.moveDataToHisTable();

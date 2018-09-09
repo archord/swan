@@ -29,7 +29,7 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
             + " FROM ot_observe_record_his oor "
             + " INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
             + " INNER JOIN move_object mo ON mo.mov_id = mor.mov_id "
-            + " INNER JOIN fits_file2 ff ON ff.ff_id = oor.ff_id "
+            + " INNER JOIN fits_file2_his ff ON ff.ff_id = oor.ff_id "
             + " WHERE mo.mov_id=" + motId
             + " ORDER BY ff.img_name";
 
@@ -102,7 +102,7 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
             + "FROM ot_observe_record_his oor  "
             + "INNER JOIN move_object_record mor ON mor.oor_id = oor.oor_id  "
             + "INNER JOIN move_object mo ON mo.mov_id = mor.mov_id "
-            + "INNER JOIN fits_file2 ff ON ff.ff_id = oor.ff_id "
+            + "INNER JOIN fits_file2_his ff ON ff.ff_id = oor.ff_id "
             + "WHERE oor.ot_id=0 AND oor.date_str=? "
             + "ORDER BY mo.mov_id, oor.date_ut, oor.dec_d  "
             + ")as moor  "
@@ -127,7 +127,7 @@ public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implemen
             + "FROM ( "
             + "		SELECT oor.ff_number, oor.ra_d, oor.dec_d, oor.x, oor.y, oor.date_ut, oor.oor_id, mor.mov_id, ff.img_name "
             + "		FROM ot_observe_record_his oor "
-            + "     INNER JOIN fits_file2 ff ON ff.ff_id = oor.ff_id "
+            + "     INNER JOIN fits_file2_his ff ON ff.ff_id = oor.ff_id "
             + "		LEFT JOIN move_object_record mor ON mor.oor_id = oor.oor_id "
             + "		WHERE oor.ot_id=0 and oor.data_produce_method='1' and mor.mov_id IS NULL AND oor.date_str=? "
             + "		ORDER BY date_ut "

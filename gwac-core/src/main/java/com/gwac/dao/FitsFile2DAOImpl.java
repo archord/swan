@@ -23,7 +23,15 @@ import org.springframework.stereotype.Repository;
 public class FitsFile2DAOImpl extends BaseHibernateDaoImpl<FitsFile2> implements FitsFile2DAO {
 
   private static final Log log = LogFactory.getLog(FitsFile2DAOImpl.class);
+  
+  @Override
+  public void moveDataToHisTable() {
 
+    Session session = getCurrentSession();
+    String sql = "WITH moved_rows AS ( DELETE FROM fits_file2 RETURNING * ) INSERT INTO fits_file2_his SELECT * FROM moved_rows;";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
   @Override
   public FitsFile2 getByOt2ForCut(long ot2Id, int ffNum) {
 
