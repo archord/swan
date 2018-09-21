@@ -17,13 +17,41 @@ import org.hibernate.annotations.Parameter;
 )
 public class SkyRegionTemplate implements java.io.Serializable {
 
+  /**
+   * @return the mountId
+   */
+  @Column(name = "mount_id")
+  public Integer getMountId() {
+    return mountId;
+  }
+
+  /**
+   * @param mountId the mountId to set
+   */
+  public void setMountId(Integer mountId) {
+    this.mountId = mountId;
+  }
+
+  /**
+   * @return the skyId
+   */
+  @Column(name = "sky_id")
+  public Integer getSkyId() {
+    return skyId;
+  }
+
+  /**
+   * @param skyId the skyId to set
+   */
+  public void setSkyId(Integer skyId) {
+    this.skyId = skyId;
+  }
+
   private long tmptId;
   private String tmptName;
-  private Integer groupId;
-  private Integer unitId;
+  private Integer mountId;
   private Integer camId;
-  private Integer gridId;
-  private Integer fieldId;
+  private Integer skyId;
   private Float centerRa;
   private Float centerDec;
   private Float topLeftRa;
@@ -41,8 +69,8 @@ public class SkyRegionTemplate implements java.io.Serializable {
 
   @Override
   public String toString() {
-    return "tmptName=" + tmptName + ", groupId=" + groupId + ", unitId=" + unitId + ", camId=" + camId + ", gridId=" + gridId
-            + ", fieldId=" + fieldId + ", centerRa=" + centerRa + ", centerDec=" + centerDec + ", topLeftRa=" + topLeftRa + ", topLeftDec=" + topLeftDec
+    return "tmptName=" + tmptName + ", mountId=" + getMountId() + ", camId=" + camId + ", skyId=" + getSkyId()
+            + ", centerRa=" + centerRa + ", centerDec=" + centerDec + ", topLeftRa=" + topLeftRa + ", topLeftDec=" + topLeftDec
             + ", topRightRa=" + topRightRa + ", topRightDec=" + topRightDec + ", bottomRightRa=" + bottomRightRa + ", bottomRightDec=" + bottomRightDec + ", bottomLeftRa=" + bottomLeftRa
             + ", bottomLeftDec=" + bottomLeftDec + ", genTime=" + genTime + ", storePath=" + storePath + ", starNum=" + starNum + ", fwhm=" + fwhm;
   }
@@ -88,36 +116,6 @@ public class SkyRegionTemplate implements java.io.Serializable {
   }
 
   /**
-   * @return the groupId
-   */
-  @Column(name = "group_id")
-  public Integer getGroupId() {
-    return groupId;
-  }
-
-  /**
-   * @param groupId the groupId to set
-   */
-  public void setGroupId(Integer groupId) {
-    this.groupId = groupId;
-  }
-
-  /**
-   * @return the unitId
-   */
-  @Column(name = "unit_id")
-  public Integer getUnitId() {
-    return unitId;
-  }
-
-  /**
-   * @param unitId the unitId to set
-   */
-  public void setUnitId(Integer unitId) {
-    this.unitId = unitId;
-  }
-
-  /**
    * @return the camId
    */
   @Column(name = "cam_id")
@@ -130,36 +128,6 @@ public class SkyRegionTemplate implements java.io.Serializable {
    */
   public void setCamId(Integer camId) {
     this.camId = camId;
-  }
-
-  /**
-   * @return the gridId
-   */
-  @Column(name = "grid_id")
-  public Integer getGridId() {
-    return gridId;
-  }
-
-  /**
-   * @param gridId the gridId to set
-   */
-  public void setGridId(Integer gridId) {
-    this.gridId = gridId;
-  }
-
-  /**
-   * @return the fieldId
-   */
-  @Column(name = "field_id")
-  public Integer getFieldId() {
-    return fieldId;
-  }
-
-  /**
-   * @param fieldId the fieldId to set
-   */
-  public void setFieldId(Integer fieldId) {
-    this.fieldId = fieldId;
   }
 
   /**

@@ -8,23 +8,28 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.CameraDao;
+import com.gwac.dao.MountDao;
+import com.gwac.dao.ObservationSkyDao;
 import com.gwac.dao.SkyRegionTemplateDao;
+import com.gwac.model.Camera;
+import com.gwac.model.Mount;
+import com.gwac.model.ObservationSky;
 import com.gwac.model.SkyRegionTemplate;
 import com.gwac.util.CommonFunction;
-import static com.opensymphony.xwork2.Action.ERROR;
-import static com.opensymphony.xwork2.Action.INPUT;
-import static com.opensymphony.xwork2.Action.SUCCESS;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Result;
 
 /**
  * from MultipleCommonFileUploadAction
@@ -33,14 +38,35 @@ import org.apache.struts2.convention.annotation.Result;
  */
 public class RegTemplateAction extends ActionSupport {
 
+  /**
+   * @param fileUpload the fileUpload to set
+   */
+  public void setFileUpload(List<File> fileUpload) {
+    this.fileUpload = fileUpload;
+  }
+
+  /**
+   * @param fileUploadContentType the fileUploadContentType to set
+   */
+  public void setFileUploadContentType(List<String> fileUploadContentType) {
+    this.fileUploadContentType = fileUploadContentType;
+  }
+
+  /**
+   * @param fileUploadFileName the fileUploadFileName to set
+   */
+  public void setFileUploadFileName(List<String> fileUploadFileName) {
+    this.fileUploadFileName = fileUploadFileName;
+  }
+
   private static final Log log = LogFactory.getLog(RegTemplateAction.class);
 
   private String tmptName;
-  private Integer groupId;
-  private Integer unitId;
-  private Integer camId;
-  private Integer gridId;
-  private Integer fieldId;
+  private String groupId;
+  private String unitId;
+  private String camId;
+  private String gridId;
+  private String fieldId;
   private Float centerRa;
   private Float centerDec;
   private Float topLeftRa;
@@ -55,29 +81,50 @@ public class RegTemplateAction extends ActionSupport {
   private String storePath;
   private Integer starNum;
   private Float fwhm;
+
+  private List<File> fileUpload = new ArrayList<>();
+  private List<String> fileUploadContentType = new ArrayList<>();
+  private List<String> fileUploadFileName = new ArrayList<>();
+
   @Resource
   private SkyRegionTemplateDao srTmptDao;
+  @Resource
+  private ObservationSkyDao obsSkyDao;
+  @Resource
+  private CameraDao cameraDao;
+  @Resource
+  private MountDao mountDao;
 
   private String echo = "";
 
-  @Action(value = "regTemplateImg", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
-    @Result(location = "manage/result.jsp", name = ERROR)})
+  @Action(value = "regTemplateImg")
   public String action1() {
 
-    String result = SUCCESS;
     echo = "";
-    if (tmptName != null) {
+    if (groupId == null || groupId.isEmpty() || unitId == null || unitId.isEmpty()
+            || camId == null || camId.isEmpty() || tmptName == null || tmptName.isEmpty()
+            || fileUpload.isEmpty() || null == fieldId || fieldId.isEmpty() || fieldId.equalsIgnoreCase("undefined")
+            || null == gridId || gridId.isEmpty() || gridId.equalsIgnoreCase("undefined")) {
+      echo = "all parameter cannot be empty.";
+      log.warn(echo);
+      log.warn("groupId:" + groupId + ", unitId:" + unitId + ", camId:" + camId + ", gridId:" + gridId
+              + ", fieldId:" + fieldId + ", tmptName:" + tmptName + ", genTime:" + genTime);
+    } else {
+
+      Camera tcamera = cameraDao.getByName(camId);
+      Mount tmount = mountDao.getByGroupUnitId(groupId, unitId);
+      ObservationSky tsky = obsSkyDao.getByName(fieldId, gridId);
+
       SkyRegionTemplate obj = new SkyRegionTemplate();
       obj.setBottomLeftDec(bottomLeftDec);
       obj.setBottomLeftRa(bottomLeftRa);
       obj.setBottomRightDec(bottomRightDec);
       obj.setBottomRightRa(bottomRightRa);
-      obj.setCamId(camId);
+      obj.setCamId(tcamera.getCameraId());
       obj.setCenterDec(centerDec);
       obj.setCenterRa(centerRa);
-      obj.setFieldId(fieldId);
+      obj.setMountId(tmount.getMountId());
+      obj.setSkyId(tsky.getSkyId());
       obj.setFwhm(fwhm);
       if (genTime != null && !genTime.isEmpty()) {
         genTime = genTime.replace("T", " ");
@@ -87,8 +134,6 @@ public class RegTemplateAction extends ActionSupport {
           log.warn("parse datatime error");
         }
       }
-      obj.setGridId(gridId);
-      obj.setGroupId(groupId);
       obj.setStarNum(starNum);
       obj.setStorePath(storePath);
       obj.setTmptName(tmptName);
@@ -96,13 +141,45 @@ public class RegTemplateAction extends ActionSupport {
       obj.setTopLeftRa(topLeftRa);
       obj.setTopRightDec(topRightDec);
       obj.setTopRightRa(topRightRa);
-      obj.setUnitId(unitId);
-      srTmptDao.save(obj);
-      echo = "regist template success!";
-      log.debug(obj.toString());
-    } else {
-      echo = "regist template failure!";
-      log.error("tmplate is null");
+
+      try {
+        String rootPath = getText("gwacDataRootDirectory");
+        String gwacTemp = getText("gwacTempDirectory");
+        if (rootPath.charAt(rootPath.length() - 1) != '/') {
+          rootPath += "/";
+        }
+        int i = 0;
+        String tfullPath = rootPath + gwacTemp;
+        for (File file : fileUpload) {
+          String tfilename = fileUploadFileName.get(i++).trim();
+          if (tfilename.isEmpty()) {
+            continue;
+          }
+          tfilename = tfilename.substring(0, tfilename.lastIndexOf('.')) + "_" + CommonFunction.getCurTimeString() + tfilename.substring(tfilename.lastIndexOf('.'));
+          log.debug("receive file " + tfilename);
+          File destFile = new File(tfullPath, tfilename);
+          //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
+          try {
+            if (destFile.exists()) {
+              log.warn(destFile + " already exist, delete it.");
+              FileUtils.forceDelete(destFile);
+            }
+            FileUtils.moveFile(file, destFile);
+
+            obj.setStorePath(tfilename);
+            srTmptDao.save(obj);
+            echo = "regist template success!";
+            log.debug(obj.toString());
+          } catch (IOException ex) {
+            log.error("delete or move file errror ", ex);
+            echo = "regist template failure!";
+          }
+          break;
+        }
+      } catch (Exception ex) {
+        log.error("delete or move file errror ", ex);
+        echo = "upload failure";
+      }
     }
 
     sendResultMsg(echo);
@@ -123,7 +200,6 @@ public class RegTemplateAction extends ActionSupport {
     }
   }
 
-
   /**
    * @param tmptName the tmptName to set
    */
@@ -134,35 +210,35 @@ public class RegTemplateAction extends ActionSupport {
   /**
    * @param groupId the groupId to set
    */
-  public void setGroupId(Integer groupId) {
+  public void setGroupId(String groupId) {
     this.groupId = groupId;
   }
 
   /**
    * @param unitId the unitId to set
    */
-  public void setUnitId(Integer unitId) {
+  public void setUnitId(String unitId) {
     this.unitId = unitId;
   }
 
   /**
    * @param camId the camId to set
    */
-  public void setCamId(Integer camId) {
+  public void setCamId(String camId) {
     this.camId = camId;
   }
 
   /**
    * @param gridId the gridId to set
    */
-  public void setGridId(Integer gridId) {
+  public void setGridId(String gridId) {
     this.gridId = gridId;
   }
 
   /**
    * @param fieldId the fieldId to set
    */
-  public void setFieldId(Integer fieldId) {
+  public void setFieldId(String fieldId) {
     this.fieldId = fieldId;
   }
 
