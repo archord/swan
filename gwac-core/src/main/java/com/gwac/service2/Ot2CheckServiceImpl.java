@@ -381,6 +381,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
           ot2.setUsnoMatch((short) tusno.size());
           ot2Dao.updateUsnoMatch(ot2);
           log.debug(ot2.getName() + " usno :" + tusno.size());
+        }else{
+          log.debug(ot2.getName() + " usno not match");
         }
         endTime = System.nanoTime();
         log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
@@ -565,6 +567,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   //有两个亮于13星等的星
   public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog2(OtLevel2 ot2) {
 
+    log.debug("query usno");
+    
     float tmag2 = 9;
     float tmag3 = 8;
     float tmag4 = 7;
