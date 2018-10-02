@@ -27,7 +27,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
   public void moveDataToHisTable() {
 
     Session session = getCurrentSession();
-    String sql = "WITH moved_rows AS ( DELETE FROM fits_file_cut_ref RETURNING * ) INSERT INTO fits_file_cut_ref_ref SELECT * FROM moved_rows;";
+    String sql = "WITH moved_rows AS ( DELETE FROM fits_file_cut_ref RETURNING * ) INSERT INTO fits_file_cut_ref_his SELECT * FROM moved_rows;";
     session.createSQLQuery(sql).executeUpdate();
   }
   
@@ -140,9 +140,9 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
 
     String unionSql = "";
     if (queryHis) {
-      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by number";
+      unionSql = "(" + sql1 + ") union (" + sql2 + ")";
     } else {
-      unionSql = sql1 + " order by number";
+      unionSql = sql1;
     }
     
     Query q = session.createSQLQuery(unionSql).addEntity(FitsFileCutRef.class);
