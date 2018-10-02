@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface FitsFileCutRefDAO extends BaseHibernateDao<FitsFileCutRef> {
   
+  public void moveDataToHisTable();
+  
   public List<FitsFileCutRef> getByName(String ffcName);
   
   public void updateIsRecvOk(long ffcrId);
@@ -23,7 +25,7 @@ public interface FitsFileCutRefDAO extends BaseHibernateDao<FitsFileCutRef> {
 
   public List<FitsFileCutRef> getCutImageByOtName(String otName);
   
-  public List<FitsFileCutRef> getCutImageByOtId(long otId);
+  public List<FitsFileCutRef> getCutImageByOtId(long otId, Boolean queryHis);
   
   public String getUnCuttedStarList(int dpmId, int size);
 }

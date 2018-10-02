@@ -85,7 +85,7 @@ public class GetOtDetail extends ActionSupport {
         ffc.setStorePath(dataRootWebMap + "/" + ffc.getStorePath());
       }
 
-      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2().getOtId());
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2().getOtId(), queryHis);
       if (ffcrs != null && ffcrs.size() > 0) {
         ffcrStorePath = dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/";
         ffcrFileName = ffcrs.get(0).getFileName() + ".jpg";

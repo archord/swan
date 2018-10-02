@@ -24,6 +24,14 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
   private static final Log log = LogFactory.getLog(FitsFileCutRefDAOImpl.class);
   
   @Override
+  public void moveDataToHisTable() {
+
+    Session session = getCurrentSession();
+    String sql = "WITH moved_rows AS ( DELETE FROM fits_file_cut_ref RETURNING * ) INSERT INTO fits_file_cut_ref_ref SELECT * FROM moved_rows;";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
   public List<FitsFileCutRef> getByName(String ffcName) {
 
     Session session = getCurrentSession();
@@ -118,14 +126,26 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
   }
   
   
-  public List<FitsFileCutRef> getCutImageByOtId(long otId) {
+  @Override
+  public List<FitsFileCutRef> getCutImageByOtId(long otId, Boolean queryHis) {
 
     Session session = getCurrentSession();
-    String sql = "select * "
+    String sql1 = "select * "
             + "from fits_file_cut_ref ffcr "
             + "where ffcr.success_cut=true and ffcr.ot_id='" + otId + "';";
     
-    Query q = session.createSQLQuery(sql).addEntity(FitsFileCutRef.class);
+    String sql2 = "select * "
+            + "from fits_file_cut_ref_his ffcrh "
+            + "where ffcrh.success_cut=true and ffcrh.ot_id='" + otId + "';";
+
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = "(" + sql1 + ") union (" + sql2 + ") order by number";
+    } else {
+      unionSql = sql1 + " order by number";
+    }
+    
+    Query q = session.createSQLQuery(unionSql).addEntity(FitsFileCutRef.class);
     return q.list();
   }
 
@@ -135,6 +155,7 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
    * @param otName
    * @return OT切图路径和名称Map
    */
+  @Override
   public List<FitsFileCutRef> getCutImageByOtName(String otName) {
 
     Session session = getCurrentSession();

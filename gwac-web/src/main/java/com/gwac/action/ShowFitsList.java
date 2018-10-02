@@ -84,7 +84,7 @@ public class ShowFitsList extends ActionSupport {
       }
       ffcListStr = tsb.toString();
 
-      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId());
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ob.getOtId(), queryHis);
       if (ffcrs != null && ffcrs.size() > 0) {
         ffcrStorePath = dataRootWebMap + "/" + ffcrs.get(0).getStorePath() + "/";
         ffcrName = ffcrs.get(0).getFileName() + ".fit";

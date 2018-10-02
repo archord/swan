@@ -10,6 +10,7 @@ import com.gwac.dao.ConfigFileDao;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
@@ -60,6 +61,8 @@ public class DataBackupServiceImpl implements BaseService {
   private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
   @Resource
   private FitsFile2DAO ff2Dao;
+  @Resource
+  private FitsFileCutRefDAO ffcrDao;
 
   @Override
   public void startJob() {
@@ -81,6 +84,7 @@ public class DataBackupServiceImpl implements BaseService {
 
     long startTime = System.nanoTime();
     try {//JDBCConnectionException or some other exception
+      ffcrDao.moveDataToHisTable();
       ff2Dao.moveDataToHisTable();
       otlv2Dao.moveDataToHisTable();
       ffcDao.moveDataToHisTable();

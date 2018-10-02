@@ -78,7 +78,7 @@ public class OT2InfoDownload extends ActionSupport {
         Boolean queryHis = his == 1;
         OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(otName, queryHis);
         List<FitsFileCut> ffcList = ffcDao.getCutImageByOtId(ot2.getOtId(), queryHis);
-        List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2.getOtId());
+        List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2.getOtId(), queryHis);
 
         List<File> tfiles = new ArrayList();
         String tpath = "";

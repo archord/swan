@@ -83,7 +83,7 @@ public class GetOtHistoryDetailJson extends ActionSupport implements SessionAwar
     if (ot2Tmpl != null) {
       ffcList = ffcDao.getCutImageByOtId(ot2Tmpl.getOtId(), queryHis);
 
-      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2Tmpl.getOtId());
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2Tmpl.getOtId(), queryHis);
       if (ffcrs != null && ffcrs.size() > 0) {
         ffcRef = ffcrs.get(0);
       }

@@ -82,7 +82,7 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
       ot2 = obDao.getOtLevel2ByName(getOtName(), queryHis);
       ffcList = ffcDao.getCutImageByOtId(getOt2().getOtId(), queryHis);
 
-      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2().getOtId());
+      List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2().getOtId(), queryHis);
       if (ffcrs != null && ffcrs.size() > 0) {
         ffcRef = ffcrs.get(0);
       }

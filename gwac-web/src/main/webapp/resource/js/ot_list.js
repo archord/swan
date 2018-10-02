@@ -362,12 +362,12 @@ $(function() {
 
   function formateLookBackCNN(data, type, full, meta) {
     var result = data;
-    if (data === 1) {
-      result = 'OT';
-    } else if (data === 2) {
-      result = 'FOT';
+    if (data >= 0.5) {
+      result = "<span title='" + data + "'>OT</span>";
+    } else if (data > -1) {
+      result = "<span title='" + data + "'>FOT</span>";
     } else {
-      result = '未处理';
+      result = "<span title='" + data + "'>未处理</span>";
     }
     return result;
   }
