@@ -132,11 +132,11 @@ public class FitsFileCutRefDAOImpl extends BaseHibernateDaoImpl<FitsFileCutRef> 
     Session session = getCurrentSession();
     String sql1 = "select * "
             + "from fits_file_cut_ref ffcr "
-            + "where ffcr.success_cut=true and ffcr.ot_id='" + otId + "';";
+            + "where ffcr.success_cut=true and ffcr.ot_id=" + otId ;
     
     String sql2 = "select * "
             + "from fits_file_cut_ref_his ffcrh "
-            + "where ffcrh.success_cut=true and ffcrh.ot_id='" + otId + "';";
+            + "where ffcrh.success_cut=true and ffcrh.ot_id=" + otId;
 
     String unionSql = "";
     if (queryHis) {
