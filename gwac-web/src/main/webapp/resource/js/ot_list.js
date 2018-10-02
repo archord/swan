@@ -127,6 +127,7 @@ $(function() {
     $('#ot2Type').multiselect(option);
     $('#ot2Ccd').multiselect(option);
     $('#lookBackResult').multiselect(option);
+    $('#lookBackCnn').multiselect(option);
     $("#ot2QueryBtn").click(ot2QueryBtnClick);
     $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
 
@@ -224,23 +225,22 @@ $(function() {
       "columns": [
         {"data": "otId"},
         {"data": "name"},
+        {"data": "foundTimeUtc"},
         {"data": "ra"},
         {"data": "dec"},
         {"data": "xtemp"},
         {"data": "ytemp"},
-        {"data": "identify"},
         {"data": "total"},
         {"data": "otType"},
         {"data": "lookBackResult"},
+        {"data": "lookBackCnn"},
         {"data": "minorPlanetMatch"},
         {"data": "ot2HisMatch"},
         {"data": "usnoMatch"},
         {"data": "rc3Match"},
         {"data": "foCount"},
-        {"data": "followUpResult"},
         {"data": "cvsMatch"},
-        {"data": "otherMatch"},
-        {"data": "firstNMark"}
+        {"data": "otherMatch"}
       ],
       "columnDefs": [{
           "targets": 0,
@@ -251,19 +251,23 @@ $(function() {
           "data": "OtName?",
           "render": formateOtName
         }, {
-          "targets": [2, 3],
+          "targets": 2,
+          "data": "foundTimeUtc?",
+          "render": formateTime
+        }, {
+          "targets": [3, 4],
           "data": "dont know",
           "render": floatFormate3
         }, {
-          "targets": [4, 5],
+          "targets": [5, 6],
           "data": "dont know",
           "render": floatFormate2
         }, {
-          "targets": 12,
+          "targets": 14,
           "data": "dont know",
           "render": formateRC3
         }, {
-          "targets": 11,
+          "targets": 12,
           "data": "dont know",
           "render": formateOT2His
         }, {
@@ -271,9 +275,9 @@ $(function() {
           "data": "dont know",
           "render": formateLookBack
         }, {
-          "targets": 18,
+          "targets": 10,
           "data": "dont know",
-          "render": formateFirstNMark
+          "render": formateLookBackCNN
         }, {
           "targets": 8,
           "data": "dont know",
@@ -346,12 +350,31 @@ $(function() {
       result = 'FMCH'; //图像匹配，未匹配到任何目标
     } else if (data === 9) {
       result = 'FHOT'; //图像匹配，未匹配到任何目标
+    }else if (data === 10) {
+      result = 'F2OB'; //图像匹配失败
+    } else if (data === 11) {
+      result = 'FLUX'; //图像匹配，未匹配到任何目标
+    } else if (data === 12) {
+      result = 'FRNB'; //图像匹配，未匹配到任何目标
     }
     return result;
   }
 
-  function formateFirstNMark(data, type, full, meta) {
-    return data ? '是' : '否';
+  function formateLookBackCNN(data, type, full, meta) {
+    var result = data;
+    if (data === 1) {
+      result = 'OT';
+    } else if (data === 2) {
+      result = 'FOT';
+    } else {
+      result = '未处理';
+    }
+    return result;
+  }
+  
+  function formateTime(data, type, full, meta) {
+    //foundTimeUtc:"2018-10-01T21:20:05"
+    return data.substring(11);
   }
 
   function formateRowNumber(data, type, full, meta) {

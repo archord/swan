@@ -37,6 +37,7 @@ public class OtLevel2QueryParameter {
   private List<String> otType;
   private List<String> lookBackResult;
   private List<String> followUpResult;
+  private List<String> lookBackCnn;
 
   @Override
   public String toString() {
@@ -47,6 +48,7 @@ public class OtLevel2QueryParameter {
             + ", isMatch=" + isMatch + ", otName=" + otName
             + ", matchType=" + matchType + ", otType=" + otType 
             + ", lookBackResult=" + lookBackResult + ", followUpResult=" + getFollowUpResult()
+            + ", lookBackCnn=" + lookBackCnn
             + ", start=" + start + ", length=" + length;
   }
 
@@ -69,6 +71,9 @@ public class OtLevel2QueryParameter {
     }
     if (lookBackResult != null) {
       lookBackResult.removeAll(emptyStr);
+    }
+    if (lookBackCnn != null) {
+      lookBackCnn.removeAll(emptyStr);
     }
     if (getFollowUpResult() != null) {
       getFollowUpResult().removeAll(emptyStr);
@@ -351,5 +356,19 @@ public class OtLevel2QueryParameter {
    */
   public void setLength(int length) {
     this.length = length;
+  }
+
+  /**
+   * @return the lookBackCnn
+   */
+  public List<String> getLookBackCnn() {
+    return lookBackCnn;
+  }
+
+  /**
+   * @param lookBackCnn the lookBackCnn to set
+   */
+  public void setLookBackCnn(List<String> lookBackCnn) {
+    this.lookBackCnn = lookBackCnn;
   }
 }

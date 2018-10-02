@@ -55,6 +55,7 @@ public class OtLevel2  implements java.io.Serializable {
      private Short usnoMatch;
      private Short lookBackResult;
      private Short followUpResult;
+     private Short lookBackCnn;
 
     public OtLevel2() {
     }
@@ -62,31 +63,6 @@ public class OtLevel2  implements java.io.Serializable {
 	
     public OtLevel2(long otId) {
         this.otId = otId;
-    }
-    public OtLevel2(long otId, String name, Float ra, Float dec, Date foundTimeUtc, String identify, Float xtemp, Float ytemp, Integer lastFfNumber, Integer total, Boolean isRecognize, Short otType, String comments, Integer dpmId, String dateStr, Boolean allFileCutted, Integer firstFfNumber, Integer cuttedFfNumber, Short isMatch, Boolean firstNMark, Short skyId, Character dataProduceMethod, Float mag) {
-       this.otId = otId;
-       this.name = name;
-       this.ra = ra;
-       this.dec = dec;
-       this.foundTimeUtc = foundTimeUtc;
-       this.identify = identify;
-       this.xtemp = xtemp;
-       this.ytemp = ytemp;
-       this.lastFfNumber = lastFfNumber;
-       this.total = total;
-       this.isRecognize = isRecognize;
-       this.otType = otType;
-       this.comments = comments;
-       this.dpmId = dpmId;
-       this.dateStr = dateStr;
-       this.allFileCutted = allFileCutted;
-       this.firstFfNumber = firstFfNumber;
-       this.cuttedFfNumber = cuttedFfNumber;
-       this.isMatch = isMatch;
-       this.firstNMark = firstNMark;
-       this.skyId = skyId;
-       this.dataProduceMethod = dataProduceMethod;
-       this.mag = mag;
     }
    
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -462,6 +438,21 @@ public class OtLevel2  implements java.io.Serializable {
    */
   public void setFollowUpResult(Short followUpResult) {
     this.followUpResult = followUpResult;
+  }
+
+  /**
+   * @return the lookBackCnn
+   */
+  @Column(name="look_back_cnn")
+  public Short getLookBackCnn() {
+    return lookBackCnn;
+  }
+
+  /**
+   * @param lookBackCnn the lookBackCnn to set
+   */
+  public void setLookBackCnn(Short lookBackCnn) {
+    this.lookBackCnn = lookBackCnn;
   }
 
 }

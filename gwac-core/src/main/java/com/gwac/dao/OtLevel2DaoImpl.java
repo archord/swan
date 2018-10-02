@@ -516,6 +516,15 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       sql.append(") ");
       isQueryParameterEmpty = false;
     }
+    if (ot2qp.getLookBackCnn() != null && !ot2qp.getLookBackCnn().isEmpty()) {
+      sql.append(" and look_back_cnn in (");
+      for (String tstr : ot2qp.getLookBackCnn()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
+      isQueryParameterEmpty = false;
+    }
 
     if (isQueryParameterEmpty && ot2qp.getLength() == 0) {
       ot2qp.setStart(0);
@@ -609,6 +618,22 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       for (String tstr : ot2qp.getMatchType()) {
         sql.append(tstr);
         sql.append(">0 or ");
+      }
+      sql.append(") ");
+    }
+    if (ot2qp.getLookBackResult() != null && !ot2qp.getLookBackResult().isEmpty()) {
+      sql.append(" and look_back_result in (");
+      for (String tstr : ot2qp.getLookBackResult()) {
+        sql.append(tstr);
+        sql.append(",");
+      }
+      sql.append(") ");
+    }
+    if (ot2qp.getLookBackCnn() != null && !ot2qp.getLookBackCnn().isEmpty()) {
+      sql.append(" and look_back_cnn in (");
+      for (String tstr : ot2qp.getLookBackCnn()) {
+        sql.append(tstr);
+        sql.append(",");
       }
       sql.append(") ");
     }
