@@ -140,7 +140,8 @@
           </table>
         </div>                                   
       </div>
-      <div id="alarm-player"></div>
+      <div id="alarm-player" ></div>
+      <img id='ot2lbcnn' style="position: fixed;display:none;"/>
     </div>
 
     <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>

@@ -359,16 +359,39 @@ $(function() {
     }
     return result;
   }
+  
+  function showOT2LBCNNImg(e,otName){
+    var left  = e.clientX  + "px";
+    var top  = e.clientY  + "px";
+    var dateStr = otName.substring(1,7);
+    $("#ot2lbcnn").attr("src", "/images/ot2lbcnn/"+dateStr+"/"+otName+".jpg"); 
+    $("#ot2lbcnn").style({
+      "left": left,
+      "top": top,
+      "position": 'fixed'
+    }); 
+    $("#ot2lbcnn").toggle();
+    return false;
+  }
+  
+  function hiddenOT2LBCNNImg(){
+    $("#ot2lbcnn").style({
+      "display": 'none'
+    }); 
+    $("#ot2lbcnn").toggle();
+    return false;
+  }
 
   function formateLookBackCNN(data, type, full, meta) {
-    var result = data;
+    var result = "<span title='" + data + "' onmouseover='showOT2LBCNNImg(event,\""+full.name + "\")' onmouseout='hiddenOT2LBCNNImg()'>";
     if (data >= 0.5) {
-      result = "<span title='" + data + "'>OT</span>";
+      result = result + "OT";
     } else if (data > -1) {
-      result = "<span title='" + data + "'>FOT</span>";
+      result = result + "FOT";
     } else {
-      result = "<span title='" + data + "'>未处理</span>";
+      result = result + "未处理";
     }
+      result = result + "</span>";
     return result;
   }
   
