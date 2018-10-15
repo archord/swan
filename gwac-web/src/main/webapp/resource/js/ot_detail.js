@@ -803,6 +803,33 @@ $(function() {
   }
 
   function formateOtName(data, type, full, meta) {
+    var result = "<span title='" + data + "' onmouseover='showOT2LBCNNImg(event,\""+data + "\")' onmouseout='hiddenOT2LBCNNImg()'>"+full.name + "</span>";
+    return result;
+  }
+
+  function showOT2LBCNNImg(e,otName){
+    var left  = e.clientX  + "px";
+    var top  = e.clientY  + "px";
+    var dateStr = otName.substring(1,7);
+    $("#ot2lbcnn").attr("src", "/images/ot2lbcnn/"+dateStr+"/"+otName+".jpg"); 
+    $("#ot2lbcnn").style({
+      "left": left,
+      "top": top,
+      "position": 'fixed'
+    }); 
+    $("#ot2lbcnn").toggle();
+    return false;
+  }
+  
+  function hiddenOT2LBCNNImg(){
+    $("#ot2lbcnn").style({
+      "display": 'none'
+    }); 
+    $("#ot2lbcnn").toggle();
+    return false;
+  }
+  
+  function formateOtName2(data, type, full, meta) {
     var result = "";
     if (!(data === "" || data === 'null' || data === undefined || data === null)) {
       var url = baseUrl + data;
