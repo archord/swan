@@ -249,6 +249,7 @@
                       sortable="false" align="center"/>
     </sjg:grid>
 
+      <img id='ot2lbcnn' style="position: fixed;display:none;"/>
 
     <script type="text/javascript">
 
@@ -257,9 +258,23 @@
         loadOT2Type();
 
       });
+      function showOT2LBCNNImg(e, otName) {
+        var dateStr = otName.substring(1, 7);
+        $("#ot2lbcnn").attr("src", "/images/ot2lbcnn/" + dateStr + "/" + otName + ".jpg");
+        //$("#ot2lbcnn").attr("src", "/images/ot2lbcnn/181011/G181011_C05424.jpg");
+        $("#ot2lbcnn").css({top: e.clientY - 80 - 40, left: e.clientX - 115, position: 'fixed'}).fadeIn(200);
+        $('#ot2lbcnn').show();
+        return false;
+      }
+
+      function hiddenOT2LBCNNImg() {
+        $("#ot2lbcnn").hide();
+        return false;
+      }
       function formatLink(cellvalue, options, rowObject) {
         var url = "<s:property value="otDetail"/>?otName=" + cellvalue;
-        return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + cellvalue + "</a>";
+        //return "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + cellvalue + "</a>";
+        return "<a href='" + url + "' target='_blank' onmouseover='showOT2LBCNNImg(event,\"" + cellvalue + "\")' onmouseout='hiddenOT2LBCNNImg()'>" + cellvalue + "</a>";
       }
 
       function formatLink1(cellvalue, options, rowObject) {

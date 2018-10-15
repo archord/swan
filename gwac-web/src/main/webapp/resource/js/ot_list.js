@@ -1,5 +1,5 @@
 
-$(function() {
+$(function () {
   var gwacRootURL = $("#gwacRootURL").val();
 //  var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
   var baseUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=";
@@ -18,12 +18,12 @@ $(function() {
   loadQueryParmeter();
   loadOT2List();
 
-  ot2ListTable.on('xhr', function() {
+  ot2ListTable.on('xhr', function () {
     lastTotalOT2 = curTotalOT2;
     curTotalOT2 = 0;
     var ot2List = ot2ListTable.ajax.json().gridModel;
 //    console.log(ot2List);
-    $.each(ot2List, function(i, item) {
+    $.each(ot2List, function (i, item) {
       if ((item.dataProduceMethod === '1' && item.isMatch === 1 && item.lookBackResult === 1)
               || (item.dataProduceMethod === '8' && item.isMatch === 1)) {
         curTotalOT2 = curTotalOT2 + 1;
@@ -41,7 +41,7 @@ $(function() {
 
     getAutoFollowUp();
 
-    $("#autoFollowUp").change(function() {
+    $("#autoFollowUp").change(function () {
       if ($('#autoFollowUp').is(':checked')) {
         setAutoFollowUp('true');
       } else {
@@ -60,9 +60,9 @@ $(function() {
       data: "parmName=AutoFollowUp",
       async: true,
       dataType: 'json',
-      success: function(data) {
+      success: function (data) {
         console.log(data);
-        if (data.AutoFollowUp==='true') {
+        if (data.AutoFollowUp === 'true') {
           $("#autoFollowUp").attr("checked", "true");
         } else {
           $("#autoFollowUp").removeAttr("checked");
@@ -82,7 +82,7 @@ $(function() {
       data: "parmName=AutoFollowUp&parmValue=" + val,
       async: true,
       dataType: 'json',
-      success: function(data) {
+      success: function (data) {
         console.log(data);
       }
     });
@@ -91,7 +91,7 @@ $(function() {
   function initAlarmPlayer() {
     alarmPlayer = $("#alarm-player");
     alarmPlayer.jPlayer({
-      ready: function() {
+      ready: function () {
         alarmPlayer.jPlayer("setMedia", {
           mp3: "/gresources/" + $('#newOTAlarm').val()
         });
@@ -99,7 +99,7 @@ $(function() {
       loop: false
     });
 
-    $("#newOTAlarm").change(function() {
+    $("#newOTAlarm").change(function () {
       playAlarm();
     });
   }
@@ -131,7 +131,7 @@ $(function() {
     $("#ot2QueryBtn").click(ot2QueryBtnClick);
     $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
 
-    $(".ot2QueryParameter").change(function() {
+    $(".ot2QueryParameter").change(function () {
       lastTotalOT2 = 0;
       curTotalOT2 = 0;
     });
@@ -164,9 +164,9 @@ $(function() {
       data: 'p1=1',
       async: false,
       dataType: 'json',
-      success: function(data) {
+      success: function (data) {
         ot2arr = data.otTypes;
-        $.each(ot2arr, function(i, item) {
+        $.each(ot2arr, function (i, item) {
           if (item.ottName !== "未分类")
             $('#ot2Type').append($('<option>', {
               value: item.ottId,
@@ -186,13 +186,13 @@ $(function() {
       data: 'p1=1',
       async: false,
       dataType: 'json',
-      success: function(data) {
+      success: function (data) {
 //        $('#newOTAlarm').append($('<option>', {
 //          value: "",
 //          text: "请选择"
 //        }));
         var mrs = data.multimediaResources;
-        $.each(mrs, function(i, item) {
+        $.each(mrs, function (i, item) {
           if (item.type === '1')
             $('#newOTAlarm').append($('<option>', {
               value: item.path,
@@ -201,7 +201,7 @@ $(function() {
         });
 
         var defaultText = 'Beep';
-        $('#newOTAlarm option').filter(function() {
+        $('#newOTAlarm option').filter(function () {
           return $(this).text() === defaultText;
         }).prop('selected', true);
       }
@@ -350,7 +350,7 @@ $(function() {
       result = 'FMCH'; //图像匹配，未匹配到任何目标
     } else if (data === 9) {
       result = 'FHOT'; //图像匹配，未匹配到任何目标
-    }else if (data === 10) {
+    } else if (data === 10) {
       result = 'F2OB'; //图像匹配失败
     } else if (data === 11) {
       result = 'FLUX'; //图像匹配，未匹配到任何目标
@@ -359,31 +359,10 @@ $(function() {
     }
     return result;
   }
-  
-  function showOT2LBCNNImg(e,otName){
-    var left  = e.clientX  + "px";
-    var top  = e.clientY  + "px";
-    var dateStr = otName.substring(1,7);
-    $("#ot2lbcnn").attr("src", "/images/ot2lbcnn/"+dateStr+"/"+otName+".jpg"); 
-    $("#ot2lbcnn").style({
-      "left": left,
-      "top": top,
-      "position": 'fixed'
-    }); 
-    $("#ot2lbcnn").toggle();
-    return false;
-  }
-  
-  function hiddenOT2LBCNNImg(){
-    $("#ot2lbcnn").style({
-      "display": 'none'
-    }); 
-    $("#ot2lbcnn").toggle();
-    return false;
-  }
+
 
   function formateLookBackCNN(data, type, full, meta) {
-    var result = "<span title='" + data + "' onmouseover='showOT2LBCNNImg(event,\""+full.name + "\")' onmouseout='hiddenOT2LBCNNImg()'>";
+    var result = "<span title='" + data + "' onmouseover='showOT2LBCNNImg(event,\"" + full.name + "\")' onmouseout='hiddenOT2LBCNNImg()'>";
     if (data >= 0.5) {
       result = result + "OT";
     } else if (data > -1) {
@@ -391,10 +370,10 @@ $(function() {
     } else {
       result = result + "未处理";
     }
-      result = result + "</span>";
+    result = result + "</span>";
     return result;
   }
-  
+
   function formateTime(data, type, full, meta) {
     //foundTimeUtc:"2018-10-01T21:20:05"
     return data.substring(11);
@@ -422,6 +401,19 @@ $(function() {
   }
 });
 
+function showOT2LBCNNImg(e, otName) {
+  var dateStr = otName.substring(1, 7);
+  $("#ot2lbcnn").attr("src", "/images/ot2lbcnn/" + dateStr + "/" + otName + ".jpg");
+  //$("#ot2lbcnn").attr("src", "/images/ot2lbcnn/181011/G181011_C05424.jpg");
+  $("#ot2lbcnn").css({top: e.clientY - 80 - 40, left: e.clientX - 115, position: 'fixed'}).fadeIn(200);
+  $('#ot2lbcnn').show();
+  return false;
+}
+
+function hiddenOT2LBCNNImg() {
+  $("#ot2lbcnn").hide();
+  return false;
+}
 
 function openDialog(otName) {
   var gwacRootURL = $("#gwacRootURL").val();

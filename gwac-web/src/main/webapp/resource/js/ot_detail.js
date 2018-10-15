@@ -1,5 +1,5 @@
 
-$(function() {
+$(function () {
   var gwacRootURL = $("#gwacRootURL").val();
   var baseUrl = gwacRootURL + "/gwac/pgwac-ot-history-detail.action?otName=";
   var option1 = {
@@ -65,7 +65,7 @@ $(function() {
     }
 
     bootbox.setLocale("zh_CN");
-    $("#user-login").click(function() {
+    $("#user-login").click(function () {
       bootbox.confirm({
         title: '用户登录',
         className: 'login-field-dialog',
@@ -76,14 +76,14 @@ $(function() {
                 <input type='text' class='form-control required' name='loginName' id='loginName' minlength='2' maxlength='20'/></div>\
                 <div>密&nbsp;&nbsp;&nbsp;&nbsp;码:\
                 <input type='password' class='form-control required' name='loginPass' id='loginPass' minlength='6' maxlength='20'/></div></form></div>",
-        callback: function(result) {
+        callback: function (result) {
           if (result) {
             if ($("#loginForm").valid()) {
               var gwacRootURL = $("#gwacRootURL").val();
               var loginUrl = gwacRootURL + "/user-login.action";
               var formData = $("#loginForm").serialize();
               $.post(loginUrl, formData,
-                      function(data) {
+                      function (data) {
                         console.log(data);
                         if (data.flag === '1') {
                           var user = data.userInfo;
@@ -107,17 +107,17 @@ $(function() {
       $("#loginForm").validate();
     });
 
-    $("#user-logout").click(function() {
+    $("#user-logout").click(function () {
       bootbox.confirm({
         className: 'login-field-dialog',
         message: "是否注销",
-        callback: function(result) {
+        callback: function (result) {
           if (result) {
             var gwacRootURL = $("#gwacRootURL").val();
             var userName = $("#userName").val();
             var logoutUrl = gwacRootURL + "/user-logout.action?userName=" + userName;
             $.get(logoutUrl,
-                    function(data) {
+                    function (data) {
                       console.log(data);
                       if (data.flag === '1') {
                         $('#userName').val('mini-GWAC');
@@ -144,7 +144,7 @@ $(function() {
     $("#fuDec").val(ot2.dec);
 
     setFilter60();
-    $("#telescope").change(function() {
+    $("#telescope").change(function () {
       if ($("#telescope").val() === '2') {
         setFilter30();
       } else {
@@ -153,18 +153,18 @@ $(function() {
     });
 
     bootbox.setLocale("zh_CN");
-    $("#followBtn").click(function() {
+    $("#followBtn").click(function () {
       bootbox.confirm({
         size: 'small',
         message: "确定发送后随信息？",
-        callback: function(result) {
+        callback: function (result) {
           if (result) {
             var gwacRootURL = $("#gwacRootURL").val();
             var fuUrl = gwacRootURL + "/otFollowUp.action";
             var formData = $("#otFollowUp").serialize();
 //            console.log(formData);
             $.post(fuUrl, formData,
-                    function(data) {
+                    function (data) {
                       console.log(data);
 //                      alert(data.result);
                     }, "json");
@@ -177,7 +177,7 @@ $(function() {
   function setFilter60() {
     var filter60 = ["Lum", "Green", "R", "Blue", "V", "I", "B", "Red", "U", "null"];
     $('#filter').find('option').remove();
-    $.each(filter60, function(i, item) {
+    $.each(filter60, function (i, item) {
       $('#filter').append($('<option>', {
         value: item,
         text: item
@@ -190,7 +190,7 @@ $(function() {
   function setFilter30() {
     var filter30 = ["null", "R", "B", "I", "U", "V"];
     $('#filter').find('option').remove();
-    $.each(filter30, function(i, item) {
+    $.each(filter30, function (i, item) {
       $('#filter').append($('<option>', {
         value: item,
         text: item
@@ -203,7 +203,7 @@ $(function() {
   function otClassify(data) {
     var otTypes = data.otTypes;
     var ot2 = data.ot2;
-    $.each(otTypes, function(i, item) {
+    $.each(otTypes, function (i, item) {
       $('#ot2Classify').append($('<option>', {
         value: item.ottId,
         text: item.ottName
@@ -216,7 +216,7 @@ $(function() {
       $("#ot2Classify").val(ot2.otType);
     }
 
-    $("#ot2Classify").change(function() {
+    $("#ot2Classify").change(function () {
       var gwacRootURL = $("#gwacRootURL").val();
       var otTypeId = $("#ot2Classify").val();
       var otId = $("#otId").val();
@@ -225,7 +225,7 @@ $(function() {
 //      console.log(formData);
 //      console.log(url);
       $.post(url, formData,
-              function(data) {
+              function (data) {
                 console.log(data);
 //                if (data.flag === '1') {
 //                  alert("分类成功!");
@@ -341,7 +341,7 @@ $(function() {
       $("#cut-image-show").append(downloadOT2Info);
     }
 
-    $.each(ffcList, function(i, item) {
+    $.each(ffcList, function (i, item) {
       var objImg;
       if (ot2.dataProduceMethod === '1') {
         objImg = $('<img/>', {
@@ -379,25 +379,25 @@ $(function() {
         items: 1,
         duration: 0,
         fx: 'fade',
-        onBefore: function(data) {
+        onBefore: function (data) {
           setNavi($(this), data.items.visible);
         }
       }
     });
-    $('#carousel-wrapper').hover(function() {
+    $('#carousel-wrapper').hover(function () {
       $('#navi').stop().animate({
         bottom: 0
       });
-    }, function() {
+    }, function () {
       $('#navi').stop().animate({
         bottom: -30
       });
     });
-    $('#start').on('click', function() {
+    $('#start').on('click', function () {
       var startImgNum = $('#startImgNum').val();
       $('#carousel').trigger('slideTo', 0);
     });
-    $('#end').on('click', function() {
+    $('#end').on('click', function () {
       var totalImg = $('#totalImg').val();
       $('#carousel').trigger('slideTo', totalImg - 1);
     });
@@ -412,7 +412,7 @@ $(function() {
     $("#skyCordDetail").append("OT坐标(赤经,赤纬)：(" + siderealTime + ",&nbsp;" + pitchAngle + ")&nbsp;&nbsp;&nbsp;(" + ra + ",&nbsp;" + dec + ")&nbsp;&nbsp;&nbsp;");
 
     //点击查看fits原图
-    $("#showOt2Fits").click(function() {
+    $("#showOt2Fits").click(function () {
       var gwacRootURL = $("#gwacRootURL").val();
       var otName = $("#otName").val();
       var url = gwacRootURL + "/show-fits-list.action?otName=" + otName;
@@ -455,7 +455,7 @@ $(function() {
     option1.yaxis.inverseTransform = formate2;
     otCurve = $.plot("#ot-curve", otCurveShow, option1);
 
-    $("#ot-curve").bind("plothover", function(event, pos, item) {
+    $("#ot-curve").bind("plothover", function (event, pos, item) {
       if (item) {
         var x = item.datapoint[0].toFixed(4);
         var y = item.datapoint[1].toFixed(2);
@@ -478,7 +478,7 @@ $(function() {
       return;
     }
     var fuMagsShow = [];
-    $.each(fuMags, function(i, item) {
+    $.each(fuMags, function (i, item) {
       fuMagsShow[i] = {
         label: fuMags[i].objName,
         data: eval(fuMags[i].objMag),
@@ -492,7 +492,7 @@ $(function() {
 
     otFollowupMagCurve = $.plot("#ot-followup-mag-curve", fuMagsShow, option1);
 
-    $("#ot-followup-mag-curve").bind("plothover", function(event, pos, item) {
+    $("#ot-followup-mag-curve").bind("plothover", function (event, pos, item) {
       if (item) {
         var x = item.datapoint[0].toFixed(4);
         var y = item.datapoint[1].toFixed(2);
@@ -504,7 +504,7 @@ $(function() {
 
 
     //点击查看后随fits原图
-    $("#showOt2FollowupFits").click(function() {
+    $("#showOt2FollowupFits").click(function () {
       var gwacRootURL = $("#gwacRootURL").val();
       var otName = $("#otName").val();
       var url = gwacRootURL + "/gwac/pgwac-ot-followup-fits.action?otName=" + otName;
@@ -542,7 +542,7 @@ $(function() {
     option1.yaxis.inverseTransform = formate3;
     otxyPosition = $.plot("#ot-xy-curve", positionData, option1);
   }
-  
+
   function otxytempPositionShow(data) {
     var otPositionVaration = eval(data.otxyTempVaration);
     if (typeof (otPositionVaration) === "undefined")
@@ -786,11 +786,11 @@ $(function() {
     var dateTime = full.dateUt.split("T");
     var date = dateTime[0].split("-");
     var time = dateTime[1].split(":");
-    var day = parseInt(date[2])+(parseInt(time[0])+parseInt(time[1])/60+parseInt(time[2])/3600)/24;
+    var day = parseInt(date[2]) + (parseInt(time[0]) + parseInt(time[1]) / 60 + parseInt(time[2]) / 3600) / 24;
     var raStr = degreeToHMS2(full.raD, "+");
     var decStr = degreeToDMS2(full.decD, "+");
     var searchUrl = "http://www.minorplanetcenter.net/cgi-bin/mpcheck.cgi?TextArea=&radius=15&limit=20.0&oc=327&sort=d&mot=h&tmot=s&pdes=u&needed=f&ps=n&type=p&which=pos&";
-    searchUrl += "year="+date[0]+"&month="+date[1]+"&day="+day+"&ra="+raStr+"&decl="+decStr;
+    searchUrl += "year=" + date[0] + "&month=" + date[1] + "&day=" + day + "&ra=" + raStr + "&decl=" + decStr;
     return "<a href='" + searchUrl + "' title='点击在IAU小行星网站搜寻OT对应坐标' target='_blank'>" + data + "</a>";
   }
 
@@ -803,33 +803,6 @@ $(function() {
   }
 
   function formateOtName(data, type, full, meta) {
-    var result = "<span title='" + data + "' onmouseover='showOT2LBCNNImg(event,\""+data + "\")' onmouseout='hiddenOT2LBCNNImg()'>"+full.name + "</span>";
-    return result;
-  }
-
-  function showOT2LBCNNImg(e,otName){
-    var left  = e.clientX  + "px";
-    var top  = e.clientY  + "px";
-    var dateStr = otName.substring(1,7);
-    $("#ot2lbcnn").attr("src", "/images/ot2lbcnn/"+dateStr+"/"+otName+".jpg"); 
-    $("#ot2lbcnn").style({
-      "left": left,
-      "top": top,
-      "position": 'fixed'
-    }); 
-    $("#ot2lbcnn").toggle();
-    return false;
-  }
-  
-  function hiddenOT2LBCNNImg(){
-    $("#ot2lbcnn").style({
-      "display": 'none'
-    }); 
-    $("#ot2lbcnn").toggle();
-    return false;
-  }
-  
-  function formateOtName2(data, type, full, meta) {
     var result = "";
     if (!(data === "" || data === 'null' || data === undefined || data === null)) {
       var url = baseUrl + data;
