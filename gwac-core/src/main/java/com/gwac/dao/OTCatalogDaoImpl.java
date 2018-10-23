@@ -183,7 +183,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
           log.error("parse flux error:" + path, e);
         }
         try {
-          ot.setFlag(Boolean.parseBoolean(strs[9]));
+          ot.setFlag(Integer.parseInt(strs[9]));
         } catch (NumberFormatException e) {
           log.error("parse flag error:" + path, e);
         }
@@ -277,7 +277,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         ot.setDateUt(df.parse(strs[6].replace('T', ' ')));
         ot.setImageName(strs[7]);
         ot.setFlux(Float.parseFloat(strs[8]));
-        ot.setFlag(Boolean.parseBoolean(strs[9]));
+        ot.setFlag(Integer.parseInt(strs[9]));
         ot.setBackground(Float.parseFloat(strs[10]));
         ot.setThreshold(Float.parseFloat(strs[11]));
         ot.setMagAper(Float.parseFloat(strs[12]));

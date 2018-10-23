@@ -33,7 +33,7 @@ public class OtObserveRecord implements java.io.Serializable {
   private Float YTemp;
   private Date dateUt;
   private Float flux;
-  private Boolean flag;
+  private Integer flag;
   private Float flagChb;
   private Float background;
   private Float threshold;
@@ -58,40 +58,6 @@ public class OtObserveRecord implements java.io.Serializable {
 
   public OtObserveRecord(long oorId) {
     this.oorId = oorId;
-  }
-
-  public OtObserveRecord(long oorId, Long otId, Long ffId, Long ffcId, Short otTypeId, Float raD, Float decD, Float x, Float y, Float XTemp, Float YTemp, Date dateUt, Float flux, Boolean flag, Float flagChb, Float background, Float threshold, Float magAper, Float magerrAper, Float ellipticity, Float classStar, Boolean otFlag, Integer ffNumber, Integer dpmId, String dateStr, Boolean requestCut, Boolean successCut, Short skyId, Float distance, Float deltamag, Character dataProduceMethod) {
-    this.oorId = oorId;
-    this.otId = otId;
-    this.ffId = ffId;
-    this.ffcId = ffcId;
-    this.otTypeId = otTypeId;
-    this.raD = raD;
-    this.decD = decD;
-    this.x = x;
-    this.y = y;
-    this.XTemp = XTemp;
-    this.YTemp = YTemp;
-    this.dateUt = dateUt;
-    this.flux = flux;
-    this.flag = flag;
-    this.flagChb = flagChb;
-    this.background = background;
-    this.threshold = threshold;
-    this.magAper = magAper;
-    this.magerrAper = magerrAper;
-    this.ellipticity = ellipticity;
-    this.classStar = classStar;
-    this.otFlag = otFlag;
-    this.ffNumber = ffNumber;
-    this.dpmId = dpmId;
-    this.dateStr = dateStr;
-    this.requestCut = requestCut;
-    this.successCut = successCut;
-    this.skyId = skyId;
-    this.distance = distance;
-    this.deltamag = deltamag;
-    this.dataProduceMethod = dataProduceMethod;
   }
 
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -219,11 +185,11 @@ public class OtObserveRecord implements java.io.Serializable {
   }
 
   @Column(name = "flag")
-  public Boolean getFlag() {
+  public Integer getFlag() {
     return this.flag;
   }
 
-  public void setFlag(Boolean flag) {
+  public void setFlag(Integer flag) {
     this.flag = flag;
   }
 

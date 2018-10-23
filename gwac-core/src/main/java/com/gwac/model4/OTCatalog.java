@@ -22,7 +22,7 @@ public class OTCatalog {
   private Integer timeSubSecond;
   private String imageName;
   private Float flux;
-  private Boolean flag;
+  private Integer flag;
   private Float flagChb;
   private Float background;
   private Float threshold;
@@ -193,14 +193,14 @@ public class OTCatalog {
   /**
    * @return the flag
    */
-  public Boolean getFlag() {
+  public Integer getFlag() {
     return flag;
   }
 
   /**
    * @param flag the flag to set
    */
-  public void setFlag(Boolean flag) {
+  public void setFlag(Integer flag) {
     this.flag = flag;
   }
 
