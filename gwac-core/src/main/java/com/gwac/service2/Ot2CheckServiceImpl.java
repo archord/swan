@@ -541,7 +541,9 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       double subDay = cal.get(Calendar.HOUR_OF_DAY) / 24.0 + cal.get(Calendar.MINUTE) / 24.0 / 60.0
               + cal.get(Calendar.SECOND) / 24.0 / 60.0 / 60;
       for (MinorPlanet obj : objs) {
-        double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getLon() + obj.getDlon() * subDay, obj.getLat() + obj.getDlat() * subDay);
+        double preRa = obj.getLon() + obj.getDlon() * subDay/Math.cos(obj.getLat()*0.017453293);
+        double preDec = obj.getLat() + obj.getDlat() * subDay;
+        double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), preRa, preDec);
 //        if (obj.getIdnum() == 30 || obj.getIdnum() == 115 || obj.getIdnum() == 654) {
 //          log.debug("start*******************************");
 //          log.debug("ot2checkotname=" + ot2.getName());
