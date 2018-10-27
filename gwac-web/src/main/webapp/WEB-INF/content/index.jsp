@@ -102,6 +102,7 @@
           <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/monitor-focus.action" target="_blank" ><p>调焦值曲线</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
           <div class='mason-block'><a href="/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
+          <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/monitor-preview.action" target="_blank" ><p>历史图像预览</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>
         </div>
