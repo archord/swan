@@ -127,7 +127,7 @@ $(function () {
     $('#ot2Type').multiselect(option);
     $('#ot2Ccd').multiselect(option);
     $('#lookBackResult').multiselect(option);
-    $('#lookBackCnn').multiselect(option);
+//    $('#lookBackCnn').multiselect(option);
     $("#ot2QueryBtn").click(ot2QueryBtnClick);
     $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
 
@@ -360,12 +360,11 @@ $(function () {
     return result;
   }
 
-
   function formateLookBackCNN(data, type, full, meta) {
     var result = "<span title='" + data + "' onmouseover='showOT2LBCNNImg(event,\"" + full.name + "\")' onmouseout='hiddenOT2LBCNNImg()'>";
     if (data >= 0.5) {
       result = result + "OT";
-    } else if (data > -1) {
+    } else if (data > -0.9) {
       result = result + "FOT";
     } else {
       result = result + "未处理";

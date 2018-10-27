@@ -55,7 +55,7 @@ public class OtLevel2  implements java.io.Serializable {
      private Short usnoMatch;
      private Short lookBackResult;
      private Short followUpResult;
-     private Short lookBackCnn;
+     private Float lookBackCnn;
 
     public OtLevel2() {
     }
@@ -444,14 +444,14 @@ public class OtLevel2  implements java.io.Serializable {
    * @return the lookBackCnn
    */
   @Column(name="look_back_cnn")
-  public Short getLookBackCnn() {
+  public Float getLookBackCnn() {
     return lookBackCnn;
   }
 
   /**
    * @param lookBackCnn the lookBackCnn to set
    */
-  public void setLookBackCnn(Short lookBackCnn) {
+  public void setLookBackCnn(Float lookBackCnn) {
     this.lookBackCnn = lookBackCnn;
   }
 

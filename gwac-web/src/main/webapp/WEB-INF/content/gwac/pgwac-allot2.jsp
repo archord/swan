@@ -101,9 +101,17 @@
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>回看2</h4>
             <select name="ot2qp.lookBackCnn" id="lookBackCnn" multiple="multiple" class="ot2QueryParameter">
-              <option value="-1">未处理</option>
-              <option value="0">FOT</option>
-              <option value="1">OT</option>
+              <option value="1">1.0</option>
+              <option value="0.9">0.9</option>
+              <option value="0.8">0.8</option>
+              <option value="0.7">0.7</option>
+              <option value="0.6">0.6</option>
+              <option value="0.5">0.5</option>
+              <option value="0.4">0.4</option>
+              <option value="0.3">0.3</option>
+              <option value="0.2">0.2</option>
+              <option value="0.1">0.1</option>
+              <option value="0.05">0.05</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
