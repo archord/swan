@@ -387,6 +387,11 @@
         removeItems:function($items, callback ) {
             this.$element.find($items).remove();
             this.reLayout(callback);
+            this.options.state.curPage=1; // cur page
+            var self = this;
+            var timer = setTimeout(function() {
+                self._scroll();
+            }, 100);
         },
 
         /*

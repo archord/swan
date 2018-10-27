@@ -75,8 +75,9 @@
         </script>
         <script src="${pageContext.request.contextPath}/resource/watefall/js/libs/jquery/jquery.js"></script>
         <script src="${pageContext.request.contextPath}/resource/watefall/js/libs/handlebars/handlebars.js"></script>
-        <script src="${pageContext.request.contextPath}/resource/watefall/js/waterfall.min.js"></script>
+        <script src="${pageContext.request.contextPath}/resource/watefall/js/waterfall.js"></script>
         <script>
+            var reqNum = 1;
             var toption = {
               itemCls: 'item',
               colWidth: 430,
@@ -96,7 +97,7 @@
                     tpl = $('#waterfall-tpl').html();
                     template = Handlebars.compile(tpl);
                     var tdataObj = eval('(' + data.rstData + ')');
-                    console.log(tdataObj);
+                    //console.log(tdataObj);
                     return template(tdataObj);
                   } else { // html format
                     return data;
@@ -105,8 +106,13 @@
               }
             }
             function reloadImgs() {
-              //$('#container').waterfall('removeItems', $('.item'));
-              $('#container').waterfall(toption);
+              
+              if(reqNum===1){
+                $('#container').waterfall(toption);
+              }else{
+                $('#container').waterfall('removeItems', $('.item'));
+              }
+              reqNum=reqNum+1;
             }
             function loadDateList() {
               var gwacRootURL = $("#gwacRootURL").val();
