@@ -58,19 +58,19 @@
         <div class="col-xs-2 col-sm-2 col-md-1 ">
           <div class="row star-list-left">
             <select name="formqp.starList" id="starList" class="form-control select select-primary" data-toggle="select" size="12">
-              <option value="fwhm" selected>半高全宽</option>
+              <option value="fwhm">半高全宽</option>
               <option value="obj_num">星的数目</option>
               <option value="ot1_num">OT1数目</option>
               <option value="bg_bright">背景亮度</option>
               <option value="avg_limit">极限星等</option>
-              <option value="s2n">亮星星等差</option>
+              <option value="s2n" selected>亮星星等差</option>
               <option value="xshift">图像偏移量X</option>
               <option value="yshift">图像偏移量Y</option>
               <option value="xrms">图像对齐精度X</option>
               <option value="yrms">图像对齐精度Y</option>
               <option value="proc_time">数据处理时间</option>
               <option value="temperature_actual">实际温度</option>
-              <option value="temperature_set">设定温度</option>
+              <option value="temperature_set" >设定温度</option>
             </select><br/>
             <!--多条曲线过滤显示，请参考:http://www.flotcharts.org/flot/examples/series-toggle/index.html-->
             <select name="formqp.mountList" id="mountList" class="form-control select select-primary" data-toggle="select" size="5">

@@ -517,7 +517,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       isQueryParameterEmpty = false;
     }
     if (ot2qp.getLookBackCnn() != null && !ot2qp.getLookBackCnn().isEmpty()) {
-      sql.append(" and look_back_cnn in >");
+      sql.append(" and look_back_cnn >");
       sql.append(ot2qp.getLookBackCnn());
       sql.append(" ");
       isQueryParameterEmpty = false;
