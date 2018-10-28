@@ -19,7 +19,6 @@ import com.gwac.model.FollowUpObservation;
 import com.gwac.model.FollowUpRecord;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.UploadFileUnstore;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
@@ -156,10 +155,10 @@ public class FollowUpRecordServiceImpl implements BaseService {
         return;
       }
 
-      short checkId = 0;
-      short miniotId = 0;
-      short catasId = 0;
-      short newotId = 0;
+      short checkId = 1;
+      short catasId = 2;
+      short miniotId = 3;
+      short newotId = 4;
       FollowUpObjectType tfuot = fuotDao.getOtTypeByTypeName("CHECK");
       if (tfuot != null) {
         checkId = tfuot.getFuoTypeId();
@@ -224,100 +223,6 @@ public class FollowUpRecordServiceImpl implements BaseService {
          }*/
       }
     }
-  }
-
-  public void saveFollowUpCatalogNewOt(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
-
-    FollowUpObject fuo = new FollowUpObject();
-    fuo.setOtId(ot2Id);
-    fuo.setFoId(foId);
-    fuo.setFuoTypeId(fuotId);
-    fuo.setStartTimeUtc(obj.getDateUt());
-    fuo.setLastRa(obj.getRa());
-    fuo.setLastDec(obj.getDec());
-    fuo.setLastX(obj.getX());
-    fuo.setLastY(obj.getY());
-    fuo.setFoundSerialNumber(obj.getFuSerialNumber());
-    fuo.setRecordTotal(1);
-
-    int newOtNum = fuoDao.countTypeNumberByFoId(fuo);
-
-    if (newOtNum == 1) {
-      List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
-      if (fuos.size() > 0) {
-        FollowUpObject tfuo = fuos.get(0);
-        fuo.setFuoId(tfuo.getFuoId());
-
-        tfuo.setLastRa(fuo.getLastRa());
-        tfuo.setLastDec(fuo.getLastDec());
-        tfuo.setLastX(fuo.getLastX());
-        tfuo.setLastY(fuo.getLastY());
-        tfuo.setRecordTotal(tfuo.getRecordTotal() + 1);
-        if (fuo.getFoundSerialNumber() < tfuo.getFoundSerialNumber()) {
-          tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
-          tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());
-        }
-        fuoDao.update(tfuo);
-      } else {
-        int fuoNum = fuoDao.countTypeNumberByOtId(fuo);
-        String fuoName = String.format("%s%02d", obj.getOtType(), fuoNum + 1);
-        fuo.setFuoName(fuoName);
-        fuoDao.save(fuo);
-      }
-    }
-
-    FollowUpRecord fur = new FollowUpRecord();
-    if (newOtNum == 1) {
-      fur.setFuoId(fuo.getFuoId());
-    }
-    fur.setFoId(foId);
-    fur.setDateUtc(obj.getDateUt());
-    fur.setFilter(obj.getFilter());
-    fur.setRa(obj.getRa());
-    fur.setDec(obj.getDec());
-    fur.setX(obj.getX());
-    fur.setY(obj.getY());
-    fur.setMagCalUsno(obj.getMagClbtUsno());
-    fur.setMagErr(obj.getMagErr());
-    fur.setEllipticity(obj.getEllipticity());
-    fur.setClassStar(obj.getClassStar());
-    fur.setFwhm(obj.getFwhm());
-    fur.setFlag(obj.getFlag());
-    fur.setB2(obj.getB2());
-    fur.setR2(obj.getR2());
-    fur.setI(obj.getI());
-    fur.setFuoTypeId(fuotId);
-    fur.setFrObjId(obj.getObjLabel());
-    fur.setFuSerialNumber(obj.getFuSerialNumber());
-    fur.setFufId(fufId);
-    frDao.save(fur);
-  }
-
-  public void saveNewOtRecord(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {
-
-    FollowUpRecord fur = new FollowUpRecord();
-//    fur.setFuoId(fuo.getFuoId());
-    fur.setFoId(foId);
-    fur.setDateUtc(obj.getDateUt());
-    fur.setFilter(obj.getFilter());
-    fur.setRa(obj.getRa());
-    fur.setDec(obj.getDec());
-    fur.setX(obj.getX());
-    fur.setY(obj.getY());
-    fur.setMagCalUsno(obj.getMagClbtUsno());
-    fur.setMagErr(obj.getMagErr());
-    fur.setEllipticity(obj.getEllipticity());
-    fur.setClassStar(obj.getClassStar());
-    fur.setFwhm(obj.getFwhm());
-    fur.setFlag(obj.getFlag());
-    fur.setB2(obj.getB2());
-    fur.setR2(obj.getR2());
-    fur.setI(obj.getI());
-    fur.setFuoTypeId(fuotId);
-    fur.setFrObjId(obj.getObjLabel());
-    fur.setFuSerialNumber(obj.getFuSerialNumber());
-    fur.setFufId(fufId);
-    frDao.save(fur);
   }
 
   public void saveFollowUpCatalog(FollowUpCatalog obj, long ot2Id, long foId, long fufId, short fuotId) {

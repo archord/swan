@@ -53,7 +53,7 @@
             <div id="navi">
                 <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
                 <p id="title"></p>
-                <p id="imageNumber">显示第<span style="font-weight:bold;font-size: 14px;">1</span>帧，共<span id='totalImage'></span>帧</p>
+                <p>显示第<span id="imageNumber" style="font-weight:bold;font-size: 14px;">1</span>帧，共<span id='totalImage'></span>帧</p>
                 <p id="start"><a href="#" id="showStart">起始帧</a></p>
                 <p id="end"><a href="#" id="showEnd">结束帧</a></p>
                 <p id="before"><a href="#" id="showBefore">上一帧</a></p>
@@ -133,7 +133,7 @@
                   url = curFits.path + '/' + curFits.fileName;
                 }
                 $("#title").html(curFits.fileName);
-                $("#imageNumber span").html(curNum);
+                $("#imageNumber").html(curNum);
                 curFitsName = curFits.fileName;
 
                 setJs9Fits(url);
@@ -152,7 +152,7 @@
                   url = curFits.path + '/' + curFits.fileName;
                 }
                 $("#title").html(curFits.fileName);
-                $("#imageNumber span").html(1);
+                $("#totalImage").html(fitsList.length);
                 var option = {zoom: 'toFit', colormap: 'grey', contrast: 4.0, bias: 0.4, scale: "log"};
                 JS9.Preload(url, option);
                 setJs9Parameter();
