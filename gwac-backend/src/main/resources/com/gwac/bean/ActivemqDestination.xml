@@ -36,5 +36,8 @@
   <bean id="followUpCatalogDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
     <constructor-arg value="FOLLOW_UP_CATALOG" />
   </bean>
+  <bean id="followUpObjCheckDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+    <constructor-arg value="FOLLOW_UP_OBJECT_CHECK" />
+  </bean>
       
 </beans>

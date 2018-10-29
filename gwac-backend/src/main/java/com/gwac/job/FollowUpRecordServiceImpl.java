@@ -3,6 +3,7 @@
  */
 package com.gwac.job;
 
+import com.gwac.activemq.FollowUpObjectCheckMessageCreator;
 import com.gwac.dao.FollowUpFitsfileDao;
 import com.gwac.dao.FollowUpObjectDao;
 import com.gwac.dao.FollowUpObjectTypeDao;
@@ -22,9 +23,12 @@ import com.gwac.model.UploadFileUnstore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 /**
@@ -53,6 +57,11 @@ public class FollowUpRecordServiceImpl implements BaseService {
   private FollowUpObjectTypeDao fuotDao;
   @Resource
   private FollowUpObjectDao fuoDao;
+
+  @Resource
+  private JmsTemplate jmsTemplate;
+  @Resource(name = "followUpObjCheckDest")
+  private Destination followUpObjCheckDest;
 
   @Value("#{syscfg.gwacFollowupErrorbox}")
   private float followupErrorbox;
@@ -139,19 +148,13 @@ public class FollowUpRecordServiceImpl implements BaseService {
       FollowUpFitsfile fuf = fufDao.getByName(tfr.getFfName());
       if (fuf == null) {
         /**
-        fuf = new FollowUpFitsfile();
-        fuf.setFfName(tfr.getFfName());
-        fuf.setFfPath(storePath);
-        fuf.setFoId(fo.getFoId());
-        File tfile = new File(rootPath + "/" + storePath + "/" + tfr.getFfName());
-        if (tfile.exists()) {
-          fuf.setIsUpload(true);
-        } else {
-          fuf.setIsUpload(false);
-        }
-        fufDao.save(fuf);
-        * **/
-        log.error("hibernate cache problem, can not find FollowUpFitsfile "+ tfr.getFfName());
+         * fuf = new FollowUpFitsfile(); fuf.setFfName(tfr.getFfName());
+         * fuf.setFfPath(storePath); fuf.setFoId(fo.getFoId()); File tfile = new
+         * File(rootPath + "/" + storePath + "/" + tfr.getFfName()); if
+         * (tfile.exists()) { fuf.setIsUpload(true); } else {
+         * fuf.setIsUpload(false); } fufDao.save(fuf); *
+         */
+        log.error("hibernate cache problem, can not find FollowUpFitsfile " + tfr.getFfName());
         return;
       }
 
@@ -222,6 +225,8 @@ public class FollowUpRecordServiceImpl implements BaseService {
          }
          }*/
       }
+      MessageCreator tmc = new FollowUpObjectCheckMessageCreator(fo.getFoId());
+      jmsTemplate.send(followUpObjCheckDest, tmc);
     }
   }
 
@@ -238,6 +243,13 @@ public class FollowUpRecordServiceImpl implements BaseService {
     fuo.setLastY(obj.getY());
     fuo.setFoundSerialNumber(obj.getFuSerialNumber());
     fuo.setRecordTotal(1);
+    fuo.setFoundMag(obj.getMagClbtUsno());
+    fuo.setB2(obj.getB2());
+    fuo.setR2(obj.getR2());
+    fuo.setI(obj.getI());
+    fuo.setLastMag(obj.getMagClbtUsno());
+    fuo.setLastTimeUtc(obj.getDateUt());
+    fuo.setLastSerialNumber(obj.getFuSerialNumber());
 
     List<FollowUpObject> fuos = fuoDao.exist(fuo, followupErrorbox);
     if (fuos.size() > 0) {
@@ -249,6 +261,9 @@ public class FollowUpRecordServiceImpl implements BaseService {
       tfuo.setLastX(fuo.getLastX());
       tfuo.setLastY(fuo.getLastY());
       tfuo.setRecordTotal(tfuo.getRecordTotal() + 1);
+      tfuo.setLastMag(fuo.getLastMag());
+      tfuo.setLastTimeUtc(fuo.getLastTimeUtc());
+      tfuo.setLastSerialNumber(fuo.getLastSerialNumber());
       if (fuo.getFoundSerialNumber() < tfuo.getFoundSerialNumber()) {
         tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
         tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());

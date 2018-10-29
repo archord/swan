@@ -23,4 +23,6 @@ public interface FollowUpObjectDao extends BaseHibernateDao<FollowUpObject> {
   public List<FollowUpObject> getByFoName(String foName, Boolean queryHis);
 
   public List<FollowUpObject> getByOtIdTypeId(long otId, short fuoTypeId, Boolean queryHis);
+  
+  public List<FollowUpObject> getByFupObsId(long fupObsId, Boolean queryHis);
 }

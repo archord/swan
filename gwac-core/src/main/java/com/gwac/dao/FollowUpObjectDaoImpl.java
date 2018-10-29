@@ -33,7 +33,7 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
     return ((BigInteger) q.list().get(0)).intValue();
   }
 
-  @Override
+    @Override
   public List<FollowUpObject> exist(FollowUpObject obj, float errorBox) {
 
     Session session = getCurrentSession();
@@ -111,6 +111,16 @@ public class FollowUpObjectDaoImpl extends BaseHibernateDaoImpl<FollowUpObject> 
 
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(FollowUpObject.class);
+    return q.list();
+  }
+  
+  @Override
+  public List<FollowUpObject> getByFupObsId(long fupObsId, Boolean queryHis) {
+
+    String sql1 = "select * from follow_up_object where fo_id=" + fupObsId;
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql1).addEntity(FollowUpObject.class);
     return q.list();
   }
 }

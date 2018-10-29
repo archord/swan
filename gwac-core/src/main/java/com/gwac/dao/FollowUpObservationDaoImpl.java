@@ -19,6 +19,26 @@ import org.springframework.stereotype.Repository;
 public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObservation> implements FollowUpObservationDao {
 
   @Override
+  public void updateSciObjId(long fupObsId, long sciObjId) {
+
+    String sql = "update follow_up_observation set so_id=" + sciObjId
+            + " where fo_id=" + fupObsId;
+    getCurrentSession().createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public List<FollowUpObservation> getByFoId(long foId) {
+
+    String sql = "SELECT fupObs1.* "
+            + "from follow_up_observation fupObs1 "
+            + "INNER JOIN follow_up_observation fupObs2 on fupObs1.obj_name=fupObs2.obj_name and fupObs2.fo_id=" + foId
+            + " order by fupObs1.fo_id asc";
+
+    Query q = getCurrentSession().createSQLQuery(sql).addEntity(FollowUpObservation.class);
+    return q.list();
+  }
+
+  @Override
   public List<FollowUpObservation> getUnTriggeredByTime(int seconds) {
 
     String sql = "SELECT * "
@@ -162,7 +182,7 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
       return null;
     }
   }
-  
+
   @Override
   public int countByObjName(String objName) {
 
