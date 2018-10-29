@@ -31,6 +31,8 @@ public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObserva
 
   public FollowUpObservation getByName(String name);
   
+  public int countByObjName(String objName);
+  
   public List<FollowUpObservation> getUnTriggeredByTime(int seconds);
   
   public void updateLatePlan();

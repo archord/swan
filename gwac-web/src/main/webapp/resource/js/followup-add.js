@@ -69,12 +69,22 @@ $(function() {
   function ot2QueryBtnClick() {
     var expTime = $("#expTime").val();
     var frameCount = $("#frameCount").val();
+    var ra = parseFloat($("#ra").val());
+    var dec = parseFloat($("#dec").val());
     if (expTime === "") {
       alert("请填写曝光时间");
       return;
     }
     if (frameCount === "") {
       alert("请填写帧数");
+      return;
+    }
+    if (ra<0 || ra>360) {
+      alert("请填写正确的赤经值");
+      return;
+    }
+    if (dec<-90 || dec>90) {
+      alert("请填写正确的赤纬值");
       return;
     }
 

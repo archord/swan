@@ -43,6 +43,8 @@ public class FollowUpObservation implements java.io.Serializable {
   private char executeStatus;
   private char processResult;
   private String comment;
+  private String objName;
+  private Long soId;
 
   public FollowUpObservation() {
   }
@@ -296,6 +298,36 @@ public class FollowUpObservation implements java.io.Serializable {
    */
   public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  /**
+   * @return the objName
+   */
+  @Column(name = "obj_name")
+  public String getObjName() {
+    return objName;
+  }
+
+  /**
+   * @param objName the objName to set
+   */
+  public void setObjName(String objName) {
+    this.objName = objName;
+  }
+
+  /**
+   * @return the soId
+   */
+  @Column(name = "so_id")
+  public Long getSoId() {
+    return soId;
+  }
+
+  /**
+   * @param soId the soId to set
+   */
+  public void setSoId(Long soId) {
+    this.soId = soId;
   }
 
 }

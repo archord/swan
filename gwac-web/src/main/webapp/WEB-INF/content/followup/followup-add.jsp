@@ -124,10 +124,12 @@
                         <td width="150px">UTC时间：</td><td><input id="utcTime" class="timeinput"/></td></tr>
                       <tr><td>本地恒星时：</td><td><input id="siderealTime" class="timeinput"/></td>
                         <td>儒略日：</td><td><input id="julDay" class="timeinput"/></td></tr>
-                      <tr><td>后随名称：</td><td><input name="ot2fp.followName" id="followName" title="如果该字段为空，则系统自动生成后随名称；
-如果该字段不为空，则用该字段作为后随名称；
-如果是OT2后随，则该字段为空,设置OT2名称；"/></td>
-                        <td>OT2名称：</td><td><input name="ot2fp.otName" id="otName" title="非OT2后随时，可以为空"/></td></tr>
+                      <tr><td>后随名称：</td><td><input name="ot2fp.followName" id="followName" title="如果\"目标名称\"不为空，则以\"目标名称\"为基准生成\"后随名称\"；
+如果\"后随名称\"不为空，且\"目标名称\"为空，则用该字段作为\"后随名称\"，且设置\"目标名称\"为\"后随名称\"；
+如果\"后随名称\"为空，且\"目标名称\"也为空，则系统自动生成\"后随名称\"，且设置\"目标名称\"为\"后随名称\"；
+"/></td>
+                        <td>目标名称：</td><td><input name="ot2fp.otName" id="otName" title="非OT2后随时，可以为空；
+如果多次观测，则\"目标名称\"必须相同，否则系统会存储为两个不同的目标；"/></td></tr>
                       <tr><td>赤经(度)：</td>
                         <td><input name="ot2fp.ra" id="ra" style="text-align: right;width: 200px;" value="-99"/></td>
                         <td>赤纬(度)：</td>
@@ -188,7 +190,7 @@
                         </td></tr>
                       <tr><td colspan="4" style="text-align:center;">
                           <input type="hidden" name="ot2fp.foName" id="foName" value=""/>
-                          <input type="hidden" name="foId" id="foId" value=""/>
+                          <input type="hidden" name="foId" id="foId" value="0"/>
                           <input type="hidden" name="ot2fp.epoch" id="epoch" value="2000"/>
                           <button type="button" id="genObsPlanBtn">提交</button>
                         </td></tr>

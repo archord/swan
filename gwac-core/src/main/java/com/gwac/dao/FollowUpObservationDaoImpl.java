@@ -162,4 +162,17 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
       return null;
     }
   }
+  
+  @Override
+  public int countByObjName(String objName) {
+
+    Session session = getCurrentSession();
+    String sql = "select count(*) from follow_up_observation where obj_name='" + objName + "'";
+    Query q = session.createSQLQuery(sql).addEntity(FollowUpObservation.class);
+    if (!q.list().isEmpty()) {
+      return ((BigInteger) q.list().get(0)).intValue();
+    } else {
+      return 0;
+    }
+  }
 }
