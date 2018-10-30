@@ -97,7 +97,8 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
 
     FollowUpObservation fupObs = fupObsDao.getById(fupObsId);
     List<FollowUpObservation> fupObss = fupObsDao.getByFoId(fupObsId);
-    List<FollowUpObject> fupObjs = fupObjDao.getByFupObsId(fupObsId, true);
+//    List<FollowUpObject> fupObjs = fupObjDao.getByFupObsId(fupObsId, true);
+    List<FollowUpObject> fupObjs = fupObjDao.getByOtId(fupObs.getOtId(), false);
 
     //第N>1次后随
     if (fupObss.size() > 1) {
