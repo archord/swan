@@ -127,6 +127,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
     for (FollowUpObject tobj : fupObjs) {
       if (tobj.getFuoTypeId() == catasId) {
         float magDiff = tobj.getFoundMag() - tobj.getR2();
+        log.debug(tobj.getFuoName()+" magDiff="+magDiff);
         if (magDiff > fupStage1MagDiff) {
           ScienceObject sciObj = new ScienceObject();
           sciObj.setPointRa(fupObs.getRa());
@@ -150,6 +151,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
           break;
         }
       } else if (tobj.getFuoTypeId() == miniotId && tobj.getRecordTotal() >= fupStage1MinRecordNum) {
+        log.debug(tobj.getFuoName()+" totalRecord="+tobj.getRecordTotal());
         ScienceObject sciObj = new ScienceObject();
         sciObj.setPointRa(fupObs.getRa());
         sciObj.setPointDec(fupObs.getDec());

@@ -65,7 +65,6 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
   @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
-
   @Override
   public void startJob() {
 
@@ -83,7 +82,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
 
     long startTime = System.nanoTime();
     try {//JDBCConnectionException or some other exception
-      log.warn("do nothing");
+      checkObjects();
     } catch (Exception ex) {
       log.error("Job error", ex);
     } finally {
@@ -142,6 +141,10 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
           if ((diffMinutes > fupStage3StartTime) && (sciObj.getTriggerStatus() == 3)) {
             autoFollowUp(sciObj, ot2.getOtId());
           }
+        } else {
+          log.debug(sciObj.getName() + " in stage" + sciObj.getStatus() + " stop AutoObservation.");
+          sciObj.setAutoObservation(false);
+          sciObjDao.update(sciObj);
         }
       }
     }
