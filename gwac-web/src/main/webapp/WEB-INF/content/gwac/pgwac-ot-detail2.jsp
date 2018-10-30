@@ -51,8 +51,8 @@
                 <td><input type="text" style="width: 150px; border-color: #bdc3c7;color: #34495e;" name="ot2fp.otName" readonly="true" id="otName" value="" class="form-control"/></td>
                 <td><input type="text" style="width: 80px; " name="ot2fp.ra" id="fuRa" value=""  class="form-control"/></td>
                 <td><input type="text" style="width: 80px; " name="ot2fp.dec" id="fuDec" value="" class="form-control"/></td>
-                <td><input type="text" style="width: 80px; " name="ot2fp.expTime" id="expTime" value="2" class="form-control"/></td>
-                <td><input type="text" style="width: 80px; " name="ot2fp.frameCount" id="frameCount" value="10" class="form-control"/></td>
+                <td><input type="text" style="width: 80px; " name="ot2fp.expTime" id="expTime" value="5" class="form-control"/></td>
+                <td><input type="text" style="width: 80px; " name="ot2fp.frameCount" id="frameCount" value="3" class="form-control"/></td>
                 <td>
                   <select name="ot2fp.telescope" id="telescope" class="form-control select select-primary" data-toggle="select">
                     <option value="1" selected>60公分</option>

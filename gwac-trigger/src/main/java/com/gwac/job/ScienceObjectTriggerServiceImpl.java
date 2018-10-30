@@ -7,12 +7,14 @@ package com.gwac.job;
 
 import com.gwac.activemq.OTFollowMessageCreator;
 import com.gwac.dao.FollowUpObjectDao;
-import com.gwac.dao.FollowUpObjectTypeDao;
 import com.gwac.dao.FollowUpObservationDao;
+import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.ScienceObjectDao;
 import com.gwac.dao.UserInfoDAO;
 import com.gwac.dao.WebGlobalParameterDao;
+import com.gwac.model.FollowUpObject;
 import com.gwac.model.FollowUpObservation;
+import com.gwac.model.OtLevel2;
 import com.gwac.model.ScienceObject;
 import com.gwac.model.UserInfo;
 import com.gwac.model4.OtLevel2FollowParameter;
@@ -43,32 +45,26 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
   @Resource
   private FollowUpObjectDao fupObjDao;
   @Resource
-  private FollowUpObjectTypeDao fuotDao;
-  @Resource
   private ScienceObjectDao sciObjDao;
   @Resource
   private WebGlobalParameterDao wgpdao;
   @Resource
   private UserInfoDAO userDao;
+  @Resource
+  private OtLevel2Dao ot2Dao;
+  @Resource(name = "sendMsg2WeChat")
+  private SendMessageService sendMsgService;
 
   @Resource
   private JmsTemplate jmsTemplate;
   @Resource(name = "otFollowDest")
   private Destination otFollowDest;
 
-  @Value("#{syscfg.gwacFollowTriggerPreSendTime}")
-  private int gwacFollowTriggerPreSendTime; //seconds
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
   @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
-  private double fupStage1MagDiff = 1.0;
-  private Integer fupStage1MinRecordNum = 3;
-  private short checkId = 1;
-  private short catasId = 2;
-  private short miniotId = 3;
-  private short newotId = 4;
 
   @Override
   public void startJob() {
@@ -104,36 +100,54 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
    */
   public void checkObjects() {
 
+    String chatId = "gwac003"; //GWAC_OT_gft_alert 
     Integer fupStage2StartTime = Integer.parseInt(wgpdao.getValueByName("fupStage2StartTime")); //第二次后随距离第一次后随的时间，单位分钟
     Integer fupStage3StartTime = Integer.parseInt(wgpdao.getValueByName("fupStage3StartTime")); //第三次后随距离第一次后随的时间，单位分钟
+    Float fupStage3MagDiff = Float.parseFloat(wgpdao.getValueByName("fupStage3MagDiff")); //
 
     List<ScienceObject> sciObjs = sciObjDao.getByStatus(1);
     for (ScienceObject sciObj : sciObjs) {
-      Date discoveryTimeUtc = sciObj.getDiscoveryTimeUtc();
-      Date curDate = new Date();
-      double diffMinutes = (curDate.getTime() - discoveryTimeUtc.getTime()) / (1000 * 60.0) - 8 * 60;
-      if (null != sciObj.getStatus()) {
-        switch (sciObj.getStatus()) {
-          case 1:
-            if (diffMinutes > fupStage2StartTime) {
-              autoFollowUp(sciObj);
+
+      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(sciObj.getName(), false);
+      if (null != ot2) {
+        Date discoveryTimeUtc = sciObj.getDiscoveryTimeUtc();
+        Date curDate = new Date();
+        double diffMinutes = (curDate.getTime() - discoveryTimeUtc.getTime()) / (1000 * 60.0) - 8 * 60;
+        if (sciObj.getStatus() == 1) {
+          if (sciObj.getTriggerStatus() == 1) {
+            String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\n", sciObj.getName(), sciObj.getType());
+            sendMsgService.send(tmsg, chatId);
+            sciObj.setTriggerStatus(2);
+            sciObjDao.update(sciObj);
+          }
+          if (diffMinutes > fupStage2StartTime) {
+//          List<FollowUpObservation> fupObs = fupObsDao.getBySciObjId(sciObj.getSoId());
+//          FollowUpObservation lastFupObs = fupObs.get(fupObs.size() - 1);
+//          autoFollowUp(sciObj, lastFupObs.getOtId());
+            autoFollowUp(sciObj, ot2.getOtId());
+          }
+        } else if (sciObj.getStatus() == 2) {
+          if (sciObj.getTriggerStatus() == 2) {
+            List<FollowUpObject> fupObjs = fupObjDao.getByOtId(ot2.getOtId(), false);
+            for (FollowUpObject fupObj : fupObjs) {
+              if (Math.abs(fupObj.getLastMag() - fupObj.getFoundMag()) > fupStage3MagDiff) {
+                String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2.\n", sciObj.getName(), sciObj.getType());
+                sendMsgService.send(tmsg, chatId);
+                sciObj.setTriggerStatus(3);
+                sciObjDao.update(sciObj);
+                break;
+              }
             }
-            break;
-          case 2:
-            if (diffMinutes > fupStage3StartTime) {
-              autoFollowUp(sciObj);
-            }
-            break;
-          case 3:
-            break;
-          default:
-            break;
+          }
+          if ((diffMinutes > fupStage3StartTime) && (sciObj.getTriggerStatus() == 3)) {
+            autoFollowUp(sciObj, ot2.getOtId());
+          }
         }
       }
     }
   }
 
-  public void autoFollowUp(ScienceObject sciObj) {
+  public void autoFollowUp(ScienceObject sciObj, long ot2Id) {
 
     String filter = "";
     String frameCount = "";
@@ -153,9 +167,6 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
       telescope = wgpdao.getValueByName("fupStage3Telescope");
       priority = wgpdao.getValueByName("fupStage3Priority");
     }
-
-    List<FollowUpObservation> fupObs = fupObsDao.getBySciObjId(sciObj.getSoId());
-    FollowUpObservation lastFupObs = fupObs.get(fupObs.size() - 1);
 
     OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
     ot2fp.setFollowName(String.format("%s_%03d", sciObj.getName(), sciObj.getFupCount()));
@@ -178,7 +189,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     fo.setFoObjCount((short) 0);
     fo.setFrameCount((short) ot2fp.getFrameCount());
     fo.setImageType(ot2fp.getImageType());
-    fo.setOtId(lastFupObs.getOtId());
+    fo.setOtId(ot2Id);
     fo.setPriority((short) ot2fp.getPriority());
     fo.setRa(ot2fp.getRa());
     if (user != null) {
@@ -221,10 +232,6 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         log.debug(ot2fp.getTriggerMsg());
       }
     }
-  }
-
-  public void sendMessage(String tmsg) {
-
   }
 
 }

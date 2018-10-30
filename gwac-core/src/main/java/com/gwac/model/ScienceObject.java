@@ -38,6 +38,7 @@ public class ScienceObject implements java.io.Serializable {
   private Integer fupCount;
   private Float objRa;
   private Float objDec;
+  private Integer triggerStatus;
   
   public ScienceObject() {
   }
@@ -307,6 +308,21 @@ public class ScienceObject implements java.io.Serializable {
    */
   public void setObjDec(Float objDec) {
     this.objDec = objDec;
+  }
+
+  /**
+   * @return the triggerStatus 
+   */
+  @Column(name = "trigger_status")
+  public Integer getTriggerStatus() {
+    return triggerStatus;
+  }
+
+  /**
+   * @param triggerStatus the triggerStatus to set
+   */
+  public void setTriggerStatus(Integer triggerStatus) {
+    this.triggerStatus = triggerStatus;
   }
   
 }

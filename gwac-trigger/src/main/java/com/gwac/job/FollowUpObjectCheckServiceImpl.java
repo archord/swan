@@ -14,7 +14,6 @@ import com.gwac.model.FollowUpObject;
 import com.gwac.model.FollowUpObjectType;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.ScienceObject;
-import com.gwac.service.SendMessageService;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
@@ -42,8 +41,6 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
   private ScienceObjectDao sciObjDao;
   @Resource
   private WebGlobalParameterDao wgpdao;
-  @Resource(name = "sendMsg2WeChat")
-  private SendMessageService sendMsgService;
 
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
@@ -143,15 +140,13 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
           sciObj.setMag(tobj.getFoundMag());
           sciObj.setName(fupObs.getObjName());
           sciObj.setStatus(1);
+          sciObj.setTriggerStatus(1);
           sciObj.setType("CATAS");
           sciObj.setFupCount(1);
           sciObjDao.save(sciObj);
           sciObjDao.updateFupCount(sciObj.getSoId());
           fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
 
-          String chatId = "gwac003"; //GWAC_OT_gft_alert
-          String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s CATAS magnitude change %.2f.\n", sciObj.getName(), magDiff);
-          sendMsgService.send(tmsg, chatId);
           break;
         }
       } else if (tobj.getFuoTypeId() == miniotId && tobj.getRecordTotal() >= fupStage1MinRecordNum) {
@@ -167,15 +162,13 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
         sciObj.setMag(tobj.getFoundMag());
         sciObj.setName(fupObs.getObjName());
         sciObj.setStatus(1);
+        sciObj.setTriggerStatus(1);
         sciObj.setType("MINIOT");
         sciObj.setFupCount(1);
         sciObjDao.save(sciObj);
         sciObjDao.updateFupCount(sciObj.getSoId());
         fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
         
-        String chatId = "gwac003"; //GWAC_OT_gft_alert
-        String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s MINIOT\n", sciObj.getName());
-        sendMsgService.send(tmsg, chatId);
         break;
       }
     }
