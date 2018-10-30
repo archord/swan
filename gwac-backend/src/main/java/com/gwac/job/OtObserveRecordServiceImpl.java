@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.gwac.service;
+package com.gwac.job;
 
 import com.gwac.activemq.OTCheckMessageCreator;
 import com.gwac.dao.DataProcessMachineDAO;

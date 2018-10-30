@@ -1,6 +1,6 @@
 package com.gwac.activemq;
 
-import com.gwac.service.OtObserveRecordService;
+import com.gwac.job.OtObserveRecordService;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 

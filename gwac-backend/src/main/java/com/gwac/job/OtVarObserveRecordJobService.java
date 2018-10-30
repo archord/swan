@@ -5,8 +5,6 @@ package com.gwac.job;
 
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.UploadFileUnstore;
-import com.gwac.service.OtObserveRecordService;
-import com.gwac.service.OtObserveRecordServiceImpl;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

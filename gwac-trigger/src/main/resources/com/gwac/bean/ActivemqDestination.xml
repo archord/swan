@@ -24,5 +24,8 @@
   <bean id="followUpObjCheckDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
     <constructor-arg value="FOLLOW_UP_OBJECT_CHECK" />
   </bean>
+  <bean id="otFollowDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+    <constructor-arg value="OT_FOLLOW_LIST" />
+  </bean>
       
 </beans>
