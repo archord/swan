@@ -5,29 +5,21 @@
  */
 package com.gwac.job;
 
-import com.gwac.activemq.OTFollowMessageCreator;
 import com.gwac.dao.FollowUpObjectDao;
 import com.gwac.dao.FollowUpObjectTypeDao;
 import com.gwac.dao.FollowUpObservationDao;
-import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.ScienceObjectDao;
-import com.gwac.dao.UserInfoDAO;
+import com.gwac.dao.WebGlobalParameterDao;
 import com.gwac.model.FollowUpObject;
 import com.gwac.model.FollowUpObjectType;
 import com.gwac.model.FollowUpObservation;
-import com.gwac.model.OtLevel2;
 import com.gwac.model.ScienceObject;
-import com.gwac.model.UserInfo;
-import com.gwac.model4.OtLevel2FollowParameter;
-import com.gwac.util.CommonFunction;
+import com.gwac.service.SendMessageService;
 import java.util.List;
 import javax.annotation.Resource;
-import javax.jms.Destination;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 /**
@@ -45,34 +37,26 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
   @Resource
   private FollowUpObjectDao fupObjDao;
   @Resource
-  private OtLevel2Dao ot2Dao;
-  @Resource
-  private UserInfoDAO userDao;
-  @Resource
   private FollowUpObjectTypeDao fuotDao;
   @Resource
   private ScienceObjectDao sciObjDao;
-
   @Resource
-  private JmsTemplate jmsTemplate;
-  @Resource(name = "otFollowDest")
-  private Destination otFollowDest;
+  private WebGlobalParameterDao wgpdao;
+  @Resource(name = "sendMsg2WeChat")
+  private SendMessageService sendMsgService;
 
-  @Value("#{syscfg.gwacFollowTriggerPreSendTime}")
-  private int gwacFollowTriggerPreSendTime; //seconds
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
   @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
-  private double catasLongMagDiff = 1.0;
-  private double catasShortMagDiff = 0.5;
-  private float miniMinRecordNum = 3;
+  private double fupStage1MagDiff = 1.0;
+  private Integer fupStage1MinRecordNum = 3;
   private short checkId = 1;
   private short catasId = 2;
   private short miniotId = 3;
   private short newotId = 4;
-    
+
   @Override
   public void startJob() {
 
@@ -112,6 +96,96 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
    */
   public void checkObjects(long fupObsId) {
 
+    getParm();
+
+    FollowUpObservation fupObs = fupObsDao.getById(fupObsId);
+    List<FollowUpObservation> fupObss = fupObsDao.getByFoId(fupObsId);
+    List<FollowUpObject> fupObjs = fupObjDao.getByFupObsId(fupObsId, true);
+
+    //第N>1次后随
+    if (fupObss.size() > 1) {
+      for (FollowUpObservation tobj : fupObss) {
+        if (null != tobj.getSoId()) {
+          fupObs.setSoId(tobj.getSoId());
+          fupObsDao.update(fupObs);
+          break;
+        }
+      }
+      if (null == fupObs.getSoId()) {//前N-1次后随，都没有发现真目标，检查这次的所有目标
+        checkFupObjs(fupObjs, fupObs);
+      }
+    } else {
+      //第1次后随，且还没有发现“真目标”触发再次后随，因而observation中的sci_obj_id还为空
+      if (null == fupObs.getSoId()) {
+        checkFupObjs(fupObjs, fupObs);
+      }
+    }
+
+  }
+
+  public void checkFupObjs(List<FollowUpObject> fupObjs, FollowUpObservation fupObs) {
+
+    log.debug("check observation " + fupObs.getFoName() + " has " + fupObjs.size() + " objects.");
+
+    for (FollowUpObject tobj : fupObjs) {
+      if (tobj.getFuoTypeId() == catasId) {
+        float magDiff = tobj.getFoundMag() - tobj.getR2();
+        if (magDiff > fupStage1MagDiff) {
+          ScienceObject sciObj = new ScienceObject();
+          sciObj.setPointRa(fupObs.getRa());
+          sciObj.setPointDec(fupObs.getDec());
+          sciObj.setObjRa(tobj.getLastRa());
+          sciObj.setObjDec(tobj.getLastDec());
+          sciObj.setDiscoveryTimeUtc(tobj.getStartTimeUtc());
+          sciObj.setFollowupTimes(1);
+          sciObj.setIsTrue(true);
+          sciObj.setLastObsTimeUtc(tobj.getLastTimeUtc());
+          sciObj.setMag(tobj.getFoundMag());
+          sciObj.setName(fupObs.getObjName());
+          sciObj.setStatus(1);
+          sciObj.setType("CATAS");
+          sciObj.setFupCount(1);
+          sciObjDao.save(sciObj);
+          sciObjDao.updateFupCount(sciObj.getSoId());
+          fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
+
+          String chatId = "gwac003"; //GWAC_OT_gft_alert
+          String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s CATAS magnitude change %.2f.\n", sciObj.getName(), magDiff);
+          sendMsgService.send(tmsg, chatId);
+          break;
+        }
+      } else if (tobj.getFuoTypeId() == miniotId && tobj.getRecordTotal() >= fupStage1MinRecordNum) {
+        ScienceObject sciObj = new ScienceObject();
+        sciObj.setPointRa(fupObs.getRa());
+        sciObj.setPointDec(fupObs.getDec());
+        sciObj.setObjRa(tobj.getLastRa());
+        sciObj.setObjDec(tobj.getLastDec());
+        sciObj.setDiscoveryTimeUtc(tobj.getStartTimeUtc());
+        sciObj.setFollowupTimes(1);
+        sciObj.setIsTrue(true);
+        sciObj.setLastObsTimeUtc(tobj.getLastTimeUtc());
+        sciObj.setMag(tobj.getFoundMag());
+        sciObj.setName(fupObs.getObjName());
+        sciObj.setStatus(1);
+        sciObj.setType("MINIOT");
+        sciObj.setFupCount(1);
+        sciObjDao.save(sciObj);
+        sciObjDao.updateFupCount(sciObj.getSoId());
+        fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
+        
+        String chatId = "gwac003"; //GWAC_OT_gft_alert
+        String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s MINIOT\n", sciObj.getName());
+        sendMsgService.send(tmsg, chatId);
+        break;
+      }
+    }
+  }
+
+  public void getParm() {
+
+    fupStage1MagDiff = Double.parseDouble(wgpdao.getValueByName("fupStage1MagDiff"));
+    fupStage1MinRecordNum = Integer.parseInt(wgpdao.getValueByName("fupStage1MinRecordNum"));
+
     FollowUpObjectType tfuot = fuotDao.getOtTypeByTypeName("CHECK");
     if (tfuot != null) {
       checkId = tfuot.getFuoTypeId();
@@ -128,83 +202,6 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
     if (tfuot != null) {
       newotId = tfuot.getFuoTypeId();
     }
-
-    FollowUpObservation fupObs = fupObsDao.getById(fupObsId);
-    List<FollowUpObservation> fupObss = fupObsDao.getByFoId(fupObsId);
-    List<FollowUpObject> fupObjs = fupObjDao.getByFupObsId(fupObsId, true);
-
-    //第N>1次后随
-    if (fupObss.size() > 1) {
-      for (FollowUpObservation tobj : fupObss) {
-        if (null != tobj.getSoId()) {
-          fupObs.setSoId(tobj.getSoId());
-          fupObsDao.update(fupObs);
-          break;
-        }
-      }
-      if(null == fupObs.getSoId()){//前N-1次后随，都没有发现真目标，检查这次的所有目标
-        checkFupObjs(fupObjs, fupObs);
-      }
-    } else {
-      if(null == fupObs.getSoId()){//第1次后随，第一次上传结果，检查所有目标
-        checkFupObjs(fupObjs, fupObs);
-      }
-    }
-
-    Long sciObjId = fupObs.getSoId();
-    if (null == sciObjId || sciObjId == 0) {
-    } else {
-      ScienceObject sciObj = sciObjDao.getById(sciObjId);
-    }
-
-  }
-  
-  public void checkFupObjs(List<FollowUpObject> fupObjs, FollowUpObservation fupObs){
-    
-      for (FollowUpObject tobj : fupObjs) {
-        if (tobj.getFuoTypeId() == catasId) {
-          float magDiff = tobj.getFoundMag() - tobj.getR2();
-          if (magDiff > catasLongMagDiff) {
-            ScienceObject sciObj = new ScienceObject();
-            sciObj.setRa(tobj.getLastRa());
-            sciObj.setDec(tobj.getLastDec());
-            sciObj.setDiscoveryTimeUtc(tobj.getStartTimeUtc());
-            sciObj.setFollowupTimes(1);
-            sciObj.setIsTrue(true);
-            sciObj.setLastObsTimeUtc(tobj.getLastTimeUtc());
-            sciObj.setMag(tobj.getFoundMag());
-            sciObj.setName(fupObs.getObjName());
-            sciObj.setStatus(1);
-            sciObj.setType("CATAS");
-            sciObjDao.save(sciObj);
-            fupObsDao.updateSciObjId(fupObs.getFoId(), sciObj.getSoId());
-            break;
-          }
-        } else if (tobj.getFuoTypeId() == miniotId && tobj.getRecordTotal() >= miniMinRecordNum) {
-          ScienceObject sciObj = new ScienceObject();
-          sciObj.setRa(tobj.getLastRa());
-          sciObj.setDec(tobj.getLastDec());
-          sciObj.setDiscoveryTimeUtc(tobj.getStartTimeUtc());
-          sciObj.setFollowupTimes(1);
-          sciObj.setIsTrue(true);
-          sciObj.setLastObsTimeUtc(tobj.getLastTimeUtc());
-          sciObj.setMag(tobj.getFoundMag());
-          sciObj.setName(fupObs.getObjName());
-          sciObj.setStatus(1);
-          sciObj.setType("MINIOT");
-          sciObjDao.save(sciObj);
-          fupObsDao.updateSciObjId(fupObs.getFoId(), sciObj.getSoId());
-          break;
-        }
-      }
-  }
-
-  public void autoFollowUp() {
-
-  }
-
-  public void sendMessage() {
-
   }
 
 }

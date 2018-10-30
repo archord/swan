@@ -187,6 +187,7 @@ public class OTLookBack extends ActionSupport {
       fo.setBeginTime(fo.getTriggerTime());
       fo.setExecuteStatus('1');
       fo.setProcessResult('0');
+      fo.setObjName(ot2fp.getOtName().trim());
       foDao.save(fo);
 
       MessageCreator tmc = new OTFollowMessageCreator(ot2fp);

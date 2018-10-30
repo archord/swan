@@ -63,7 +63,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       }
 
       OtLevel2 ot2 = null;
-      if (foId != null && foId > 0) {
+      if (foId == null || foId == 0) {
         String objName = ot2fp.getOtName().trim();
         if (objName.isEmpty()) {
           if (ot2fp.getFollowName().trim().isEmpty()) {
@@ -75,15 +75,17 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
           ot2fp.setOtName(ot2fp.getFollowName()); //用于发送后随计划时填充字段
         } else {
           int tnum = foDao.countByObjName(objName);
-          ot2fp.setFollowName(String.format("%s_%03d", objName, tnum+1));
+          ot2fp.setFollowName(String.format("%s_%03d", objName, tnum + 1));
           ot2 = ot2Dao.getOtLevel2ByName(objName, true);
+          if(null!=ot2){
+            ot2.setFoCount((short) (ot2.getFoCount() + 1));
+            ot2Dao.updateFoCount(ot2);
+          }
         }
       }
 
       FollowUpObservation fo = new FollowUpObservation();
       fo.setBackImageCount(0);
-      fo.setRa(ot2fp.getRa());
-      fo.setDec(ot2fp.getDec());
       fo.setEpoch(ot2fp.getEpoch());
       fo.setExposeDuration((short) ot2fp.getExpTime());
       fo.setFilter(ot2fp.getFilter());
@@ -94,6 +96,11 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       fo.setObjName(ot2fp.getOtName().trim());
       if (ot2 != null) {
         fo.setOtId(ot2.getOtId());
+        fo.setRa(ot2.getRa());
+        fo.setDec(ot2.getDec());
+      } else {
+        fo.setRa(ot2fp.getRa());
+        fo.setDec(ot2fp.getDec());
       }
       fo.setPriority((short) ot2fp.getPriority());
       if (null != tuser) {
@@ -137,7 +144,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
         fo.setExecuteStatus('0');
       }
 
-      if (foId != null&&foId>0) {
+      if (foId != null && foId > 0) {
         fo.setFoId(foId);
         foDao.update(fo);
       } else {

@@ -30,11 +30,11 @@
     <property name="destination" ref="followUpCatalogDest" />
     <property name="messageListener" ref="followUpCatalogListener" />
   </bean>
-  <bean id="followUpObjCheckConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+<!--  <bean id="followUpObjCheckConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
     <property name="connectionFactory" ref="jmsFactory"/>
     <property name="destination" ref="followUpObjCheckDest" />
     <property name="messageListener" ref="followUpObjCheckListener" />
-  </bean>
+  </bean>-->
  
   
 </beans>

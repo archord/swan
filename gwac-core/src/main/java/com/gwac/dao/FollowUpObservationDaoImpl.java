@@ -25,6 +25,26 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
             + " where fo_id=" + fupObsId;
     getCurrentSession().createSQLQuery(sql).executeUpdate();
   }
+  
+  @Override
+  public void updateSciObjId(String objName, long sciObjId) {
+
+    String sql = "update follow_up_observation set so_id=" + sciObjId
+            + " where obj_name='" + objName + "'";
+    getCurrentSession().createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
+  public List<FollowUpObservation> getBySciObjId(long sciObjId) {
+
+    String sql = "SELECT * "
+            + "from follow_up_observation  "
+            + "where so_id=" + sciObjId
+            + " order by fo_id asc";
+
+    Query q = getCurrentSession().createSQLQuery(sql).addEntity(FollowUpObservation.class);
+    return q.list();
+  }
 
   @Override
   public List<FollowUpObservation> getByFoId(long foId) {
@@ -188,7 +208,7 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
 
     Session session = getCurrentSession();
     String sql = "select count(*) from follow_up_observation where obj_name='" + objName + "'";
-    Query q = session.createSQLQuery(sql).addEntity(FollowUpObservation.class);
+    Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
       return ((BigInteger) q.list().get(0)).intValue();
     } else {

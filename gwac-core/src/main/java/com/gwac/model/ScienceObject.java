@@ -20,11 +20,11 @@ import org.hibernate.annotations.Parameter;
          schema = "public"
 )
 public class ScienceObject implements java.io.Serializable {
-  
+
   private long soId;
   private String name;
-  private Float ra;
-  private Float dec;
+  private Float pointRa;
+  private Float pointDec;
   private Date discoveryTimeUtc;
   private Date lastObsTimeUtc;
   private Integer followupTimes;
@@ -34,6 +34,10 @@ public class ScienceObject implements java.io.Serializable {
   private String type;
   private Boolean isTrue;
   private Integer status;
+  private Boolean autoObservation;
+  private Integer fupCount;
+  private Float objRa;
+  private Float objDec;
   
   public ScienceObject() {
   }
@@ -76,36 +80,6 @@ public class ScienceObject implements java.io.Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * @return the ra
-   */
-  @Column(name = "ra")
-  public Float getRa() {
-    return ra;
-  }
-
-  /**
-   * @param ra the ra to set
-   */
-  public void setRa(Float ra) {
-    this.ra = ra;
-  }
-
-  /**
-   * @return the dec
-   */
-  @Column(name = "dec")
-  public Float getDec() {
-    return dec;
-  }
-
-  /**
-   * @param dec the dec to set
-   */
-  public void setDec(Float dec) {
-    this.dec = dec;
   }
 
   /**
@@ -245,4 +219,94 @@ public class ScienceObject implements java.io.Serializable {
     this.status = status;
   }
 
+  /**
+   * @return the autoObservation 
+   */
+  @Column(name = "auto_observation")
+  public Boolean getAutoObservation() {
+    return autoObservation;
+  }
+
+  /**
+   * @param autoObservation the autoObservation to set
+   */
+  public void setAutoObservation(Boolean autoObservation) {
+    this.autoObservation = autoObservation;
+  }
+
+  /**
+   * @return the pointRa
+   */
+  @Column(name = "point_ra")
+  public Float getPointRa() {
+    return pointRa;
+  }
+
+  /**
+   * @param pointRa the pointRa to set
+   */
+  public void setPointRa(Float pointRa) {
+    this.pointRa = pointRa;
+  }
+
+  /**
+   * @return the pointDec
+   */
+  @Column(name = "point_dec")
+  public Float getPointDec() {
+    return pointDec;
+  }
+
+  /**
+   * @param pointDec the pointDec to set
+   */
+  public void setPointDec(Float pointDec) {
+    this.pointDec = pointDec;
+  }
+
+  /**
+   * @return the fupCount
+   */
+  @Column(name = "fup_count")
+  public Integer getFupCount() {
+    return fupCount;
+  }
+
+  /**
+   * @param fupCount the fupCount to set
+   */
+  public void setFupCount(Integer fupCount) {
+    this.fupCount = fupCount;
+  }
+
+  /**
+   * @return the objRa
+   */
+  @Column(name = "obj_ra")
+  public Float getObjRa() {
+    return objRa;
+  }
+
+  /**
+   * @param objRa the objRa to set
+   */
+  public void setObjRa(Float objRa) {
+    this.objRa = objRa;
+  }
+
+  /**
+   * @return the objDec
+   */
+  @Column(name = "obj_dec")
+  public Float getObjDec() {
+    return objDec;
+  }
+
+  /**
+   * @param objDec the objDec to set
+   */
+  public void setObjDec(Float objDec) {
+    this.objDec = objDec;
+  }
+  
 }

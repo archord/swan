@@ -6,6 +6,8 @@
 package com.gwac.dao;
 
 import com.gwac.model.ScienceObject;
+import java.util.List;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,5 +16,22 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class ScienceObjectDaoImpl extends BaseHibernateDaoImpl<ScienceObject> implements ScienceObjectDao {
-  
+
+  @Override
+  public List<ScienceObject> getByStatus(int status) {
+    String sql = "SELECT * from science_object where auto_observation=true and status>=" + status;
+
+    Query q = getCurrentSession().createSQLQuery(sql).addEntity(ScienceObject.class);
+    return q.list();
+  }
+
+  @Override
+  public void updateFupCount(long sciObjId) {
+    String sql = "update science_object "
+            + "set fup_count=(select count(*) from follow_up_observation  where so_id=" + sciObjId + ") "
+            + "where so_id=" + sciObjId + "";
+
+    getCurrentSession().createSQLQuery(sql).executeUpdate();
+  }
+
 }

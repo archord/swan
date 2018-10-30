@@ -6,11 +6,15 @@
 package com.gwac.dao;
 
 import com.gwac.model.ScienceObject;
+import java.util.List;
 
 /**
  *
  * @author msw
  */
 public interface ScienceObjectDao extends BaseHibernateDao<ScienceObject> {
+
+  public List<ScienceObject> getByStatus(int status);
   
+  public void updateFupCount(long sciObjId);
 }

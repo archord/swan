@@ -18,12 +18,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 
-/*http://host-url/dpmIsAlive.action?dpm=M01*/
 /**
  * @author xy
  */
-//@InterceptorRef("jsonValidationWorkflowStack")
-//加了这句化，文件传不上来
 public class WXMessage extends ActionSupport {
 
   private static final Log log = LogFactory.getLog(WXMessage.class);
@@ -35,6 +32,11 @@ public class WXMessage extends ActionSupport {
 
   private String echo = "";
 
+  /**
+   * 企业微信注册时使用
+   * @return
+   * @throws Exception 
+   */
   @Action(value = "wxvalidation")
   public String upload() throws Exception {
 

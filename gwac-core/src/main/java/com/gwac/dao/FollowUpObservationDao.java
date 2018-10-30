@@ -13,9 +13,13 @@ import java.util.List;
  */
 public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObservation> {
   
+  public List<FollowUpObservation> getBySciObjId(long sciObjId);
+  
   public List<FollowUpObservation> getByFoId(long foId);
   
   public void updateSciObjId(long fupObsId, long sciObjId);
+  
+  public void updateSciObjId(String objName, long sciObjId);
   
   public void deleteByIds(String foIds);
   

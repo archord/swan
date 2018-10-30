@@ -214,16 +214,6 @@ public class FollowUpRecordServiceImpl implements BaseService {
         for (FollowUpCatalog obj : newotObjs) {
           saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
         }
-        /*//只有一个NewOT时，才存储
-         if (newotObjs.size() == 1) {
-         for (FollowUpCatalog obj : newotObjs) {
-         saveFollowUpCatalogNewOt(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
-         }
-         } else {
-         for (FollowUpCatalog obj : newotObjs) {
-         saveNewOtRecord(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
-         }
-         }*/
       }
       MessageCreator tmc = new FollowUpObjectCheckMessageCreator(fo.getFoId());
       jmsTemplate.send(followUpObjCheckDest, tmc);

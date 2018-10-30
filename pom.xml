@@ -25,6 +25,7 @@
         <module>gwac-web-backend</module>
         <module>gwac-web-resources</module>
         <module>gwac-classify</module>
+        <module>gwac-trigger</module>
     </modules>
   
     <!--add a plugin: maven-install-plugin-->

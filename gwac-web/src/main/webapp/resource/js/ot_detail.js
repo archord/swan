@@ -778,7 +778,7 @@ $(function () {
   function formateRaDec(data, type, full, meta) {
     //var searchUrl = "http://simbad.u-strasbg.fr/simbad/sim-coo?CooFrame=FK5&CooEpoch=2000&CooEqui=2000&CooDefinedFrames=none&Radius=5&Radius.unit=arcmin&submit=submit%20query&Coord=";
     //searchUrl += full.raD + "%20" + full.decD;
-    var searchUrl = "http://vizier.u-strasbg.fr/viz-bin/VizieR-4?-ref=VIZ5bd5371da602&-out.add=_r&-out.add=_RAJ%2C_DEJ&-sort=_r&-order=I&-oc.form=sexa&-meta.foot=1&-meta=1&-meta.ucd=2&-c.geom=r&-c.eq=J2000&-c.u=arcmin&-c.r=+2&-c=";
+    var searchUrl = "http://vizier.u-strasbg.fr/viz-bin/VizieR-4?-ref=VIZ5bd5371da602&-out.add=_r&-out.add=_RAJ%2C_DEJ&-sort=_r&-order=I&-oc.form=sexa&-meta.foot=1&-meta=1&-meta.ucd=2&-c.geom=r&-c.eq=J2000&-c.u=arcmin&-c.r=+0.5&-c=";
     //110.58181%2C+30.451553
     searchUrl += full.raD + "%2C" + full.decD;
     return "<a href='" + searchUrl + "' title='点击在VizieR搜寻OT对应坐标' target='_blank'>" + data + "</a>";

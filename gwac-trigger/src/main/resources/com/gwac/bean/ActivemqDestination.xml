@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+    <property name="brokerURL">
+      <value>failover:(tcp://127.0.0.1:61616)</value>
+    </property>
+  </bean> 
+
+  <bean id="pooledJmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+    <property name="connectionFactory">
+      <ref local="jmsFactory"/>
+    </property>
+  </bean>
+    
+  <!-- Spring JMS Template -->
+  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    <property name="connectionFactory">
+      <ref local="pooledJmsFactory"/>
+    </property>
+  </bean>  
+   
+  <bean id="followUpObjCheckDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+    <constructor-arg value="FOLLOW_UP_OBJECT_CHECK" />
+  </bean>
+      
+</beans>

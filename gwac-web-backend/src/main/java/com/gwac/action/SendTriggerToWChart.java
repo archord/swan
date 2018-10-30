@@ -36,6 +36,7 @@ public class SendTriggerToWChart extends ActionSupport {
   private WebGlobalParameterDao wgpDao;
 
   private String triggerMsg;
+  private String chatId;
 
   private String echo = "";
 
@@ -69,8 +70,14 @@ public class SendTriggerToWChart extends ActionSupport {
       WxCpServiceImpl wxCpService = new WxCpServiceImpl();
       wxCpService.setWxCpConfigStorage(config);
 
+      if(chatId==null || chatId.isEmpty()){
+        chatId="gwac001";
+      }
       String url = "https://qyapi.weixin.qq.com/cgi-bin/appchat/send";
-      String msg = "{\"chatid\" : \"gwac001\",\"msgtype\" : \"text\",\"safe\" : \"0\",\"text\" : {\"content\": \"" + triggerMsg + "\"}}";
+      String msg = "{\"chatid\" : \""+chatId+"\",\"msgtype\" : \"text\",\"safe\" : \"0\",\"text\" : {\"content\": \"" + triggerMsg + "\"}}";
+      //String urlCreateQun = "https://qyapi.weixin.qq.com/cgi-bin/appchat/create";
+      //String msgCreateQun = "{\"name\" : \"GWAC001\",\"owner\" : \"XuYang\",\"userlist\" : [\"XuYang\", \"Long\", \"zheng_ya_tong\"],\"chatid\" : \"gwac001\"}";
+      //echo = wxCpService.post(urlCreateQun, msgCreateQun);
 
       String trst;
       try {

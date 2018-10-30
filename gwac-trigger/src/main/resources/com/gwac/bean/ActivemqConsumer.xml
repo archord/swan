@@ -1,0 +1,12 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="followUpObjCheckConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="jmsFactory"/>
+    <property name="destination" ref="followUpObjCheckDest" />
+    <property name="messageListener" ref="followUpObjCheckListener" />
+  </bean>
+ 
+  
+</beans>
