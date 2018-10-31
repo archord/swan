@@ -71,7 +71,7 @@ public class SendTriggerToWChart extends ActionSupport {
       wxCpService.setWxCpConfigStorage(config);
 
       if(chatId==null || chatId.isEmpty()){
-        chatId="gwac001";
+        setChatId("gwac001");
       }
       String url = "https://qyapi.weixin.qq.com/cgi-bin/appchat/send";
       String msg = "{\"chatid\" : \""+chatId+"\",\"msgtype\" : \"text\",\"safe\" : \"0\",\"text\" : {\"content\": \"" + triggerMsg + "\"}}";
@@ -118,5 +118,12 @@ public class SendTriggerToWChart extends ActionSupport {
    */
   public void setTriggerMsg(String triggerMsg) {
     this.triggerMsg = triggerMsg;
+  }
+
+  /**
+   * @param chatId the chatId to set
+   */
+  public void setChatId(String chatId) {
+    this.chatId = chatId;
   }
 }

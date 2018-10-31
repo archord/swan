@@ -25,7 +25,7 @@
   <bean id="sciObjTrgTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="sciObjTrgJob" />
-    <property name="repeatInterval" value="15000" />  
+    <property name="repeatInterval" value="30000" />  
     <property name="startDelay" value="15000" />   
   </bean>
   
