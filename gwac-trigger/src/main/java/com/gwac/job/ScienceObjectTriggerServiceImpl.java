@@ -133,8 +133,8 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
             List<FollowUpObject> fupObjs = fupObjDao.getByOtId(ot2.getOtId(), false);
             for (FollowUpObject fupObj : fupObjs) {
               double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
+              log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
               if (diffMag > fupStage3MagDiff) {
-                log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
                 String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2\nusnoRMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\n",
                         sciObj.getName(), sciObj.getType(), fupObj.getR2(), fupObj.getFoundMag(), fupObj.getLastMag());
                 sendMsgService.send(tmsg, chatId);
@@ -146,7 +146,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
           }
           if ((diffMinutes > fupStage3StartTime) && (sciObj.getTriggerStatus() == 3)) {
             autoFollowUp(sciObj, ot2.getOtId());
-          }else if ((diffMinutes > fupStage3StopTime) && (sciObj.getTriggerStatus() == 2)) {//长时间在阶段2未进入到阶段3，很大可能性为假目标，停止自动观测
+          } else if ((diffMinutes > fupStage3StopTime) && (sciObj.getTriggerStatus() == 2)) {//长时间在阶段2未进入到阶段3，很大可能性为假目标，停止自动观测
             sciObj.setAutoObservation(false);
           }
         } else {
@@ -235,9 +235,11 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
       String[] filterArray = filter.split(",");
       for (int i = 0; i < filterArray.length; i++) {
         String tf = filterArray[i];
+        fo.setFoId(0);
         fo.setFilter(tf);
         fo.setFoName(String.format("%s_%03d", sciObj.getName(), fupCount + i + 1));
         fupObsDao.save(fo);
+        ot2fp.setFilter(tf);
         MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
         jmsTemplate.send(otFollowDest, tmc);
         log.debug(ot2fp.getTriggerMsg());
