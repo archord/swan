@@ -29,7 +29,7 @@ public class FollowUpCatalogListener implements MessageListener {
       String fileName = map.getString("fileName");
       String followUpName = map.getString("followUpName");
       String otName = map.getString("otName");
-      log.debug("receive message, followUpName=" + followUpName + ",  file=otlist " + storePath + "/" + fileName);
+      log.debug("receive message, followUpName=" + followUpName + ", ufuId=" + ufuId + ",  file=otlist " + storePath + "/" + fileName);
       
       long startTime = System.nanoTime();
       followUpRecordService.parseFollowUpInfo(ufuId, storePath, fileName, followUpName, otName);
