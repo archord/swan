@@ -31,7 +31,7 @@
     </div>      
     <div id="tabs-monitor-table-div" style="width:100%; height:100%;margin:0 auto;border:0;">
       <div style="width:100%; text-align: center; margin-top: 20px;">
-        <span style="font-size: 18px">科学目标列表</span>
+          <span style="font-size: 18px">科学目标列表</span>&nbsp;<img id="setFupParm" title="点击设置后随参数" src="${pageContext.request.contextPath}/resource/images/Settings-icon.png"/>
       </div>
       
       <div id="ot-list" style="margin: 0px 30px">

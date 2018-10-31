@@ -6,12 +6,21 @@ $(function() {
   function initPage() {
     $("#genObsPlanBtn").click(ot2QueryBtnClick);
 
-    setFilter60();
+    setFilter60("#filter");
+    setFilter60("#fupStage2Filter");
+    setFilter60("#fupStage3Filter");
     $("#telescope").change(function() {
       if ($("#telescope").val() === '2') {
-        setFilter30();
+        setFilter30("#filter");
       } else {
-        setFilter60();
+        setFilter60("#filter");
+      }
+    });
+    $("#fupStage2Telescope").change(function() {
+      if ($("#fupStage2Telescope").val() === '2') {
+        setFilter30("#fupStage2Filter");
+      } else {
+        setFilter60("#fupStage2Filter");
       }
     });
 
@@ -32,6 +41,28 @@ $(function() {
         $("#frameCount").val(data.frameCount);
         $("#autoFollowUp").val(data.autoFollowUp);
         $("#filter").change();
+        
+        $("#fupStage2FrameCount").val(data.fupStage2FrameCount);
+        $("#fupStage2ExposeDuration").val(data.fupStage2ExposeDuration);
+        $("#fupStage2Filter").val(data.fupStage2Filter);
+        $("#fupStage2Priority").val(data.fupStage2Priority);
+        $("#fupStage2Telescope").val(data.fupStage2Telescope);
+        $("#fupStage2Filter").change();
+
+        $("#fupStage3FrameCount").val(data.fupStage3FrameCount);
+        $("#fupStage3ExposeDuration").val(data.fupStage3ExposeDuration);
+        $("#fupStage3Filter").val(data.fupStage3Filter);
+        $("#fupStage3Priority").val(data.fupStage3Priority);
+        $("#fupStage3Telescope").val(data.fupStage3Telescope);
+//        $("#fupStage3Filter").change();
+        
+        $("#fupStage1MagDiff").val(data.fupStage1MagDiff);
+        $("#fupStage1MinRecordNum").val(data.fupStage1MinRecordNum);
+        $("#fupStage2StartTime").val(data.fupStage2StartTime);
+        $("#fupStage3StopTime").val(data.fupStage3StopTime);
+        $("#fupStage3MagDiff").val(data.fupStage3MagDiff);
+        $("#fupStage3StartTime").val(data.fupStage3StartTime);
+
       }
     });
   }
@@ -70,11 +101,11 @@ $(function() {
     }
   }
 
-  function setFilter60() {
+  function setFilter60(filterId) {
     var filter60 = ["Lum", "Green", "R", "Blue", "V", "I", "B", "Red", "U", "null"];
-    $('#filter').find('option').remove();
+    $(filterId).find('option').remove();
     $.each(filter60, function(i, item) {
-      $('#filter').append($('<option>', {
+      $(filterId).append($('<option>', {
         value: item,
         text: item
       }));
@@ -83,11 +114,11 @@ $(function() {
 //    $("#filter").change();
   }
 
-  function setFilter30() {
+  function setFilter30(filterId) {
     var filter30 = ["null", "R", "B", "I", "U", "V"];
-    $('#filter').find('option').remove();
+    $(filterId).find('option').remove();
     $.each(filter30, function(i, item) {
-      $('#filter').append($('<option>', {
+      $(filterId).append($('<option>', {
         value: item,
         text: item
       }));
