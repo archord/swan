@@ -17,4 +17,8 @@ public interface ScienceObjectDao extends BaseHibernateDao<ScienceObject> {
   public List<ScienceObject> getByStatus(int status);
   
   public void updateFupCount(long sciObjId);
+  
+  public String findRecord(int start, int length);
+  
+  public Long findRecordCount();
 }

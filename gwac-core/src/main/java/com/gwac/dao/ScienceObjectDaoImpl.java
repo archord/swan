@@ -6,6 +6,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.ScienceObject;
+import java.math.BigInteger;
 import java.util.List;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -34,6 +35,29 @@ public class ScienceObjectDaoImpl extends BaseHibernateDaoImpl<ScienceObject> im
             + "where so_id=" + sciObjId + "";
 
     getCurrentSession().createSQLQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public String findRecord(int start, int length) {
+
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT tmp1.*) r))) from("
+            + "SELECT * FROM science_object ORDER BY so_id desc OFFSET " + start + " LIMIT " + length + " )as tmp1";
+
+    //log.debug(sql);
+    String rst = "";
+    Query q = this.getCurrentSession().createSQLQuery(sql);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
+  @Override
+  public Long findRecordCount() {
+
+    String sql = "SELECT count(*) FROM follow_up_observation";
+    Query q = this.getCurrentSession().createSQLQuery(sql);
+    return ((BigInteger) q.list().get(0)).longValue();
   }
 
 }

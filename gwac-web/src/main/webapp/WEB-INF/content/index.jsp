@@ -66,6 +66,9 @@
             <a href="<%=request.getContextPath()%>/monitor/pgwac-monitor.action" target="_blank" ><p class="multiline">参数监控</p></a>
           </div>
           <div class='mason-block x5'>
+            <a href="<%=request.getContextPath()%>/science/science-object-list.action" target="_blank" ><p>科学目标</p></a>
+          </div>
+          <div class='mason-block x5'>
             <a href="<%=request.getContextPath()%>/followup/followup-manage.action" target="_blank" ><p>后随观测</p></a>
           </div>
           <div class='mason-block x5'>
