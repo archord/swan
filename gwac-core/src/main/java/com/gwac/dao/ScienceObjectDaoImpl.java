@@ -55,7 +55,7 @@ public class ScienceObjectDaoImpl extends BaseHibernateDaoImpl<ScienceObject> im
   @Override
   public Long findRecordCount() {
 
-    String sql = "SELECT count(*) FROM follow_up_observation";
+    String sql = "SELECT count(*) FROM science_object";
     Query q = this.getCurrentSession().createSQLQuery(sql);
     return ((BigInteger) q.list().get(0)).longValue();
   }

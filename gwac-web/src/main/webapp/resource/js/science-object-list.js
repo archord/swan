@@ -17,7 +17,7 @@ $(function () {
       "processing": true,
       "searching": false,
       "lengthChange": true,
-      "pageLength": 8,
+      "pageLength": 16,
       "scrollX": true,
       "ajax": {
         url: queryUrl,
@@ -31,11 +31,11 @@ $(function () {
       },
       "columns": [
         {"data": "so_id"},
-        {"data": "name"}, //begin_time trigger_time
+        {"data": "name"},
         {"data": "mag"},
         {"data": "discovery_time_utc"},
         {"data": "obj_ra"},
-        {"data": "fup_couont"},
+        {"data": "fup_count"},
         {"data": "type"}
       ],
       "columnDefs": [{
@@ -45,12 +45,18 @@ $(function () {
         }, {
           "targets": 1,
           "render": formateOt2
+        }, {
+          "targets": 2,
+          "render": formateMag
+        }, {
+          "targets": 4,
+          "render": formatePosition
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
-                '<option value="5">5</option>' +
                 '<option value="8">8</option>' +
                 '<option value="16">16</option>' +
+                '<option value="20">20</option>' +
                 '<option value="-1">All</option>' +
                 '</select> 条',
         "info": "显示第 _START_ 到 _END_ ，共 _TOTAL_ 条。",
@@ -67,8 +73,7 @@ $(function () {
   }
 
   function formateRowNumber(data, type, full, meta) {
-//    return "<span>" +(meta.row + 1)+"<input type='checkbox'/></span>";
-    return "<span><input name='opIds' type='checkbox' value='" + data + "'/></span>";
+    return "<span>" +(meta.row + 1)+"</span>";
   }
 
   function formateRaDec(data, type, full, meta) {
@@ -81,7 +86,7 @@ $(function () {
     var content = "";
     var gwacRootURL = $("#gwacRootURL").val();
     var searchUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=" + data;
-    content = "<a href='" + searchUrl + "' title='点击打开OT2详细页面' target='_blank'>" + name + "</a>";
+    content = "<a href='" + searchUrl + "' title='点击打开OT2详细页面' target='_blank'>" + data + "</a>";
     return content;
   }
   function formateFollowName(data, type, full, meta) {
@@ -138,9 +143,12 @@ $(function () {
     }
     return name;
   }
+  function formateMag(data, type, full, meta) {
+    return data.toFixed(2);
+  }
   function formatePosition(data, type, full, meta) {
     meta.title = full.epoch;
-    return "(" + full.ra.toFixed(3) + "," + full.dec.toFixed(3) + ")";
+    return "(" + full.obj_ra.toFixed(3) + "," + full.obj_dec.toFixed(3) + ")";
   }
   function formateExpusore(data, type, full, meta) {
     return full.expusore_during + "(" + full.delay + ")";

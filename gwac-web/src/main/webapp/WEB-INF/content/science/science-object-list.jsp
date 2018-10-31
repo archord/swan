@@ -34,7 +34,7 @@
         <span style="font-size: 18px">科学目标列表</span>
       </div>
       
-      <div id="ot-list">
+      <div id="ot-list" style="margin: 0px 30px">
         <table id="sci-obj-table" class="display" cellspacing="0" width="100%">
           <thead><tr><th></th><th>名称</th><th>星等</th><th>发现时间</th><th title="(RA-DEC)J2000">目标位置</th>
               <th>后随次数</th><th>类型</th></tr></thead>
