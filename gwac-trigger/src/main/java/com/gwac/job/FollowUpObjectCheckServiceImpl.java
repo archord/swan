@@ -128,7 +128,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
     for (FollowUpObject tobj : fupObjs) {
       if (tobj.getFuoTypeId() == catasId) {
         float magDiff = tobj.getFoundMag() - tobj.getR2();
-        log.debug(tobj.getFuoName()+" magDiff="+magDiff);
+        log.debug(tobj.getFuoName() + " magDiff=" + magDiff);
         if (magDiff > fupStage1MagDiff) {
           ScienceObject sciObj = new ScienceObject();
           sciObj.setPointRa(fupObs.getRa());
@@ -145,6 +145,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
           sciObj.setTriggerStatus(1);
           sciObj.setType("CATAS");
           sciObj.setFupCount(1);
+          sciObj.setAutoObservation(true);
           sciObjDao.save(sciObj);
           fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
           sciObjDao.updateFupCount(sciObj.getSoId());
@@ -152,7 +153,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
           break;
         }
       } else if (tobj.getFuoTypeId() == miniotId && tobj.getRecordTotal() >= fupStage1MinRecordNum) {
-        log.debug(tobj.getFuoName()+" totalRecord="+tobj.getRecordTotal());
+        log.debug(tobj.getFuoName() + " totalRecord=" + tobj.getRecordTotal());
         ScienceObject sciObj = new ScienceObject();
         sciObj.setPointRa(fupObs.getRa());
         sciObj.setPointDec(fupObs.getDec());
@@ -168,10 +169,11 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
         sciObj.setTriggerStatus(1);
         sciObj.setType("MINIOT");
         sciObj.setFupCount(1);
+        sciObj.setAutoObservation(true);
         sciObjDao.save(sciObj);
         fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
         sciObjDao.updateFupCount(sciObj.getSoId());
-        
+
         break;
       }
     }

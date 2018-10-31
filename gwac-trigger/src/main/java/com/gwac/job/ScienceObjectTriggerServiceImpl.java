@@ -102,6 +102,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     String chatId = "gwac003"; //GWAC_OT_gft_alert 
     Integer fupStage2StartTime = Integer.parseInt(wgpdao.getValueByName("fupStage2StartTime")); //第二次后随距离第一次后随的时间，单位分钟
     Integer fupStage3StartTime = Integer.parseInt(wgpdao.getValueByName("fupStage3StartTime")); //第三次后随距离第一次后随的时间，单位分钟
+    Integer fupStage3StopTime = Integer.parseInt(wgpdao.getValueByName("fupStage3StopTime")); //过了fupStage3StopTime时间之后，该目标还未进入到stage3，则该目标很大可能性为假目标，将该目标移除的自动检测后随任务列表
     Float fupStage3MagDiff = Float.parseFloat(wgpdao.getValueByName("fupStage3MagDiff")); //
 
     List<ScienceObject> sciObjs = sciObjDao.getByStatus(1);
@@ -113,7 +114,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         Date discoveryTimeUtc = sciObj.getDiscoveryTimeUtc();
         Date curDate = new Date();
         double diffMinutes = (curDate.getTime() - discoveryTimeUtc.getTime()) / (1000 * 60.0) - 8 * 60;
-        log.debug("check " + ot2.getName()+", diffMinutes: "+diffMinutes+", status: "+sciObj.getStatus());
+        log.debug("check " + ot2.getName() + ", diffMinutes: " + diffMinutes + ", status: " + sciObj.getStatus());
         if (sciObj.getStatus() == 1) {
           if (sciObj.getTriggerStatus() == 1) {
             String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\n", sciObj.getName(), sciObj.getType());
@@ -133,8 +134,9 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
             for (FollowUpObject fupObj : fupObjs) {
               double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
               if (diffMag > fupStage3MagDiff) {
-                log.debug("check " + ot2.getName()+", diffMag: "+diffMag+", status: "+sciObj.getStatus());
-                String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2.\n", sciObj.getName(), sciObj.getType());
+                log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
+                String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2\nusnoRMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\n",
+                        sciObj.getName(), sciObj.getType(), fupObj.getR2(), fupObj.getFoundMag(), fupObj.getLastMag());
                 sendMsgService.send(tmsg, chatId);
                 sciObj.setTriggerStatus(3);
                 sciObjDao.update(sciObj);
@@ -144,6 +146,8 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
           }
           if ((diffMinutes > fupStage3StartTime) && (sciObj.getTriggerStatus() == 3)) {
             autoFollowUp(sciObj, ot2.getOtId());
+          }else if ((diffMinutes > fupStage3StopTime) && (sciObj.getTriggerStatus() == 2)) {//长时间在阶段2未进入到阶段3，很大可能性为假目标，停止自动观测
+            sciObj.setAutoObservation(false);
           }
         } else {
           log.debug(sciObj.getName() + " in stage" + sciObj.getStatus() + " stop AutoObservation.");
