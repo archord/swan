@@ -146,8 +146,8 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
           sciObj.setType("CATAS");
           sciObj.setFupCount(1);
           sciObjDao.save(sciObj);
-          sciObjDao.updateFupCount(sciObj.getSoId());
           fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
+          sciObjDao.updateFupCount(sciObj.getSoId());
 
           break;
         }
@@ -169,8 +169,8 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
         sciObj.setType("MINIOT");
         sciObj.setFupCount(1);
         sciObjDao.save(sciObj);
-        sciObjDao.updateFupCount(sciObj.getSoId());
         fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
+        sciObjDao.updateFupCount(sciObj.getSoId());
         
         break;
       }

@@ -105,6 +105,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     Float fupStage3MagDiff = Float.parseFloat(wgpdao.getValueByName("fupStage3MagDiff")); //
 
     List<ScienceObject> sciObjs = sciObjDao.getByStatus(1);
+    log.debug("get ScienceObject: " + sciObjs.size());
     for (ScienceObject sciObj : sciObjs) {
 
       OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(sciObj.getName(), false);
@@ -112,6 +113,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         Date discoveryTimeUtc = sciObj.getDiscoveryTimeUtc();
         Date curDate = new Date();
         double diffMinutes = (curDate.getTime() - discoveryTimeUtc.getTime()) / (1000 * 60.0) - 8 * 60;
+        log.debug("check " + ot2.getName()+", diffMinutes: "+diffMinutes+", status: "+sciObj.getStatus());
         if (sciObj.getStatus() == 1) {
           if (sciObj.getTriggerStatus() == 1) {
             String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\n", sciObj.getName(), sciObj.getType());
@@ -129,7 +131,9 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
           if (sciObj.getTriggerStatus() == 2) {
             List<FollowUpObject> fupObjs = fupObjDao.getByOtId(ot2.getOtId(), false);
             for (FollowUpObject fupObj : fupObjs) {
-              if (Math.abs(fupObj.getLastMag() - fupObj.getFoundMag()) > fupStage3MagDiff) {
+              double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
+              if (diffMag > fupStage3MagDiff) {
+                log.debug("check " + ot2.getName()+", diffMag: "+diffMag+", status: "+sciObj.getStatus());
                 String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2.\n", sciObj.getName(), sciObj.getType());
                 sendMsgService.send(tmsg, chatId);
                 sciObj.setTriggerStatus(3);

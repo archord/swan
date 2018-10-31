@@ -27,6 +27,8 @@ public class ScienceObjectDaoImpl extends BaseHibernateDaoImpl<ScienceObject> im
 
   @Override
   public void updateFupCount(long sciObjId) {
+    
+    //"update science_object as so set fup_count=(select count(*) from follow_up_observation as fuo where fuo.so_id=so.so_id)"
     String sql = "update science_object "
             + "set fup_count=(select count(*) from follow_up_observation  where so_id=" + sciObjId + ") "
             + "where so_id=" + sciObjId + "";
