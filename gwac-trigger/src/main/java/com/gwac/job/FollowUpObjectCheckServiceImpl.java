@@ -49,6 +49,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
 
   private double fupStage1MagDiff = 1.0;
   private Integer fupStage1MinRecordNum = 3;
+  private boolean autoFollowUp = true;
   private short checkId = 1;
   private short catasId = 2;
   private short miniotId = 3;
@@ -145,7 +146,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
           sciObj.setTriggerStatus(1);
           sciObj.setType("CATAS");
           sciObj.setFupCount(1);
-          sciObj.setAutoObservation(true);
+          sciObj.setAutoObservation(autoFollowUp);
           sciObjDao.save(sciObj);
           fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
           sciObjDao.updateFupCount(sciObj.getSoId());
@@ -169,7 +170,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
         sciObj.setTriggerStatus(1);
         sciObj.setType("MINIOT");
         sciObj.setFupCount(1);
-        sciObj.setAutoObservation(true);
+        sciObj.setAutoObservation(autoFollowUp);
         sciObjDao.save(sciObj);
         fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
         sciObjDao.updateFupCount(sciObj.getSoId());
@@ -181,6 +182,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
 
   public void getParm() {
 
+    autoFollowUp = Boolean.parseBoolean(wgpdao.getValueByName("AutoFollowUp")); 
     fupStage1MagDiff = Double.parseDouble(wgpdao.getValueByName("fupStage1MagDiff"));
     fupStage1MinRecordNum = Integer.parseInt(wgpdao.getValueByName("fupStage1MinRecordNum"));
 
