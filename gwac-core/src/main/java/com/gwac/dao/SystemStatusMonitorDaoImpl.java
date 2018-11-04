@@ -155,7 +155,8 @@ public class SystemStatusMonitorDaoImpl extends BaseHibernateDaoImpl<SystemStatu
     Session session = getCurrentSession();
     String sql = "update system_status_monitor set img_parm_id=" + isp.getIspId()
             + ", cam_temperature=" + (isp.getTemperatureActual() - isp.getTemperatureSet())
-            + ", img_fwhm=" + isp.getFwhm() + ", position_error=" + (isp.getImgCenterRa() - isp.getMountRa()) + " where identity='" + id + "'";
+            + ", img_fwhm=" + isp.getFwhm() + ", astro_flag=" + isp.getAstroFlag()
+            + ", position_error=" + (isp.getImgCenterRa() - isp.getMountRa()) + " where identity='" + id + "'";
 
     session.createSQLQuery(sql).executeUpdate();
   }
