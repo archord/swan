@@ -410,11 +410,13 @@
       var parmValue = d[parmName];
       if (parmValue !== null) {
         //白，灰，绿，橙，红
-        if (parmValue<0.8) {
-          idx = 2;
-        } else if (parmValue>=0.8) {
+        if (parmValue>=0.9) {
+          idx = 4;
+        }else if (parmValue>=0.8) {
           idx = 3;
-        }
+        }else if (parmValue<0.8) {
+          idx = 2;
+        } 
       }
       return idx;
     },
