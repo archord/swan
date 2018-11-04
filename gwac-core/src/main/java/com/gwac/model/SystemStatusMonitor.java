@@ -58,6 +58,18 @@ public class SystemStatusMonitor implements java.io.Serializable {
   private String imgCutRequestName;
   private Date imgCutRequestTime;
   private Integer cameraStatus;
+  
+  private Float rootUsed;
+  private Date rootUsedTime;
+  private Float dataUsed;
+  private Date dataUsedTime;
+  private Float data1Used;
+  private Date data1UsedTime;
+  private Float data2Used;
+  private Date data2UsedTime;
+  private Float data3Used;
+  private Date data3UsedTime;
+  private Integer astroFlag;
 
   public SystemStatusMonitor() {
   }
@@ -552,4 +564,168 @@ public class SystemStatusMonitor implements java.io.Serializable {
     this.cameraStatus = cameraStatus;
   }
 
+  /**
+   * @return the rootUsed
+   */
+  @Column(name = "root_used")
+  public Float getRootUsed() {
+    return rootUsed;
+  }
+
+  /**
+   * @param rootUsed the rootUsed to set
+   */
+  public void setRootUsed(Float rootUsed) {
+    this.rootUsed = rootUsed;
+  }
+
+  /**
+   * @return the rootUsedTime
+   */
+  @Column(name = "root_used_time")
+  public Date getRootUsedTime() {
+    return rootUsedTime;
+  }
+
+  /**
+   * @param rootUsedTime the rootUsedTime to set
+   */
+  public void setRootUsedTime(Date rootUsedTime) {
+    this.rootUsedTime = rootUsedTime;
+  }
+
+  /**
+   * @return the dataUsed
+   */
+  @Column(name = "data_used")
+  public Float getDataUsed() {
+    return dataUsed;
+  }
+
+  /**
+   * @param dataUsed the dataUsed to set
+   */
+  public void setDataUsed(Float dataUsed) {
+    this.dataUsed = dataUsed;
+  }
+
+  /**
+   * @return the dataUsedTime
+   */
+  @Column(name = "data_used_time")
+  public Date getDataUsedTime() {
+    return dataUsedTime;
+  }
+
+  /**
+   * @param dataUsedTime the dataUsedTime to set
+   */
+  public void setDataUsedTime(Date dataUsedTime) {
+    this.dataUsedTime = dataUsedTime;
+  }
+
+  /**
+   * @return the data1Used
+   */
+  @Column(name = "data1_used")
+  public Float getData1Used() {
+    return data1Used;
+  }
+
+  /**
+   * @param data1Used the data1Used to set
+   */
+  public void setData1Used(Float data1Used) {
+    this.data1Used = data1Used;
+  }
+
+  /**
+   * @return the data1UsedTime
+   */
+  @Column(name = "data1_used_time")
+  public Date getData1UsedTime() {
+    return data1UsedTime;
+  }
+
+  /**
+   * @param data1UsedTime the data1UsedTime to set
+   */
+  public void setData1UsedTime(Date data1UsedTime) {
+    this.data1UsedTime = data1UsedTime;
+  }
+
+  /**
+   * @return the data2Used
+   */
+  @Column(name = "data2_used")
+  public Float getData2Used() {
+    return data2Used;
+  }
+
+  /**
+   * @param data2Used the data2Used to set
+   */
+  public void setData2Used(Float data2Used) {
+    this.data2Used = data2Used;
+  }
+
+  /**
+   * @return the data2UsedTime
+   */
+  @Column(name = "data2_used_time")
+  public Date getData2UsedTime() {
+    return data2UsedTime;
+  }
+
+  /**
+   * @param data2UsedTime the data2UsedTime to set
+   */
+  public void setData2UsedTime(Date data2UsedTime) {
+    this.data2UsedTime = data2UsedTime;
+  }
+
+  /**
+   * @return the data3Used
+   */
+  @Column(name = "data3_used")
+  public Float getData3Used() {
+    return data3Used;
+  }
+
+  /**
+   * @param data3Used the data3Used to set
+   */
+  public void setData3Used(Float data3Used) {
+    this.data3Used = data3Used;
+  }
+
+  /**
+   * @return the data3UsedTime
+   */
+  @Column(name = "data3_used_time")
+  public Date getData3UsedTime() {
+    return data3UsedTime;
+  }
+
+  /**
+   * @param data3UsedTime the data3UsedTime to set
+   */
+  public void setData3UsedTime(Date data3UsedTime) {
+    this.data3UsedTime = data3UsedTime;
+  }
+
+  /**
+   * @return the astroFlag
+   */
+  @Column(name = "astro_flag")
+  public Integer getAstroFlag() {
+    return astroFlag;
+  }
+
+  /**
+   * @param astroFlag the astroFlag to set
+   */
+  public void setAstroFlag(Integer astroFlag) {
+    this.astroFlag = astroFlag;
+  }
 }

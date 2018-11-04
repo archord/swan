@@ -5,13 +5,11 @@
 package com.gwac.job;
 
 import com.gwac.dao.CameraDao;
-import com.gwac.dao.FeedbackFocusDao;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.Camera;
-import com.gwac.model.FeedbackFocus;
 import com.gwac.model.FitsFile2Show;
 import com.gwac.model.ImageStatusParameter;
 import com.gwac.model.UploadFileUnstore;

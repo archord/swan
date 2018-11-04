@@ -116,7 +116,25 @@
           }, fillColorIdx: this.fillColorIdx},
         {label: "预览图", min: 0, max: 0, time: "thumbnailTime", title: function(d) {
             return d.thumbnailName + "(" + d.thumbnailTime + ")";
-          }, fillColorIdx: this.fillColorIdx}
+          }, fillColorIdx: this.fillColorIdx},
+        {label: "AstroFlag", min: 0, max: 0, time: "astroFlag", title: function(d) {
+            return d.astroFlag;
+          }, fillColorIdx: this.fillColorIdxShutter},
+        {label: "rootUsed", min: 0, max: 0, time: "rootUsed", title: function(d) {
+            return (d.rootUsed*100).toFixed(2) + "%(" + d.rootUsedTime + ")";
+          }, fillColorIdx: this.fillColorIdxDiskUse},
+        {label: "dataUsed", min: 0, max: 0, time: "dataUsed", title: function(d) {
+            return (d.dataUsed*100).toFixed(2) + "%(" + d.dataUsedTime + ")";
+          }, fillColorIdx: this.fillColorIdxDiskUse},
+        {label: "data1Used", min: 0, max: 0, time: "data1Used", title: function(d) {
+            return (d.data1Used*100).toFixed(2) + "%(" + d.data1UsedTime + ")";
+          }, fillColorIdx: this.fillColorIdxDiskUse},
+        {label: "data2Used", min: 0, max: 0, time: "data2Used", title: function(d) {
+            return (d.data2Used*100).toFixed(2) + "%(" + d.data2UsedTime + ")";
+          }, fillColorIdx: this.fillColorIdxDiskUse},
+        {label: "data3Used", min: 0, max: 0, time: "data3Used", title: function(d) {
+            return (d.data3Used*100).toFixed(2) + "%(" + d.data3UsedTime + ")";
+          }, fillColorIdx: this.fillColorIdxDiskUse}
       ];
 
       var w1 = this.grid1W > this.grid1H ? this.grid1H : this.grid1W;
@@ -383,6 +401,29 @@
           idx = 3;
         } else if (timeDiff < 60 * 1000) {
           idx = 2;
+        }
+      }
+      return idx;
+    },
+    fillColorIdxDiskUse: function(d, parmName, nowDateTime) {
+      var idx = 4;
+      var parmValue = d[parmName];
+      if (parmValue !== null) {
+        //白，灰，绿，橙，红
+        if (parmValue<0.8) {
+          idx = 2;
+        } else if (parmValue>=0.8) {
+          idx = 3;
+        }
+      }
+      return idx;
+    },
+    fillColorIdxShutter: function(d, parmName, nowDateTime) {
+      var idx = 2;
+      var parmValue = d[parmName];
+      if (parmValue !== null) {
+        if (parmName>=-13 && parmName<=-11) {
+          idx = 4;
         }
       }
       return idx;
