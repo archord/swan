@@ -98,6 +98,11 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
   /**
    */
   public void checkObjects() {
+    
+    boolean autoFollowUp = Boolean.parseBoolean(wgpdao.getValueByName("AutoFollowUp")); 
+    if(!autoFollowUp){
+      return;
+    }
 
     String chatId = "gwac003"; //GWAC_OT_gft_alert 
     Integer fupStage2StartTime = Integer.parseInt(wgpdao.getValueByName("fupStage2StartTime")); //第二次后随距离第一次后随的时间，单位分钟
@@ -115,7 +120,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         Date curDate = new Date();
         double diffMinutes = (curDate.getTime() - discoveryTimeUtc.getTime()) / (1000 * 60.0) - 8 * 60;
         log.debug("check " + ot2.getName() + ", diffMinutes: " + diffMinutes + ", status: " + sciObj.getStatus());
-        if (sciObj.getStatus() == 1) {
+        if (sciObj.getStatus() == 1 && diffMinutes<60) { //超过60分钟的，目标很大可能是来自于自动后随关闭后的目标，这种目标不用触发警报
           if (sciObj.getTriggerStatus() == 1) {
             String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\n", sciObj.getName(), sciObj.getType());
             sendMsgService.send(tmsg, chatId);
