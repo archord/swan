@@ -71,6 +71,7 @@
               <option value="proc_time">数据处理时间</option>
               <option value="temperature_actual">实际温度</option>
               <option value="temperature_set" >设定温度</option>
+              <option value="astro_flag" >AstroFlag</option>
             </select><br/>
             <!--多条曲线过滤显示，请参考:http://www.flotcharts.org/flot/examples/series-toggle/index.html-->
             <select name="formqp.mountList" id="mountList" class="form-control select select-primary" data-toggle="select" size="5">

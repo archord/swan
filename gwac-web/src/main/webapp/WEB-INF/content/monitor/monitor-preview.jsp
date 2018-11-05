@@ -40,12 +40,13 @@
                     <option value="" selected>未选择</option>
                 </select>&nbsp;
                 <select name="ccdList" id="ccdList" class="form-control select select-primary" data-toggle="select">
+                    <option value="" selected>未选择</option>
                     <option value="G011">G011</option>
                     <option value="G012">G012</option>
                     <option value="G013">G013</option>
                     <option value="G014">G014</option>
                     <option value="G015">G015</option>
-                    <option value="G021" selected>G021</option>
+                    <option value="G021">G021</option>
                     <option value="G022">G022</option>
                     <option value="G023">G023</option>
                     <option value="G024">G024</option>
@@ -136,10 +137,32 @@
                 }
               });
             }
+            function loadCCDList() {
+              var gwacRootURL = $("#gwacRootURL").val();
+              var queryUrl = gwacRootURL + "/image-preview-json.action";
+              $('#ccdList').find('option').remove();
+              $.ajax({
+                type: "get",
+                url: queryUrl,
+                data: 'dataType=ccdList',
+                async: false,
+                dataType: 'json',
+                success: function (data) {
+                  var ccdStr = data.rstData;
+                  var dateS = ccdStr.split(",");
+                  $.each(dateS, function (i, item) {
+                    $('#ccdList').append($('<option>', {
+                      value: item,
+                      text: item
+                    }));
+                  });
+                }
+              });
+            }
             $(function () {
               loadDateList();
               //$('#container').waterfall(toption);
-              //$('#dateList').change(reloadImgs);
+              $('#dateList').change(loadCCDList);
               //$('#ccdList').change(reloadImgs);
               $("#imgPreBtn").click(reloadImgs);
             });
