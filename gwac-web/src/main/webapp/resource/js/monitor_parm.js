@@ -154,7 +154,7 @@ $(function() {
       });
     }
 
-    if ("bg_bright" !== parmType && "obj_num" !== parmType) {
+    if ("bg_bright" !== parmType && "obj_num" !== parmType && "astro_flag" !== parmType) {
       plotOption.yaxis = {
         min: parmProperty[parmType].min,
         max: parmProperty[parmType].max,

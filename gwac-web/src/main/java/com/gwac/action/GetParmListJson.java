@@ -47,6 +47,7 @@ public class GetParmListJson extends ActionSupport {
     queryParms.add("proc_time");
     queryParms.add("temperature_actual");
     queryParms.add("temperature_set");
+    queryParms.add("astro_flag");
     if (queryParms.contains(queryParm)) {
       if (queryParm.equals("posshift")) {
         ArrayList<String> plist = new ArrayList();

@@ -64,6 +64,14 @@ public class MonitorImagePreview extends ActionSupport {
       String imgRootPath = rootPath + thead;
       log.warn(imgRootPath);
       rstData = getAllDirListStr(imgRootPath);
+    } else if (dataType.equals("ccdList")) {
+      if (dateStr != null && dateStr.length() > 0) {
+      String imgRootPath = rootPath + thead + "/" + dateStr;
+      log.warn(imgRootPath);
+      rstData = getAllCCDListStr(imgRootPath);
+      }else{
+        rstData = "";
+      }
     } else if (dataType.equals("imageList")) {
       if (dateStr != null && ccdStr != null && dateStr.length() > 0 && ccdStr.length() > 0) {
         String tImgPath = rootPath + thead + "/" + dateStr + "/" + ccdStr;
@@ -206,6 +214,13 @@ public class MonitorImagePreview extends ActionSupport {
         log.error("read write file error:" + dateList, e);
       }
     }
+    return tstr;
+  }
+
+  public String getAllCCDListStr(String path) {
+
+    int dirNameLength = 4;
+    String tstr = dirContent2Str(path, dirNameLength);
     return tstr;
   }
 
