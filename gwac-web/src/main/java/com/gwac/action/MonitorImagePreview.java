@@ -161,7 +161,7 @@ public class MonitorImagePreview extends ActionSupport {
   public String getAllDirListStr(String path) {
 
     //181027
-    int dirNameLength = 8;
+    int dirNameLength = 6;
     String tstr = "";
     String dateList = path + "/thumbnailDateList.txt";
     File tfile = new File(dateList);

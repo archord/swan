@@ -138,13 +138,14 @@
               });
             }
             function loadCCDList() {
+              var dateStr = $('#dateList').val();
               var gwacRootURL = $("#gwacRootURL").val();
               var queryUrl = gwacRootURL + "/image-preview-json.action";
               $('#ccdList').find('option').remove();
               $.ajax({
                 type: "get",
                 url: queryUrl,
-                data: 'dataType=ccdList',
+                data: 'dataType=ccdList&dateStr='+dateStr,
                 async: false,
                 dataType: 'json',
                 success: function (data) {
