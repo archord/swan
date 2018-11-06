@@ -241,8 +241,11 @@ public class MonitorImagePreview extends ActionSupport {
             for (File file3 : file21) {
               if (file3.isDirectory()) {
                 File[] file31 = file3.listFiles(); //fitsImgs
-                tnum = tnum + file31.length;
-                dirNum++;
+                if(file31.length>0){
+                  tnum = 1;
+                  dirNum = 1;
+                  break;
+                }
               }
             }
             if (dirNum > 0 && tnum > 0) {
