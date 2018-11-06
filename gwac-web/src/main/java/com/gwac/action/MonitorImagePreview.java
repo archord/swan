@@ -67,7 +67,7 @@ public class MonitorImagePreview extends ActionSupport {
     } else if (dataType.equals("ccdList")) {
       if (dateStr != null && dateStr.length() > 0) {
         String imgRootPath = rootPath + thead + "/" + dateStr;
-        log.warn(imgRootPath);
+        log.debug(imgRootPath);
         rstData = getAllCCDListStr(imgRootPath);
       } else {
         rstData = "";
@@ -76,9 +76,11 @@ public class MonitorImagePreview extends ActionSupport {
       if (dateStr != null && ccdStr != null && dateStr.length() > 0 && ccdStr.length() > 0) {
         String tImgPath = rootPath + thead + "/" + dateStr + "/" + ccdStr;
         String urlPath = "http://www.gwac.top/images/" + thead + "/" + dateStr + "/" + ccdStr + "/";
-        log.warn(tImgPath);
-        log.warn(urlPath);
-        rstData = getImageListStr(tImgPath, urlPath);
+        String fitUrlPath = "http://www.gwac.top/images/gwac_orig_fits/" + dateStr 
+                + "/" +ccdStr.charAt(0) + "0" + ccdStr.substring(1, 3) + "_" + ccdStr.substring(1) + "/";
+        log.debug(tImgPath);
+        log.debug(urlPath);
+        rstData = getImageListStr(tImgPath, urlPath, fitUrlPath);
       } else {
         rstData = "";
       }
@@ -89,7 +91,7 @@ public class MonitorImagePreview extends ActionSupport {
     return "json";
   }
 
-  public String getImageListStr(String path, String urlPath) {
+  public String getImageListStr(String path, String urlPath, String fitUrlPath) {
 
     int PAGE_NUM = 20;
     //G023_mon_objt_181025T12574229_min.jpg
@@ -142,9 +144,10 @@ public class MonitorImagePreview extends ActionSupport {
         sb2.append(urlPath);
         sb2.append(timgs[i]);
         sb2.append("','fullUrl': '");
-        sb2.append(urlPath);
+        sb2.append(fitUrlPath);
         sb2.append(tname);
-        sb2.append(".jpg','imgName': '");
+        //sb2.append(".jpg','imgName': '");
+        sb2.append(".fit.fz','imgName': '");
         sb2.append(tname);
         sb2.append("','width': 400,'height': 400");
         sb2.append("},");
