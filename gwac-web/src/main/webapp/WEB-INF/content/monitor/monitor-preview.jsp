@@ -112,6 +112,8 @@ function loadDateList() {
     success: function (data) {
       var dateStr = data.rstData;
       var dateS = dateStr.split(",");
+      dateS.sort();
+      dateS.reverse()
       $('#dateList').append($('<option>', {
         value: "",
         text: "未选择"
