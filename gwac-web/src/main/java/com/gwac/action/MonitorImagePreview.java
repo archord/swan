@@ -173,7 +173,7 @@ public class MonitorImagePreview extends ActionSupport {
         Date now = new Date();
         double seconds = (now.getTime() - changeTime.toMillis()) * 0.001;
         if (seconds > 600) {
-          tstr = dirContent2Str(path, dirNameLength);
+          tstr = dirContent2Str2(path, dirNameLength);
           FileWriter fileWritter = new FileWriter(tfile);
           fileWritter.write(tstr);
           fileWritter.close();
@@ -224,14 +224,45 @@ public class MonitorImagePreview extends ActionSupport {
     return tstr;
   }
 
+  public String dirContent2Str2(String path, int nameLength) {
+    StringBuilder sb = new StringBuilder("");
+    File file = new File(path);
+    if (file.exists()) {
+      File[] files = file.listFiles();//dateStrs
+      for (File file2 : files) {
+        if (file2.getName().length() == nameLength) {
+          if (file2.isDirectory()) {
+            File[] file21 = file2.listFiles(); //ccdNames
+            int tnum = 0; //fitsImg Number
+            int dirNum = 0; //ccdName Number
+            for (File file3 : file21) {
+              if (file3.isDirectory()) {
+                File[] file31 = file3.listFiles(); //fitsImgs
+                tnum = tnum + file31.length;
+                dirNum++;
+              }
+            }
+            if (dirNum > 0 && tnum > 0) {
+              sb.append(file2.getName());
+              sb.append(",");
+            }
+          }
+        }
+      }
+    }
+    String tstr = sb.toString();
+    if (tstr.length() > 0) {
+      tstr = tstr.substring(0, tstr.length() - 1);
+    }
+    return tstr;
+  }
+
   public String dirContent2Str(String path, int nameLength) {
     StringBuilder sb = new StringBuilder("");
     File file = new File(path);
     if (file.exists()) {
       File[] files = file.listFiles();
-      //for (File file2 : files) {
-      for (int i = 0; i < files.length; i++) {
-        File file2 = files[files.length - 1 - i];
+      for (File file2 : files) {
         if (file2.getName().length() == nameLength) {
           if (file2.isDirectory()) {
             File[] tfiles21 = file2.listFiles();
