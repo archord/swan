@@ -66,10 +66,10 @@ public class MonitorImagePreview extends ActionSupport {
       rstData = getAllDirListStr(imgRootPath);
     } else if (dataType.equals("ccdList")) {
       if (dateStr != null && dateStr.length() > 0) {
-      String imgRootPath = rootPath + thead + "/" + dateStr;
-      log.warn(imgRootPath);
-      rstData = getAllCCDListStr(imgRootPath);
-      }else{
+        String imgRootPath = rootPath + thead + "/" + dateStr;
+        log.warn(imgRootPath);
+        rstData = getAllCCDListStr(imgRootPath);
+      } else {
         rstData = "";
       }
     } else if (dataType.equals("imageList")) {
@@ -79,7 +79,7 @@ public class MonitorImagePreview extends ActionSupport {
         log.warn(tImgPath);
         log.warn(urlPath);
         rstData = getImageListStr(tImgPath, urlPath);
-      }else{
+      } else {
         rstData = "";
       }
       if (rstData.isEmpty()) {
@@ -225,17 +225,24 @@ public class MonitorImagePreview extends ActionSupport {
   }
 
   public String dirContent2Str(String path, int nameLength) {
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder("");
     File file = new File(path);
     if (file.exists()) {
       File[] files = file.listFiles();
       //for (File file2 : files) {
-      for (int i=0; i<files.length; i++) {
-        File file2 = files[files.length-1-i];
-//        if (file2.isDirectory() && file2.getName().length() == nameLength) {
+      for (int i = 0; i < files.length; i++) {
+        File file2 = files[files.length - 1 - i];
         if (file2.getName().length() == nameLength) {
-          sb.append(file2.getName());
-          sb.append(",");
+          if (file2.isDirectory()) {
+            File[] tfiles21 = file2.listFiles();
+            if (tfiles21.length > 0) {
+              sb.append(file2.getName());
+              sb.append(",");
+            }
+          } else {
+            sb.append(file2.getName());
+            sb.append(",");
+          }
         }
       }
     }
