@@ -185,8 +185,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
               break;
             case "impre":
               tfileType = 'a';
-              String thead = getText("gwacDataThumbnailDirectory");
-              tpath = rootPath + thead + "/" + dateStr + "/" + dpmName;
+              tpath = rootPath + getText("gwacMonitorimageDirectory");
               break;
             case "magclb":
               tfileType = '9';
