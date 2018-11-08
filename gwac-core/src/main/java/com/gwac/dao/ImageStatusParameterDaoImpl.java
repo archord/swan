@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository(value="ispDao")
+@Repository(value = "ispDao")
 public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatusParameter> implements ImageStatusParameterDao {
 
   private static final Log log = LogFactory.getLog(ImageStatusParameterDaoImpl.class);
@@ -66,7 +66,6 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     return q.list();
   }
 
-  
   /**
    * 获取当前库中所有参数
    *
@@ -139,7 +138,24 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
     }
     return rst;
   }
-  
+
+  @Override
+  public String getPointJsonByParm(String dateStr, int dpmId, float ra, float dec) {
+    Session session = getCurrentSession();
+    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mount_ra, mount_dec, img_center_ra, img_center_dec, prc_num, time_obs_ut) r ORDER BY time_obs_ut))) "
+            + "FROM image_status_parameter_his "
+            + "WHERE dpm_id=" + dpmId 
+            + " and time_obs_ut>'" + dateStr + " 8:00:00' and time_obs_ut<'" 
+            + dateStr + " 23:59:59' and abs(mount_ra-" + ra + ")<0.1  and abs(mount_dec-" + dec + ")<0.1";
+    log.debug(sql);
+    String rst = "";
+    Query q = session.createSQLQuery(sql);
+    if (q.list().size() > 0) {
+      rst = (String) q.list().get(0);
+    }
+    return rst;
+  }
+
   /**
    * 获取最新一帧的参数
    *

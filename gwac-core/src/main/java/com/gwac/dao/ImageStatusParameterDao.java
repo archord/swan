@@ -33,4 +33,5 @@ public interface ImageStatusParameterDao extends BaseHibernateDao<ImageStatusPar
   
   public Date getMinDate();
   
+  public String getPointJsonByParm(String dateStr,int dpmId, float ra, float dec);
 }

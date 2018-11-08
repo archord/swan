@@ -7,6 +7,7 @@ package com.gwac.dao;
 
 import com.gwac.model.ObservationPlan;
 import java.math.BigInteger;
+import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Query;
@@ -66,4 +67,33 @@ public class ObservationPlanDaoImpl extends BaseHibernateDaoImpl<ObservationPlan
     }
     return rst;
   }
+
+  @Override
+  public List<String> getFieldId(String dateStr, String unitId) {
+
+    String sql = "select DISTINCT field_id "
+            + "from observation_plan "
+            + "where unit_id='" + unitId + "' and op_time>='" + dateStr + " 8:00:00' and op_time<'" + dateStr + " 23:59:59'";
+
+    Query q = this.getCurrentSession().createSQLQuery(sql);
+    return q.list();
+  }
+
+  @Override
+  public ObservationPlan getLatestObservationPlanByFieldId(String unitId, String fieldId) {
+
+    String sql = "select * "
+            + "from observation_plan "
+            + "where unit_id='" + unitId + "' and field_id='" + fieldId + "'  "
+            + "ORDER BY op_id desc limit 1";
+
+    Query q = this.getCurrentSession().createSQLQuery(sql).addEntity(ObservationPlan.class);
+    
+    ObservationPlan tobsPlan = null;
+    if(q.list().size()>0){
+      tobsPlan = (ObservationPlan)q.list().get(0);
+    }
+    return tobsPlan;
+  }
+
 }
