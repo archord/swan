@@ -66,7 +66,7 @@
               <option value="004">转台4</option>
               <option value="005">转台5</option>
             </select><br/>
-            <select name="fieldId" id="fieldId" class="form-control select select-primary" data-toggle="select" size="3">
+            <select name="fieldId" id="fieldId" class="form-control select select-primary" data-toggle="select" size="6">
             </select>
           </div>
         </div>

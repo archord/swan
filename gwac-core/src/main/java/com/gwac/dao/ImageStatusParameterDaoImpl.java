@@ -142,14 +142,21 @@ public class ImageStatusParameterDaoImpl extends BaseHibernateDaoImpl<ImageStatu
   @Override
   public String getPointJsonByParm(String dateStr, int dpmId, float ra, float dec) {
     Session session = getCurrentSession();
-    String sql = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mount_ra, mount_dec, img_center_ra, img_center_dec, prc_num, time_obs_ut) r ORDER BY time_obs_ut))) "
+    String unionSql = "";
+    String sql1 = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mount_ra, mount_dec, img_center_ra, img_center_dec, prc_num, time_obs_ut) r ))) "
             + "FROM image_status_parameter_his "
             + "WHERE dpm_id=" + dpmId 
             + " and time_obs_ut>'" + dateStr + " 8:00:00' and time_obs_ut<'" 
             + dateStr + " 23:59:59' and abs(mount_ra-" + ra + ")<0.1  and abs(mount_dec-" + dec + ")<0.1";
-    log.debug(sql);
+    String sql2 = "SELECT text(JSON_AGG((SELECT r FROM (SELECT mount_ra, mount_dec, img_center_ra, img_center_dec, prc_num, time_obs_ut) r ))) "
+            + "FROM image_status_parameter "
+            + "WHERE dpm_id=" + dpmId 
+            + " and time_obs_ut>'" + dateStr + " 8:00:00' and time_obs_ut<'" 
+            + dateStr + " 23:59:59' and abs(mount_ra-" + ra + ")<0.1  and abs(mount_dec-" + dec + ")<0.1";
+    unionSql = "(" + sql1 + ") union (" + sql2 + ") ";
+    log.debug(unionSql);
     String rst = "";
-    Query q = session.createSQLQuery(sql);
+    Query q = session.createSQLQuery(unionSql);
     if (q.list().size() > 0) {
       rst = (String) q.list().get(0);
     }
