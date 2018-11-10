@@ -46,10 +46,10 @@ $(function () {
   };
 
   var parmProperty = [
-    {label: '赤经',name: 'ra', min: 0, max: 10, note: '', unit: ''},
-    {label: '赤纬',name: 'dec', min: 0, max: 10, note: '', unit: ''}
+    {label: '赤经', name: 'ra', min: 0, max: 10, note: '', unit: ''},
+    {label: '赤纬', name: 'dec', min: 0, max: 10, note: '', unit: ''}
   ];
-  
+
   initStarCurveShow();
 //  loadStarRecords();
   $('#unitId').change(loadFieldList);
@@ -72,8 +72,8 @@ $(function () {
   }
 
   function curveShow(data) {
-    
-    if (typeof (data.parStr) === "undefined" || data.parStr===null)
+
+    if (typeof (data.parStr) === "undefined" || data.parStr === null)
     {
       alert("该天区没有数据，或者对应的FFOV没有工作,请选择其他天区！");
       return;
@@ -86,7 +86,7 @@ $(function () {
 
     $('#startDay').html(minDate);
 
-    if (typeof (parmList) === "undefined" || parmList===null)
+    if (typeof (parmList) === "undefined" || parmList === null)
     {
       parmList = [];
     }
@@ -99,12 +99,20 @@ $(function () {
     var coorShow2 = [];
     var coorShow3 = [];
     var coorShow4 = [];
-    $.each(parmList, function(j, item2) {
+    $.each(parmList, function (j, item2) {
       var minute = item2['dateObj'] - minDateMinute;
-      coorShow1.push([minute, item2["mount_ra"]]);
-      coorShow2.push([minute, item2["img_center_ra"]]);
-      coorShow3.push([minute, item2["mount_dec"]]);
-      coorShow4.push([minute, item2["img_center_dec"]]);
+      var mRa = item2["mount_ra"];
+      var mDec = item2["mount_dec"];
+      var iRa = item2["img_center_ra"];
+      var iDec = item2["img_center_dec"];
+      coorShow1.push([minute, mRa]);
+      coorShow3.push([minute, mDec]);
+      if (Math.abs(iRa) > 0.000001) {
+        coorShow2.push([minute, iRa]);
+      }
+      if (Math.abs(iDec) > 0.000001) {
+        coorShow4.push([minute, iDec]);
+      }
     });
     formatedObjList.push({
       label: "计划指向RA",
@@ -172,14 +180,14 @@ $(function () {
 
   function loadFieldList() {
     var queryUrl = gwacRootURL + "/query-mount-obs-fieldId.action";
-    
+
     var obsDate = $('#obsDate').val();
     var unitId = $('#unitId').val();
-    if (obsDate==="") {
+    if (obsDate === "") {
       alert("请选择日期！");
       return;
     }
-    if (unitId==="") {
+    if (unitId === "") {
       alert("请选择转台！");
       return;
     }
@@ -187,7 +195,7 @@ $(function () {
     $.ajax({
       type: "get",
       url: queryUrl,
-      data: "obsDate="+obsDate+"&unitId="+unitId,
+      data: "obsDate=" + obsDate + "&unitId=" + unitId,
       async: false,
       dataType: 'json',
       success: function (data) {
@@ -203,29 +211,29 @@ $(function () {
       }
     });
   }
-  
+
   function loadPointData() {
     var queryUrl = gwacRootURL + "/get-point-list-json.action";
-    
+
     var obsDate = $('#obsDate').val();
     var unitId = $('#unitId').val();
     var fieldId = $('#fieldId').val();
-    if (obsDate==="") {
+    if (obsDate === "") {
       alert("请选择日期！");
       return;
     }
-    if (unitId==="") {
+    if (unitId === "") {
       alert("请选择转台！");
       return;
     }
-    if (fieldId==="") {
+    if (fieldId === "") {
       alert("请选择天区！");
       return;
     }
     $.ajax({
       type: "get",
       url: queryUrl,
-      data: "obsDate="+obsDate+"&unitId="+unitId+"&fieldId="+fieldId,
+      data: "obsDate=" + obsDate + "&unitId=" + unitId + "&fieldId=" + fieldId,
       async: false,
       dataType: 'json',
       success: function (data) {
