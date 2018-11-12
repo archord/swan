@@ -264,7 +264,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
           FileUtils.moveFile(fitsname, fitsNameFile);
 
           String fitsName = fitsNamePath + "/" + finalName;
-          String runCmd = "/home/gwac/software/cfitsio/fpack " + fitsName;
+          String runCmd = "/home/gwac/software/cfitsio/fpack -i2f -q 1 " + fitsName;
           Runtime r = Runtime.getRuntime();
           Process p = r.exec(runCmd);
           try {
