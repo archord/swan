@@ -98,9 +98,9 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
   /**
    */
   public void checkObjects() {
-    
-    boolean autoFollowUp = Boolean.parseBoolean(wgpdao.getValueByName("AutoFollowUp")); 
-    if(!autoFollowUp){
+
+    boolean autoFollowUp = Boolean.parseBoolean(wgpdao.getValueByName("AutoFollowUp"));
+    if (!autoFollowUp) {
       return;
     }
 
@@ -120,7 +120,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         Date curDate = new Date();
         double diffMinutes = (curDate.getTime() - discoveryTimeUtc.getTime()) / (1000 * 60.0) - 8 * 60;
         log.debug("check " + ot2.getName() + ", diffMinutes: " + diffMinutes + ", status: " + sciObj.getStatus());
-        if (sciObj.getStatus() == 1 && diffMinutes<60) { //超过60分钟的，目标很大可能是来自于自动后随关闭后的目标，这种目标不用触发警报
+        if (sciObj.getStatus() == 1 && diffMinutes < 60) { //超过60分钟的，目标很大可能是来自于自动后随关闭后的目标，这种目标不用触发警报
           if (sciObj.getTriggerStatus() == 1) {
             String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\n", sciObj.getName(), sciObj.getType());
             sendMsgService.send(tmsg, chatId);
@@ -137,15 +137,17 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
           if (sciObj.getTriggerStatus() == 2) {
             List<FollowUpObject> fupObjs = fupObjDao.getByOtId(ot2.getOtId(), false);
             for (FollowUpObject fupObj : fupObjs) {
-              double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
-              log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
-              if (diffMag > fupStage3MagDiff) {
-                String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2\nusnoRMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\n",
-                        sciObj.getName(), sciObj.getType(), fupObj.getR2(), fupObj.getFoundMag(), fupObj.getLastMag());
-                sendMsgService.send(tmsg, chatId);
-                sciObj.setTriggerStatus(3);
-                sciObjDao.update(sciObj);
-                break;
+              if (fupObj.getLastMag() < 21 && fupObj.getFoundMag() < 21&&fupObj.getLastMag() >0 && fupObj.getFoundMag() >0) {
+                double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
+                log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
+                if (diffMag > fupStage3MagDiff) {
+                  String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2\nusnoRMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\n",
+                          sciObj.getName(), fupObj.getFuoName(), fupObj.getR2(), fupObj.getFoundMag(), fupObj.getLastMag());
+                  sendMsgService.send(tmsg, chatId);
+                  sciObj.setTriggerStatus(3);
+                  sciObjDao.update(sciObj);
+                  break;
+                }
               }
             }
           }

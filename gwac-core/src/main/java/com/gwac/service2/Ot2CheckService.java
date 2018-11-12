@@ -5,8 +5,6 @@
  */
 package com.gwac.service2;
 
-import com.gwac.model.OtLevel2;
-import com.gwac.model2.Cvs;
 
 /**
  *

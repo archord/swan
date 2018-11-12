@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.jms.Destination;
 import javax.servlet.http.HttpServletResponse;
@@ -115,6 +117,12 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
       setEcho(echo + "Error, must set followname.\n");
       flag = false;
     }
+    //G181111_C11397_001
+    if (followname.length() < 7) {
+      setEcho(echo + "Error, followname is wrong: " + followname);
+      flag = false;
+      log.error(echo);
+    }
 
     //必须传输数据文件
     //Error, must transform data file
@@ -195,10 +203,10 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
     obj.setFileType('9');   //otlist:1, starlist:2, origimage:3, cutimage:4, 9种监控图（共108幅）:5, varlist:6, imgstatus:7, otlistSub:8, followObjectList:9, otfollowimg:A
     obj.setUploadDate(new Date());
 
-    if ((null == fitsname || null == fitsnameFileName|| fitsnameFileName.trim().isEmpty()) && 
-            null != objlistFileName && !objlistFileName.trim().isEmpty()) {
+    if ((null == fitsname || null == fitsnameFileName || fitsnameFileName.trim().isEmpty())
+            && null != objlistFileName && !objlistFileName.trim().isEmpty()) {
       String fitsNamePath = destPath;
-      String finalFitsName = objlistFileName.substring(0, objlistFileName.indexOf("_otfinalres"))+".fit";
+      String finalFitsName = objlistFileName.substring(0, objlistFileName.indexOf("_otfinalres")) + ".fit";
       FollowUpObservation fo = foDao.getByName(finalFitsName.trim());
       FollowUpFitsfile fuf = new FollowUpFitsfile();
       fuf.setFfName(finalFitsName);
@@ -254,6 +262,20 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
             FileUtils.forceDelete(fitsNameFile);
           }
           FileUtils.moveFile(fitsname, fitsNameFile);
+
+          String fitsName = fitsNamePath + "/" + finalName;
+          String runCmd = "/home/gwac/software/cfitsio/fpack " + fitsName;
+          Runtime r = Runtime.getRuntime();
+          Process p = r.exec(runCmd);
+          try {
+            int result = p.waitFor();
+            if (result != 0) {
+              log.error("fpack otfollowimg error: " + fitsName);
+            }
+          } catch (InterruptedException ex) {
+            log.error("fpack otfollowimg error!", ex);
+          }
+
         } else {
           log.error("upload file is empty: " + finalName);
         }

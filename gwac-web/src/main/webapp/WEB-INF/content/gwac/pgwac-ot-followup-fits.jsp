@@ -71,6 +71,14 @@
         <script type="text/javascript">
 
             $(function () {
+              getFollowupFitsList();
+              $("#showStart").click(function(){showFits('start');});
+              $("#showEnd").click(function(){showFits('end');});
+              $("#showBefore").click(function(){showFits('before');});
+              $("#showNext").click(function(){showFits('next');});
+              $("#totalImage").val(endNum);
+            });
+            
               var drawRadius = 20;
               var count = 1;
               var curNum = 1;
@@ -81,13 +89,8 @@
               var fitsList;
               var curFits;
               var fuoList;
-              getFollowupFitsList();
-              $("#showStart").click(showFits('start'));
-              $("#showEnd").click(showFits('end'));
-              $("#showBefore").click(showFits('before'));
-              $("#showNext").click(showFits('next'));
-              $("#totalImage").val(endNum)
-
+              
+              
               function getFollowupFitsList() {
                 var gwacRootURL = $("#gwacRootURL").val();
                 var otName = getUrlParameter("otName");
@@ -103,7 +106,7 @@
 //                showFits('start');
                 preLoadJs9Fits();
               }
-
+              
               function showFits(command) {
                 if (endNum === 0 || fitsList.length === 0) {
                   return false;
@@ -128,9 +131,9 @@
                 }
                 curFits = fitsList[curNum - 1];
                 if (curFits.path[curFits.path.length - 1] === '/') {
-                  url = curFits.path + curFits.fileName;
+                  url = curFits.path + curFits.fileName + ".fz";
                 } else {
-                  url = curFits.path + '/' + curFits.fileName;
+                  url = curFits.path + '/' + curFits.fileName + ".fz";
                 }
                 $("#title").html(curFits.fileName);
                 $("#imageNumber").html(curNum);
@@ -140,6 +143,7 @@
                 return false;
               }
 
+
               function preLoadJs9Fits() {
                 if (endNum === 0 || fitsList.length === 0) {
                   return false;
@@ -147,9 +151,9 @@
                 var url = "";
                 curFits = fitsList[0];
                 if (curFits.path[curFits.path.length - 1] === '/') {
-                  url = curFits.path + curFits.fileName;
+                  url = curFits.path + curFits.fileName + ".fz";
                 } else {
-                  url = curFits.path + '/' + curFits.fileName;
+                  url = curFits.path + '/' + curFits.fileName + ".fz";
                 }
                 $("#title").html(curFits.fileName);
                 $("#totalImage").html(fitsList.length);
@@ -212,7 +216,6 @@
                   setTimeout(setJs9Parameter, 100);
                 }
               }
-            });
 
             function getUrlParameter(sParam) {
               var sPageURL = decodeURIComponent(window.location.search.substring(1)),

@@ -128,10 +128,10 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
 
     for (FollowUpObject tobj : fupObjs) {
       if (tobj.getFuoTypeId() == catasId) {
-        if(Math.abs(tobj.getR2()-99)<1){
+        if(Math.abs(tobj.getR2()-99)<1 || Math.abs(tobj.getR2()+99)<1 || tobj.getFoundMag()>21){
           continue;
         }
-        float magDiff = tobj.getFoundMag() - tobj.getR2();
+        float magDiff = Math.abs(tobj.getFoundMag() - tobj.getR2());
         log.debug(tobj.getFuoName() + " magDiff=" + magDiff);
         if (magDiff > fupStage1MagDiff) {
           ScienceObject sciObj = new ScienceObject();
