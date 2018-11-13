@@ -39,6 +39,10 @@ public class ScienceObject implements java.io.Serializable {
   private Float objRa;
   private Float objDec;
   private Integer triggerStatus;
+  private Float foundUsnoB2;
+  private Float foundUsnoR2;
+  private Float foundUsnoI;
+  private Long fupObjId;
   
   public ScienceObject() {
   }
@@ -325,4 +329,64 @@ public class ScienceObject implements java.io.Serializable {
     this.triggerStatus = triggerStatus;
   }
   
+  /**
+   * @return the foundUsnoB2
+   */
+  @Column(name = "found_usno_b2")
+  public Float getFoundUsnoB2() {
+    return foundUsnoB2;
+  }
+
+  /**
+   * @param foundUsnoB2 the foundUsnoB2 to set
+   */
+  public void setFoundUsnoB2(Float foundUsnoB2) {
+    this.foundUsnoB2 = foundUsnoB2;
+  }
+
+  /**
+   * @return the foundUsnoR2
+   */
+  @Column(name = "found_usno_r2")
+  public Float getFoundUsnoR2() {
+    return foundUsnoR2;
+  }
+
+  /**
+   * @param foundUsnoR2 the foundUsnoR2 to set
+   */
+  public void setFoundUsnoR2(Float foundUsnoR2) {
+    this.foundUsnoR2 = foundUsnoR2;
+  }
+
+  /**
+   * @return the foundUsnoI
+   */
+  @Column(name = "found_usno_i")
+  public Float getFoundUsnoI() {
+    return foundUsnoI;
+  }
+
+  /**
+   * @param foundUsnoI the foundUsnoI to set
+   */
+  public void setFoundUsnoI(Float foundUsnoI) {
+    this.foundUsnoI = foundUsnoI;
+  }
+
+  /**
+   * @return the fupObjId
+   */
+  @Column(name = "fup_obj_id")
+  public Long getFupObjId() {
+    return fupObjId;
+  }
+
+  /**
+   * @param fupObjId the fupObjId to set
+   */
+  public void setFupObjId(Long fupObjId) {
+    this.fupObjId = fupObjId;
+  }
+
 }

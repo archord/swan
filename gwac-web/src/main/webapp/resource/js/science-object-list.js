@@ -34,8 +34,11 @@ $(function () {
       "columns": [
         {"data": "so_id"},
         {"data": "name"},
-        {"data": "mag"},
         {"data": "discovery_time_utc"},
+        {"data": "mag"},
+        {"data": "found_usno_r2"},
+        {"data": "found_usno_b2"},
+        {"data": "found_usno_i"},
         {"data": "obj_ra"},
         {"data": "fup_count"},
         {"data": "type"}
@@ -48,10 +51,19 @@ $(function () {
           "targets": 1,
           "render": formateOt2
         }, {
-          "targets": 2,
+          "targets": 3,
           "render": formateMag
         }, {
           "targets": 4,
+          "render": formateMag
+        }, {
+          "targets": 5,
+          "render": formateMag
+        }, {
+          "targets": 6,
+          "render": formateMag
+        }, {
+          "targets": 7,
           "render": formatePosition
         }],
       "language": {

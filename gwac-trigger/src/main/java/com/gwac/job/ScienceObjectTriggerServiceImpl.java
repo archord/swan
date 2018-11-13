@@ -122,7 +122,8 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         log.debug("check " + ot2.getName() + ", diffMinutes: " + diffMinutes + ", status: " + sciObj.getStatus());
         if (sciObj.getStatus() == 1 && diffMinutes < 60) { //超过60分钟的，目标很大可能是来自于自动后随关闭后的目标，这种目标不用触发警报
           if (sciObj.getTriggerStatus() == 1) {
-            String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\n", sciObj.getName(), sciObj.getType());
+            String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\nusnoRMag:%.2f, firstObsMag:%.2f", 
+                    sciObj.getName(), sciObj.getType(), sciObj.getFoundUsnoR2(), sciObj.getMag());
             sendMsgService.send(tmsg, chatId);
             sciObj.setTriggerStatus(2);
             sciObjDao.update(sciObj);

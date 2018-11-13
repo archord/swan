@@ -128,7 +128,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
 
     for (FollowUpObject tobj : fupObjs) {
       if (tobj.getFuoTypeId() == catasId) {
-        if(Math.abs(tobj.getR2()-99)<1 || Math.abs(tobj.getR2()+99)<1 || tobj.getFoundMag()>21){
+        if (Math.abs(tobj.getR2() - 99) < 1 || Math.abs(tobj.getR2() + 99) < 1 || tobj.getFoundMag() > 21) {
           continue;
         }
         float magDiff = Math.abs(tobj.getFoundMag() - tobj.getR2());
@@ -147,9 +147,14 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
           sciObj.setName(fupObs.getObjName());
           sciObj.setStatus(1);
           sciObj.setTriggerStatus(1);
-          sciObj.setType("CATAS");
+//          sciObj.setType("CATAS");
+          sciObj.setType(tobj.getFuoName());
           sciObj.setFupCount(1);
           sciObj.setAutoObservation(autoFollowUp);
+          sciObj.setFoundUsnoB2(tobj.getB2());
+          sciObj.setFoundUsnoR2(tobj.getR2());
+          sciObj.setFoundUsnoI(tobj.getI());
+          sciObj.setFupObjId(tobj.getFuoId());
           sciObjDao.save(sciObj);
           fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
           sciObjDao.updateFupCount(sciObj.getSoId());
@@ -171,9 +176,14 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
         sciObj.setName(fupObs.getObjName());
         sciObj.setStatus(1);
         sciObj.setTriggerStatus(1);
-        sciObj.setType("MINIOT");
+//        sciObj.setType("MINIOT");
+        sciObj.setType(tobj.getFuoName());
         sciObj.setFupCount(1);
         sciObj.setAutoObservation(autoFollowUp);
+        sciObj.setFoundUsnoB2(tobj.getB2());
+        sciObj.setFoundUsnoR2(tobj.getR2());
+        sciObj.setFoundUsnoI(tobj.getI());
+        sciObj.setFupObjId(tobj.getFuoId());
         sciObjDao.save(sciObj);
         fupObsDao.updateSciObjId(fupObs.getObjName(), sciObj.getSoId());
         sciObjDao.updateFupCount(sciObj.getSoId());
@@ -185,7 +195,7 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
 
   public void getParm() {
 
-    autoFollowUp = Boolean.parseBoolean(wgpdao.getValueByName("AutoFollowUp")); 
+    autoFollowUp = Boolean.parseBoolean(wgpdao.getValueByName("AutoFollowUp"));
     fupStage1MagDiff = Double.parseDouble(wgpdao.getValueByName("fupStage1MagDiff"));
     fupStage1MinRecordNum = Integer.parseInt(wgpdao.getValueByName("fupStage1MinRecordNum"));
 
