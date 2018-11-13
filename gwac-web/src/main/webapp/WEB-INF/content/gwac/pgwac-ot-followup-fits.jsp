@@ -52,7 +52,7 @@
             <div class="JS9Menubar" id="JS9Menubar"></div>
             <div id="navi">
                 <input type="hidden" id="gwacRootURL" value="${pageContext.request.contextPath}"/>
-                <p id="title"></p>
+                <p><a href="" id="downloadFits" title="点击下载Fits图像" target='_blank'><span id="title"></span></a></p>
                 <p>显示第<span id="imageNumber" style="font-weight:bold;font-size: 14px;">1</span>帧，共<span id='totalImage'></span>帧</p>
                 <p id="start"><a href="#" id="showStart">起始帧</a></p>
                 <p id="end"><a href="#" id="showEnd">结束帧</a></p>
@@ -136,6 +136,7 @@
                   url = curFits.path + '/' + curFits.fileName + ".fz";
                 }
                 $("#title").html(curFits.fileName);
+                $("#downloadFits").attr("href", url);
                 $("#imageNumber").html(curNum);
                 curFitsName = curFits.fileName;
 
@@ -156,6 +157,7 @@
                   url = curFits.path + '/' + curFits.fileName + ".fz";
                 }
                 $("#title").html(curFits.fileName);
+                $("#downloadFits").attr("href", url);
                 $("#totalImage").html(fitsList.length);
                 var option = {zoom: 'toFit', colormap: 'grey', contrast: 4.0, bias: 0.4, scale: "log"};
                 JS9.Preload(url, option);
