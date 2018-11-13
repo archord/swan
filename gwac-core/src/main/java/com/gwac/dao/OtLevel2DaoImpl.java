@@ -386,14 +386,15 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     return null;
   }
   
+  @Override
   public OtLevel2 existInLatestN(OtLevel2 obj, float errorBox, int n) {
-    Boolean flag = false;
     Session session = getCurrentSession();
     
     String sql = "select * from ot_level2 "
             + " where last_ff_number>" + (obj.getLastFfNumber() - n)
-            + " and dpm_id=" + obj.getDpmId()
-            //            + " and date_str='"+obj.getDateStr() + "'"
+            + " dpm_id=" + obj.getDpmId()
+            + " and sky_id=" + obj.getSkyId()
+            + " and data_produce_method='" + obj.getDataProduceMethod() + "'"
             + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
     if (!q.list().isEmpty()) {

@@ -75,8 +75,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   private String cutIDir;
   @Value("#{syscfg.gwacErrorbox}")
   private float errorBox;
+  @Value("#{syscfg.gwacErrorbox2}")
+  private float errorBox2;
   @Value("#{syscfg.gwacSuccessiveImageNumber}")
   private int successiveImageNumber;
+  @Value("#{syscfg.gwacSuccessiveImageNumber2}")
+  private int successiveImageNumber2;
   @Value("#{syscfg.gwacFirstNMarkNumber}")
   private int firstNMarkNumber;
   @Value("#{syscfg.gwacOccurImageNumber}")
@@ -168,6 +172,9 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较
         OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
+        if (tlv2 == null) {
+          tlv2 = otLv2Dao.existInLatestN(otLv2, errorBox2, successiveImageNumber2);
+        }
         if (tlv2 != null) {
           log.debug("match ot2:" + tlv2.getOtId());
           if (tlv2.getFirstFfNumber() > number) {
