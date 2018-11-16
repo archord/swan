@@ -101,7 +101,7 @@
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>回看2</h4>
             <select name="ot2qp.lookBackCnn" id="lookBackCnn" class="form-control">
-              <option value="-1">未处理</option>
+              <option value="">未处理</option>
               <option value="1">1.0</option>
               <option value="0.9">0.9</option>
               <option value="0.8">0.8</option>
