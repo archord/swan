@@ -35,8 +35,8 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
-/* curl command example: */
-/* curl http://localhost/otLookBack.action -F ot2name=M151017_C00020 -F flag=1 */
+ /* curl command example: */
+ /* curl http://localhost/otLookBack.action -F ot2name=M151017_C00020 -F flag=1 */
 /**
  * @author xy
  */
@@ -135,17 +135,36 @@ public class OTLookBack extends ActionSupport {
   public void autoFollowUp() {
 
     log.debug("start auto follow up, ot2name=" + ot2name);
-
     OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+    if (ot2 == null) {
+      return;
+    }
+    if (ot2.getIsMatch() == 0) {
+      log.warn("query isMatch 1, ot2name=" + ot2name + ", isMatch=" + ot2.getIsMatch());
+      for (int i = 0; i < 5; i++) {
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e) {
+          log.error("sleep error", e);
+        }
+        ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+        if (ot2.getIsMatch() > 0) {
+          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + ot2.getIsMatch());
+          break;
+        }else{
+          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + ot2.getIsMatch());
+        }
+      }
+    }
 
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
 //            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
     if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)) {
       ot2StreamNodeTimeDao.updateLookUpTime(ot2.getOtId());
-      
+
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
       ot2Dao.updateFoCount(ot2);
-      
+
       String filter = webGlobalParameterDao.getValueByName("Filter");
       String frameCount = webGlobalParameterDao.getValueByName("FrameCount");
       String exposeDuration = webGlobalParameterDao.getValueByName("ExposeDuration");
