@@ -24,6 +24,7 @@ import com.gwac.model.Ot2StreamNodeTime;
 import com.gwac.model4.OTCatalog;
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
+import com.gwac.model.UploadFileUnstore;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -94,8 +95,43 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
 
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource(name="otCheckDest")
+  @Resource(name = "otCheckDest")
   private Destination otCheckDest;
+
+  public void startJob() {
+
+//    if (isTestServer) {
+//      return;
+//    }
+    if (running == true) {
+      log.debug("start job...");
+      running = false;
+    } else {
+      log.warn("job is running, jump this scheduler.");
+      return;
+    }
+
+    long startTime = System.nanoTime();
+    try {//JDBCConnectionException or some other exception
+
+      List<UploadFileUnstore> ufus = ufuDao.getOTLevel1File();
+      log.debug("size=" + ufus.size());
+      if (!ufus.isEmpty()) {
+        for (UploadFileUnstore ufu : ufus) {
+          parseLevel1Ot(ufu.getUfuId(), ufu.getStorePath(), ufu.getFileName());
+        }
+      }
+    } catch (Exception ex) {
+      log.error("Job error", ex);
+    } finally {
+      if (running == false) {
+        running = true;
+      }
+    }
+    long endTime = System.nanoTime();
+    double time1 = 1.0 * (endTime - startTime) / 1e9;
+    log.debug("job consume: parse cut ot list " + time1 + ".");
+  }
 
   /**
    * 解析一级OT列表文件，得出二级OT，切图文件名称，二级OT模板切图名称
@@ -108,13 +144,13 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
   public void parseLevel1Ot(long ufuId, String storePath, String fileName) {
 
     if (storePath != null && fileName != null) {
-      
-      FitsFile2 ff2 = ff2Dao.getByName(fileName.substring(0, fileName.indexOf('.'))+".fit"); 
-      if(ff2==null){
+
+      FitsFile2 ff2 = ff2Dao.getByName(fileName.substring(0, fileName.indexOf('.')) + ".fit");
+      if (ff2 == null) {
         return;
       }
-      String fileDate = fileName.substring(fileName.lastIndexOf('_')+1, fileName.lastIndexOf('T'));
-      String ccdType = fileName.substring(0,1);
+      String fileDate = fileName.substring(fileName.lastIndexOf('_') + 1, fileName.lastIndexOf('T'));
+      String ccdType = fileName.substring(0, 1);
       int number = ff2.getFfNumber();
       int dpmId = ff2.getCamId();
 
@@ -174,6 +210,10 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
         OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
         if (tlv2 == null) {
           tlv2 = otLv2Dao.existInLatestN(otLv2, errorBox2, successiveImageNumber2);
+          if (tlv2 != null) {
+            tlv2.setOtType((short) 22); //慢速移动目标
+            log.debug("second match " + tlv2.getName());
+          }
         }
         if (tlv2 != null) {
           log.debug("match ot2:" + tlv2.getOtId());
@@ -221,6 +261,12 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setDateStr(fileDate);
             tOtLv2.setAllFileCutted(false);
             tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
+            int secNum = oors.get(1).getFfNumber();
+            if (secNum - oor1.getFfNumber() == 1) {
+              tOtLv2.setFirstNMark(true); //借用first_n_mark字段,标识“首两帧连续出现”的OT2
+            } else {
+              tOtLv2.setFirstNMark(false);
+            }
             tOtLv2.setCuttedFfNumber(0);
             tOtLv2.setIsMatch((short) 0);
             tOtLv2.setSkyId(oor1.getSkyId());
@@ -239,8 +285,8 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setLookBackCnn((float) -1);
 
             otLv2Dao.save(tOtLv2);
-                        
-            Ot2StreamNodeTime ot2SNT= new Ot2StreamNodeTime();
+
+            Ot2StreamNodeTime ot2SNT = new Ot2StreamNodeTime();
             ot2SNT.setOtId(tOtLv2.getOtId());
             ot2SNT.setOorId1(oor1.getOorId());
             ot2SNT.setOorId2(oor.getOorId());

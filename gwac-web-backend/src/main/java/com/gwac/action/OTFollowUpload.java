@@ -264,13 +264,19 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
           FileUtils.moveFile(fitsname, fitsNameFile);
 
           String fitsName = fitsNamePath + "/" + finalName;
+          String fitsNameFz = fitsNamePath + "/" + finalName+".fz";
+          File tfile = new File(fitsNameFz);
+          if (tfile.exists()) {
+            log.warn(fitsNameFz + " already exist, delete it.");
+            FileUtils.forceDelete(tfile);
+          }
           String runCmd = "/home/gwac/software/cfitsio/fpack -i2f -q 1 " + fitsName;
           Runtime r = Runtime.getRuntime();
           Process p = r.exec(runCmd);
           try {
             int result = p.waitFor();
             if (result != 0) {
-              log.error("fpack otfollowimg error: " + fitsName);
+              log.error("fpack otfollowimg error "+result+": " + fitsName);
             }
           } catch (InterruptedException ex) {
             log.error("fpack otfollowimg error!", ex);

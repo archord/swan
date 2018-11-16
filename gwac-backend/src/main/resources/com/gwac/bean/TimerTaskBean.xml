@@ -89,6 +89,20 @@
     <property name="targetMethod" value="startJob" /> 
     <property name="concurrent" value="false" />
   </bean> 
+
+  <bean id="otObsRecordJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="otObserveRecordService" /> 
+    <property name="targetMethod" value="startJob" /> 
+    <property name="concurrent" value="false" />
+  </bean> 
+  
+  <bean id="otObsRecordTrigger" 
+        class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+    <property name="jobDetail" ref="otObsRecordJob" />
+    <property name="repeatInterval" value="150000000000" />  
+    <property name="startDelay" value="5000" />   
+  </bean>
   
   <bean id="ot2CheckTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -177,6 +191,7 @@
         <ref bean="followUpObservationTrigger" />
         <ref bean="otTmplTrigger" />
         <ref bean="findMoveObjectTrigger" />
+        <!--<ref bean="otObsRecordTrigger" />-->
         
         <!--<ref bean="ot2CheckTrigger" />-->
         

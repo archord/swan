@@ -392,7 +392,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     
     String sql = "select * from ot_level2 "
             + " where last_ff_number>" + (obj.getLastFfNumber() - n)
-            + " dpm_id=" + obj.getDpmId()
+            + " and first_n_mark=true"
+            + " and dpm_id=" + obj.getDpmId()
             + " and sky_id=" + obj.getSkyId()
             + " and data_produce_method='" + obj.getDataProduceMethod() + "'"
             + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
@@ -519,7 +520,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     }
     if (ot2qp.getLookBackCnn() != null && !ot2qp.getLookBackCnn().isEmpty()) {
       if (ot2qp.getLookBackCnn().size() > 0) {
-        sql.append(" and look_back_cnn >");
+        sql.append(" and look_back_cnn >=");
         sql.append(ot2qp.getLookBackCnn().get(0));
         sql.append(" ");
         isQueryParameterEmpty = false;

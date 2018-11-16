@@ -41,6 +41,7 @@ public class UploadFileUnstoreDaoImpl extends BaseHibernateDaoImpl<UploadFileUns
   public List<UploadFileUnstore> getOTLevel1File() {
 
     String sql = "WITH moved_rows AS ( DELETE FROM upload_file_unstore where file_type='1' and upload_success=true RETURNING * ) SELECT * FROM moved_rows;";
+//    String sql = "select * from upload_file_unstore where file_type='1' and upload_success=true  order by ufu_id;";
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql).addEntity(UploadFileUnstore.class);
     return q.list();

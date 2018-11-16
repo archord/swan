@@ -131,8 +131,12 @@ public class FollowUpRecordServiceImpl implements BaseService {
 
     long ot2Id = 0;
     if (ot2Name != null && !ot2Name.trim().isEmpty()) {
-      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name, false);
-      ot2Id = ot2.getOtId();
+      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name.trim(), false);
+      if (ot2 != null) {
+        ot2Id = ot2.getOtId();
+      }else{
+        log.warn("can not find ot2:" + ot2Name);
+      }
     }
 
     FollowUpObservation fo = foDao.getByName(foName);
