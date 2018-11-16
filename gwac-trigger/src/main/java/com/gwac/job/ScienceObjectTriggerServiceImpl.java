@@ -122,8 +122,8 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         log.debug("check " + ot2.getName() + ", diffMinutes: " + diffMinutes + ", status: " + sciObj.getStatus());
         if (sciObj.getStatus() == 1 && diffMinutes < 60) { //超过60分钟的，目标很大可能是来自于自动后随关闭后的目标，这种目标不用触发警报
           if (sciObj.getTriggerStatus() == 1) {
-            String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1.\nusnoRMag:%.2f, firstObsMag:%.2f", 
-                    sciObj.getName(), sciObj.getType(), sciObj.getFoundUsnoR2(), sciObj.getMag());
+            String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage1\ngwacMag:%.2f, firstObsMag:%.2f\nusnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f", 
+                    sciObj.getName(), sciObj.getType(), ot2.getMag(), sciObj.getMag(), sciObj.getFoundUsnoR2(), sciObj.getFoundUsnoB2(), sciObj.getFoundUsnoI());
             sendMsgService.send(tmsg, chatId);
             sciObj.setTriggerStatus(2);
             sciObjDao.update(sciObj);
@@ -142,8 +142,8 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
                 double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
                 log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
                 if (diffMag > fupStage3MagDiff) {
-                  String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2\nusnoRMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\n",
-                          sciObj.getName(), fupObj.getFuoName(), fupObj.getR2(), fupObj.getFoundMag(), fupObj.getLastMag());
+                  String tmsg = String.format("Auto Trigger 60CM Telescope:\n%s %s in Stage2\ngwacMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\nusnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f\n",
+                          sciObj.getName(), fupObj.getFuoName(), ot2.getMag(), fupObj.getFoundMag(), fupObj.getLastMag(), fupObj.getR2(), fupObj.getB2(), fupObj.getI());
                   sendMsgService.send(tmsg, chatId);
                   sciObj.setTriggerStatus(3);
                   sciObjDao.update(sciObj);
