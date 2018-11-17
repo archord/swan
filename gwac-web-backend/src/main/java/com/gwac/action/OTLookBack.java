@@ -85,7 +85,7 @@ public class OTLookBack extends ActionSupport {
       ot2.setName(ot2name.trim());
       ot2.setLookBackResult(flag);
       int trst = ot2Dao.updateLookBackResult(ot2);
-      log.debug("1 update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
+      log.debug("1 update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst + ", AutoFollowUp=" + parmValue);
       for (int i = 0; i < 5; i++) {
         try {
           Thread.sleep(500);
