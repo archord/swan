@@ -241,9 +241,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
     boolean mysqlCheck = true;
     Boolean flag = false;
-    long endTime, startTime;
+    long allEndTime, allStartTime;
     MatchTable ott = null;
 
+    allEndTime = System.nanoTime();
     if (mysqlCheck) {
       ott = mtDao.getMatchTableByTypeName("cvs");
       Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
@@ -326,6 +327,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       }
 
       ott = mtDao.getMatchTableByTypeName("minor_planet");
+      long tStartTime = System.nanoTime();
       Map<MinorPlanet, Double> tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
       for (Map.Entry<MinorPlanet, Double> entry : tmpm.entrySet()) {
         MinorPlanet tmp = (MinorPlanet) entry.getKey();
@@ -353,9 +355,11 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         ot2Dao.updateOTType(ot2);
         log.debug(ot2.getName() + " minor planet :" + tmpm.size());
       }
+      long tEndTime = System.nanoTime();
+      log.debug("search minor planet consume " + 1.0 * (tStartTime - tEndTime) / 1e9 + " seconds.");
 
       if (ot2.getDataProduceMethod() == '8') {
-        startTime = System.nanoTime();
+        long usnoStartTime = System.nanoTime();
         ott = mtDao.getMatchTableByTypeName("usno");
         Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);//minorPlanetSearchbox
 //      log.debug("ot2: " + ot2.getName());
@@ -381,15 +385,14 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
           ot2.setUsnoMatch((short) tusno.size());
           ot2Dao.updateUsnoMatch(ot2);
           log.debug(ot2.getName() + " usno :" + tusno.size());
-        }else{
+        } else {
           log.debug(ot2.getName() + " usno not match");
         }
-        endTime = System.nanoTime();
-        log.debug("search usno table consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
+        long usnoEndTime = System.nanoTime();
+        log.debug("search usno table consume " + 1.0 * (usnoStartTime - usnoEndTime) / 1e9 + " seconds.");
       }
     }
 
-    startTime = System.nanoTime();
     ott = mtDao.getMatchTableByTypeName("ot_level2_his");
     Map<OtTmplWrong, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
     Boolean hisType = false;
@@ -419,8 +422,6 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2Dao.updateOt2HisMatch(ot2);
       log.debug(ot2.getName() + " ot2his :" + tOT2Hism.size());
     }
-    endTime = System.nanoTime();
-    log.debug("search ot2 history consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
 
     try {
       boolean tflag = filtOT2InCcdPixel(ot2);
@@ -438,6 +439,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2.setIsMatch((short) 1); //匹配不成功，未找到匹配对应体
       ot2Dao.updateIsMatch(ot2);
     }
+    allStartTime = System.nanoTime();
+    log.debug("search ot2 " + ot2.getName() + " total consume " + 1.0 * (allEndTime - allStartTime) / 1e9 + " seconds.");
   }
 
   public Map<OtTmplWrong, Double> matchOt2His(OtLevel2 ot2, float searchRadius, float mag) {
@@ -541,7 +544,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       double subDay = cal.get(Calendar.HOUR_OF_DAY) / 24.0 + cal.get(Calendar.MINUTE) / 24.0 / 60.0
               + cal.get(Calendar.SECOND) / 24.0 / 60.0 / 60;
       for (MinorPlanet obj : objs) {
-        double preRa = obj.getLon() + obj.getDlon() * subDay/Math.cos(obj.getLat()*0.017453293);
+        double preRa = obj.getLon() + obj.getDlon() * subDay / Math.cos(obj.getLat() * 0.017453293);
         double preDec = obj.getLat() + obj.getDlat() * subDay;
         double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), preRa, preDec);
 //        if (obj.getIdnum() == 30 || obj.getIdnum() == 115 || obj.getIdnum() == 654) {
@@ -570,7 +573,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog2(OtLevel2 ot2) {
 
     log.debug("query usno");
-    
+
     float tmag2 = 9;
     float tmag3 = 8;
     float tmag4 = 7;
