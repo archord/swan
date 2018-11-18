@@ -356,7 +356,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         log.debug(ot2.getName() + " minor planet :" + tmpm.size());
       }
       long tEndTime = System.nanoTime();
-      log.debug("search minor planet consume " + 1.0 * (tStartTime - tEndTime) / 1e9 + " seconds.");
+      log.debug("search minor planet consume " + 1.0 * (tEndTime  - tStartTime) / 1e9 + " seconds.");
 
       if (ot2.getDataProduceMethod() == '8') {
         long usnoStartTime = System.nanoTime();
@@ -389,7 +389,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
           log.debug(ot2.getName() + " usno not match");
         }
         long usnoEndTime = System.nanoTime();
-        log.debug("search usno table consume " + 1.0 * (usnoStartTime - usnoEndTime) / 1e9 + " seconds.");
+        log.debug("search usno table consume " + 1.0 * (usnoEndTime  - usnoStartTime) / 1e9 + " seconds.");
       }
     }
 
@@ -440,7 +440,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2Dao.updateIsMatch(ot2);
     }
     allStartTime = System.nanoTime();
-    log.debug("search ot2 " + ot2.getName() + " total consume " + 1.0 * (allEndTime - allStartTime) / 1e9 + " seconds.");
+    log.debug("search ot2 " + ot2.getName() + " total consume " + 1.0 * (allStartTime  - allEndTime) / 1e9 + " seconds.");
   }
 
   public Map<OtTmplWrong, Double> matchOt2His(OtLevel2 ot2, float searchRadius, float mag) {

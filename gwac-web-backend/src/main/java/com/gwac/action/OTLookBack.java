@@ -85,7 +85,7 @@ public class OTLookBack extends ActionSupport {
       ot2.setName(ot2name.trim());
       ot2.setLookBackResult(flag);
       int trst = ot2Dao.updateLookBackResult(ot2);
-      log.debug("1 update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst + ", AutoFollowUp=" + parmValue);
+      log.debug("1 update, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst + ", AutoFollowUp=" + parmValue);
       for (int i = 0; i < 5; i++) {
         try {
           Thread.sleep(500);
@@ -98,9 +98,9 @@ public class OTLookBack extends ActionSupport {
         }
         if (tot2.getLookBackResult() == 0) {
           trst = ot2Dao.updateLookBackResult(ot2);
-          log.debug((i + 2) + " update, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
+          log.debug((i + 2) + " update, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst);
         } else {
-          log.debug((i + 2) + " update sucess, ot2name=" + ot2name + ", flag=" + flag + ", result=" + trst);
+          log.debug((i + 2) + " update sucess, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst);
           break;
         }
       }
@@ -135,31 +135,33 @@ public class OTLookBack extends ActionSupport {
   public void autoFollowUp() {
 
     log.debug("start auto follow up, ot2name=" + ot2name);
-    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
-    if (ot2 == null) {
+    short isMatch = ot2Dao.getIsMatchByName(ot2name);
+    if (isMatch == -1) {
       return;
     }
-    if (ot2.getIsMatch() == 0) {
-      log.warn("query isMatch 1, ot2name=" + ot2name + ", isMatch=" + ot2.getIsMatch());
+    if (isMatch == 0) {
+      log.warn("query isMatch 1, ot2name=" + ot2name + ", isMatch=" + isMatch);
       for (int i = 0; i < 20; i++) {
         try {
           Thread.sleep(500);
         } catch (InterruptedException e) {
           log.error("sleep error", e);
         }
-        ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
-        if (ot2.getIsMatch() > 0) {
-          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + ot2.getIsMatch());
+        isMatch = ot2Dao.getIsMatchByName(ot2name);
+        if (isMatch > 0) {
+          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + isMatch);
           break;
         }else{
-          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + ot2.getIsMatch());
+          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + isMatch);
         }
       }
     }
 
+    OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+    log.debug("isMatch1="+isMatch+", isMatch2=" + ot2.getIsMatch());
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
 //            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
-    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)) {
+    if ((ot2.getDataProduceMethod() == '1' && isMatch == 1)) {
       ot2StreamNodeTimeDao.updateLookUpTime(ot2.getOtId());
 
       ot2.setFoCount((short) (ot2.getFoCount() + 1));

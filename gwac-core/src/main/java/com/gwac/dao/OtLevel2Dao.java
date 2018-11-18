@@ -101,4 +101,6 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   
   public String getOT2FitsFileName(String otName, Boolean queryHis);
   
+  public short getIsMatchByName(String otName);
+  
 }

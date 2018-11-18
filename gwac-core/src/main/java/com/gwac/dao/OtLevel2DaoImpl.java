@@ -166,6 +166,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "update ot_level2 set is_match=" + ot2.getIsMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
+    session.flush();
   }
   
   @Override
@@ -290,6 +291,19 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       return (OtLevel2) q.list().get(0);
     } else {
       return null;
+    }
+  }
+  
+  @Override
+  public short getIsMatchByName(String otName) {
+    
+    String sql1 = "select is_match from ot_level2 where name='" + otName + "'";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql1);
+    if (!q.list().isEmpty()) {
+      return (short) q.list().get(0);
+    } else {
+      return -1;
     }
   }
   
