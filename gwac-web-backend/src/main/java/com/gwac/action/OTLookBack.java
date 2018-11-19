@@ -9,12 +9,14 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.activemq.OTFollowMessageCreator;
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UserInfoDAO;
 import com.gwac.dao.WebGlobalParameterDao;
+import com.gwac.model.Camera;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
 import com.gwac.model4.OtLevel2FollowParameter;
@@ -66,6 +68,8 @@ public class OTLookBack extends ActionSupport {
   private WebGlobalParameterDao webGlobalParameterDao;
   @Resource
   private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
+  @Resource
+  private CameraDao cameraDao;
 
   @Action(value = "otLookBack")
   public void upload() {
@@ -149,16 +153,16 @@ public class OTLookBack extends ActionSupport {
         }
         isMatch = ot2Dao.getIsMatchByName(ot2name);
         if (isMatch > 0) {
-          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + isMatch);
+          log.warn("query isMatch " + (i + 2) + ", ot2name=" + ot2name + ", isMatch=" + isMatch);
           break;
-        }else{
-          log.warn("query isMatch "+(i+2)+", ot2name=" + ot2name + ", isMatch=" + isMatch);
+        } else {
+          log.warn("query isMatch " + (i + 2) + ", ot2name=" + ot2name + ", isMatch=" + isMatch);
         }
       }
     }
 
     OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
-    log.debug("isMatch1="+isMatch+", isMatch2=" + ot2.getIsMatch());
+    log.debug("ot2name=" + ot2name + "isMatch1=" + isMatch + ", isMatch2=" + ot2.getIsMatch());
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
 //            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
     if ((ot2.getDataProduceMethod() == '1' && isMatch == 1)) {
@@ -183,7 +187,13 @@ public class OTLookBack extends ActionSupport {
       ot2fp.setTelescope(Short.parseShort(telescope));
       ot2fp.setPriority(Integer.parseInt(priority));
       ot2fp.setOtName(ot2name);
-      ot2fp.setUserName("gwac");
+
+      Camera tcam = cameraDao.getById(ot2.getDpmId());
+      if (tcam != null) {
+        ot2fp.setUserName(tcam.getName());
+      } else {
+        ot2fp.setUserName("gwac");
+      }
 
       UserInfo user = userDao.getUserByLoginName("gwac");
       FollowUpObservation fo = new FollowUpObservation();
