@@ -32,8 +32,8 @@ $(function() {
   var parmProperty = [
     {label: '电压',name: 'voltage', min: 0, max: 10, note: '', unit: ''},
     {label: '电流',name: 'current', min: 0, max: 10, note: '', unit: ''},
-    {label: 'CCD温度',name: 'hot_end_temperature', min: 0, max: 100, note: '', unit: ''},
-    {label: '散热器温度',name: 'cold_end_temperature', min: 0, max: 100, note: '', unit: ''},
+    {label: 'CCD温度',name: 'cold_end_temperature', min: 0, max: 100, note: '', unit: ''},
+    {label: '散热器温度',name: 'hot_end_temperature', min: 0, max: 100, note: '', unit: ''},
     {label: '设置温度',name: 'coolset', min: 0, max: 100, note: '', unit: ''}
   ];
 
@@ -66,7 +66,7 @@ $(function() {
       if (item) {
         var x = item.datapoint[0].toFixed(4);
         var y = item.datapoint[1].toFixed(2);
-        $("#tooltip").html(item.series.label + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
+        $("#tooltip").html(item.series.label + "," + item.series.data[item.dataIndex][2] + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
       } else {
         $("#tooltip").hide();
       }
@@ -94,7 +94,7 @@ $(function() {
       var coorShow = [];
       $.each(sortObj, function(j, item2) {
         var minute = item2['dateObj'] - minDateMinute;
-        coorShow.push([minute, item2[item.name]]);
+        coorShow.push([minute, item2[item.name], item2['time']]);
       });
       formatedObjList.push({
         label: item.label,
