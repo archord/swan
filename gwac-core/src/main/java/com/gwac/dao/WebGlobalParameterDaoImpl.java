@@ -42,7 +42,7 @@ public class WebGlobalParameterDaoImpl extends BaseHibernateDaoImpl<WebGlobalPar
   @Override
   public void everyDayInit() {
     Session session = getCurrentSession();
-    String sql = "update web_global_parameter set value=false where name='AutoFollowUp';";
+    String sql = "update web_global_parameter set value=true where name='AutoFollowUp';";
     session.createSQLQuery(sql).executeUpdate();
   }
 }
