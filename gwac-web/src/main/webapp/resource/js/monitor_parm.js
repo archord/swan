@@ -79,7 +79,7 @@ $(function() {
       if (item) {
         var x = item.datapoint[0].toFixed(4);
         var y = item.datapoint[1].toFixed(2);
-        $("#tooltip").html(item.series.label + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
+        $("#tooltip").html(item.series.label + "," + item.series.data[item.dataIndex][2] +  + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
       } else {
         $("#tooltip").hide();
       }
@@ -115,7 +115,7 @@ $(function() {
       var coorShow = [];
       $.each(parmList, function(j, item2) {
         var minute = item2['dateObj'] - minDateMinute;
-        coorShow.push([minute, item2[parmType]]);
+        coorShow.push([minute, item2[parmType], item2['time_obs_ut']]);
       });
       formatedCCDList.push({
         ccdId: item.dpm_id,
