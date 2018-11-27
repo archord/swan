@@ -1,9 +1,11 @@
 package com.gwac.action;
 
 import com.gwac.activemq.OTFollowMessageCreator;
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtNumberDao;
+import com.gwac.model.Camera;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
 import com.gwac.model4.OtLevel2FollowParameter;
@@ -46,6 +48,8 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
   private OtLevel2Dao ot2Dao;
   @Resource
   private OtNumberDao otnDao;
+  @Resource
+  private CameraDao cameraDao;
 
   @Resource
   private JmsTemplate jmsTemplate;
@@ -80,6 +84,11 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
           if(null!=ot2){
             ot2.setFoCount((short) (ot2.getFoCount() + 1));
             ot2Dao.updateFoCount(ot2);
+            
+            Camera tcam = cameraDao.getById(ot2.getDpmId());
+            if (tcam != null) {
+              ot2fp.setUserName(tcam.getName());
+            }
           }
         }
       }
