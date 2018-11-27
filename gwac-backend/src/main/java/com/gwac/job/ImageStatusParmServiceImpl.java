@@ -99,6 +99,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
    */
   public void parseImageStatusParm() {
 
+    long startTime = System.nanoTime();
     List<UploadFileUnstore> ufus = ufuDao.getImgStatusFile();
     log.debug("size=" + ufus.size());
 
@@ -406,6 +407,10 @@ public class ImageStatusParmServiceImpl implements BaseService {
               tStr = cfile.getProperty("TimeProcessEnd");
               if (StringUtils.isNotBlank(tStr)) {
                 try {
+                  //yyyyMMddHHmmss
+                  if(tStr.length()>14){
+                    tStr=tStr.substring(0, 14);
+                  }
                   isp.setProcEndTime(df2.parse(tStr));
                 } catch (ParseException ex) {
                   log.error("parse image status file: " + ufu.getFileName() + ", error procEndTiime: " + tStr, ex);
@@ -482,6 +487,9 @@ public class ImageStatusParmServiceImpl implements BaseService {
         }
       }
     }
+    long endTime = System.nanoTime();
+    double time1 = 1.0 * (endTime - startTime) / 1e9;
+    log.warn("parse " +ufus.size() +" files, use: " + time1 + ".");
   }
 
   public void sendFocus(ImageStatusParameter isp, FitsFile2Show ff2, DataOutputStream out) {
