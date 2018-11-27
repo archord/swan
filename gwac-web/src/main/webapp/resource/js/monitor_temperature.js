@@ -33,7 +33,7 @@ $(function() {
     {label: '电压',name: 'voltage', min: 0, max: 10, note: '', unit: ''},
     {label: '电流',name: 'current', min: 0, max: 10, note: '', unit: ''},
     {label: 'CCD温度',name: 'cold_end_temperature', min: 0, max: 100, note: '', unit: ''},
-    {label: '散热器温度',name: 'hot_end_temperature', min: 0, max: 100, note: '', unit: ''},
+    {label: '热端温度',name: 'hot_end_temperature', min: 0, max: 100, note: '', unit: ''},
     {label: '设置温度',name: 'coolset', min: 0, max: 100, note: '', unit: ''}
   ];
 

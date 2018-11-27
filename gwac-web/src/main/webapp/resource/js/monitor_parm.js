@@ -1,5 +1,5 @@
 
-$(function() {
+$(function () {
   var gwacRootURL = $("#gwacRootURL").val();
   var parmUrl = gwacRootURL + "/get-parm-list-json.action";
 
@@ -63,7 +63,7 @@ $(function() {
       data: 'queryParm=' + parmType,
       async: false,
       dataType: 'json',
-      success: function(data) {
+      success: function (data) {
         formateRawData(data, parmType);
         starCurveShow();
       }
@@ -75,11 +75,11 @@ $(function() {
     var otCurveShow = [];
     otCurve = $.plot("#star-light-curve", otCurveShow, plotOption);
 
-    $("#star-light-curve").bind("plothover", function(event, pos, item) {
+    $("#star-light-curve").bind("plothover", function (event, pos, item) {
       if (item) {
         var x = item.datapoint[0].toFixed(4);
         var y = item.datapoint[1].toFixed(2);
-        $("#tooltip").html(item.series.label + "," + item.series.data[item.dataIndex][2] +  + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
+        $("#tooltip").html(item.series.label + "," + item.series.data[item.dataIndex][2] + "(" + x + ", " + y + ")").css({top: item.pageY - 25, left: item.pageX + 10}).fadeIn(200);
       } else {
         $("#tooltip").hide();
       }
@@ -98,8 +98,8 @@ $(function() {
     {
       ccdList = [];
     }
-    $.each(ccdList, function(i, item) {
-      $.each(item.par_detail, function(j, item2) {
+    $.each(ccdList, function (i, item) {
+      $.each(item.par_detail, function (j, item2) {
         item2['dateObj'] = Date.parse(item2['time_obs_ut']) / 60000;
       });
     });
@@ -108,14 +108,16 @@ $(function() {
     while (formatedCCDList.pop()) {
     }
 
-    $.each(ccdList, function(i, item) {
+    $.each(ccdList, function (i, item) {
       var ccdID = 'CCD' + padZero(parseInt(item.dpm_id), 2);
       var parmList = sortJson(item.par_detail, 'time_obs_ut', true);
 
       var coorShow = [];
-      $.each(parmList, function(j, item2) {
+      $.each(parmList, function (j, item2) {
         var minute = item2['dateObj'] - minDateMinute;
-        coorShow.push([minute, item2[parmType], item2['time_obs_ut']]);
+        if (Math.abs(item2[parmType]) > 0.0001) {
+          coorShow.push([minute, item2[parmType], item2['time_obs_ut']]);
+        }
       });
       formatedCCDList.push({
         ccdId: item.dpm_id,
@@ -128,8 +130,8 @@ $(function() {
 
 //星表匹配
   function starCurveShow() {
-    
-    if(formatedCCDList[0] === null){
+
+    if (formatedCCDList[0] === null) {
       console.log("请先点击参数列表，加载数据！");
       return;
     }
@@ -141,13 +143,13 @@ $(function() {
     if (tmount === null && tccds === null) {
       showCCDs = formatedCCDList;
     } else if (tmount !== null) {
-      $.each(formatedCCDList, function(i, item) {
+      $.each(formatedCCDList, function (i, item) {
         if (tmount === item.ccdId.substring(0, 2)) {
           showCCDs.push(item);
         }
       });
     } else if (tmount === null && tccds !== null) {
-      $.each(formatedCCDList, function(i, item) {
+      $.each(formatedCCDList, function (i, item) {
         if (tccds.indexOf(item.ccdId) > -1) {
           showCCDs.push(item);
         }
@@ -174,7 +176,7 @@ $(function() {
   }
 
   function sortJson(list, prop, asc) {
-    list.sort(function(a, b) {
+    list.sort(function (a, b) {
       if (asc) {
         return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
       } else {
