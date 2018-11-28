@@ -460,7 +460,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
         }
         
         UploadFileRecord ufr = new UploadFileRecord();
-        ufr.setUfrId(ufu.getUfuId());
+//        ufr.setUfrId(ufu.getUfuId());
         ufr.setFileName(ufu.getFileName());
         ufr.setFileType(ufu.getFileType());
         ufr.setProcessDoneTime(new Date());
