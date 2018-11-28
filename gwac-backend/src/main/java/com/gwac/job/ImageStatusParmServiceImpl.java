@@ -8,10 +8,12 @@ import com.gwac.dao.CameraDao;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.ImageStatusParameterDao;
 import com.gwac.dao.SystemStatusMonitorDao;
+import com.gwac.dao.UploadFileRecordDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.Camera;
 import com.gwac.model.FitsFile2Show;
 import com.gwac.model.ImageStatusParameter;
+import com.gwac.model.UploadFileRecord;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
 import java.io.DataOutputStream;
@@ -49,6 +51,8 @@ public class ImageStatusParmServiceImpl implements BaseService {
 
   @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
+  private UploadFileRecordDao ufrDao;
   @Resource
   private FitsFile2DAO ff2Dao;
   @Resource
@@ -454,6 +458,16 @@ public class ImageStatusParmServiceImpl implements BaseService {
         } else {
           log.error("ufuId=" + ufu.getUfuId() + ", " + tfile.getAbsolutePath() + " not exists!");
         }
+        
+        UploadFileRecord ufr = new UploadFileRecord();
+        ufr.setUfrId(ufu.getUfuId());
+        ufr.setFileName(ufu.getFileName());
+        ufr.setFileType(ufu.getFileType());
+        ufr.setProcessDoneTime(new Date());
+        ufr.setStorePath(ufu.getStorePath());
+        ufr.setUploadDate(ufu.getUploadDate());
+        ufr.setUploadSuccess(ufu.getUploadSuccess());
+        ufrDao.save(ufr);
       }
 
       if (!isBeiJingServer && isps.size() > 0) {
