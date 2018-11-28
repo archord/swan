@@ -576,7 +576,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
               && isp.getObjNum() != null && isp.getBgBright() != null && isp.getS2n() != null
               && isp.getAvgLimit() != null && isp.getFwhm() != null && isp.getXshift() != null) {
 
-        if (isp.getFwhm() < 5 && isp.getFwhm() > 0) {
+        if (isp.getFwhm() < 5 && isp.getFwhm() > 0.001) {
           flag = true;
         }
 
