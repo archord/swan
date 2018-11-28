@@ -125,9 +125,9 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
             String tmsg = String.format("Auto Trigger 60CM Telescope:\n"
                     + "%s %s in Stage1\n"
                     + "gwacMag:%.2f, firstObsMag:%.2f\n"
-                    + "usnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f", 
-                    sciObj.getName(), sciObj.getType(), 
-                    ot2.getMag(), sciObj.getMag(), 
+                    + "usnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f",
+                    sciObj.getName(), sciObj.getType(),
+                    ot2.getMag(), sciObj.getMag(),
                     sciObj.getFoundUsnoR2(), sciObj.getFoundUsnoB2(), sciObj.getFoundUsnoI());
             sendMsgService.send(tmsg, chatId);
             sciObj.setTriggerStatus(2);
@@ -143,7 +143,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
           if (sciObj.getTriggerStatus() == 2) {
             List<FollowUpObject> fupObjs = fupObjDao.getByOtId(ot2.getOtId(), false);
             for (FollowUpObject fupObj : fupObjs) {
-              if (fupObj.getLastMag() < 21 && fupObj.getFoundMag() < 21&&fupObj.getLastMag() >0 && fupObj.getFoundMag() >0) {
+              if (fupObj.getLastMag() < 21 && fupObj.getFoundMag() < 21 && fupObj.getLastMag() > 0 && fupObj.getFoundMag() > 0) {
                 double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
                 log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
                 if (diffMag > fupStage3MagDiff) {
@@ -151,8 +151,8 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
                           + "%s %s in Stage2\n"
                           + "gwacMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\n"
                           + "usnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f\n",
-                          sciObj.getName(), fupObj.getFuoName(), 
-                          ot2.getMag(), fupObj.getFoundMag(), fupObj.getLastMag(), 
+                          sciObj.getName(), fupObj.getFuoName(),
+                          ot2.getMag(), fupObj.getFoundMag(), fupObj.getLastMag(),
                           fupObj.getR2(), fupObj.getB2(), fupObj.getI());
                   sendMsgService.send(tmsg, chatId);
                   sciObj.setTriggerStatus(3);
@@ -172,6 +172,9 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
           sciObj.setAutoObservation(false);
           sciObjDao.update(sciObj);
         }
+      } else {
+        sciObj.setAutoObservation(false);
+        sciObjDao.update(sciObj);
       }
     }
   }
