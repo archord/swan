@@ -43,6 +43,7 @@ public class CommonLog extends ActionSupport {
 
   private String echo = "";
 
+  //curl http://190.168.1.27:8080/glog/commonLog.action -F logType=logchb -F msgCode=317 -F msgDate=2018-11-24T20:39:59.708 -F msgContent=317test -F msgType=stat
   @Action(value = "commonLog")
   public void upload() {
 
