@@ -6,12 +6,14 @@
 package com.gwac.job;
 
 import com.gwac.activemq.OTFollowMessageCreator;
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.FollowUpObjectDao;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.ScienceObjectDao;
 import com.gwac.dao.UserInfoDAO;
 import com.gwac.dao.WebGlobalParameterDao;
+import com.gwac.model.Camera;
 import com.gwac.model.FollowUpObject;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
@@ -52,6 +54,8 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
   private UserInfoDAO userDao;
   @Resource
   private OtLevel2Dao ot2Dao;
+  @Resource
+  private CameraDao cameraDao;
   @Resource(name = "sendMsg2WeChat")
   private SendMessageService sendMsgService;
 
@@ -106,9 +110,6 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
 
     String chatId = "gwac003"; //GWAC_OT_gft_alert 
     Integer fupStage2StartTime = Integer.parseInt(wgpdao.getValueByName("fupStage2StartTime")); //第二次后随距离第一次后随的时间，单位分钟
-    Integer fupStage3StartTime = Integer.parseInt(wgpdao.getValueByName("fupStage3StartTime")); //第三次后随距离第一次后随的时间，单位分钟
-    Integer fupStage3StopTime = Integer.parseInt(wgpdao.getValueByName("fupStage3StopTime")); //过了fupStage3StopTime时间之后，该目标还未进入到stage3，则该目标很大可能性为假目标，将该目标移除的自动检测后随任务列表
-    Float fupStage3MagDiff = Float.parseFloat(wgpdao.getValueByName("fupStage3MagDiff")); //
 
     List<ScienceObject> sciObjs = sciObjDao.getByStatus(1);
     log.debug("get ScienceObject: " + sciObjs.size());
@@ -120,57 +121,27 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
         Date curDate = new Date();
         double diffMinutes = (curDate.getTime() - discoveryTimeUtc.getTime()) / (1000 * 60.0) - 8 * 60;
         log.debug("check " + ot2.getName() + ", diffMinutes: " + diffMinutes + ", status: " + sciObj.getStatus());
-        if (sciObj.getStatus() == 1 && diffMinutes < 60) { //超过60分钟的，目标很大可能是来自于自动后随关闭后的目标，这种目标不用触发警报
-          if (sciObj.getTriggerStatus() == 1) {
-            String tmsg = String.format("Auto Trigger 60CM Telescope:\n"
-                    + "%s %s in Stage1\n"
-                    + "gwacMag:%.2f, firstObsMag:%.2f\n"
-                    + "usnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f",
-                    sciObj.getName(), sciObj.getType(),
-                    ot2.getMag(), sciObj.getMag(),
-                    sciObj.getFoundUsnoR2(), sciObj.getFoundUsnoB2(), sciObj.getFoundUsnoI());
-            sendMsgService.send(tmsg, chatId);
-            sciObj.setTriggerStatus(2);
+        if (sciObj.getStatus() == 1) {
+          if (diffMinutes < 60) {//超过60分钟的，目标很大可能是来自于自动后随关闭后的目标，这种目标不用触发警报
+            if (sciObj.getTriggerStatus() == 1) {
+              String tmsg = String.format("Auto Trigger 60CM Telescope:\n"
+                      + "%s %s in Stage1\n"
+                      + "gwacMag:%.2f, firstObsMag:%.2f\n"
+                      + "usnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f",
+                      sciObj.getName(), sciObj.getType(),
+                      ot2.getMag(), sciObj.getMag(),
+                      sciObj.getFoundUsnoR2(), sciObj.getFoundUsnoB2(), sciObj.getFoundUsnoI());
+              sendMsgService.send(tmsg, chatId);
+              sciObj.setTriggerStatus(2);
+              sciObjDao.update(sciObj);
+            }
+            if (diffMinutes > fupStage2StartTime) {
+              autoFollowUp(sciObj, ot2);
+            }
+          } else {
+            sciObj.setAutoObservation(false);
             sciObjDao.update(sciObj);
           }
-          if (diffMinutes > fupStage2StartTime) {
-//          List<FollowUpObservation> fupObs = fupObsDao.getBySciObjId(sciObj.getSoId());
-//          FollowUpObservation lastFupObs = fupObs.get(fupObs.size() - 1);
-//          autoFollowUp(sciObj, lastFupObs.getOtId());
-            autoFollowUp(sciObj, ot2.getOtId());
-          }
-        } else if (sciObj.getStatus() == 2) {
-          if (sciObj.getTriggerStatus() == 2) {
-            List<FollowUpObject> fupObjs = fupObjDao.getByOtId(ot2.getOtId(), false);
-            for (FollowUpObject fupObj : fupObjs) {
-              if (fupObj.getLastMag() < 21 && fupObj.getFoundMag() < 21 && fupObj.getLastMag() > 0 && fupObj.getFoundMag() > 0) {
-                double diffMag = Math.abs(fupObj.getLastMag() - fupObj.getFoundMag());
-                log.debug("check " + ot2.getName() + ", diffMag: " + diffMag + ", status: " + sciObj.getStatus());
-                if (diffMag > fupStage3MagDiff) {
-                  String tmsg = String.format("Auto Trigger 60CM Telescope:\n"
-                          + "%s %s in Stage2\n"
-                          + "gwacMag:%.2f, firstObsMag:%.2f, lastObsMag:%.2f\n"
-                          + "usnoRMag:%.2f, usnoBMag:%.2f, usnoIMag:%.2f\n",
-                          sciObj.getName(), fupObj.getFuoName(),
-                          ot2.getMag(), fupObj.getFoundMag(), fupObj.getLastMag(),
-                          fupObj.getR2(), fupObj.getB2(), fupObj.getI());
-                  sendMsgService.send(tmsg, chatId);
-                  sciObj.setTriggerStatus(3);
-                  sciObjDao.update(sciObj);
-                  break;
-                }
-              }
-            }
-          }
-          if ((diffMinutes > fupStage3StartTime) && (sciObj.getTriggerStatus() == 3)) {
-            autoFollowUp(sciObj, ot2.getOtId());
-          } else if ((diffMinutes > fupStage3StopTime) && (sciObj.getTriggerStatus() == 2)) {//长时间在阶段2未进入到阶段3，很大可能性为假目标，停止自动观测
-            sciObj.setAutoObservation(false);
-          }
-        } else {
-          log.debug(sciObj.getName() + " in stage" + sciObj.getStatus() + " stop AutoObservation.");
-          sciObj.setAutoObservation(false);
-          sciObjDao.update(sciObj);
         }
       } else {
         sciObj.setAutoObservation(false);
@@ -179,7 +150,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     }
   }
 
-  public void autoFollowUp(ScienceObject sciObj, long ot2Id) {
+  public void autoFollowUp(ScienceObject sciObj, OtLevel2 ot2) {
 
     String filter = "";
     String frameCount = "";
@@ -201,7 +172,6 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     }
 
     OtLevel2FollowParameter ot2fp = new OtLevel2FollowParameter();
-    ot2fp.setFollowName(String.format("%s_%03d", sciObj.getName(), sciObj.getFupCount()));
     ot2fp.setDec(sciObj.getPointDec());
     ot2fp.setRa(sciObj.getPointRa());
     ot2fp.setExpTime(Short.parseShort(exposeDuration));
@@ -212,6 +182,11 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     ot2fp.setOtName(sciObj.getName());
     ot2fp.setUserName("gwac");
 
+    Camera tcam = cameraDao.getById(ot2.getDpmId());
+    if (tcam != null) {
+      ot2fp.setUserName(tcam.getName());
+    }
+
     UserInfo user = userDao.getUserByLoginName("gwac");
     FollowUpObservation fo = new FollowUpObservation();
     fo.setBackImageCount(0);
@@ -221,7 +196,7 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     fo.setFoObjCount((short) 0);
     fo.setFrameCount((short) ot2fp.getFrameCount());
     fo.setImageType(ot2fp.getImageType());
-    fo.setOtId(ot2Id);
+    fo.setOtId(ot2.getOtId());
     fo.setPriority((short) ot2fp.getPriority());
     fo.setRa(ot2fp.getRa());
     if (user != null) {
@@ -234,37 +209,35 @@ public class ScienceObjectTriggerServiceImpl implements BaseService {
     fo.setExecuteStatus('1');
     fo.setProcessResult('0');
     fo.setObjName(ot2fp.getOtName().trim());
+    fo.setSoId(sciObj.getSoId());
+    fo.setAutoLoop(2);
 
     if (sciObj.getStatus() == 1) {
-      sciObj.setStatus(2);
-      sciObj.setFupCount(sciObj.getFupCount() + 1);
-      sciObjDao.update(sciObj);
 
-      fo.setFilter(ot2fp.getFilter());
-      fo.setFoName(String.format("%s_%03d", sciObj.getName(), sciObj.getFupCount()));
-      fupObsDao.save(fo);
-      MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
-      jmsTemplate.send(otFollowDest, tmc);
-      log.debug(ot2fp.getTriggerMsg());
-
-    } else if (sciObj.getStatus() == 2) {
-      int fupCount = sciObj.getFupCount();
-      sciObj.setStatus(3);
-      sciObj.setFupCount(sciObj.getFupCount() + 3);
-      sciObjDao.update(sciObj);
+      int tnum = fupObsDao.countByObjName(sciObj.getName());
 
       String[] filterArray = filter.split(",");
       for (int i = 0; i < filterArray.length; i++) {
+        tnum++;
+        String foName = String.format("%s_%03d", sciObj.getName(), tnum);
         String tf = filterArray[i];
         fo.setFoId(0);
         fo.setFilter(tf);
-        fo.setFoName(String.format("%s_%03d", sciObj.getName(), fupCount + i + 1));
+        fo.setFoName(foName);
         fupObsDao.save(fo);
+
+        ot2fp.setFollowName(foName);
         ot2fp.setFilter(tf);
         MessageCreator tmc = new OTFollowMessageCreator(ot2fp);
         jmsTemplate.send(otFollowDest, tmc);
         log.debug(ot2fp.getTriggerMsg());
       }
+      sciObj.setStatus(2);
+      sciObj.setFupCount(tnum);
+      sciObjDao.update(sciObj);
+
+      ot2.setFoCount((short) tnum);
+      ot2Dao.updateFoCount(ot2);
     }
   }
 

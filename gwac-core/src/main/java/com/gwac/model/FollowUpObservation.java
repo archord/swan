@@ -45,6 +45,7 @@ public class FollowUpObservation implements java.io.Serializable {
   private String comment;
   private String objName;
   private Long soId;
+  private int autoLoop;
 
   public FollowUpObservation() {
   }
@@ -330,4 +331,12 @@ public class FollowUpObservation implements java.io.Serializable {
     this.soId = soId;
   }
 
+  @Column(name = "auto_loop")
+  public int getAutoLoop() {
+    return this.autoLoop;
+  }
+
+  public void setAutoLoop(int autoLoop) {
+    this.autoLoop = autoLoop;
+  }
 }

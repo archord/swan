@@ -103,8 +103,10 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       fo.setFrameCount((short) ot2fp.getFrameCount());
       fo.setImageType(ot2fp.getImageType());
       fo.setObjName(ot2fp.getOtName().trim());
-      if (ot2 != null) {
+      if (ot2 != null){
         fo.setOtId(ot2.getOtId());
+      }
+      if(ot2 != null&&ot2fp.getRa()<0.000001 && Math.abs(ot2fp.getDec())<0.00001) {
         fo.setRa(ot2.getRa());
         fo.setDec(ot2.getDec());
       } else {

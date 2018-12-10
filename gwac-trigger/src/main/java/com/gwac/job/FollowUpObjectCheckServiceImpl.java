@@ -103,11 +103,13 @@ public class FollowUpObjectCheckServiceImpl implements BaseService {
 
     //第N>1次后随
     if (fupObss.size() > 1) {
-      for (FollowUpObservation tobj : fupObss) {
-        if (null != tobj.getSoId()) {
-          fupObs.setSoId(tobj.getSoId());
-          fupObsDao.update(fupObs);
-          break;
+      if (null == fupObs.getSoId()) {
+        for (FollowUpObservation tobj : fupObss) {
+          if (null != tobj.getSoId()) {
+            fupObs.setSoId(tobj.getSoId());
+            fupObsDao.update(fupObs);
+            break;
+          }
         }
       }
       if (null == fupObs.getSoId()) {//前N-1次后随，都没有发现真目标，检查这次的所有目标

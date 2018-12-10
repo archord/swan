@@ -20,7 +20,7 @@ public class ScienceObjectDaoImpl extends BaseHibernateDaoImpl<ScienceObject> im
 
   @Override
   public List<ScienceObject> getByStatus(int status) {
-    String sql = "SELECT * from science_object where auto_observation=true and status>=" + status;
+    String sql = "SELECT * from science_object where auto_observation=true and status=" + status;
 
     Query q = getCurrentSession().createSQLQuery(sql).addEntity(ScienceObject.class);
     return q.list();
