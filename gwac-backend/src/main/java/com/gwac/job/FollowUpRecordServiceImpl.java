@@ -292,6 +292,8 @@ public class FollowUpRecordServiceImpl implements BaseService {
     fur.setFrObjId(obj.getObjLabel());
     fur.setFuSerialNumber(obj.getFuSerialNumber());
     fur.setFufId(fufId);
+    fur.setDistance(obj.getDistance());
+    
     frDao.save(fur);
   }
 

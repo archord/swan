@@ -71,6 +71,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
           obj.setOtType(strs[16]);
           obj.setFfName(strs[17]);
           obj.setObjLabel(Short.parseShort(strs[18]));
+          obj.setDistance(Float.parseFloat(strs[18]));
           objs.add(obj);
         }
       } else {

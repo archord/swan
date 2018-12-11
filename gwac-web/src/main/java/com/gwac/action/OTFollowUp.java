@@ -154,6 +154,8 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
       } else {
         fo.setExecuteStatus('0');
       }
+      fo.setAutoLoop(1);
+      fo.setLimitMag((float)-1.0);
 
       if (foId != null && foId > 0) {
         fo.setFoId(foId);

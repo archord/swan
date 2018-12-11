@@ -42,6 +42,7 @@ public class FollowUpRecord implements java.io.Serializable {
   private String filter;
   private Integer fuSerialNumber;
   private Long fuoId;
+  private Float distance;
 
   public FollowUpRecord() {
   }
@@ -304,6 +305,15 @@ public class FollowUpRecord implements java.io.Serializable {
    */
   public void setFuoId(Long fuoId) {
     this.fuoId = fuoId;
+  }
+
+  @Column(name = "distance")
+  public Float getDistance() {
+    return distance;
+  }
+
+  public void setDistance(Float distance) {
+    this.distance = distance;
   }
 
 }

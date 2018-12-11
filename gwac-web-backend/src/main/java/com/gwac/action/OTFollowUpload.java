@@ -70,6 +70,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   private File fitsname;
   private String objlistFileName;
   private String fitsnameFileName;
+  private Float limitMag;
 
   private String rootPath;
   private String destPath;
@@ -164,6 +165,11 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
 
       receiveOTFollowImg();
       receiveFollowObjectList();
+      
+      
+      FollowUpObservation fo = foDao.getByName(followname.trim());
+      fo.setLimitMag(limitMag);
+      foDao.update(fo);
 
       setEcho(echo + "Success!\n");
     } else {
@@ -410,5 +416,12 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
   @Override
   public void setApplication(Map<String, Object> map) {
     this.appmap = map;
+  }
+
+  /**
+   * @param limitMag the limitMag to set
+   */
+  public void setLimitMag(Float limitMag) {
+    this.limitMag = limitMag;
   }
 }

@@ -45,7 +45,8 @@ public class FollowUpObservation implements java.io.Serializable {
   private String comment;
   private String objName;
   private Long soId;
-  private int autoLoop;
+  private Integer autoLoop;
+  private Float limitMag;
 
   public FollowUpObservation() {
   }
@@ -332,11 +333,20 @@ public class FollowUpObservation implements java.io.Serializable {
   }
 
   @Column(name = "auto_loop")
-  public int getAutoLoop() {
+  public Integer getAutoLoop() {
     return this.autoLoop;
   }
 
-  public void setAutoLoop(int autoLoop) {
+  public void setAutoLoop(Integer autoLoop) {
     this.autoLoop = autoLoop;
+  }
+
+  @Column(name = "limit_mag")
+  public Float getLimitMag() {
+    return this.limitMag;
+  }
+
+  public void setLimitMag(Float limitMag) {
+    this.limitMag = limitMag;
   }
 }

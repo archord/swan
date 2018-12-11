@@ -31,6 +31,7 @@ public class FollowUpCatalog {
   private String otType;
   private String ffName;
   private Short objLabel;
+  private Float distance;
 
   //OT第N次的后随编号
   public int getFuSerialNumber() {
@@ -328,4 +329,12 @@ public class FollowUpCatalog {
     this.objLabel = objLabel;
   }
 
+  public Float getDistance() {
+    return distance;
+  }
+
+  public void setDistance(Float distance) {
+    this.distance = distance;
+  }
+  
 }
