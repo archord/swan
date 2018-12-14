@@ -159,7 +159,7 @@
           <option value="4" style="background-color:#EEAD0E">故障</option>
           <option value="5" style="background-color:#CD2626">损坏</option>
         </select>
-        <input type="button" value="初始化" id="setStatusBtn"/>
+        <input type="button" value="设置" id="setStatusBtn"/>
       </form>
     </div>
     <div id="monitor-center"></div>

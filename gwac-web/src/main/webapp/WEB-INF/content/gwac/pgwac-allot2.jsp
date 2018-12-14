@@ -41,6 +41,7 @@
               <option value="0">未匹配</option>
               <option value="1">匹配不成功</option>
               <option value="2">匹配成功</option>
+              <option value="3">OT2数目异常</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">

@@ -128,18 +128,26 @@
             <td>CCD：</td>
             <td><select name="ot2qp.telscope" >
                 <option value="">All</option>
-                <option value="1">M01</option>
-                <option value="2">M02</option>
-                <option value="3">M03</option>
-                <option value="4">M04</option>
-                <option value="5">M05</option>
-                <option value="6">M06</option>
-                <option value="7">M07</option>
-                <option value="8">M08</option>
-                <option value="9">M09</option>
-                <option value="10">M10</option>
-                <option value="11">M11</option>
-                <option value="12">M12</option>
+                <option value="1">G011</option>
+                <option value="2">G012</option>
+                <option value="3">G013</option>
+                <option value="4">G014</option>
+                <option value="5">G015</option>
+                <option value="6">G021</option>
+                <option value="7">G022</option>
+                <option value="8">G023</option>
+                <option value="9">G024</option>
+                <option value="10">G025</option>
+                <option value="11">G031</option>
+                <option value="12">G032</option>
+                <option value="13">G033</option>
+                <option value="14">G034</option>
+                <option value="15">G035</option>
+                <option value="16">G041</option>
+                <option value="17">G042</option>
+                <option value="18">G043</option>
+                <option value="19">G044</option>
+                <option value="20">G045</option>
               </select>
             </td>
             <td>分类标识：</td>
@@ -164,6 +172,10 @@
                 <option value="16">空场</option>
                 <option value="17">凹槽</option>
                 <option value="18">跟踪不好</option>
+                <option value="19">大行星</option>
+                <option value="20">疑似OT</option>
+                <option value="21">热像斑</option>
+                <option value="22">慢速移动目标</option>
               </select></td>
             <td>回看：</td>
             <td>

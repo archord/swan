@@ -8,7 +8,7 @@ $(function () {
 
   function folowupParmSet() {
     var url = $("#gwacRootURL").val() + "/followup/followup-parm.action";
-    openwindow(url, '_blank', 830, 540, 830, 540);
+    openwindow(url, '_blank', 830, 340, 830, 340);
   }
 
   function loadObsPlanList() {

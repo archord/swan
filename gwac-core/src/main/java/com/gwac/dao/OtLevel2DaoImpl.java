@@ -29,6 +29,16 @@ import org.springframework.stereotype.Repository;
 public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements OtLevel2Dao {
   
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
+    
+  @Override
+  public List<OtLevel2> getUnFollowOT2() {
+    
+    String sql = "SELECT * FROM ot_level2 WHERE look_back_result = 1 AND is_match = 1 AND fo_count = 0";
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2.class);
+    return q.list();
+  }
   
   public Map<Float, Float> getAllCoorByMatchId(String ids) {
     
@@ -784,7 +794,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   @Override
   public void updateSomeRealTimeInfo(OtLevel2 ot2) {
     String sql = "update ot_level2 set first_ff_number=?, found_time_utc=?, last_ff_number=?, xtemp=?, ytemp=?, "
-            + "ra=?, dec=?, mag=?, total=? where ot_id=?";
+            + "ra=?, dec=?, mag=?, total=?, ot_type=? where ot_id=?";
     Session session = getCurrentSession();
     SQLQuery query = session.createSQLQuery(sql);
     query.setParameter(0, ot2.getFirstFfNumber());
@@ -796,7 +806,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     query.setParameter(6, ot2.getDec());
     query.setParameter(7, ot2.getMag());
     query.setParameter(8, ot2.getTotal());
-    query.setParameter(9, ot2.getOtId());
+    query.setParameter(9, ot2.getOtType());
+    query.setParameter(10, ot2.getOtId());
     query.executeUpdate();
   }
   

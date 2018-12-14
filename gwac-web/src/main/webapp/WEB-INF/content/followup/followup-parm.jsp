@@ -144,70 +144,14 @@
                                                         <option value="90">90</option>
                                                     </select></td>
                                             </tr>
-                                            <tr><td style="text-align:left;">OT2第二次自动后随</td><td style="text-align:left;">
-                                                    <select height="30" name="fupStage2Telescope" id="fupStage2Telescope">
-                                                        <option value="1">60公分</option>
-                                                        <option value="2">30公分</option>
-                                                    </select></td>
-                                                    <td>
-                                                    <select height="30" name="fupStage2Filter" id="fupStage2Filter">
-                                                    </select></td>
-                                                    <td><input name="fupStage2ExposeDuration" id="fupStage2ExposeDuration" /></td>
-                                                <td><input name="fupStage2FrameCount" id="fupStage2FrameCount"/></td>
-                                                <td>
-                                                    <select height="30" name="fupStage2Priority" id="fupStage2Priority">
-                                                        <option value="10">10</option>
-                                                        <option value="20">20</option>
-                                                        <option value="30">30</option>
-                                                        <option value="40">40</option>
-                                                        <option value="50">50</option>
-                                                        <option value="60">60</option>
-                                                        <option value="70">70</option>
-                                                        <option value="80">80</option>
-                                                        <option value="90">90</option>
-                                                    </select></td>
-                                            </tr>
-                                            <tr><td style="text-align:left;">OT2第三次自动后随</td><td style="text-align:left;">
-                                                    <select height="30" name="fupStage3Telescope" id="fupStage3Telescope">
-                                                        <option value="1">60公分</option>
-                                                        <option value="2">30公分</option>
-                                                    </select></td>
-                                                    <td>
-                                                    <!--<select height="30" name="fupStage3Filter" id="fupStage3Filter">-->
-                                                    <input name="fupStage3Filter" id="fupStage3Filter"/>
-                                                    </select></td>
-                                                    <td><input name="fupStage3ExposeDuration" id="fupStage3ExposeDuration" /></td>
-                                                <td><input name="fupStage3FrameCount" id="fupStage3FrameCount"/></td>
-                                                <td>
-                                                    <select height="30" name="fupStage3Priority" id="fupStage3Priority">
-                                                        <option value="10">10</option>
-                                                        <option value="20">20</option>
-                                                        <option value="30">30</option>
-                                                        <option value="40">40</option>
-                                                        <option value="50">50</option>
-                                                        <option value="60">60</option>
-                                                        <option value="70">70</option>
-                                                        <option value="80">80</option>
-                                                        <option value="90">90</option>
-                                                    </select></td>
-                                            </tr>
                                             <tr><td colspan="3" style="text-align:left;">STAGE1中CATAS观测星等相对USNO的变化</td><td colspan="3" style="text-align:left;">
                                                     <input name="fupStage1MagDiff" id="fupStage1MagDiff"/>
                                                 </td></tr>
                                             <tr><td colspan="3" style="text-align:left;">STAGE1中MINIOT的最小出现次数</td><td colspan="3" style="text-align:left;">
                                                     <input name="fupStage1MinRecordNum" id="fupStage1MinRecordNum"/>
                                                 </td></tr>
-                                            <tr><td colspan="3" style="text-align:left;">STAGE2开始触发延时（分钟）</td><td colspan="3" style="text-align:left;">
-                                                    <input name="fupStage2StartTime" id="fupStage2StartTime"/>
-                                                </td></tr>
-                                            <tr><td colspan="3" style="text-align:left;">STAGE3开始触发最小星等相对变化</td><td colspan="3" style="text-align:left;">
-                                                    <input name="fupStage3MagDiff" id="fupStage3MagDiff"/>
-                                                </td></tr>
-                                            <tr><td colspan="3" style="text-align:left;">STAGE3开始触发延时（分钟）</td><td colspan="3" style="text-align:left;">
-                                                    <input name="fupStage3StartTime" id="fupStage3StartTime"/>
-                                                </td></tr>
-                                            <tr><td colspan="3" style="text-align:left;">STAGE3结束自动触发时间（分钟）</td><td colspan="3" style="text-align:left;">
-                                                    <input name="fupStage3StopTime" id="fupStage3StopTime"/>
+                                            <tr><td colspan="3" style="text-align:left;">单帧图像中，允许最多出现的OT2的个数</td><td colspan="3" style="text-align:left;">
+                                                    <input name="maxSingleFrameOT2Num" id="maxSingleFrameOT2Num"/>
                                                 </td></tr>
                                             <tr><td colspan="3" style="text-align:left;">是否自动后随</td><td colspan="3" style="text-align:left;">
                                                     <select height="30" name="autoFollowUp" id="autoFollowUp">

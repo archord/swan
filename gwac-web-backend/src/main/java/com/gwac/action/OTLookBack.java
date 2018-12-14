@@ -145,7 +145,7 @@ public class OTLookBack extends ActionSupport {
     }
     if (isMatch == 0) {
       log.warn("query isMatch 1, ot2name=" + ot2name + ", isMatch=" + isMatch);
-      for (int i = 0; i < 20; i++) {
+      for (int i = 0; i < 3; i++) {
         try {
           Thread.sleep(500);
         } catch (InterruptedException e) {
