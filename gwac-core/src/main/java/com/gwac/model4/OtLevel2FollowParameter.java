@@ -31,7 +31,7 @@ public class OtLevel2FollowParameter {
   public OtLevel2FollowParameter() {
     this.epoch = "2000";
     this.imageType = "LIGHT";
-    this.priority = 20;
+    this.priority = 50;
   }
 
   //"append_plan mini-GWAC 2\n";
