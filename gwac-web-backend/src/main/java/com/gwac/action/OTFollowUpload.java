@@ -105,7 +105,7 @@ public class OTFollowUpload extends ActionSupport implements ApplicationAware {
     String result = SUCCESS;
     echo = "";
 
-    log.debug("tspname=" + tspname + ", ot2name=" + ot2name + ", followname=" + followname);
+    log.debug("tspname=" + tspname + ", ot2name=" + ot2name + ", followname=" + followname + ", limitMag=" + limitMag);
 
     //必须设置望远镜名称
     if (null == tspname || tspname.isEmpty()) {
