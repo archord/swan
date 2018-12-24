@@ -204,20 +204,20 @@ public class FollowUpRecordServiceImpl implements BaseService {
       }
 
       if (miniotObjs.size() > 0) {
-        foDao.updateProcessResult(foName, '1'); //MINIOT:1, CATAS:2, NEWOT:3
         for (FollowUpCatalog obj : miniotObjs) {
           saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), miniotId);
         }
+        foDao.updateProcessResult(foName, '1'); //MINIOT:1, CATAS:2, NEWOT:3
       } else if (catasObjs.size() > 0) {
-        foDao.updateProcessResult(foName, '2');
         for (FollowUpCatalog obj : catasObjs) {
           saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), catasId);
         }
+        foDao.updateProcessResult(foName, '2');
       } else if (newotObjs.size() > 0) {
-        foDao.updateProcessResult(foName, '3');
         for (FollowUpCatalog obj : newotObjs) {
           saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
         }
+        foDao.updateProcessResult(foName, '3');
       }
       MessageCreator tmc = new FollowUpObjectCheckMessageCreator(fo.getFoId());
       jmsTemplate.send(followUpObjCheckDest, tmc);
