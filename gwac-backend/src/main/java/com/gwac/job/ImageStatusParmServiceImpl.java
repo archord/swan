@@ -503,7 +503,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
     }
     long endTime = System.nanoTime();
     double time1 = 1.0 * (endTime - startTime) / 1e9;
-    log.warn("parse " +ufus.size() +" files, use: " + time1 + ".");
+    log.debug("parse " +ufus.size() +" files, use: " + time1 + ".");
   }
 
   public void sendFocus(ImageStatusParameter isp, FitsFile2Show ff2, DataOutputStream out) {
