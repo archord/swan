@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 @Service(value = "otDiffObserveRecordService")
 public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
 
-  private static final Log log = LogFactory.getLog(OtObserveRecordServiceImpl.class);
+  private static final Log log = LogFactory.getLog(OtDiffObserveRecordServiceImpl.class);
 
   @Resource
   private OTCatalogDao otcDao;
@@ -134,6 +134,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
   @Override
   public void parseLevel1Ot(long ufuId, String storePath, String fileName) {
 
+    log.debug("process file " + rootPath + "/" + storePath + "/" + fileName);
+
     if (storePath != null && fileName != null) {
 
       FitsFile2 ff2 = ff2Dao.getByName(fileName.substring(0, fileName.indexOf('.')) + ".fit");
@@ -145,7 +147,6 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
       int number = ff2.getFfNumber();
       int dpmId = ff2.getCamId();
 
-      log.debug("process file " + rootPath + "/" + storePath + "/" + fileName);
       List<OTCatalog> otcs = otcDao.getDiffOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
       totalRecord += otcs.size();
       for (OTCatalog otc : otcs) {

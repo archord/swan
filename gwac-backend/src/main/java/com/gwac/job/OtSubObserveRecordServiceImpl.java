@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 @Service(value = "otSubObserveRecordService")
 public class OtSubObserveRecordServiceImpl implements OtObserveRecordService {
 
-  private static final Log log = LogFactory.getLog(OtObserveRecordServiceImpl.class);
+  private static final Log log = LogFactory.getLog(OtSubObserveRecordServiceImpl.class);
 
   @Resource
   private OTCatalogDao otcDao;
