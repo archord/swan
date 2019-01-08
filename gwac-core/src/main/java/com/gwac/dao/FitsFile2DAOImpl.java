@@ -88,6 +88,20 @@ public class FitsFile2DAOImpl extends BaseHibernateDaoImpl<FitsFile2> implements
   }
 
   @Override
+  public FitsFile2 getByNameHis(String ffName) {
+
+    Session session = getCurrentSession();
+    String sql = "select * from fits_file2_his where img_name='" + ffName + "'";
+    Query q = session.createSQLQuery(sql).addEntity(FitsFile2.class);
+
+    if (!q.list().isEmpty()) {
+      return (FitsFile2) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+
+  @Override
   public FitsFile2Show getShowByName(String ffName) {
 
     Session session = getCurrentSession();

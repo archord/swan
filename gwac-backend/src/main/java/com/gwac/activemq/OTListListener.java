@@ -40,7 +40,6 @@ public class OTListListener implements MessageListener {
       } else if (fileType == '8') {
         otSubObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else if (fileType == 'b') {
-        log.debug("call otDiffObserveRecordService");
         otDiffObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else {
         log.error("wrong fileType");

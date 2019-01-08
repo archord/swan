@@ -138,9 +138,14 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
 
     if (storePath != null && fileName != null) {
 
-      FitsFile2 ff2 = ff2Dao.getByName(fileName.substring(0, fileName.indexOf('.')) + ".fit");
+      String fitsName = fileName.substring(0, fileName.indexOf('.')) + ".fit";
+      FitsFile2 ff2 = ff2Dao.getByName(fitsName);
       if (ff2 == null) {
-        return;
+        ff2 = ff2Dao.getByNameHis(fitsName);
+        if (ff2 == null) {
+          log.warn("cannot find file in fits_file2 " + rootPath + "/" + storePath + "/" + fileName);
+          return;
+        }
       }
       String fileDate = fileName.substring(fileName.lastIndexOf('_') + 1, fileName.lastIndexOf('T'));
       String ccdType = fileName.substring(0, 1);

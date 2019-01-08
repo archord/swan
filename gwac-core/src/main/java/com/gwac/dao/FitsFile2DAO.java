@@ -21,6 +21,8 @@ public interface FitsFile2DAO extends BaseHibernateDao<FitsFile2> {
   public List<FitsFile2> getByOt2ForCut(long ot2Id);
 
   public FitsFile2 getByName(String ffName);
+  
+  public FitsFile2 getByNameHis(String ffName);
 
   public FitsFile2Show getShowByName(String ffName);
 
