@@ -379,7 +379,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     }
     return otList;
   }
-  
+
   @Override
   public List<OTCatalog> getDiffOT1Catalog(String path) {
     BufferedReader br = null;
@@ -426,7 +426,11 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
           ot.setDecD(Float.parseFloat(strs[14]));
         }
         ot.setProbability(Float.parseFloat(strs[15]));
-        ot.setOtFlag(Boolean.parseBoolean(strs[16])); //noMatch:1;match:0
+        if ("1".equals(strs[16])) {
+          ot.setOtFlag(Boolean.TRUE); //noMatch:1;match:0
+        } else {
+          ot.setOtFlag(Boolean.FALSE); //noMatch:1;match:0
+        }
         ot.setCutImageName(strs[17]);
 
         otList.add(ot);

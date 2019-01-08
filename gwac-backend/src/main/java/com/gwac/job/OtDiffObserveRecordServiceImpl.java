@@ -289,7 +289,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
             jmsTemplate.send(otCheckDest, tmc);
 
           } else {
-            List<OtObserveRecord> oors = otorDao.existInAll(oor, errorBox);
+            //List<OtObserveRecord> oors = otorDao.existInAll(oor, errorBox);
+            List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
             if (oors.size() >= cutOccurNumber) {
               OtObserveRecord oor1 = oors.get(0);
 
