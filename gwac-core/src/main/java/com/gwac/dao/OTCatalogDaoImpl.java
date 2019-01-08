@@ -312,8 +312,7 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
   }
 
   @Override
-  public List<OTCatalog> getOT1CutCatalog(String path
-  ) {
+  public List<OTCatalog> getOT1CutCatalog(String path) {
     BufferedReader br = null;
     String line = "";
     String splitBy = " +";
@@ -366,6 +365,76 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
     } catch (IOException e) {
       log.error("parse file error:" + path, e);
     } catch (ParseException e) {
+      log.error("parse file error:" + path, e);
+    } catch (Exception e) {
+      log.error("parse file error:" + path, e);
+    } finally {
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException e) {
+          log.error(e);
+        }
+      }
+    }
+    return otList;
+  }
+  
+  @Override
+  public List<OTCatalog> getDiffOT1Catalog(String path) {
+    BufferedReader br = null;
+    String line = "";
+    String splitBy = ",";
+    List<OTCatalog> otList = new ArrayList<>();
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+    try {
+      File tfile = new File(path);
+      if (!tfile.exists()) {
+        log.error("file not exist " + tfile);
+        return otList;
+      }
+      br = new BufferedReader(new FileReader(tfile));
+      while ((line = br.readLine()) != null) {
+        if (line.charAt(0) == '#') {
+          continue;
+        }
+        // split on comma(',')  
+        String[] strs = line.split(splitBy);
+        // create car object to store values  
+        OTCatalog ot = new OTCatalog();
+
+        // add values from csv to car object  
+        ot.setX(Float.parseFloat(strs[0]));
+        ot.setY(Float.parseFloat(strs[1]));
+        ot.setFlux(Float.parseFloat(strs[2]));
+        ot.setEllipticity(Float.parseFloat(strs[6]));
+        ot.setClassStar(Float.parseFloat(strs[7]));
+        ot.setBackground(Float.parseFloat(strs[8]));
+        ot.setThreshold(Float.parseFloat(strs[9]));
+        ot.setFlag(Integer.parseInt(strs[10]));
+        ot.setMagAper(Float.parseFloat(strs[11]));
+        ot.setMagerrAper(Float.parseFloat(strs[12]));
+        if (strs[5].contains(":")) {
+          ot.setRaD(CommonFunction.hmsToDegree(strs[13]));
+        } else {
+          ot.setRaD(Float.parseFloat(strs[13]));
+        }
+        if (strs[6].contains(":")) {
+          ot.setDecD(CommonFunction.dmsToDegree(strs[14]));
+        } else {
+          ot.setDecD(Float.parseFloat(strs[14]));
+        }
+        ot.setProbability(Float.parseFloat(strs[15]));
+        ot.setOtFlag(Boolean.parseBoolean(strs[16])); //noMatch:1;match:0
+        ot.setCutImageName(strs[17]);
+
+        otList.add(ot);
+      }
+
+    } catch (FileNotFoundException e) {
+      log.error("parse file error:" + path, e);
+    } catch (IOException e) {
       log.error("parse file error:" + path, e);
     } catch (Exception e) {
       log.error("parse file error:" + path, e);

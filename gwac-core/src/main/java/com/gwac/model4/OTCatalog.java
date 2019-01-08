@@ -34,6 +34,7 @@ public class OTCatalog {
   private Float distance;
   private Float deltamag;
   private String cutImageName;
+  private Float probability;
   
   public String getFileDate(){
     return imageName.substring(6, 12);
@@ -370,5 +371,19 @@ public class OTCatalog {
    */
   public void setTimeSubSecond(Integer timeSubSecond) {
     this.timeSubSecond = timeSubSecond;
+  }
+
+  /**
+   * @return the probability
+   */
+  public Float getProbability() {
+    return probability;
+  }
+
+  /**
+   * @param probability the probability to set
+   */
+  public void setProbability(Float probability) {
+    this.probability = probability;
   }
 }

@@ -52,6 +52,7 @@ public class OtObserveRecord implements java.io.Serializable {
   private Float deltamag;
   private Character dataProduceMethod;
   private Integer timeSubSecond;
+  private Float probability;
 
   public OtObserveRecord() {
   }
@@ -79,9 +80,24 @@ public class OtObserveRecord implements java.io.Serializable {
   public Long getOtId() {
     return this.otId;
   }
-
+  
   public void setOtId(Long otId) {
     this.otId = otId;
+  }
+
+  /**
+   * @return the probability
+   */
+  @Column(name = "probability")
+  public Float getProbability() {
+    return probability;
+  }
+
+  /**
+   * @param probability the probability to set
+   */
+  public void setProbability(Float probability) {
+    this.probability = probability;
   }
 
   @Column(name = "ff_id")

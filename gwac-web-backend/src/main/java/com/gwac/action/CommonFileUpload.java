@@ -57,7 +57,7 @@ import org.springframework.jms.core.MessageCreator;
 public class CommonFileUpload extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
-  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im"}));
+  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im", "diffot1", "diffot1img"}));
 
   @Resource
   private CameraDao cameraDao;
@@ -85,8 +85,10 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
   private String echo = "";
 
   @Action(value = "commonFileUpload", results = {
-    @Result(location = "manage/result.jsp", name = SUCCESS),
-    @Result(location = "manage/result.jsp", name = INPUT),
+    @Result(location = "manage/result.jsp", name = SUCCESS)
+    ,
+    @Result(location = "manage/result.jsp", name = INPUT)
+    ,
     @Result(location = "manage/result.jsp", name = ERROR)})
   public String upload() {
 
@@ -135,7 +137,11 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
     if (flag) {
       try {
         if (sendTime != null && !sendTime.isEmpty()) {
-          SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+          String fmtStr = "yyyyMMddHHmmss";
+          if (sendTime.length() > fmtStr.length()) {
+            sendTime = sendTime.substring(0, fmtStr.length());
+          }
+          SimpleDateFormat sdf = new SimpleDateFormat(fmtStr);
           sendTimeObj = sdf.parse(sendTime);
         }
       } catch (ParseException ex) {
@@ -195,6 +201,14 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
               tfileType = '4';
               tpath = destPath + getText("gwacDataCutimagesDirectory");
               break;
+            case "diffot1":
+              tfileType = 'b';
+              tpath = destPath + getText("gwacDataDiffOtlistDirectory");
+              break;
+            case "diffot1img":
+              tfileType = 'c';
+              tpath = destPath + getText("gwacDataDiffOtImagesDirectory");
+              break;
           }
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
           echo += "success upload " + fileUpload.size() + " files.";
@@ -208,7 +222,6 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           }
           log.warn(echo);
         }
-        endTime = System.nanoTime();
       } catch (Exception ex) {
         log.error("delete or move file errror ", ex);
       }
@@ -216,6 +229,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
       result = ERROR;
     }
 
+    endTime = System.nanoTime();
     double time1 = 1.0 * (endTime - startTime) / 1e9;
     log.debug("fileType=" + fileType + ": " + fileUpload.size() + " files, total time: " + time1 + "s, ");
 
@@ -370,6 +384,10 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         MessageCreator tmc = new OTListMessageCreator(obj);
         jmsTemplate.send(otlistDest, tmc);
         ssmDao.updateOt1ListSub(unitId, tfilename);
+      } else if ('b' == fileType) {
+        MessageCreator tmc = new OTListMessageCreator(obj);
+        jmsTemplate.send(otlistDest, tmc);
+        ssmDao.updateOt1ListSub(unitId, tfilename);
       } else if ('a' == fileType) {
         String tpath = rootPath + getText("gwacMonitorimageDirectory");
         String tname = tfilename.substring(0, tfilename.indexOf("_")) + "_ccdimg.jpg";
@@ -386,7 +404,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
           int toHeight = 400;
           getThumbnail(tpath, tname, tnameSub, tfilename, toWidth, toHeight);
         } catch (IOException ex) {
-          log.error("create thumbnail errror "+tfilename, ex);
+          log.error("create thumbnail errror " + tfilename, ex);
         }
 
         cameraDao.updateMonitorImageTime(unitId);
@@ -413,7 +431,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         log.error("image " + src + " does not exist.");
       }
     } catch (IOException e) {
-      log.error("create thumbnail error "+fullName, e);
+      log.error("create thumbnail error " + fullName, e);
     }
   }
 

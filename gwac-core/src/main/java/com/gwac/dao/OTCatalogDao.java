@@ -21,4 +21,6 @@ public interface OTCatalogDao {
   public List<OTCatalog> getOT1VarCatalog(String path);
   
   public List<FollowUpCatalog> getFollowUpCatalog(String path);
+  
+  public List<OTCatalog> getDiffOT1Catalog(String path);
 }

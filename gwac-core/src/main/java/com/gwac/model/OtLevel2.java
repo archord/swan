@@ -56,6 +56,7 @@ public class OtLevel2  implements java.io.Serializable {
      private Short lookBackResult;
      private Short followUpResult;
      private Float lookBackCnn;
+     private Float probability;
 
     public OtLevel2() {
     }
@@ -455,6 +456,20 @@ public class OtLevel2  implements java.io.Serializable {
     this.lookBackCnn = lookBackCnn;
   }
 
+  /**
+   * @return the probability
+   */
+  @Column(name="probability")
+  public Float getProbability() {
+    return probability;
+  }
+
+  /**
+   * @param probability the probability to set
+   */
+  public void setProbability(Float probability) {
+    this.probability = probability;
+  }
 }
 
 
