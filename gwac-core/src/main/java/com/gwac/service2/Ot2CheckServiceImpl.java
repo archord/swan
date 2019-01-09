@@ -521,7 +521,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
   public Map<MinorPlanet, Double> matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
 
-    String tableName = getMinorPlanetTableName();
+    String tableName = getMinorPlanetTableName(ot2.getFoundTimeUtc());
     log.debug("tableName=" + tableName);
     Map rst = new HashMap();
     if (mpDao.tableExists(tableName)) {
@@ -786,9 +786,11 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
-  public String getMinorPlanetTableName() {
+  public String getMinorPlanetTableName(Date ot2Date) {
     MatchTable ott = mtDao.getMatchTableByTypeName("minor_planet");
-    return ott.getMatchTableName() + CommonFunction.getDateString(CommonFunction.getUTCDate(new Date()));
+    //String tableName = ott.getMatchTableName() + CommonFunction.getDateString(CommonFunction.getUTCDate(new Date()));
+    String tableName = ott.getMatchTableName() + CommonFunction.getDateString(ot2Date);
+    return tableName;
   }
 
   public void printConfigParameter() {
