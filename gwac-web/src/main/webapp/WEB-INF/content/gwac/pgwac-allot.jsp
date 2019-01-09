@@ -103,7 +103,7 @@
             <td><select name="ot2qp.processType" >
                 <option value="">All</option>
                 <option value="1">星表匹配</option>
-                <option value="8">图像相减</option>
+                <option value="b">图像相减</option>
               </select></td>
             <td>匹配状态：</td>
             <td><select name="ot2qp.isMatch" >

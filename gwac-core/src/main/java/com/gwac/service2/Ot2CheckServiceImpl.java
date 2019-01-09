@@ -358,7 +358,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       long tEndTime = System.nanoTime();
       log.debug("search minor planet consume " + 1.0 * (tEndTime  - tStartTime) / 1e9 + " seconds.");
 
-      if (ot2.getDataProduceMethod() == '8') {
+      if (ot2.getDataProduceMethod() == 'b') {
         long usnoStartTime = System.nanoTime();
         ott = mtDao.getMatchTableByTypeName("usno");
         Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);//minorPlanetSearchbox

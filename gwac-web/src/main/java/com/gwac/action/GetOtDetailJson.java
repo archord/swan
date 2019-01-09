@@ -69,12 +69,12 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
   public String execute() throws Exception {
 
     dataRootWebMap = getText("gwacDataRootDirectoryWebmap");
-            
-    if(session.containsKey("userInfo")){
-      userInfo = (UserInfo)session.get("userInfo");
+
+    if (session.containsKey("userInfo")) {
+      userInfo = (UserInfo) session.get("userInfo");
     }
 
-    otTypes=ottDao.findAll();
+    otTypes = ottDao.findAll();
     List<Integer> tlist = obDao.hisOrCurExist(otName);
     if (!tlist.isEmpty()) {
       Integer his = tlist.get(0);
@@ -84,12 +84,18 @@ public class GetOtDetailJson extends ActionSupport implements SessionAware {
 
       List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(getOt2().getOtId(), queryHis);
       if (ffcrs != null && ffcrs.size() > 0) {
-        ffcRef = ffcrs.get(0);
+	ffcRef = ffcrs.get(0);
       }
-      String tmp[] = otorDao.getOtOpticalVaration(ot2, queryHis).split("=");
-      otOpticalVaration = tmp[0];
-      otxyVaration = tmp[1];
-      otxyTempVaration = tmp[2];
+      if (ot2 != null) {
+	String tmp[] = otorDao.getOtOpticalVaration(ot2, queryHis).split("=");
+	otOpticalVaration = tmp[0];
+	otxyVaration = tmp[1];
+	otxyTempVaration = tmp[2];
+      } else {
+	otOpticalVaration = "[]";
+	otxyVaration = "[]";
+	otxyTempVaration = "[]";
+      }
     } else {
       ffcList = new ArrayList();
       otOpticalVaration = "[]";
