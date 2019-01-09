@@ -192,6 +192,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setDecD(otc.getDecD());
         oor.setX(otc.getX());
         oor.setY(otc.getY());
+        oor.setXTemp(otc.getX());
+        oor.setYTemp(otc.getY());
         oor.setDateUt(ff2.getGenTime());
         oor.setMagAper(otc.getMagAper());
         oor.setMagerrAper(otc.getMagerrAper());
