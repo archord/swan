@@ -62,7 +62,8 @@ public class OTCatalog {
             + " otFlag=" + otFlag
             + " distance=" + distance
             + " deltamag=" + deltamag
-            + " cutImageName=" + cutImageName;
+            + " cutImageName=" + cutImageName
+            + " probability=" + probability;
   }
 
   /**

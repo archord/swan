@@ -512,7 +512,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
       try {
         out.write(tmsg.getBytes());
         out.flush();
-        log.warn("start send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+        log.debug("start send fwhm, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
         isp.setSendSuccess(true);
       } catch (IOException ex) {
         log.error("send fwhm, send message error.", ex);
@@ -523,7 +523,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
         log.error("send fwhm, delay error.", ex);
       }
     } else {
-      log.warn("send fwhm ispId=" + isp.getIspId() + ", image status do not meet send status.");
+      log.debug("send fwhm ispId=" + isp.getIspId() + ", image status do not meet send status.");
     }
   }
 
@@ -533,7 +533,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
       try {
         out.write(tmsg.getBytes());
         out.flush();
-        log.warn("start send guide, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
+        log.debug("start send guide, ccdId:" + isp.getDpmId() + ", number: " + isp.getPrcNum() + ", message: " + tmsg);
         isp.setSendSuccess(true);
       } catch (IOException ex) {
         log.error("send guide, send message error.", ex);
@@ -544,7 +544,7 @@ public class ImageStatusParmServiceImpl implements BaseService {
         log.error("send guide, delay error.", ex);
       }
     } else {
-      log.warn("send guide ispId=" + isp.getIspId() + ", image status do not meet send status.");
+      log.debug("send guide ispId=" + isp.getIspId() + ", image status do not meet send status.");
     }
   }
 

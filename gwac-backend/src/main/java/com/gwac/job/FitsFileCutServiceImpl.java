@@ -72,7 +72,7 @@ public class FitsFileCutServiceImpl implements BaseService {
       log.error("Job error", ex);
     } finally {
       if (running == false) {
-        running = true;
+	running = true;
       }
     }
     long endTime = System.nanoTime();
@@ -91,32 +91,34 @@ public class FitsFileCutServiceImpl implements BaseService {
       List<OtObserveRecord> oors = oorDao.getLastRecord(otlv2);
 
       if (tffcs.isEmpty() || oors.isEmpty()) {
-        continue;
+	continue;
       }
       FitsFileCut firstFfc = tffcs.get(0);
       OtObserveRecord lastRecord = oors.get(0);
 
       for (int i = otlv2.getLastFfNumber() + 1; i <= otlv2.getLastFfNumber() + 2; i++) {
-        FitsFile2 tff = ff2Dao.getByOt2ForCut(otlv2.getOtId(), i);
-        if (tff == null) {
-          log.warn("can't find orig fits file of " + otlv2.getName() + " in number " + i + ", is the sky region name correct ?");
-          continue;
-        }
+	FitsFile2 tff = ff2Dao.getByOt2ForCut(otlv2.getOtId(), i);
+	if (tff == null) {
+	  if (i > 20) {
+	    log.warn("can't find orig fits file of " + otlv2.getName() + " in number " + i + ", is the sky region name correct ?");
+	  }
+	  continue;
+	}
 
-        FitsFileCut ffc = new FitsFileCut();
-        ffc.setFfId(tff.getFfId());
-        ffc.setStorePath(firstFfc.getStorePath());
-        ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
-        ffc.setOtId(otlv2.getOtId());
-        ffc.setNumber(i);
-        ffc.setDpmId(otlv2.getDpmId().shortValue());
-        ffc.setImgX(lastRecord.getX());
-        ffc.setImgY(lastRecord.getY());
-        ffc.setRequestCut(false);
-        ffc.setSuccessCut(false);
-        ffc.setIsMissed(true);
-        ffc.setPriority((short) (otlv2.getLastFfNumber() - i));
-        ffcDao.save(ffc);
+	FitsFileCut ffc = new FitsFileCut();
+	ffc.setFfId(tff.getFfId());
+	ffc.setStorePath(firstFfc.getStorePath());
+	ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
+	ffc.setOtId(otlv2.getOtId());
+	ffc.setNumber(i);
+	ffc.setDpmId(otlv2.getDpmId().shortValue());
+	ffc.setImgX(lastRecord.getX());
+	ffc.setImgY(lastRecord.getY());
+	ffc.setRequestCut(false);
+	ffc.setSuccessCut(false);
+	ffc.setIsMissed(true);
+	ffc.setPriority((short) (otlv2.getLastFfNumber() - i));
+	ffcDao.save(ffc);
       }
 
       otlv2.setCuttedFfNumber(otlv2.getLastFfNumber() + 2);
@@ -139,66 +141,66 @@ public class FitsFileCutServiceImpl implements BaseService {
        * cuttedFfNumber == 0代表ot2还没开始计算切图
        */
       if (cuttedFfNumber == 0) {
-        cuttedFfNumber = otlv2.getFirstFfNumber() > 2 ? otlv2.getFirstFfNumber() - (headTailCutNumber + 1) : 1;
+	cuttedFfNumber = otlv2.getFirstFfNumber() > 2 ? otlv2.getFirstFfNumber() - (headTailCutNumber + 1) : 1;
       }
 
       List<FitsFileCut> tffcs = ffcDao.getFirstCutFile(otlv2);
       List<OtObserveRecord> oors = oorDao.getUnCutRecord(otlv2.getOtId(), cuttedFfNumber);
 
       if (tffcs.isEmpty()) {
-        continue;
+	continue;
       }
       FitsFileCut firstFfc = tffcs.get(0);
 
       int oorIdx = 0;
       for (int i = cuttedFfNumber + 1; i <= otlv2.getLastFfNumber(); i++) {
-        FitsFile2 tff = ff2Dao.getByOt2ForCut(otlv2.getOtId(), i);
-        if (tff == null) {
-          log.warn("can't find orig fits file of " + otlv2.getName() + " in number " + i + ", is the sky region name correct ?");
-          continue;
-        }
-        while (oorIdx < oors.size() && oors.get(oorIdx).getFfNumber() <= i) {
-          oorIdx++;
-        }
+	FitsFile2 tff = ff2Dao.getByOt2ForCut(otlv2.getOtId(), i);
+	if (tff == null) {
+	  log.warn("can't find orig fits file of " + otlv2.getName() + " in number " + i + ", is the sky region name correct ?");
+	  continue;
+	}
+	while (oorIdx < oors.size() && oors.get(oorIdx).getFfNumber() <= i) {
+	  oorIdx++;
+	}
 
-        int tIdx = oorIdx;
-        if (i >= otlv2.getFirstFfNumber() && oorIdx > 0) {
-          tIdx = oorIdx - 1;
-        }
-        //防止指针越界
-        if (tIdx < 0) {
-          tIdx = 0;
-        }
+	int tIdx = oorIdx;
+	if (i >= otlv2.getFirstFfNumber() && oorIdx > 0) {
+	  tIdx = oorIdx - 1;
+	}
+	//防止指针越界
+	if (tIdx < 0) {
+	  tIdx = 0;
+	}
 
-        OtObserveRecord toor = oors.get(tIdx);
-        FitsFileCut ffc = new FitsFileCut();
-        ffc.setFfId(tff.getFfId());
-        ffc.setStorePath(firstFfc.getStorePath());
-        ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
-        ffc.setOtId(otlv2.getOtId());
-        ffc.setNumber(i);
-        ffc.setDpmId(otlv2.getDpmId().shortValue());
-        ffc.setImgX(toor.getX());
-        ffc.setImgY(toor.getY());
-        ffc.setRequestCut(false);
-        ffc.setSuccessCut(false);
-        ffc.setIsMissed(true);
-        if (toor.getFfNumber() == i || i < otlv2.getFirstFfNumber() || i > otlv2.getLastFfNumber()) {
-          if (i == otlv2.getLastFfNumber()) {
-            ffc.setPriority((short) 0);
-          } else {
-            ffc.setPriority((short) (i - otlv2.getFirstFfNumber()));
-          }
-        } else {
-          ffc.setPriority(Short.MAX_VALUE);
-        }
+	OtObserveRecord toor = oors.get(tIdx);
+	FitsFileCut ffc = new FitsFileCut();
+	ffc.setFfId(tff.getFfId());
+	ffc.setStorePath(firstFfc.getStorePath());
+	ffc.setFileName(String.format("%s_%04d", otlv2.getName(), i));
+	ffc.setOtId(otlv2.getOtId());
+	ffc.setNumber(i);
+	ffc.setDpmId(otlv2.getDpmId().shortValue());
+	ffc.setImgX(toor.getX());
+	ffc.setImgY(toor.getY());
+	ffc.setRequestCut(false);
+	ffc.setSuccessCut(false);
+	ffc.setIsMissed(true);
+	if (toor.getFfNumber() == i || i < otlv2.getFirstFfNumber() || i > otlv2.getLastFfNumber()) {
+	  if (i == otlv2.getLastFfNumber()) {
+	    ffc.setPriority((short) 0);
+	  } else {
+	    ffc.setPriority((short) (i - otlv2.getFirstFfNumber()));
+	  }
+	} else {
+	  ffc.setPriority(Short.MAX_VALUE);
+	}
 
-        ffcDao.save(ffc);
+	ffcDao.save(ffc);
 
-        if (toor.getFfNumber() == i) {
-          toor.setFfcId(ffc.getFfcId());
-          oorDao.updateFfcId(toor);
-        }
+	if (toor.getFfNumber() == i) {
+	  toor.setFfcId(ffc.getFfcId());
+	  oorDao.updateFfcId(toor);
+	}
       }
 
       otlv2.setCuttedFfNumber(otlv2.getLastFfNumber());

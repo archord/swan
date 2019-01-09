@@ -81,7 +81,6 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
   @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
-  private int totalRecord = 0;
   @Resource
   private JmsTemplate jmsTemplate;
   @Resource(name = "otCheckDest")
@@ -111,7 +110,6 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
         for (UploadFileUnstore ufu : ufus) {
           parseLevel1Ot(ufu.getUfuId(), ufu.getStorePath(), ufu.getFileName());
         }
-        log.debug("total cut ot1 number:" + totalRecord);
       }
     } catch (Exception ex) {
       log.error("Job error", ex);
@@ -153,7 +151,6 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
       int dpmId = ff2.getCamId();
 
       List<OTCatalog> otcs = otcDao.getDiffOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
-      totalRecord += otcs.size();
       for (OTCatalog otc : otcs) {
 
         String otListPath = storePath;
@@ -242,7 +239,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
           otorDao.save(oor);
 
           if (oor.getOtFlag()) {
-
+	    
             int otNumber = otnDao.getSubNumberByDate(fileDate);
             String otName = String.format("%s%s_D%05d", ccdType, fileDate, otNumber);
 

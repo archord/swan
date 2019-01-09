@@ -291,7 +291,7 @@ $(function () {
               "  </div>" +
               "</div>";
       $("#showOt2Fits").show();
-    } else if (ot2.dataProduceMethod === '8') {
+    } else if (ot2.dataProduceMethod === 'b') {
       $("#cut-image-show").css({width: "620px"});
       cutImageShow = "<div id=\"obj-image-cut\">" +
               "  <div id=\"carousel-wrapper\">" +
@@ -350,7 +350,7 @@ $(function () {
           title: item.fileName + ".jpg",
           style: "width:200px;height:200px;border:0"
         });
-      } else if (ot2.dataProduceMethod === '8') {
+      } else if (ot2.dataProduceMethod === 'b') {
         objImg = $('<img/>', {
           src: dataRootWebMap + "/" + item.storePath + "/" + item.fileName,
           alt: item.fileName,
@@ -601,6 +601,14 @@ $(function () {
           "targets": 0,
           "data": "dont know",
           "render": formateRowNumber
+        }, {
+          "targets": [3],
+          "data": "dont know",
+          "render": formateRaDec60
+        }, {
+          "targets": [4],
+          "data": "dont know",
+          "render": formateRaDec602
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -792,6 +800,28 @@ $(function () {
     var day = parseInt(date[2]) + (parseInt(time[0]) + parseInt(time[1]) / 60 + parseInt(time[2]) / 3600) / 24;
     var raStr = degreeToHMS2(full.raD, "+");
     var decStr = degreeToDMS2(full.decD, "+");
+    var searchUrl = "http://www.minorplanetcenter.net/cgi-bin/mpcheck.cgi?TextArea=&radius=15&limit=20.0&oc=327&sort=d&mot=h&tmot=s&pdes=u&needed=f&ps=n&type=p&which=pos&";
+    searchUrl += "year=" + date[0] + "&month=" + date[1] + "&day=" + day + "&ra=" + raStr + "&decl=" + decStr;
+    return "<a href='" + searchUrl + "' title='点击在IAU小行星网站搜寻OT对应坐标' target='_blank'>" + data + "</a>";
+  }
+
+  function formateRaDec60(data, type, full, meta) {
+    //var searchUrl = "http://simbad.u-strasbg.fr/simbad/sim-coo?CooFrame=FK5&CooEpoch=2000&CooEqui=2000&CooDefinedFrames=none&Radius=5&Radius.unit=arcmin&submit=submit%20query&Coord=";
+    //searchUrl += full.raD + "%20" + full.decD;
+    var searchUrl = "http://vizier.u-strasbg.fr/viz-bin/VizieR-4?-ref=VIZ5bd5371da602&-out.add=_r&-out.add=_RAJ%2C_DEJ&-sort=_r&-order=I&-oc.form=sexa&-meta.foot=1&-meta=1&-meta.ucd=2&-c.geom=r&-c.eq=J2000&-c.u=arcmin&-c.r=+0.1&-c=";
+    //110.58181%2C+30.451553
+    searchUrl += full.lastRa + "%2C" + full.lastDec;
+    return "<a href='" + searchUrl + "' title='点击在VizieR搜寻OT对应坐标' target='_blank'>" + data + "</a>";
+  }
+
+  function formateRaDec602(data, type, full, meta) {
+    //dateUt: "2015-12-26T22:13:24"
+    var dateTime = full.startTimeUtc.split("T");
+    var date = dateTime[0].split("-");
+    var time = dateTime[1].split(":");
+    var day = parseInt(date[2]) + (parseInt(time[0]) + parseInt(time[1]) / 60 + parseInt(time[2]) / 3600) / 24;
+    var raStr = degreeToHMS2(full.lastRa, "+");
+    var decStr = degreeToDMS2(full.lastDec, "+");
     var searchUrl = "http://www.minorplanetcenter.net/cgi-bin/mpcheck.cgi?TextArea=&radius=15&limit=20.0&oc=327&sort=d&mot=h&tmot=s&pdes=u&needed=f&ps=n&type=p&which=pos&";
     searchUrl += "year=" + date[0] + "&month=" + date[1] + "&day=" + day + "&ra=" + raStr + "&decl=" + decStr;
     return "<a href='" + searchUrl + "' title='点击在IAU小行星网站搜寻OT对应坐标' target='_blank'>" + data + "</a>";

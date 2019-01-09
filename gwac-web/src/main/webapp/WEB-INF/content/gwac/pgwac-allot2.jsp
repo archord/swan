@@ -32,7 +32,7 @@
             <h4>处理方式</h4>
             <select name="ot2qp.processType" id="ot2ProcessType" multiple="multiple" class="ot2QueryParameter">
               <option value="1">星表匹配</option>
-              <option value="8">图像相减</option>
+              <option value="b">图像相减</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
