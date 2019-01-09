@@ -209,6 +209,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setClassStar(otc.getClassStar());
         oor.setFlux(otc.getFlux());
         oor.setProbability(otc.getProbability());
+	oor.setThreshold(otc.getThreshold());
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较
