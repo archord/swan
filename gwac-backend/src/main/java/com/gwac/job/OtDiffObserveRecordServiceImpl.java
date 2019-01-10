@@ -241,7 +241,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
 
           otorDao.save(oor);
 
-          if (oor.getOtFlag()) {
+//          if (oor.getOtFlag()) {
+          if (false) {
 	    
             int otNumber = otnDao.getSubNumberByDate(fileDate);
             String otName = String.format("%s%s_D%05d", ccdType, fileDate, otNumber);
@@ -289,7 +290,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
             jmsTemplate.send(otCheckDest, tmc);
 
           } else {
-            //List<OtObserveRecord> oors = otorDao.existInAll(oor, errorBox);
+//            List<OtObserveRecord> oors = otorDao.existInAll(oor, errorBox);
             List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
             if (oors.size() >= cutOccurNumber) {
               OtObserveRecord oor1 = oors.get(0);
@@ -325,7 +326,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setOtherMatch((short) 0);
               tOtLv2.setUsnoMatch((short) 0);
               tOtLv2.setOtType((short) 0);
-              tOtLv2.setLookBackResult((short) 2);
+              tOtLv2.setLookBackResult((short) 1);
               tOtLv2.setFollowUpResult((short) 0);
               tOtLv2.setProbability(oor1.getProbability());
 
