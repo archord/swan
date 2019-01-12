@@ -229,6 +229,10 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
             tlv2.setMag(otLv2.getMag());
           }
           tlv2.setTotal(tlv2.getTotal() + 1);
+          if (oor.getOtFlag() && tlv2.getLookBackResult()==2) {
+            tlv2.setLookBackResult((short) 1);
+            otLv2Dao.updateLookBackResult(tlv2);
+          }
 //          otLv2Dao.update(tlv2);
           otLv2Dao.updateSomeRealTimeInfo(tlv2);
 
@@ -241,8 +245,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
 
           otorDao.save(oor);
 
-//          if (oor.getOtFlag()) {
-          if (false) {
+          if (oor.getOtFlag()) {
+//          if (false) {
 	    
             int otNumber = otnDao.getSubNumberByDate(fileDate);
             String otName = String.format("%s%s_D%05d", ccdType, fileDate, otNumber);
@@ -275,7 +279,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setOtherMatch((short) 0);
             tOtLv2.setUsnoMatch((short) 0);
             tOtLv2.setOtType((short) 0);
-            tOtLv2.setLookBackResult((short) 1);
+            tOtLv2.setLookBackResult((short) 0);
             tOtLv2.setFollowUpResult((short) 0);
             tOtLv2.setProbability(oor.getProbability());
 
@@ -326,7 +330,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setOtherMatch((short) 0);
               tOtLv2.setUsnoMatch((short) 0);
               tOtLv2.setOtType((short) 0);
-              tOtLv2.setLookBackResult((short) 1);
+              tOtLv2.setLookBackResult((short) 2);
               tOtLv2.setFollowUpResult((short) 0);
               tOtLv2.setProbability(oor1.getProbability());
 
