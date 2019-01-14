@@ -166,8 +166,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
         otLv2.setAllFileCutted(true);
         otLv2.setSkyId(ff2.getSkyId().shortValue());
         otLv2.setDataProduceMethod('b');    //星表匹配一级OT
-        otLv2.setXtemp(otc.getX());
-        otLv2.setYtemp(otc.getY());
+        otLv2.setXtemp(otc.getXTemp());
+        otLv2.setYtemp(otc.getYTemp());
         otLv2.setMag(otc.getMagAper());
 
         String cutImg = otc.getCutImageName();
@@ -192,8 +192,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setDecD(otc.getDecD());
         oor.setX(otc.getX());
         oor.setY(otc.getY());
-        oor.setXTemp(otc.getX());
-        oor.setYTemp(otc.getY());
+        oor.setXTemp(otc.getXTemp());
+        oor.setYTemp(otc.getYTemp());
         oor.setDateUt(ff2.getGenTime());
         oor.setMagAper(otc.getMagAper());
         oor.setMagerrAper(otc.getMagerrAper());
@@ -264,8 +264,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setSkyId(oor.getSkyId());
             tOtLv2.setDataProduceMethod('b');    //图像相减一级OT
             tOtLv2.setFirstNMark(false);
-            tOtLv2.setXtemp(otc.getX());
-            tOtLv2.setYtemp(otc.getY());
+            tOtLv2.setXtemp(otc.getXTemp());
+            tOtLv2.setYtemp(otc.getYTemp());
             tOtLv2.setFoCount((short) 0);
             tOtLv2.setMag(oor.getMagAper());
             tOtLv2.setCvsMatch((short) 0);
@@ -278,6 +278,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setLookBackResult((short) 1);
             tOtLv2.setFollowUpResult((short) 0);
             tOtLv2.setProbability(oor.getProbability());
+	    tOtLv2.setLookBackCnn(oor.getProbability());
 
             otLv2Dao.save(tOtLv2);
 
@@ -315,8 +316,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setSkyId(oor1.getSkyId());
               tOtLv2.setDataProduceMethod('b');    //图像相减一级OT
               tOtLv2.setFirstNMark(false);
-              tOtLv2.setXtemp(otc.getX());
-              tOtLv2.setYtemp(otc.getY());
+              tOtLv2.setXtemp(otc.getXTemp());
+              tOtLv2.setYtemp(otc.getYTemp());
               tOtLv2.setFoCount((short) 0);
               tOtLv2.setMag(oor1.getMagAper());
               tOtLv2.setCvsMatch((short) 0);
@@ -329,6 +330,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setLookBackResult((short) 1);
               tOtLv2.setFollowUpResult((short) 0);
               tOtLv2.setProbability(oor1.getProbability());
+	      tOtLv2.setLookBackCnn(oor1.getProbability());
 
               otLv2Dao.save(tOtLv2);
 

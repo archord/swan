@@ -405,8 +405,8 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         OTCatalog ot = new OTCatalog();
 
         // add values from csv to car object  
-        ot.setX(Float.parseFloat(strs[0]));
-        ot.setY(Float.parseFloat(strs[1]));
+        ot.setXTemp(Float.parseFloat(strs[0]));
+        ot.setYTemp(Float.parseFloat(strs[1]));
         ot.setFlux(Float.parseFloat(strs[2]));
         ot.setEllipticity(Float.parseFloat(strs[6]));
         ot.setClassStar(Float.parseFloat(strs[7]));
@@ -415,23 +415,25 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
         ot.setFlag(Integer.parseInt(strs[10]));
         ot.setMagAper(Float.parseFloat(strs[11]));
         ot.setMagerrAper(Float.parseFloat(strs[12]));
-        if (strs[5].contains(":")) {
-          ot.setRaD(CommonFunction.hmsToDegree(strs[13]));
+        ot.setX(Float.parseFloat(strs[13]));
+        ot.setY(Float.parseFloat(strs[14]));
+        if (strs[15].contains(":")) {
+          ot.setRaD(CommonFunction.hmsToDegree(strs[15]));
         } else {
-          ot.setRaD(Float.parseFloat(strs[13]));
+          ot.setRaD(Float.parseFloat(strs[15]));
         }
-        if (strs[6].contains(":")) {
-          ot.setDecD(CommonFunction.dmsToDegree(strs[14]));
+        if (strs[16].contains(":")) {
+          ot.setDecD(CommonFunction.dmsToDegree(strs[16]));
         } else {
-          ot.setDecD(Float.parseFloat(strs[14]));
+          ot.setDecD(Float.parseFloat(strs[16]));
         }
-        ot.setProbability(Float.parseFloat(strs[15]));
-        if ("1".equals(strs[16])) {
+        ot.setProbability(Float.parseFloat(strs[17]));
+        if ("1".equals(strs[18])) {
           ot.setOtFlag(Boolean.TRUE); //noMatch:1;match:0
         } else {
           ot.setOtFlag(Boolean.FALSE); //noMatch:1;match:0
         }
-        ot.setCutImageName(strs[17]);
+        ot.setCutImageName(strs[19]);
 
         otList.add(ot);
       }
