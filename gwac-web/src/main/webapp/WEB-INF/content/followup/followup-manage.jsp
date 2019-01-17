@@ -56,6 +56,7 @@
             <option value="1">MINIOT</option>
             <option value="2">CATAS</option>
             <option value="3">NEWOT</option>
+            <option value="4">CHECK</option>
           </select>
           <span style="font-size: 18px">&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <input type="button" value="增加" class="btn btn-primary" id="addFuObsBtn"/>

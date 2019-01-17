@@ -227,6 +227,8 @@ $(function () {
       name = "CATAS";
     } else if (data === '3') {
       name = "NEWOT";
+    } else if (data === '4') {
+      name = "CHECK";
     }
     return name;
   }

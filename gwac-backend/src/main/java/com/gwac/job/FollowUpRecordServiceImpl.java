@@ -94,7 +94,7 @@ public class FollowUpRecordServiceImpl implements BaseService {
       log.error("Job error", ex);
     } finally {
       if (running == false) {
-        running = true;
+	running = true;
       }
     }
     long endTime = System.nanoTime();
@@ -108,7 +108,7 @@ public class FollowUpRecordServiceImpl implements BaseService {
 
     if (!ufus.isEmpty()) {
       for (UploadFileUnstore obj : ufus) {
-        parseFollowUpInfo(obj.getUfuId(), obj.getStorePath(), obj.getFileName());
+	parseFollowUpInfo(obj.getUfuId(), obj.getStorePath(), obj.getFileName());
 //        ufuDao.updateProcessDoneTime(obj.getUfuId());
       }
     }
@@ -133,9 +133,9 @@ public class FollowUpRecordServiceImpl implements BaseService {
     if (ot2Name != null && !ot2Name.trim().isEmpty()) {
       OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name.trim(), false);
       if (ot2 != null) {
-        ot2Id = ot2.getOtId();
-      }else{
-        log.warn("can not find ot2:" + ot2Name);
+	ot2Id = ot2.getOtId();
+      } else {
+	log.warn("can not find ot2:" + ot2Name);
       }
     }
 
@@ -151,15 +151,15 @@ public class FollowUpRecordServiceImpl implements BaseService {
       FollowUpCatalog tfr = objs.get(0);
       FollowUpFitsfile fuf = fufDao.getByName(tfr.getFfName());
       if (fuf == null) {
-        /**
-         * fuf = new FollowUpFitsfile(); fuf.setFfName(tfr.getFfName());
-         * fuf.setFfPath(storePath); fuf.setFoId(fo.getFoId()); File tfile = new
-         * File(rootPath + "/" + storePath + "/" + tfr.getFfName()); if
-         * (tfile.exists()) { fuf.setIsUpload(true); } else {
-         * fuf.setIsUpload(false); } fufDao.save(fuf); *
-         */
-        log.error("hibernate cache problem, can not find FollowUpFitsfile " + tfr.getFfName());
-        return;
+	/**
+	 * fuf = new FollowUpFitsfile(); fuf.setFfName(tfr.getFfName());
+	 * fuf.setFfPath(storePath); fuf.setFoId(fo.getFoId()); File tfile = new
+	 * File(rootPath + "/" + storePath + "/" + tfr.getFfName()); if
+	 * (tfile.exists()) { fuf.setIsUpload(true); } else {
+	 * fuf.setIsUpload(false); } fufDao.save(fuf); *
+	 */
+	log.error("hibernate cache problem, can not find FollowUpFitsfile " + tfr.getFfName());
+	return;
       }
 
       short checkId = 1;
@@ -168,19 +168,19 @@ public class FollowUpRecordServiceImpl implements BaseService {
       short newotId = 4;
       FollowUpObjectType tfuot = fuotDao.getOtTypeByTypeName("CHECK");
       if (tfuot != null) {
-        checkId = tfuot.getFuoTypeId();
+	checkId = tfuot.getFuoTypeId();
       }
       tfuot = fuotDao.getOtTypeByTypeName("MINIOT");
       if (tfuot != null) {
-        miniotId = tfuot.getFuoTypeId();
+	miniotId = tfuot.getFuoTypeId();
       }
       tfuot = fuotDao.getOtTypeByTypeName("CATAS");
       if (tfuot != null) {
-        catasId = tfuot.getFuoTypeId();
+	catasId = tfuot.getFuoTypeId();
       }
       tfuot = fuotDao.getOtTypeByTypeName("NEWOT");
       if (tfuot != null) {
-        newotId = tfuot.getFuoTypeId();
+	newotId = tfuot.getFuoTypeId();
       }
 
       List<FollowUpCatalog> checkObjs = new ArrayList<>();
@@ -188,36 +188,37 @@ public class FollowUpRecordServiceImpl implements BaseService {
       List<FollowUpCatalog> catasObjs = new ArrayList<>();
       List<FollowUpCatalog> newotObjs = new ArrayList<>();
       for (FollowUpCatalog obj : objs) {
-        if (obj.getOtType().trim().equalsIgnoreCase("CHECK")) {
-          checkObjs.add(obj);
-        } else if (obj.getOtType().trim().equalsIgnoreCase("MINIOT")) {
-          miniotObjs.add(obj);
-        } else if (obj.getOtType().trim().equalsIgnoreCase("CATAS")) {
-          catasObjs.add(obj);
-        } else if (obj.getOtType().trim().equalsIgnoreCase("NEWOT")) {
-          newotObjs.add(obj);
-        }
-      }
-
-      for (FollowUpCatalog obj : checkObjs) {
-        saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), checkId);
+	if (obj.getOtType().trim().equalsIgnoreCase("CHECK")) {
+	  checkObjs.add(obj);
+	} else if (obj.getOtType().trim().equalsIgnoreCase("MINIOT")) {
+	  miniotObjs.add(obj);
+	} else if (obj.getOtType().trim().equalsIgnoreCase("CATAS")) {
+	  catasObjs.add(obj);
+	} else if (obj.getOtType().trim().equalsIgnoreCase("NEWOT")) {
+	  newotObjs.add(obj);
+	}
       }
 
       if (miniotObjs.size() > 0) {
-        for (FollowUpCatalog obj : miniotObjs) {
-          saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), miniotId);
-        }
-        foDao.updateProcessResult(foName, '1'); //MINIOT:1, CATAS:2, NEWOT:3
+	for (FollowUpCatalog obj : miniotObjs) {
+	  saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), miniotId);
+	}
+	foDao.updateProcessResult(foName, '1'); //MINIOT:1, CATAS:2, NEWOT:3, CHECK:4
       } else if (catasObjs.size() > 0) {
-        for (FollowUpCatalog obj : catasObjs) {
-          saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), catasId);
-        }
-        foDao.updateProcessResult(foName, '2');
+	for (FollowUpCatalog obj : catasObjs) {
+	  saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), catasId);
+	}
+	foDao.updateProcessResult(foName, '2');
       } else if (newotObjs.size() > 0) {
-        for (FollowUpCatalog obj : newotObjs) {
-          saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
-        }
-        foDao.updateProcessResult(foName, '3');
+	for (FollowUpCatalog obj : newotObjs) {
+	  saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), newotId);
+	}
+	foDao.updateProcessResult(foName, '3');
+      } else if (checkObjs.size() > 0) {
+	for (FollowUpCatalog obj : checkObjs) {
+	  saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), checkId);
+	}
+	foDao.updateProcessResult(foName, '4');
       }
       MessageCreator tmc = new FollowUpObjectCheckMessageCreator(fo.getFoId());
       jmsTemplate.send(followUpObjCheckDest, tmc);
@@ -259,8 +260,8 @@ public class FollowUpRecordServiceImpl implements BaseService {
       tfuo.setLastTimeUtc(fuo.getLastTimeUtc());
       tfuo.setLastSerialNumber(fuo.getLastSerialNumber());
       if (fuo.getFoundSerialNumber() < tfuo.getFoundSerialNumber()) {
-        tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
-        tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());
+	tfuo.setStartTimeUtc(fuo.getStartTimeUtc());
+	tfuo.setFoundSerialNumber(fuo.getFoundSerialNumber());
       }
       fuoDao.update(tfuo);
     } else {
@@ -293,7 +294,7 @@ public class FollowUpRecordServiceImpl implements BaseService {
     fur.setFuSerialNumber(obj.getFuSerialNumber());
     fur.setFufId(fufId);
     fur.setDistance(obj.getDistance());
-    
+
     frDao.save(fur);
   }
 
