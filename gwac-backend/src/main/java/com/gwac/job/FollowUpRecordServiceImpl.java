@@ -199,6 +199,9 @@ public class FollowUpRecordServiceImpl implements BaseService {
 	}
       }
 
+      for (FollowUpCatalog obj : checkObjs) {
+	saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), checkId);
+      }
       if (miniotObjs.size() > 0) {
 	for (FollowUpCatalog obj : miniotObjs) {
 	  saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), miniotId);
@@ -215,9 +218,6 @@ public class FollowUpRecordServiceImpl implements BaseService {
 	}
 	foDao.updateProcessResult(foName, '3');
       } else if (checkObjs.size() > 0) {
-	for (FollowUpCatalog obj : checkObjs) {
-	  saveFollowUpCatalog(obj, ot2Id, fo.getFoId(), fuf.getFufId(), checkId);
-	}
 	foDao.updateProcessResult(foName, '4');
       }
       MessageCreator tmc = new FollowUpObjectCheckMessageCreator(fo.getFoId());
