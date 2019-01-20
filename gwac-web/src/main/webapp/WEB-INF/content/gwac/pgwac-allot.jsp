@@ -176,6 +176,10 @@
                 <option value="20">疑似OT</option>
                 <option value="21">热像斑</option>
                 <option value="22">慢速移动目标</option>
+                <option value="23">大凹坑</option>
+                <option value="24">增益边界</option>
+                <option value="25">散焦</option>
+                <option value="26">快门没关</option>
               </select></td>
             <td>回看：</td>
             <td>
