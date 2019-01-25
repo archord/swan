@@ -211,7 +211,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
         oor.setClassStar(otc.getClassStar());
         oor.setFlux(otc.getFlux());
         oor.setProbability(otc.getProbability());
-	oor.setThreshold(otc.getThreshold());
+        oor.setThreshold(otc.getThreshold());
 
         //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
         //existInLatestN与最近5幅比较
@@ -243,7 +243,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
 
 //          if (oor.getOtFlag()) {
           if (false) {
-	    
+
             int otNumber = otnDao.getSubNumberByDate(fileDate);
             String otName = String.format("%s%s_D%05d", ccdType, fileDate, otNumber);
 
@@ -278,7 +278,7 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
             tOtLv2.setLookBackResult((short) 1);
             tOtLv2.setFollowUpResult((short) 0);
             tOtLv2.setProbability(oor.getProbability());
-	    tOtLv2.setLookBackCnn(oor.getProbability());
+            tOtLv2.setLookBackCnn(oor.getProbability());
 
             otLv2Dao.save(tOtLv2);
 
@@ -312,7 +312,6 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setAllFileCutted(true);
               tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
               tOtLv2.setCuttedFfNumber(0);
-              tOtLv2.setIsMatch((short) 0);
               tOtLv2.setSkyId(oor1.getSkyId());
               tOtLv2.setDataProduceMethod('b');    //图像相减一级OT
               tOtLv2.setFirstNMark(false);
@@ -327,10 +326,19 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
               tOtLv2.setOtherMatch((short) 0);
               tOtLv2.setUsnoMatch((short) 0);
               tOtLv2.setOtType((short) 0);
-              tOtLv2.setLookBackResult((short) 1);
+              if (oor.getOtFlag()) {
+                tOtLv2.setIsMatch((short) 0);
+              } else {
+                tOtLv2.setIsMatch((short) 2);
+              }
+              if (oor.getProbability() > 0.01 || oor1.getProbability() > 0.01) {
+                tOtLv2.setLookBackResult((short) 1);
+              }else{
+                tOtLv2.setLookBackResult((short) 2);
+              }
               tOtLv2.setFollowUpResult((short) 0);
               tOtLv2.setProbability(oor1.getProbability());
-	      tOtLv2.setLookBackCnn(oor1.getProbability());
+              tOtLv2.setLookBackCnn(oor1.getProbability());
 
               otLv2Dao.save(tOtLv2);
 
