@@ -60,8 +60,10 @@
     curnode: [],
     parseData: function(reqData) {
       gwac = this;
-      gwac.ot1Obj = eval(reqData.ot1List);
-      gwac.motObj = eval(reqData.motList);
+      //gwac.ot1Obj = eval(reqData.ot1List);
+      //gwac.motObj = eval(reqData.motList);
+      gwac.ot1Obj = reqData.ot1List;
+      gwac.motObj = reqData.motList;
       gwac.firstFrame = reqData.minNum;
       gwac.lastFrame = reqData.maxNum;
       gwac.firsDate = reqData.minDate;

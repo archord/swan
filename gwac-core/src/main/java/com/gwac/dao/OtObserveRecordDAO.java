@@ -16,6 +16,8 @@ import java.util.List;
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   
+  public List<OtObserveRecord> getOt1ByOorId(int camId, long oorId);
+  
   public String getMagCurveByTypeIdStarId(int typeId, long starId, int dataProduceMethod);
   
   public String getOt2TmplOpticalVaration(OtTmplWrong ot2Tmpl);
@@ -58,4 +60,5 @@ public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   public List<OtObserveRecord> getAllOrderByDate();
   
   public Object[] getMinMaxDateOt1(String dateStr);
+  public Object[] getMinMaxDateOt1();
 }

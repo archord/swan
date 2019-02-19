@@ -491,8 +491,8 @@ public class LineObject {
 
   }
 
-  public void addPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, long oorId) {
-    this.addPoint(new HoughtPoint(pIdx, frameNumber, x, y, dateUtc, oorId));
+  public void addPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, long oorId, double ra, double dec) {
+    this.addPoint(new HoughtPoint(pIdx, frameNumber, x, y, dateUtc, oorId, ra, dec));
   }
 
   /**
@@ -661,7 +661,7 @@ public class LineObject {
           avgX /= tnum;
           avgY /= tnum;
           HoughtPoint fp = hf.pointList.get(0);
-          HoughtPoint thp = new HoughtPoint(fp.getpIdx(), fp.getFrameNumber(), avgX.floatValue(), avgY.floatValue(), fp.getDateUtc(), fp.getOorId());
+          HoughtPoint thp = new HoughtPoint(fp.getpIdx(), fp.getFrameNumber(), avgX.floatValue(), avgY.floatValue(), fp.getDateUtc(), fp.getOorId(), fp.getRa(), fp.getDec());
 
           for (HoughtPoint hp : hf.pointList) {
             for (int k = 0; k < this.pointList.size(); k++) {

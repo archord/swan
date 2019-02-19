@@ -147,7 +147,7 @@ public class FindMoveObject {
       tline.removeOldFrame(curNumber - this.maxHoughFrameNunmber);
 
       if (tline.matchLastPoint(ot1, maxDistance)) {
-        tline.addPoint(numOT1s - 1, curNumber, ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId());
+        tline.addPoint(numOT1s - 1, curNumber, ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId(), ot1.getRaD(), ot1.getDecD());
         if (tline.validSize() >= this.objInitMinPoint) {
           double tsigma = tline.lineRegression();
           if ((tsigma < 2 && tline.validSize() >= this.objInitMinPoint) || (tline.validSize() >= 10)) {
@@ -170,7 +170,7 @@ public class FindMoveObject {
     for (LineObject tline : this.mvObjs) {
       if (!tline.isEndLine(ot1.getFfNumber() - this.maxHoughFrameNunmber + 1)) {
         if (tline.isOnLine(ot1)) {
-          tline.addPoint(numOT1s - 1, ot1.getFfNumber(), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId());
+          tline.addPoint(numOT1s - 1, ot1.getFfNumber(), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId(), ot1.getRaD(), ot1.getDecD());
           findLine = true;
           break;
         }
@@ -204,7 +204,7 @@ public class FindMoveObject {
       i++;
     }
 
-    getOutLinePointSet();
+//    getOutLinePointSet();
 //    reprocess();
   }
 
@@ -220,7 +220,7 @@ public class FindMoveObject {
       for (LineObject tline : this.mvObjs) {
         if (tline.isOnLineReprocess(ot1)) {
           tnum++;
-          HoughtPoint hp = new HoughtPoint(idx, ot1.getFfNumber(), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId());
+          HoughtPoint hp = new HoughtPoint(idx, ot1.getFfNumber(), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId(), ot1.getRaD(), ot1.getDecD());
           tline.addPointReprocess(hp);
           break;
         }
