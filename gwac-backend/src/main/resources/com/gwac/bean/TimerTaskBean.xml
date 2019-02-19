@@ -139,17 +139,17 @@
     <property name="startDelay" value="10000" />   
   </bean>
     
-<!--  <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+  <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="findMoveObjectJob" />
-    <property name="repeatInterval" value="15000000000" />  
+    <property name="repeatInterval" value="15000" />  
     <property name="startDelay" value="5000" />   
-  </bean>-->
+  </bean>
   
   <!-- 13点40 -->
-  <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+<!--  <bean id="findMoveObjectTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="findMoveObjectJob" />
-    <property name="cronExpression" value="0 40 13 * * ?"/> <!-- 40 13 -->
-  </bean>
+    <property name="cronExpression" value="0 40 13 * * ?"/>  40 13 
+  </bean>-->
 
   <!-- Simple Trigger, run every 15 seconds -->
   <bean id="imageStatusParmTrigger" 

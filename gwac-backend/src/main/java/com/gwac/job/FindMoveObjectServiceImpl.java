@@ -182,7 +182,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
 	if (!destDir.exists()) {
 	  destDir.mkdirs();
 	}
-	String fullname = tpath + "/" + dateStr + ".json";
+//	String fullname = tpath + "/" + dateStr + ".json";
+	String fullname = tpath + "/today.json";
 	out = new FileOutputStream(new File(fullname));
 	out.write(sb.toString().getBytes());
 	out.close();

@@ -23,7 +23,7 @@
     lastDate: 1,
     reqNum: 1,
     maxNumber: 1,
-    playSpeed: 400,
+    playSpeed: 15000,
     playInterval: 1,
     startFrame: 1,
     currentFrame: 1,
@@ -60,8 +60,10 @@
     curnode: [],
     parseData: function(reqData) {
       gwac = this;
-      gwac.ot1Obj = eval(reqData.ot1List);
-      gwac.motObj = eval(reqData.motList);
+      //gwac.ot1Obj = eval(reqData.ot1List);
+      //gwac.motObj = eval(reqData.motList);
+      gwac.ot1Obj = reqData.ot1List;
+      gwac.motObj = reqData.motList;
       gwac.firstFrame = reqData.minNum;
       gwac.lastFrame = reqData.maxNum;
       gwac.firsDate = reqData.minDate;
