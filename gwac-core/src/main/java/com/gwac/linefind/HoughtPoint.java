@@ -16,7 +16,7 @@ public class HoughtPoint implements Comparable, Cloneable {
   private float x;
   private float y;
   private Date dateUtc;
-  private long oorId;
+  private String ffName;
   private double ra;
   private double dec;
 
@@ -29,13 +29,13 @@ public class HoughtPoint implements Comparable, Cloneable {
     return tstr;
   }
 
-  public HoughtPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, long oorId, double ra, double dec) {
+  public HoughtPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, String ffName, double ra, double dec) {
     this.pIdx = pIdx;
     this.frameNumber = frameNumber;
     this.x = x;
     this.y = y;
     this.dateUtc = dateUtc;
-    this.oorId = oorId;
+    this.ffName = ffName;
     this.ra = ra;
     this.dec = dec;
   }
@@ -130,20 +130,6 @@ public class HoughtPoint implements Comparable, Cloneable {
   }
 
   /**
-   * @return the oorId
-   */
-  public long getOorId() {
-    return oorId;
-  }
-
-  /**
-   * @param oorId the oorId to set
-   */
-  public void setOorId(long oorId) {
-    this.oorId = oorId;
-  }
-
-  /**
    * @return the ra
    */
   public double getRa() {
@@ -169,6 +155,20 @@ public class HoughtPoint implements Comparable, Cloneable {
    */
   public void setDec(double dec) {
     this.dec = dec;
+  }
+
+  /**
+   * @return the ffName
+   */
+  public String getFfName() {
+    return ffName;
+  }
+
+  /**
+   * @param ffName the ffName to set
+   */
+  public void setFfName(String ffName) {
+    this.ffName = ffName;
   }
 
 }

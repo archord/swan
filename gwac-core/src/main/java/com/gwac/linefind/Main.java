@@ -3,7 +3,7 @@
  */
 package com.gwac.linefind;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-  ArrayList<OtObserveRecord> ot1list = new ArrayList();
+  ArrayList<OtObserveRecordMovObj> ot1list = new ArrayList();
 
   /**
    * @param args the command line arguments
@@ -57,7 +57,7 @@ public class Main {
     }
   }
 
-  public void processOneDay(List<OtObserveRecord> oors, String dateStr, int dpmId, int skyId) {
+  public void processOneDay(List<OtObserveRecordMovObj> oors, String dateStr, int dpmId, int skyId) {
 
     int imgWidthG = 4196;
     int imgHeightG = 4136;
@@ -69,8 +69,8 @@ public class Main {
     FindMoveObject fmo = new FindMoveObject(parmM);
 
     int lastFrameNumber = 0;
-    List<OtObserveRecord> singleFrame = new ArrayList<>();
-    for (OtObserveRecord oor : oors) {
+    List<OtObserveRecordMovObj> singleFrame = new ArrayList<>();
+    for (OtObserveRecordMovObj oor : oors) {
       oor.setX(oor.getXTemp());
       oor.setY(oor.getYTemp());
       if (lastFrameNumber != oor.getFfNumber()) {
@@ -138,7 +138,7 @@ public class Main {
           tdate = sdf2.parse(tstr[4]);
         }
 
-        OtObserveRecord ot1 = new OtObserveRecord();
+        OtObserveRecordMovObj ot1 = new OtObserveRecordMovObj();
         ot1.setX(x);
         ot1.setY(y);
         ot1.setRaD(ra);

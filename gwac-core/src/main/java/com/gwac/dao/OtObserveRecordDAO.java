@@ -6,6 +6,7 @@ package com.gwac.dao;
 
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import com.gwac.model.OtObserveRecordShow;
 import com.gwac.model.OtTmplWrong;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   
-  public List<OtObserveRecord> getOt1ByOorId(int camId, long oorId);
+  public List<OtObserveRecordMovObj> getOt1ByOorId(int camId, long oorId);
   
   public String getMagCurveByTypeIdStarId(int typeId, long starId, int dataProduceMethod);
   

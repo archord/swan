@@ -3,7 +3,7 @@
  */
 package com.gwac.linefind;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,7 +29,7 @@ public class FindMoveObject {
   // the number of points that have been added 
   protected int numOT1s;
   HoughLine[][] houghArray;
-  ArrayList<OtObserveRecord> historyOT1s;
+  ArrayList<OtObserveRecordMovObj> historyOT1s;
   HashSet<Integer> notInLine;
   HashSet<Integer> inLine;
   public ArrayList<LineObject> mvObjs;
@@ -112,25 +112,25 @@ public class FindMoveObject {
 
   }
 
-  public void addFrame(List<OtObserveRecord> singleFrame) {
+  public void addFrame(List<OtObserveRecordMovObj> singleFrame) {
 
-    for (OtObserveRecord ot1 : singleFrame) {
+    for (OtObserveRecordMovObj ot1 : singleFrame) {
       this.historyAddPoint(ot1);
       this.lineAddPoint(ot1);
     }
     this.endFrame();
   }
 
-  public void findSingleFrameLine(List<OtObserveRecord> singleFrame) {
+  public void findSingleFrameLine(List<OtObserveRecordMovObj> singleFrame) {
 
   }
 
-  public void historyAddPoint(OtObserveRecord ot1) {
+  public void historyAddPoint(OtObserveRecordMovObj ot1) {
     historyOT1s.add(ot1);
     numOT1s++;
   }
 
-  public void houghAddPoint(OtObserveRecord ot1) {
+  public void houghAddPoint(OtObserveRecordMovObj ot1) {
 
     for (int t = 0; t < thetaSize; t++) {
 
@@ -147,7 +147,7 @@ public class FindMoveObject {
       tline.removeOldFrame(curNumber - this.maxHoughFrameNunmber);
 
       if (tline.matchLastPoint(ot1, maxDistance)) {
-        tline.addPoint(numOT1s - 1, curNumber, ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId(), ot1.getRaD(), ot1.getDecD());
+        tline.addPoint(numOT1s - 1, curNumber, ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getFfName(), ot1.getRaD(), ot1.getDecD());
         if (tline.validSize() >= this.objInitMinPoint) {
           double tsigma = tline.lineRegression();
           if ((tsigma < 2 && tline.validSize() >= this.objInitMinPoint) || (tline.validSize() >= 10)) {
@@ -163,14 +163,14 @@ public class FindMoveObject {
 
   }
 
-  public void lineAddPoint(OtObserveRecord ot1) {
+  public void lineAddPoint(OtObserveRecordMovObj ot1) {
 
     boolean findLine = false;
     int i = 0;
     for (LineObject tline : this.mvObjs) {
       if (!tline.isEndLine(ot1.getFfNumber() - this.maxHoughFrameNunmber + 1)) {
         if (tline.isOnLine(ot1)) {
-          tline.addPoint(numOT1s - 1, ot1.getFfNumber(), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId(), ot1.getRaD(), ot1.getDecD());
+          tline.addPoint(numOT1s - 1, ot1.getFfNumber(), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getFfName(), ot1.getRaD(), ot1.getDecD());
           findLine = true;
           break;
         }
@@ -204,37 +204,6 @@ public class FindMoveObject {
       i++;
     }
 
-//    getOutLinePointSet();
-//    reprocess();
-  }
-
-  public void reprocess() {
-
-    getOutLinePointSet();
-
-    int tnum = 0;
-    Iterator<Integer> titer = this.notInLine.iterator();
-    while (titer.hasNext()) {
-      int idx = titer.next();
-      OtObserveRecord ot1 = this.historyOT1s.get(idx);
-      for (LineObject tline : this.mvObjs) {
-        if (tline.isOnLineReprocess(ot1)) {
-          tnum++;
-          HoughtPoint hp = new HoughtPoint(idx, ot1.getFfNumber(), ot1.getX(), ot1.getY(), ot1.getDateUt(), ot1.getOorId(), ot1.getRaD(), ot1.getDecD());
-          tline.addPointReprocess(hp);
-          break;
-        }
-      }
-    }
-    int i = 1;
-    for (LineObject tmo : this.mvObjs) {
-      tmo.statistic();
-      tmo.analysis();
-      tmo.findFirstAndLastPoint();
-      i++;
-    }
-
-    getOutLinePointSet();
   }
 
   public void statisticAndAnalysisLine() {
@@ -337,7 +306,7 @@ public class FindMoveObject {
 
         out = new FileOutputStream(new File(fullname));
         for (HoughtPoint tPoint : mvObj.pointList) {
-          OtObserveRecord ot1 = this.historyOT1s.get(tPoint.getpIdx());
+          OtObserveRecordMovObj ot1 = this.historyOT1s.get(tPoint.getpIdx());
           out.write((ot1.toString() + "\n").getBytes());
         }
         out.close();
@@ -369,7 +338,7 @@ public class FindMoveObject {
       }
       QuickSort.sort(idList);
       for (Integer idx : idList) {
-        OtObserveRecord ot1 = this.historyOT1s.get(idx);
+        OtObserveRecordMovObj ot1 = this.historyOT1s.get(idx);
         out.write((ot1.toString() + "\n").getBytes());
       }
       out.close();
@@ -384,24 +353,6 @@ public class FindMoveObject {
         Logger.getLogger(FindMoveObject.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
-  }
-
-  public void getOutLinePointSet() {
-
-    inLine.clear();
-    notInLine.clear();
-
-    for (LineObject line : this.mvObjs) {
-      for (HoughtPoint tpoint : line.pointList) {
-        inLine.add(tpoint.getpIdx());
-      }
-    }
-
-    totalLinePointNumber = inLine.size();
-    for (int i = 0; i < this.numOT1s; i++) {
-      notInLine.add(i);
-    }
-    notInLine.removeAll(inLine);
   }
 
 }

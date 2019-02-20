@@ -3,7 +3,7 @@
  */
 package com.gwac.linefind;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import java.util.ArrayList;
 
 /**
@@ -45,7 +45,7 @@ public class HoughFrame {
    * @param ot1
    * @return
    */
-  public HoughtPoint findNearestPoint(OtObserveRecord ot1) {
+  public HoughtPoint findNearestPoint(OtObserveRecordMovObj ot1) {
 
     HoughtPoint nearest = null;
     double distance = Double.MAX_VALUE;
@@ -65,7 +65,7 @@ public class HoughFrame {
    * @param ot1
    * @return
    */
-  public HoughtPoint findLastPoint(OtObserveRecord ot1) {
+  public HoughtPoint findLastPoint(OtObserveRecordMovObj ot1) {
     HoughtPoint minPoint, maxPoint, lastPoint;
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       maxPoint = maxX;
@@ -80,7 +80,7 @@ public class HoughFrame {
     return lastPoint;
   }
 
-  public HoughtPoint findLastPointUsingDelta(OtObserveRecord ot1, float lineDeltaX, float lineDeltaY) {
+  public HoughtPoint findLastPointUsingDelta(OtObserveRecordMovObj ot1, float lineDeltaX, float lineDeltaY) {
     HoughtPoint lastPoint;
     if (Math.abs(lineDeltaX) > Math.abs(lineDeltaY)) {
       if (lineDeltaX > 0) {

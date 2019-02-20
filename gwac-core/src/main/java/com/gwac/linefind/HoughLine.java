@@ -3,7 +3,7 @@
  */
 package com.gwac.linefind;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,8 +80,8 @@ public class HoughLine {
     this.lastPoint = null;
   }
 
-  public void addPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, long oorId,double ra, double dec) {
-    this.addPoint(new HoughtPoint(pIdx, frameNumber, x, y, dateUtc, oorId, ra, dec));
+  public void addPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, String ffName,double ra, double dec) {
+    this.addPoint(new HoughtPoint(pIdx, frameNumber, x, y, dateUtc, ffName, ra, dec));
   }
 
   /**
@@ -115,7 +115,7 @@ public class HoughLine {
    * @param maxDistance 新目标与直线最后一个点的距离不超过maxDpListstance
    * @return
    */
-  public boolean matchLastPoint(OtObserveRecord ot1, float maxDistance) {
+  public boolean matchLastPoint(OtObserveRecordMovObj ot1, float maxDistance) {
     boolean flag = true;
     if (this.pointNumber > 0) {
       if (this.pointNumber == 1) {
@@ -211,7 +211,7 @@ public class HoughLine {
     this.frameList.clear();
   }
 
-  public void printInfo(ArrayList<OtObserveRecord> historyOT1s) {
+  public void printInfo(ArrayList<OtObserveRecordMovObj> historyOT1s) {
 
     for (HoughFrame tFrame : frameList) {
       for (HoughtPoint tPoint : tFrame.pointList) {

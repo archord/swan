@@ -14,7 +14,7 @@ import com.gwac.linefind.HoughtPoint;
 import com.gwac.linefind.LineObject;
 import com.gwac.linefind.LineParameterConfig;
 import com.gwac.model.Camera;
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -102,8 +102,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
   }
 
   public void processRealTime() {
-    
-    if(tcams.isEmpty()){
+
+    if (tcams.isEmpty()) {
       tcams = camDao.findAll();
     }
 
@@ -116,17 +116,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
 
       String dateStr = "";
       int tIdx = 1;
-      StringBuilder sb = new StringBuilder();
-
-      sb.append("{\"maxDate\":\"");
-      sb.append(maxDate);
-      sb.append("\",\"maxNum\":");
-      sb.append(maxNum);
-      sb.append(",\"minDate\":\"");
-      sb.append(minDate);
-      sb.append("\",\"minNum\":");
-      sb.append(minNum);
-      sb.append(",\"motList\":[");
+      StringBuilder sb2 = new StringBuilder();
 
       for (Camera tcam : tcams) {
 	Integer camId = tcam.getCameraId();
@@ -146,68 +136,82 @@ public class FindMoveObjectServiceImpl implements BaseService {
 	  startOorId = (long) 0;
 	  oorMaps.put(camId, startOorId);
 	}
-	List<OtObserveRecord> oors = oorDao.getOt1ByOorId(camId, startOorId);
-	if (dateStr.isEmpty() && (!oors.isEmpty())) {
-	  dateStr = oors.get(0).getDateStr();
-	}
-
-	int lastFrameNumber = 0;
-	List<OtObserveRecord> singleFrame = new ArrayList<>();
-	for (OtObserveRecord oor : oors) {
-	  oor.setX(oor.getXTemp());
-	  oor.setY(oor.getYTemp());
-	  if (lastFrameNumber != oor.getFfNumber()) {
-	    lastFrameNumber = oor.getFfNumber();
-	    fmo.addFrame(singleFrame);
-	    singleFrame.clear();
+	List<OtObserveRecordMovObj> oors = oorDao.getOt1ByOorId(camId, startOorId);
+	if (!oors.isEmpty()) {
+	  if (dateStr.isEmpty()) {
+	    dateStr = oors.get(0).getDateStr();
 	  }
-	  singleFrame.add(oor);
-	}
-	oorMaps.put(camId, oors.get(oors.size() - 1).getOorId());
 
-	fmo.addFrame(singleFrame);
-	fmo.endAllFrame();
-
-        log.debug(tcam.getName()+" total "+fmo.mvObjs.size()+" objs.");
-	for (LineObject obj : fmo.mvObjs) {
-	  if (obj.pointNumber >= validLineMinPoint && obj.isValidLine()) {
-	    String tstr = lineObject2Str(obj, tIdx);
-	    sb.append(tstr);
-	    sb.append(",");
+	  int lastFrameNumber = 0;
+	  List<OtObserveRecordMovObj> singleFrame = new ArrayList<>();
+	  for (OtObserveRecordMovObj oor : oors) {
+	    oor.setX(oor.getXTemp());
+	    oor.setY(oor.getYTemp());
+	    if (lastFrameNumber != oor.getFfNumber()) {
+	      lastFrameNumber = oor.getFfNumber();
+	      fmo.addFrame(singleFrame);
+	      singleFrame.clear();
+	    }
+	    singleFrame.add(oor);
 	  }
-	  tIdx++;
+	  oorMaps.put(camId, oors.get(oors.size() - 1).getOorId());
+
+	  fmo.addFrame(singleFrame);
+	  fmo.endAllFrame();
+
+	  log.debug(tcam.getName() + " total " + fmo.mvObjs.size() + " objs.");
+	  for (LineObject obj : fmo.mvObjs) {
+	    if (obj.pointNumber >= validLineMinPoint && obj.isValidLine()) {
+	      String tstr = lineObject2Str(obj, tIdx);
+	      sb2.append(tstr);
+	      sb2.append(",");
+	    }
+	    tIdx++;
+	  }
 	}
       }
-      sb.append("]}");
-
-      FileOutputStream out = null;
-      try {
-	String tpath = rootDir + "/" + movObjCacheDir;
-	File destDir = new File(tpath);
-	if (!destDir.exists()) {
-	  destDir.mkdirs();
-	}
-//	String fullname = tpath + "/" + dateStr + ".json";
-	String fullname = tpath + "/today.json";
-        log.debug(fullname);
-	out = new FileOutputStream(new File(fullname));
-	out.write(sb.toString().getBytes());
-	out.close();
-      } catch (FileNotFoundException ex) {
-	log.error(ex);
-      } catch (IOException ex) {
-	log.error(ex);
-      } finally {
+      String tstr = sb2.toString();
+      if (!tstr.isEmpty()) {
+	StringBuilder sb = new StringBuilder();
+	sb.append("{\"maxDate\":\"");
+	sb.append(maxDate);
+	sb.append("\",\"maxNum\":");
+	sb.append(maxNum);
+	sb.append(",\"minDate\":\"");
+	sb.append(minDate);
+	sb.append("\",\"minNum\":");
+	sb.append(minNum);
+	sb.append(",\"motList\":[");
+	sb.append(tstr.substring(0, tstr.length()-1));
+	sb.append("]}");
+	FileOutputStream out = null;
 	try {
-	  if (out != null) {
-	    out.close();
+	  String tpath = rootDir + "/" + movObjCacheDir;
+	  File destDir = new File(tpath);
+	  if (!destDir.exists()) {
+	    destDir.mkdirs();
 	  }
+//	String fullname = tpath + "/" + dateStr + ".json";
+	  String fullname = tpath + "/today.json";
+	  log.debug(fullname);
+	  out = new FileOutputStream(new File(fullname));
+	  out.write(sb.toString().getBytes());
+	  out.close();
+	} catch (FileNotFoundException ex) {
+	  log.error(ex);
 	} catch (IOException ex) {
 	  log.error(ex);
+	} finally {
+	  try {
+	    if (out != null) {
+	      out.close();
+	    }
+	  } catch (IOException ex) {
+	    log.error(ex);
+	  }
 	}
       }
     }
-
   }
 
   /**
@@ -226,6 +230,8 @@ public class FindMoveObjectServiceImpl implements BaseService {
     sb.append(",\"mov_type\":\"");
     sb.append(obj.lineType);
     sb.append("\",\"mov_detail\":[");
+    int i = 0;
+    int total = obj.pointList.size();
     for (HoughtPoint hp : obj.pointList) {
       sb.append("{\"ff_number\":");
       sb.append(hp.getFrameNumber());
@@ -237,9 +243,13 @@ public class FindMoveObjectServiceImpl implements BaseService {
       sb.append(hp.getX());
       sb.append(",\"y\":");
       sb.append(hp.getY());
-      sb.append(",\"oor_id\":");
-      sb.append(hp.getOorId());
-      sb.append("},");
+      sb.append(",\"ffName\":\"");
+      sb.append(hp.getFfName());
+      sb.append("\"}");
+      i++;
+      if (i < total) {
+	sb.append(",");
+      }
     }
     sb.append("]}");
     return sb.toString();

@@ -6,6 +6,7 @@ package com.gwac.dao;
 
 import com.gwac.model.OtLevel2;
 import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import com.gwac.model.OtObserveRecordShow;
 import com.gwac.model.OtTmplWrong;
 import com.gwac.util.CommonFunction;
@@ -134,14 +135,14 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   }
 
   @Override
-  public List<OtObserveRecord> getOt1ByOorId(int camId, long oorId) {
+  public List<OtObserveRecordMovObj> getOt1ByOorId(int camId, long oorId) {
 
     Session session = getCurrentSession();
-    String sql = "select * from ot_observe_record "
+    String sql = "select oor.*, ff.img_name as ff_name from ot_observe_record oor inner join fits_file2 ff on oor.ff_id=ff.ff_id"
 	    + " where ot_id=0 and ra_d is not null and dec_d is not null "
 	    + "and x_temp is not null and y_temp is not null and data_produce_method='1' and dpm_id=" + camId + " and oor_id>" + oorId
-	    + " order by dpm_id, ff_number asc limit 1000";
-    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
+	    + " order by dpm_id, ff_number asc limit 2000";
+    Query q = session.createSQLQuery(sql).addEntity(OtObserveRecordMovObj.class);
     return q.list();
   }
 

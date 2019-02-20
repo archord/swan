@@ -1,5 +1,5 @@
 
-(function($) {
+(function ($) {
 
   function maybeCall(thing, ctx) {
     return (typeof thing === 'function') ? (thing.call(ctx)) : thing;
@@ -49,7 +49,7 @@
     motPointData: {data: {type: "MultiPoint", coordinates: []}, class: "motPoint", radius: 3},
     ot1Data: {data: {type: "MultiPoint", coordinates: []}, class: "ot1", radius: 1},
     ot1: [],
-    ot1InitView: [],
+    initView: [],
     mot1: [],
     mot2: [],
     mot3: [],
@@ -58,11 +58,9 @@
     ot1Obj: [],
     motObj: [],
     curnode: [],
-    parseData: function(reqData) {
+    parseData: function (reqData) {
       gwac = this;
-      //gwac.ot1Obj = eval(reqData.ot1List);
       //gwac.motObj = eval(reqData.motList);
-      gwac.ot1Obj = reqData.ot1List;
       gwac.motObj = reqData.motList;
       gwac.firstFrame = reqData.minNum;
       gwac.lastFrame = reqData.maxNum;
@@ -80,58 +78,7 @@
       $("#endFrame").val(gwac.lastFrame);
       $("#totalFrame").val(gwac.maxNumber);
 
-
-      for (var i = 0; i < gwac.maxNumber; i++) {
-        gwac.ot1[i] = [];
-      }
-      $.each(gwac.ot1Obj, function(i, item1) {
-        $.each(item1.mov_detail, function(i, item2) {
-//          gwac.ot1[Math.floor(item1.ff_number - gwac.firstFrame)].push([item2.ra_d, item2.dec_d]);
-          gwac.ot1[Math.floor(item1.ff_number - gwac.firstFrame)].push([item2.ra_d, item2.dec_d, item2.x, item2.y, item2.file_name]);
-        });
-      });
-
-      $.each(gwac.ot1[0], function(i, item1) {
-        gwac.ot1InitView.push([item1[0], item1[1]]);
-      });
-
-      /**
-       $.each(gwac.motObj, function(i, item1) {
-       if (item1.mov_type === '1') {
-       gwac.mot1.push(item1);
-       } else if (item1.mov_type === '2') {
-       gwac.mot2.push(item1);
-       } else if (item1.mov_type === '3') {
-       gwac.mot3.push(item1);
-       } else {
-       gwac.mot4.push(item1);
-       }
-       });
-       **/
-
-      //将第3类移动目标按照帧编号进行组织
-      /**
-       $.each(gwac.mot3, function(i, item) {
-       item["frameList"] = [];
-       var mot3Idx = 0;
-       $.each(item.mov_detail, function(j, item1) {
-       if (j === 0) {
-       item.frameList.push({"ff_number": item1.ff_number, "objList": []});
-       item.frameList[mot3Idx].objList.push(item1);
-       } else {
-       if (item.frameList[mot3Idx].ff_number !== item1.ff_number) {
-       item.frameList.push({"ff_number": item1.ff_number, "objList": []});
-       mot3Idx++;
-       item.frameList[mot3Idx].objList.push(item1);
-       } else {
-       item.frameList[mot3Idx].objList.push(item1);
-       }
-       }
-       });
-       });
-       **/
-
-      $.each(gwac.motObj, function(i, item) {
+      $.each(gwac.motObj, function (i, item) {
         var tcolor1 = 50;
         var tcolor2 = 200;
         if (item.tt_frm_num > 1) {
@@ -149,13 +96,13 @@
           item.color = d3.rgb(255, 255, 255);
           item.fillColor = item.color;
         }
-        item.mov_detail.sort(function(a, b) {
+        item.mov_detail.sort(function (a, b) {
           return (a['ff_number'] > b['ff_number']) ? 1 : ((a['ff_number'] < b['ff_number']) ? -1 : 0);
         });
       });
       this.genLabelPoint();
     },
-    updateShowData: function() {
+    updateShowData: function () {
       gwac = this;
       gwac.playSpeed = parseInt($("#playSpeed").val());
       gwac.playInterval = parseInt($("#playInterval").val());
@@ -184,7 +131,7 @@
         $("#currentFrame").val(gwac.currentFrame);
       }
     },
-    draw: function() {
+    draw: function () {
 
       var gwac = this;
       d3.select(gwac.placeholder + " svg").remove();
@@ -218,7 +165,7 @@
 
       var zoom = d3.geo.zoom().projection(projection)
               .scaleExtent([scale, Infinity])
-              .on("zoom", function() {
+              .on("zoom", function () {
 
                 svg.selectAll("*").remove();
                 svg.append("image").attr("xlink:href", gwac.pingsUrl).attr("width", 40).attr("height", 40).attr("x", 10).attr("y", 10);
@@ -228,36 +175,39 @@
                 svg.append("path").datum(gwac.primemeridian.data).attr("class", gwac.primemeridian.class).attr("d", path);
 //                svg.append("path").datum(gwac.singleLineStringExample.data).attr("class", gwac.primemeridian.class).attr("d", path);
 
-                $.each(gwac.labelPoint.data.coordinates, function(i, item) {
+                $.each(gwac.labelPoint.data.coordinates, function (i, item) {
                   var tdata = {type: "Point", coordinates: item};
                   svg.append("path").datum(tdata).attr("class", gwac.labelPoint.class).attr("d", path.pointRadius(gwac.labelPoint.radius)).append("title").text("(" + item[0] + "," + item[1] + ")");
                 });
 
-                gwac.drawOt1();
                 gwac.drawMot();
               });
 
+      if (gwac.initView.length === 0) {
+        $.each(gwac.motObj[0].mov_detail, function (i, item) {
+          gwac.initView.push([item['ra_d'], item['dec_d']]);
+        });
+      }
       svg.call(zoom).call(zoom.event);
-      gwac.ot1Data.data.coordinates = gwac.ot1InitView;
-      gwac.zoomBounds({type: "MultiPoint", coordinates: gwac.ot1InitView});
+      gwac.ot1Data.data.coordinates = gwac.initView;
+      gwac.zoomBounds({type: "MultiPoint", coordinates: gwac.initView});
       svg.transition().ease("quad-in-out").duration(gwac.startAnimationDuration).call(zoom.projection(projection).event);
-
       gwac.zoom = zoom;
     },
-    drawMot: function() {
+    drawMot: function () {
       var gwac = this;
       if (gwac.motObj.length > 0 && gwac.movType !== '5') {
-        $.each(gwac.motObj, function(i, item1) {
+        $.each(gwac.motObj, function (i, item1) {
           var mvType = parseInt(item1.mov_type);
           if (item1.tt_frm_num >= gwac.miniFrameNumber && (gwac.movType === 0 || gwac.movType === mvType)) {
-            $.each(item1.mov_detail, function(j, item2) {
+            $.each(item1.mov_detail, function (j, item2) {
               if (item2.ff_number <= gwac.currentFrame && item2.ff_number >= gwac.startFrame) {
                 gwac.motPointData.data.coordinates = [[item2.ra_d, item2.dec_d]];
                 var tnode = gwac.svg.append("path").datum(gwac.motPointData.data).attr("class", gwac.motPointData.class)
                         .style('fill', item1.fillColor)
                         .attr("d", gwac.path.pointRadius(3));
-                tnode.append("title").text(item2.file_name);
-                tnode.attr("file_name", item2.file_name);
+                tnode.append("title").text(item2.ffName);
+                tnode.attr("file_name", item2.ffName);
                 tnode.attr("mov_id", item1.mov_id);
                 tnode.attr("x", item2.x);
                 tnode.attr("y", item2.y);
@@ -269,64 +219,7 @@
         });
       }
     },
-    drawOt1: function() {
-      var gwac = this;
-      if (gwac.ot1.length > 0) {
-        var startIdx = gwac.currentFrame - gwac.playInterval + 1;
-        if (startIdx < gwac.startFrame || startIdx > gwac.endFrame) {
-          startIdx = gwac.startFrame;
-        }
-
-        for (i = startIdx; i <= gwac.currentFrame; i++) {
-          var tIdx = i - gwac.startFrame;
-          if (gwac.ot1[tIdx] !== null && gwac.ot1[tIdx].length > 0) {
-            $.each(gwac.ot1[tIdx], function(j, ot1item) {
-              gwac.ot1Data.data.coordinates = [[ot1item[0], ot1item[1]]];
-              var tnode = gwac.svg.append("path").datum(gwac.ot1Data.data).attr("class", gwac.ot1Data.class)
-                      .style('fill', '#FFF')
-                      .attr("d", gwac.path.pointRadius(3));
-              tnode.append("title").text(ot1item[4]);
-              tnode.attr("file_name", ot1item[4]);
-              tnode.attr("x", ot1item[2]);
-              tnode.attr("y", ot1item[3]);
-              tnode.on("mouseover", gwac.clickStar);
-              tnode.on("click", gwac.clickStar);
-            });
-          }
-        }
-      }
-    },
-    clickStar2: function() {
-      $("#dragDiv").show();
-      var fName = $(this).attr("file_name");
-      var x = $(this).attr("x");
-      var y = $(this).attr("y");
-      var movId = $(this).attr("mov_id");
-      var rootUrl = $("#gwacRootURL").val();
-//      var rootUrl = "http://10.0.10.236";
-//      var rootUrl = "http://172.28.8.8";
-// G042_mon_objt_171116T14073_ccdimg.jpg
-      var otImgUrl = rootUrl + "/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
-//      console.log(otImgUrl + ", " + x + ", " + y);
-      console.log("id=" + movId + ", " + fName + ", " + x + ", " + y);
-      $("#otCoordinate").html("<a target=\"_blank\" href=\"" + otImgUrl + "\">" + fName.substring(0, 29) + "</a>(" + parseFloat(x).toFixed(2) + ", " + parseFloat(y).toFixed(2) + ")");
-
-      var img = document.getElementById('otImgShow');
-      $("#otImgShow").attr("src", otImgUrl);
-      $("#otImgShow_img").attr("src", otImgUrl);
-//      shiftzoom.source(img, otImgUrl, false);
-      $("#otImgShow").load(function() {
-        shiftzoom.add(img, {showcoords: true, relativecoords: true, zoom: 100});
-        $("#otImgShow_tumb").attr("src", otImgUrl);
-      });
-      setTimeout(function() {
-        var img = document.getElementById('otImgShow');
-        var imgHeight = shiftzoom.get(img, 'maxheight');
-        shiftzoom.zooming(img, 100);
-        shiftzoom.moveto(img, parseInt(x), parseInt(y));
-      }, 1000);
-    },
-    clickStar: function() {
+    clickStar: function () {
       $("#dragDiv").show();
       var fName = $(this).attr("file_name");
       var x = $(this).attr("x");
@@ -334,30 +227,30 @@
       var movId = $(this).attr("mov_id");
       var rootUrl = $("#gwacRootURL").val();
 //      var rootUrl = "http://10.0.10.236:9995";
-      var subImgListUrl = rootUrl + "/getMotSubImageList.action?cropW=400&cropH=400&labelW=0&cmodel=0&motId="+movId;
+      var subImgListUrl = rootUrl + "/getMotSubImageList.action?cropW=400&cropH=400&labelW=0&cmodel=0&motId=" + movId;
       var fullImgUrl = rootUrl + "/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg";
       var subImgUrl = rootUrl + "/getSubImage.action?imgPath=/images/thumbnail/20" + fName.substring(14, 20) + "/" + fName.substring(0, 4) + "/" + fName.substring(0, 29) + ".jpg"
-      + "&centerX=" + x + "&centerY=" + y + "&cropW=400&cropH=400&labelW=0";
+              + "&centerX=" + x + "&centerY=" + y + "&cropW=400&cropH=400&labelW=0";
       console.log(subImgListUrl);
       console.log("id=" + movId + ", " + fName + ", " + x + ", " + y);
-      $("#otCoordinate").html("<a target=\"_blank\" href=\"" + fullImgUrl + "\" href=\"点击打开大图\">" + fName.substring(0, 29) 
-              + "</a>&nbsp;&nbsp;<a target=\"_blank\" href=\"" + subImgListUrl + "\" href=\"点击下载切图\">(" 
+      $("#otCoordinate").html("<a target=\"_blank\" href=\"" + fullImgUrl + "\" href=\"点击打开大图\">" + fName.substring(0, 29)
+              + "</a>&nbsp;&nbsp;<a target=\"_blank\" href=\"" + subImgListUrl + "\" href=\"点击下载所有切图\">("
               + parseFloat(x).toFixed(2) + ", " + parseFloat(y).toFixed(2) + ")</a>");
       $("#otImgShow").attr("src", subImgUrl);
     },
-    changeView: function(gwac) {
+    changeView: function (gwac) {
       var tdata = {type: "MultiPoint", coordinates: []};
       tdata.coordinates.push(eval("[" + $('#leftTopBound').val() + "]"));
       tdata.coordinates.push(eval("[" + $('#rightBottomBound').val() + "]"));
       gwac.zoomBounds(tdata);
       gwac.svg.transition().ease("quad-in-out").duration(100).call(gwac.zoom.projection(gwac.projection).event);
     },
-    getBounds: function() {
+    getBounds: function () {
       var gwac = this;
       var bounds = {type: "Feature", geometry: {type: "Polygon", coordinates: [[[30, 30], [0, 10], [10, 0], [0, -10], [-10, 0]]]}};
       return bounds;
     },
-    zoomBounds: function(data) {
+    zoomBounds: function (data) {
 
       var gwac = this;
       var width = $(gwac.placeholder).width();
@@ -376,7 +269,7 @@
               .scale(k)
               .translate([width / 2, height / 2]);
     },
-    genLabelPoint: function() {
+    genLabelPoint: function () {
       var gwac = this;
       var tpoints = gwac.labelPoint.data.coordinates;
       while (tpoints.length > 0) {
@@ -390,23 +283,23 @@
         }
       }
     },
-    getPlayData: function() {
+    getPlayData: function () {
       gwac = this;
       gwac.playSpeed = $("#playSpeed").val();
       gwac.playInterval = $("#playInterval").val();
       gwac.startFrame = $("#startFrame").val();
     },
-    loadDateStrList: function() {
+    loadDateStrList: function () {
       var queryUrl = this.rootUrl + this.getDateStrListJsonUrl;
       $.ajax({
         type: "get",
         url: queryUrl,
         async: false,
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
           var objs = data.objs;
           if (objs.length > 0) {
-            $.each(objs, function(i, item) {
+            $.each(objs, function (i, item) {
               $('#obsDate').append($('<option>', {
                 value: item,
                 text: item,
@@ -417,17 +310,17 @@
         }
       });
     },
-    loadSkyList: function() {
+    loadSkyList: function () {
       var queryUrl = this.rootUrl + this.getSkyListJsonUrl;
       $.ajax({
         type: "get",
         url: queryUrl,
         async: false,
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
           var objs = data.objs;
           if (objs.length > 0) {
-            $.each(objs, function(i, item) {
+            $.each(objs, function (i, item) {
               $('#obsSky').append($('<option>', {
                 value: item,
                 text: item,
@@ -438,17 +331,17 @@
         }
       });
     },
-    loadDpmList: function() {
+    loadDpmList: function () {
       var queryUrl = this.rootUrl + this.getDpmListJsonUrl;
       $.ajax({
         type: "get",
         url: queryUrl,
         async: false,
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
           var objs = data.objs;
           if (objs.length > 0) {
-            $.each(objs, function(i, item) {
+            $.each(objs, function (i, item) {
               $('#obsCcd').append($('<option>', {
                 value: item.dpmId,
                 text: item.name,
@@ -459,7 +352,7 @@
         }
       });
     },
-    printInfo: function() {
+    printInfo: function () {
       gwac = this;
       console.log("playSpeed:" + gwac.playSpeed);
       console.log("playInterval:" + gwac.playInterval);
@@ -469,7 +362,7 @@
     }
   };
 
-  $.gwac = function(placeholder, root, url) {
+  $.gwac = function (placeholder, root, url) {
     var gwac = new Gwac(placeholder, root, url);
     return gwac;
   };

@@ -3,7 +3,7 @@
  */
 package com.gwac.linefind;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -209,7 +209,7 @@ public class DrawObject {
     g2d.setColor(Color.RED);
     int pointSize2 = 6;
 
-    for (OtObserveRecord ot1 : ht.historyOT1s) {
+    for (OtObserveRecordMovObj ot1 : ht.historyOT1s) {
       int x = (int) (ot1.getX() - pointSize2 / 2);
       int y = (int) (ot1.getY() - pointSize2 / 2);
       g2d.drawRect(x, y, pointSize2, pointSize2);
@@ -235,7 +235,7 @@ public class DrawObject {
 
     Iterator tIter = ht.notInLine.iterator();
     while (tIter.hasNext()) {
-      OtObserveRecord ot1 = ht.historyOT1s.get((int) tIter.next());
+      OtObserveRecordMovObj ot1 = ht.historyOT1s.get((int) tIter.next());
       int x = (int) (ot1.getX() - pointSize2 / 2);
       int y = (int) (ot1.getY() - pointSize2 / 2);
       g2d.drawRect(x, y, pointSize2, pointSize2);

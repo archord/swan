@@ -3,7 +3,7 @@
  */
 package com.gwac.linefind;
 
-import com.gwac.model.OtObserveRecord;
+import com.gwac.model.OtObserveRecordMovObj;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -370,7 +370,7 @@ public class LineObject {
     return fpMatch && spMatch;
   }
 
-  public boolean isOnLine(OtObserveRecord ot1) {
+  public boolean isOnLine(OtObserveRecordMovObj ot1) {
     return isOnLine(ot1.getX(), ot1.getY(), ot1.getDateUt());
   }
 
@@ -394,7 +394,7 @@ public class LineObject {
     return isOnLine;
   }
 
-  public boolean isOnLineReprocess(OtObserveRecord ot1) {
+  public boolean isOnLineReprocess(OtObserveRecordMovObj ot1) {
 
     float x = ot1.getX();
     float y = ot1.getY();
@@ -420,7 +420,7 @@ public class LineObject {
     return isOnLine;
   }
 
-  public boolean isOnLineMultiPointCheck(OtObserveRecord ot1) {
+  public boolean isOnLineMultiPointCheck(OtObserveRecordMovObj ot1) {
     boolean isOnLine = false;
 
     float x = ot1.getX();
@@ -491,8 +491,8 @@ public class LineObject {
 
   }
 
-  public void addPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, long oorId, double ra, double dec) {
-    this.addPoint(new HoughtPoint(pIdx, frameNumber, x, y, dateUtc, oorId, ra, dec));
+  public void addPoint(int pIdx, int frameNumber, float x, float y, Date dateUtc, String ffName, double ra, double dec) {
+    this.addPoint(new HoughtPoint(pIdx, frameNumber, x, y, dateUtc, ffName, ra, dec));
   }
 
   /**
@@ -661,7 +661,7 @@ public class LineObject {
           avgX /= tnum;
           avgY /= tnum;
           HoughtPoint fp = hf.pointList.get(0);
-          HoughtPoint thp = new HoughtPoint(fp.getpIdx(), fp.getFrameNumber(), avgX.floatValue(), avgY.floatValue(), fp.getDateUtc(), fp.getOorId(), fp.getRa(), fp.getDec());
+          HoughtPoint thp = new HoughtPoint(fp.getpIdx(), fp.getFrameNumber(), avgX.floatValue(), avgY.floatValue(), fp.getDateUtc(), fp.getFfName(), fp.getRa(), fp.getDec());
 
           for (HoughtPoint hp : hf.pointList) {
             for (int k = 0; k < this.pointList.size(); k++) {
@@ -752,7 +752,7 @@ public class LineObject {
 
     if (this.pointNumber >= 2) {
       HoughtPoint fPoint = pointList.get(0);
-      HoughtPoint lPoint = pointList.get(this.pointNumber - 1);
+      HoughtPoint lPoint = pointList.get(pointList.size() - 1);
 
       double xDelta = fPoint.getX() - lPoint.getX();
       double yDelta = fPoint.getY() - lPoint.getY();
@@ -919,7 +919,7 @@ public class LineObject {
     return rst;
   }
 
-  public void printInfo(ArrayList<OtObserveRecord> historyOT1s) {
+  public void printInfo(ArrayList<OtObserveRecordMovObj> historyOT1s) {
 
     int i = 1;
     for (HoughFrame tFrame : frameList) {
@@ -956,10 +956,10 @@ public class LineObject {
     return 0;
   }
 
-  public void printOT1Info(ArrayList<OtObserveRecord> historyOT1s) {
+  public void printOT1Info(ArrayList<OtObserveRecordMovObj> historyOT1s) {
     int i = 0;
     for (HoughtPoint tPoint : pointList) {
-      OtObserveRecord ot1 = historyOT1s.get(tPoint.getpIdx());
+      OtObserveRecordMovObj ot1 = historyOT1s.get(tPoint.getpIdx());
       ot1.printInfo();
       i++;
     }
