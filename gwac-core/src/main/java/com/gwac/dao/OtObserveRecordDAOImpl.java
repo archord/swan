@@ -140,7 +140,7 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     String sql = "select * from ot_observe_record "
 	    + " where ot_id=0 and ra_d is not null and dec_d is not null "
 	    + "and x_temp is not null and y_temp is not null and data_produce_method='1' and dpm_id=" + camId + " and oor_id>" + oorId
-	    + " order by dpm_id, ff_number asc";
+	    + " order by dpm_id, ff_number asc limit 1000";
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }

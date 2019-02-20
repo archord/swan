@@ -64,9 +64,9 @@ public class FindMoveObjectServiceImpl implements BaseService {
   private final LineParameterConfig parmG;
   private final LineParameterConfig parmM;
   private final int validLineMinPoint;
-  private final List<Camera> tcams;
   private final Map<Integer, FindMoveObject> fmoMaps;
   private final Map<Integer, Long> oorMaps;
+  private List<Camera> tcams;
 
   public FindMoveObjectServiceImpl() {
 
@@ -82,7 +82,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
     parmG = new LineParameterConfig(imgWidthG, imgHeightG);
     parmM = new LineParameterConfig(imgWidthM, imgHeightM);
 
-    tcams = camDao.findAll();
+    tcams = new ArrayList();
   }
 
 //  @Scheduled(cron = "0/1 * *  * * ? ")
@@ -102,6 +102,10 @@ public class FindMoveObjectServiceImpl implements BaseService {
   }
 
   public void processRealTime() {
+    
+    if(tcams.isEmpty()){
+      tcams = camDao.findAll();
+    }
 
     Object[] objs = oorDao.getMinMaxDateOt1();
     if (objs != null && objs.length == 4 && objs[0] != null && objs[1] != null && objs[2] != null && objs[3] != null) {
@@ -164,6 +168,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
 	fmo.addFrame(singleFrame);
 	fmo.endAllFrame();
 
+        log.debug(tcam.getName()+" total "+fmo.mvObjs.size()+" objs.");
 	for (LineObject obj : fmo.mvObjs) {
 	  if (obj.pointNumber >= validLineMinPoint && obj.isValidLine()) {
 	    String tstr = lineObject2Str(obj, tIdx);
@@ -184,6 +189,7 @@ public class FindMoveObjectServiceImpl implements BaseService {
 	}
 //	String fullname = tpath + "/" + dateStr + ".json";
 	String fullname = tpath + "/today.json";
+        log.debug(fullname);
 	out = new FileOutputStream(new File(fullname));
 	out.write(sb.toString().getBytes());
 	out.close();
