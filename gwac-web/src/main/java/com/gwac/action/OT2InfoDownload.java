@@ -122,12 +122,12 @@ public class OT2InfoDownload extends ActionSupport {
               }
             }
             zos.putNextEntry(new ZipEntry("catalog.txt"));
-            zos.write("dateUt, ra, dec, x, y, xtemp, ytemp, mag, magerr, ff_number\n".getBytes());
+            zos.write("dateUt, ra, dec, x, y, xtemp, ytemp, mag, magerr, fwhm, ff_number\n".getBytes());
             for (OtObserveRecord oor : oors) {
-              String tstr = String.format("%s, %.6f, %.6f, %.3f, %.3f, %.3f, %.3f, %f, %f, %d\n",
+              String tstr = String.format("%s, %.6f, %.6f, %.3f, %.3f, %.3f, %.3f, %f, %f, %f, %d\n",
                       CommonFunction.getDateTimeString2(oor.getDateUt()), oor.getRaD(), oor.getDecD(),
                       oor.getX(), oor.getY(), oor.getXTemp(), oor.getYTemp(), oor.getMagAper(),
-                      oor.getMagerrAper(), oor.getFfNumber());
+                      oor.getMagerrAper(), oor.getThreshold(), oor.getFfNumber());
               zos.write(tstr.getBytes());
             }
             zos.closeEntry();
