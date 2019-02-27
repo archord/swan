@@ -15,6 +15,8 @@ import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtObserveRecord;
+import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.BufferedInputStream;
@@ -34,8 +36,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /*parameter：currentDirectory, configFile, [fileUpload], [fileUpload].*/
-/* wget command example: */
-/* wget http://localhost:8080/gwac/downloadot2.action?otName=M151207_C00163*/
+ /* wget command example: */
+ /* wget http://localhost:8080/gwac/downloadot2.action?otName=M151207_C00163*/
 /**
  * @author xy
  */
@@ -79,6 +81,7 @@ public class OT2InfoDownload extends ActionSupport {
         OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(otName, queryHis);
         List<FitsFileCut> ffcList = ffcDao.getCutImageByOtId(ot2.getOtId(), queryHis);
         List<FitsFileCutRef> ffcrs = ffcrDao.getCutImageByOtId(ot2.getOtId(), queryHis);
+        List<OtObserveRecord> oors = otorDao.getRecordByOt2Id(ot2.getOtId(), queryHis);
 
         List<File> tfiles = new ArrayList();
         String tpath = "";
@@ -86,34 +89,48 @@ public class OT2InfoDownload extends ActionSupport {
           FitsFileCutRef ffcr = ffcrs.get(0);
           tpath = dataRootDir + "/" + ffcr.getStorePath() + "/";
           tfiles.add(new File(tpath, ffcr.getFileName() + ".fit"));
+          tfiles.add(new File(tpath, ffcr.getFileName() + ".jpg"));
         }
         for (FitsFileCut tffc : ffcList) {
           if (tpath.isEmpty()) {
             tpath = dataRootDir + "/" + tffc.getStorePath() + "/";
           }
           tfiles.add(new File(tpath, tffc.getFileName() + ".fit"));
+          tfiles.add(new File(tpath, tffc.getFileName() + ".jpg"));
         }
 
         try {
           try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             for (File file : tfiles) {
+              if (file.exists()) {
 //              System.out.println("Adding " + file.getName());
 //            zos.putNextEntry(new ZipEntry("xml/"));
-              zos.putNextEntry(new ZipEntry(file.getName()));
-              try (FileInputStream fis = new FileInputStream(file)) {
-                int data;
-                BufferedInputStream fif = new BufferedInputStream(fis);
-                while ((data = fif.read()) != -1) {
-                  zos.write(data);
+                zos.putNextEntry(new ZipEntry(file.getName()));
+                try (FileInputStream fis = new FileInputStream(file)) {
+                  int data;
+                  BufferedInputStream fif = new BufferedInputStream(fis);
+                  while ((data = fif.read()) != -1) {
+                    zos.write(data);
+                  }
+                  fif.close();
+                  zos.closeEntry();
+                } catch (FileNotFoundException e) {
+                  zos.write(("error: not find file " + file.getName()).getBytes());
+                  zos.closeEntry();
+                  log.error("cannot find file " + file.getAbsolutePath(), e);
                 }
-                fif.close();
-                zos.closeEntry();
-              } catch (FileNotFoundException e) {
-                zos.write(("error: not find file " + file.getName()).getBytes());
-                zos.closeEntry();
-                log.error("cannot find file " + file.getAbsolutePath(), e);
               }
             }
+            zos.putNextEntry(new ZipEntry("catalog.txt"));
+            zos.write("dateUt, ra, dec, x, y, xtemp, ytemp, mag, magerr, ff_number\n".getBytes());
+            for (OtObserveRecord oor : oors) {
+              String tstr = String.format("%s, %.6f, %.6f, %.3f, %.3f, %.3f, %.3f, %f, %f, %d\n",
+                      CommonFunction.getDateTimeString2(oor.getDateUt()), oor.getRaD(), oor.getDecD(),
+                      oor.getX(), oor.getY(), oor.getXTemp(), oor.getYTemp(), oor.getMagAper(),
+                      oor.getMagerrAper(), oor.getFfNumber());
+              zos.write(tstr.getBytes());
+            }
+            zos.closeEntry();
 
             zos.flush();
             zos.close();

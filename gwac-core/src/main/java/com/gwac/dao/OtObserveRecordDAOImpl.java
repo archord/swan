@@ -177,6 +177,23 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
+  
+
+  @Override
+  public List<OtObserveRecord> getRecordByOt2Id(long ot2Id, boolean queryHis) {
+
+    Session session = getCurrentSession();
+    String sql1 = "select * from ot_observe_record where ot_id=" + ot2Id ;
+    String sql2 = "select * from ot_observe_record_his where ot_id=" + ot2Id ;
+    String unionSql;
+    if (queryHis) {
+      unionSql = sql2 + " order by date_ut asc";
+    } else {
+      unionSql = sql1 + " order by date_ut asc";
+    }
+    Query q = session.createSQLQuery(unionSql).addEntity(OtObserveRecord.class);
+    return q.list();
+  }
 
   @Override
   public List<OtObserveRecord> getUnCutRecord(long otId, int lastCuttedNum) {

@@ -17,6 +17,8 @@ import java.util.List;
  */
 public interface OtObserveRecordDAO extends BaseHibernateDao<OtObserveRecord> {
   
+  public List<OtObserveRecord> getRecordByOt2Id(long ot2Id, boolean queryHis);
+  
   public List<OtObserveRecordMovObj> getOt1ByOorId(int camId, long oorId);
   
   public String getMagCurveByTypeIdStarId(int typeId, long starId, int dataProduceMethod);
