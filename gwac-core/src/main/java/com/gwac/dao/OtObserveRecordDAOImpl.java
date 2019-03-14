@@ -33,6 +33,48 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
   private static final Log log = LogFactory.getLog(OtObserveRecordDAOImpl.class);
 
   @Override
+  public String getLatestRecord(String minOorId) {
+    Session session = getCurrentSession();
+    String sql = " select date_ut, ff_number, x_temp, y_temp, ra_d, dec_d, mag_aper, magerr_aper, time_sub_second, dpm_id, sky_id, oor_id "
+	    + " from ot_observe_record "
+	    + " where data_produce_method='1' and ot_id=0 and oor_id> "+minOorId
+	    + " ORDER BY dpm_id, sky_id, date_ut, ra_d";
+
+    Query q = session.createSQLQuery(sql);
+    Iterator itor = q.list().iterator();
+
+    StringBuilder sb = new StringBuilder();
+    while (itor.hasNext()) {
+      Object[] row = (Object[]) itor.next();
+      sb.append(CommonFunction.getDateTimeString2((Date)row[0]));
+      sb.append(",");
+      sb.append(row[1]);
+      sb.append(",");
+      sb.append(row[2]);
+      sb.append(",");
+      sb.append(row[3]);
+      sb.append(",");
+      sb.append(row[4]);
+      sb.append(",");
+      sb.append(row[5]);
+      sb.append(",");
+      sb.append(row[6]);
+      sb.append(",");
+      sb.append(row[7]);
+      sb.append(",");
+      sb.append(row[8]);
+      sb.append(",");
+      sb.append(row[9]);
+      sb.append(",");
+      sb.append(row[10]);
+      sb.append(",");
+      sb.append(row[11]);
+      sb.append("\n");
+    }
+    return sb.toString();
+  }
+
+  @Override
   public List<String> getAllDateStr(boolean history) {
 
     List<String> result = new ArrayList<>();
@@ -177,14 +219,13 @@ public class OtObserveRecordDAOImpl extends BaseHibernateDaoImpl<OtObserveRecord
     Query q = session.createSQLQuery(sql).addEntity(OtObserveRecord.class);
     return q.list();
   }
-  
 
   @Override
   public List<OtObserveRecord> getRecordByOt2Id(long ot2Id, boolean queryHis) {
 
     Session session = getCurrentSession();
-    String sql1 = "select * from ot_observe_record where ot_id=" + ot2Id ;
-    String sql2 = "select * from ot_observe_record_his where ot_id=" + ot2Id ;
+    String sql1 = "select * from ot_observe_record where ot_id=" + ot2Id;
+    String sql2 = "select * from ot_observe_record_his where ot_id=" + ot2Id;
     String unionSql;
     if (queryHis) {
       unionSql = sql2 + " order by date_ut asc";
