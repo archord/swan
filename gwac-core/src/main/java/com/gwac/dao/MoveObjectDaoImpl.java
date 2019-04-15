@@ -21,6 +21,19 @@ import org.springframework.stereotype.Repository;
  */
 @Repository(value = "moveObjectDao")
 public class MoveObjectDaoImpl extends BaseHibernateDaoImpl<MoveObject> implements MoveObjectDao {
+  
+  @Override
+  public MoveObject getMovObj(String dateStr, int todayMovId){
+    String sql="select * from move_object where date_str='"+dateStr+"' and today_mov_id="+todayMovId;
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(MoveObject.class);
+    if(q.list().isEmpty()){
+      return null;
+    }else{
+      return (MoveObject)q.list().get(0);
+    }
+  }
 
   @Override
   public Map<String, Float[]> getMotFitsList(int motId) {

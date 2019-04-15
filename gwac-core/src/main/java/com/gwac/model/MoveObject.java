@@ -53,6 +53,7 @@ public class MoveObject implements java.io.Serializable {
   private Float tdecPolyn0;
   private Float tdecPolyn1;
   private Float tdecPolyn2;
+  private Integer todayMovId;
 
   public MoveObject() {
   }
@@ -399,6 +400,21 @@ public class MoveObject implements java.io.Serializable {
 
   public void setTdecPolyn2(Float tdecPolyn2) {
     this.tdecPolyn2 = tdecPolyn2;
+  }
+
+  /**
+   * @return the todayMovId
+   */
+  @Column(name = "today_mov_id")
+  public Integer getTodayMovId() {
+    return todayMovId;
+  }
+
+  /**
+   * @param todayMovId the todayMovId to set
+   */
+  public void setTodayMovId(Integer todayMovId) {
+    this.todayMovId = todayMovId;
   }
 
 }
