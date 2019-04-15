@@ -145,7 +145,8 @@ public class OtDiffObserveRecordServiceImpl implements OtObserveRecordService {
           return;
         }
       }
-      String fileDate = fileName.substring(fileName.lastIndexOf('_') + 1, fileName.lastIndexOf('T'));
+      int tIdx = fileName.lastIndexOf('T');
+      String fileDate = fileName.substring(tIdx-6, tIdx);
       String ccdType = fileName.substring(0, 1);
       int number = ff2.getFfNumber();
       int dpmId = ff2.getCamId();
