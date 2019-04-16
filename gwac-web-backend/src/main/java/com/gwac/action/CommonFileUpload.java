@@ -211,11 +211,13 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
               break;
             case "cmbot1":
               tfileType = 'd';
-              tpath = destPath + getText("gwacDataCmbOtlistDirectory");
+              //tpath = destPath + getText("gwacDataCmbOtlistDirectory");
+              tpath = destPath + getText("gwacDataDiffOtlistDirectory");
               break;
             case "cmbot1img":
               tfileType = 'e';
-              tpath = destPath + getText("gwacDataCmbOtImagesDirectory");
+              //tpath = destPath + getText("gwacDataCmbOtImagesDirectory");
+              tpath = destPath + getText("gwacDataDiffOtImagesDirectory");
               break;
           }
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
