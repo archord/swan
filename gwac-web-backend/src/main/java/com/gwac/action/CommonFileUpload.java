@@ -57,7 +57,7 @@ import org.springframework.jms.core.MessageCreator;
 public class CommonFileUpload extends ActionSupport implements ApplicationAware {
 
   private static final Log log = LogFactory.getLog(CommonFileUpload.class);
-  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im", "diffot1", "diffot1img"}));
+  private static final Set<String> typeSet = new HashSet(Arrays.asList(new String[]{"crsot1", "imqty", "subot1", "impre", "magclb", "subot2im", "diffot1", "diffot1img", "cmbot1", "cmbot1img"}));
 
   @Resource
   private CameraDao cameraDao;
