@@ -47,7 +47,7 @@ public class SaveMovObjAction extends ActionSupport {
 
   private String echo = "";
 
-  @Action(value = "regOrigImg")
+  @Action(value = "saveMovObj")
   public void upload() {
 
     echo = "success";
