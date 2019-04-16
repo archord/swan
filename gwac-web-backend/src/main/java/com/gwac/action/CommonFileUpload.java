@@ -209,6 +209,14 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
               tfileType = 'c';
               tpath = destPath + getText("gwacDataDiffOtImagesDirectory");
               break;
+            case "cmbot1":
+              tfileType = 'd';
+              tpath = destPath + getText("gwacDataCmbOtlistDirectory");
+              break;
+            case "cmbot1img":
+              tfileType = 'e';
+              tpath = destPath + getText("gwacDataCmbOtImagesDirectory");
+              break;
           }
           storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
           echo += "success upload " + fileUpload.size() + " files.";
@@ -384,7 +392,7 @@ public class CommonFileUpload extends ActionSupport implements ApplicationAware 
         MessageCreator tmc = new OTListMessageCreator(obj);
         jmsTemplate.send(otlistDest, tmc);
         ssmDao.updateOt1ListSub(unitId, tfilename);
-      } else if ('b' == fileType) {
+      } else if ('b' == fileType || 'd' == fileType) {
         MessageCreator tmc = new OTListMessageCreator(obj);
         jmsTemplate.send(otlistDest, tmc);
         ssmDao.updateOt1ListSub(unitId, tfilename);

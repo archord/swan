@@ -21,6 +21,8 @@ public class OTListListener implements MessageListener {
   private OtObserveRecordService otSubObserveRecordService;
   @Resource(name = "otDiffObserveRecordService")
   private OtObserveRecordService otDiffObserveRecordService;
+  @Resource(name = "otCmbDiffObserveRecordService")
+  private OtObserveRecordService otCmbDiffObserveRecordService;
 
   @Override
   public void onMessage(Message message) {
@@ -41,6 +43,8 @@ public class OTListListener implements MessageListener {
         otSubObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else if (fileType == 'b') {
         otDiffObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
+      } else if (fileType == 'd') {
+        otCmbDiffObserveRecordService.parseLevel1Ot(ufuId, storePath, fileName);
       } else {
         log.error("wrong fileType");
       }
