@@ -532,6 +532,13 @@ label.error{
   margin-top: 2px;
 }
 
+#ot-search-button{
+  width: 100px;
+  height: 26px;
+  padding: 2px 0;
+  margin-top: 2px;
+}
+
 #ot-comment{
   text-align: center;
   margin-bottom: 3px;

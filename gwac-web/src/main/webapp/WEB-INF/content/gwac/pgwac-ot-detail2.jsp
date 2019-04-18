@@ -90,7 +90,17 @@
             <span id="ot-classify">OT分类&nbsp;<select name="ot2Classify" id="ot2Classify" title="选择即可分类"></select>
               <a id="ot2ClassifyBtn" href='#' title='点击对OT2进行分类' style="display:none">OT分类</a></span>
             <span id="skyCordDetail"></span>
-            <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图' style="display: none;">查看fits切图</a></span>
+            <span style="display:inline-block"><a id="showOt2Fits" href='#' title='点击查看fits切图' style="display: none;">查看fits切图</a></span><br/>
+            <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  id="ot-search-button">
+              多星表查询
+            </button>
+                <div class="dropdown-menu" style="text-align: center;">
+              <a class="dropdown-item" href="#" id="searchMPC" target='_blank'>MPC</a><br/>
+              <a class="dropdown-item" href="#" id="searchVizieR" target='_blank'>VizieR</a><br/>
+              <a class="dropdown-item" href="#" id="searchAAVSO" target='_blank'>AAVSO</a><br/>
+            </div>
+          </div>
           </div>
           <div id="ot-description">
             <div><textarea id="ot-description-content" name="ot-description-content" class="form-control" placeholder="添加OT2的说明，官方对该OT的定性描述。"></textarea></div>
