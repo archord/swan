@@ -46,6 +46,16 @@ public class UploadFileUnstoreDaoImpl extends BaseHibernateDaoImpl<UploadFileUns
     Query q = session.createSQLQuery(sql).addEntity(UploadFileUnstore.class);
     return q.list();
   }
+  
+
+  @Override
+  public List<UploadFileUnstore> getCrossTaskFile() {
+
+    String sql = "WITH moved_rows AS ( DELETE FROM upload_file_unstore where file_type='z' and upload_success=true RETURNING * ) SELECT * FROM moved_rows;";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(UploadFileUnstore.class);
+    return q.list();
+  }
 
   @Override
   public List<UploadFileUnstore> getSubOTLevel1File() {
