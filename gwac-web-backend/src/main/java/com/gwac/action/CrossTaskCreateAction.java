@@ -29,9 +29,9 @@ import org.apache.struts2.interceptor.ApplicationAware;
  *
  * @author xy
  */
-public class CreateCrossTaskAction extends ActionSupport implements ApplicationAware {
+public class CrossTaskCreateAction extends ActionSupport implements ApplicationAware {
 
-  private static final Log log = LogFactory.getLog(CreateCrossTaskAction.class);
+  private static final Log log = LogFactory.getLog(CrossTaskCreateAction.class);
 
   private String taskName;
   private String crossMethod;
@@ -43,7 +43,7 @@ public class CreateCrossTaskAction extends ActionSupport implements ApplicationA
 
   private String echo = "";
 
-  @Action(value = "createCrossTask")
+  @Action(value = "crossTaskCreate")
   public void upload() {
 
     echo = "";
@@ -58,7 +58,7 @@ public class CreateCrossTaskAction extends ActionSupport implements ApplicationA
       ct.setCreateTime(new Date());
       ct.setCrossMethod(Integer.parseInt(crossMethod));
       ct.setCtName(taskName);
-      ct.setDateStr(dateStr);
+      ct.setDateStr(dateStr.substring(2));
       ct.setFfCount(0);
       ct.setObjCount(0);
       if(crossTaskDao.exist(ct)){

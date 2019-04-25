@@ -9,21 +9,14 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.activemq.CrossTaskMessageCreator;
-import com.gwac.dao.CameraDao;
 import com.gwac.dao.CrossFileDao;
-import com.gwac.dao.FitsFileCutDAO;
-import com.gwac.dao.FitsFileCutRefDAO;
-import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UploadFileUnstoreDao;
-import com.gwac.model.FitsFileCut;
-import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
 import static com.opensymphony.xwork2.Action.ERROR;
 import static com.opensymphony.xwork2.Action.INPUT;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
 import javax.jms.Destination;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
@@ -124,7 +116,7 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
     if (fileTotalSize * 1.0 / 1048576 > 100.0) {
       echo = echo + "total file size is " + fileTotalSize * 1.0 / 1048576 + " beyond 100MB, total file " + fileUpload.size();
       for (File file : fileUpload) {
-        log.warn(fileUploadFileName.get(i++).trim() + ": " + file.length() * 1.0 / 1048576 + "MB");
+	log.warn(fileUploadFileName.get(i++).trim() + ": " + file.length() * 1.0 / 1048576 + "MB");
       }
       flag = false;
     }
@@ -132,43 +124,56 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
 
     if (flag) {
       try {
-        initDateStr();
+	initDateStr();
 
-        String rootPath = getText("gwacDataRootDirectory");
-        if (rootPath.charAt(rootPath.length() - 1) != '/') {
-          rootPath += "/";
-        }
+	try {
+	  if (sendTime != null && !sendTime.isEmpty()) {
+	    String fmtStr = "yyyyMMddHHmmss";
+	    if (sendTime.length() > fmtStr.length()) {
+	      sendTime = sendTime.substring(0, fmtStr.length());
+	    }
+	    SimpleDateFormat sdf = new SimpleDateFormat(fmtStr);
+	    sendTimeObj = sdf.parse(sendTime);
+	  }
+	} catch (ParseException ex) {
+	  sendTimeObj = null;
+	  log.error("parse sendTime: " + sendTime + " error", ex);
+	}
+	String rootPath = getText("gwacDataRootDirectory");
+	if (rootPath.charAt(rootPath.length() - 1) != '/') {
+	  rootPath += "/";
+	}
 
-        if (typeSet.contains(fileType)) {
-          String destPath = rootPath + dateStr + "/" + taskName + "/";
-          File destDir = new File(destPath);
-          if (!destDir.exists()) {
-            destDir.mkdirs();
-            log.debug("create dir " + destDir);
-          }
-          char tfileType = '0';
-          String tpath = "";
-          switch (fileType) {
-            case "crossOTList":
-              tfileType = 'z';
-              tpath = destPath + getText("gwacDataCrossTaskOtListDirectory");
-              break;
-            case "crossOTStamp":
-              tfileType = 'y';
-              tpath = destPath + getText("gwacDataCrossTaskOtStampDirectory");
-              break;
-          }
-          storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
-          echo += "success upload " + fileUpload.size() + " files.";
-        } else {
-          echo += "unrecognize fileType:" + fileType;
-          for (String fname : fileUploadFileName) {
-            echo += ", fname:" + fname;
-          }
-          log.warn(echo);
-        }
+	if (typeSet.contains(fileType)) {
+	  String destPath = rootPath + dateStr + "/" + taskName + "/";
+	  File destDir = new File(destPath);
+	  if (!destDir.exists()) {
+	    destDir.mkdirs();
+	    log.debug("create dir " + destDir);
+	  }
+	  char tfileType = '0';
+	  String tpath = "";
+	  switch (fileType) {
+	    case "crossOTList":
+	      tfileType = 'z';
+	      tpath = destPath + getText("gwacDataCrossTaskOtListDirectory");
+	      break;
+	    case "crossOTStamp":
+	      tfileType = 'y';
+	      tpath = destPath + getText("gwacDataCrossTaskOtStampDirectory");
+	      break;
+	  }
+	  storeFile(fileUpload, fileUploadFileName, tpath, rootPath, tfileType);
+	  echo += "success upload " + fileUpload.size() + " files.";
+	} else {
+	  echo += "unrecognize fileType:" + fileType;
+	  for (String fname : fileUploadFileName) {
+	    echo += ", fname:" + fname;
+	  }
+	  log.warn(echo);
+	}
       } catch (Exception ex) {
-        log.error("delete or move file errror ", ex);
+	log.error("delete or move file errror ", ex);
       }
     } else {
       result = ERROR;
@@ -189,19 +194,19 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
     for (File file : files) {
       String tfilename = fnames.get(i++).trim();
       if (tfilename.isEmpty()) {
-        continue;
+	continue;
       }
       log.debug("receive file " + tfilename);
       File destFile = new File(path, tfilename);
       //如果存在，必须删除，否则FileUtils.moveFile报错FileExistsException
       try {
-        if (destFile.exists()) {
-          log.warn(destFile + " already exist, delete it.");
-          FileUtils.forceDelete(destFile);
-        }
-        FileUtils.moveFile(file, destFile);
+	if (destFile.exists()) {
+	  log.warn(destFile + " already exist, delete it.");
+	  FileUtils.forceDelete(destFile);
+	}
+	FileUtils.moveFile(file, destFile);
       } catch (IOException ex) {
-        log.error("delete or move file errror ", ex);
+	log.error("delete or move file errror ", ex);
       }
 
       UploadFileUnstore obj = new UploadFileUnstore();
@@ -211,12 +216,12 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
       obj.setUploadDate(new Date());
       obj.setUploadSuccess(Boolean.TRUE);
       if (sendTimeObj != null) {
-        obj.setSendTime(sendTimeObj);
+	obj.setSendTime(sendTimeObj);
       }
       ufuDao.save(obj);
       if ('z' == fileType) {
-        MessageCreator tmc = new CrossTaskMessageCreator(obj, taskName);
-        jmsTemplate.send(crossTaskDest, tmc);
+	MessageCreator tmc = new CrossTaskMessageCreator(obj, taskName);
+	jmsTemplate.send(crossTaskDest, tmc);
       }
     }
   }
@@ -241,7 +246,7 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
       log.error("response error: ", ex);
     }
   }
-  
+
   public String display() {
     return NONE;
   }

@@ -52,7 +52,7 @@ public class CrossTask implements java.io.Serializable {
   /**
    * @return the ctName
    */
-  @Column(name = "store_path")
+  @Column(name = "ct_name")
   public String getCtName() {
     return ctName;
   }

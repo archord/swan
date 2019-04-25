@@ -4,6 +4,7 @@
  */
 package com.gwac.dao;
 
+import com.gwac.model.CrossRecord;
 import com.gwac.model.FollowUpCatalog;
 import com.gwac.model4.OTCatalog;
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.List;
  * @author xy
  */
 public interface OTCatalogDao {
+  
+  public List<CrossRecord> getCrossRecord(String path);
 
   public List<OTCatalog> getOT1Catalog(String path);
 

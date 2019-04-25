@@ -17,5 +17,5 @@ import java.util.List;
  */
 public interface MergedOtherDao extends BaseHibernateDao<MergedOther> {
   
-  public List<MergedOther> queryByOt2(OtLevel2 ot2, float searchRadius, float mag);
+  public List<MergedOther> queryByOt2(float ra, float dec, float searchRadius, float mag);
 }

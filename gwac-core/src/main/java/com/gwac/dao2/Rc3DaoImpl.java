@@ -23,9 +23,9 @@ import org.springframework.stereotype.Repository;
 public class Rc3DaoImpl extends MysqlHibernateDaoImpl<Rc3> implements Rc3Dao {
   
   @Override
-  public List<Rc3> queryByOt2(OtLevel2 ot2, float searchRadius, float minMag, float maxMag) {
+  public List<Rc3> queryByOt2(float ra, float dec, float searchRadius, float minMag, float maxMag) {
 
-    SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
+    SearchBoxSphere sbs = new SearchBoxSphere(ra, dec, searchRadius);
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();

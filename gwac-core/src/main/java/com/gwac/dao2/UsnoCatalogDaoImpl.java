@@ -23,9 +23,9 @@ import org.springframework.stereotype.Repository;
 public class UsnoCatalogDaoImpl extends MysqlUsnoHibernateDaoImpl<UsnoCatalog> implements UsnoCatalogDao {
 
   @Override
-  public List<UsnoCatalog> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName) {
+  public List<UsnoCatalog> queryByOt2(float ra, float dec, float searchRadius, float mag, String tableName) {
 
-    SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
+    SearchBoxSphere sbs = new SearchBoxSphere(ra, dec, searchRadius);
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();

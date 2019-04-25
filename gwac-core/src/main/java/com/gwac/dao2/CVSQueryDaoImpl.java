@@ -23,9 +23,9 @@ import org.springframework.stereotype.Repository;
 public class CVSQueryDaoImpl extends MysqlHibernateDaoImpl<Cvs> implements CVSQueryDao {
   
   @Override
-  public List<Cvs> queryByOt2(OtLevel2 ot2, float searchRadius, float mag) {
+  public List<Cvs> queryByOt2(float ra, float dec, float searchRadius, float mag) {
 
-    SearchBoxSphere sbs = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), searchRadius);
+    SearchBoxSphere sbs = new SearchBoxSphere(ra, dec, searchRadius);
     int tflag = sbs.calSearchBox();
     if (tflag != 0) {
       Session session = getCurrentSession();

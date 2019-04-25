@@ -4,38 +4,17 @@
  */
 package com.gwac.job;
 
-import com.gwac.activemq.OTCheckMessageCreator;
-import com.gwac.dao.CameraDao;
+import com.gwac.activemq.CrossObjectCheckMessageCreator;
 import com.gwac.dao.CrossFileDao;
 import com.gwac.dao.CrossObjectDao;
 import com.gwac.dao.CrossRecordDao;
 import com.gwac.dao.CrossTaskDao;
-import com.gwac.dao.DataProcessMachineDAO;
-import com.gwac.dao.FitsFile2DAO;
-import com.gwac.dao.FitsFileCutDAO;
-import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.OTCatalogDao;
-import com.gwac.dao.ObservationSkyDao;
-import com.gwac.dao.Ot2StreamNodeTimeDao;
-import com.gwac.dao.OtLevel2Dao;
-import com.gwac.dao.OtNumberDao;
-import com.gwac.dao.OtObserveRecordDAO;
-import com.gwac.dao.OtTypeDao;
 import com.gwac.dao.UploadFileUnstoreDao;
-import com.gwac.dao.WebGlobalParameterDao;
-import com.gwac.model.Camera;
 import com.gwac.model.CrossFile;
+import com.gwac.model.CrossObject;
+import com.gwac.model.CrossRecord;
 import com.gwac.model.CrossTask;
-import com.gwac.model.FitsFile2;
-import com.gwac.model.FitsFileCut;
-import com.gwac.model.FitsFileCutRef;
-import com.gwac.model.Ot2StreamNodeTime;
-import com.gwac.model4.OTCatalog;
-import com.gwac.model.OtLevel2;
-import com.gwac.model.OtObserveRecord;
-import com.gwac.model.UploadFileUnstore;
-import com.gwac.service.SendMessageService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -52,6 +31,8 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
   private static final Log log = LogFactory.getLog(CrossTaskRecordServiceImpl.class);
 
   @Resource
+  private OTCatalogDao otcDao;
+  @Resource
   private CrossTaskDao crossTaskDao;
   @Resource
   private CrossObjectDao crossObjectDao;
@@ -64,7 +45,7 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
-  @Value("#{syscfg.gwacDataCutimagesDirectory}")
+  @Value("#{syscfg.gwacDataCrossTaskOtStampDirectory}")
   private String cutIDir;
   @Value("#{syscfg.gwacErrorbox}")
   private float errorBox;
@@ -87,8 +68,8 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 
   @Resource
   private JmsTemplate jmsTemplate;
-  @Resource(name = "otCheckDest")
-  private Destination otCheckDest;
+  @Resource(name = "crossObjectCheckDest")
+  private Destination crossObjectCheckDest;
 
   /**
    * 解析一级OT列表文件，得出二级OT，切图文件名称，二级OT模板切图名称
@@ -101,9 +82,9 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
   public void parseLevel1Ot(long ufuId, String storePath, String fileName, String taskName) {
 
     if (storePath != null && fileName != null && taskName != null) {
-      
+
       CrossTask ct = crossTaskDao.getByName(taskName);
-      if(ct==null){
+      if (ct == null) {
 	return;
       }
 
@@ -111,84 +92,43 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
       cf.setCtId(ct.getCtId());
       cf.setFileName(fileName);
       crossFileDao.save(cf);
-      if (cf.getCfId()==0) {
+      if (cf.getCfId() == 0) {
 	return;
       }
-      String fileDate = fileName.substring(fileName.lastIndexOf('_') + 1, fileName.lastIndexOf('T'));
-      String ccdType = fileName.substring(0, 1);
-      int number = ff2.getFfNumber();
-      int dpmId = ff2.getCamId();
+      ct.setFfCount(ct.getFfCount() + 1);
+      crossTaskDao.update(ct);
+      int number = ct.getFfCount();
 
-      Camera tcam = cameraDao.getById(dpmId);
-      if (tcam.getStatus() != 3) {
-	return;
-      }
-
-      List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
+      List<CrossRecord> otcs = otcDao.getCrossRecord(rootPath + "/" + storePath + "/" + fileName);
       log.debug(fileName + ", otlv1 size:" + otcs.size());
 
-      List<OtLevel2> ot2s = new ArrayList();
-      for (OTCatalog otc : otcs) {
+      for (CrossRecord otc : otcs) {
 
-	String otListPath = storePath;
+	otc.setFfNumber(number);
+	otc.setCtId(ct.getCtId());
+	otc.setCfId(cf.getCfId());
+	String stampStorePath = ct.getDateStr() + "/" + taskName + "/" + cutIDir;
+	otc.setStampPath(stampStorePath);
 
-	OtLevel2 otLv2 = new OtLevel2();
-	otLv2.setRa(otc.getRaD());
-	otLv2.setDec(otc.getDecD());
-	otLv2.setFoundTimeUtc(otc.getDateUt());
-	otLv2.setIdentify(fileName.substring(0, 4));
+	CrossObject otLv2 = new CrossObject();
+	otLv2.setCtId(ct.getCtId());
+	otLv2.setFoundTimeUtc(otc.getDateUtc());
+	otLv2.setX(otc.getX());
+	otLv2.setY(otc.getY());
 	otLv2.setXtemp(otc.getXTemp());
 	otLv2.setYtemp(otc.getYTemp());
+	otLv2.setRa(otc.getRa());
+	otLv2.setDec(otc.getDec());
+	otLv2.setMag(otc.getMag());
+	otLv2.setFirstFfNumber(number);
 	otLv2.setLastFfNumber(number);
-	otLv2.setDpmId(dpmId);
-	otLv2.setDateStr(fileDate);
-	otLv2.setAllFileCutted(false);
-	otLv2.setSkyId(ff2.getSkyId().shortValue());
-	otLv2.setDataProduceMethod('1');    //星表匹配一级OT
-	otLv2.setMag(otc.getMagAper());
-
-	OtObserveRecord oor = new OtObserveRecord();
-	oor.setOtId((long) 0);
-	oor.setFfcId((long) 0);
-	oor.setFfId(ff2.getFfId());
-	oor.setRaD(otc.getRaD());
-	oor.setDecD(otc.getDecD());
-	oor.setX(otc.getX());
-	oor.setY(otc.getY());
-	oor.setXTemp(otc.getXTemp());
-	oor.setYTemp(otc.getYTemp());
-	oor.setDateUt(otc.getDateUt());
-	oor.setFlux(otc.getFlux());
-	oor.setFlag(otc.getFlag());
-	//oor.setFlagChb(otc.getFlagChb());
-	oor.setBackground(otc.getBackground());
-	oor.setThreshold(otc.getThreshold());
-	oor.setMagAper(otc.getMagAper());
-	oor.setMagerrAper(otc.getMagerrAper());
-	oor.setEllipticity(otc.getEllipticity());
-	oor.setClassStar(otc.getClassStar());
-	//oor.setOtFlag(otc.getOtFlag());
-	oor.setFfNumber(number);
-	oor.setDateStr(fileDate);
-	oor.setDpmId(dpmId);
-	oor.setRequestCut(false);
-	oor.setSuccessCut(false);
-	oor.setSkyId(ff2.getSkyId().shortValue());
-	oor.setDataProduceMethod('1');    //星表匹配一级OT
-	oor.setTimeSubSecond(otc.getTimeSubSecond());
+	otLv2.setTotal(0);
+	otLv2.setDateStr(ct.getDateStr());
 
 	//当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
 	//existInLatestN与最近5幅比较
-	OtLevel2 tlv2 = otLv2Dao.existInAll(otLv2, errorBox);
-	if (tlv2 == null) {
-	  tlv2 = otLv2Dao.existInLatestN(otLv2, errorBox2, successiveImageNumber2);
-	  if (tlv2 != null) {
-	    tlv2.setOtType((short) 22); //慢速移动目标
-	    log.debug("second match " + tlv2.getName());
-	  }
-	}
+	CrossObject tlv2 = crossObjectDao.exist(otLv2, errorBox);
 	if (tlv2 != null) {
-	  log.debug("match ot2:" + tlv2.getOtId());
 	  if (tlv2.getFirstFfNumber() > number) {
 	    tlv2.setFirstFfNumber(number);
 	    tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
@@ -201,163 +141,104 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	    tlv2.setMag(otLv2.getMag());
 	  }
 	  tlv2.setTotal(tlv2.getTotal() + 1);
-//          otLv2Dao.update(tlv2);
-	  otLv2Dao.updateSomeRealTimeInfo(tlv2);
+	  crossObjectDao.updateSomeRealTimeInfo(tlv2);
 
-//          oor.setFfcId(ffc.getFfcId());
-	  oor.setOtId(tlv2.getOtId());
-	  otorDao.save(oor);
+	  otc.setCoId(tlv2.getCoId());
+	  crossRecordDao.save(otc);
 	} else {
 
-	  otorDao.save(oor);
-	  List<OtObserveRecord> oors = otorDao.matchLatestN(oor, errorBox, successiveImageNumber);
-	  log.debug("match ot1(" + oor.getOorId() + ") record size:" + oors.size());
-	  if (oors.size() >= occurNumber) {
-	    OtObserveRecord oor1 = oors.get(0);
+	  otc.setCoId((long) 0);
+	  crossRecordDao.save(otc);
+	  if (ct.getCrossMethod() == 1) {
 
-	    int otNumber = otnDao.getJfovNumberByDate(fileDate);
-	    String otName = String.format("%s%s_C%05d", ccdType, fileDate, otNumber);
-	    log.debug("generate new ot :" + otName + ", from file: " + fileName);
-
-	    OtLevel2 tOtLv2 = new OtLevel2();
-	    tOtLv2.setName(otName);
-	    tOtLv2.setRa(oor1.getRaD());
-	    tOtLv2.setDec(oor1.getDecD());
-	    tOtLv2.setFoundTimeUtc(oor1.getDateUt());
-	    tOtLv2.setIdentify(otLv2.getIdentify());
-	    tOtLv2.setXtemp(oor1.getXTemp());
-	    tOtLv2.setYtemp(oor1.getYTemp());
-	    tOtLv2.setLastFfNumber(oors.get(oors.size() - 1).getFfNumber());  //已有序列的最大一个编号（最后一个），数据库中查询时，按照升序排列
-	    tOtLv2.setTotal(oors.size());
-	    tOtLv2.setDpmId(oor1.getDpmId());
-	    tOtLv2.setDateStr(fileDate);
-	    tOtLv2.setAllFileCutted(false);
-	    tOtLv2.setFirstFfNumber(oor1.getFfNumber());  //已有序列的最小一个编号（第一个）
-	    int secNum = oors.get(1).getFfNumber();
-	    if (secNum - oor1.getFfNumber() == 1) {
-	      tOtLv2.setFirstNMark(true); //借用first_n_mark字段,标识“首两帧连续出现”的OT2
-	    } else {
-	      tOtLv2.setFirstNMark(false);
-	    }
-	    tOtLv2.setCuttedFfNumber(0);
-	    tOtLv2.setIsMatch((short) 0);
-	    tOtLv2.setSkyId(oor1.getSkyId());
-	    tOtLv2.setDataProduceMethod('1');    //星表匹配一级OT
-	    tOtLv2.setFoCount((short) 0);
-	    tOtLv2.setMag(oor1.getMagAper());
-	    tOtLv2.setCvsMatch((short) 0);
-	    tOtLv2.setRc3Match((short) 0);
-	    tOtLv2.setMinorPlanetMatch((short) 0);
-	    tOtLv2.setOt2HisMatch((short) 0);
-	    tOtLv2.setOtherMatch((short) 0);
-	    tOtLv2.setUsnoMatch((short) 0);
+	    CrossObject tOtLv2 = new CrossObject();
+	    tOtLv2.setCtId(ct.getCtId());
+	    tOtLv2.setFoundTimeUtc(otc.getDateUtc());
+	    tOtLv2.setX(otc.getX());
+	    tOtLv2.setY(otc.getY());
+	    tOtLv2.setXtemp(otc.getXTemp());
+	    tOtLv2.setYtemp(otc.getYTemp());
+	    tOtLv2.setRa(otc.getRa());
+	    tOtLv2.setDec(otc.getDec());
+	    tOtLv2.setMag(otc.getMag());
+	    tOtLv2.setFirstFfNumber(number);
+	    tOtLv2.setLastFfNumber(number);
+	    tOtLv2.setTotal(0);
+	    tOtLv2.setDateStr(ct.getDateStr());
 	    tOtLv2.setOtType((short) 0);
+	    tOtLv2.setIsMatch((short) 0);
+	    tOtLv2.setCvsMatch(false);
+	    tOtLv2.setRc3Match(false);
+	    tOtLv2.setMinorPlanetMatch(false);
+	    tOtLv2.setHisMatch(false);
+	    tOtLv2.setOtherMatch(false);
+	    tOtLv2.setUsnoMatch(false);
+	    tOtLv2.setBadMatch(false);
 	    tOtLv2.setLookBackResult((short) 0);
 	    tOtLv2.setFollowUpResult((short) 0);
+	    tOtLv2.setFoCount((short) 0);
 	    tOtLv2.setLookBackCnn((float) -1);
+	    tOtLv2.setProbability((float) 0);
+	    crossObjectDao.save(tOtLv2);
 
-	    otLv2Dao.save(tOtLv2);
-	    ot2s.add(tOtLv2);
+	    otc.setCoId(tOtLv2.getCoId());
+	    crossRecordDao.update(otc);
 
-	    Ot2StreamNodeTime ot2SNT = new Ot2StreamNodeTime();
-	    ot2SNT.setOtId(tOtLv2.getOtId());
-	    ot2SNT.setOorId1(oor1.getOorId());
-	    ot2SNT.setOorId2(oor.getOorId());
-	    ot2StreamNodeTimeDao.save(ot2SNT);
+	    MessageCreator tmc = new CrossObjectCheckMessageCreator(tOtLv2);
+	    jmsTemplate.send(crossObjectCheckDest, tmc);
+	  } else if (ct.getCrossMethod() == 2) {
+	    List<CrossRecord> oors = crossRecordDao.matchLatestN(otc, errorBox, successiveImageNumber);
+	    if (oors.size() >= occurNumber) {
+	      CrossRecord oor1 = oors.get(0);
 
-	    String ffcrName = String.format("%s_%04d_ref", otName, tOtLv2.getFirstFfNumber());
-	    log.debug("ffcrName=" + ffcrName);
-	    log.debug("otId=" + tOtLv2.getOtId());
+	      CrossObject tOtLv2 = new CrossObject();
+	      tOtLv2.setCtId(ct.getCtId());
+	      tOtLv2.setFoundTimeUtc(oor1.getDateUtc());
+	      tOtLv2.setX(oor1.getX());
+	      tOtLv2.setY(oor1.getY());
+	      tOtLv2.setXtemp(oor1.getXTemp());
+	      tOtLv2.setYtemp(oor1.getYTemp());
+	      tOtLv2.setRa(oor1.getRa());
+	      tOtLv2.setDec(oor1.getDec());
+	      tOtLv2.setMag(oor1.getMag());
+	      tOtLv2.setFirstFfNumber(oor1.getFfNumber());
+	      tOtLv2.setLastFfNumber(number);
+	      tOtLv2.setTotal(2);
+	      tOtLv2.setDateStr(ct.getDateStr());
+	      tOtLv2.setOtType((short) 0);
+	      tOtLv2.setIsMatch((short) 0);
+	      tOtLv2.setCvsMatch(false);
+	      tOtLv2.setRc3Match(false);
+	      tOtLv2.setMinorPlanetMatch(false);
+	      tOtLv2.setHisMatch(false);
+	      tOtLv2.setOtherMatch(false);
+	      tOtLv2.setUsnoMatch(false);
+	      tOtLv2.setBadMatch(false);
+	      tOtLv2.setLookBackResult((short) 0);
+	      tOtLv2.setFollowUpResult((short) 0);
+	      tOtLv2.setFoCount((short) 0);
+	      tOtLv2.setLookBackCnn((float) -1);
+	      tOtLv2.setProbability((float) 0);
+	      crossObjectDao.save(tOtLv2);
 
-	    FitsFileCutRef ffcr = new FitsFileCutRef();
-	    ffcr.setDpmId(Long.valueOf(tOtLv2.getDpmId()));
-	    ffcr.setFfId(oor1.getFfId());
-	    ffcr.setFileName(ffcrName);
-	    ffcr.setOtId(tOtLv2.getOtId());
-	    ffcr.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-	    ffcr.setRequestCut(false);
-	    ffcr.setSuccessCut(false);
-	    ffcrDao.save(ffcr);
+	      MessageCreator tmc = new CrossObjectCheckMessageCreator(tOtLv2);
+	      jmsTemplate.send(crossObjectCheckDest, tmc);
 
-	    for (OtObserveRecord tOor : oors) {
-	      if (tOor.getOtId() != 0) {
-		continue;
+	      for (CrossRecord tOor : oors) {
+		if (tOor.getCoId() != 0) {
+		  continue;
+		}
+		tOor.setCoId(tOtLv2.getCoId());
+		crossRecordDao.update(tOor);
 	      }
-	      String cutImg = String.format("%s_%04d", tOtLv2.getName(), tOor.getFfNumber());
-	      FitsFileCut ffc = new FitsFileCut();
-	      ffc.setStorePath(otListPath.substring(0, otListPath.lastIndexOf('/')) + "/" + cutIDir);
-	      ffc.setFileName(cutImg);
-	      ffc.setOtId(tOtLv2.getOtId());
-	      ffc.setNumber(tOor.getFfNumber());
-	      ffc.setFfId(tOor.getFfId());
-	      ffc.setDpmId((short) dpmId);
-	      ffc.setImgX(tOor.getX());
-	      ffc.setImgY(tOor.getY());
-	      ffc.setRequestCut(false);
-	      ffc.setSuccessCut(false);
-	      ffc.setIsMissed(false);
-	      ffc.setPriority((short) (tOor.getFfNumber() - tOtLv2.getFirstFfNumber()));
-	      ffcDao.save(ffc);
-
-	      tOor.setOtId(tOtLv2.getOtId());
-	      tOor.setFfcId(ffc.getFfcId());
-	      otorDao.update(tOor);
 	    }
+	  } else {
+	    log.warn("unknown CrossMethod:" + ct.getCrossMethod());
 	  }
 	}
       }
-
-      Integer maxSingleFrameOT2Num = Integer.parseInt(wgpdao.getValueByName("MaxSingleFrameOT2Num"));
-      short isMatch = 0;
-      if (ot2s.size() >= maxSingleFrameOT2Num) {
-	isMatch = 3;
-	String chatId = "gwac003"; //GWAC_OT_gft_alert 
-	String tmsg = String.format("OT2 filter:\n %s generate %d OT2\n", fitsName, ot2s.size());
-	sendMsgService.send(tmsg, chatId);
-      }
-      for (OtLevel2 ot2 : ot2s) {
-	if (isMatch == 0) {
-	  MessageCreator tmc = new OTCheckMessageCreator(ot2);
-	  jmsTemplate.send(otCheckDest, tmc);
-	} else {
-	  ot2.setIsMatch(isMatch);
-	  otLv2Dao.updateIsMatch(ot2);
-	}
-      }
-
       ufuDao.updateProcessDoneTime(ufuId);
     }
-  }
-
-  public String getTriggerMsg(OtLevel2 ot2) {
-
-    String epoch = "2000";
-    int expTime = 1;
-    int expNum = 10;
-    String filter = "R";
-    int priority = 10;
-
-    StringBuilder tsb = new StringBuilder("append_plan mini-GWAC 2\n");
-//    String msg = "append_object M151013_00001 150.1 -10.5 2000 LIGHT 1 10 R 10\n";
-    tsb.append("append_object ");
-    tsb.append(ot2.getName());
-    tsb.append(" ");
-    tsb.append(ot2.getRa() / 15); //小时
-    tsb.append(" ");
-    tsb.append(ot2.getDec());
-    tsb.append(" ");
-    tsb.append(epoch);
-    tsb.append(" LIGHT ");
-    tsb.append(expTime);
-    tsb.append(" ");
-    tsb.append(expNum);
-    tsb.append(" ");
-    tsb.append(filter);
-    tsb.append(" ");
-    tsb.append(priority);
-    tsb.append("\n");
-
-    return tsb.toString();
   }
 
 }

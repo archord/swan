@@ -85,12 +85,12 @@ public class CrossRecord implements java.io.Serializable {
   }
   
 //  @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "date_utc", length = 29)
+  @Column(name = "date_utc")
   public Date getDateUtc() {
     return this.dateUtc;
   }
 
-  public void setDateUt(Date dateUtc) {
+  public void setDateUtc(Date dateUtc) {
     this.dateUtc = dateUtc;
   }
   

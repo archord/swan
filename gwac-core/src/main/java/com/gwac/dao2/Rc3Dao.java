@@ -17,5 +17,5 @@ import java.util.List;
  */
 public interface Rc3Dao extends BaseHibernateDao<Rc3> {
   
-  public List<Rc3> queryByOt2(OtLevel2 ot2, float searchRadius, float minMag, float maxMag);
+  public List<Rc3> queryByOt2(float ra, float dec, float searchRadius, float minMag, float maxMag);
 }

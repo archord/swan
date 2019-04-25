@@ -27,7 +27,7 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
   private static final Log log = LogFactory.getLog(MinorPlanetDaoImpl.class);
 
   @Override
-  public List<MinorPlanet> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName) {
+  public List<MinorPlanet> queryByOt2(float ra, float dec, float searchRadius, float mag, String tableName) {
 
     double maxRaSpeed = getMaxAbsValue(tableName, "DLON", mag);
     double maxDecSpeed = getMaxAbsValue(tableName, "DLAT", mag);
@@ -40,8 +40,8 @@ public class MinorPlanetDaoImpl extends MysqlHibernateDaoImpl<MinorPlanet> imple
       maxDecSpeed = 19.9;
     }
 
-    SearchBoxSphere sbs1 = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), maxRaSpeed + searchRadius);
-    SearchBoxSphere sbs2 = new SearchBoxSphere(ot2.getRa(), ot2.getDec(), maxDecSpeed + searchRadius);
+    SearchBoxSphere sbs1 = new SearchBoxSphere(ra, dec, maxRaSpeed + searchRadius);
+    SearchBoxSphere sbs2 = new SearchBoxSphere(ra, dec, maxDecSpeed + searchRadius);
     int tflag1 = sbs1.calSearchBox();
     int tflag2 = sbs2.calSearchBox();
     if (tflag1 != 0 && tflag2 != 0) {

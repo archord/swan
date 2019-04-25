@@ -85,7 +85,7 @@ public class CrossObject implements java.io.Serializable {
   }
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(name = "fount_time_utc", length = 29)
+  @Column(name = "found_time_utc", length = 29)
   public Date getFoundTimeUtc() {
     return this.foundTimeUtc;
   }

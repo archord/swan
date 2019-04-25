@@ -2,6 +2,18 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+  <bean id="crossObjectCheckConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="jmsFactory"/>
+    <property name="destination" ref="crossObjectCheckDest" />
+    <property name="messageListener" ref="crossObjectCheckListener" />
+  </bean>
+  
+  <bean id="crossTaskConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="jmsFactory"/>
+    <property name="destination" ref="crossTaskDest" />
+    <property name="messageListener" ref="crossTaskListener" />
+  </bean>
+  
   <bean id="otCheckConsumer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
     <property name="connectionFactory" ref="jmsFactory"/>
     <property name="destination" ref="otCheckDest" />

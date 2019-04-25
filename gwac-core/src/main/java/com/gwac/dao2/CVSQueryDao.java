@@ -16,6 +16,6 @@ import java.util.List;
  */
 public interface CVSQueryDao extends BaseHibernateDao<Cvs> {
   
-  public List<Cvs> queryByOt2(OtLevel2 ot2, float searchRadius, float mag);
+  public List<Cvs> queryByOt2(float ra, float dec, float searchRadius, float mag);
 
 }

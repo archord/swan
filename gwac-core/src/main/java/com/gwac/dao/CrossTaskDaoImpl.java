@@ -45,7 +45,7 @@ public class CrossTaskDaoImpl extends BaseHibernateDaoImpl<CrossTask> implements
   public Boolean exist(CrossTask obj) {
     Boolean flag = false;
     Session session = getCurrentSession();
-    String sql = "select cf_id from cross_task where ct_name='" + obj.getCtName()+ "' ";
+    String sql = "select ct_id from cross_task where ct_name='" + obj.getCtName()+ "' ";
     Query q = session.createSQLQuery(sql);
     if (!q.list().isEmpty()) {
       BigInteger cfId = (BigInteger) q.list().get(0);

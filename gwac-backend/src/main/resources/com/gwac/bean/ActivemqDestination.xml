@@ -27,6 +27,9 @@
   <bean id="otlistDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
     <constructor-arg value="OT_LIST" />
   </bean>
+  <bean id="crossObjectCheckDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
+    <constructor-arg value="CROSS_OBJECT_CHECK_LIST" />
+  </bean>
   <bean id="crossTaskDest" class="org.apache.activemq.command.ActiveMQTopic" autowire="constructor">
     <constructor-arg value="CROSS_TASK_LIST" />
   </bean>

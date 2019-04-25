@@ -69,9 +69,9 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
   public CrossObject exist(CrossObject obj, float errorBox) {
     Boolean flag = false;
     Session session = getCurrentSession();
-    String sql = "select co_id from cross_object where ct_id='"
+    String sql = "select * from cross_object where ct_id="
             + obj.getCtId()
-            + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
+            + " and sqrt(power(x_temp-" + obj.getXtemp() + ", 2)+power(y_temp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql).addEntity(CrossObject.class);
     if (!q.list().isEmpty()) {
       return (CrossObject) q.list().get(0);
@@ -86,7 +86,7 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
     String sql = "select * from cross_object "
             + " where last_ff_number>" + (obj.getLastFfNumber() - n)
             + " and ct_id=" + obj.getCtId()
-            + " and sqrt(power(xtemp-" + obj.getXtemp() + ", 2)+power(ytemp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
+            + " and sqrt(power(x_temp-" + obj.getXtemp() + ", 2)+power(y_temp-" + obj.getYtemp() + ", 2))<" + errorBox + " ";
     Query q = session.createSQLQuery(sql).addEntity(CrossObject.class);
     if (!q.list().isEmpty()) {
       return (CrossObject) q.list().get(0);
@@ -123,8 +123,8 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
       isQueryParameterEmpty = false;
     }
     if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
-      sql.append(" and abs(xtemp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
-      sql.append(" and abs(ytemp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(x_temp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(y_temp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
       isQueryParameterEmpty = false;
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
       sql.append(" and abs(ra-").append(ot2qp.getRa()).append(")/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
@@ -226,8 +226,8 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
       sql.append(" and found_time_utc<'").append(ot2qp.getEndDate()).append(" 23:59:59' ");
     }
     if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
-      sql.append(" and abs(xtemp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
-      sql.append(" and abs(ytemp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(x_temp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(y_temp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
       sql.append(" and abs(ra-").append(ot2qp.getRa()).append(")/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
       sql.append(" and abs(dec-").append(ot2qp.getDec()).append(")<").append(ot2qp.getSphereRadius()).append(" ");
@@ -363,7 +363,7 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
   
   @Override
   public void updateSomeRealTimeInfo(CrossObject obj) {
-    String sql = "update cross_object set first_ff_number=?, found_time_utc=?, last_ff_number=?, xtemp=?, ytemp=?, "
+    String sql = "update cross_object set first_ff_number=?, found_time_utc=?, last_ff_number=?, x_temp=?, y_temp=?, "
             + "ra=?, dec=?, mag=?, total=?, ot_type=? where co_id=?";
     Session session = getCurrentSession();
     SQLQuery query = session.createSQLQuery(sql);

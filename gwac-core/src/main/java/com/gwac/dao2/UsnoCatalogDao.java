@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface UsnoCatalogDao extends BaseHibernateDao<UsnoCatalog> {
   
-  public List<UsnoCatalog> queryByOt2(OtLevel2 ot2, float searchRadius, float mag, String tableName);
+  public List<UsnoCatalog> queryByOt2(float ra, float dec, float searchRadius, float mag, String tableName);
   
   public boolean tableExists(String tableName);
 

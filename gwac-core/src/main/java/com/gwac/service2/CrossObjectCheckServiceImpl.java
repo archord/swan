@@ -8,19 +8,17 @@ package com.gwac.service2;
 import com.gwac.dao.CameraDao;
 import com.gwac.dao2.CVSQueryDao;
 import com.gwac.dao.CcdPixFilterDao;
+import com.gwac.dao.CrossObjectDao;
+import com.gwac.dao.CrossObjectMatchDao;
 import com.gwac.dao2.MergedOtherDao;
 import com.gwac.dao2.MinorPlanetDao;
-import com.gwac.dao.OtLevel2Dao;
-import com.gwac.dao.OtLevel2MatchDao;
 import com.gwac.dao.MatchTableDao;
 import com.gwac.dao.OtTmplWrongDao;
 import com.gwac.dao2.Rc3Dao;
 import com.gwac.dao2.UsnoCatalogDao;
-import com.gwac.model.Camera;
-import com.gwac.model.OtLevel2;
-import com.gwac.model.OtLevel2Match;
+import com.gwac.model.CrossObject;
+import com.gwac.model.CrossObjectMatch;
 import com.gwac.model.MatchTable;
-import com.gwac.model.OtTmplWrong;
 import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
 import com.gwac.model2.MinorPlanet;
@@ -44,10 +42,10 @@ import org.springframework.stereotype.Service;
  *
  * @author xy
  */
-@Service(value = "ot2CheckService")
-public class Ot2CheckServiceImpl implements Ot2CheckService {
+@Service(value = "crossObjectCheckService")
+public class CrossObjectCheckServiceImpl implements Ot2CheckService {
 
-  private static final Log log = LogFactory.getLog(Ot2CheckServiceImpl.class);
+  private static final Log log = LogFactory.getLog(CrossObjectCheckServiceImpl.class);
 
   @Value("#{syscfg.gwacServerBeijing}")
   private Boolean isBeiJingServer;
@@ -130,17 +128,11 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   float usnoMag2 = (float) 0.0;
 
   @Resource
-  private OtLevel2Dao ot2Dao;
-  @Resource
-  private CcdPixFilterDao cpfDao;
+  private CrossObjectDao ot2Dao;
   @Resource
   private MatchTableDao mtDao;
   @Resource
-  private OtLevel2MatchDao ot2mDao;
-  @Resource
-  private OtTmplWrongDao ottwdao;
-  @Resource
-  private CameraDao cameraDao;
+  private CrossObjectMatchDao ot2mDao;
 
   @Resource
   private CVSQueryDao cvsDao;
@@ -153,61 +145,21 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   @Resource
   private UsnoCatalogDao usnoDao;
 
-  private static boolean running = true;
-
-  @Override
-  public void startJob() {
-
-    if (isTestServer) {
-      return;
-    }
-    if (running == true) {
-      log.debug("start job...");
-      running = false;
-    } else {
-      log.warn("job is running, jump this scheduler.");
-      return;
-    }
-
-    long startTime = System.nanoTime();
-    try {//JDBCConnectionException or some other exception
-      searchOT2();
-    } catch (Exception ex) {
-      log.error("Job error", ex);
-    } finally {
-      if (running == false) {
-        running = true;
-      }
-    }
-    long endTime = System.nanoTime();
-    log.debug("job consume " + 1.0 * (endTime - startTime) / 1e9 + " seconds.");
-  }
-
-  public void searchOT2() {
-
-    List<OtLevel2> ot2s = ot2Dao.getUnMatched();
-//    log.debug("ot2 size: " + ot2s.size());
-    for (OtLevel2 ot2 : ot2s) {
-      searchOT2(ot2);
-    }
-  }
-
   @Override
   public void searchOT2(Long otId) {
 
-    OtLevel2 ot2 = ot2Dao.getById(otId);
+    CrossObject ot2 = ot2Dao.getById(otId);
     searchOT2(ot2);
   }
 
-  void searchOT2(OtLevel2 ot2) {
+  void searchOT2(CrossObject ot2) {
 
     if (ot2.getRa() < 0 || ot2.getRa() > 360 || ot2.getDec() < -90 || ot2.getDec() > 90) {
       return;
     }
-    log.debug("search ot2: " + ot2.getName());
+    log.debug("search ot2: " + ot2.getCoId());
 
-    Camera tcamera = cameraDao.getById(ot2.getDpmId());
-    if (tcamera.getCameraType().equals("JFoV")) {
+    if (true) {
       mergedSearchbox = mergedSearchboxG;
       cvsSearchbox = cvsSearchboxG;
       rc3Searchbox = rc3SearchboxG;
@@ -251,8 +203,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
         Cvs tcvs = (Cvs) entry.getKey();
         Double distance = (Double) entry.getValue();
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
+        CrossObjectMatch ot2m = new CrossObjectMatch();
+        ot2m.setOtId(ot2.getCoId());
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
         ot2m.setRa(tcvs.getRadeg());
@@ -267,9 +219,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         flag = true;
       }
       if (tcvsm.size() > 0) {
-        ot2.setCvsMatch((short) tcvsm.size());
+        ot2.setCvsMatch(true);
         ot2Dao.updateCvsMatch(ot2);
-        log.debug(ot2.getName() + " cvs :" + tcvsm.size());
       }
 
       Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
@@ -278,8 +229,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         MergedOther tmo = (MergedOther) entry.getKey();
         Double distance = (Double) entry.getValue();
 
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
+        CrossObjectMatch ot2m = new CrossObjectMatch();
+        ot2m.setOtId(ot2.getCoId());
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
         ot2m.setRa(tmo.getRadeg());
@@ -294,9 +245,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         flag = true;
       }
       if (tmom.size() > 0) {
-        ot2.setOtherMatch((short) tmom.size());
+        ot2.setOtherMatch(true);
         ot2Dao.updateOtherMatch(ot2);
-        log.debug(ot2.getName() + " other :" + tmom.size());
       }
 
       ott = mtDao.getMatchTableByTypeName("rc3");
@@ -305,8 +255,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         Rc3 trc3 = (Rc3) entry.getKey();
         Double distance = (Double) entry.getValue();
 
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
+        CrossObjectMatch ot2m = new CrossObjectMatch();
+        ot2m.setOtId(ot2.getCoId());
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
         ot2m.setRa(trc3.getRadeg());
@@ -321,9 +271,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         flag = true;
       }
       if (trc3m.size() > 0) {
-        ot2.setRc3Match((short) trc3m.size());
+        ot2.setRc3Match(true);
         ot2Dao.updateRc3Match(ot2);
-        log.debug(ot2.getName() + " rc3 :" + trc3m.size());
       }
 
       ott = mtDao.getMatchTableByTypeName("minor_planet");
@@ -333,8 +282,8 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         MinorPlanet tmp = (MinorPlanet) entry.getKey();
         Double distance = (Double) entry.getValue();
 
-        OtLevel2Match ot2m = new OtLevel2Match();
-        ot2m.setOtId(ot2.getOtId());
+        CrossObjectMatch ot2m = new CrossObjectMatch();
+        ot2m.setOtId(ot2.getCoId());
         ot2m.setMtId(ott.getMtId());
         ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
         ot2m.setRa(tmp.getLon());
@@ -349,87 +298,13 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
         flag = true;
       }
       if (tmpm.size() > 0) {
-        ot2.setMinorPlanetMatch((short) tmpm.size());
+        ot2.setMinorPlanetMatch(true);
         ot2Dao.updateMinorPlanetMatch(ot2);
         ot2.setOtType((short) 2);
-        ot2Dao.updateOTType(ot2);
-        log.debug(ot2.getName() + " minor planet :" + tmpm.size());
+        ot2Dao.updateOtType(ot2);
       }
       long tEndTime = System.nanoTime();
       log.debug("search minor planet consume " + 1.0 * (tEndTime  - tStartTime) / 1e9 + " seconds.");
-
-      if (ot2.getDataProduceMethod() == 'b') {
-        long usnoStartTime = System.nanoTime();
-        ott = mtDao.getMatchTableByTypeName("usno");
-        Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);//minorPlanetSearchbox
-//      log.debug("ot2: " + ot2.getName());
-//        log.debug("usnoMag: " + usnoMag);
-//      log.debug("usno match size: " + tusno.size());
-        for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
-          UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
-          Double distance = (Double) entry.getValue();
-
-          OtLevel2Match ot2m = new OtLevel2Match();
-          ot2m.setOtId(ot2.getOtId());
-          ot2m.setMtId(ott.getMtId());
-          ot2m.setMatchId(Long.valueOf(tmp.getRcdid()));
-          ot2m.setRa(tmp.getrAdeg());
-          ot2m.setDec(tmp.getdEdeg());
-          ot2m.setMag(tmp.getRmag());
-          ot2m.setDistance(distance.floatValue());
-          ot2m.setD25(new Float(0));
-          ot2mDao.save(ot2m);
-          flag = true;
-        }
-        if (tusno.size() > 0) {
-          ot2.setUsnoMatch((short) tusno.size());
-          ot2Dao.updateUsnoMatch(ot2);
-          log.debug(ot2.getName() + " usno :" + tusno.size());
-        } else {
-          log.debug(ot2.getName() + " usno not match");
-        }
-        long usnoEndTime = System.nanoTime();
-        log.debug("search usno table consume " + 1.0 * (usnoEndTime  - usnoStartTime) / 1e9 + " seconds.");
-      }
-    }
-
-    ott = mtDao.getMatchTableByTypeName("ot_level2_his");
-    Map<OtTmplWrong, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
-    Boolean hisType = false;
-    for (Map.Entry<OtTmplWrong, Double> entry : tOT2Hism.entrySet()) {
-      OtTmplWrong tot2 = (OtTmplWrong) entry.getKey();
-      Double distance = (Double) entry.getValue();
-
-      OtLevel2Match ot2m = new OtLevel2Match();
-      ot2m.setOtId(ot2.getOtId());
-      ot2m.setMtId(ott.getMtId());
-      ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
-      ot2m.setRa(tot2.getRa());
-      ot2m.setDec(tot2.getDec());
-      ot2m.setMag(tot2.getMag());
-      ot2m.setDistance(distance.floatValue());
-      ot2mDao.save(ot2m);
-      flag = true;
-
-      if (!hisType && tot2.getOtClass() == '1') {
-        ot2.setOtType(tot2.getOttId());
-        ot2Dao.updateOTType(ot2);
-        hisType = true;
-      }
-    }
-    if (tOT2Hism.size() > 0) {
-      ot2.setOt2HisMatch((short) tOT2Hism.size());
-      ot2Dao.updateOt2HisMatch(ot2);
-      log.debug(ot2.getName() + " ot2his :" + tOT2Hism.size());
-    }
-
-    try {
-      boolean tflag = filtOT2InCcdPixel(ot2);
-      if (tflag) {
-        flag = tflag;
-      }
-    } catch (Exception e) {
-      log.error("filt ot2 " + ot2.getName() + " in ccd pixel error!", e);
     }
 
     if (flag) {
@@ -440,22 +315,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       ot2Dao.updateIsMatch(ot2);
     }
     allStartTime = System.nanoTime();
-    log.debug("search ot2 " + ot2.getName() + " total consume " + 1.0 * (allStartTime  - allEndTime) / 1e9 + " seconds.");
-  }
-
-  public Map<OtTmplWrong, Double> matchOt2His(OtLevel2 ot2, float searchRadius, float mag) {
-
-//    List<OtLevel2> objs = ot2Dao.searchOT2His(ot2, searchRadius, mag);
-    List<OtTmplWrong> objs = ottwdao.searchOT2TmplWrong(ot2, searchRadius, mag);
-    double minDis = searchRadius;
-    Map rst = new HashMap();
-    for (OtTmplWrong obj : objs) {
-      double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRa(), obj.getDec());
-      if (tDis < minDis) {
-        rst.put(obj, tDis);
-      }
-    }
-    return rst;
+    log.debug("search ot2 " + ot2.getCoId() + " total consume " + 1.0 * (allStartTime  - allEndTime) / 1e9 + " seconds.");
   }
 
   /**
@@ -466,7 +326,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
    * @param mag 搜索的最大星等
    * @return
    */
-  public Map<Cvs, Double> matchOt2InCvs(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<Cvs, Double> matchOt2InCvs(CrossObject ot2, float searchRadius, float mag) {
 
     List<Cvs> cvss = cvsDao.queryByOt2(ot2.getRa(), ot2.getDec(), searchRadius, mag);
     double minDis = searchRadius;
@@ -481,7 +341,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
-  public Map<MergedOther, Double> matchOt2InMergedOther(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<MergedOther, Double> matchOt2InMergedOther(CrossObject ot2, float searchRadius, float mag) {
 
     List<MergedOther> objs = moDao.queryByOt2(ot2.getRa(), ot2.getDec(), searchRadius, mag);
     double minDis = searchRadius;
@@ -496,7 +356,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
-  public Map<Rc3, Double> matchOt2InRc3(OtLevel2 ot2, float searchRadius, float minMag, float maxMag) {
+  public Map<Rc3, Double> matchOt2InRc3(CrossObject ot2, float searchRadius, float minMag, float maxMag) {
 
     float searchBoundary = 1; //1度，认为最大的星系半径为1度
     List<Rc3> objs = rc3Dao.queryByOt2(ot2.getRa(), ot2.getDec(), searchBoundary, minMag, maxMag);
@@ -519,7 +379,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
-  public Map<MinorPlanet, Double> matchOt2InMinorPlanet(OtLevel2 ot2, float searchRadius, float mag) {
+  public Map<MinorPlanet, Double> matchOt2InMinorPlanet(CrossObject ot2, float searchRadius, float mag) {
 
     String tableName = getMinorPlanetTableName(ot2.getFoundTimeUtc());
     log.debug("tableName=" + tableName);
@@ -570,7 +430,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
   }
 
   //有两个亮于13星等的星
-  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog2(OtLevel2 ot2) {
+  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog2(CrossObject ot2) {
 
     log.debug("query usno");
 
@@ -721,7 +581,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
-  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog(OtLevel2 ot2) {
+  public Map<UsnoCatalog, Double> matchOt2InUsnoCatalog(CrossObject ot2) {
 
     Map rst = new HashMap();
     List<String> tableNames = getUsnoTableNames(ot2, usnoSearchbox);
@@ -759,19 +619,7 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     return rst;
   }
 
-  public boolean filtOT2InCcdPixel(OtLevel2 ot2) {
-
-    boolean flag = false;
-    short otTypeId = cpfDao.filterOT2(ot2);
-    if (otTypeId != 0) {
-      ot2.setOtType(otTypeId);
-      ot2Dao.updateOTType(ot2);
-      flag = true;
-    }
-    return flag;
-  }
-
-  public List<String> getUsnoTableNames(OtLevel2 ot2, float searchBox) {
+  public List<String> getUsnoTableNames(CrossObject ot2, float searchBox) {
 
     List<String> rst = new ArrayList();
     if (ot2.getDec() + 90 > 0 && ot2.getDec() - 90 < 0) {
@@ -810,5 +658,10 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
     log.debug("minorPlanetMag=" + minorPlanetMag);
     log.debug("usnoMag=" + usnoMag);
     log.debug("usnoMag2=" + usnoMag2);
+  }
+
+  @Override
+  public void startJob() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }
