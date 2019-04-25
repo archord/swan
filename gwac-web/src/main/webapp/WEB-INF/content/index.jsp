@@ -84,7 +84,10 @@
           <div class='mason-block x4'>
             <a href="<%=request.getContextPath()%>/monitor/pctl-mount-monitor.action" target="_blank" ><p>转台状态</p></a>
           </div>
-          <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT列表</p></a>     </div>
+          <div class='mason-block xl'>
+              <a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p class="multiline2">OT列表</p></a>
+              <a href="<%=request.getContextPath()%>/gwac/pgwac-crossobj.action" target="_blank" ><p class="multiline2">目标列表</p></a>
+          </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-image-realtime.action" target="_blank" ><p>图像预览</p></a>     </div>
           <div class='mason-block xl'>

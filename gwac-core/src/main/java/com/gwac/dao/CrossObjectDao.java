@@ -5,6 +5,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.CrossObject;
+import com.gwac.model.FitsFileCut;
 import com.gwac.model4.CrossObjectQueryParameter;
 import java.util.List;
 
@@ -13,6 +14,10 @@ import java.util.List;
  * @author xy
  */
 public interface CrossObjectDao extends BaseHibernateDao<CrossObject> {
+  
+  public CrossObject getCrossObjectById(long coId, Boolean queryHis);
+  
+  public List<Integer> hisOrCurExist(long coId);
 
   public void moveDataToHisTable();
 

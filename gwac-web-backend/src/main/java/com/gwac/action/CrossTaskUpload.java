@@ -125,7 +125,7 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
     if (flag) {
       try {
 	initDateStr();
-
+	dateStr = dateStr.substring(2);
 	try {
 	  if (sendTime != null && !sendTime.isEmpty()) {
 	    String fmtStr = "yyyyMMddHHmmss";
@@ -230,6 +230,7 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
     dateStr = (String) appmap.get("datestr");
     if (null == dateStr) {
       dateStr = CommonFunction.getUniqueDateStr();
+      dateStr = dateStr.substring(2);
       appmap.put("datestr", dateStr);
     }
   }

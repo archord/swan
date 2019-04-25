@@ -5,9 +5,12 @@
 package com.gwac.dao;
 
 import com.gwac.model.CrossObject;
+import com.gwac.model.FitsFileCut;
+import com.gwac.model.OtLevel2;
 import com.gwac.model4.CrossObjectQueryParameter;
 import com.gwac.util.CommonFunction;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -25,6 +28,47 @@ import org.springframework.stereotype.Repository;
 public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implements CrossObjectDao {
   
   private static final Log log = LogFactory.getLog(CrossObjectDaoImpl.class);
+    
+  @Override
+  public CrossObject getCrossObjectById(long coId, Boolean queryHis) {
+    
+    String sql1 = "select * from cross_object where co_id=" + coId;
+    String sql2 = "select * from cross_object_his where co_id=" + coId;
+    
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = "(" + sql1 + ") union (" + sql2 + ")";
+    } else {
+      unionSql = sql1;
+    }
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql).addEntity(CrossObject.class);
+    if (!q.list().isEmpty()) {
+      return (CrossObject) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+  
+  @Override
+  public List<Integer> hisOrCurExist(long coId) {
+    
+    List result = new ArrayList<>();
+    
+    String sql = "select 0 his from cross_object where co_id=" + coId
+            + " union select 1 his from cross_object_his where co_id=" + coId + ";";
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    if (iter.hasNext()) {
+      Integer his = (Integer) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
   
   @Override
   public void updateIsMatch(CrossObject obj) {
