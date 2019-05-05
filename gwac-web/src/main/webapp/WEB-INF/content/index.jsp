@@ -85,8 +85,10 @@
             <a href="<%=request.getContextPath()%>/monitor/pctl-mount-monitor.action" target="_blank" ><p>转台状态</p></a>
           </div>
           <div class='mason-block xl'>
-              <a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p class="multiline2">OT列表</p></a>
-              <a href="<%=request.getContextPath()%>/gwac/pgwac-crossobj.action" target="_blank" ><p class="multiline2">目标列表</p></a>
+              <a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT2列表</p></a>
+          </div>
+          <div class='mason-block xl'>
+              <a href="<%=request.getContextPath()%>/gwac/pgwac-crossobj.action" target="_blank" ><p>目标列表</p></a>
           </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-image-realtime.action" target="_blank" ><p>图像预览</p></a>     </div>
@@ -106,10 +108,11 @@
             <a href="<%=request.getContextPath()%>/monitor/monitor-vaccum.action" target="_blank" ><p class="multiline">真空度曲线</p></a>
             <a href="<%=request.getContextPath()%>/monitor/monitor-temperature.action" target="_blank" ><p class="multiline">温度曲线</p></a>
           </div>
-          <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/pgwac-point-monitor.action" target="_blank" ><p>指向曲线</p></a></div>
-          <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/monitor-focus.action" target="_blank" ><p>调焦值曲线</p></a></div>
+          <div class='mason-block'>
+              <a href="<%=request.getContextPath()%>/monitor/pgwac-point-monitor.action" target="_blank" ><p class="multiline1">指向曲线</p></a>
+              <a href="<%=request.getContextPath()%>/monitor/monitor-focus.action" target="_blank" ><p class="multiline">调焦值曲线</p></a>
+              <a href="/glog/gwac/pgwac-system-log.action" target="_blank" ><p class="multiline">日志信息</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
-          <div class='mason-block'><a href="/glog/gwac/pgwac-system-log.action" target="_blank" ><p>日志信息</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/monitor-preview.action" target="_blank" ><p>历史图像预览</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>

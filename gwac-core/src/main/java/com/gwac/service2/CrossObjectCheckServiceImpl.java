@@ -10,6 +10,7 @@ import com.gwac.dao2.CVSQueryDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.CrossObjectDao;
 import com.gwac.dao.CrossObjectMatchDao;
+import com.gwac.dao.CrossTaskDao;
 import com.gwac.dao2.MergedOtherDao;
 import com.gwac.dao2.MinorPlanetDao;
 import com.gwac.dao.MatchTableDao;
@@ -18,6 +19,7 @@ import com.gwac.dao2.Rc3Dao;
 import com.gwac.dao2.UsnoCatalogDao;
 import com.gwac.model.CrossObject;
 import com.gwac.model.CrossObjectMatch;
+import com.gwac.model.CrossTask;
 import com.gwac.model.MatchTable;
 import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
@@ -144,7 +146,9 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
   private Rc3Dao rc3Dao;
   @Resource
   private UsnoCatalogDao usnoDao;
-
+  @Resource
+  private CrossTaskDao crossTaskDao;
+  
   @Override
   public void searchOT2(Long otId) {
 
@@ -158,38 +162,23 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
       return;
     }
     log.debug("search ot2: " + ot2.getCoId());
+    
+    CrossTask crossTask = crossTaskDao.getById(ot2.getCtId());
 
-    if (true) {
-      mergedSearchbox = mergedSearchboxG;
-      cvsSearchbox = cvsSearchboxG;
-      rc3Searchbox = rc3SearchboxG;
-      minorPlanetSearchbox = minorPlanetSearchboxG;
-      ot2Searchbox = ot2SearchboxG;
-      usnoSearchbox = usnoSearchboxG;
-      usnoSearchbox2 = usnoSearchbox2G;
-      mergedMag = mergedMagG;
-      cvsMag = cvsMagG;
-      rc3MinMag = rc3MinMagG;
-      rc3MaxMag = rc3MaxMagG;
-      minorPlanetMag = minorPlanetMagG;
-      usnoMag = usnoMagG;
-      usnoMag2 = usnoMag2G;
-    } else {
-      mergedSearchbox = mergedSearchboxM;
-      cvsSearchbox = cvsSearchboxM;
-      rc3Searchbox = rc3SearchboxM;
-      minorPlanetSearchbox = minorPlanetSearchboxM;
-      ot2Searchbox = ot2SearchboxM;
-      usnoSearchbox = usnoSearchboxM;
-      usnoSearchbox2 = usnoSearchbox2M;
-      mergedMag = mergedMagM;
-      cvsMag = cvsMagM;
-      rc3MinMag = rc3MinMagM;
-      rc3MaxMag = rc3MaxMagM;
-      minorPlanetMag = minorPlanetMagM;
-      usnoMag = usnoMagM;
-      usnoMag2 = usnoMag2M;
-    }
+    mergedSearchbox = crossTask.getMergedR();
+    cvsSearchbox = crossTask.getCvsR();
+    rc3Searchbox = crossTask.getRc3R();
+    minorPlanetSearchbox = crossTask.getMinorPlanetR();
+    ot2Searchbox = crossTask.getOt2HisR();
+    usnoSearchbox = crossTask.getUsnoR1();
+    usnoSearchbox2 = crossTask.getUsnoR2();
+    mergedMag = crossTask.getMergedMag();
+    cvsMag = crossTask.getCvsMag();
+    rc3MinMag = crossTask.getRc3MinMag();
+    rc3MaxMag = crossTask.getRc3MaxMag();
+    minorPlanetMag = crossTask.getMinorPlanetMag();
+    usnoMag = crossTask.getUsnoMag1();
+    usnoMag2 = crossTask.getUsnoMag2();
 
     boolean mysqlCheck = true;
     Boolean flag = false;

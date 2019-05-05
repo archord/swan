@@ -35,6 +35,21 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
 
   private String taskName;
   private String crossMethod;
+  private Float mergedR;
+  private Float mergedMag;
+  private Float cvsR;
+  private Float cvsMag;
+  private Float rc3R;
+  private Float rc3MinMag;
+  private Float rc3MaxMag;
+  private Float minorPlanetR;
+  private Float minorPlanetMag;
+  private Float ot2HisR;
+  private Float ot2HisMag;
+  private Float usnoR1;
+  private Float usnoMag1;
+  private Float usnoR2;
+  private Float usnoMag2;
 
   @Resource
   private CrossTaskDao crossTaskDao;
@@ -53,6 +68,21 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
       log.warn(echo);
       log.warn("taskName:" + taskName + ", crossMethod:" + crossMethod);
     } else {
+//      System.out.println(mergedR);
+//      System.out.println(mergedMag);
+//      System.out.println(cvsR);
+//      System.out.println(cvsMag);
+//      System.out.println(rc3R);
+//      System.out.println(rc3MinMag);
+//      System.out.println(rc3MaxMag);
+//      System.out.println(minorPlanetR);
+//      System.out.println(minorPlanetMag);
+//      System.out.println(ot2HisR);
+//      System.out.println(ot2HisMag);
+//      System.out.println(usnoR1);
+//      System.out.println(usnoMag1);
+//      System.out.println(usnoR2);
+//      System.out.println(usnoMag2);
       initDateStr();
       CrossTask ct = new CrossTask();
       ct.setCreateTime(new Date());
@@ -61,6 +91,21 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
       ct.setDateStr(dateStr.substring(2));
       ct.setFfCount(0);
       ct.setObjCount(0);
+      ct.setMergedR(mergedR);
+      ct.setMergedMag(mergedMag);
+      ct.setCvsR(cvsR);
+      ct.setCvsMag(cvsMag);
+      ct.setRc3R(rc3R);
+      ct.setRc3MinMag(rc3MinMag);
+      ct.setRc3MaxMag(rc3MaxMag);
+      ct.setMinorPlanetR(minorPlanetR);
+      ct.setMinorPlanetMag(minorPlanetMag);
+      ct.setOt2HisR(ot2HisR);
+      ct.setOt2HisMag(ot2HisMag);
+      ct.setUsnoR1(usnoR1);
+      ct.setUsnoMag1(usnoMag1);
+      ct.setUsnoR2(usnoR2);
+      ct.setUsnoMag2(usnoMag2);
       if(crossTaskDao.exist(ct)){
 	echo = taskName + " already exist, please select another name.";
       }else{
@@ -92,6 +137,108 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
       dateStr = CommonFunction.getUniqueDateStr();
       appMap.put("datestr", dateStr);
     }
+  }
+
+  /**
+   * @param mergedR the mergedR to set
+   */
+  public void setMergedR(Float mergedR) {
+    this.mergedR = mergedR;
+  }
+
+  /**
+   * @param mergedMag the mergedMag to set
+   */
+  public void setMergedMag(Float mergedMag) {
+    this.mergedMag = mergedMag;
+  }
+
+  /**
+   * @param cvsR the cvsR to set
+   */
+  public void setCvsR(Float cvsR) {
+    this.cvsR = cvsR;
+  }
+
+  /**
+   * @param cvsMag the cvsMag to set
+   */
+  public void setCvsMag(Float cvsMag) {
+    this.cvsMag = cvsMag;
+  }
+
+  /**
+   * @param rc3R the rc3R to set
+   */
+  public void setRc3R(Float rc3R) {
+    this.rc3R = rc3R;
+  }
+
+  /**
+   * @param rc3Mag the rc3Mag to set
+   */
+  public void setRc3MinMag(Float rc3MinMag) {
+    this.rc3MinMag = rc3MinMag;
+  }
+  
+  public void setRc3MaxMag(Float rc3MaxMag) {
+    this.rc3MaxMag = rc3MaxMag;
+  }
+
+  /**
+   * @param minorPlanetR the minorPlanetR to set
+   */
+  public void setMinorPlanetR(Float minorPlanetR) {
+    this.minorPlanetR = minorPlanetR;
+  }
+
+  /**
+   * @param minorPlanetMag the minorPlanetMag to set
+   */
+  public void setMinorPlanetMag(Float minorPlanetMag) {
+    this.minorPlanetMag = minorPlanetMag;
+  }
+
+  /**
+   * @param ot2HisR the ot2HisR to set
+   */
+  public void setOt2HisR(Float ot2HisR) {
+    this.ot2HisR = ot2HisR;
+  }
+
+  /**
+   * @param ot2HisMag the ot2HisMag to set
+   */
+  public void setOt2HisMag(Float ot2HisMag) {
+    this.ot2HisMag = ot2HisMag;
+  }
+
+  /**
+   * @param usnoR1 the usnoR1 to set
+   */
+  public void setUsnoR1(Float usnoR1) {
+    this.usnoR1 = usnoR1;
+  }
+
+  /**
+   * @param usnnoMag1 the usnnoMag1 to set
+   */
+  public void setUsnoMag1(Float usnnoMag1) {
+    this.usnoMag1 = usnnoMag1;
+  }
+
+  /**
+   * @param usnoR2 the usnoR2 to set
+   */
+  public void setUsnoR2(Float usnoR2) {
+    this.usnoR2 = usnoR2;
+  }
+
+  /**
+   * @param usnnoMag2 the usnnoMag2 to set
+   */
+  public void setUsnoMag2(Float usnnoMag2) {
+    this.usnoMag2 = usnnoMag2;
   }
 
   /**
