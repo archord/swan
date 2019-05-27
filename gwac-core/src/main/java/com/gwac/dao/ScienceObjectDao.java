@@ -13,6 +13,8 @@ import java.util.List;
  * @author msw
  */
 public interface ScienceObjectDao extends BaseHibernateDao<ScienceObject> {
+  
+  public void updateIsTrue(long sciObjId, String isTrue);
 
   public List<ScienceObject> getByStatus(int status);
   

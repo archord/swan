@@ -235,23 +235,21 @@ $(function () {
               }, "json");
     });
 
-//    $("#ot2ClassifyBtn").click(function() {
-//      var gwacRootURL = $("#gwacRootURL").val();
-//      var otTypeId = $("#ot2Classify").val();
-//      var otId = $("#otId").val();
-//      var url = gwacRootURL + "/ot-classify.action";
-//      var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
-////      console.log(formData);
-//      $.post(url, formData,
-//              function(data) {
-//                console.log(data);
-//                if (data.flag === '1') {
-//                  alert("分类成功!");
-//                } else {
-//                  alert("分类失败!");
-//                }
-//              }, "json");
-//    });
+//      console.log(ot2);
+//      console.log(ot2.comments);
+    $("#ot-description-content").val(ot2.comments);
+    $("#ot-description-button").click(function () {
+      var gwacRootURL = $("#gwacRootURL").val();
+      var otComments = $("#ot-description-content").val();
+      var otId = $("#otId").val();
+      var url = gwacRootURL + "/update-ot2-comments.action";
+      var formData = "otId=" + otId + "&comments=" + otComments;
+//      console.log(formData);
+      $.post(url, formData,
+              function (data) {
+                console.log(data);
+              }, "json");
+    });
   }
 
   function cutImgShow(data) {
@@ -407,7 +405,7 @@ $(function () {
     var searchVizieRUrl = "http://vizier.u-strasbg.fr/viz-bin/VizieR-4?-ref=VIZ5bd5371da602&-out.add=_r&-out.add=_RAJ%2C_DEJ&-sort=_r&-order=I&-oc.form=sexa&-meta.foot=1&-meta=1&-meta.ucd=2&-c.geom=r&-c.eq=J2000&-c.u=arcmin&-c.r=+0.5&-c=";
     var searchMPCUrl = "http://www.minorplanetcenter.net/cgi-bin/mpcheck.cgi?TextArea=&radius=15&limit=20.0&oc=327&sort=d&mot=h&tmot=s&pdes=u&needed=f&ps=n&type=p&which=pos&";
     var searchAAVSOUrl = "https://www.aavso.org/vsx/index.php?view=results.submit1&ql=1&getCoordinates=0&plotType=Search&special=index.php%3Fview%3Dresults.special%26sid%3D2&ident=&constid=0&format=s&fieldunit=2&geometry=r&filter%5B%5D=0&filter%5B%5D=1&filter%5B%5D=2&filter%5B%5D=3&order=9&fieldsize=10&targetcenter=";
-    
+
     var ot2 = data.ot2;
     var ra = ot2.ra;
     var dec = ot2.dec;
@@ -415,18 +413,18 @@ $(function () {
     var siderealTime = degreeToHMS(ra);
     var pitchAngle = degreeToDMS(dec);
     $("#skyCordDetail").append("OT坐标(赤经,赤纬)：(" + siderealTime + ",&nbsp;" + pitchAngle + ")&nbsp;&nbsp;&nbsp;(" + ra + ",&nbsp;" + dec + ")&nbsp;&nbsp;&nbsp;");
-    
+
     var dateTime = datetimeUt.split("T");
     var date = dateTime[0].split("-");
     var time = dateTime[1].split(":");
     var day = parseInt(date[2]) + (parseInt(time[0]) + parseInt(time[1]) / 60 + parseInt(time[2]) / 3600) / 24;
     var raStr = degreeToHMS2(ra, "+");
     var decStr = degreeToDMS2(dec, "+");
-    
+
     searchVizieRUrl += ra + "%2C" + dec;
     searchMPCUrl += "year=" + date[0] + "&month=" + date[1] + "&day=" + day + "&ra=" + raStr + "&decl=" + decStr;
     searchAAVSOUrl += ra + "%2C" + dec;
-    
+
     $("#searchMPC").attr("href", searchMPCUrl);
     $("#searchVizieR").attr("href", searchVizieRUrl);
     $("#searchAAVSO").attr("href", searchAAVSOUrl);

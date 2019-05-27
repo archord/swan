@@ -37,10 +37,10 @@
       <div id="ot-list" style="margin: 0px 30px">
         <table id="sci-obj-table" class="display" cellspacing="0" width="100%">
           <thead><tr><th></th><th>名称</th><th>发现时间</th><th>后随星等</th><th title="后随第一帧USNO">R2</th><th title="后随第一帧USNO">B2</th><th title="后随第一帧USNO">I</th>
-              <th title="(RA-DEC)J2000">目标位置(60)</th><th>后随次数</th><th>类型</th></tr></thead>
+              <th title="(RA-DEC)J2000">目标位置(60)</th><th>后随次数</th><th>类型</th><th>假的</th></tr></thead>
 
           <tfoot><tr><th></th><th>名称</th><th>发现时间</th><th>后随星等</th><th title="后随第一帧USNO">R2</th><th title="后随第一帧USNO">B2</th><th title="后随第一帧USNO">I</th>
-              <th title="(RA-DEC)J2000">目标位置(60)</th><th>后随次数</th><th>类型</th></tr></tfoot>
+              <th title="(RA-DEC)J2000">目标位置(60)</th><th>后随次数</th><th>类型</th><th>假的</th></tr></tfoot>
         </table>
       </div>  
     </div>

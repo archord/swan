@@ -15,6 +15,9 @@ import java.util.Map;
  */
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   
+  public void updateComments(long otId, String comments);
+  public void updateCommentsHis(long otId, String comments);
+  
   public List<OtLevel2> getUnFollowOT2();
   
   public List<OtLevel2> getUnCutRecord(int successiveImageNumber);
@@ -40,6 +43,7 @@ public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
   public Boolean exist(OtLevel2 obj, float errorBox);
   
   public List<Integer> hisOrCurExist(String otName);
+  public List<Integer> hisOrCurExist(long otId);
 
   public OtLevel2 existInAll(OtLevel2 obj, float errorBox);
 

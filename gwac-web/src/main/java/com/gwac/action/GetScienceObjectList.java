@@ -1,6 +1,5 @@
 package com.gwac.action;
 
-import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.ScienceObjectDao;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
@@ -47,7 +46,7 @@ public class GetScienceObjectList extends ActionSupport {
       start = 0;
     }
     if (length < 0) {
-      length = 5;
+      length = 100;
     }
 
     dataStr = dao.findRecord(start, length);

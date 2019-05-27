@@ -393,6 +393,25 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   }
   
   @Override
+  public List<Integer> hisOrCurExist(long otId) {
+    
+    List result = new ArrayList<>();
+    
+    String sql = "select 0 his from ot_level2 where ot_id=" + otId
+            + " union select 1 his from ot_level2_his where ot_id=" + otId;
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    if (iter.hasNext()) {
+      Integer his = (Integer) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
+  
+  @Override
   public OtLevel2 existInAll(OtLevel2 obj, float errorBox) {
     Boolean flag = false;
     Session session = getCurrentSession();
@@ -716,6 +735,26 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     String sql = "update ot_level2 set minor_planet_match=" + ot2.getMinorPlanetMatch() + " where ot_id=" + ot2.getOtId();
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
+  public void updateComments(long otId, String comments) {
+    String sql = "update ot_level2 set comments=? where ot_id=?";
+    Session session = getCurrentSession();
+    SQLQuery query = session.createSQLQuery(sql);
+    query.setParameter(1, otId);
+    query.setString(0, comments);
+    query.executeUpdate();
+  }
+  
+  @Override
+  public void updateCommentsHis(long otId, String comments) {
+    String sql = "update ot_level2_his set comments=? where ot_id=?";
+    Session session = getCurrentSession();
+    SQLQuery query = session.createSQLQuery(sql);
+    query.setParameter(1, otId);
+    query.setString(0, comments);
+    query.executeUpdate();
   }
   
   @Override
