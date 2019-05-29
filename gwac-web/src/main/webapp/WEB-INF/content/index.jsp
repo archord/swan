@@ -66,16 +66,13 @@
             <a href="<%=request.getContextPath()%>/monitor/pgwac-monitor.action" target="_blank" ><p class="multiline">参数监控</p></a>
           </div>
           <div class='mason-block x5'>
-            <a href="<%=request.getContextPath()%>/science/science-object-list.action" target="_blank" ><p>科学目标</p></a>
+            <a href="<%=request.getContextPath()%>/science/science-object-final-list.action" target="_blank" ><p>科学目标</p></a>
           </div>
           <div class='mason-block x5'>
             <a href="<%=request.getContextPath()%>/followup/followup-manage.action" target="_blank" ><p>后随观测</p></a>
           </div>
           <div class='mason-block x5'>
-            <a href="<%=request.getContextPath()%>/monitor/pgwac-ot2time-monitor.action" target="_blank" ><p>OT2时间统计</p></a>
-          </div>
-          <div class='mason-block x5'>
-            <a  href="javascript:void(0)" onclick="redirectToZabbix();"><p>服务器资源监控</p></a>
+            <a href="<%=request.getContextPath()%>/science/science-object-list.action" target="_blank" ><p>后随目标</p></a>
           </div>
           <div class='mason-block x4'><a href="<%=request.getContextPath()%>/control/pctl-observation-plan.action" target="_blank" ><p class="multiline1">观测计划列表</p></a>     
             <a href="<%=request.getContextPath()%>/control/pctl-observation-manual.action" target="_blank" ><p class="multiline">生成观测计划</p></a>
@@ -113,6 +110,8 @@
               <a href="<%=request.getContextPath()%>/monitor/monitor-focus.action" target="_blank" ><p class="multiline">调焦值曲线</p></a>
               <a href="/glog/gwac/pgwac-system-log.action" target="_blank" ><p class="multiline">日志信息</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/manage/batch-script.action" target="_blank" ><p>批处理命令</p></a></div>
+          <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/pgwac-ot2time-monitor.action" target="_blank" ><p>OT2时间统计</p></a></div>
+          <div class='mason-block'><a  href="javascript:void(0)" onclick="redirectToZabbix();"><p>服务器资源监控</p></a></div>
           <div class='mason-block'><a href="<%=request.getContextPath()%>/monitor/monitor-preview.action" target="_blank" ><p>历史图像预览</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/manage/system-config.action" target="_blank"><p>系统配置</p></a></div>
           <div class='mason-block x3'><a href="<%=request.getContextPath()%>/user-logout.action" ><p>退出</p></a>             </div>
