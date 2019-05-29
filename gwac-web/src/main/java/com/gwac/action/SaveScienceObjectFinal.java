@@ -28,10 +28,10 @@ public class SaveScienceObjectFinal extends ActionSupport {
   private String triggerTime;
   private String ra;
   private String dec;
-  private Float magDetect;
-  private Float magCatalog;
-  private Float magAbsolute;
-  private Float amplitude;
+  private String magDetect;
+  private String magCatalog;
+  private String magAbsolute;
+  private String amplitude;
   private String dutyScientist;
   private String followup;
   private String type;
@@ -133,28 +133,28 @@ public class SaveScienceObjectFinal extends ActionSupport {
   /**
    * @param magDetect the magDetect to set
    */
-  public void setMagDetect(Float magDetect) {
+  public void setMagDetect(String magDetect) {
     this.magDetect = magDetect;
   }
 
   /**
    * @param magCatalog the magCatalog to set
    */
-  public void setMagCatalog(Float magCatalog) {
+  public void setMagCatalog(String magCatalog) {
     this.magCatalog = magCatalog;
   }
 
   /**
    * @param magAbsolute the magAbsolute to set
    */
-  public void setMagAbsolute(Float magAbsolute) {
+  public void setMagAbsolute(String magAbsolute) {
     this.magAbsolute = magAbsolute;
   }
 
   /**
    * @param amplitude the amplitude to set
    */
-  public void setAmplitude(Float amplitude) {
+  public void setAmplitude(String amplitude) {
     this.amplitude = amplitude;
   }
 

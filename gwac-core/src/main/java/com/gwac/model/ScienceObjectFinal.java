@@ -24,10 +24,10 @@ public class ScienceObjectFinal implements java.io.Serializable {
   private String triggerTime;
   private String ra;
   private String dec;
-  private Float magDetect;
-  private Float magCatalog;
-  private Float magAbsolute;
-  private Float amplitude;
+  private String magDetect;
+  private String magCatalog;
+  private String magAbsolute;
+  private String amplitude;
   private String dutyScientist;
   private String followup;
   private String type;
@@ -143,14 +143,14 @@ public class ScienceObjectFinal implements java.io.Serializable {
    * @return the magDetect
    */
   @Column(name = "mag_detect")
-  public Float getMagDetect() {
+  public String getMagDetect() {
     return magDetect;
   }
 
   /**
    * @param magDetect the magDetect to set
    */
-  public void setMagDetect(Float magDetect) {
+  public void setMagDetect(String magDetect) {
     this.magDetect = magDetect;
   }
 
@@ -158,14 +158,14 @@ public class ScienceObjectFinal implements java.io.Serializable {
    * @return the magCatalog
    */
   @Column(name = "mag_catalog")
-  public Float getMagCatalog() {
+  public String getMagCatalog() {
     return magCatalog;
   }
 
   /**
    * @param magCatalog the magCatalog to set
    */
-  public void setMagCatalog(Float magCatalog) {
+  public void setMagCatalog(String magCatalog) {
     this.magCatalog = magCatalog;
   }
 
@@ -173,14 +173,14 @@ public class ScienceObjectFinal implements java.io.Serializable {
    * @return the magAbsolute
    */
   @Column(name = "mag_absolute")
-  public Float getMagAbsolute() {
+  public String getMagAbsolute() {
     return magAbsolute;
   }
 
   /**
    * @param magAbsolute the magAbsolute to set
    */
-  public void setMagAbsolute(Float magAbsolute) {
+  public void setMagAbsolute(String magAbsolute) {
     this.magAbsolute = magAbsolute;
   }
 
@@ -188,14 +188,14 @@ public class ScienceObjectFinal implements java.io.Serializable {
    * @return the amplitude
    */
   @Column(name = "amplitude")
-  public Float getAmplitude() {
+  public String getAmplitude() {
     return amplitude;
   }
 
   /**
    * @param amplitude the amplitude to set
    */
-  public void setAmplitude(Float amplitude) {
+  public void setAmplitude(String amplitude) {
     this.amplitude = amplitude;
   }
 

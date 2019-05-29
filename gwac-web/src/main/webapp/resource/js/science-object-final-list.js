@@ -124,11 +124,11 @@ $(function () {
 
   function formateComment(data, type, full, meta) {
     var show = data;
-    var showLen = 60;
-    if(data!==null && data.length>showLen){
-      show = data.substring(0,showLen) + "...";
-      show = "<span title='" + data + "'>" + show + "</span>";
-    }
+//    var showLen = 60;
+//    if(data!==null && data.length>showLen){
+//      show = data.substring(0,showLen) + "...";
+//      show = "<span title='" + data + "'>" + show + "</span>";
+//    }
     return show;
   }
 
@@ -164,14 +164,14 @@ $(function () {
   }
   //.toFixed(3)
   function formateMag(data, type, full, meta) {
-    var mag_detect = full.mag_detect === null ? '_' : full.mag_detect.toFixed(1);
-    var mag_catalog = full.mag_catalog === null ? '_' : full.mag_catalog.toFixed(1);
-    var mag_absolute = full.mag_absolute === null ? '_' : full.mag_absolute.toFixed(1);
-    var amplitude = full.amplitude === null ? '_' : full.amplitude.toFixed(1);
+    var mag_detect = full.mag_detect === null ? '_' : full.mag_detect;
+    var mag_catalog = full.mag_catalog === null ? '_' : full.mag_catalog;
+    var mag_absolute = full.mag_absolute === null ? '_' : full.mag_absolute;
+    var amplitude = full.amplitude === null ? '_' : full.amplitude;
     
     var content = mag_detect +"("+amplitude+")";
     var title = "magCatalog:" + mag_catalog + ";magAbsolute:" + mag_absolute;
-    return "<span title='(" + title + ")'>" + content + "</span>";
+    return "<span title='" + title + "'>" + content + "</span>";
   }
 
   function reConstructParameter(data) {
