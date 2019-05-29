@@ -43,7 +43,11 @@ public class ScienceObjectFinalDaoImpl extends BaseHibernateDaoImpl<ScienceObjec
       sql = sql + " where gwac_type=" + type;
     }
     
+    if(length>0){
     sql = sql + " ORDER BY sof_id desc OFFSET " + start + " LIMIT " + length + " )as tmp1";
+    }else{
+    sql = sql + " ORDER BY sof_id desc )as tmp1";
+    }
 
     //log.debug(sql);
     String rst = "";
