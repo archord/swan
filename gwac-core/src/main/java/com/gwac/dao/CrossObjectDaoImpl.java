@@ -52,12 +52,54 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
   }
   
   @Override
+  public CrossObject getCrossObjectByName(String name, Boolean queryHis) {
+    
+    String sql1 = "select * from cross_object where name='" + name + "'";
+    String sql2 = "select * from cross_object_his where name='" + name + "'";
+    
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = "(" + sql1 + ") union (" + sql2 + ")";
+    } else {
+      unionSql = sql1;
+    }
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql).addEntity(CrossObject.class);
+    if (!q.list().isEmpty()) {
+      return (CrossObject) q.list().get(0);
+    } else {
+      return null;
+    }
+  }
+  
+  @Override
   public List<Integer> hisOrCurExist(long coId) {
     
     List result = new ArrayList<>();
     
     String sql = "select 0 his from cross_object where co_id=" + coId
             + " union select 1 his from cross_object_his where co_id=" + coId + ";";
+    
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql);
+    List list = q.list();
+    Iterator iter = list.iterator();
+    if (iter.hasNext()) {
+      Integer his = (Integer) iter.next();
+      result.add(his);
+    }
+    return result;
+  }
+  
+  
+  @Override
+  public List<Integer> hisOrCurExist(String name) {
+    
+    List result = new ArrayList<>();
+    
+    String sql = "select 0 his from cross_object where name='" + name
+            + "' union select 1 his from cross_object_his where name='" + name + "';";
     
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);

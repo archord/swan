@@ -51,6 +51,7 @@ public class CrossObject implements java.io.Serializable {
   private Short foCount;
   private Float lookBackCnn;
   private Float probability;
+  private String name;
 
   public CrossObject() {
   }
@@ -398,5 +399,20 @@ public class CrossObject implements java.io.Serializable {
    */
   public void setProbability(Float probability) {
     this.probability = probability;
+  }
+
+  /**
+   * @return the name
+   */
+  @Column(name = "name")
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 }

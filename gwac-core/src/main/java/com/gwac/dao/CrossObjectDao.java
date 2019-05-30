@@ -15,6 +15,10 @@ import java.util.List;
  */
 public interface CrossObjectDao extends BaseHibernateDao<CrossObject> {
   
+  public List<Integer> hisOrCurExist(String name);
+  
+  public CrossObject getCrossObjectByName(String name, Boolean queryHis);
+  
   public CrossObject getCrossObjectById(long coId, Boolean queryHis);
   
   public List<Integer> hisOrCurExist(long coId);

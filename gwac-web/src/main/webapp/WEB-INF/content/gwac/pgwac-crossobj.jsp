@@ -29,10 +29,13 @@
       <div class="row ot-list-top">
         <form action="${pageContext.request.contextPath}/get-cross-object-list.action" id="ot2QueryAction" method="post">
           <div class="col-xs-2 col-sm-2 col-md-1 ">
-            <h4>处理方式</h4>
-            <select name="ot2qp.processType" id="ot2ProcessType" multiple="multiple" class="ot2QueryParameter">
-              <option value="1">星表匹配</option>
-              <option value="b">图像相减</option>
+            <h4>日期</h4>
+            <input type="text" style="width: 85px; height: 34px;" name="ot2qp.dateStr" id="dateStr" onclick="WdatePicker({dateFmt: 'yyMMdd'})" class="Wdate timeinput form-control"/>
+          </div>
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
+            <h4>任务名称</h4>
+            <select name="ot2qp.crossTaskId" id="crossTaskId" multiple="multiple" class="ot2QueryParameter">
+              <option value="0">无</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
@@ -116,14 +119,6 @@
               <option value="0.05">0.05</option>
             </select>
           </div>
-          <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
-            <h4>提示音</h4>
-            <select id="newOTAlarm" class="form-control"></select>
-          </div>
-          <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
-            <h4>声音提醒</h4>
-            <input id="autoRing" type="checkbox" />
-          </div>
           <div class="col-xs-2 col-sm-2 col-md-1 " title="匹配不成功且回看为OT的会自动后随">
             <h4>自动后随</h4>
             <input id="autoFollowUp" type="checkbox" />
@@ -157,6 +152,7 @@
     <script src="${pageContext.request.contextPath}/resource/multiselect/jquery-2.1.3.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-3.3.2.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/multiselect/bootstrap-multiselect.js"></script>
+    <script src="${pageContext.request.contextPath}/resource/js/date/My97DatePicker/WdatePicker.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.dataTables.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/jquery.jplayer.min.js"></script>
     <script src="${pageContext.request.contextPath}/resource/js/crossobj_list.js"></script>

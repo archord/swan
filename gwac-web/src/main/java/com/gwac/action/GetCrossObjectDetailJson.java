@@ -1,18 +1,13 @@
 package com.gwac.action;
 
-import com.gwac.dao.FitsFileCutDAO;
-import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.CrossObjectDao;
 import com.gwac.dao.CrossRecordDao;
 import com.gwac.dao.OtTypeDao;
-import com.gwac.model.FitsFileCut;
 import com.gwac.model.FitsFileCutRef;
 import com.gwac.model.CrossObject;
 import com.gwac.model.OtType;
 import com.gwac.model.UserInfo;
-import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -42,7 +37,7 @@ public class GetCrossObjectDetailJson extends ActionSupport implements SessionAw
   /**
    * 查询条件
    */
-  private Long coId;
+  private String name;
   private Boolean queryHis;
   /**
    * 返回结果
@@ -71,12 +66,12 @@ public class GetCrossObjectDetailJson extends ActionSupport implements SessionAw
     }
 
     otTypes = ottDao.findAll();
-    List<Integer> tlist = obDao.hisOrCurExist(coId);
+    List<Integer> tlist = obDao.hisOrCurExist(name);
     if (!tlist.isEmpty()) {
       Integer his = tlist.get(0);
       queryHis = his == 1;
-      ot2 = obDao.getCrossObjectById(coId, queryHis);
-      ffcList = otorDao.getCutImageByOtId(coId, queryHis);
+      ot2 = obDao.getCrossObjectByName(name, queryHis);
+      ffcList = otorDao.getCutImageByOtId(ot2.getCoId(), queryHis);
 
       if (ot2 != null) {
 	String tmp[] = otorDao.getOtOpticalVaration(ot2, queryHis).split("=");
@@ -181,10 +176,10 @@ public class GetCrossObjectDetailJson extends ActionSupport implements SessionAw
   }
 
   /**
-   * @param coId the coId to set
+   * @param name the name to set
    */
-  public void setCoId(Long coId) {
-    this.coId = coId;
+  public void setName(String name) {
+    this.name = name;
   }
 
 }

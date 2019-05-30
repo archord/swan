@@ -1,7 +1,7 @@
 
 $(function () {
   var gwacRootURL = $("#gwacRootURL").val();
-  var baseUrl = gwacRootURL + "/gwac/pgwac-ot-history-detail.action?otName=";
+  var baseUrl = gwacRootURL + "/gwac/pgwac-ot-history-detail.action?name=";
   var option1 = {
     legend: {show: false},
     series: {shadowSize: 0},
@@ -28,8 +28,8 @@ $(function () {
 
   function getOt2Detail() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var coId = getUrlParameter("coId");
-    var url = gwacRootURL + "/get-crossobj-detail-json.action?coId=" + coId;
+    var coId = getUrlParameter("name");
+    var url = gwacRootURL + "/get-crossobj-detail-json.action?name=" + coId;
     $.get(url, ot2Show, "json");
   }
 

@@ -2,7 +2,7 @@
 $(function () {
   var gwacRootURL = $("#gwacRootURL").val();
 //  var baseUrl = gwacRootURL + "/get-ot-detail.action?queryHis=false&otName=";
-  var baseUrl = gwacRootURL + "/gwac/pgwac-crossobj-detail.action?coId=";
+  var baseUrl = gwacRootURL + "/gwac/pgwac-crossobj-detail.action?name=";
   var ot2arr;
   var ot2ListTable;
   var ot2QueryInterval;
@@ -121,7 +121,7 @@ $(function () {
       allSelectedText: '已全选',
       selectAllText: '全选'
     };
-    $('#ot2ProcessType').multiselect(option);
+    $('#crossTaskId').multiselect(option);
     $('#ot2IsMatch').multiselect(option);
     $('#ot2MatchType').multiselect(option);
     $('#ot2Type').multiselect(option);
@@ -225,7 +225,7 @@ $(function () {
       },
       "columns": [
         {"data": "coId"},
-        {"data": "coId"},
+        {"data": "name"},
         {"data": "foundTimeUtc"},
         {"data": "ra"},
         {"data": "dec"},
@@ -245,35 +245,27 @@ $(function () {
       ],
       "columnDefs": [{
           "targets": 0,
-          "data": "ID?",
           "render": formateRowNumber
         }, {
           "targets": 1,
-          "data": "OtName?",
           "render": formateOtName
         }, {
           "targets": 2,
-          "data": "foundTimeUtc?",
           "render": formateTime
         }, {
           "targets": [3, 4],
-          "data": "dont know",
           "render": floatFormate3
         }, {
           "targets": [5, 6],
-          "data": "dont know",
           "render": floatFormate2
         }, {
           "targets": 11,
-          "data": "dont know",
           "render": formatBool
         }, {
           "targets": 12,
-          "data": "dont know",
           "render": formatBool
         }, {
           "targets": 13,
-          "data": "dont know",
           "render": formatBool
         }, {
           "targets": 14,
@@ -281,23 +273,18 @@ $(function () {
           "render": formateRC3
         }, {
           "targets": 16,
-          "data": "dont know",
           "render": formatBool
         }, {
           "targets": 17,
-          "data": "dont know",
           "render": formatBool
         }, {
           "targets": 9,
-          "data": "dont know",
           "render": formateLookBack
         }, {
           "targets": 10,
-          "data": "dont know",
           "render": formateLookBackCNN
         }, {
           "targets": 8,
-          "data": "dont know",
           "render": formateOtType
         }],
       "language": {

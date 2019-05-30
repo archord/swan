@@ -10,6 +10,7 @@ import com.gwac.dao.CrossObjectDao;
 import com.gwac.dao.CrossRecordDao;
 import com.gwac.dao.CrossTaskDao;
 import com.gwac.dao.OTCatalogDao;
+import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.CrossFile;
 import com.gwac.model.CrossObject;
@@ -42,6 +43,8 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
   private CrossFileDao crossFileDao;
   @Resource
   private UploadFileUnstoreDao ufuDao;
+  @Resource
+  private OtNumberDao otnDao;
 
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
@@ -151,7 +154,12 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	  crossRecordDao.save(otc);
 	  if (ct.getCrossMethod() == 1) {
 
+	    int otNumber = otnDao.getNumberByDate(ct.getDateStr());
+	    String otName = String.format("G%s_U%06d", ct.getDateStr(), otNumber);
+	    log.debug("generate new ot :" + otName + ", from file: " + fileName);
+
 	    CrossObject tOtLv2 = new CrossObject();
+	    tOtLv2.setName(otName);
 	    tOtLv2.setCtId(ct.getCtId());
 	    tOtLv2.setFoundTimeUtc(otc.getDateUtc());
 	    tOtLv2.setX(otc.getX());
@@ -191,7 +199,12 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	    if (oors.size() >= occurNumber) {
 	      CrossRecord oor1 = oors.get(0);
 
+	      int otNumber = otnDao.getNumberByDate(ct.getDateStr());
+	      String otName = String.format("G%s_U%06d", ct.getDateStr(), otNumber);
+	      log.debug("generate new ot :" + otName + ", from file: " + fileName);
+
 	      CrossObject tOtLv2 = new CrossObject();
+	      tOtLv2.setName(otName);
 	      tOtLv2.setCtId(ct.getCtId());
 	      tOtLv2.setFoundTimeUtc(oor1.getDateUtc());
 	      tOtLv2.setX(oor1.getX());
