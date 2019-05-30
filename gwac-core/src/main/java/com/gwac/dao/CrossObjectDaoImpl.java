@@ -200,6 +200,10 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
       sql.append(" and ct_id=").append(ot2qp.getCtId()).append(" ");
       isQueryParameterEmpty = false;
     }
+    if (ot2qp.getMagDiff() != null && ot2qp.getMagDiff()>0) {
+      sql.append(" and mag_diff>=").append(ot2qp.getMagDiff()).append(" ");
+      isQueryParameterEmpty = false;
+    }
     if (ot2qp.getStartDate() != null && !ot2qp.getStartDate().isEmpty()) {
       sql.append(" and found_time_utc>'").append(ot2qp.getStartDate()).append(" 00:00:00' ");
       isQueryParameterEmpty = false;

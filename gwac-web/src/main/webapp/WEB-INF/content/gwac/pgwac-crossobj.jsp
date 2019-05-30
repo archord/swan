@@ -34,8 +34,7 @@
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>任务名称</h4>
-            <select name="ot2qp.crossTaskId" id="crossTaskId"  class="form-control">
-              <option value="0">未选择</option></select>
+            <select name="ot2qp.ctId" id="ctId"  class="form-control"></select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>匹配状态</h4>
@@ -120,7 +119,7 @@
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>星等变化</h4>
-            <select name="ot2qp.magDiffAbs" id="magDiffAbs" class="form-control">
+            <select name="ot2qp.magDiff" id="magDiff" class="form-control">
               <option value="0">ALL</option>
               <option value="3">大于3</option>
               <option value="2">大于2</option>

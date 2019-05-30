@@ -11,9 +11,10 @@ import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.interceptor.ApplicationAware;
 
 @Result(name = "success", type = "json")
-public class GetCrossObjectList extends ActionSupport {
+public class GetCrossObjectList extends ActionSupport implements ApplicationAware {
 
   private static final long serialVersionUID = 5073694279068543593L;
   private static final Log log = LogFactory.getLog(GetCrossObjectList.class);
@@ -46,23 +47,36 @@ public class GetCrossObjectList extends ActionSupport {
   private CrossObjectDao obDao = null;
   private CrossObjectQueryParameter ot2qp;
 
+  private Map<String, Object> appMap = null;
+  private String dateStr = null;
+
   @SuppressWarnings("unchecked")
 //  @Transactional(readOnly=true)
   public String execute() {
+    initObjType();
 
-    System.out.println("get cross object list");
-    ot2qp.setQueryHis(false);
-    System.out.println(ot2qp.toString());
-
+    if (dateStr.equalsIgnoreCase(ot2qp.getDateStr())) {
+      ot2qp.setQueryHis(false);
+    } else {
+      ot2qp.setQueryHis(true);
+    }
     gridModel = obDao.queryCrossObject(ot2qp);
 //    log.debug(gridModel.size());
 
     return SUCCESS;
   }
 
+  public void initObjType() {
+    dateStr = (String) appMap.get("datestr");
+    if (null == dateStr) {
+      dateStr = CommonFunction.getUniqueDateStr();
+      appMap.put("datestr", dateStr);
+    }
+  }
+
   public void checkIsHistory(CrossObjectQueryParameter ot2qp) {
     String curUtc = CommonFunction.getCurUTCDateString();
-    System.out.println(curUtc);
+//    System.out.println(curUtc);
     if (ot2qp.getStartDate().isEmpty() && ot2qp.getEndDate().isEmpty()) {
       ot2qp.setQueryHis(false);
     } else if (ot2qp.getStartDate().equals(curUtc) && ot2qp.getEndDate().equals(curUtc)) {
@@ -132,7 +146,7 @@ public class GetCrossObjectList extends ActionSupport {
 
     if (this.records > 0 && this.rows > 0) {
       this.total = (int) Math.ceil((double) this.records
-              / (double) this.rows);
+	      / (double) this.rows);
     } else {
       this.total = 0;
     }
@@ -208,5 +222,10 @@ public class GetCrossObjectList extends ActionSupport {
    */
   public void setOt2qp(CrossObjectQueryParameter ot2qp) {
     this.ot2qp = ot2qp;
+  }
+
+  @Override
+  public void setApplication(Map<String, Object> map) {
+    this.appMap = map;
   }
 }

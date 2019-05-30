@@ -52,6 +52,9 @@ public class CrossObject implements java.io.Serializable {
   private Float lookBackCnn;
   private Float probability;
   private String name;
+  private String maxMag;
+  private String minMag;
+  private String magDiff;
 
   public CrossObject() {
   }
@@ -414,5 +417,51 @@ public class CrossObject implements java.io.Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+  
+
+  /**
+   * @return the maxMag
+   */
+  @Column(name = "max_mag")
+  public String getMaxMag() {
+    return maxMag;
+  }
+
+  /**
+   * @param maxMag the maxMag to set
+   */
+  public void setMaxMag(String maxMag) {
+    this.maxMag = maxMag;
+  }
+
+  /**
+   * @return the minMag
+   */
+  @Column(name = "min_mag")
+  public String getMinMag() {
+    return minMag;
+  }
+
+  /**
+   * @param minMag the minMag to set
+   */
+  public void setMinMag(String minMag) {
+    this.minMag = minMag;
+  }
+
+  /**
+   * @return the magDiff
+   */
+  @Column(name = "mag_diff")
+  public String getMagDiff() {
+    return magDiff;
+  }
+
+  /**
+   * @param magDiff the magDiff to set
+   */
+  public void setMagDiff(String magDiff) {
+    this.magDiff = magDiff;
   }
 }

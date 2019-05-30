@@ -110,7 +110,7 @@ $(function () {
 
   function ot2QueryBtnClick() {
     var formData = $("#ot2QueryAction").serialize();
-    console.log(formData)
+    console.log(formData);
     if (formData === 'ot2qp.lookBackCnn=' || formData === 'autoRefresh=on' || formData === '') {
       formData = "ot2qp.coId=";
     }
@@ -371,18 +371,11 @@ function openwindow(url, name, width, height, iWidth, iHeight)
 }
 
 function loadCrossTask() {
-  var option = {
-    maxHeight: 200,
-    nonSelectedText: '请选择',
-    includeSelectAllOption: true,
-    allSelectedText: '已全选',
-    selectAllText: '全选'
-  };
   var gwacRootURL = $("#gwacRootURL").val();
   var dateStr = $("#dateStr").val();
   var queryUrl = gwacRootURL + "/get-cross-task-json.action";
-  $('#crossTaskId').find('option').remove();
-  $('#crossTaskId').append($('<option>', {
+  $('#ctId').find('option').remove();
+  $('#ctId').append($('<option>', {
     value: '0',
     text: 'ALL'
   }));
@@ -394,21 +387,19 @@ function loadCrossTask() {
     dataType: 'json',
     success: function (data) {
       var objs = data.objs;
-      console.log(objs);
       if (objs) {
         $.each(objs, function (i, item) {
-          $('#crossTaskId').append($('<option>', {
+          $('#ctId').append($('<option>', {
             value: item.ctId,
             text: item.ctName
           }));
-          console.log(item.ctName);
         });
       } else {
         console.log("cannot find cross task.");
       }
     }
   });
-//  $('#crossTaskId').multiselect(option);
-//  $("#crossTaskId").val('R');
-//  $("#crossTaskId").change();
+//  $('#ctId').multiselect(option);
+//  $("#ctId").val('R');
+//  $("#ctId").change();
 }

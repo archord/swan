@@ -25,8 +25,10 @@ public class CrossObjectQueryParameter {
   private float sphereRadius;
   private Boolean queryHis;
   
+  private String dateStr;
   private Long coId;
   private Long ctId;
+  private Float magDiff;
   private List<String> isMatch;
   private List<String> matchType;
   private List<String> otType;
@@ -49,6 +51,8 @@ public class CrossObjectQueryParameter {
             + ", matchType=" + matchType + ", otType=" + otType 
             + ", lookBackResult=" + lookBackResult + ", followUpResult=" + getFollowUpResult()
             + ", lookBackCnn=" + lookBackCnn
+            + ", dateStr=" + dateStr
+            + ", magDiff=" + getMagDiff()
             + ", start=" + start + ", length=" + length;
   }
 
@@ -350,5 +354,33 @@ public class CrossObjectQueryParameter {
    */
   public void setCtId(Long ctId) {
     this.ctId = ctId;
+  }
+
+  /**
+   * @return the dateStr
+   */
+  public String getDateStr() {
+    return dateStr;
+  }
+
+  /**
+   * @param dateStr the dateStr to set
+   */
+  public void setDateStr(String dateStr) {
+    this.dateStr = dateStr;
+  }
+
+  /**
+   * @return the magDiff
+   */
+  public Float getMagDiff() {
+    return magDiff;
+  }
+
+  /**
+   * @param magDiff the magDiff to set
+   */
+  public void setMagDiff(Float magDiff) {
+    this.magDiff = magDiff;
   }
 }
