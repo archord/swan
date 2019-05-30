@@ -6,12 +6,15 @@
 package com.gwac.dao;
 
 import com.gwac.model.CrossTask;
+import java.util.List;
 
 /**
  *
  * @author xy
  */
 public interface CrossTaskDao extends BaseHibernateDao<CrossTask> {
+  
+  public List<CrossTask> getObjects(String dateStr);
   
   public CrossTask getByName(String ctName);
   

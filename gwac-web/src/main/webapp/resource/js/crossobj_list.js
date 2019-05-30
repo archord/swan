@@ -6,36 +6,28 @@ $(function () {
   var ot2arr;
   var ot2ListTable;
   var ot2QueryInterval;
-  var alarmPlayer;
 
-  var lastTotalOT2 = 0;
-  var curTotalOT2 = 0;
-
+  initDateStr();
+  loadCrossTask();
   loadOT2Type();
-  loadOT2Alarm();
-  initAlarmPlayer();
   initAutoFollowUp();
   loadQueryParmeter();
   loadOT2List();
 
-  ot2ListTable.on('xhr', function () {
-    lastTotalOT2 = curTotalOT2;
-    curTotalOT2 = 0;
-    var ot2List = ot2ListTable.ajax.json().gridModel;
-//    console.log(ot2List);
-    $.each(ot2List, function (i, item) {
-      if ((item.dataProduceMethod === '1' && item.isMatch === 1 && item.lookBackResult === 1)
-              || (item.dataProduceMethod === '8' && item.isMatch === 1)) {
-        curTotalOT2 = curTotalOT2 + 1;
-      }
-    });
-    if ($('#autoRing').is(':checked') && lastTotalOT2 !== 0 && curTotalOT2 > lastTotalOT2) {
-      playAlarm();
-    }
-//    console.log("lastTotalOT2:"+lastTotalOT2);
-//    console.log("curTotalOT2:"+curTotalOT2);
-  });
+  function initDateStr() {
+    var today = new Date();
+    var y = today.getUTCFullYear();
+    var m = today.getUTCMonth() + 1;
+    var d = today.getUTCDate();
+    m = m < 10 ? "0" + m : m;
+    d = d < 10 ? "0" + d : d;
+    var dateStr = (y - 2000) + '' + m + d;
+    $('#dateStr').val(dateStr);
 
+//    $("#dateStr").change(function () {
+//      loadCrossTask();
+//    });
+  }
 
   function initAutoFollowUp() {
 
@@ -88,31 +80,6 @@ $(function () {
     });
   }
 
-  function initAlarmPlayer() {
-    alarmPlayer = $("#alarm-player");
-    alarmPlayer.jPlayer({
-      ready: function () {
-        alarmPlayer.jPlayer("setMedia", {
-          mp3: "/gresources/" + $('#newOTAlarm').val()
-        });
-      },
-      loop: false
-    });
-
-    $("#newOTAlarm").change(function () {
-      playAlarm();
-    });
-  }
-
-  function playAlarm() {
-    var optionSelected = $("#newOTAlarm").find("option:selected");
-    var valueSelected = optionSelected.val();
-    alarmPlayer.jPlayer("setMedia", {
-      mp3: "/gresources/" + valueSelected
-    });
-    alarmPlayer.jPlayer("play");
-  }
-
   function loadQueryParmeter() {
     var option = {
       maxHeight: 200,
@@ -121,7 +88,6 @@ $(function () {
       allSelectedText: '已全选',
       selectAllText: '全选'
     };
-    $('#crossTaskId').multiselect(option);
     $('#ot2IsMatch').multiselect(option);
     $('#ot2MatchType').multiselect(option);
     $('#ot2Type').multiselect(option);
@@ -131,10 +97,6 @@ $(function () {
     $("#ot2QueryBtn").click(ot2QueryBtnClick);
     $('#ot2ListTableAutoRefresh').change(setAutoRefresh);
 
-    $(".ot2QueryParameter").change(function () {
-      lastTotalOT2 = 0;
-      curTotalOT2 = 0;
-    });
     setAutoRefresh();
   }
 
@@ -174,37 +136,6 @@ $(function () {
               text: item.ottName
             }));
         });
-      }
-    });
-  }
-
-  function loadOT2Alarm() {
-    var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-ot-alarm.action";
-    $.ajax({
-      type: "get",
-      url: queryUrl,
-      data: 'p1=1',
-      async: false,
-      dataType: 'json',
-      success: function (data) {
-//        $('#newOTAlarm').append($('<option>', {
-//          value: "",
-//          text: "请选择"
-//        }));
-        var mrs = data.multimediaResources;
-        $.each(mrs, function (i, item) {
-          if (item.type === '1')
-            $('#newOTAlarm').append($('<option>', {
-              value: item.path,
-              text: item.enName
-            }));
-        });
-
-        var defaultText = 'Beep';
-        $('#newOTAlarm option').filter(function () {
-          return $(this).text() === defaultText;
-        }).prop('selected', true);
       }
     });
   }
@@ -329,7 +260,7 @@ $(function () {
   function formateRC3(data, type, full, meta) {
     return data ? "<span style='color:#D9006C;font-weight: bold;'>" + 1 + "</span>" : 0;
   }
-  
+
   function formatBool(data, type, full, meta) {
     return data ? 1 : 0;
   }
@@ -437,4 +368,47 @@ function openwindow(url, name, width, height, iWidth, iHeight)
           ',top=' + iTop +
           ',left=' + iLeft +
           ',toolbar=no,menubar=no,scrollbars=auto,resizeable=yes,location=no,status=yes');
+}
+
+function loadCrossTask() {
+  var option = {
+    maxHeight: 200,
+    nonSelectedText: '请选择',
+    includeSelectAllOption: true,
+    allSelectedText: '已全选',
+    selectAllText: '全选'
+  };
+  var gwacRootURL = $("#gwacRootURL").val();
+  var dateStr = $("#dateStr").val();
+  var queryUrl = gwacRootURL + "/get-cross-task-json.action";
+  $('#crossTaskId').find('option').remove();
+  $('#crossTaskId').append($('<option>', {
+    value: '0',
+    text: 'ALL'
+  }));
+  $.ajax({
+    type: "get",
+    url: queryUrl,
+    data: 'dateStr=' + dateStr,
+    async: false,
+    dataType: 'json',
+    success: function (data) {
+      var objs = data.objs;
+      console.log(objs);
+      if (objs) {
+        $.each(objs, function (i, item) {
+          $('#crossTaskId').append($('<option>', {
+            value: item.ctId,
+            text: item.ctName
+          }));
+          console.log(item.ctName);
+        });
+      } else {
+        console.log("cannot find cross task.");
+      }
+    }
+  });
+//  $('#crossTaskId').multiselect(option);
+//  $("#crossTaskId").val('R');
+//  $("#crossTaskId").change();
 }

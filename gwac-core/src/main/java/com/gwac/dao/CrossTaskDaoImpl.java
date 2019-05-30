@@ -20,6 +20,14 @@ import org.springframework.stereotype.Repository;
 public class CrossTaskDaoImpl extends BaseHibernateDaoImpl<CrossTask> implements CrossTaskDao {
   
   @Override
+  public List<CrossTask> getObjects(String dateStr) {
+    String sql = "select * from cross_task where date_str='"+dateStr+"' order by ct_id desc";
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql).addEntity(CrossTask.class);
+    return q.list();
+  }
+  
+  @Override
   public CrossTask getByName(String ctName) {
 
     Session session = getCurrentSession();

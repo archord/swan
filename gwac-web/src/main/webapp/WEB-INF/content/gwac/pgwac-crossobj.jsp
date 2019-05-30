@@ -30,13 +30,12 @@
         <form action="${pageContext.request.contextPath}/get-cross-object-list.action" id="ot2QueryAction" method="post">
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>日期</h4>
-            <input type="text" style="width: 85px; height: 34px;" name="ot2qp.dateStr" id="dateStr" onclick="WdatePicker({dateFmt: 'yyMMdd'})" class="Wdate timeinput form-control"/>
+            <input type="text" style="width: 85px; height: 34px;" name="ot2qp.dateStr" id="dateStr" onclick="WdatePicker({dateFmt: 'yyMMdd',onpicked: loadCrossTask})" class="Wdate timeinput form-control"/>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>任务名称</h4>
-            <select name="ot2qp.crossTaskId" id="crossTaskId" multiple="multiple" class="ot2QueryParameter">
-              <option value="0">无</option>
-            </select>
+            <select name="ot2qp.crossTaskId" id="crossTaskId"  class="form-control">
+              <option value="0">未选择</option></select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>匹配状态</h4>
@@ -117,6 +116,15 @@
               <option value="0.2">0.2</option>
               <option value="0.1">0.1</option>
               <option value="0.05">0.05</option>
+            </select>
+          </div>
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
+            <h4>星等变化</h4>
+            <select name="ot2qp.magDiffAbs" id="magDiffAbs" class="form-control">
+              <option value="0">ALL</option>
+              <option value="3">大于3</option>
+              <option value="2">大于2</option>
+              <option value="1">大于1</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 " title="匹配不成功且回看为OT的会自动后随">
