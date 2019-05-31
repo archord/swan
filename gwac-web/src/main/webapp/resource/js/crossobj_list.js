@@ -7,7 +7,7 @@ $(function () {
   var ot2ListTable;
   var ot2QueryInterval;
 
-  initDateStr();
+//  initDateStr();
   loadCrossTask();
   loadOT2Type();
   initAutoFollowUp();
@@ -172,7 +172,8 @@ $(function () {
         {"data": "rc3Match"},
         {"data": "foCount"},
         {"data": "cvsMatch"},
-        {"data": "otherMatch"}
+        {"data": "otherMatch"},
+        {"data": "magDiff"}
       ],
       "columnDefs": [{
           "targets": 0,
@@ -217,6 +218,9 @@ $(function () {
         }, {
           "targets": 8,
           "render": formateOtType
+        }, {
+          "targets": 18,
+          "render": formateMagDiff
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -247,6 +251,10 @@ $(function () {
       rst = "未分类";
     }
     return rst;
+  }
+
+  function formateMagDiff(data, type, full, meta) {
+    return data.toFixed(1);
   }
 
   function floatFormate3(data, type, full, meta) {

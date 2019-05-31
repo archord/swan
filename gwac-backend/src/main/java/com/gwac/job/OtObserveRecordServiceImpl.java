@@ -166,11 +166,6 @@ public class OtObserveRecordServiceImpl implements OtObserveRecordService {
       int number = ff2.getFfNumber();
       int dpmId = ff2.getCamId();
 
-      Camera tcam = cameraDao.getById(dpmId);
-      if (tcam.getStatus() != 3) {
-	return;
-      }
-
       List<OTCatalog> otcs = otcDao.getOT1Catalog(rootPath + "/" + storePath + "/" + fileName);
       log.debug(fileName + ", otlv1 size:" + otcs.size());
 

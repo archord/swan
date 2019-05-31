@@ -82,7 +82,7 @@ public class OTLookBack extends ActionSupport {
     } else {
       String parmValue = webGlobalParameterDao.getValueByName("AutoFollowUp");
       if (flag == 1 && parmValue.equalsIgnoreCase("true")) {
-        autoFollowUp();
+	autoFollowUp();
       }
 
       OtLevel2 ot2 = new OtLevel2();
@@ -91,29 +91,29 @@ public class OTLookBack extends ActionSupport {
       int trst = ot2Dao.updateLookBackResult(ot2);
       log.debug("1 update, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst + ", AutoFollowUp=" + parmValue);
       for (int i = 0; i < 5; i++) {
-        try {
-          Thread.sleep(500);
-        } catch (InterruptedException e) {
-          log.error("sleep error", e);
-        }
-        OtLevel2 tot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
-        if (tot2 == null) {
-          break;
-        }
-        if (tot2.getLookBackResult() == 0) {
-          trst = ot2Dao.updateLookBackResult(ot2);
-          log.debug((i + 2) + " update, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst);
-        } else {
-          log.debug((i + 2) + " update sucess, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst);
-          break;
-        }
+	try {
+	  Thread.sleep(500);
+	} catch (InterruptedException e) {
+	  log.error("sleep error", e);
+	}
+	OtLevel2 tot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+	if (tot2 == null) {
+	  break;
+	}
+	if (tot2.getLookBackResult() == 0) {
+	  trst = ot2Dao.updateLookBackResult(ot2);
+	  log.debug((i + 2) + " update, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst);
+	} else {
+	  log.debug((i + 2) + " update sucess, ot2name=" + ot2name + ", flag=" + flag + ", updatedRowNumber=" + trst);
+	  break;
+	}
       }
       echo = "lookback success.\n";
 
       String ip = ServletActionContext.getRequest().getRemoteAddr();
       String unitId = ip.substring(ip.lastIndexOf('.') + 1);
       if (unitId.length() < 3) {
-        unitId = "0" + unitId;
+	unitId = "0" + unitId;
       }
       ssmDao.updateOt2LookBack(unitId, ot2name);
       ot2StreamNodeTimeDao.updateLookBackTime(ot2name);
@@ -146,26 +146,27 @@ public class OTLookBack extends ActionSupport {
     if (isMatch == 0) {
       log.warn("query isMatch 1, ot2name=" + ot2name + ", isMatch=" + isMatch);
       for (int i = 0; i < 3; i++) {
-        try {
-          Thread.sleep(500);
-        } catch (InterruptedException e) {
-          log.error("sleep error", e);
-        }
-        isMatch = ot2Dao.getIsMatchByName(ot2name);
-        if (isMatch > 0) {
-          log.warn("query isMatch " + (i + 2) + ", ot2name=" + ot2name + ", isMatch=" + isMatch);
-          break;
-        } else {
-          log.warn("query isMatch " + (i + 2) + ", ot2name=" + ot2name + ", isMatch=" + isMatch);
-        }
+	try {
+	  Thread.sleep(500);
+	} catch (InterruptedException e) {
+	  log.error("sleep error", e);
+	}
+	isMatch = ot2Dao.getIsMatchByName(ot2name);
+	if (isMatch > 0) {
+	  log.warn("query isMatch " + (i + 2) + ", ot2name=" + ot2name + ", isMatch=" + isMatch);
+	  break;
+	} else {
+	  log.warn("query isMatch " + (i + 2) + ", ot2name=" + ot2name + ", isMatch=" + isMatch);
+	}
       }
     }
 
     OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+    Camera tcam = cameraDao.getById(ot2.getDpmId());
     log.debug("ot2name=" + ot2name + "isMatch1=" + isMatch + ", isMatch2=" + ot2.getIsMatch());
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
 //            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
-    if ((ot2.getDataProduceMethod() == '1' && isMatch == 1)) {
+    if (ot2.getDataProduceMethod() == '1' && isMatch == 1 && (tcam==null || (tcam!=null&&tcam.getStatus() == 3))) {
       ot2StreamNodeTimeDao.updateLookUpTime(ot2.getOtId());
 
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
@@ -188,11 +189,10 @@ public class OTLookBack extends ActionSupport {
       ot2fp.setPriority(Integer.parseInt(priority));
       ot2fp.setOtName(ot2name);
 
-      Camera tcam = cameraDao.getById(ot2.getDpmId());
       if (tcam != null) {
-        ot2fp.setUserName(tcam.getName());
+	ot2fp.setUserName(tcam.getName());
       } else {
-        ot2fp.setUserName("gwac");
+	ot2fp.setUserName("gwac");
       }
 
       UserInfo user = userDao.getUserByLoginName("gwac");
@@ -210,7 +210,7 @@ public class OTLookBack extends ActionSupport {
       fo.setPriority((short) ot2fp.getPriority());
       fo.setRa(ot2fp.getRa());
       if (user != null) {
-        fo.setUserId(user.getUiId());
+	fo.setUserId(user.getUiId());
       }
       fo.setTriggerTime(new Date());
       fo.setTriggerType('0'); //0:AUTO; 1:MANUAL, 2:PLANNING
@@ -220,7 +220,7 @@ public class OTLookBack extends ActionSupport {
       fo.setProcessResult('0');
       fo.setObjName(ot2fp.getOtName().trim());
       fo.setAutoLoop(1);
-      fo.setLimitMag((float)-1.0);
+      fo.setLimitMag((float) -1.0);
       foDao.save(fo);
 
       MessageCreator tmc = new OTFollowMessageCreator(ot2fp);

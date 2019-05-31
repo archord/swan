@@ -55,11 +55,12 @@ public class GetCrossObjectList extends ActionSupport implements ApplicationAwar
   public String execute() {
     initObjType();
 
-    if (dateStr.equalsIgnoreCase(ot2qp.getDateStr())) {
+    if (dateStr==null || dateStr.isEmpty() || dateStr.equalsIgnoreCase(ot2qp.getDateStr())) {
       ot2qp.setQueryHis(false);
     } else {
       ot2qp.setQueryHis(true);
     }
+    System.out.println(ot2qp.toString());
     gridModel = obDao.queryCrossObject(ot2qp);
 //    log.debug(gridModel.size());
 
@@ -72,6 +73,7 @@ public class GetCrossObjectList extends ActionSupport implements ApplicationAwar
       dateStr = CommonFunction.getUniqueDateStr();
       appMap.put("datestr", dateStr);
     }
+    dateStr = dateStr.substring(2);
   }
 
   public void checkIsHistory(CrossObjectQueryParameter ot2qp) {

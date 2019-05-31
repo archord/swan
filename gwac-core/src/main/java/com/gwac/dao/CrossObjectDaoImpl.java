@@ -192,6 +192,10 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
 //    log.debug(ot2qp.toString());
 
     Boolean isQueryParameterEmpty = true;
+    if (ot2qp.getDateStr()!=null && !ot2qp.getDateStr().isEmpty()) {
+      sql.append(" and date_str='").append(ot2qp.getStartDate()).append("' ");
+      isQueryParameterEmpty = false;
+    }
     if (ot2qp.getCoId() != null && ot2qp.getCoId()>0) {
       sql.append(" and co_id=").append(ot2qp.getCoId()).append(" ");
       isQueryParameterEmpty = false;
@@ -243,7 +247,7 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
       sql.append(" and (");
       for (String tstr : ot2qp.getMatchType()) {
         sql.append(tstr);
-        sql.append(">0 or ");
+        sql.append("=true or ");
       }
       sql.append(") ");
       isQueryParameterEmpty = false;
@@ -282,7 +286,7 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
     } else {
       unionSql = sqlprefix1 + " order by found_time_utc desc";
     }
-//    log.debug(unionSql);
+    log.debug(unionSql);
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(CrossObject.class);
     if (ot2qp.getLength() != 0) {
@@ -369,7 +373,7 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
     sqlprefix2 += tstr;
     
     String unionSql = "";
-    if (ot2qp.getQueryHis()) {
+    if (ot2qp.getQueryHis() && ot2qp.getDateStr()!=null && !ot2qp.getDateStr().isEmpty()) {
       unionSql = "(" + sqlprefix1 + ") union (" + sqlprefix2 + ")";
     } else {
       unionSql = sqlprefix1;
@@ -454,7 +458,7 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
   @Override
   public void updateSomeRealTimeInfo(CrossObject obj) {
     String sql = "update cross_object set first_ff_number=?, found_time_utc=?, last_ff_number=?, x_temp=?, y_temp=?, "
-            + "ra=?, dec=?, mag=?, total=?, ot_type=? where co_id=?";
+            + "ra=?, dec=?, mag=?, total=?, ot_type=?, min_mag=?, max_mag=?, mag_diff=? where co_id=?";
     Session session = getCurrentSession();
     SQLQuery query = session.createSQLQuery(sql);
     query.setParameter(0, obj.getFirstFfNumber());
@@ -468,6 +472,9 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
     query.setParameter(8, obj.getTotal());
     query.setParameter(9, obj.getOtType());
     query.setParameter(10, obj.getCoId());
+    query.setParameter(8, obj.getMinMag());
+    query.setParameter(9, obj.getMaxMag());
+    query.setParameter(10, obj.getMagDiff());
     query.executeUpdate();
   }
   

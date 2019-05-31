@@ -143,6 +143,13 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	    tlv2.setDec(otLv2.getDec());
 	    tlv2.setMag(otLv2.getMag());
 	  }
+	  if (tlv2.getMinMag() > otLv2.getMinMag()) {
+	    tlv2.setMinMag(otLv2.getMinMag());
+	  }
+	  if (tlv2.getMaxMag() < otLv2.getMaxMag()) {
+	    tlv2.setMaxMag(otLv2.getMaxMag());
+	  }
+	  tlv2.setMagDiff(tlv2.getMaxMag() - tlv2.getMinMag());
 	  tlv2.setTotal(tlv2.getTotal() + 1);
 	  crossObjectDao.updateSomeRealTimeInfo(tlv2);
 
@@ -187,6 +194,9 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	    tOtLv2.setFoCount((short) 0);
 	    tOtLv2.setLookBackCnn((float) -1);
 	    tOtLv2.setProbability((float) 0);
+	    tOtLv2.setMinMag(otc.getMag());
+	    tOtLv2.setMaxMag(otc.getMag());
+	    tOtLv2.setMagDiff((float) 0);
 	    crossObjectDao.save(tOtLv2);
 
 	    otc.setCoId(tOtLv2.getCoId());
@@ -197,8 +207,18 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	  } else if (ct.getCrossMethod() == 2) {
 	    List<CrossRecord> oors = crossRecordDao.matchLatestN(otc, errorBox, successiveImageNumber);
 	    if (oors.size() >= occurNumber) {
-	      CrossRecord oor1 = oors.get(0);
+	      float minMag = 99;
+	      float maxMag = -99;
+	      for (CrossRecord cr : oors) {
+		if (cr.getMag() > maxMag) {
+		  maxMag = cr.getMag();
+		}
+		if (cr.getMag() < minMag) {
+		  minMag = cr.getMag();
+		}
+	      }
 
+	      CrossRecord oor1 = oors.get(0);
 	      int otNumber = otnDao.getNumberByDate(ct.getDateStr());
 	      String otName = String.format("G%s_U%06d", ct.getDateStr(), otNumber);
 	      log.debug("generate new ot :" + otName + ", from file: " + fileName);
@@ -232,6 +252,9 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	      tOtLv2.setFoCount((short) 0);
 	      tOtLv2.setLookBackCnn((float) -1);
 	      tOtLv2.setProbability((float) 0);
+	      tOtLv2.setMinMag(minMag);
+	      tOtLv2.setMaxMag(maxMag);
+	      tOtLv2.setMagDiff(maxMag-minMag);
 	      crossObjectDao.save(tOtLv2);
 
 	      MessageCreator tmc = new CrossObjectCheckMessageCreator(tOtLv2);

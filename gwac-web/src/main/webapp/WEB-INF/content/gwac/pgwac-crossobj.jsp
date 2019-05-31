@@ -51,7 +51,7 @@
               <option value="cvs_match">CVS</option>
               <option value="rc3_match">RC3</option>
               <option value="minor_planet_match">小行星</option>
-              <option value="ot2_his_match">OT2历史</option>
+              <option value="his_match">OT2历史</option>
               <option value="other_match">其他类型</option>
               <option value="usno_match">USNO</option>
             </select>
@@ -145,10 +145,10 @@
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
             <thead><tr><th></th><th>ID</th><th>时间</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
                 <th>分类标识</th><th>回看</th><th>回看2</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
-                <th>CVS</th><th>Other</th></tr></thead>
+                <th>CVS</th><th>Other</th><th>星等变化</th></tr></thead>
             <tfoot><tr><th></th><th>ID</th><th>时间</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
                 <th>分类标识</th><th>回看</th><th>回看2</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
-                <th>CVS</th><th>Other</th></tr></tfoot>
+                <th>CVS</th><th>Other</th><th>星等变化</th></tr></tfoot>
           </table>
         </div>                                   
       </div>
