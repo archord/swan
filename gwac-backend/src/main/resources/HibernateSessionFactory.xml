@@ -59,6 +59,54 @@
     </property>
   </bean>
   
+  <bean id="sessionFactoryYunwei" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSourceYunWei"/>
+    <property name="packagesToScan">
+      <list>
+        <value>com.gwac.modelyw</value>
+      </list>
+    </property>
+    <!--property name="namingStrategy" ref="namingStrategy"/-->
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+        <!--create-drop update-->
+        <!--prop key="hibernate.hbm2ddl.auto">update</prop-->
+        <prop key="hibernate.autoReconnect">true</prop>  
+        <prop key="hibernate.show_sql">false</prop>  
+        <prop key="hibernate.format_sql">false</prop>  
+        <prop key="hibernate.connection.autocommit">true</prop>  
+        
+        <!-- <prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop> -->  
+  
+        <!-- c3p0 -->  
+        <!-- 连接池hibernate配置 <prop key="hibernate.connection.provider_class">org.hibernate.connection.ProxoolConnectionProvider</prop> -->  
+  
+        <!-- 需要再次配置数据源,c3p0才起作用 -->  
+        <prop key="hibernate.connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</prop>   
+        <prop key="hibernate.connection.driver_class">${jdbc.driverClassName}</prop>  
+        <prop key="hibernate.connection.url">${jdbc.url2}</prop>  
+        <prop key="hibernate.connection.username">${jdbc.username2}</prop>  
+        <prop key="hibernate.connection.password">${jdbc.password2}</prop>  
+  
+        <!-- 连接池中JDBC连接的最小数量。Hibernate默认为1 -->  
+        <prop key="hibernate.c3p0.min_size">1</prop>  
+        <!-- 连接池中JDBC连接的最大数量。Hibernate默认为100 -->  
+        <prop key="hibernate.c3p0.max_size">100</prop>  
+        <!-- 何时从连接池中移除一个空闲的连接（以秒为单位）时。Hibernate默认为0，永不过期 -->  
+        <prop key="hibernate.c3p0.timeout">300</prop>  
+        <!-- 被缓存的预编译语句数量。用来提高性能。Hibernate默认为0，缓存不可用 -->  
+        <prop key="c3p0.max_statements">255</prop>  
+        <!-- 一个连接被自动验证前的闲置时间（以秒为单位）。Hibernate默认为0 -->  
+        <prop key="hibernate.c3p0.idle_test_period">300</prop>  
+        <!-- 当连接池里面的连接用完的时候，C3P0一下获取的新的连接数 -->  
+        <prop key="hibernate.c3p0.acquire_increment">5</prop>  
+        <!-- 每次都验证连接是否可用 -->  
+        <prop key="hibernate.c3p0.validate">true</prop>  
+      </props>
+    </property>
+  </bean>
+  
   <bean id="sessionFactoryMysql" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSourceMsql"/>
     <property name="packagesToScan">

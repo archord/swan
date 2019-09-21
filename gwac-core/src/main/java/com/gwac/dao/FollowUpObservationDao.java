@@ -12,7 +12,7 @@ import java.util.List;
  * @author xy
  */
 public interface FollowUpObservationDao extends BaseHibernateDao<FollowUpObservation> {
-  
+    
   public List<FollowUpObservation> getBySciObjId(long sciObjId);
   
   public List<FollowUpObservation> getByFoId(long foId);

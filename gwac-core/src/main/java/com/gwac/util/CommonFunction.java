@@ -92,6 +92,11 @@ public class CommonFunction {
     return formatter.format(date);
   }
 
+  public static String getDateString3(Date date) {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+    return formatter.format(getUTCDate(date));
+  }
+
   public static String getCurDateTimeString() {
     return getDateTimeString(new Date());
   }

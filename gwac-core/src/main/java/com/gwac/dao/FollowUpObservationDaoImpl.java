@@ -100,7 +100,7 @@ public class FollowUpObservationDaoImpl extends BaseHibernateDaoImpl<FollowUpObs
     }
     return rst;
   }
-
+  
   @Override
   public void updateExecuteStatus(String followName, char executeStatus) {
     Session session = getCurrentSession();
