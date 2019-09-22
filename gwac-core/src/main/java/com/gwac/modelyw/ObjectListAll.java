@@ -40,7 +40,7 @@ public class ObjectListAll implements Serializable {
   private String run_name = "1";
   private String mode = "observation";
 
-  private String followup_name= "G190830_C0001_001";
+  private String followname= "G190830_C0001_001";
   private String obj_name = "G190830_C0001";
   private float objra = (float) 100.0;
   private float objdec = (float) -60.0;
@@ -448,16 +448,16 @@ public class ObjectListAll implements Serializable {
   /**
    * @return the followup_name
    */
-  @Column(name = "followup_name")
-  public String getFollowup_name() {
-    return followup_name;
+  @Column(name = "followname")
+  public String getFollowname() {
+    return this.followname;
   }
 
   /**
    * @param followup_name the followup_name to set
    */
-  public void setFollowup_name(String followup_name) {
-    this.followup_name = followup_name;
+  public void setFollowname(String followname) {
+    this.followname = followname;
   }
 
 }

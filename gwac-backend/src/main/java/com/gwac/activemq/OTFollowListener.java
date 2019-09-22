@@ -68,7 +68,7 @@ public class OTFollowListener implements MessageListener {
 	String dateStr = CommonFunction.getDateString3(new Date());
 	FollowUpObservation fuo = dao.getByName(followName);
 	ObjectListAll obj = new ObjectListAll();
-	obj.setFollowup_name(fuo.getFoName());
+	obj.setFollowname(fuo.getFoName());
 	obj.setObj_name(fuo.getObjName());
 	obj.setObjra(fuo.getRa());
 	obj.setObjdec(fuo.getDec());
