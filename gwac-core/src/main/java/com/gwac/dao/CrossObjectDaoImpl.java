@@ -204,9 +204,19 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
       sql.append(" and ct_id=").append(ot2qp.getCtId()).append(" ");
       isQueryParameterEmpty = false;
     }
-    if (ot2qp.getMagDiff() != null && ot2qp.getMagDiff()>0) {
-      sql.append(" and mag_diff>=").append(ot2qp.getMagDiff()).append(" ");
-      isQueryParameterEmpty = false;
+    if (ot2qp.getMagDiff() != null) {
+      if(ot2qp.getMagDiff()>0&&ot2qp.getMagDiff()<4){
+	sql.append(" and mag_diff>=").append(ot2qp.getMagDiff()).append(" ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getMagDiff()==4){ //大于2小于3
+	sql.append(" and mag_diff>=2 and mag_diff<=3 "); 
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getMagDiff()==5){ //大于1小于2
+	sql.append(" and mag_diff>=1 and mag_diff<=2 "); 
+      }else if(ot2qp.getMagDiff()==6){ //小于1
+	sql.append(" and mag_diff<=1 ");
+	isQueryParameterEmpty = false;
+      }
     }
     if (ot2qp.getStartDate() != null && !ot2qp.getStartDate().isEmpty()) {
       sql.append(" and found_time_utc>'").append(ot2qp.getStartDate()).append(" 00:00:00' ");

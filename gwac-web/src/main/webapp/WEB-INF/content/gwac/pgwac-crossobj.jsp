@@ -122,8 +122,11 @@
             <select name="ot2qp.magDiff" id="magDiff" class="form-control">
               <option value="0">ALL</option>
               <option value="3">大于3</option>
+              <option value="4">大于2小于3</option>
               <option value="2">大于2</option>
+              <option value="5">大于1小于2</option>
               <option value="1">大于1</option>
+              <option value="6">小于1</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 " title="匹配不成功且回看为OT的会自动后随">
