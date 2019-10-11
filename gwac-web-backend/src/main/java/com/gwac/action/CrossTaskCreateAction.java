@@ -35,6 +35,7 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
 
   private String taskName;
   private String crossMethod;
+  private String dateStr;
   private Float mergedR;
   private Float mergedMag;
   private Float cvsR;
@@ -54,7 +55,6 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
   @Resource
   private CrossTaskDao crossTaskDao;
   private Map<String, Object> appMap = null;
-  private String dateStr = null;
 
   private String echo = "";
 
@@ -83,7 +83,9 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
 //      System.out.println(usnoMag1);
 //      System.out.println(usnoR2);
 //      System.out.println(usnoMag2);
-      initDateStr();
+      if(dateStr==null || dateStr.isEmpty()){
+	initDateStr();
+      }
       CrossTask ct = new CrossTask();
       ct.setCreateTime(new Date());
       ct.setCrossMethod(Integer.parseInt(crossMethod));
@@ -132,9 +134,9 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
   }
 
   public void initDateStr() {
-    dateStr = (String) appMap.get("datestr");
+    setDateStr((String) appMap.get("datestr"));
     if (null == dateStr) {
-      dateStr = CommonFunction.getUniqueDateStr();
+      setDateStr(CommonFunction.getUniqueDateStr());
       appMap.put("datestr", dateStr);
     }
   }
@@ -266,6 +268,13 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
    */
   public void setCrossMethod(String crossMethod) {
     this.crossMethod = crossMethod;
+  }
+
+  /**
+   * @param dateStr the dateStr to set
+   */
+  public void setDateStr(String dateStr) {
+    this.dateStr = dateStr;
   }
 
 }
