@@ -1,5 +1,6 @@
 package com.gwac.dao;
 
+import com.gwac.dao.BaseHibernateDao;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;

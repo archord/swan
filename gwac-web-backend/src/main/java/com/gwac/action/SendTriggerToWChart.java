@@ -84,19 +84,23 @@ public class SendTriggerToWChart extends ActionSupport {
       String url = "https://qyapi.weixin.qq.com/cgi-bin/appchat/send";
       try {
 	if ((triggerMsg != null) && (!triggerMsg.isEmpty())) {
-	  String msg = "{\"chatid\" : \"" + chatId + "\",\"msgtype\" : \"text\",\"safe\" : \"0\",\"text\" : {\"content\": \"" + triggerMsg + "\"}}";
-	  //String urlCreateQun = "https://qyapi.weixin.qq.com/cgi-bin/appchat/create";
-	  //String msgCreateQun = "{\"name\" : \"GWAC001\",\"owner\" : \"XuYang\",\"userlist\" : [\"XuYang\", \"Long\", \"zheng_ya_tong\"],\"chatid\" : \"gwac001\"}";
-	  //echo = wxCpService.post(urlCreateQun, msgCreateQun);
 
-	  echo = wxCpService.post(url, msg);
-	  log.debug(echo);
+	  if (triggerMsg.equals("createChat")) {
+	    String urlCreateQun = "https://qyapi.weixin.qq.com/cgi-bin/appchat/create";
+	    String msgCreateQun = "{\"name\" : \"" + chatId + "\",\"owner\" : \"XuYang\",\"userlist\" : [\"XuYang\", \"Long\", \"zheng_ya_tong\"],\"chatid\" : \"" + chatId + "\"}";
+	    echo = wxCpService.post(urlCreateQun, msgCreateQun);
+	    log.info(echo);
+	  } else {
+	    String msg = "{\"chatid\" : \"" + chatId + "\",\"msgtype\" : \"text\",\"safe\" : \"0\",\"text\" : {\"content\": \"" + triggerMsg + "\"}}";
+	    echo = wxCpService.post(url, msg);
+	    log.debug(echo);
+	  }
 	}
 
 	if (fileUpload.size() > 0) {
 
 	  if (mediaType == null || mediaType.isEmpty()) {
-	    mediaType="image";
+	    mediaType = "image";
 	  }
 	  for (File file : fileUpload) {
 	    String mediaId = wxCpService.getMediaService().upload(mediaType, file).getMediaId();

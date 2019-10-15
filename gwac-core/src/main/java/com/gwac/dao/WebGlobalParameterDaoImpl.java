@@ -27,7 +27,11 @@ public class WebGlobalParameterDaoImpl extends BaseHibernateDaoImpl<WebGlobalPar
     Session session = getCurrentSession();
     String sql = "SELECT value from web_global_parameter where name='" + name + "'";
     Query q = session.createSQLQuery(sql);
-    return (String) q.list().get(0);
+    String trst = "";
+    if(q.list().size()>0){
+      trst = (String) q.list().get(0);
+    }
+    return trst;
   }
 
   @Override

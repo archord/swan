@@ -4,9 +4,8 @@
  */
 package com.gwac.dao;
 
-import com.gwac.model.Camera;
+import com.gwac.dao.BaseHibernateDao;
 import com.gwac.modelyw.ObjectListAll;
-import java.util.List;
 
 /**
  *
