@@ -12,10 +12,12 @@ import com.gwac.dao.CrossTaskDao;
 import com.gwac.dao.OTCatalogDao;
 import com.gwac.dao.OtNumberDao;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.dao.WebGlobalParameterDao;
 import com.gwac.model.CrossFile;
 import com.gwac.model.CrossObject;
 import com.gwac.model.CrossRecord;
 import com.gwac.model.CrossTask;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -45,6 +47,8 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
   private UploadFileUnstoreDao ufuDao;
   @Resource
   private OtNumberDao otnDao;
+  @Resource
+  private WebGlobalParameterDao wgpdao;
 
   @Value("#{syscfg.gwacDataRootDirectory}")
   private String rootPath;
@@ -82,143 +86,99 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
    * @param fileName
    */
   @Override
-  public void parseLevel1Ot(long ufuId, String storePath, String fileName, String taskName) {
+  public void parseLevel1Ot(long ufuId, String storePath, String fileName, String taskName, String dateStr) {
 
-    if (storePath != null && fileName != null && taskName != null) {
+    try {
+      if (storePath != null && fileName != null && taskName != null) {
 
-      CrossTask ct = crossTaskDao.getByName(taskName);
-      if (ct == null) {
-	return;
-      }
+	CrossTask ct = crossTaskDao.getByName(taskName);
+	if (ct == null) {
+	  return;
+	}
 
-      CrossFile cf = new CrossFile();
-      cf.setCtId(ct.getCtId());
-      cf.setFileName(fileName);
-      crossFileDao.save(cf);
-      if (cf.getCfId() == 0) {
-	return;
-      }
-      ct.setFfCount(ct.getFfCount() + 1);
-      crossTaskDao.update(ct);
-      int number = ct.getFfCount();
+	CrossFile cf = new CrossFile();
+	cf.setCtId(ct.getCtId());
+	cf.setFileName(fileName.replace("cat", "fit"));
 
-      List<CrossRecord> otcs = otcDao.getCrossRecord(rootPath + "/" + storePath + "/" + fileName);
-      log.debug(fileName + ", otlv1 size:" + otcs.size());
+	ct.setFfCount(ct.getFfCount() + 1);
+	crossTaskDao.update(ct);
+	int number = ct.getFfCount();
 
-      for (CrossRecord otc : otcs) {
+	List<CrossRecord> otcs = otcDao.getCrossRecord(rootPath + "/" + storePath + "/" + fileName);
+	log.debug(fileName + ", otlv1 size:" + otcs.size());
 
-	otc.setFfNumber(number);
-	otc.setCtId(ct.getCtId());
-	otc.setCfId(cf.getCfId());
-	String stampStorePath = ct.getDateStr() + "/" + taskName + "/" + cutIDir;
-	otc.setStampPath(stampStorePath);
-
-	CrossObject otLv2 = new CrossObject();
-	otLv2.setCtId(ct.getCtId());
-	otLv2.setFoundTimeUtc(otc.getDateUtc());
-	otLv2.setX(otc.getX());
-	otLv2.setY(otc.getY());
-	otLv2.setXtemp(otc.getXTemp());
-	otLv2.setYtemp(otc.getYTemp());
-	otLv2.setRa(otc.getRa());
-	otLv2.setDec(otc.getDec());
-	otLv2.setMag(otc.getMag());
-	otLv2.setFirstFfNumber(number);
-	otLv2.setLastFfNumber(number);
-	otLv2.setTotal(0);
-	otLv2.setDateStr(ct.getDateStr());
-
-	//当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
-	//existInLatestN与最近5幅比较
-	CrossObject tlv2 = crossObjectDao.exist(otLv2, errorBox);
-	if (tlv2 != null) {
-	  if (tlv2.getFirstFfNumber() > number) {
-	    tlv2.setFirstFfNumber(number);
-	    tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
-	  } else {
-	    tlv2.setLastFfNumber(otLv2.getLastFfNumber());
-	    tlv2.setXtemp(otLv2.getXtemp());
-	    tlv2.setYtemp(otLv2.getYtemp());
-	    tlv2.setRa(otLv2.getRa());
-	    tlv2.setDec(otLv2.getDec());
-	    tlv2.setMag(otLv2.getMag());
-	  }
-	  if (tlv2.getMinMag() > otLv2.getMinMag()) {
-	    tlv2.setMinMag(otLv2.getMinMag());
-	  }
-	  if (tlv2.getMaxMag() < otLv2.getMaxMag()) {
-	    tlv2.setMaxMag(otLv2.getMaxMag());
-	  }
-	  tlv2.setMagDiff(tlv2.getMaxMag() - tlv2.getMinMag());
-	  tlv2.setTotal(tlv2.getTotal() + 1);
-	  crossObjectDao.updateSomeRealTimeInfo(tlv2);
-
-	  otc.setCoId(tlv2.getCoId());
-	  crossRecordDao.save(otc);
+	cf.setOtNumber(otcs.size());
+	if (!crossFileDao.exist(cf)) {
+	  crossFileDao.save(cf);
 	} else {
+	  cf = crossFileDao.getByName(fileName);
+	}
 
-	  otc.setCoId((long) 0);
-	  crossRecordDao.save(otc);
-	  if (ct.getCrossMethod() == 1) {
+	Integer maxSingleFrameOT2Num = Integer.parseInt(wgpdao.getValueByName("MaxSingleFrameOT2Num"));
+	short isMatch = 0;
+	if (otcs.size() >= maxSingleFrameOT2Num) {
+	  isMatch = 3;
+	}
 
-	    int otNumber = otnDao.getNumberByDate(ct.getDateStr());
-	    String otName = String.format("G%s_U%06d", ct.getDateStr(), otNumber);
-	    log.debug("generate new ot :" + otName + ", from file: " + fileName);
+	List<CrossObject> crossObjs = new ArrayList();
+	for (CrossRecord otc : otcs) {
 
-	    CrossObject tOtLv2 = new CrossObject();
-	    tOtLv2.setName(otName);
-	    tOtLv2.setCtId(ct.getCtId());
-	    tOtLv2.setFoundTimeUtc(otc.getDateUtc());
-	    tOtLv2.setX(otc.getX());
-	    tOtLv2.setY(otc.getY());
-	    tOtLv2.setXtemp(otc.getXTemp());
-	    tOtLv2.setYtemp(otc.getYTemp());
-	    tOtLv2.setRa(otc.getRa());
-	    tOtLv2.setDec(otc.getDec());
-	    tOtLv2.setMag(otc.getMag());
-	    tOtLv2.setFirstFfNumber(number);
-	    tOtLv2.setLastFfNumber(number);
-	    tOtLv2.setTotal(0);
-	    tOtLv2.setDateStr(ct.getDateStr());
-	    tOtLv2.setOtType((short) 0);
-	    tOtLv2.setIsMatch((short) 0);
-	    tOtLv2.setCvsMatch(false);
-	    tOtLv2.setRc3Match(false);
-	    tOtLv2.setMinorPlanetMatch(false);
-	    tOtLv2.setHisMatch(false);
-	    tOtLv2.setOtherMatch(false);
-	    tOtLv2.setUsnoMatch(false);
-	    tOtLv2.setBadMatch(false);
-	    tOtLv2.setLookBackResult((short) 0);
-	    tOtLv2.setFollowUpResult((short) 0);
-	    tOtLv2.setFoCount((short) 0);
-	    tOtLv2.setLookBackCnn((float) -1);
-	    tOtLv2.setProbability((float) 0);
-	    tOtLv2.setMinMag(otc.getMag());
-	    tOtLv2.setMaxMag(otc.getMag());
-	    tOtLv2.setMagDiff((float) 0);
-	    crossObjectDao.save(tOtLv2);
+	  otc.setFfNumber(number);
+	  otc.setCtId(ct.getCtId());
+	  otc.setCfId(cf.getCfId());
+	  //String stampStorePath = ct.getDateStr() + "/" + taskName + "/" + cutIDir;
+	  String stampStorePath = dateStr + "/" + taskName + "/" + cutIDir;
+	  otc.setStampPath(stampStorePath);
 
-	    otc.setCoId(tOtLv2.getCoId());
-	    crossRecordDao.update(otc);
+	  CrossObject otLv2 = new CrossObject();
+	  otLv2.setCtId(ct.getCtId());
+	  otLv2.setFoundTimeUtc(otc.getDateUtc());
+	  otLv2.setX(otc.getX());
+	  otLv2.setY(otc.getY());
+	  otLv2.setXtemp(otc.getXTemp());
+	  otLv2.setYtemp(otc.getYTemp());
+	  otLv2.setRa(otc.getRa());
+	  otLv2.setDec(otc.getDec());
+	  otLv2.setMag(otc.getMag());
+	  otLv2.setFirstFfNumber(number);
+	  otLv2.setLastFfNumber(number);
+	  otLv2.setTotal(1);
+	  otLv2.setDateStr(ct.getDateStr());
 
-	    MessageCreator tmc = new CrossObjectCheckMessageCreator(tOtLv2);
-	    jmsTemplate.send(crossObjectCheckDest, tmc);
-	  } else if (ct.getCrossMethod() == 2) {
-	    List<CrossRecord> oors = crossRecordDao.matchLatestN(otc, errorBox, successiveImageNumber);
-	    if (oors.size() >= occurNumber) {
-	      float minMag = 99;
-	      float maxMag = -99;
-	      for (CrossRecord cr : oors) {
-		if (cr.getMag() > maxMag) {
-		  maxMag = cr.getMag();
-		}
-		if (cr.getMag() < minMag) {
-		  minMag = cr.getMag();
-		}
-	      }
+	  //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
+	  //existInLatestN与最近5幅比较
+	  CrossObject tlv2 = crossObjectDao.exist(otLv2, errorBox);
+	  if (tlv2 != null) {
+	    if (tlv2.getFirstFfNumber() > number) {
+	      tlv2.setFirstFfNumber(number);
+	      tlv2.setFoundTimeUtc(otLv2.getFoundTimeUtc());
+	    } else {
+	      tlv2.setLastFfNumber(otLv2.getLastFfNumber());
+	      tlv2.setXtemp(otLv2.getXtemp());
+	      tlv2.setYtemp(otLv2.getYtemp());
+	      tlv2.setRa(otLv2.getRa());
+	      tlv2.setDec(otLv2.getDec());
+	      tlv2.setMag(otLv2.getMag());
+	    }
+	    
+	    if (tlv2.getMinMag() > otLv2.getMag()) {
+	      tlv2.setMinMag(otLv2.getMag());
+	    }
+	    if (tlv2.getMaxMag() < otLv2.getMag()) {
+	      tlv2.setMaxMag(otLv2.getMag());
+	    }
+	    tlv2.setMagDiff(tlv2.getMaxMag() - tlv2.getMinMag());
+	    tlv2.setTotal(tlv2.getTotal() + 1);
+	    crossObjectDao.updateSomeRealTimeInfo(tlv2);
 
-	      CrossRecord oor1 = oors.get(0);
+	    otc.setCoId(tlv2.getCoId());
+	    crossRecordDao.save(otc);
+	  } else {
+
+	    otc.setCoId((long) 0);
+	    crossRecordDao.save(otc);
+	    if (ct.getCrossMethod() == 1) {
+
 	      int otNumber = otnDao.getNumberByDate(ct.getDateStr());
 	      String otName = String.format("G%s_U%06d", ct.getDateStr(), otNumber);
 	      log.debug("generate new ot :" + otName + ", from file: " + fileName);
@@ -226,20 +186,26 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	      CrossObject tOtLv2 = new CrossObject();
 	      tOtLv2.setName(otName);
 	      tOtLv2.setCtId(ct.getCtId());
-	      tOtLv2.setFoundTimeUtc(oor1.getDateUtc());
-	      tOtLv2.setX(oor1.getX());
-	      tOtLv2.setY(oor1.getY());
-	      tOtLv2.setXtemp(oor1.getXTemp());
-	      tOtLv2.setYtemp(oor1.getYTemp());
-	      tOtLv2.setRa(oor1.getRa());
-	      tOtLv2.setDec(oor1.getDec());
-	      tOtLv2.setMag(oor1.getMag());
-	      tOtLv2.setFirstFfNumber(oor1.getFfNumber());
+	      tOtLv2.setFoundTimeUtc(otc.getDateUtc());
+	      tOtLv2.setX(otc.getX());
+	      tOtLv2.setY(otc.getY());
+	      tOtLv2.setXtemp(otc.getXTemp());
+	      tOtLv2.setYtemp(otc.getYTemp());
+	      tOtLv2.setRa(otc.getRa());
+	      tOtLv2.setDec(otc.getDec());
+	      tOtLv2.setMag(otc.getMag());
+	      tOtLv2.setFirstFfNumber(number);
 	      tOtLv2.setLastFfNumber(number);
-	      tOtLv2.setTotal(2);
+	      tOtLv2.setTotal(1);
 	      tOtLv2.setDateStr(ct.getDateStr());
 	      tOtLv2.setOtType((short) 0);
-	      tOtLv2.setIsMatch((short) 0);
+	      if (isMatch == 3) {
+		tOtLv2.setIsMatch((short) 3);
+	      } else if (otc.getIsMatch()) {
+		tOtLv2.setIsMatch((short) 2);
+	      } else {
+		tOtLv2.setIsMatch((short) 1);
+	      }
 	      tOtLv2.setCvsMatch(false);
 	      tOtLv2.setRc3Match(false);
 	      tOtLv2.setMinorPlanetMatch(false);
@@ -252,28 +218,105 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	      tOtLv2.setFoCount((short) 0);
 	      tOtLv2.setLookBackCnn((float) -1);
 	      tOtLv2.setProbability((float) 0);
-	      tOtLv2.setMinMag(minMag);
-	      tOtLv2.setMaxMag(maxMag);
-	      tOtLv2.setMagDiff(maxMag-minMag);
+	      tOtLv2.setMinMag(otc.getMag());
+	      tOtLv2.setMaxMag(otc.getMag());
+	      tOtLv2.setMagDiff((float) 0);
 	      crossObjectDao.save(tOtLv2);
+
+	      otc.setCoId(tOtLv2.getCoId());
+	      crossRecordDao.update(otc);
 
 	      MessageCreator tmc = new CrossObjectCheckMessageCreator(tOtLv2);
 	      jmsTemplate.send(crossObjectCheckDest, tmc);
-
-	      for (CrossRecord tOor : oors) {
-		if (tOor.getCoId() != 0) {
-		  continue;
+	    } else if (ct.getCrossMethod() == 2) {
+	      List<CrossRecord> oors = crossRecordDao.matchLatestN(otc, errorBox, successiveImageNumber);
+	      if (oors.size() >= occurNumber) {
+		float minMag = 99;
+		float maxMag = -99;
+		for (CrossRecord cr : oors) {
+		  if (cr.getMag() > maxMag) {
+		    maxMag = cr.getMag();
+		  }
+		  if (cr.getMag() < minMag) {
+		    minMag = cr.getMag();
+		  }
 		}
-		tOor.setCoId(tOtLv2.getCoId());
-		crossRecordDao.update(tOor);
+
+		CrossRecord oor1 = oors.get(0);
+		int otNumber = otnDao.getNumberByDate(ct.getDateStr());
+		String otName = String.format("G%s_U%06d", ct.getDateStr(), otNumber);
+		log.debug("generate new ot :" + otName + ", from file: " + fileName);
+
+		CrossObject tOtLv2 = new CrossObject();
+		tOtLv2.setName(otName);
+		tOtLv2.setCtId(ct.getCtId());
+		tOtLv2.setFoundTimeUtc(oor1.getDateUtc());
+		tOtLv2.setX(oor1.getX());
+		tOtLv2.setY(oor1.getY());
+		tOtLv2.setXtemp(oor1.getXTemp());
+		tOtLv2.setYtemp(oor1.getYTemp());
+		tOtLv2.setRa(oor1.getRa());
+		tOtLv2.setDec(oor1.getDec());
+		tOtLv2.setMag(oor1.getMag());
+		tOtLv2.setFirstFfNumber(oor1.getFfNumber());
+		tOtLv2.setLastFfNumber(number);
+		tOtLv2.setTotal(2);
+		tOtLv2.setDateStr(ct.getDateStr());
+		tOtLv2.setOtType((short) 0);
+		if (otc.getIsMatch()) {
+		  tOtLv2.setIsMatch((short) 2);
+		} else {
+		  tOtLv2.setIsMatch((short) 1);
+		}
+		tOtLv2.setCvsMatch(false);
+		tOtLv2.setRc3Match(false);
+		tOtLv2.setMinorPlanetMatch(false);
+		tOtLv2.setHisMatch(false);
+		tOtLv2.setOtherMatch(false);
+		tOtLv2.setUsnoMatch(false);
+		tOtLv2.setBadMatch(false);
+		tOtLv2.setLookBackResult((short) 0);
+		tOtLv2.setFollowUpResult((short) 0);
+		tOtLv2.setFoCount((short) 0);
+		tOtLv2.setLookBackCnn((float) -1);
+		tOtLv2.setProbability((float) 0);
+		tOtLv2.setMinMag(minMag);
+		tOtLv2.setMaxMag(maxMag);
+		tOtLv2.setMagDiff(maxMag - minMag);
+		crossObjectDao.save(tOtLv2);
+		crossObjs.add(tOtLv2);
+
+		for (CrossRecord tOor : oors) {
+		  if (tOor.getCoId() != 0) {
+		    continue;
+		  }
+		  tOor.setCoId(tOtLv2.getCoId());
+		  crossRecordDao.update(tOor);
+		}
 	      }
+	    } else {
+	      log.warn("unknown CrossMethod:" + ct.getCrossMethod());
 	    }
+	  }
+	}
+	ufuDao.updateProcessDoneTime(ufuId);
+
+	isMatch = 0;
+	if (crossObjs.size() >= maxSingleFrameOT2Num) {
+	  isMatch = 3;
+	}
+	for (CrossObject ot2 : crossObjs) {
+	  if (isMatch == 0) {
+	    MessageCreator tmc = new CrossObjectCheckMessageCreator(ot2);
+	    jmsTemplate.send(crossObjectCheckDest, tmc);
 	  } else {
-	    log.warn("unknown CrossMethod:" + ct.getCrossMethod());
+	    ot2.setIsMatch(isMatch);
+	    crossObjectDao.updateIsMatch(ot2);
 	  }
 	}
       }
-      ufuDao.updateProcessDoneTime(ufuId);
+    } catch (Exception ex) {
+      log.error("error", ex);
     }
   }
 

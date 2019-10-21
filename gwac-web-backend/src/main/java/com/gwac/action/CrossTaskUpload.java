@@ -220,7 +220,7 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
       }
       ufuDao.save(obj);
       if ('z' == fileType) {
-	MessageCreator tmc = new CrossTaskMessageCreator(obj, taskName);
+	MessageCreator tmc = new CrossTaskMessageCreator(obj, taskName, dateStr);
 	jmsTemplate.send(crossTaskDest, tmc);
       }
     }

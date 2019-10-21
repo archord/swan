@@ -6,7 +6,7 @@ package com.gwac.dao;
 
 import com.gwac.model.CrossObject;
 import com.gwac.model.CrossRecord;
-import com.gwac.model.FitsFileCut;
+import com.gwac.model.CrossRecordShow;
 import java.util.List;
 
 /**
@@ -14,6 +14,10 @@ import java.util.List;
  * @author xy
  */
 public interface CrossRecordDao extends BaseHibernateDao<CrossRecord> {
+  
+  public List<CrossRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis);
+  
+  public int countRecordByOtName(String otName, Boolean queryHis);
   
   public String getCutImageByOtId(long otId, Boolean queryHis) ;
   

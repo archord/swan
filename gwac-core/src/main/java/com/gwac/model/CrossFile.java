@@ -21,6 +21,7 @@ public class CrossFile implements java.io.Serializable {
   private String storePath;
   private String fileName;
   private Long ctId;
+  private Integer otNumber;
 
   public CrossFile() {
   }
@@ -70,4 +71,12 @@ public class CrossFile implements java.io.Serializable {
     this.ctId = ctId;
   }
 
+  @Column(name = "ot_number")
+  public Integer getOtNumber() {
+    return this.otNumber;
+  }
+
+  public void setOtNumber(Integer otNumber) {
+    this.otNumber = otNumber;
+  }
 }

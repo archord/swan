@@ -1,6 +1,8 @@
 package com.gwac.action;
 
+import com.gwac.dao.CrossObjectDao;
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.model.CrossObject;
 import com.gwac.model.UserInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,13 +21,13 @@ import org.apache.struts2.interceptor.SessionAware;
 //@InterceptorRef("jsonValidationWorkflowStack")
 @Result(name = "error", location = "/error.jsp")
 @ExceptionMapping(exception = "java.lang.Exception", result = "error")
-public class OTClassify extends ActionSupport implements SessionAware {
+public class CrossOTClassify extends ActionSupport implements SessionAware {
 
   private static final long serialVersionUID = 7968544374444173511L;
-  private static final Log log = LogFactory.getLog(OTClassify.class);
+  private static final Log log = LogFactory.getLog(CrossOTClassify.class);
   
   @Resource
-  private OtLevel2Dao ot2Dao;
+  private CrossObjectDao dao;
 
   private Map<String, Object> session;
 
@@ -35,7 +37,7 @@ public class OTClassify extends ActionSupport implements SessionAware {
   private Map msg;
 
 
-  @Action(value = "/ot-classify", results = {
+  @Action(value = "/cross-ot-classify", results = {
     @Result(name = "json", type = "json", params = {"root", "msg"})
   })
   public String userLogout() throws Exception {
@@ -48,7 +50,10 @@ public class OTClassify extends ActionSupport implements SessionAware {
     msg.put("flag", "1");
     log.debug("otId="+otId);
     log.debug("otTypeId="+otTypeId);
-    ot2Dao.updateOtType(otId, otTypeId);
+    CrossObject obj = new CrossObject();
+    obj.setOtType((short)otTypeId);
+    obj.setCoId(otId);
+    dao.updateOtType(obj);
     return "json";
   }
 

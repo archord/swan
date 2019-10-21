@@ -10,6 +10,6 @@ package com.gwac.job;
  * @author xy
  */
 public interface CrossTaskRecordService {
-  public void parseLevel1Ot(long ufuId, String storePath, String fileName, String taskName);
+  public void parseLevel1Ot(long ufuId, String storePath, String fileName, String taskName, String dateStr);
   
 }

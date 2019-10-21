@@ -15,10 +15,12 @@ public class CrossTaskMessageCreator implements MessageCreator {
   private static final Log log = LogFactory.getLog(CrossTaskMessageCreator.class);
   private final UploadFileUnstore fileInfo;
   private final String taskName;
+  private final String dateStr;
 
-  public CrossTaskMessageCreator(UploadFileUnstore fileInfo, String taskName) {
+  public CrossTaskMessageCreator(UploadFileUnstore fileInfo, String taskName, String dateStr) {
     this.fileInfo = fileInfo;
     this.taskName = taskName;
+    this.dateStr = dateStr;
   }
 
   @Override
@@ -30,6 +32,7 @@ public class CrossTaskMessageCreator implements MessageCreator {
     message.setString("storePath", fileInfo.getStorePath());
     message.setString("fileName", fileInfo.getFileName());
     message.setString("taskName", taskName);
+    message.setString("dateStr", dateStr);
     log.debug("receive message, taskName=" + taskName + ", fileType=" + fileInfo.getFileType() + ",  file=otlist " + fileInfo.getStorePath() + "/" + fileInfo.getFileName());
     return message;
   }

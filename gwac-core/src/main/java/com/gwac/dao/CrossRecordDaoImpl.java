@@ -6,8 +6,8 @@ package com.gwac.dao;
 
 import com.gwac.model.CrossObject;
 import com.gwac.model.CrossRecord;
-import com.gwac.model.FitsFileCut;
-import com.gwac.model.OtLevel2;
+import com.gwac.model.CrossRecordShow;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -26,6 +26,61 @@ import org.springframework.stereotype.Repository;
 public class CrossRecordDaoImpl extends BaseHibernateDaoImpl<CrossRecord> implements CrossRecordDao {
 
   private static final Log log = LogFactory.getLog(CrossRecordDaoImpl.class);
+  
+  @Override
+  public List<CrossRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis) {
+
+    Session session = getCurrentSession();
+    String sql1 = "select ff.file_name ff_name, ff.store_path ff_path, oor.stamp_name ffc_name, oor.stamp_path ffc_path, oor.date_utc date_ut, oor.*"
+	    + "from cross_record oor "
+	    + "left join cross_file ff on oor.cf_id=ff.cf_id "
+	    + "where oor.co_id=(select ob.co_id from cross_object ob where name='" + otName + "') ";
+    String sql2 = "select ff.file_name ff_name, ff.store_path ff_path, oor.stamp_name ffc_name, oor.stamp_path ffc_path, oor.date_utc date_ut, oor.*"
+	    + "from cross_record_his oor "
+	    + "left join cross_file ff on oor.cf_id=ff.cf_id "
+	    + "where oor.co_id=(select ob.co_id from cross_object_his ob where name='" + otName + "') ";
+
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = sql1 + " union " + sql2 + " order by date_ut";
+    } else {
+      unionSql = sql1 + " order by date_ut";
+    }
+
+    Query q = session.createSQLQuery(unionSql).addEntity(CrossRecordShow.class);
+    q.setFirstResult(start);
+    q.setMaxResults(resultSize);
+    return q.list();
+  }
+  
+  @Override
+  public int countRecordByOtName(String otName, Boolean queryHis) {
+
+    String sql1 = "select count(*) "
+	    + "from cross_record oor "
+	    + "where oor.co_id=(select ob.co_id from cross_object ob where name='" + otName + "') ";
+
+    String sql2 = "select count(*) "
+	    + "from cross_record_his oor "
+	    + "where oor.co_id=(select ob.co_id from cross_object_his ob where name='" + otName + "') ";
+
+    String unionSql = "";
+    if (queryHis) {
+      unionSql = sql1 + " union " + sql2;
+    } else {
+      unionSql = sql1;
+    }
+
+    int total = 0;
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(unionSql);
+    Iterator itor = q.list().iterator();
+    while (itor.hasNext()) {
+      BigInteger tNum = (BigInteger) itor.next();
+      total += tNum.intValue();
+    }
+    return total;
+  }
   
   @Override
   public String getCutImageByOtId(long otId, Boolean queryHis) {

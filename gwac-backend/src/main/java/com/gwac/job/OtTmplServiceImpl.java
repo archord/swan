@@ -158,6 +158,9 @@ public class OtTmplServiceImpl implements BaseService {
             tot2.setDec(avgOttw.getDec());
             float maxDist = getMaxDist(matchedOttws, avgOttw);
             searchbox = maxDist * 2 + ot2Searchbox;
+	    if(searchbox>0.1){
+	      searchbox=0.1;
+	    }
           } else {
             ot2mDao.save(ot2m);
             ottwDao.save(otw);
@@ -176,6 +179,9 @@ public class OtTmplServiceImpl implements BaseService {
       if (matchedOttws.size() > 1) {
         OtTmplWrong avgOttw = getAvgPosition(matchedOttws);
         float maxDist = getMaxDist(matchedOttws, avgOttw);
+	if(maxDist>0.1){
+	  maxDist=(float) 0.1;
+	}
 
         int totalMchNum = 0;
         OtTmplWrong firstOttw = null, tottw2 = null, toRemove = null;

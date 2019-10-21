@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface CrossTaskDao extends BaseHibernateDao<CrossTask> {
   
+  public List<CrossTask> getTodayObjects();
+  
   public List<CrossTask> getObjects(String dateStr);
   
   public CrossTask getByName(String ctName);

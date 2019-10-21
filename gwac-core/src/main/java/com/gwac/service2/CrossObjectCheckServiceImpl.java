@@ -54,66 +54,6 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
   @Value("#{syscfg.gwacServerTest}")
   private Boolean isTestServer;
 
-  //Mini-GWAC查询参数
-  @Value("#{syscfg.mingwacMergedSearchbox}")
-  private float mergedSearchboxM;
-  @Value("#{syscfg.mingwacCvsSearchbox}")
-  private float cvsSearchboxM;
-  @Value("#{syscfg.mingwacRc3Searchbox}")
-  private float rc3SearchboxM;
-  @Value("#{syscfg.mingwacMinorplanetSearchbox}")
-  private float minorPlanetSearchboxM;
-  @Value("#{syscfg.mingwacOt2hisSearchbox}")
-  private float ot2SearchboxM;
-  @Value("#{syscfg.mingwacUsnoSearchbox}")
-  private float usnoSearchboxM;
-  @Value("#{syscfg.mingwacUsnoSearchbox2}")
-  private float usnoSearchbox2M;
-  @Value("#{syscfg.mingwacMergedMag}")
-  private float mergedMagM;
-  @Value("#{syscfg.mingwacCvsMag}")
-  private float cvsMagM;
-  @Value("#{syscfg.mingwacRc3Minmag}")
-  private float rc3MinMagM;
-  @Value("#{syscfg.mingwacRc3Maxmag}")
-  private float rc3MaxMagM;
-  @Value("#{syscfg.mingwacMinorplanetMag}")
-  private float minorPlanetMagM;
-  @Value("#{syscfg.mingwacUsnoMag}")
-  private float usnoMagM;
-  @Value("#{syscfg.mingwacUsnoMag2}")
-  private float usnoMag2M;
-
-  //GWAC查询参数
-  @Value("#{syscfg.gwacMergedSearchbox}")
-  private float mergedSearchboxG;
-  @Value("#{syscfg.gwacCvsSearchbox}")
-  private float cvsSearchboxG;
-  @Value("#{syscfg.gwacRc3Searchbox}")
-  private float rc3SearchboxG;
-  @Value("#{syscfg.gwacMinorplanetSearchbox}")
-  private float minorPlanetSearchboxG;
-  @Value("#{syscfg.gwacOt2hisSearchbox}")
-  private float ot2SearchboxG;
-  @Value("#{syscfg.gwacUsnoSearchbox}")
-  private float usnoSearchboxG;
-  @Value("#{syscfg.gwacUsnoSearchbox2}")
-  private float usnoSearchbox2G;
-  @Value("#{syscfg.gwacMergedMag}")
-  private float mergedMagG;
-  @Value("#{syscfg.gwacCvsMag}")
-  private float cvsMagG;
-  @Value("#{syscfg.gwacRc3Minmag}")
-  private float rc3MinMagG;
-  @Value("#{syscfg.gwacRc3Maxmag}")
-  private float rc3MaxMagG;
-  @Value("#{syscfg.gwacMinorplanetMag}")
-  private float minorPlanetMagG;
-  @Value("#{syscfg.gwacUsnoMag}")
-  private float usnoMagG;
-  @Value("#{syscfg.gwacUsnoMag2}")
-  private float usnoMag2G;
-
   float mergedSearchbox = (float) 0.0;
   float cvsSearchbox = (float) 0.0;
   float rc3Searchbox = (float) 0.0;

@@ -91,7 +91,7 @@ $(function () {
     $('#ot2IsMatch').multiselect(option);
     $('#ot2MatchType').multiselect(option);
     $('#ot2Type').multiselect(option);
-    $('#ot2Ccd').multiselect(option);
+//    $('#frameNumber').multiselect(option);
     $('#lookBackResult').multiselect(option);
 //    $('#lookBackCnn').multiselect(option);
     $("#ot2QueryBtn").click(ot2QueryBtnClick);

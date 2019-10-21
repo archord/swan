@@ -48,8 +48,8 @@ public class CrossFileDaoImpl extends BaseHibernateDaoImpl<CrossFile> implements
   public boolean exist(CrossFile obj) {
 
     Session session = getCurrentSession();
-    String sql = "select ff_id from cross_file where file_name='" + obj.getFileName() + "' and ct_id="+obj.getCtId();
-    Query q = session.createSQLQuery(sql).addEntity(CrossFile.class);
+    String sql = "select * from cross_file where file_name='" + obj.getFileName() + "' and ct_id="+obj.getCtId();
+    Query q = session.createSQLQuery(sql);
     return !q.list().isEmpty();
   }
 

@@ -90,7 +90,7 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
       ct.setCreateTime(new Date());
       ct.setCrossMethod(Integer.parseInt(crossMethod));
       ct.setCtName(taskName);
-      ct.setDateStr(dateStr.substring(2));
+      ct.setDateStr(dateStr);
       ct.setFfCount(0);
       ct.setObjCount(0);
       ct.setMergedR(mergedR);
@@ -134,11 +134,12 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
   }
 
   public void initDateStr() {
-    setDateStr((String) appMap.get("datestr"));
+    dateStr = (String) appMap.get("datestr");
     if (null == dateStr) {
       setDateStr(CommonFunction.getUniqueDateStr());
       appMap.put("datestr", dateStr);
     }
+    dateStr = dateStr.substring(2);
   }
 
   /**

@@ -2,7 +2,6 @@ package com.gwac.activemq;
 
 import com.gwac.service2.Ot2CheckService;
 import javax.annotation.Resource;
-import javax.jms.JMSException;
 
 import javax.jms.MapMessage;
 import javax.jms.Message;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class CrossObjectCheckListener implements MessageListener {
 
   private static final Log log = LogFactory.getLog(CrossObjectCheckListener.class);
-  @Resource
+  @Resource(name="crossObjectCheckService")
   private Ot2CheckService crossObjectCheckService;
 
   @Override

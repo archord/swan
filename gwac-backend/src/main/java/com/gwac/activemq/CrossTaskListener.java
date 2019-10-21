@@ -27,11 +27,12 @@ public class CrossTaskListener implements MessageListener {
       String storePath = map.getString("storePath");
       String fileName = map.getString("fileName");
       String taskName = map.getString("taskName");
+      String dateStr = map.getString("dateStr");
       log.debug("receive message, taskName=" + taskName + ", fileType=" + fileType + ",  file=otlist " + storePath + "/" + fileName);
 
       long startTime = System.nanoTime();
       if (fileType == 'z') {
-        crossTaskRecordService.parseLevel1Ot(ufuId, storePath, fileName, taskName);
+        crossTaskRecordService.parseLevel1Ot(ufuId, storePath, fileName, taskName, dateStr);
       } else {
         log.error("wrong fileType");
       }

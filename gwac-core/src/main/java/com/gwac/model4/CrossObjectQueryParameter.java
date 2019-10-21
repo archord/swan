@@ -28,7 +28,9 @@ public class CrossObjectQueryParameter {
   private String dateStr;
   private Long coId;
   private Long ctId;
-  private Float magDiff;
+  private Integer magDiff;
+  private Integer frameNumber;
+  private Integer probability;
   private List<String> isMatch;
   private List<String> matchType;
   private List<String> otType;
@@ -89,6 +91,13 @@ public class CrossObjectQueryParameter {
     }
   }
 
+  public Integer getFrameNumber() {
+    return frameNumber;
+  }
+
+  public void setFrameNumber(Integer frameNumber) {
+    this.frameNumber = frameNumber;
+  }
   /**
    * @return the startDate
    */
@@ -373,14 +382,22 @@ public class CrossObjectQueryParameter {
   /**
    * @return the magDiff
    */
-  public Float getMagDiff() {
+  public Integer getMagDiff() {
     return magDiff;
   }
 
   /**
    * @param magDiff the magDiff to set
    */
-  public void setMagDiff(Float magDiff) {
+  public void setMagDiff(Integer magDiff) {
     this.magDiff = magDiff;
+  }
+  
+  public Integer getProbability() {
+    return probability;
+  }
+
+  public void setProbability(Integer probability) {
+    this.probability = probability;
   }
 }

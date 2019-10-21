@@ -33,8 +33,11 @@ public class GetCrossTasksJson extends ActionSupport {
   })
   @SuppressWarnings("unchecked")
   public String execute() throws Exception {
-        
+    if(dateStr==null || dateStr.isEmpty()){
+      objs = dao.getTodayObjects();
+    }else{
     objs = dao.getObjects(dateStr);
+    }
     return "json";
   }
 

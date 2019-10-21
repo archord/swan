@@ -5,8 +5,6 @@
 package com.gwac.dao;
 
 import com.gwac.model.CrossObject;
-import com.gwac.model.FitsFileCut;
-import com.gwac.model.OtLevel2;
 import com.gwac.model4.CrossObjectQueryParameter;
 import com.gwac.util.CommonFunction;
 import java.math.BigInteger;
@@ -204,6 +202,15 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
       sql.append(" and ct_id=").append(ot2qp.getCtId()).append(" ");
       isQueryParameterEmpty = false;
     }
+    if (ot2qp.getFrameNumber()!= null) {
+      if(ot2qp.getFrameNumber()>0&&ot2qp.getFrameNumber()<4){
+	sql.append(" and total=").append(ot2qp.getFrameNumber()).append(" ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getFrameNumber()==4){ //大于2小于3
+	sql.append(" and total>3 "); 
+	isQueryParameterEmpty = false;
+      }
+    }
     if (ot2qp.getMagDiff() != null) {
       if(ot2qp.getMagDiff()>0&&ot2qp.getMagDiff()<4){
 	sql.append(" and mag_diff>=").append(ot2qp.getMagDiff()).append(" ");
@@ -277,6 +284,24 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
         sql.append(ot2qp.getLookBackCnn().get(0));
         sql.append(" ");
         isQueryParameterEmpty = false;
+      }
+    }
+    if (ot2qp.getProbability()!= null) {
+      if(ot2qp.getProbability()==1){
+	sql.append(" and probability=0 ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==2){
+	sql.append(" and mag_diff>0 and mag_diff<=0.05 "); 
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==3){ 
+	sql.append(" and mag_diff>=0.05 and mag_diff<=0.1 "); 
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==4){ 
+	sql.append(" and mag_diff>=0.1 and mag_diff<=0.5 "); 
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==5){ 
+	sql.append(" and mag_diff>=0.5 ");
+	isQueryParameterEmpty = false;
       }
     }
     
@@ -481,10 +506,10 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
     query.setParameter(7, obj.getMag());
     query.setParameter(8, obj.getTotal());
     query.setParameter(9, obj.getOtType());
-    query.setParameter(10, obj.getCoId());
-    query.setParameter(8, obj.getMinMag());
-    query.setParameter(9, obj.getMaxMag());
-    query.setParameter(10, obj.getMagDiff());
+    query.setParameter(10, obj.getMinMag());
+    query.setParameter(11, obj.getMaxMag());
+    query.setParameter(12, obj.getMagDiff());
+    query.setParameter(13, obj.getCoId());
     query.executeUpdate();
   }
   

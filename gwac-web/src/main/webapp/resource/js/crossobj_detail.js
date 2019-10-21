@@ -138,7 +138,7 @@ $(function () {
 
   function initFollowUpInfo(data) {
     var ot2 = data.ot2;
-    $("#otId").val(ot2.otId);
+    $("#otId").val(ot2.coId);
     $("#otName").val(ot2.name);
     $("#fuRa").val(ot2.ra);
     $("#fuDec").val(ot2.dec);
@@ -220,7 +220,7 @@ $(function () {
       var gwacRootURL = $("#gwacRootURL").val();
       var otTypeId = $("#ot2Classify").val();
       var otId = $("#otId").val();
-      var url = gwacRootURL + "/ot-classify.action";
+      var url = gwacRootURL + "/cross-ot-classify.action";
       var formData = "otId=" + otId + "&otTypeId=" + otTypeId;
 //      console.log(formData);
 //      console.log(url);
@@ -297,7 +297,10 @@ $(function () {
       $("#carousel").append(objImg);
     });
 
-    $("#pagenumber").append("第<span style='font-weight:bold;font-size: 14px;'>0</span>帧，共" + ffcList.length + "帧");
+    $("#pagenumber").append("第<span style='font-weight:bold;font-size: 14px;'>1</span>帧，共" + ffcList.length + "帧");
+    if(ffcList.length>0){
+      $('#title span').text(ffcList[0].stamp_name);
+    }
     $("#totalImg").val(ffcList.length);
     $("#startImgNum").val(ot2.firstFfNumber);
 
@@ -663,8 +666,8 @@ $(function () {
 
   function loadOT2Record() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/ot-observe-record.action?otName=" + otName;
+    var otName = getUrlParameter("name");
+    var queryUrl = gwacRootURL + "/cross-ot-observe-record.action?otName=" + otName;
     $('#ot2-record-table').DataTable({
       "deferRender": true,
       "processing": true,
@@ -677,22 +680,19 @@ $(function () {
         dataSrc: 'gridModel'
       },
       "columns": [
-        {"data": "oorId"},
-        {"data": "dateUt"},
-        {"data": "raD"},
-        {"data": "decD"},
-        {"data": "XTemp"},
-        {"data": "YTemp"},
-        {"data": "magAper"},
-        {"data": "magerrAper"},
-        {"data": "ffName"},
+        {"data": "crId"},
+        {"data": "dateUtc"},
+        {"data": "ra"},
+        {"data": "dec"},
         {"data": "x"},
         {"data": "y"},
-        {"data": "flux"},
-        {"data": "background"},
-        {"data": "threshold"},
+        {"data": "mag"},
+        {"data": "magerr"},
+        {"data": "ffName"},
+        {"data": "fwhm"},
         {"data": "ellipticity"},
-        {"data": "classStar"}
+        {"data": "XTemp"},
+        {"data": "YTemp"}
       ],
       "columnDefs": [{
           "targets": 0,
@@ -750,7 +750,7 @@ $(function () {
 
   function formateRaDec2(data, type, full, meta) {
     //dateUt: "2015-12-26T22:13:24"
-    var dateTime = full.dateUt.split("T");
+    var dateTime = full.dateUtc.split("T");
     var date = dateTime[0].split("-");
     var time = dateTime[1].split(":");
     var day = parseInt(date[2]) + (parseInt(time[0]) + parseInt(time[1]) / 60 + parseInt(time[2]) / 3600) / 24;

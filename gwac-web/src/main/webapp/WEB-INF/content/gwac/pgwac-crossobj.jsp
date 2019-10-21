@@ -61,31 +61,6 @@
             <select name="ot2qp.otType" id="ot2Type" multiple="multiple" class="ot2QueryParameter"></select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
-            <h4>CCD</h4>
-            <select name="ot2qp.telscope" id="ot2Ccd" multiple="multiple" class="ot2QueryParameter">
-              <option value="1">011</option>
-              <option value="2">012</option>
-              <option value="3">013</option>
-              <option value="4">014</option>
-              <option value="5">015</option>
-              <option value="6">021</option>
-              <option value="7">022</option>
-              <option value="8">023</option>
-              <option value="9">024</option>
-              <option value="10">025</option>
-              <option value="11">031</option>
-              <option value="12">032</option>
-              <option value="13">033</option>
-              <option value="14">034</option>
-              <option value="15">035</option>
-              <option value="16">041</option>
-              <option value="17">042</option>
-              <option value="18">043</option>
-              <option value="19">044</option>
-              <option value="20">045</option>
-            </select>
-          </div>
-          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>回看</h4>
             <select name="ot2qp.lookBackResult" id="lookBackResult" multiple="multiple" class="ot2QueryParameter">
               <option value="0">未处理</option>
@@ -101,20 +76,25 @@
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
-            <h4>回看2</h4>
-            <select name="ot2qp.lookBackCnn" id="lookBackCnn" class="form-control">
-              <option value="">未处理</option>
-              <option value="1">1.0</option>
-              <option value="0.9">0.9</option>
-              <option value="0.8">0.8</option>
-              <option value="0.7">0.7</option>
-              <option value="0.6">0.6</option>
-              <option value="0.5">0.5</option>
-              <option value="0.4">0.4</option>
-              <option value="0.3">0.3</option>
-              <option value="0.2">0.2</option>
-              <option value="0.1">0.1</option>
-              <option value="0.05">0.05</option>
+            <h4>AI概率</h4>
+            <select name="ot2qp.probability" id="probability" class="form-control">
+              <option value="">ALL</option>
+              <option value="5">0.5以上</option>
+              <option value="4">0.1到0.5</option>
+              <option value="3">0.05到0.1</option>
+              <option value="2">0到0.05</option>
+              <option value="1">等于0</option>
+            </select>
+          </div>
+          
+          <div class="col-xs-2 col-sm-2 col-md-1 ">
+            <h4>目标探测帧数</h4>
+            <select name="ot2qp.frameNumber" id="frameNumber" class="form-control">
+              <option value="0">ALL</option>
+              <option value="4">大于3帧</option>
+              <option value="3">等于3帧</option>
+              <option value="2">等于2帧</option>
+              <option value="1">等于1帧</option>
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">

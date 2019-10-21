@@ -14,7 +14,6 @@ import com.gwac.model.OtLevel2;
 import com.gwac.model.UserInfo;
 import com.gwac.model4.OtLevel2FollowParameter;
 import com.gwac.util.CommonFunction;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.jms.Destination;

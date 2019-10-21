@@ -69,12 +69,13 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
   @Override
   public List<CrossRecord> getCrossRecord(String path) {
 
-    String[] keys = {"dateUtc", "x", "y", "xtemp", "ytemp", "ra", "dec", "mag", "magerr", "fwhm", "ellipticity", "stampName", "probability"};
+    String[] keys = {"dateUtc", "x", "y", "xtemp", "ytemp", "ra", "dec", "mag", "magerr", "fwhm", "ellipticity", "stampName", "probability", "otflag"};
     int[] headerIdx = null;
 
     BufferedReader br = null;
     String line = "";
-    String splitBy = " +";
+    //String splitBy = " +";
+    String splitBy = ",";
     List<CrossRecord> otList = new ArrayList();
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -243,6 +244,21 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
 	    cr.setProbability(Float.parseFloat(strs[tIdx]));
 	  }else{
 	    cr.setProbability((float)0);
+	  }
+	} catch (NumberFormatException e) {
+	  log.error("parse probability error:" + path, e);
+	}
+	try {
+	  int tIdx = headerIdx[13];
+	  if (tIdx > -1) {
+	    Integer tdata = Integer.parseInt(strs[tIdx]);
+	    if(tdata==0){
+	      cr.setIsMatch(false);
+	    }else{
+	      cr.setIsMatch(true);
+	    }
+	  }else{
+	    cr.setIsMatch(false);
 	  }
 	} catch (NumberFormatException e) {
 	  log.error("parse probability error:" + path, e);
