@@ -14,7 +14,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional("transactionManagerGWAC")
 public abstract class BaseHibernateDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
 
   public static final int SORT_ASC = 1;
@@ -23,7 +23,7 @@ public abstract class BaseHibernateDaoImpl<T extends Serializable> implements Ba
   private static final Log log = LogFactory.getLog(BaseHibernateDaoImpl.class);
   private Class<T> clazz;
   
-  @Resource(name = "sessionFactory")
+  @Resource(name = "sessionFactoryGWAC")
   private SessionFactory sessionFactory;
 
   public BaseHibernateDaoImpl() {

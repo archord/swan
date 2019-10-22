@@ -25,30 +25,30 @@ public class ObjectListAll implements Serializable {
 
   private int id;
   private String obj_id;
-  private String object_list = "object_list_all";
+//  private String object_list = "object_list_all"; //
   private String objsour = "GWAC_followup";
   private String observer = "GWAC";
-  private String objepoch = "2000";
+  private Integer objepoch = 2000;
   private String objerror = "0.0|0.0";
   private String objrank = "0.0";
   private String group_id = "XL002";
   private String unit_id = "001|002";
   private String obs_type = "goa";
   private String obs_stra = "pointing";
-  private String day_int = "0";
+  private Integer day_int = 0;
   private String imgtype = "object";
   private String run_name = "1";
   private String mode = "observation";
 
-  private String followname= "G190830_C0001_001";
+//  private String followname= "G190830_C0001_001"; //
   private String obj_name = "G190830_C0001";
   private float objra = (float) 100.0;
   private float objdec = (float) -60.0;
   private String date_beg = "2019/09/09";
   private String date_end = "2019/09/09";
-  private String filter_band = "R";
-  private int expdur = 180;
-  private int delay = 0;
+  private String filter = "R";
+  private float expdur = 180;
+  private float delay = 0;
   private int frmcnt = 10;
   private int priority = 40;
   
@@ -86,21 +86,6 @@ public class ObjectListAll implements Serializable {
   }
 
   /**
-   * @return the object_list
-   */
-  @Column(name = "object_list")
-  public String getObject_list() {
-    return object_list;
-  }
-
-  /**
-   * @param object_list the object_list to set
-   */
-  public void setObject_list(String object_list) {
-    this.object_list = object_list;
-  }
-
-  /**
    * @return the objsour
    */
   @Column(name = "objsour")
@@ -134,14 +119,14 @@ public class ObjectListAll implements Serializable {
    * @return the objepoch
    */
   @Column(name = "objepoch")
-  public String getObjepoch() {
+  public Integer getObjepoch() {
     return objepoch;
   }
 
   /**
    * @param objepoch the objepoch to set
    */
-  public void setObjepoch(String objepoch) {
+  public void setObjepoch(Integer objepoch) {
     this.objepoch = objepoch;
   }
 
@@ -239,14 +224,14 @@ public class ObjectListAll implements Serializable {
    * @return the day_int
    */
   @Column(name = "day_int")
-  public String getDay_int() {
+  public Integer getDay_int() {
     return day_int;
   }
 
   /**
    * @param day_int the day_int to set
    */
-  public void setDay_int(String day_int) {
+  public void setDay_int(Integer day_int) {
     this.day_int = day_int;
   }
 
@@ -373,30 +358,30 @@ public class ObjectListAll implements Serializable {
   /**
    * @return the filter_band
    */
-  @Column(name = "filter_band")
-  public String getFilter_band() {
-    return filter_band;
+  @Column(name = "filter")
+  public String getFilter() {
+    return filter;
   }
 
   /**
    * @param filter_band the filter_band to set
    */
-  public void setFilter_band(String filter_band) {
-    this.filter_band = filter_band;
+  public void setFilter(String filter) {
+    this.filter = filter;
   }
 
   /**
    * @return the expdur
    */
   @Column(name = "expdur")
-  public int getExpdur() {
+  public Float getExpdur() {
     return expdur;
   }
 
   /**
    * @param expdur the expdur to set
    */
-  public void setExpdur(int expdur) {
+  public void setExpdur(Float expdur) {
     this.expdur = expdur;
   }
 
@@ -404,14 +389,14 @@ public class ObjectListAll implements Serializable {
    * @return the delay
    */
   @Column(name = "delay")
-  public int getDelay() {
+  public Float getDelay() {
     return delay;
   }
 
   /**
    * @param delay the delay to set
    */
-  public void setDelay(int delay) {
+  public void setDelay(Float delay) {
     this.delay = delay;
   }
 
@@ -443,21 +428,6 @@ public class ObjectListAll implements Serializable {
    */
   public void setPriority(int priority) {
     this.priority = priority;
-  }
-
-  /**
-   * @return the followup_name
-   */
-  @Column(name = "followname")
-  public String getFollowname() {
-    return this.followname;
-  }
-
-  /**
-   * @param followup_name the followup_name to set
-   */
-  public void setFollowname(String followname) {
-    this.followname = followname;
   }
 
 }

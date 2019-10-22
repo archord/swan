@@ -9,8 +9,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.jms.JMSException;
 
@@ -46,8 +44,8 @@ public class OTFollowListener implements MessageListener {
 
   @Resource
   private FollowUpObservationDao dao = null;
-  @Resource
-  private ObjectListAllDao dao2 = null;
+  @Resource(name = "objectListAllDao")
+  private ObjectListAllDao objectListAllDao = null;
 
   @Override
   public void onMessage(Message message) {
@@ -67,23 +65,37 @@ public class OTFollowListener implements MessageListener {
       if (!isBeiJingServer && !isTestServer) {
 	String dateStr = CommonFunction.getDateString3(new Date());
 	FollowUpObservation fuo = dao.getByName(followName);
-	ObjectListAll obj = new ObjectListAll();
-	obj.setFollowname(fuo.getFoName());
-	obj.setObj_name(fuo.getObjName());
-	obj.setObjra(fuo.getRa());
-	obj.setObjdec(fuo.getDec());
-	obj.setDate_beg(dateStr);
-	obj.setDate_end(dateStr);
-	obj.setFilter_band(fuo.getFilter());
-	obj.setExpdur(fuo.getExposeDuration());
-	obj.setDelay(0);
-	obj.setFrmcnt(fuo.getFrameCount());
-	obj.setPriority(fuo.getPriority());
-	dao2.save(obj);
-	sendInsertNotice();
+
+	int i = 0;
+	while (fuo == null && i < 5) {
+	  log.warn("OTFollowListener fuo is null, request again...");
+	  fuo = dao.getByName(followName);
+	  Thread.sleep(500);
+	  i++;
+	}
+	if (fuo == null) {
+	  log.error("OTFollowListener after request 5 times, fuo is still null, the hibernate cache is slow, break...");
+	} else {
+	  ObjectListAll obj = new ObjectListAll();
+	  if (fuo.getFoName() != null) {
+	    obj.setRun_name(fuo.getFoName());
+	  }
+	  obj.setObj_name(fuo.getObjName());
+	  obj.setObjra(fuo.getRa());
+	  obj.setObjdec(fuo.getDec());
+	  obj.setDate_beg(dateStr);
+	  obj.setDate_end(dateStr);
+	  obj.setFilter(fuo.getFilter());
+	  obj.setExpdur((float) fuo.getExposeDuration());
+	  obj.setDelay((float) 0);
+	  obj.setFrmcnt(fuo.getFrameCount());
+	  obj.setPriority(fuo.getPriority());
+	  objectListAllDao.save(obj);
+	  sendInsertNotice();
+	}
       }
 
-    } catch (JMSException e) {
+    } catch (Exception e) {
       log.error("receive followPlan error!", e);
     }
   }

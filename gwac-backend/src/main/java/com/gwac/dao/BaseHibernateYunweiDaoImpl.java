@@ -1,6 +1,5 @@
 package com.gwac.dao;
 
-import com.gwac.dao.BaseHibernateDao;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -15,7 +14,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional("transactionManagerYunwei")
 public abstract class BaseHibernateYunweiDaoImpl<T extends Serializable> implements BaseHibernateDao<T> {
 
   public static final int SORT_ASC = 1;
@@ -131,8 +130,5 @@ public abstract class BaseHibernateYunweiDaoImpl<T extends Serializable> impleme
   public final Session getCurrentSession() {
     return sessionFactory.getCurrentSession();
   }
-
-//  public void setSessionFactory(SessionFactory sessionFactory) {
-//    this.sessionFactory = sessionFactory;
-//  }
+  
 }

@@ -4,7 +4,6 @@
  */
 package com.gwac.dao;
 
-import com.gwac.dao.BaseHibernateDao;
 import com.gwac.modelyw.ObjectListAll;
 
 /**

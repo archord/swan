@@ -11,8 +11,8 @@
 			http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
  
   <!-- Hibernate session factory AnnotationSessionFactoryBean -->
-  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSource"/>
+  <bean id="sessionFactoryGWAC" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSourceGWAC"/>
     <property name="packagesToScan">
       <list>
         <value>com.gwac.model</value>
@@ -62,10 +62,11 @@
   <!--bean id="namingStrategy" class="org.hibernate.cfg.ImprovedNamingStrategy"/-->
   
   <!-- Declare a transaction manager-->
-  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-    <property name="sessionFactory" ref="sessionFactory" />
+  <bean id="transactionManagerGWAC" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="dataSource" ref="dataSourceGWAC" />
+    <property name="sessionFactory" ref="sessionFactoryGWAC" />
   </bean>
   
-  <tx:annotation-driven transaction-manager="transactionManager" />
+  <tx:annotation-driven transaction-manager="transactionManagerGWAC" />
    
 </beans>

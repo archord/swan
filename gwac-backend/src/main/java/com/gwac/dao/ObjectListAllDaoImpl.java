@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author xy
  */
-@Repository
+@Repository(value="objectListAllDao")
 public class ObjectListAllDaoImpl extends BaseHibernateYunweiDaoImpl<ObjectListAll> implements ObjectListAllDao {
 
   private static final Log log = LogFactory.getLog(ObjectListAllDaoImpl.class);
