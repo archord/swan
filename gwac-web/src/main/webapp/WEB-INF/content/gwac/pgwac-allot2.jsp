@@ -99,7 +99,7 @@
               <option value="9">FHOT</option>
             </select>
           </div>
-          <div class="col-xs-2 col-sm-2 col-md-1 ">
+<!--          <div class="col-xs-2 col-sm-2 col-md-1 ">
             <h4>回看2</h4>
             <select name="ot2qp.lookBackCnn" id="lookBackCnn" class="form-control">
               <option value="">未处理</option>
@@ -115,7 +115,7 @@
               <option value="0.1">0.1</option>
               <option value="0.05">0.05</option>
             </select>
-          </div>
+          </div>-->
           <div class="col-xs-2 col-sm-2 col-md-1 " title="以下两种情况会声音提醒，且仅判断列出的条件：&#10;1，交叉证认：匹配不成功且回看为OT&#10;2，图像相减：匹配不成功">
             <h4>提示音</h4>
             <select id="newOTAlarm" class="form-control"></select>
@@ -141,11 +141,11 @@
       <div class="row ot-list-body">
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
-            <thead><tr><th>ID</th><th>OT名</th><th>时间</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
-                <th>分类标识</th><th>回看</th><th>回看2</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
+            <thead><tr><th>ID</th><th>OT名</th><th>时间</th><th>CCD</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
+                <th>分类标识</th><th>回看</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
                 <th>CVS</th><th>Other</th></tr></thead>
-            <tfoot><tr><th>ID</th><th>OT名</th><th>时间</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
-                <th>分类标识</th><th>回看</th><th>回看2</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
+            <tfoot><tr><th>ID</th><th>OT名</th><th>时间</th><th>CCD</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
+                <th>分类标识</th><th>回看</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
                 <th>CVS</th><th>Other</th></tr></tfoot>
           </table>
         </div>                                   

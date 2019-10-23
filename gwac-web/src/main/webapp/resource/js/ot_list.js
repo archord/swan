@@ -226,6 +226,7 @@ $(function () {
         {"data": "otId"},
         {"data": "name"},
         {"data": "foundTimeUtc"},
+        {"data": "identify"},
         {"data": "ra"},
         {"data": "dec"},
         {"data": "xtemp"},
@@ -233,7 +234,6 @@ $(function () {
         {"data": "total"},
         {"data": "otType"},
         {"data": "lookBackResult"},
-        {"data": "lookBackCnn"},
         {"data": "minorPlanetMatch"},
         {"data": "ot2HisMatch"},
         {"data": "usnoMatch"},
@@ -255,11 +255,11 @@ $(function () {
           "data": "foundTimeUtc?",
           "render": formateTime
         }, {
-          "targets": [3, 4],
+          "targets": [4, 5],
           "data": "dont know",
           "render": floatFormate3
         }, {
-          "targets": [5, 6],
+          "targets": [6, 7],
           "data": "dont know",
           "render": floatFormate2
         }, {
@@ -271,15 +271,15 @@ $(function () {
           "data": "dont know",
           "render": formateOT2His
         }, {
-          "targets": 9,
+          "targets": 10,
           "data": "dont know",
           "render": formateLookBack
         }, {
-          "targets": 10,
+          "targets": 3,
           "data": "dont know",
-          "render": formateLookBackCNN
+          "render": formateCCD
         }, {
-          "targets": 8,
+          "targets": 9,
           "data": "dont know",
           "render": formateOtType
         }],
@@ -376,6 +376,10 @@ $(function () {
   function formateTime(data, type, full, meta) {
     //foundTimeUtc:"2018-10-01T21:20:05"
     return data.substring(11);
+  }
+  
+  function formateCCD(data, type, full, meta) {
+    return data;
   }
 
   function formateRowNumber(data, type, full, meta) {

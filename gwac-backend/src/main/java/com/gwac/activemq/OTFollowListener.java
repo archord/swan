@@ -47,8 +47,7 @@ public class OTFollowListener implements MessageListener {
   @Resource(name = "objectListAllDao")
   private ObjectListAllDao objectListAllDao = null;
 
-  @Override
-  public void onMessage(Message message) {
+  public void onMessage2(Message message) {
     try {
 
       MapMessage map = (MapMessage) message;
@@ -121,7 +120,8 @@ public class OTFollowListener implements MessageListener {
     }
   }
 
-  public void onMessage2(Message message) {
+  @Override
+  public void onMessage(Message message) {
     try {
 
       MapMessage map = (MapMessage) message;
