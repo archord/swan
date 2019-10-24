@@ -28,6 +28,14 @@ public class CrossRecordDaoImpl extends BaseHibernateDaoImpl<CrossRecord> implem
   private static final Log log = LogFactory.getLog(CrossRecordDaoImpl.class);
   
   @Override
+  public void moveDataToHisTable() {
+
+    Session session = getCurrentSession();
+    String sql = "WITH moved_rows AS ( DELETE FROM cross_record RETURNING * ) INSERT INTO cross_record_his SELECT * FROM moved_rows;";
+    session.createSQLQuery(sql).executeUpdate();
+  }
+  
+  @Override
   public List<CrossRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis) {
 
     Session session = getCurrentSession();

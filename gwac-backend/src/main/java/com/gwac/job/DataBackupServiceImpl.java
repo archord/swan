@@ -7,6 +7,8 @@ package com.gwac.job;
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.ConfigFileDao;
+import com.gwac.dao.CrossObjectDao;
+import com.gwac.dao.CrossRecordDao;
 import com.gwac.dao.DataProcessMachineDAO;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
@@ -63,6 +65,10 @@ public class DataBackupServiceImpl implements BaseService {
   private FitsFile2DAO ff2Dao;
   @Resource
   private FitsFileCutRefDAO ffcrDao;
+  @Resource
+  private CrossRecordDao crossRecordDao;
+  @Resource
+  private CrossObjectDao crossObjectDao;
 
   @Override
   public void startJob() {
@@ -84,6 +90,8 @@ public class DataBackupServiceImpl implements BaseService {
 
     long startTime = System.nanoTime();
     try {//JDBCConnectionException or some other exception
+      crossRecordDao.moveDataToHisTable();
+      crossObjectDao.moveDataToHisTable();
       ffcrDao.moveDataToHisTable();
       ff2Dao.moveDataToHisTable();
       otlv2Dao.moveDataToHisTable();

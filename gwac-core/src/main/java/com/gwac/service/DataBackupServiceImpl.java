@@ -6,12 +6,17 @@ package com.gwac.service;
 import com.gwac.dao.CameraDao;
 import com.gwac.dao.CcdPixFilterDao;
 import com.gwac.dao.ConfigFileDao;
+import com.gwac.dao.CrossObjectDao;
+import com.gwac.dao.CrossRecordDao;
 import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
+import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.ImageStatusParameterDao;
+import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.dao.WebGlobalParameterDao;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,10 +50,23 @@ public class DataBackupServiceImpl implements DataBackupService {
   private CcdPixFilterDao cpfDao;
   @Resource
   private FitsFile2DAO ff2Dao;
+  @Resource
+  private FitsFileCutRefDAO ffcrDao;
+  @Resource
+  private CrossRecordDao crossRecordDao;
+  @Resource
+  private CrossObjectDao crossObjectDao;
+  @Resource
+  private WebGlobalParameterDao webGlobalParameterDao;
+  @Resource
+  private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
 
   @Override
   public void backupData() {
     try {
+      crossRecordDao.moveDataToHisTable();
+      crossObjectDao.moveDataToHisTable();
+      ffcrDao.moveDataToHisTable();
       ff2Dao.moveDataToHisTable();
       otlv2Dao.moveDataToHisTable();
       ffcDao.moveDataToHisTable();
@@ -58,6 +76,8 @@ public class DataBackupServiceImpl implements DataBackupService {
       camDao.everyDayInit();
       ufuDao.removeAll();
       cpfDao.removeAll();
+      webGlobalParameterDao.everyDayInit();
+      ot2StreamNodeTimeDao.removeAll();
     } catch (Exception ex) {
       log.error("backup error", ex);
     }

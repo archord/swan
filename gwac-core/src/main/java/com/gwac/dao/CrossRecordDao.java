@@ -15,6 +15,8 @@ import java.util.List;
  */
 public interface CrossRecordDao extends BaseHibernateDao<CrossRecord> {
   
+  public void moveDataToHisTable();
+  
   public List<CrossRecordShow> getRecordByOtName(String otName, int start, int resultSize, Boolean queryHis);
   
   public int countRecordByOtName(String otName, Boolean queryHis);
