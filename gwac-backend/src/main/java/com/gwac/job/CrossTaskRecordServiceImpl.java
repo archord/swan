@@ -108,10 +108,9 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	log.debug(fileName + ", otlv1 size:" + otcs.size());
 
 	cf.setOtNumber(otcs.size());
-	if (!crossFileDao.exist(cf)) {
+	CrossFile cf0 = crossFileDao.exist(cf);
+	if (cf0==null) {
 	  crossFileDao.save(cf);
-	} else {
-	  cf = crossFileDao.getByName(fileName);
 	}
 
 	Integer maxSingleFrameOT2Num = Integer.parseInt(wgpdao.getValueByName("MaxSingleFrameOT2Num"));
@@ -122,6 +121,10 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 
 	List<CrossObject> crossObjs = new ArrayList();
 	for (CrossRecord otc : otcs) {
+	  
+	  if(otc.getMag()>=50){
+	    continue;
+	  }
 
 	  otc.setFfNumber(number);
 	  otc.setCtId(ct.getCtId());
@@ -159,6 +162,10 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	      tlv2.setRa(otLv2.getRa());
 	      tlv2.setDec(otLv2.getDec());
 	      tlv2.setMag(otLv2.getMag());
+	    }
+	    
+	    if(otLv2.getProbability()>tlv2.getProbability()){
+	      tlv2.setProbability(otLv2.getProbability());
 	    }
 	    
 	    if (tlv2.getMinMag() > otLv2.getMag()) {
@@ -217,7 +224,7 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	      tOtLv2.setFollowUpResult((short) 0);
 	      tOtLv2.setFoCount((short) 0);
 	      tOtLv2.setLookBackCnn((float) -1);
-	      tOtLv2.setProbability((float) 0);
+	      tOtLv2.setProbability(otc.getProbability());
 	      tOtLv2.setMinMag(otc.getMag());
 	      tOtLv2.setMaxMag(otc.getMag());
 	      tOtLv2.setMagDiff((float) 0);
@@ -233,12 +240,16 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	      if (oors.size() >= occurNumber) {
 		float minMag = 99;
 		float maxMag = -99;
+		float maxProb = -1;
 		for (CrossRecord cr : oors) {
 		  if (cr.getMag() > maxMag) {
 		    maxMag = cr.getMag();
 		  }
 		  if (cr.getMag() < minMag) {
 		    minMag = cr.getMag();
+		  }
+		  if (cr.getProbability()>maxProb){
+		    maxProb = cr.getProbability();
 		  }
 		}
 
@@ -279,7 +290,7 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 		tOtLv2.setFollowUpResult((short) 0);
 		tOtLv2.setFoCount((short) 0);
 		tOtLv2.setLookBackCnn((float) -1);
-		tOtLv2.setProbability((float) 0);
+		tOtLv2.setProbability(maxProb);
 		tOtLv2.setMinMag(minMag);
 		tOtLv2.setMaxMag(maxMag);
 		tOtLv2.setMagDiff(maxMag - minMag);

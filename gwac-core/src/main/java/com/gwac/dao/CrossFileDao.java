@@ -15,9 +15,9 @@ public interface CrossFileDao extends BaseHibernateDao<CrossFile> {
 
   public void moveDataToHisTable();
   
-  public CrossFile getByName(String ffName);
+  public CrossFile getByName(String ffName, Long ctId);
   
   public CrossFile getByNameHis(String ffName);
 
-  public boolean exist(CrossFile obj);
+  public CrossFile exist(CrossFile obj);
 }

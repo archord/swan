@@ -253,9 +253,9 @@ public class OTCatalogDaoImpl implements OTCatalogDao {
 	  if (tIdx > -1) {
 	    Integer tdata = Integer.parseInt(strs[tIdx]);
 	    if(tdata==0){
-	      cr.setIsMatch(false);
-	    }else{
 	      cr.setIsMatch(true);
+	    }else{
+	      cr.setIsMatch(false);
 	    }
 	  }else{
 	    cr.setIsMatch(false);

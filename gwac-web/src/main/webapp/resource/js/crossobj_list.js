@@ -165,7 +165,7 @@ $(function () {
         {"data": "total"},
         {"data": "otType"},
         {"data": "lookBackResult"},
-        {"data": "lookBackCnn"},
+        {"data": "probability"},
         {"data": "minorPlanetMatch"},
         {"data": "hisMatch"},
         {"data": "usnoMatch"},
@@ -307,7 +307,7 @@ $(function () {
     return result;
   }
 
-  function formateLookBackCNN(data, type, full, meta) {
+  function formateLookBackCNN2(data, type, full, meta) {
     var result = "<span title='" + data + "' onmouseover='showOT2LBCNNImg(event,\"" + full.name + "\")' onmouseout='hiddenOT2LBCNNImg()'>";
     if (data >= 0.5) {
       result = result + "OT";
@@ -318,6 +318,9 @@ $(function () {
     }
     result = result + "</span>";
     return result;
+  }
+  function formateLookBackCNN(data, type, full, meta) {
+    return data;
   }
 
   function formateTime(data, type, full, meta) {

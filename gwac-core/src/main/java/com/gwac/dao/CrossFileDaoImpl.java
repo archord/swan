@@ -45,19 +45,23 @@ public class CrossFileDaoImpl extends BaseHibernateDaoImpl<CrossFile> implements
   }
 
   @Override
-  public boolean exist(CrossFile obj) {
+  public CrossFile exist(CrossFile obj) {
 
     Session session = getCurrentSession();
     String sql = "select * from cross_file where file_name='" + obj.getFileName() + "' and ct_id="+obj.getCtId();
     Query q = session.createSQLQuery(sql);
-    return !q.list().isEmpty();
+    if (!q.list().isEmpty()) {
+      return (CrossFile) q.list().get(0);
+    } else {
+      return null;
+    }
   }
 
   @Override
-  public CrossFile getByName(String ffName) {
+  public CrossFile getByName(String ffName, Long ctId) {
 
     Session session = getCurrentSession();
-    String sql = "select * from cross_file where file_name='" + ffName + "'";
+    String sql = "select * from cross_file where file_name='" + ffName + "' and ct_id="+ctId;
     Query q = session.createSQLQuery(sql).addEntity(CrossFile.class);
 
     if (!q.list().isEmpty()) {

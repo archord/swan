@@ -207,7 +207,10 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
 	sql.append(" and total=").append(ot2qp.getFrameNumber()).append(" ");
 	isQueryParameterEmpty = false;
       }else if(ot2qp.getFrameNumber()==4){ //大于2小于3
-	sql.append(" and total>3 "); 
+	sql.append(" and total>=3 "); 
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getFrameNumber()==5){ //大于2小于3
+	sql.append(" and total>=2 "); 
 	isQueryParameterEmpty = false;
       }
     }
@@ -291,16 +294,28 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
 	sql.append(" and probability=0 ");
 	isQueryParameterEmpty = false;
       }else if(ot2qp.getProbability()==2){
-	sql.append(" and mag_diff>0 and mag_diff<=0.05 "); 
+	sql.append(" and probability>0 and probability<=0.05 "); 
 	isQueryParameterEmpty = false;
       }else if(ot2qp.getProbability()==3){ 
-	sql.append(" and mag_diff>=0.05 and mag_diff<=0.1 "); 
+	sql.append(" and probability>=0.05 and probability<=0.1 "); 
 	isQueryParameterEmpty = false;
       }else if(ot2qp.getProbability()==4){ 
-	sql.append(" and mag_diff>=0.1 and mag_diff<=0.5 "); 
+	sql.append(" and probability>=0.1 and probability<=0.5 "); 
 	isQueryParameterEmpty = false;
       }else if(ot2qp.getProbability()==5){ 
-	sql.append(" and mag_diff>=0.5 ");
+	sql.append(" and probability>0 ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==6){ 
+	sql.append(" and probability>=0.05 ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==7){ 
+	sql.append(" and probability>=0.1 ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==8){ 
+	sql.append(" and probability>=0.5 ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==9){ 
+	sql.append(" and probability>=0.9 ");
 	isQueryParameterEmpty = false;
       }
     }

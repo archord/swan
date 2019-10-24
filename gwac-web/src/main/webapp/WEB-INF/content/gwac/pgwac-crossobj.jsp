@@ -76,10 +76,14 @@
             </select>
           </div>
           <div class="col-xs-2 col-sm-2 col-md-1 ">
-            <h4>AI概率</h4>
+            <h4>概率</h4>
             <select name="ot2qp.probability" id="probability" class="form-control">
               <option value="">ALL</option>
-              <option value="5">0.5以上</option>
+              <option value="9">0.9以上</option>
+              <option value="8">0.5以上</option>
+              <option value="7">0.1以上</option>
+              <option value="6">0.05以上</option>
+              <option value="5">0以上</option>
               <option value="4">0.1到0.5</option>
               <option value="3">0.05到0.1</option>
               <option value="2">0到0.05</option>
@@ -93,6 +97,7 @@
               <option value="0">ALL</option>
               <option value="4">大于3帧</option>
               <option value="3">等于3帧</option>
+              <option value="5">大于2帧</option>
               <option value="2">等于2帧</option>
               <option value="1">等于1帧</option>
             </select>
@@ -127,10 +132,10 @@
         <div id="ot-list">
           <table id="ot-list-table" class="display" cellspacing="0" width="100%">
             <thead><tr><th></th><th>ID</th><th>时间</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
-                <th>分类标识</th><th>回看</th><th>回看2</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
+                <th>分类标识</th><th>回看</th><th>概率</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
                 <th>CVS</th><th>Other</th><th>星等变化</th></tr></thead>
             <tfoot><tr><th></th><th>ID</th><th>时间</th><th>RA</th><th>DEC</th><th>模板X</th><th>模板Y</th><th>记录总数</th>
-                <th>分类标识</th><th>回看</th><th>回看2</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
+                <th>分类标识</th><th>回看</th><th>概率</th><th>小行星</th><th>OT2</th><th>USNO</th><th>RC3</th><th>后随次数</th>
                 <th>CVS</th><th>Other</th><th>星等变化</th></tr></tfoot>
           </table>
         </div>                                   
