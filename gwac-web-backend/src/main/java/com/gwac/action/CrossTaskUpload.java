@@ -9,7 +9,9 @@ package com.gwac.action;
  * @author xy
  */
 import com.gwac.activemq.CrossTaskMessageCreator;
+import com.gwac.activemq.OTListMessageCreator;
 import com.gwac.dao.CrossFileDao;
+import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UploadFileUnstoreDao;
 import com.gwac.model.UploadFileUnstore;
 import com.gwac.util.CommonFunction;
@@ -60,6 +62,8 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
   private JmsTemplate jmsTemplate;
   @Resource(name = "crossTaskDest")
   private Destination crossTaskDest;
+  @Resource
+  private SystemStatusMonitorDao ssmDao;
 
   private Map<String, Object> appmap;
 
@@ -223,6 +227,14 @@ public class CrossTaskUpload extends ActionSupport implements ApplicationAware {
 	MessageCreator tmc = new CrossTaskMessageCreator(obj, taskName, dateStr);
 	jmsTemplate.send(crossTaskDest, tmc);
       }
+    }
+    
+    String tfilename = fnames.get(fnames.size()-1).trim();
+    String unitId = tfilename.substring(1, tfilename.indexOf("_"));
+    if ('z' == fileType) {
+      ssmDao.updateOt1ListSub(unitId, tfilename);
+    }else if ('y' == fileType) {
+      ssmDao.updateImgCutSub(unitId, tfilename);
     }
   }
 
