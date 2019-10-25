@@ -599,8 +599,8 @@ $(function () {
 
   function loadOT2Match() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var otName = getUrlParameter("otName");
-    var queryUrl = gwacRootURL + "/get-ot-match-list.action?otName=" + otName;
+    var otName = getUrlParameter("name");
+    var queryUrl = gwacRootURL + "/get-cross-object-match-list.action?otName=" + otName;
     $('#ot2-match-table').DataTable({
       "deferRender": true,
       "processing": true,

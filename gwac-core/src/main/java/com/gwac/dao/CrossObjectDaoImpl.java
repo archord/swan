@@ -191,7 +191,7 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
 
     Boolean isQueryParameterEmpty = true;
     if (ot2qp.getDateStr()!=null && !ot2qp.getDateStr().isEmpty()) {
-      sql.append(" and date_str='").append(ot2qp.getStartDate()).append("' ");
+      sql.append(" and date_str='").append(ot2qp.getDateStr()).append("' ");
       isQueryParameterEmpty = false;
     }
     if (ot2qp.getCoId() != null && ot2qp.getCoId()>0) {
@@ -316,6 +316,9 @@ public class CrossObjectDaoImpl extends BaseHibernateDaoImpl<CrossObject> implem
 	isQueryParameterEmpty = false;
       }else if(ot2qp.getProbability()==9){ 
 	sql.append(" and probability>=0.9 ");
+	isQueryParameterEmpty = false;
+      }else if(ot2qp.getProbability()==10){ 
+	sql.append(" and probability>=1.0 ");
 	isQueryParameterEmpty = false;
       }
     }

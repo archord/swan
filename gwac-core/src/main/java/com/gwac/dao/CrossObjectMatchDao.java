@@ -21,4 +21,5 @@ public interface CrossObjectMatchDao extends BaseHibernateDao<CrossObjectMatch> 
 
   public CrossObjectMatch getByOt2Id(long ot2Id);
 
+  public List<OtLevel2MatchShow> getByOt2Name(String otName, Boolean queryHis);
 }

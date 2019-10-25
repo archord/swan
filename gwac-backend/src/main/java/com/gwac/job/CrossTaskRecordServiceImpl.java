@@ -111,6 +111,8 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	CrossFile cf0 = crossFileDao.exist(cf);
 	if (cf0==null) {
 	  crossFileDao.save(cf);
+	}else{
+	  cf=cf0;
 	}
 
 	Integer maxSingleFrameOT2Num = Integer.parseInt(wgpdao.getValueByName("MaxSingleFrameOT2Num"));
@@ -147,6 +149,7 @@ public class CrossTaskRecordServiceImpl implements CrossTaskRecordService {
 	  otLv2.setLastFfNumber(number);
 	  otLv2.setTotal(1);
 	  otLv2.setDateStr(ct.getDateStr());
+	  otLv2.setProbability(otc.getProbability());
 
 	  //当前这条记录是与最近5幅之内的OT匹配，还是与当晚所有OT匹配，这里选择与当晚所有OT匹配
 	  //existInLatestN与最近5幅比较

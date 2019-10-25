@@ -79,6 +79,7 @@
             <h4>概率</h4>
             <select name="ot2qp.probability" id="probability" class="form-control">
               <option value="">ALL</option>
+              <option value="10">1.0</option>
               <option value="9">0.9以上</option>
               <option value="8">0.5以上</option>
               <option value="7">0.1以上</option>

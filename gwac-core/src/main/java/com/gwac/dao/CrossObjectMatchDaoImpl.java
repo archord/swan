@@ -24,7 +24,7 @@ public class CrossObjectMatchDaoImpl extends BaseHibernateDaoImpl<CrossObjectMat
 
     Session session = getCurrentSession();
     String sql = "select DISTINCT match_id "
-            + "from ot_level2_match "
+            + "from cross_object_match "
             + "where mt_id=" + starType
             + " ORDER BY match_id;";
 
@@ -51,9 +51,9 @@ public class CrossObjectMatchDaoImpl extends BaseHibernateDaoImpl<CrossObjectMat
   @Override
   public void updateOt2HisMatchId(long curId, long fromId, long toId) {
 
-    String sql1 = "select * from ot_level2_match where mt_id=6 and ot_id=" + curId + " and match_id=" + toId;
-    String sql2 = "update ot_level2_match set match_id=" + toId + " where mt_id=6 and match_id=" + fromId;
-    String sql3 = "delete from ot_level2_match where mt_id=6 and ot_id=" + curId + " and match_id=" + toId;
+    String sql1 = "select * from cross_object_match where mt_id=6 and ot_id=" + curId + " and match_id=" + toId;
+    String sql2 = "update cross_object_match set match_id=" + toId + " where mt_id=6 and match_id=" + fromId;
+    String sql3 = "delete from cross_object_match where mt_id=6 and ot_id=" + curId + " and match_id=" + toId;
 
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql1).addEntity(CrossObjectMatch.class);
@@ -64,4 +64,24 @@ public class CrossObjectMatchDaoImpl extends BaseHibernateDaoImpl<CrossObjectMat
     }
   }
 
+
+ @Override
+  public List<OtLevel2MatchShow> getByOt2Name(String otName, Boolean queryHis) {
+    Session session = getCurrentSession();
+    String sql = "select mt.comments match_table_name, ot2h.name ot2_name, olm.* " //显示match_table_name不便于理解，偷懒，直接显示注释中文名
+            + "from cross_object_match olm "
+            + "inner join match_table mt on mt.mt_id=olm.mt_id " // and mt.match_table_name='ot_level2_his'
+            + "left join cross_object_his ot2h on ot2h.co_id=olm.match_id and mt.match_table_name='cross_object_his'"
+            + "inner join ";
+
+    if (queryHis) {
+      sql += " cross_object_his ";
+    } else {
+      sql += " cross_object ";
+    }
+    sql += "ot2 on ot2.co_id=olm.ot_id and ot2.name='" + otName + "';";
+
+    Query q = session.createSQLQuery(sql).addEntity(OtLevel2MatchShow.class);
+    return q.list();
+  }
 }

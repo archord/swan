@@ -1,25 +1,23 @@
 package com.gwac.action;
 
 import com.gwac.dao.CrossObjectDao;
-import com.gwac.model.CrossObject;
-import com.gwac.model4.CrossObjectQueryParameter;
-import com.gwac.util.CommonFunction;
-import static com.opensymphony.xwork2.Action.SUCCESS;
+import com.gwac.dao.CrossObjectMatchDao;
+import com.gwac.dao.OtLevel2Dao;
+import com.gwac.model.OtLevel2MatchShow;
 import com.opensymphony.xwork2.ActionSupport;
 import java.util.*;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.convention.annotation.Result;
-import org.apache.struts2.interceptor.ApplicationAware;
 
 @Result(name = "success", type = "json")
-public class GetCrossObjectList extends ActionSupport implements ApplicationAware {
+public class GetCrossObjectMatchList extends ActionSupport {
 
-  private static final long serialVersionUID = 5073694279068543593L;
-  private static final Log log = LogFactory.getLog(GetCrossObjectList.class);
+  private static final long serialVersionUID = 5078264277068533593L;
+  private static final Log log = LogFactory.getLog(GetCrossObjectMatchList.class);
   // Your result List
-  private List<CrossObject> gridModel;
+  private List<OtLevel2MatchShow> gridModel;
   // get how many rows we want to have into the grid - rowNum attribute in the
   // grid
   private Integer rows = 0;
@@ -44,49 +42,42 @@ public class GetCrossObjectList extends ActionSupport implements ApplicationAwar
   private Integer records = 0;
   private boolean loadonce = false;
   @Resource
-  private CrossObjectDao obDao = null;
-  private CrossObjectQueryParameter ot2qp;
-
-  private Map<String, Object> appMap = null;
-  private String dateStr = null;
+  private CrossObjectMatchDao otmDao;
+  @Resource
+  private CrossObjectDao obDao;
+  private String otName;
+  private Boolean queryHis;
 
   @SuppressWarnings("unchecked")
-//  @Transactional(readOnly=true)
   public String execute() {
-    initObjType();
-    if (ot2qp.getDateStr()==null || ot2qp.getDateStr().isEmpty() || dateStr.equalsIgnoreCase(ot2qp.getDateStr())) {
-      ot2qp.setQueryHis(false);
+
+    int to = (rows * page);
+    int from = to - rows;
+
+    List<Integer> tlist = obDao.hisOrCurExist(otName);
+    if (!tlist.isEmpty()) {
+      Integer his = tlist.get(0);
+      queryHis = his == 1;
+      gridModel = otmDao.getByOt2Name(otName, queryHis);
     } else {
-      ot2qp.setQueryHis(true);
+      gridModel = new ArrayList();
     }
-//    System.out.println(ot2qp.toString());
-    gridModel = obDao.queryCrossObject(ot2qp);
-//    log.debug(gridModel.size());
+    records = gridModel.size();
+
+    if (totalrows != null) {
+      records = totalrows;
+    }
+    if (to > records) {
+      to = records;
+    }
+    total = (int) Math.ceil((double) records / (double) rows);
 
     return SUCCESS;
   }
 
-  public void initObjType() {
-    dateStr = (String) appMap.get("datestr");
-    if (null == dateStr) {
-      dateStr = CommonFunction.getUniqueDateStr();
-      appMap.put("datestr", dateStr);
-    }
-    dateStr = dateStr.substring(2);
-  }
-
-  public void checkIsHistory(CrossObjectQueryParameter ot2qp) {
-    String curUtc = CommonFunction.getCurUTCDateString();
-//    System.out.println(curUtc);
-    if (ot2qp.getStartDate().isEmpty() && ot2qp.getEndDate().isEmpty()) {
-      ot2qp.setQueryHis(false);
-    } else if (ot2qp.getStartDate().equals(curUtc) && ot2qp.getEndDate().equals(curUtc)) {
-      ot2qp.setQueryHis(false);
-    } else {
-      ot2qp.setQueryHis(true);
-    }
-  }
-
+//  public String getJSON() {
+//    return execute();
+//  }
   /**
    * @return how many rows we want to have into the grid
    */
@@ -147,24 +138,10 @@ public class GetCrossObjectList extends ActionSupport implements ApplicationAwar
 
     if (this.records > 0 && this.rows > 0) {
       this.total = (int) Math.ceil((double) this.records
-	      / (double) this.rows);
+              / (double) this.rows);
     } else {
       this.total = 0;
     }
-  }
-
-  /**
-   * @return an collection that contains the actual data
-   */
-  public List<CrossObject> getGridModel() {
-    return gridModel;
-  }
-
-  /**
-   * @param gridModel an collection that contains the actual data
-   */
-  public void setGridModel(List<CrossObject> gridModel) {
-    this.gridModel = gridModel;
   }
 
   /**
@@ -207,26 +184,54 @@ public class GetCrossObjectList extends ActionSupport implements ApplicationAwar
     this.searchOper = searchOper;
   }
 
+  public void setLoadonce(boolean loadonce) {
+    this.loadonce = loadonce;
+  }
+
   public void setTotalrows(Integer totalrows) {
     this.totalrows = totalrows;
   }
 
   /**
-   * @return the ot2qp
+   * @return the otName
    */
-  public CrossObjectQueryParameter getOt2qp() {
-    return ot2qp;
+  public String getOtName() {
+    return otName;
   }
 
   /**
-   * @param ot2qp the ot2qp to set
+   * @param otName the otName to set
    */
-  public void setOt2qp(CrossObjectQueryParameter ot2qp) {
-    this.ot2qp = ot2qp;
+  public void setOtName(String otName) {
+    this.otName = otName;
   }
 
-  @Override
-  public void setApplication(Map<String, Object> map) {
-    this.appMap = map;
+  /**
+   * @return the gridModel
+   */
+  public List<OtLevel2MatchShow> getGridModel() {
+    return gridModel;
   }
+
+  /**
+   * @param gridModel the gridModel to set
+   */
+  public void setGridModel(List<OtLevel2MatchShow> gridModel) {
+    this.gridModel = gridModel;
+  }
+
+  /**
+   * @return the queryHis
+   */
+  public Boolean getQueryHis() {
+    return queryHis;
+  }
+
+  /**
+   * @param queryHis the queryHis to set
+   */
+  public void setQueryHis(Boolean queryHis) {
+    this.queryHis = queryHis;
+  }
+
 }
