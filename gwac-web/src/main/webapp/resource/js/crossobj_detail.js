@@ -706,6 +706,10 @@ $(function () {
           "targets": [3],
           "data": "dont know",
           "render": formateRaDec2
+        }, {
+          "targets": [7],
+          "data": "dont know",
+          "render": formateMagErr
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -781,6 +785,15 @@ $(function () {
     var searchUrl = "http://www.minorplanetcenter.net/cgi-bin/mpcheck.cgi?TextArea=&radius=15&limit=20.0&oc=327&sort=d&mot=h&tmot=s&pdes=u&needed=f&ps=n&type=p&which=pos&";
     searchUrl += "year=" + date[0] + "&month=" + date[1] + "&day=" + day + "&ra=" + raStr + "&decl=" + decStr;
     return "<a href='" + searchUrl + "' title='点击在IAU小行星网站搜寻OT对应坐标' target='_blank'>" + data + "</a>";
+  }
+  
+  function formateMagErr(data, type, full, meta) {
+    var s2n=0;
+    if(data>0){
+      s2n=1.087/data;
+      s2n=s2n.toFixed(1);
+    }
+    return s2n;
   }
 
   function formateRowNumber(data, type, full, meta) {

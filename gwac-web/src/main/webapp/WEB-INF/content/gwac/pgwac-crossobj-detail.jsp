@@ -137,7 +137,7 @@
           </div>
           <div id="ot2-record" class="ot2-table-show">
             <table id="ot2-record-table" class="display" cellspacing="0" width="100%">
-              <thead><tr><th>ID</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>X</th><th>Y</th><th>星等</th><th>星等误差</th><th>原FITS图</th>
+              <thead><tr><th>ID</th><th>时间(UTC)</th><th>RA</th><th>DEC</th><th>X</th><th>Y</th><th>星等</th><th>S2N</th><th>原FITS图</th>
                   <th>半高全宽</th><th>椭率</th><th>模板X</th><th>模板Y</th></tr></thead>
             </table>
           </div>

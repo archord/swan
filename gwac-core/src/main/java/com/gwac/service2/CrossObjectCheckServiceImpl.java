@@ -21,6 +21,7 @@ import com.gwac.model.CrossObject;
 import com.gwac.model.CrossObjectMatch;
 import com.gwac.model.CrossTask;
 import com.gwac.model.MatchTable;
+import com.gwac.model.OtLevel2Match;
 import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
 import com.gwac.model2.MinorPlanet;
@@ -235,6 +236,37 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
       long tEndTime = System.nanoTime();
       log.debug("search minor planet consume " + 1.0 * (tEndTime  - tStartTime) / 1e9 + " seconds.");
     }
+    
+    
+      if (true) {
+        long usnoStartTime = System.nanoTime();
+        ott = mtDao.getMatchTableByTypeName("usno");
+        Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);
+        for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
+          UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
+          Double distance = (Double) entry.getValue();
+          CrossObjectMatch ot2m = new CrossObjectMatch();
+          ot2m.setOtId(ot2.getCoId());
+          ot2m.setMtId(ott.getMtId());
+          ot2m.setMatchId(Long.valueOf(tmp.getRcdid()));
+          ot2m.setRa(tmp.getrAdeg());
+          ot2m.setDec(tmp.getdEdeg());
+          ot2m.setMag(tmp.getRmag());
+          ot2m.setDistance(distance.floatValue());
+          ot2m.setD25(new Float(0));
+          ot2mDao.save(ot2m);
+          flag = true;
+        }
+        if (tusno.size() > 0) {
+          ot2.setUsnoMatch(true);
+          ot2Dao.updateUsnoMatch(ot2);
+          log.debug(ot2.getName() + " usno :" + tusno.size());
+        } else {
+          log.debug(ot2.getName() + " usno not match");
+        }
+        long usnoEndTime = System.nanoTime();
+        log.debug("search usno table consume " + 1.0 * (usnoEndTime  - usnoStartTime) / 1e9 + " seconds.");
+      }
 
     if (flag) {
       ot2.setIsMatch((short) 2); //匹配成功，找到匹配对应体

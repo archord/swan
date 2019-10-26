@@ -4,6 +4,7 @@
 package com.gwac.job;
 
 import com.gwac.activemq.FollowUpObjectCheckMessageCreator;
+import com.gwac.dao.CrossObjectDao;
 import com.gwac.dao.FollowUpFitsfileDao;
 import com.gwac.dao.FollowUpObjectDao;
 import com.gwac.dao.FollowUpObjectTypeDao;
@@ -12,6 +13,7 @@ import com.gwac.dao.FollowUpRecordDao;
 import com.gwac.dao.OTCatalogDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.UploadFileUnstoreDao;
+import com.gwac.model.CrossObject;
 import com.gwac.model.FollowUpCatalog;
 import com.gwac.model.FollowUpFitsfile;
 import com.gwac.model.FollowUpObject;
@@ -57,6 +59,9 @@ public class FollowUpRecordServiceImpl implements BaseService {
   private FollowUpObjectTypeDao fuotDao;
   @Resource
   private FollowUpObjectDao fuoDao;
+  
+  @Resource
+  private CrossObjectDao crossObjDao;
 
   @Resource
   private JmsTemplate jmsTemplate;
@@ -130,11 +135,20 @@ public class FollowUpRecordServiceImpl implements BaseService {
   public void parseFollowUpInfo(long ufuId, String storePath, String fileName, String foName, String ot2Name) {
 
     long ot2Id = 0;
-    if (ot2Name != null && !ot2Name.trim().isEmpty()) {
-      OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name.trim(), false);
-      if (ot2 != null) {
-	ot2Id = ot2.getOtId();
-      } else {
+    if (ot2Name != null && !ot2Name.trim().isEmpty()) { //G191025_U003560
+      char otType = ot2Name.charAt(8);
+      if(otType=='C' || otType=='D'){
+	OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2Name.trim(), false);
+	if (ot2 != null) {
+	  ot2Id = ot2.getOtId();
+	} 
+      }else if(otType=='U'){
+	CrossObject ot2 = crossObjDao.getCrossObjectByName(ot2Name.trim(), false);
+	if (ot2 != null) {
+	  ot2Id = ot2.getCoId();
+	} 
+      }
+      if(ot2Id==0){
 	log.warn("can not find ot2:" + ot2Name);
       }
     }

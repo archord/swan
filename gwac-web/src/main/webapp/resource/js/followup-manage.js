@@ -183,11 +183,19 @@ $(function () {
   /*full: json对象；meta：表格元素*/
   function formateOt2(data, type, full, meta) {
     var content = "";
-    if (full.fo_name.trim().length === 18 && full.fo_name[7] === '_') {//fo_name在数据库中定长为20, G180620_C00678_001
-      var name = full.fo_name.substring(0, 14);
-      var gwacRootURL = $("#gwacRootURL").val();
-      var searchUrl = gwacRootURL + "/gwac/pgwac-ot-detail2.action?otName=" + name;
+    var tflag = full.fo_name[8];
+    var name = full.obj_name;
+    var gwacRootURL = $("#gwacRootURL").val();
+    if (tflag === 'C' || tflag==='U' || tflag==='D') {//fo_name在数据库中定长为20, G180620_C00678_001
+      var searchUrl = gwacRootURL;
+      if(tflag === 'C' || tflag==='D' ){
+        searchUrl = searchUrl + "/gwac/pgwac-ot-detail2.action?otName=" + name;
+      }else if(tflag === 'U'){
+        searchUrl = searchUrl + "/gwac/pgwac-crossobj-detail.action?name=" + name;
+      }
       content = "<a href='" + searchUrl + "' title='点击打开OT2详细页面' target='_blank'>" + name + "</a>";
+    }else{
+      content=name;
     }
     return content;
   }
