@@ -126,7 +126,7 @@ public class FollowUpObservationTriggerServiceImpl implements BaseService {
       jmsTemplate.send(otFollowDest, tmc);
       log.debug(ot2fp.getTriggerMsg());
 
-      fuo.setExecuteStatus('1');
+      fuo.setExecuteStatus('0');  //1 ->0
       fuoDao.update(fuo);
     }
 

@@ -14,6 +14,7 @@ import com.gwac.dao.FitsFile2DAO;
 import com.gwac.dao.FitsFileCutDAO;
 import com.gwac.dao.FitsFileCutRefDAO;
 import com.gwac.dao.ImageStatusParameterDao;
+import com.gwac.dao.ObservationRecordStatisticDao;
 import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
 import com.gwac.dao.OtObserveRecordDAO;

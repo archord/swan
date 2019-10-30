@@ -149,7 +149,7 @@ public class OTFollowUp extends ActionSupport implements SessionAware {
 	  setResult("send followup message error!");
 	  log.error("send followup message error:", e);
 	}
-	fo.setExecuteStatus('1');
+	fo.setExecuteStatus('0'); //1 ->0
       } else {
 	fo.setExecuteStatus('0');
       }

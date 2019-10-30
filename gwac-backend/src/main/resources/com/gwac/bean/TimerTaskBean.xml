@@ -104,6 +104,18 @@
     <property name="concurrent" value="false" />
   </bean> 
   
+  <bean id="observationRecordStatisticJob" 
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+    <property name="targetObject" ref="observationRecordStatisticService" /> 
+    <property name="targetMethod" value="startJob" /> 
+    <property name="concurrent" value="false" />
+  </bean> 
+  
+  <bean id="observationRecordStatisticTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="observationRecordStatisticJob" />
+    <property name="cronExpression" value="0 0 6 * * ?"/> <!-- 06:00:00 -->
+  </bean>
+  
   <bean id="ot2ReFollowUpTrigger" 
         class="org.springframework.scheduling.quartz.SimpleTriggerBean">
     <property name="jobDetail" ref="ot2ReFollowUpJob" />
@@ -206,6 +218,7 @@
         <ref bean="otTmplTrigger" />
         <!--<ref bean="findMoveObjectTrigger" />-->
         <ref bean="ot2ReFollowUpTrigger" />
+        <ref bean="observationRecordStatisticTrigger" />
         
         <!--<ref bean="ot2CheckTrigger" />-->
         

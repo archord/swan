@@ -128,50 +128,50 @@ public class OTFollowListener implements MessageListener {
       String followName = map.getString("followName");
       String followPlan = map.getString("followPlan");
       Short tspId = map.getShort("tspId");
-      log.debug("receive followName=" + followName);
-      log.debug("receive followPlan=" + followPlan);
+      log.info("receive followName=" + followName);
+      log.info("receive followPlan=" + followPlan);
       log.debug("receive tspId=" + tspId);
-
-      char executeStatus = '1';
-      dao.updateExecuteStatus(followName, executeStatus);
-
-      if (!isBeiJingServer && !isTestServer) {
-	Socket socket = null;
-	DataOutputStream out = null;
-	String tIP;
-	int tPort;
-	if (tspId == 1) {
-	  tIP = serverIP;
-	  tPort = serverPort;
-	} else if (tspId == 2) {
-	  tIP = server30IP;
-	  tPort = server30Port;
-	} else {
-	  log.debug("telescope error: tspId=" + tspId);
-	  return;
-	}
-	try {
-	  socket = new Socket(tIP, tPort);
-	  out = new DataOutputStream(socket.getOutputStream());
-
-	  try {
-	    out.write(followPlan.getBytes());
-	    out.flush();
-	    log.debug("send ot2 followPlan to " + tIP + ":" + tPort + ", message:\n" + followPlan);
-	  } catch (IOException ex) {
-	    log.error("send ot2 followPlan error.", ex);
-	  }
-	  try {
-	    out.close();
-	    socket.close();
-	  } catch (IOException ex) {
-	    log.error("send ot2 followPlan, close socket error.", ex);
-	  }
-	} catch (IOException ex) {
-	  log.error("send ot2 followPlan to " + tIP + ":" + tPort + ", message:\n" + followPlan);
-	  log.error("send ot2 followPlan, cannot connect to server.", ex);
-	}
-      }
+//
+//      char executeStatus = '1';
+//      dao.updateExecuteStatus(followName, executeStatus);
+//
+//      if (!isBeiJingServer && !isTestServer) {
+//	Socket socket = null;
+//	DataOutputStream out = null;
+//	String tIP;
+//	int tPort;
+//	if (tspId == 1) {
+//	  tIP = serverIP;
+//	  tPort = serverPort;
+//	} else if (tspId == 2) {
+//	  tIP = server30IP;
+//	  tPort = server30Port;
+//	} else {
+//	  log.debug("telescope error: tspId=" + tspId);
+//	  return;
+//	}
+//	try {
+//	  socket = new Socket(tIP, tPort);
+//	  out = new DataOutputStream(socket.getOutputStream());
+//
+//	  try {
+//	    out.write(followPlan.getBytes());
+//	    out.flush();
+//	    log.debug("send ot2 followPlan to " + tIP + ":" + tPort + ", message:\n" + followPlan);
+//	  } catch (IOException ex) {
+//	    log.error("send ot2 followPlan error.", ex);
+//	  }
+//	  try {
+//	    out.close();
+//	    socket.close();
+//	  } catch (IOException ex) {
+//	    log.error("send ot2 followPlan, close socket error.", ex);
+//	  }
+//	} catch (IOException ex) {
+//	  log.error("send ot2 followPlan to " + tIP + ":" + tPort + ", message:\n" + followPlan);
+//	  log.error("send ot2 followPlan, cannot connect to server.", ex);
+//	}
+//      }
 
     } catch (JMSException e) {
       log.error("receive followPlan error!", e);

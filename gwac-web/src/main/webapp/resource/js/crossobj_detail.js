@@ -687,9 +687,9 @@ $(function () {
         {"data": "x"},
         {"data": "y"},
         {"data": "mag"},
+        {"data": "fwhm"},
         {"data": "magerr"},
         {"data": "ffName"},
-        {"data": "fwhm"},
         {"data": "ellipticity"},
         {"data": "XTemp"},
         {"data": "YTemp"}
@@ -707,7 +707,7 @@ $(function () {
           "data": "dont know",
           "render": formateRaDec2
         }, {
-          "targets": [7],
+          "targets": [8],
           "data": "dont know",
           "render": formateMagErr
         }],

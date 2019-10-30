@@ -216,7 +216,7 @@ public class OTLookBack extends ActionSupport {
       fo.setTriggerType('0'); //0:AUTO; 1:MANUAL, 2:PLANNING
       fo.setTelescopeId(ot2fp.getTelescope());
       fo.setBeginTime(fo.getTriggerTime());
-      fo.setExecuteStatus('1');
+      fo.setExecuteStatus('0');   //1 ->0
       fo.setProcessResult('0');
       fo.setObjName(ot2fp.getOtName().trim());
       fo.setAutoLoop(1);
