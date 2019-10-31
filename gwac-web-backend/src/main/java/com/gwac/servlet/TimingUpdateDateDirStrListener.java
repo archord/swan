@@ -56,6 +56,6 @@ public class TimingUpdateDateDirStrListener implements ServletContextListener {
   public void updateDateStr(ServletContext context) {
     String dateStr = CommonFunction.getUniqueDateStr();
     context.setAttribute("datestr", dateStr);
-    log.debug("update dateStr=" + context.getAttribute("datestr"));
+    log.info("update dateStr=" + context.getAttribute("datestr"));
   }
 }

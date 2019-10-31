@@ -132,7 +132,7 @@ public class CrossRecordDaoImpl extends BaseHibernateDaoImpl<CrossRecord> implem
 
     String unionSql = "";
     if (queryHis) {
-      unionSql = sql1 + " union " + sql2 + " order by date_ut asc";
+      unionSql = sql1 + " union " + sql2 + " order by date_utc asc";
     } else {
       unionSql = sql1 + " order by date_utc asc";
     }

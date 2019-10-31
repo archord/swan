@@ -53,7 +53,8 @@ public class GetCrossObjectList extends ActionSupport implements ApplicationAwar
   @SuppressWarnings("unchecked")
 //  @Transactional(readOnly=true)
   public String execute() {
-    initObjType();
+    dateStr = CommonFunction.getUniqueDateStr();
+    dateStr = dateStr.substring(2);
     if (ot2qp.getDateStr()==null || ot2qp.getDateStr().isEmpty() || dateStr.equalsIgnoreCase(ot2qp.getDateStr())) {
       ot2qp.setQueryHis(false);
     } else {
@@ -64,15 +65,6 @@ public class GetCrossObjectList extends ActionSupport implements ApplicationAwar
 //    log.debug(gridModel.size());
 
     return SUCCESS;
-  }
-
-  public void initObjType() {
-    dateStr = (String) appMap.get("datestr");
-    if (null == dateStr) {
-      dateStr = CommonFunction.getUniqueDateStr();
-      appMap.put("datestr", dateStr);
-    }
-    dateStr = dateStr.substring(2);
   }
 
   public void checkIsHistory(CrossObjectQueryParameter ot2qp) {
