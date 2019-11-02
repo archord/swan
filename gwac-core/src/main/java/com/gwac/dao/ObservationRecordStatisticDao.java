@@ -6,6 +6,7 @@
 package com.gwac.dao;
 
 import com.gwac.model.ObservationRecordStatistic;
+import java.util.List;
 
 /**
  *
@@ -14,5 +15,7 @@ import com.gwac.model.ObservationRecordStatistic;
 public interface ObservationRecordStatisticDao  extends BaseHibernateDao<ObservationRecordStatistic>{
   
   public void createTodayStatistic();
+  
+  public List<ObservationRecordStatistic> query(String startDate, String endDate, float cRa, float cDec, float radius);
   
 }

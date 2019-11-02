@@ -113,7 +113,7 @@
   
   <bean id="observationRecordStatisticTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
     <property name="jobDetail" ref="observationRecordStatisticJob" />
-    <property name="cronExpression" value="0 0 6 * * ?"/> <!-- 06:00:00 -->
+    <property name="cronExpression" value="0 0 7 * * ?"/> <!-- 07:00:00 -->
   </bean>
   
   <bean id="ot2ReFollowUpTrigger" 
