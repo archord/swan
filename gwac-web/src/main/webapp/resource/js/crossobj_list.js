@@ -44,7 +44,7 @@ $(function () {
 
   function getAutoFollowUp() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var setParameterUrl = "get-app-parameter2.action"
+    var setParameterUrl = "get-app-parameter2.action";
     var url = gwacRootURL + "/" + setParameterUrl;
     $.ajax({
       type: "get",
@@ -65,7 +65,7 @@ $(function () {
 
   function setAutoFollowUp(val) {
     var gwacRootURL = $("#gwacRootURL").val();
-    var setParameterUrl = "set-app-parameter2.action"
+    var setParameterUrl = "set-app-parameter2.action";
     var url = gwacRootURL + "/" + setParameterUrl;
     console.log(url);
     $.ajax({
@@ -142,7 +142,12 @@ $(function () {
 
   function loadOT2List() {
     var gwacRootURL = $("#gwacRootURL").val();
-    var queryUrl = gwacRootURL + "/get-cross-object-list.action?ot2qp.coId=";
+    var formData = $("#ot2QueryAction").serialize();
+    console.log(formData);
+    if (formData === 'ot2qp.lookBackCnn=' || formData === 'autoRefresh=on' || formData === '') {
+      formData = "ot2qp.coId=";
+    }
+    var queryUrl = gwacRootURL + "/get-cross-object-list.action?"+formData;
     ot2ListTable = $('#ot-list-table').DataTable({
       "deferRender": true,
       "processing": true,

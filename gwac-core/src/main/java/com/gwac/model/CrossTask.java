@@ -42,6 +42,7 @@ public class CrossTask implements java.io.Serializable {
   private Float usnoMag1;
   private Float usnoR2;
   private Float usnoMag2;
+  private Integer telescopeId;
   
 
   public CrossTask() {
@@ -381,4 +382,19 @@ public class CrossTask implements java.io.Serializable {
     this.usnoMag2 = usnoMag2;
   }
 
+
+  /**
+   * @return the usnnoMag2 
+   */
+  @Column(name = "telescope_id")
+  public Integer getTelescopeId() {
+    return telescopeId;
+  }
+
+  /**
+   * @param telescopeId the usnoMag2 to set
+   */
+  public void setTelescopeId(Integer telescopeId) {
+    this.telescopeId = telescopeId;
+  }
 }

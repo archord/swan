@@ -215,7 +215,7 @@
         <ref bean="moveDataToHisTrigger" />
         <!--<ref bean="followUpRecordTrigger" />-->
         <ref bean="followUpObservationTrigger" />
-        <ref bean="otTmplTrigger" />
+        <!--<ref bean="otTmplTrigger" />-->
         <!--<ref bean="findMoveObjectTrigger" />-->
         <ref bean="ot2ReFollowUpTrigger" />
         <ref bean="observationRecordStatisticTrigger" />

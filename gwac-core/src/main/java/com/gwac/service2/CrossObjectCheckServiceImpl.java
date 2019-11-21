@@ -14,6 +14,7 @@ import com.gwac.dao.CrossTaskDao;
 import com.gwac.dao2.MergedOtherDao;
 import com.gwac.dao2.MinorPlanetDao;
 import com.gwac.dao.MatchTableDao;
+import com.gwac.dao.OtHistoryRepeatDao;
 import com.gwac.dao.OtTmplWrongDao;
 import com.gwac.dao2.Rc3Dao;
 import com.gwac.dao2.UsnoCatalogDao;
@@ -21,6 +22,7 @@ import com.gwac.model.CrossObject;
 import com.gwac.model.CrossObjectMatch;
 import com.gwac.model.CrossTask;
 import com.gwac.model.MatchTable;
+import com.gwac.model.OtHistoryRepeat;
 import com.gwac.model.OtLevel2Match;
 import com.gwac.model2.Cvs;
 import com.gwac.model2.MergedOther;
@@ -89,7 +91,9 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
   private UsnoCatalogDao usnoDao;
   @Resource
   private CrossTaskDao crossTaskDao;
-  
+  @Resource
+  private OtHistoryRepeatDao otHistoryRepeatDao;
+
   @Override
   public void searchOT2(Long otId) {
 
@@ -103,7 +107,7 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
       return;
     }
     log.debug("search ot2: " + ot2.getCoId());
-    
+
     CrossTask crossTask = crossTaskDao.getById(ot2.getCtId());
 
     mergedSearchbox = crossTask.getMergedR();
@@ -131,153 +135,158 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
       ott = mtDao.getMatchTableByTypeName("cvs");
       Map<Cvs, Double> tcvsm = matchOt2InCvs(ot2, cvsSearchbox, cvsMag);
       for (Map.Entry<Cvs, Double> entry : tcvsm.entrySet()) {
-        Cvs tcvs = (Cvs) entry.getKey();
-        Double distance = (Double) entry.getValue();
-        CrossObjectMatch ot2m = new CrossObjectMatch();
-        ot2m.setOtId(ot2.getCoId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
-        ot2m.setRa(tcvs.getRadeg());
-        ot2m.setDec(tcvs.getDedeg());
-        ot2m.setMag(tcvs.getMag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(new Float(0));
-        ot2mDao.save(ot2m);
+	Cvs tcvs = (Cvs) entry.getKey();
+	Double distance = (Double) entry.getValue();
+	CrossObjectMatch ot2m = new CrossObjectMatch();
+	ot2m.setOtId(ot2.getCoId());
+	ot2m.setMtId(ott.getMtId());
+	ot2m.setMatchId(Long.valueOf(tcvs.getIdnum()));
+	ot2m.setRa(tcvs.getRadeg());
+	ot2m.setDec(tcvs.getDedeg());
+	ot2m.setMag(tcvs.getMag());
+	ot2m.setDistance(distance.floatValue());
+	ot2m.setD25(new Float(0));
+	ot2mDao.save(ot2m);
 
-        String cvsInfo = tcvs.getCvsid() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag();
-        log.debug("cvsInfo: " + cvsInfo);
-        flag = true;
+	String cvsInfo = tcvs.getCvsid() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag();
+	log.debug("cvsInfo: " + cvsInfo);
+	flag = true;
       }
       if (tcvsm.size() > 0) {
-        ot2.setCvsMatch(true);
-        ot2Dao.updateCvsMatch(ot2);
+	ot2.setCvsMatch(true);
+	ot2Dao.updateCvsMatch(ot2);
       }
 
       Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
       ott = mtDao.getMatchTableByTypeName("merged_other");
       for (Map.Entry<MergedOther, Double> entry : tmom.entrySet()) {
-        MergedOther tmo = (MergedOther) entry.getKey();
-        Double distance = (Double) entry.getValue();
+	MergedOther tmo = (MergedOther) entry.getKey();
+	Double distance = (Double) entry.getValue();
 
-        CrossObjectMatch ot2m = new CrossObjectMatch();
-        ot2m.setOtId(ot2.getCoId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
-        ot2m.setRa(tmo.getRadeg());
-        ot2m.setDec(tmo.getDedeg());
-        ot2m.setMag(tmo.getMag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(new Float(0));
-        ot2mDao.save(ot2m);
+	CrossObjectMatch ot2m = new CrossObjectMatch();
+	ot2m.setOtId(ot2.getCoId());
+	ot2m.setMtId(ott.getMtId());
+	ot2m.setMatchId(Long.valueOf(tmo.getIdnum()));
+	ot2m.setRa(tmo.getRadeg());
+	ot2m.setDec(tmo.getDedeg());
+	ot2m.setMag(tmo.getMag());
+	ot2m.setDistance(distance.floatValue());
+	ot2m.setD25(new Float(0));
+	ot2mDao.save(ot2m);
 
-        String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
-        log.debug("moInfo: " + moInfo);
-        flag = true;
+	String moInfo = tmo.getIdnum() + " " + tmo.getRadeg() + " " + tmo.getDedeg() + " " + tmo.getMag();
+	log.debug("moInfo: " + moInfo);
+	flag = true;
       }
       if (tmom.size() > 0) {
-        ot2.setOtherMatch(true);
-        ot2Dao.updateOtherMatch(ot2);
+	ot2.setOtherMatch(true);
+	ot2Dao.updateOtherMatch(ot2);
       }
 
       ott = mtDao.getMatchTableByTypeName("rc3");
       Map<Rc3, Double> trc3m = matchOt2InRc3(ot2, rc3Searchbox, rc3MinMag, rc3MaxMag);
       for (Map.Entry<Rc3, Double> entry : trc3m.entrySet()) {
-        Rc3 trc3 = (Rc3) entry.getKey();
-        Double distance = (Double) entry.getValue();
+	Rc3 trc3 = (Rc3) entry.getKey();
+	Double distance = (Double) entry.getValue();
 
-        CrossObjectMatch ot2m = new CrossObjectMatch();
-        ot2m.setOtId(ot2.getCoId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
-        ot2m.setRa(trc3.getRadeg());
-        ot2m.setDec(trc3.getDedeg());
-        ot2m.setMag(trc3.getMvmag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(trc3.getD25());
-        ot2mDao.save(ot2m);
+	CrossObjectMatch ot2m = new CrossObjectMatch();
+	ot2m.setOtId(ot2.getCoId());
+	ot2m.setMtId(ott.getMtId());
+	ot2m.setMatchId(Long.valueOf(trc3.getIdnum()));
+	ot2m.setRa(trc3.getRadeg());
+	ot2m.setDec(trc3.getDedeg());
+	ot2m.setMag(trc3.getMvmag());
+	ot2m.setDistance(distance.floatValue());
+	ot2m.setD25(trc3.getD25());
+	ot2mDao.save(ot2m);
 
-        String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
-        log.debug("rc3Info: " + moInfo);
-        flag = true;
+	String moInfo = trc3.getIdnum() + " " + trc3.getRadeg() + " " + trc3.getDedeg() + " " + trc3.getMvmag();
+	log.debug("rc3Info: " + moInfo);
+	flag = true;
       }
       if (trc3m.size() > 0) {
-        ot2.setRc3Match(true);
-        ot2Dao.updateRc3Match(ot2);
+	ot2.setRc3Match(true);
+	ot2Dao.updateRc3Match(ot2);
       }
 
       ott = mtDao.getMatchTableByTypeName("minor_planet");
       long tStartTime = System.nanoTime();
       Map<MinorPlanet, Double> tmpm = matchOt2InMinorPlanet(ot2, minorPlanetSearchbox, minorPlanetMag);//minorPlanetSearchbox
       for (Map.Entry<MinorPlanet, Double> entry : tmpm.entrySet()) {
-        MinorPlanet tmp = (MinorPlanet) entry.getKey();
-        Double distance = (Double) entry.getValue();
+	MinorPlanet tmp = (MinorPlanet) entry.getKey();
+	Double distance = (Double) entry.getValue();
 
-        CrossObjectMatch ot2m = new CrossObjectMatch();
-        ot2m.setOtId(ot2.getCoId());
-        ot2m.setMtId(ott.getMtId());
-        ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
-        ot2m.setRa(tmp.getLon());
-        ot2m.setDec(tmp.getLat());
-        ot2m.setMag(tmp.getVmag());
-        ot2m.setDistance(distance.floatValue());
-        ot2m.setD25(new Float(0));
-        ot2mDao.save(ot2m);
+	CrossObjectMatch ot2m = new CrossObjectMatch();
+	ot2m.setOtId(ot2.getCoId());
+	ot2m.setMtId(ott.getMtId());
+	ot2m.setMatchId(Long.valueOf(tmp.getIdnum()));
+	ot2m.setRa(tmp.getLon());
+	ot2m.setDec(tmp.getLat());
+	ot2m.setMag(tmp.getVmag());
+	ot2m.setDistance(distance.floatValue());
+	ot2m.setD25(new Float(0));
+	ot2mDao.save(ot2m);
 
-        String moInfo = tmp.getIdnum() + " " + tmp.getMpid() + " " + tmp.getLon() + " " + tmp.getLat();
-        log.debug("moInfo: " + moInfo);
-        flag = true;
+	String moInfo = tmp.getIdnum() + " " + tmp.getMpid() + " " + tmp.getLon() + " " + tmp.getLat();
+	log.debug("moInfo: " + moInfo);
+	flag = true;
       }
       if (tmpm.size() > 0) {
-        ot2.setMinorPlanetMatch(true);
-        ot2Dao.updateMinorPlanetMatch(ot2);
-        ot2.setOtType((short) 2);
-        ot2Dao.updateOtType(ot2);
+	ot2.setMinorPlanetMatch(true);
+	ot2Dao.updateMinorPlanetMatch(ot2);
+	ot2.setOtType((short) 2);
+	ot2Dao.updateOtType(ot2);
+      }else{
+	List<OtHistoryRepeat> otHistoryRepeats = otHistoryRepeatDao.exist(crossTask.getTelescopeId(), ot2.getX(), ot2.getY());
+	if(otHistoryRepeats.size()>0){
+	  ot2.setOtType((short) 28);
+	  ot2Dao.updateOtType(ot2);
+	}
       }
       long tEndTime = System.nanoTime();
-      log.debug("search minor planet consume " + 1.0 * (tEndTime  - tStartTime) / 1e9 + " seconds.");
+      log.debug("search minor planet consume " + 1.0 * (tEndTime - tStartTime) / 1e9 + " seconds.");
     }
     
-    
-      if (true) {
-        long usnoStartTime = System.nanoTime();
-        ott = mtDao.getMatchTableByTypeName("usno");
-        Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);
-        for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
-          UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
-          Double distance = (Double) entry.getValue();
-          CrossObjectMatch ot2m = new CrossObjectMatch();
-          ot2m.setOtId(ot2.getCoId());
-          ot2m.setMtId(ott.getMtId());
-          ot2m.setMatchId(Long.valueOf(tmp.getRcdid()));
-          ot2m.setRa(tmp.getrAdeg());
-          ot2m.setDec(tmp.getdEdeg());
-          ot2m.setMag(tmp.getRmag());
-          ot2m.setDistance(distance.floatValue());
-          ot2m.setD25(new Float(0));
-          ot2mDao.save(ot2m);
-          flag = true;
-        }
-        if (tusno.size() > 0) {
-          ot2.setUsnoMatch(true);
-          ot2Dao.updateUsnoMatch(ot2);
-          log.debug(ot2.getName() + " usno :" + tusno.size());
-        } else {
-          log.debug(ot2.getName() + " usno not match");
-        }
-        long usnoEndTime = System.nanoTime();
-        log.debug("search usno table consume " + 1.0 * (usnoEndTime  - usnoStartTime) / 1e9 + " seconds.");
+    if (true) {
+      long usnoStartTime = System.nanoTime();
+      ott = mtDao.getMatchTableByTypeName("usno");
+      Map<UsnoCatalog, Double> tusno = matchOt2InUsnoCatalog2(ot2);
+      for (Map.Entry<UsnoCatalog, Double> entry : tusno.entrySet()) {
+	UsnoCatalog tmp = (UsnoCatalog) entry.getKey();
+	Double distance = (Double) entry.getValue();
+	CrossObjectMatch ot2m = new CrossObjectMatch();
+	ot2m.setOtId(ot2.getCoId());
+	ot2m.setMtId(ott.getMtId());
+	ot2m.setMatchId(Long.valueOf(tmp.getRcdid()));
+	ot2m.setRa(tmp.getrAdeg());
+	ot2m.setDec(tmp.getdEdeg());
+	ot2m.setMag(tmp.getRmag());
+	ot2m.setDistance(distance.floatValue());
+	ot2m.setD25(new Float(0));
+	ot2mDao.save(ot2m);
+	flag = true;
       }
+      if (tusno.size() > 0) {
+	ot2.setUsnoMatch(true);
+	ot2Dao.updateUsnoMatch(ot2);
+	log.debug(ot2.getName() + " usno :" + tusno.size());
+      } else {
+	log.debug(ot2.getName() + " usno not match");
+      }
+      long usnoEndTime = System.nanoTime();
+      log.debug("search usno table consume " + 1.0 * (usnoEndTime - usnoStartTime) / 1e9 + " seconds.");
+    }
 
     if (flag) {
       ot2.setIsMatch((short) 2); //匹配成功，找到匹配对应体
       ot2Dao.updateIsMatch(ot2);
-    } 
+    }
 //    else {//由定时查询改为消息队列查询后，这里需要主动更新
 //      ot2.setIsMatch((short) 1); //匹配不成功，未找到匹配对应体
 //      ot2Dao.updateIsMatch(ot2);
 //    }
     allStartTime = System.nanoTime();
-    log.debug("search ot2 " + ot2.getCoId() + " total consume " + 1.0 * (allStartTime  - allEndTime) / 1e9 + " seconds.");
+    log.debug("search ot2 " + ot2.getCoId() + " total consume " + 1.0 * (allStartTime - allEndTime) / 1e9 + " seconds.");
   }
 
   /**
@@ -297,7 +306,7 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     for (Cvs cvs : cvss) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), cvs.getRadeg(), cvs.getDedeg());
       if (tDis < minDis) {
-        rst.put(cvs, tDis);
+	rst.put(cvs, tDis);
       }
     }
     return rst;
@@ -312,7 +321,7 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     for (MergedOther obj : objs) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRadeg(), obj.getDedeg());
       if (tDis < minDis) {
-        rst.put(obj, tDis);
+	rst.put(obj, tDis);
       }
     }
     return rst;
@@ -328,14 +337,14 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     for (Rc3 obj : objs) {
       double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getRadeg(), obj.getDedeg());
       if (obj.getD25() > CommonFunction.MINFLOAT) {
-        minDis = obj.getD25() / 60; //d25单位为角分
+	minDis = obj.getD25() / 60; //d25单位为角分
       } else if (obj.getAngularSize() > CommonFunction.MINFLOAT) {
-        minDis = obj.getAngularSize() / 60; //AngularSize单位为角分
+	minDis = obj.getAngularSize() / 60; //AngularSize单位为角分
       } else {
-        minDis = searchRadius;
+	minDis = searchRadius;
       }
       if (tDis < minDis) {
-        rst.put(obj, tDis);
+	rst.put(obj, tDis);
       }
     }
     return rst;
@@ -364,11 +373,11 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
       Calendar cal = Calendar.getInstance();
       cal.setTime(ot2.getFoundTimeUtc());
       double subDay = cal.get(Calendar.HOUR_OF_DAY) / 24.0 + cal.get(Calendar.MINUTE) / 24.0 / 60.0
-              + cal.get(Calendar.SECOND) / 24.0 / 60.0 / 60;
+	      + cal.get(Calendar.SECOND) / 24.0 / 60.0 / 60;
       for (MinorPlanet obj : objs) {
-        double preRa = obj.getLon() + obj.getDlon() * subDay / Math.cos(obj.getLat() * 0.017453293);
-        double preDec = obj.getLat() + obj.getDlat() * subDay;
-        double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), preRa, preDec);
+	double preRa = obj.getLon() + obj.getDlon() * subDay / Math.cos(obj.getLat() * 0.017453293);
+	double preDec = obj.getLat() + obj.getDlat() * subDay;
+	double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), preRa, preDec);
 //        if (obj.getIdnum() == 30 || obj.getIdnum() == 115 || obj.getIdnum() == 654) {
 //          log.debug("start*******************************");
 //          log.debug("ot2checkotname=" + ot2.getName());
@@ -381,9 +390,9 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
 //          }
 //          log.debug("end*******************************");
 //        }
-        if (tDis < minDis) {
-          rst.put(obj, tDis);
-        }
+	if (tDis < minDis) {
+	  rst.put(obj, tDis);
+	}
       }
     } else {
       log.warn("table " + tableName + " not exists!");
@@ -414,16 +423,16 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     List<String> tableNames = getUsnoTableNames(ot2, usnoSearchbox);
     for (String tName : tableNames) {
       if (usnoDao.tableExists(tName)) {
-        List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), usnoSearchbox, usnoMag, tName);
-        for (UsnoCatalog obj : objs) {
-          double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-          if (tDis < minDis) {
-            minDis = tDis;
-            tobj = obj;
-          }
-        }
+	List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), usnoSearchbox, usnoMag, tName);
+	for (UsnoCatalog obj : objs) {
+	  double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	  if (tDis < minDis) {
+	    minDis = tDis;
+	    tobj = obj;
+	  }
+	}
       } else {
-        log.warn("table " + tName + " not exists!");
+	log.warn("table " + tName + " not exists!");
       }
     }
     if (tobj != null) {
@@ -434,18 +443,18 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     if (rst.isEmpty()) {
       tableNames = getUsnoTableNames(ot2, tdis2);
       for (String tName : tableNames) {
-        if (usnoDao.tableExists(tName)) {
-          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis2, tmag2, tName);
-          for (UsnoCatalog obj : objs) {
-            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-            if (tDis < minDis) {
-              minDis = tDis;
-              tobj = obj;
-            }
-          }
-        } else {
-          log.warn("table " + tName + " not exists!");
-        }
+	if (usnoDao.tableExists(tName)) {
+	  List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis2, tmag2, tName);
+	  for (UsnoCatalog obj : objs) {
+	    double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	    if (tDis < minDis) {
+	      minDis = tDis;
+	      tobj = obj;
+	    }
+	  }
+	} else {
+	  log.warn("table " + tName + " not exists!");
+	}
       }
     }
     if (tobj != null) {
@@ -457,18 +466,18 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     if (rst.isEmpty()) {
       tableNames = getUsnoTableNames(ot2, tdis3);
       for (String tName : tableNames) {
-        if (usnoDao.tableExists(tName)) {
-          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis3, tmag3, tName);
-          for (UsnoCatalog obj : objs) {
-            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-            if (tDis < minDis) {
-              minDis = tDis;
-              tobj = obj;
-            }
-          }
-        } else {
-          log.warn("table " + tName + " not exists!");
-        }
+	if (usnoDao.tableExists(tName)) {
+	  List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis3, tmag3, tName);
+	  for (UsnoCatalog obj : objs) {
+	    double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	    if (tDis < minDis) {
+	      minDis = tDis;
+	      tobj = obj;
+	    }
+	  }
+	} else {
+	  log.warn("table " + tName + " not exists!");
+	}
       }
     }
     if (tobj != null) {
@@ -479,18 +488,18 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     if (rst.isEmpty()) {
       tableNames = getUsnoTableNames(ot2, tdis4);
       for (String tName : tableNames) {
-        if (usnoDao.tableExists(tName)) {
-          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis4, tmag4, tName);
-          for (UsnoCatalog obj : objs) {
-            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-            if (tDis < minDis) {
-              minDis = tDis;
-              tobj = obj;
-            }
-          }
-        } else {
-          log.warn("table " + tName + " not exists!");
-        }
+	if (usnoDao.tableExists(tName)) {
+	  List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis4, tmag4, tName);
+	  for (UsnoCatalog obj : objs) {
+	    double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	    if (tDis < minDis) {
+	      minDis = tDis;
+	      tobj = obj;
+	    }
+	  }
+	} else {
+	  log.warn("table " + tName + " not exists!");
+	}
       }
     }
     if (tobj != null) {
@@ -501,18 +510,18 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     if (rst.isEmpty()) {
       tableNames = getUsnoTableNames(ot2, tdis5);
       for (String tName : tableNames) {
-        if (usnoDao.tableExists(tName)) {
-          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis5, tmag5, tName);
-          for (UsnoCatalog obj : objs) {
-            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-            if (tDis < minDis) {
-              minDis = tDis;
-              tobj = obj;
-            }
-          }
-        } else {
-          log.warn("table " + tName + " not exists!");
-        }
+	if (usnoDao.tableExists(tName)) {
+	  List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis5, tmag5, tName);
+	  for (UsnoCatalog obj : objs) {
+	    double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	    if (tDis < minDis) {
+	      minDis = tDis;
+	      tobj = obj;
+	    }
+	  }
+	} else {
+	  log.warn("table " + tName + " not exists!");
+	}
       }
     }
     if (tobj != null) {
@@ -523,18 +532,18 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     if (rst.isEmpty()) {
       tableNames = getUsnoTableNames(ot2, tdis6);
       for (String tName : tableNames) {
-        if (usnoDao.tableExists(tName)) {
-          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis6, tmag6, tName);
-          for (UsnoCatalog obj : objs) {
-            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-            if (tDis < minDis) {
-              minDis = tDis;
-              tobj = obj;
-            }
-          }
-        } else {
-          log.warn("table " + tName + " not exists!");
-        }
+	if (usnoDao.tableExists(tName)) {
+	  List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), tdis6, tmag6, tName);
+	  for (UsnoCatalog obj : objs) {
+	    double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	    if (tDis < minDis) {
+	      minDis = tDis;
+	      tobj = obj;
+	    }
+	  }
+	} else {
+	  log.warn("table " + tName + " not exists!");
+	}
       }
     }
     if (tobj != null) {
@@ -549,33 +558,33 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
     List<String> tableNames = getUsnoTableNames(ot2, usnoSearchbox);
     for (String tName : tableNames) {
       if (usnoDao.tableExists(tName)) {
-        List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), usnoSearchbox, usnoMag, tName);
-        double minDis = usnoSearchbox;
-        for (UsnoCatalog obj : objs) {
-          double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-          if (tDis < minDis) {
-            rst.put(obj, tDis);
-          }
-        }
+	List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), usnoSearchbox, usnoMag, tName);
+	double minDis = usnoSearchbox;
+	for (UsnoCatalog obj : objs) {
+	  double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	  if (tDis < minDis) {
+	    rst.put(obj, tDis);
+	  }
+	}
       } else {
-        log.warn("table " + tName + " not exists!");
+	log.warn("table " + tName + " not exists!");
       }
     }
     if (rst.isEmpty()) {
       tableNames = getUsnoTableNames(ot2, usnoSearchbox2);
       for (String tName : tableNames) {
-        if (usnoDao.tableExists(tName)) {
-          List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), usnoSearchbox2, usnoMag2, tName);
-          double minDis = usnoSearchbox2;
-          for (UsnoCatalog obj : objs) {
-            double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
-            if (tDis < minDis) {
-              rst.put(obj, tDis);
-            }
-          }
-        } else {
-          log.warn("table " + tName + " not exists!");
-        }
+	if (usnoDao.tableExists(tName)) {
+	  List<UsnoCatalog> objs = usnoDao.queryByOt2(ot2.getRa(), ot2.getDec(), usnoSearchbox2, usnoMag2, tName);
+	  double minDis = usnoSearchbox2;
+	  for (UsnoCatalog obj : objs) {
+	    double tDis = CommonFunction.getGreatCircleDistance(ot2.getRa(), ot2.getDec(), obj.getrAdeg(), obj.getdEdeg());
+	    if (tDis < minDis) {
+	      rst.put(obj, tDis);
+	    }
+	  }
+	} else {
+	  log.warn("table " + tName + " not exists!");
+	}
       }
     }
     return rst;
@@ -589,8 +598,8 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
       int maxIdx = (int) ((90 + ot2.getDec() + searchBox) * 10);
       int minIdx = (int) ((90 + ot2.getDec() - searchBox) * 10);
       for (int i = minIdx; i <= maxIdx; i++) {
-        String tableName = String.format("%04d%s", i, ott.getMatchTableName());
-        rst.add(tableName);
+	String tableName = String.format("%04d%s", i, ott.getMatchTableName());
+	rst.add(tableName);
       }
     }
     return rst;

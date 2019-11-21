@@ -393,35 +393,35 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
       }
     }
 
-    ott = mtDao.getMatchTableByTypeName("ot_level2_his");
-    Map<OtTmplWrong, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
-    Boolean hisType = false;
-    for (Map.Entry<OtTmplWrong, Double> entry : tOT2Hism.entrySet()) {
-      OtTmplWrong tot2 = (OtTmplWrong) entry.getKey();
-      Double distance = (Double) entry.getValue();
-
-      OtLevel2Match ot2m = new OtLevel2Match();
-      ot2m.setOtId(ot2.getOtId());
-      ot2m.setMtId(ott.getMtId());
-      ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
-      ot2m.setRa(tot2.getRa());
-      ot2m.setDec(tot2.getDec());
-      ot2m.setMag(tot2.getMag());
-      ot2m.setDistance(distance.floatValue());
-      ot2mDao.save(ot2m);
-      flag = true;
-
-      if (!hisType && tot2.getOtClass() == '1') {
-        ot2.setOtType(tot2.getOttId());
-        ot2Dao.updateOTType(ot2);
-        hisType = true;
-      }
-    }
-    if (tOT2Hism.size() > 0) {
-      ot2.setOt2HisMatch((short) tOT2Hism.size());
-      ot2Dao.updateOt2HisMatch(ot2);
-      log.debug(ot2.getName() + " ot2his :" + tOT2Hism.size());
-    }
+//    ott = mtDao.getMatchTableByTypeName("ot_level2_his");
+//    Map<OtTmplWrong, Double> tOT2Hism = matchOt2His(ot2, ot2Searchbox, 0);
+//    Boolean hisType = false;
+//    for (Map.Entry<OtTmplWrong, Double> entry : tOT2Hism.entrySet()) {
+//      OtTmplWrong tot2 = (OtTmplWrong) entry.getKey();
+//      Double distance = (Double) entry.getValue();
+//
+//      OtLevel2Match ot2m = new OtLevel2Match();
+//      ot2m.setOtId(ot2.getOtId());
+//      ot2m.setMtId(ott.getMtId());
+//      ot2m.setMatchId(Long.valueOf(tot2.getOtId()));
+//      ot2m.setRa(tot2.getRa());
+//      ot2m.setDec(tot2.getDec());
+//      ot2m.setMag(tot2.getMag());
+//      ot2m.setDistance(distance.floatValue());
+//      ot2mDao.save(ot2m);
+//      flag = true;
+//
+//      if (!hisType && tot2.getOtClass() == '1') {
+//        ot2.setOtType(tot2.getOttId());
+//        ot2Dao.updateOTType(ot2);
+//        hisType = true;
+//      }
+//    }
+//    if (tOT2Hism.size() > 0) {
+//      ot2.setOt2HisMatch((short) tOT2Hism.size());
+//      ot2Dao.updateOt2HisMatch(ot2);
+//      log.debug(ot2.getName() + " ot2his :" + tOT2Hism.size());
+//    }
 
     try {
       boolean tflag = filtOT2InCcdPixel(ot2);

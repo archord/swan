@@ -40,7 +40,7 @@
             <h4>匹配状态</h4>
             <select name="ot2qp.isMatch" id="ot2IsMatch" multiple="multiple" class="ot2QueryParameter">
               <option value="0">未匹配</option>
-              <option value="1">匹配不成功</option>
+              <option value="1" selected="">匹配不成功</option>
               <option value="2">匹配成功</option>
               <option value="3">OT2数目异常</option>
             </select>
@@ -98,7 +98,7 @@
               <option value="0">ALL</option>
               <option value="4">大于3帧</option>
               <option value="3">等于3帧</option>
-              <option value="5">大于2帧</option>
+              <option value="5" selected>大于2帧</option>
               <option value="2">等于2帧</option>
               <option value="1">等于1帧</option>
             </select>

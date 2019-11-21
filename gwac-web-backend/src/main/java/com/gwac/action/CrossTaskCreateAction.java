@@ -8,7 +8,9 @@ package com.gwac.action;
  *
  * @author xy
  */
+import com.gwac.dao.CameraDao;
 import com.gwac.dao.CrossTaskDao;
+import com.gwac.model.Camera;
 import com.gwac.model.CrossTask;
 import com.gwac.util.CommonFunction;
 import com.opensymphony.xwork2.ActionSupport;
@@ -33,6 +35,7 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
 
   private static final Log log = LogFactory.getLog(CrossTaskCreateAction.class);
 
+  private String teleName;
   private String taskName;
   private String crossMethod;
   private String dateStr;
@@ -54,6 +57,8 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
 
   @Resource
   private CrossTaskDao crossTaskDao;
+  @Resource
+  private CameraDao cameraDao;
   private Map<String, Object> appMap = null;
 
   private String echo = "";
@@ -108,6 +113,12 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
       ct.setUsnoMag1(usnoMag1);
       ct.setUsnoR2(usnoR2);
       ct.setUsnoMag2(usnoMag2);
+      if(teleName!=null&&teleName.trim().length()>0){
+	Camera tcam = cameraDao.getByName(teleName);
+	ct.setTelescopeId(tcam.getCameraId());
+      }else{
+	ct.setTelescopeId(0);
+      }
       if(crossTaskDao.exist(ct)){
 	echo = taskName + " already exist, please select another name.";
       }else{
