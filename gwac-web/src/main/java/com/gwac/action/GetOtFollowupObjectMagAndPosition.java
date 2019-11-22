@@ -63,17 +63,18 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
       poss = new ArrayList();
 
       Calendar cal = Calendar.getInstance();
-      Date baseDate = null;
+      Date baseDate = ot2.getFoundTimeUtc();
       List<FollowUpObject> objs = fuoDao.getByOtId(ot2.getOtId(), queryHis);
-      if (objs.size() > 0) {
-        baseDate = objs.get(0).getStartTimeUtc();
-        for (FollowUpObject obj : objs) {
-          if (baseDate.before(obj.getStartTimeUtc())) {
-            baseDate = obj.getStartTimeUtc();
-          }
-        }
-        cal.setTime(baseDate);
-      }
+//      if (objs.size() > 0) {
+//        baseDate = objs.get(0).getStartTimeUtc();
+//        for (FollowUpObject obj : objs) {
+//          if (baseDate.before(obj.getStartTimeUtc())) {
+//            baseDate = obj.getStartTimeUtc();
+//          }
+//        }
+//        cal.setTime(baseDate);
+//      }
+      cal.setTime(baseDate);
       double baseDay = cal.getTimeInMillis() / 60000.0;
 
       int maxObjs = 6;
@@ -85,6 +86,7 @@ public class GetOtFollowupObjectMagAndPosition extends ActionSupport {
         }
         if (obj.getFuoName().contains("CHECK")) {
           fuCheckObj = obj;
+	  fuCheckObj.setStartTimeUtc(baseDate);
         }
 //        if(obj.getRecordTotal()<2){
 //          continue;

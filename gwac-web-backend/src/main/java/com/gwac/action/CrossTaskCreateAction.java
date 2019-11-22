@@ -289,4 +289,11 @@ public class CrossTaskCreateAction extends ActionSupport implements ApplicationA
     this.dateStr = dateStr;
   }
 
+
+  /**
+   * @param teleName the teleName to set
+   */
+  public void setTeleName(String teleName) {
+    this.teleName = teleName;
+  }
 }
