@@ -237,10 +237,11 @@ public class CrossObjectCheckServiceImpl implements Ot2CheckService {
 	ot2.setOtType((short) 2);
 	ot2Dao.updateOtType(ot2);
       }else{
-	List<OtHistoryRepeat> otHistoryRepeats = otHistoryRepeatDao.exist(crossTask.getTelescopeId(), ot2.getX(), ot2.getY());
+	List<OtHistoryRepeat> otHistoryRepeats = otHistoryRepeatDao.exist(crossTask.getTelescopeId(), ot2.getXtemp(), ot2.getYtemp(), ot2.getX(), ot2.getY());
 	if(otHistoryRepeats.size()>0){
 	  ot2.setOtType((short) 28);
 	  ot2Dao.updateOtType(ot2);
+	  flag = true;
 	}
       }
       long tEndTime = System.nanoTime();

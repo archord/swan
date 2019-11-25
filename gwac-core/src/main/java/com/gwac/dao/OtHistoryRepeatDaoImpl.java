@@ -24,16 +24,20 @@ public class OtHistoryRepeatDaoImpl extends BaseHibernateDaoImpl<OtHistoryRepeat
   private static final Log log = LogFactory.getLog(OtHistoryRepeatDaoImpl.class);
 
   @Override
-  public List<OtHistoryRepeat> exist(Integer camId, float x, float y) {
+  public List<OtHistoryRepeat> exist(Integer camId, float xTemp, float yTemp, float x, float y) {
 
     Session session = getCurrentSession();
-    String sql = "SELECT * from ot_history_repeat where cam_id=? and x>=? and x<=? and y>=? and y<=?";
+    String sql = "SELECT * from ot_history_repeat where cam_id=? and ((x>=? and x<=? and y>=? and y<=?) or (x>=? and x<=? and y>=? and y<=?))";
     Query q = session.createSQLQuery(sql);
     q.setInteger(0, camId);
-    q.setFloat(1, x/4-1);
-    q.setFloat(2, x/4+1);
-    q.setFloat(3, y/4-1);
-    q.setFloat(4, y/4+1);
+    q.setFloat(1, xTemp/4-1);
+    q.setFloat(2, xTemp/4+1);
+    q.setFloat(3, yTemp/4-1);
+    q.setFloat(4, yTemp/4+1);
+    q.setFloat(5, x/4-1);
+    q.setFloat(6, x/4+1);
+    q.setFloat(7, y/4-1);
+    q.setFloat(8, y/4+1);
     return q.list();
   }
 

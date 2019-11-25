@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface OtHistoryRepeatDao extends BaseHibernateDao<OtHistoryRepeat> {
 
-  public List<OtHistoryRepeat> exist(Integer camId, float x, float y);
+  public List<OtHistoryRepeat> exist(Integer camId, float xTemp, float yTemp, float x, float y);
 }
