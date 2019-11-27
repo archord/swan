@@ -497,12 +497,12 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       isQueryParameterEmpty = false;
     }
     if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
-      sql.append(" and abs(xtemp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
-      sql.append(" and abs(ytemp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(xtemp-(").append(ot2qp.getXtemp()).append("))<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(ytemp-(").append(ot2qp.getYtemp()).append("))<").append(ot2qp.getPlaneRadius()).append(" ");
       isQueryParameterEmpty = false;
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
-      sql.append(" and abs(ra-").append(ot2qp.getRa()).append(")/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
-      sql.append(" and abs(dec-").append(ot2qp.getDec()).append(")<").append(ot2qp.getSphereRadius()).append(" ");
+      sql.append(" and abs(ra-(").append(ot2qp.getRa()).append("))/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
+      sql.append(" and abs(dec-(").append(ot2qp.getDec()).append("))<").append(ot2qp.getSphereRadius()).append(" ");
       isQueryParameterEmpty = false;
     }
     
@@ -586,6 +586,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     } else {
       unionSql = sqlprefix1 + " order by found_time_utc desc";
     }
+    System.out.println(unionSql);
 //    log.debug(unionSql);
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
@@ -617,11 +618,11 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       sql.append(" and found_time_utc<'").append(ot2qp.getEndDate()).append(" 23:59:59' ");
     }
     if (Math.abs(ot2qp.getPlaneRadius()) > CommonFunction.MINFLOAT) {
-      sql.append(" and abs(xtemp-").append(ot2qp.getXtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
-      sql.append(" and abs(ytemp-").append(ot2qp.getYtemp()).append(")<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(xtemp-(").append(ot2qp.getXtemp()).append("))<").append(ot2qp.getPlaneRadius()).append(" ");
+      sql.append(" and abs(ytemp-(").append(ot2qp.getYtemp()).append("))<").append(ot2qp.getPlaneRadius()).append(" ");
     } else if (Math.abs(ot2qp.getSphereRadius()) > CommonFunction.MINFLOAT) {
-      sql.append(" and abs(ra-").append(ot2qp.getRa()).append(")/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
-      sql.append(" and abs(dec-").append(ot2qp.getDec()).append(")<").append(ot2qp.getSphereRadius()).append(" ");
+      sql.append(" and abs(ra-(").append(ot2qp.getRa()).append("))/").append(cosd).append("<").append(ot2qp.getSphereRadius()).append(" ");
+      sql.append(" and abs(dec-(").append(ot2qp.getDec()).append("))<").append(ot2qp.getSphereRadius()).append(" ");
     }
     
     if (ot2qp.getProcessType() != null && !ot2qp.getProcessType().isEmpty()) {
