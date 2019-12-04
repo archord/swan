@@ -98,7 +98,7 @@
               <option value="0">ALL</option>
               <option value="4">大于3帧</option>
               <option value="3">等于3帧</option>
-              <option value="5">大于2帧</option>
+              <option value="5" selected="">大于2帧</option>
               <option value="2">等于2帧</option>
               <option value="1">等于1帧</option>
             </select>
