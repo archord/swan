@@ -38,7 +38,7 @@ public class FollowUpFitsfileDaoImpl extends BaseHibernateDaoImpl<FollowUpFitsfi
     String sql = "select fuf.* "
             + " from follow_up_fitsfile fuf "
             + " inner join follow_up_observation fuo on fuo.fo_id=fuf.fo_id and fuo.ot_id=" + otId + " "
-            + " where fuf.is_upload=true;";
+            + " where fuf.is_upload=true order by fuf.fuf_id;";
     Query q = session.createSQLQuery(sql).addEntity(FollowUpFitsfile.class);
 
     return q.list();
