@@ -101,6 +101,11 @@
               <a class="dropdown-item" href="#" id="searchAAVSO" target='_blank'>AAVSO</a><br/>
             </div>
           </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle"  id="ot-cutimage">
+            <span>切图</span>
+            </button>
+          </div>
           </div>
           <div id="ot-description">
             <div><textarea id="ot-description-content" name="ot-description-content" class="form-control" placeholder="添加OT2的说明，官方对该OT的定性描述。"></textarea></div>

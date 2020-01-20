@@ -34,7 +34,15 @@ public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> im
   
   @Override
   public OtLevel2Match getByOt2Id(long ot2Id) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    String sql1 = "select * from ot_level2_match where ot_id=" + ot2Id;
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql1).addEntity(OtLevel2Match.class);
+    OtLevel2Match rst=null;
+    if(q.list().size()>0){
+      rst = (OtLevel2Match)q.list().get(0);
+    }
+    return rst;
   }
 
   /**

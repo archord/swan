@@ -57,6 +57,7 @@ public class OtLevel2  implements java.io.Serializable {
      private Short followUpResult;
      private Float lookBackCnn;
      private Float probability;
+     private Integer cutImageRequest;
 
     public OtLevel2() {
     }
@@ -469,6 +470,21 @@ public class OtLevel2  implements java.io.Serializable {
    */
   public void setProbability(Float probability) {
     this.probability = probability;
+  }
+
+  /**
+   * @return the cutImageRequest
+   */
+  @Column(name="cut_image_request")
+  public Integer getCutImageRequest() {
+    return cutImageRequest;
+  }
+
+  /**
+   * @param cutImageRequest the probability to set
+   */
+  public void setCutImageRequest(Integer cutImageRequest) {
+    this.cutImageRequest = cutImageRequest;
   }
 }
 

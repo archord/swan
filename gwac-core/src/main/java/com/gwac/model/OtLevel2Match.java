@@ -19,7 +19,6 @@ import org.hibernate.annotations.Parameter;
 )
 public class OtLevel2Match  implements java.io.Serializable {
 
-
      private long olmId;
      private Long otId;
      private Short mtId;
@@ -30,25 +29,10 @@ public class OtLevel2Match  implements java.io.Serializable {
      private Float mag;
      private Float distance;
      private Float d25;
+     private Float period;
+     private String type;
 
     public OtLevel2Match() {
-    }
-
-	
-    public OtLevel2Match(long olmId) {
-        this.olmId = olmId;
-    }
-    public OtLevel2Match(long olmId, Long otId, Short mtId, Long matchId, String comments, Float ra, Float dec, Float mag, Float distance, Float d25) {
-       this.olmId = olmId;
-       this.otId = otId;
-       this.mtId = mtId;
-       this.matchId = matchId;
-       this.comments = comments;
-       this.ra = ra;
-       this.dec = dec;
-       this.mag = mag;
-       this.distance = distance;
-       this.d25 = d25;
     }
    
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -165,7 +149,35 @@ public class OtLevel2Match  implements java.io.Serializable {
     this.d25 = d25;
   }
 
+  /**
+   * @return the period
+   */
+    @Column(name="period", precision=8, scale=8)
+  public Float getPeriod() {
+    return period;
+  }
 
+  /**
+   * @param period the period to set
+   */
+  public void setPeriod(Float period) {
+    this.period = period;
+  }
+
+  /**
+   * @return the type
+   */
+    @Column(name="type")
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
 
 
 }

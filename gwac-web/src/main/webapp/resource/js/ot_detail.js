@@ -142,7 +142,22 @@ $(function () {
     $("#otName").val(ot2.name);
     $("#fuRa").val(ot2.ra);
     $("#fuDec").val(ot2.dec);
-
+    
+    if(ot2.cutImageRequest===1){
+      $("#ot-cutimage span").text("切图(已请求)");
+      $("#ot-cutimage").attr("disabled",true);
+    }else if(ot2.cutImageRequest===2){
+      $("#ot-cutimage span").text("切图(处理中)");
+      $("#ot-cutimage").attr("disabled",true);
+    }else if(ot2.cutImageRequest===3){
+      $("#ot-cutimage span").text("切图(已完成)");
+      $("#ot-cutimage").attr("disabled",true);
+    }else if(ot2.cutImageRequest===4){
+      $("#ot-cutimage span").text("切图(错误)");
+    }else{
+      $("#ot-cutimage span").text("切图(未请求)");
+    }
+    
     setFilter60();
     $("#telescope").change(function () {
       if ($("#telescope").val() === '2') {
@@ -168,6 +183,24 @@ $(function () {
                       console.log(data);
 //                      alert(data.result);
                     }, "json");
+          }
+        }
+      });
+    });
+    $("#ot-cutimage").click(function () {
+      bootbox.confirm({
+        size: 'small',
+        message: "确定切图？",
+        callback: function (result) {
+          if (result) {
+            var gwacRootURL = $("#gwacRootURL").val();
+            var fuUrl = gwacRootURL + "/oTCutImage.action?cutImageRequest=1&otName="+ot2.name;
+            console.log(fuUrl);
+            $.get(fuUrl, function (data) {
+                      console.log(data);
+                    }, "json");
+          $("#ot-cutimage span").text("切图(已请求)");
+          $("#ot-cutimage").attr("disabled",true);
           }
         }
       });

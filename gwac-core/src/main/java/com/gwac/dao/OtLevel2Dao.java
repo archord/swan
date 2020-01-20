@@ -14,7 +14,8 @@ import java.util.Map;
  * @author xy
  */
 public interface OtLevel2Dao extends BaseHibernateDao<OtLevel2> {
-  
+  public String getOT2CutList(int camId);
+  public void updateCutImageRequest(String otName, String cutImageRequest);
   public void updateComments(long otId, String comments);
   public void updateCommentsHis(long otId, String comments);
   

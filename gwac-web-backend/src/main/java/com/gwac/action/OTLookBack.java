@@ -13,12 +13,14 @@ import com.gwac.dao.CameraDao;
 import com.gwac.dao.FollowUpObservationDao;
 import com.gwac.dao.Ot2StreamNodeTimeDao;
 import com.gwac.dao.OtLevel2Dao;
+import com.gwac.dao.OtLevel2MatchDao;
 import com.gwac.dao.SystemStatusMonitorDao;
 import com.gwac.dao.UserInfoDAO;
 import com.gwac.dao.WebGlobalParameterDao;
 import com.gwac.model.Camera;
 import com.gwac.model.FollowUpObservation;
 import com.gwac.model.OtLevel2;
+import com.gwac.model.OtLevel2Match;
 import com.gwac.model4.OtLevel2FollowParameter;
 import com.gwac.model.UserInfo;
 import com.opensymphony.xwork2.ActionSupport;
@@ -70,6 +72,8 @@ public class OTLookBack extends ActionSupport {
   private Ot2StreamNodeTimeDao ot2StreamNodeTimeDao;
   @Resource
   private CameraDao cameraDao;
+  @Resource
+  private OtLevel2MatchDao ot2mDao;
 
   @Action(value = "otLookBack")
   public void upload() {
@@ -162,11 +166,14 @@ public class OTLookBack extends ActionSupport {
     }
 
     OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
+    OtLevel2Match ot2m = ot2mDao.getByOt2Id(ot2.getOtId());
     Camera tcam = cameraDao.getById(ot2.getDpmId());
     log.debug("ot2name=" + ot2name + "isMatch1=" + isMatch + ", isMatch2=" + ot2.getIsMatch());
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)
 //            || (ot2.getDataProduceMethod() == '8' && ot2.getIsMatch() == 2 && ot2.getRc3Match() > 0)) {
-    if (ot2.getDataProduceMethod() == '1' && isMatch == 1 && (tcam==null || (tcam!=null&&tcam.getStatus() == 3))) {
+    if (ot2.getDataProduceMethod() == '1' && ((isMatch == 1) 
+	    || ((isMatch == 2)&&(ot2m!=null)&&(ot2m.getMtId()==9)&&(!ot2m.getType().trim().equalsIgnoreCase("m"))) )
+	    && (tcam==null || (tcam!=null&&tcam.getStatus() == 3))) {
       ot2StreamNodeTimeDao.updateLookUpTime(ot2.getOtId());
 
       ot2.setFoCount((short) (ot2.getFoCount() + 1));
