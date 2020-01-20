@@ -35,7 +35,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
 
     String sql = "with updated_rows as "
 	    + "(update ot_level2 ot2u set cut_image_request=2 where cut_image_request=1 and dpm_id="+camId+" returning *) "
-	    + "select ff2.img_name, oor.x, oor.y, ff2.img_path, ot2.name, to_char(ff2.gen_time, 'YYYYMMDD') as gen_time "
+	    + "select ff2.img_name, to_char(oor.x,'9999') as x, to_char(oor.y,'9999') as y, substr(ff2.img_path,0,24) as img_path, ot2.name, to_char(ff2.gen_time, 'YYYYMMDD') as gen_time "
 	    + "from updated_rows ot2 "
 	    + "INNER JOIN ot_observe_record oor on oor.ot_id=ot2.ot_id and oor.ff_number=ot2.first_ff_number "
 	    + "INNER JOIN fits_file2 ff2 on ff2.ff_id=oor.ff_id";
@@ -57,6 +57,8 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
       rst.append(row[3]);
       rst.append(" ");
       rst.append(row[4]);
+      rst.append(" ");
+      rst.append(row[3]);
       rst.append(" ");
       rst.append(row[5]);
       rst.append("\n");
