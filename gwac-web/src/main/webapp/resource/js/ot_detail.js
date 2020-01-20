@@ -707,12 +707,12 @@ $(function () {
       "columns": [
         {"data": "oorId"},
         {"data": "matchTableName"},
-        {"data": "matchId"},
-        {"data": "ot2Name"},
         {"data": "ra"},
         {"data": "dec"},
         {"data": "distance"},
         {"data": "mag"},
+        {"data": "type"},
+        {"data": "period"},
         {"data": "d25"}
       ],
       "columnDefs": [{
@@ -720,13 +720,8 @@ $(function () {
           "data": "dont know",
           "render": formateRowNumber
         }, {
-          "targets": 3,
-          "data": "OtName?",
-          "render": formateOtName
-        }, {
-          "targets": 6,
-          "data": "OtName?",
-          "render": formateMatchDistance
+          "targets": 4,
+          "render": formateDist
         }],
       "language": {
         "lengthMenu": '显示 <select>' +
@@ -882,15 +877,19 @@ $(function () {
     return meta.row + 1;
   }
 
-  function formateMatchDistance(data, type, full, meta) {
-    return data * 60;
-  }
-
   function formateOtName(data, type, full, meta) {
     var result = "";
     if (!(data === "" || data === 'null' || data === undefined || data === null)) {
       var url = baseUrl + data;
       result = "<a href='" + url + "' target='_blank' title='点击查看OT详细'>" + data + "</a>";
+    }
+    return result;
+  }
+
+  function formateDist(data, type, full, meta) {
+    var result = "";
+    if (!(data === "" || data === 'null' || data === undefined || data === null)) {
+      result =(data * 60).toFixed(4);
     }
     return result;
   }
@@ -901,7 +900,6 @@ $(function () {
     var current = $c.triggerHandler('currentPosition');
     $('#pagenumber span').text(current + 1);
   }
-
 
   function formate1(val, axis) {
     return (val).toFixed(axis.tickDecimals);

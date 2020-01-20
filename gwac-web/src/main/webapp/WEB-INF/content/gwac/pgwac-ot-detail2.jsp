@@ -137,7 +137,7 @@
         <div class="col-md-12 col-lg-6 ot-detail-right">
           <div id="ot2-match" class="ot2-table-show">
             <table id="ot2-match-table" class="display" cellspacing="0" width="100%">
-              <thead><tr><th>ID</th><th>匹配星表</th><th>匹配ID</th><th>OT2名称</th><th>RA</th><th>DEC</th><th>匹配距离(角分)</th><th>星等</th><th>D25</th></tr></thead>
+              <thead><tr><th>ID</th><th>匹配星表</th><th>RA</th><th>DEC</th><th>匹配距离(角分)</th><th>星等</th><th>类型</th><th>周期</th><th>D25</th></tr></thead>
             </table>
           </div>
           <div id="ot2-record" class="ot2-table-show">

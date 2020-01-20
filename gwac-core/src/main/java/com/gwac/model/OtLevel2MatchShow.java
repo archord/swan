@@ -32,26 +32,10 @@ public class OtLevel2MatchShow  implements java.io.Serializable {
      private Float mag;
      private Float distance;
      private Float d25;
-
+     private Float period;
+     private String type;
+    
     public OtLevel2MatchShow() {
-    }
-
-	
-    public OtLevel2MatchShow(long olmId) {
-        this.olmId = olmId;
-    }
-    public OtLevel2MatchShow(long olmId, Long otId, String ot2Name, Short mtId, Long matchId, String comments, Float ra, Float dec, Float mag, Float distance, Float d25) {
-       this.olmId = olmId;
-       this.otId = otId;
-       this.ot2Name = ot2Name;
-       this.mtId = mtId;
-       this.matchId = matchId;
-       this.comments = comments;
-       this.ra = ra;
-       this.dec = dec;
-       this.mag = mag;
-       this.distance = distance;
-       this.d25 = d25;
     }
    
   @GenericGenerator(name = "generator", strategy = "seqhilo", parameters = {
@@ -198,6 +182,24 @@ public class OtLevel2MatchShow  implements java.io.Serializable {
     this.ot2Name = ot2Name;
   }
 
+    
+    @Column(name="period")
+    public Float getPeriod() {
+        return this.period;
+    }
+    
+    public void setPeriod(Float period) {
+        this.period = period;
+    }
+    
+    @Column(name="type")
+    public String getType() {
+        return this.type;
+    }
+    
+    public void setType(String type) {
+        this.type = type;
+    }
 }
 
 
