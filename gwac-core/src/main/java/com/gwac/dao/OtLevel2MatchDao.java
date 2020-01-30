@@ -16,6 +16,8 @@ import java.util.List;
 public interface OtLevel2MatchDao extends BaseHibernateDao<OtLevel2Match> {
   
   public List<Long> getIdsByStarType(int starType);
+  
+  public OtLevel2Match getByOt2IdVariStar(long ot2Id);
 
   public void updateOt2HisMatchId(long curId, long fromId, long toId);
 

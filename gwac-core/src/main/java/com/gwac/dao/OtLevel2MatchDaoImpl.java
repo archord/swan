@@ -44,6 +44,19 @@ public class OtLevel2MatchDaoImpl extends BaseHibernateDaoImpl<OtLevel2Match> im
     }
     return rst;
   }
+  
+  @Override
+  public OtLevel2Match getByOt2IdVariStar(long ot2Id) {
+    String sql1 = "select * from ot_level2_match where mt_id=9 and ot_id=" + ot2Id;
+
+    Session session = getCurrentSession();
+    Query q = session.createSQLQuery(sql1).addEntity(OtLevel2Match.class);
+    OtLevel2Match rst=null;
+    if(q.list().size()>0){
+      rst = (OtLevel2Match)q.list().get(0);
+    }
+    return rst;
+  }
 
   /**
    * ot2历史匹配，可能存在一个OT2匹配多个ot2历史模板目标的情况，

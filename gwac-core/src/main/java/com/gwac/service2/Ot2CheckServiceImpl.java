@@ -305,15 +305,16 @@ public class Ot2CheckServiceImpl implements Ot2CheckService {
 
 	String cvsInfo = tcvs.getId() + " " + tcvs.getRadeg() + " " + tcvs.getDedeg() + " " + tcvs.getMag1();
 	log.debug("varInfo: " + cvsInfo);
-	if (tcvs.getType().equalsIgnoreCase("m")) {
-	  flag = true;
-	}
+//	if (tcvs.getType().equalsIgnoreCase("m")) {
+//	  flag = true;
+//	}
+	flag = true;
       }
-//      if (tvarm.size() > 0) {
-//        ot2.setCvsMatch((short) tvarm.size());
-//        ot2Dao.updateCvsMatch(ot2);
-//        log.debug(ot2.getName() + " cvs :" + tvarm.size());
-//      }
+      if (tvarm.size() > 0) {
+	ot2.setOtType((short) 15);
+	ot2Dao.updateOTType(ot2);
+	log.debug(ot2.getName() + " variable :" + tvarm.size());
+      }
 
       Map<MergedOther, Double> tmom = matchOt2InMergedOther(ot2, mergedSearchbox, mergedMag);
       ott = mtDao.getMatchTableByTypeName("merged_other");

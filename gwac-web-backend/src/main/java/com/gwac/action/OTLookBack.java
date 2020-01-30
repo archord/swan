@@ -166,7 +166,7 @@ public class OTLookBack extends ActionSupport {
     }
 
     OtLevel2 ot2 = ot2Dao.getOtLevel2ByName(ot2name, false);
-    OtLevel2Match ot2m = ot2mDao.getByOt2Id(ot2.getOtId());
+    OtLevel2Match ot2m = ot2mDao.getByOt2IdVariStar(ot2.getOtId());
     Camera tcam = cameraDao.getById(ot2.getDpmId());
     log.debug("ot2name=" + ot2name + "isMatch1=" + isMatch + ", isMatch2=" + ot2.getIsMatch());
 //    if ((ot2.getDataProduceMethod() == '1' && ot2.getIsMatch() == 1)

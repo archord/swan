@@ -626,7 +626,7 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
     } else {
       unionSql = sqlprefix1 + " order by found_time_utc desc";
     }
-    System.out.println(unionSql);
+//    System.out.println(unionSql);
 //    log.debug(unionSql);
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(unionSql).addEntity(OtLevel2.class);
