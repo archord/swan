@@ -384,7 +384,7 @@
         <hibernate.version>4.0.1.Final</hibernate.version> <!-- 4.0.1.Final 3.6.0.Final -->
         <sl4j.version>1.7.2</sl4j.version>
     
-        <quartz.version>1.8.6</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
     
         <activemq-version>5.7.0</activemq-version>
     
