@@ -31,14 +31,25 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   private static final Log log = LogFactory.getLog(OtLevel2DaoImpl.class);
 
   @Override
-  public String getOT2CutList(int camId) {
+  public String getOT2CutList(int camId, Boolean queryHis) {
 
-    String sql = "with updated_rows as "
+    String sql;
+    
+    if(queryHis){
+      sql = "with updated_rows as "
+	    + "(update ot_level2_his ot2u set cut_image_request=2 where cut_image_request=1 and dpm_id="+camId+" returning *) "
+	    + "select ff2.img_name, to_char(oor.x,'9999') as x, to_char(oor.y,'9999') as y, substr(ff2.img_path,0,24) as img_path, ot2.name, to_char(ff2.gen_time, 'YYYYMMDD') as gen_time "
+	    + "from updated_rows ot2 "
+	    + "INNER JOIN ot_observe_record_his oor on oor.ot_id=ot2.ot_id and oor.ff_number=ot2.first_ff_number "
+	    + "INNER JOIN fits_file2_his ff2 on ff2.ff_id=oor.ff_id";
+    }else{
+      sql = "with updated_rows as "
 	    + "(update ot_level2 ot2u set cut_image_request=2 where cut_image_request=1 and dpm_id="+camId+" returning *) "
 	    + "select ff2.img_name, to_char(oor.x,'9999') as x, to_char(oor.y,'9999') as y, substr(ff2.img_path,0,24) as img_path, ot2.name, to_char(ff2.gen_time, 'YYYYMMDD') as gen_time "
 	    + "from updated_rows ot2 "
 	    + "INNER JOIN ot_observe_record oor on oor.ot_id=ot2.ot_id and oor.ff_number=ot2.first_ff_number "
 	    + "INNER JOIN fits_file2 ff2 on ff2.ff_id=oor.ff_id";
+    }
 
     Session session = getCurrentSession();
     Query q = session.createSQLQuery(sql);
@@ -899,8 +910,13 @@ public class OtLevel2DaoImpl extends BaseHibernateDaoImpl<OtLevel2> implements O
   }
 
   @Override
-  public void updateCutImageRequest(String otName, String cutImageRequest) {
-    String sql = "update ot_level2 set cut_image_request=" + cutImageRequest.trim() + " where name='" + otName.trim() + "'";
+  public void updateCutImageRequest(String otName, String cutImageRequest, Boolean queryHis) {
+    String sql;
+    if(queryHis){
+      sql = "update ot_level2_his set cut_image_request=" + cutImageRequest.trim() + " where name='" + otName.trim() + "'";
+    }else{
+      sql = "update ot_level2 set cut_image_request=" + cutImageRequest.trim() + " where name='" + otName.trim() + "'";
+    }
     Session session = getCurrentSession();
     session.createSQLQuery(sql).executeUpdate();
   }

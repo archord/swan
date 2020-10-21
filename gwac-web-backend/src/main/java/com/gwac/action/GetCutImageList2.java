@@ -44,6 +44,7 @@ public class GetCutImageList2 extends ActionSupport {
   
   private static final Log log = LogFactory.getLog(GetCutImageList2.class);
   private String cameraName;
+  private Integer his;
   
   private InputStream fileInputStream;
   private String fileName;
@@ -92,7 +93,10 @@ public class GetCutImageList2 extends ActionSupport {
         String content = "";
         Camera tcamera = camDao.getByName(cameraName);
         if (tcamera != null) {
-          content = ot2Dao.getOT2CutList(tcamera.getCameraId());
+	  if(his==null){
+	    his=0;
+	  }
+          content = ot2Dao.getOT2CutList(tcamera.getCameraId(), his==1);
           if (!content.isEmpty()) {
             fileName = cameraName + "_" + CommonFunction.getCurDateTimeString() + ".lst";
             File file = new File(destPath, fileName);
@@ -104,7 +108,6 @@ public class GetCutImageList2 extends ActionSupport {
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(content);
             bw.close();
-            
           }
         } else {
           log.warn("cannot find camera: " + cameraName);
@@ -160,5 +163,12 @@ public class GetCutImageList2 extends ActionSupport {
    */
   public void setCameraName(String cameraName) {
     this.cameraName = cameraName;
+  }
+
+  /**
+   * @param his the his to set
+   */
+  public void setHis(Integer his) {
+    this.his = his;
   }
 }

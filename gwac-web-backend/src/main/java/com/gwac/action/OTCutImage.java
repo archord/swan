@@ -3,6 +3,7 @@ package com.gwac.action;
 import com.gwac.dao.OtLevel2Dao;
 import static com.opensymphony.xwork2.Action.SUCCESS;
 import com.opensymphony.xwork2.ActionSupport;
+import java.util.List;
 import javax.annotation.Resource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +36,13 @@ public class OTCutImage extends ActionSupport{
       result = "otId or cutImageRequest cannot be empty.";
     }else{
       result = "success.";
-      ot2Dao.updateCutImageRequest(otName, cutImageRequest);
+      
+      List<Integer> tlist = ot2Dao.hisOrCurExist(otName);
+      if (!tlist.isEmpty()) {
+        Integer his = tlist.get(0);
+        Boolean queryHis = his == 1;
+        ot2Dao.updateCutImageRequest(otName, cutImageRequest, queryHis);
+      }
     }
     return SUCCESS;
   }

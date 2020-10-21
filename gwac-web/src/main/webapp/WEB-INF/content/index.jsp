@@ -82,10 +82,10 @@
             <a href="<%=request.getContextPath()%>/monitor/pctl-mount-monitor.action" target="_blank" ><p>转台状态</p></a>
           </div>
           <div class='mason-block xl'>
-              <a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>OT2列表</p></a>
+              <a href="<%=request.getContextPath()%>/gwac/pgwac-allot2.action" target="_blank" ><p>星表交叉OT2</p></a>
           </div>
           <div class='mason-block xl'>
-              <a href="<%=request.getContextPath()%>/gwac/pgwac-crossobj.action" target="_blank" ><p>目标列表</p></a>
+              <a href="<%=request.getContextPath()%>/gwac/pgwac-crossobj.action" target="_blank" ><p>图像相减OT2</p></a>
           </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-pixel-filter.action" target="_blank" ><p>坏像素过滤</p></a>     </div>
           <div class='mason-block xl'><a href="<%=request.getContextPath()%>/gwac/pgwac-ccd-image-realtime.action" target="_blank" ><p>图像预览</p></a>     </div>
