@@ -377,7 +377,7 @@
     
 
         <!-- Framework dependency versions  -->
-        <struts2.version>2.3.16.3</struts2.version> <!-- 2.3.15.1  2.3.14.3  2.3.16.3-->
+        <struts2.version>2.5.30</struts2.version> <!-- 2.3.15.1  2.3.14.3  2.3.16.3-->
         <struts2.spring.version>2.3.16.3</struts2.spring.version> <!--2.3.4 2.3.15.1-->
         <struts2.jquery.version>3.7.1</struts2.jquery.version>
         <spring.version>3.1.0.RELEASE</spring.version>
