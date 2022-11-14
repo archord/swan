@@ -380,7 +380,7 @@
         <struts2.version>2.3.16.3</struts2.version> <!-- 2.3.15.1  2.3.14.3  2.3.16.3-->
         <struts2.spring.version>2.3.16.3</struts2.spring.version> <!--2.3.4 2.3.15.1-->
         <struts2.jquery.version>3.7.1</struts2.jquery.version>
-        <spring.version>3.1.0.RELEASE</spring.version>
+        <spring.version>3.2.18.RELEASE</spring.version>
         <hibernate.version>4.0.1.Final</hibernate.version> <!-- 4.0.1.Final 3.6.0.Final -->
         <sl4j.version>1.7.2</sl4j.version>
     
